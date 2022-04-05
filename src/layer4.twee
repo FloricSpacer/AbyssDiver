@@ -1,0 +1,2219 @@
+:: Layer4 1 [layer4 image]
+<<masteraudio stop>><<audio "layer4" volume 0.2 play loop>><<set $currentLayer = 4>>
+[img[setup.ImagePath+'Layer Intros/l4intro.png']]
+
+@@.layerTitle;LAYER 4 - HOARFROST WASTES@@
+
+You finally emerge from the tunnels of the third layer and are given the least warm greeting to the fourth possible: a blast of chilling air that you feel settling into your bones near-instantly. Eyes adjusting once more to the Miasmal light, your first look at the layer is of a blanket of snow extending far into the fog-covered horizon, punctuated by small glacial mountains as the ground slowly meaners downward. miasma-produced winds sometimes dislodge buildups of ice on the ceiling, causing it to drift down to the ground as snow or hail. What little begetation there is struglle to survuve in this layer grows small and sparse.
+
+This layer is enveloped in a bitter, piercing cold, strengthened by Miasma to effectively penetrate any kind of insulating clothing or similar protection. Your only option for staying warm is an active source that radiates heat. Without somehing easily portable, like a torch, you'll need to frequently stop to take shelter to start campfires. If you have a portable heat source, you may subtract 2 days from all time costs on this page. The 5 romer stones together don't quite produce enough heat to keep you warm on their own.
+
+[[Walk through the fourth layer of the Abyss|Layer4 Hub]]
+<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $visitL4 == 0>>
+	<<print "[[Use Cherry's chaotic luck|Layer4 Cherry]]">><br><<endif>>
+<<endif>><</nobr>>
+
+
+:: Layer4 Hub [layer4]
+<<set $currentLayer = 4>><<if $visitL4 == 0>><<set $endSpectre = $time>><<endif>><<if $timeL4T1 < 7>><<set $visitL4 = 1>><<set $layerExit = 0>>
+The deep cold of this layer seems to penetrate any clothing and shelter you rely on. Snow drifts gently to the ground around you, and everwhere you look is coated in either a powder of snow or a layer of clear, frozen ice. Your only relef is when you take the time to stop at camp to eat, drink, and enjoy the warmth of your nightly campfire.
+
+This layer is enveloped in a bitter, piercing cold, strengthened by Miasma to effectively penetrate any kind of insulating clothing or similar protection. Your only option for staying warm is an active source that radiates heat. Without somehing easily portable, like a torch, you'll need to frequently stop to take shelter to start campfires. If you have a portable heat source, you may subtract 2 days from all time costs on this page. The 5 romer stones together don't quite produce enough heat to keep you warm on their own.
+
+What do you want to do while you are here?
+
+<<nobr>>
+<<if $items[9].count > 0 && $torchUse == 0>>
+<br>[[Use torches to reduce travel times on this layer by 2 days each at the cost of 1 torch per travel|Layer4 Hub][$torchUse = 1]]<br><br>
+<<endif>>
+<<if $heat == 1 && $torchUse == 0>>
+<br>[[Use your non-disposable heat source to reduce travel times on this layer by 2 days per travel|Layer4 Hub][$torchUse = 1]]<br><br>
+<<endif>>
+<<if $torchUse == 1>>
+<br>[[Stop using torches to reduce travel time|Layer4 Hub][$torchUse = 0]]<br><br>
+<<endif>>
+<<if $forageWater == 1>>
+	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily water on this layer">><br>
+<<endif>>
+<<if $forageFood == 1>>
+	<<if $items[20].count < 2>>
+	<<print "You need a gun and at least 2 bullets to be able to hunt flairabou for your daily food on this layer.">>
+	<<else>>
+	<<print "You are currently foraging for your daily food on this layer, costing you 2 bullets a day in hunting.">><br>
+	<<endif>>
+	<<else>>
+	<<print "You are not currently foraging for your daily food on this layer">><br>
+<<endif>>
+<<if !isPlaying("layer4")>>
+	<<masteraudio stop>><<audio "layer4" volume 0.2 play loop>>
+<<endif>>
+<</nobr>>
+
+[[Use Items]]
+
+[[Learn about the threats on this layer|Layer4 Threats]]
+[[Check for food and water you can forage for|Layer4 Forage]]
+[[Search for relics|Layer4 Relics]]
+[[Take on curses to purge your corruption|Layer4 Curses]]
+[[Look for any wonders you can take advantage|Layer4 Wonders]]
+[[View the Layer 4 habitation option|Layer4 Habitation]]
+
+[[Look up towards the surface|Layer4 Ascend 1]]
+[[Look down at the next layer|Layer4 Exit1]]
+
+<<else>>
+
+A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.
+
+[[Deal with the Drifting Swallower|Layer4 Threat1 Main]]
+
+<<endif>>
+
+
+:: Layer4 Cherry [layer4]
+[img[setup.ImagePath+'Surface/cherry.png']]
+
+How would you like to use Cherry's chaotic luck ability?
+
+[[Get 2 random relics for half cost|Layer4 Cherry Relic]]
+[[Get 2 random curses for +50% corruption|Layer4 Cherry Curse]]
+[[Get 1 relic and 1 curse|Layer4 Cherry Mix]]
+
+
+:: Layer4 Threats [layer4 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-threats.png']]
+
+[[Return to exploring the fourth layer|Layer4 Hub]]
+
+
+:: Layer4 Forage [layer4 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-foraging.png']]
+
+If you decide to start foraging for food or water, it means that you will not reduce your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
+<<if $height == "0" && $forageFood == 1>>
+Would you like to increase or descrease your height due to eating flairabou meat?
+
+<<radiobutton "$height" -5 checked>> Decrease
+<<radiobutton "$height" 5 >> Increase
+
+<<endif>>
+<<nobr>>
+<<if $forageWater == 0>>
+	<<print "[[Start foraging for water in Algal Meltwater|Layer4 Forage][$forageWater = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for water|Layer4 Forage][$forageWater = 0]]">><br>
+<<endif>>
+<<if $forageFood == 0>>
+	<<print "[[Start foraging for food from Flairabou|Layer4 Forage][$forageFood = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for food|Layer4 Forage][$forageFood = 0]]">><br>
+<<endif>>
+<<if $items[2].count > 0>>
+[[Fill your empty flasks with water from the layer|Layer4 Flasks]]<br>
+<<endif>>
+<</nobr>>
+
+[[Return to exploring the rest of the layer|Layer4 Hub]]
+
+
+:: Layer4 Relics [layer4 image]
+<<if $timeL4T1 < 7>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>
+Here are the relics on this layer which are available for you to spend corruption on:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-relics.png']]
+
+<<nobr>><<if $totalRelics.some(e => e.name === "Ghost-righter Writing Down")>>
+	<<else>><<print "[[Pick up the Ghost-righter Writing Down]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Gilded Prison") || ($items[14].count < 1 && ($cut == 0)) || $torchUse == 1>>
+	<<else>><<print "[[Pick up the Gilded Prison]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Omoikane Circuit")>>
+	<<else>><<print "[[Pick up the Omoikane Circuit]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Afar Wanderer") || ($items[11].count == 0 && $rope == 0)>>
+	<<else>><<print "[[Pick up the Afar Wanderer]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Kin Shifter")>>
+	<<else>><<print "[[Pick up the Kin Shifter]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Brave Vector")>>
+	<<else>><<print "[[Pick up the Brave Vector]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Devil's Own")>>
+	<<else>><<print "[[Pick up the Devil's Own]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Verve Cell")>>
+	<<else>><<print "[[Pick up the Verve Cell]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Vessel Vivisector")>>
+	<<else>><<print "[[Pick up the Vessel Vivisector]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Sated Artist")>>
+	<<else>><<print "[[Pick up the Sated Artist]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $ownedRelics.some(e => e.name === "Timekeeper's Keepsake") || ($items[11].count == 0 && $rope == 0)>>
+	<<else>><<print "[[Pick up the Timekeeper's Keepsake]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Creator's Bolt")>>
+	<<else>><<print "[[Pick up the Creator's Bolt]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Perpetual Repose")>>
+	<<else>><<print "[[Pick up the Perpetual Repose]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Toral Wave")>>
+	<<else>><<print "[[Pick up the Toral Wave]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Flamel's Folly")>>
+	<<else>><<print "[[Pick up the Flamel's Folly]]">>
+<<endif>><</nobr>>
+
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+<<else>>
+
+A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.
+
+[[Deal with the Drifting Swallower|Layer4 Threat1 Main]]
+
+<<endif>>
+
+
+:: Layer4 Curses [layer4 image altered]
+These are the curses available for you to take to help manage your corruption:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-curses.png']]
+
+<<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement C")>>
+	<<else>><<print "[[Take on Libido Reinforcement C]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
+	<<else>><<print "[[Take on Lactation Rejuvination A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
+	<<else>><<print "[[Take on Asset Robustness D]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Age Reduction B")>>
+	<<else>><<print "[[Take on Age Reduction B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Sleep Tight")>>
+	<<else>><<print "[[Take on Sleep Tight]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Sweet Dreams")>>
+	<<else>><<print "[[Take on Sweet Dreams]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Hypno Happytime")>>
+	<<else>><<print "[[Take on Hypno Happytime]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || ($playerCurses.some(e => e.name === "Clothing Restriction B") && $playerCurses.some(e => e.name === "Clothing Restriction C"))>>
+	<<else>><<print "[[Take on Crossdress Your Heart]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Lie Detector")>>
+	<<else>><<print "[[Take on Lie Detector]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Megadontia")>>
+	<<else>><<print "[[Take on Megadontia]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Softie") || $playerCurses.some(e => e.name === "Hard Mode")>>
+	<<else>><<print "[[Take on Softie]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Softie") || $playerCurses.some(e => e.name === "Hard Mode")>>
+	<<else>><<print "[[Take on Hard Mode]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>
+	<<else>><<print "[[Take on Lingual Leviathan]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
+	<<else>><<print "[[Take on Tipping the Scales]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Reptail")>>
+	<<else>><<print "[[Take on Reptail]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Cold Blooded")>>
+	<<else>><<print "[[Take on Cold Blooded]]">>
+<<endif>><</nobr>>
+
+[[Allow the Abyss to bestow a random curse upon you|Layer4 Curses Random]]
+
+
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Layer4 Wonders [layer4 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-wonders.png']]
+
+<<nobr>>
+<<if ($hiredCompanions.length > 0) && ($skewedForced < 4)>>
+	Would you like to use the Skewed Shrine to copy a curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br><br>
+	[[Yes, use the Steady Shrine to copy a curse|Layer4 Steady1a]]<br><br>
+	Would you like to use the Steady Shrine to force a curse on one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br><br>
+	[[Yes, use the Steady Shrine to force a curse|Layer4 Steady 2a]]<br><br>
+	<<elseif $skewedForced > 4>>
+None of your companions trust you. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
+	<<else>>
+	You must have companions if you would like to use the Steady Shrine.<br><br>
+<<endif>>
+<</nobr>>
+
+<<nobr>>
+<<if ($purityUsed == 0)>>
+	Would you like to use the Purity Tree?<br>
+	[[Yes, choose what you want to do with the tree|Layer4 Purity 1]]<br><br>
+	<<else>>
+	You can only use the rare species of purity tree one time.<br><br>
+<<endif>>
+<</nobr>>
+[[Return to exploring the layer|Layer4 Hub]]
+
+
+:: Layer4 Habitation [layer4 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-habitation.png']]
+
+<<return>>
+
+<<nobr>>
+<<if $corruption >= 0>>
+	[[Choose to stay on the fourth layer|Habitation Ending]]
+	<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<<endif>>
+<</nobr>>
+
+
+:: Layer4 Ascend 1 [layer4]
+Backtracking through to the caverns of the previous layer will take you 7 days and cost 35 corruption.
+
+[[Continue your ascent|Layer4 Ascend2]]
+[[Turn back and continue your business on the fourth layer|Layer4 Hub]]
+
+
+:: Layer4 Exit1 [layer4]
+Between this layer and the next is a kilometers-long sheer drop with a near-featureless wall of slippery wall of rock and ice on all sides. Paths and tunnels onward to the next layer exist, but they're very slow and meandering, and taking these down to the next layer, combined with the time trekking through the main body of this layer, will take 19 days by default. If you have rope wih you, you can instead descend right through this dividing space in a much shorter time, and the whole trip will only take 8 days. Remember that the return trip takes longer than the trip down, either way.
+
+The air seems to get drier as you proceed fuurther down. You might want to stockpile plenty of water before continuing on, probably around 2 weeks worth at a minimum.
+
+[[Turn back and continue your business on the fourth layer|Layer4 Hub]]
+[[Continue your descent to the fifth layer|Layer4 Exit2]]
+
+
+:: Layer4 Threat1 Main [layer4]
+<<set $timeL4T1 -= 7>>
+[img[setup.ImagePath+'Threats/driftingswallower.png']]
+
+How do you want to deal with the creature descending upon you?
+
+
+<<nobr>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured by fighting it, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
+	[[Have Khemia fight it off with a sword|Layer4 Hub][$status.duration = (6 - $statRed), $status.penalty = 1]]<br><br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 4>>
+	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
+	[[Shoot it with your pistol|Layer4 Hub][$items[20].count -= (5 - $bullRed)]]<br><br>
+<<endif>>
+If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
+[[Allow it to overpower you|Layer4 Hub][$status.duration = 99, $status.penalty = 1]]
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Hub]]
+
+
+:: Take on Libido Reinforcement C [layer4]
+<<set $playerCurses.push($curse41)>><<set $corruption += $curse41.corr>>
+
+You have successfully taken on the $curse41.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+<<set $app.libido += 1>>
+
+
+:: Take on Lactation Rejuvination A [layer4]
+<<set $playerCurses.push($curse42)>><<set $corruption += $curse42.corr>>
+
+You have successfully taken on the $curse42.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Asset Robustness D [layer4]
+<<set $playerCurses.push($curse43)>><<set $corruption += $curse43.corr>>
+
+You have successfully taken on the $curse43.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+<<nobr>>
+<<set $app.modpenis += 2>>
+<<set $app.modbreasts += 6>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 2>>
+<<elseif $app.sex == "futa">>
+	<<set $app.breasts += 6>>
+	<<set $app.penis += 2>>
+<<else>>
+	<<set $app.breasts += 6>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Age Reduction B [layer4]
+<<set $playerCurses.push($curse44)>><<set $corruption += $curse44.corr>>
+
+You have successfully taken on the $curse44.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+<<nobr>>
+<<if $app.appAge <= 23>>
+	<<set $app.appAge -= 3>>
+	<<else>>
+	<<set $app.appAge = 20>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Sleep Tight [layer4]
+<<set $playerCurses.push($curse45)>><<set $corruption += $curse45.corr>>
+
+You have successfully taken on the $curse45.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Sweet Dreams [layer4]
+<<set $playerCurses.push($curse46)>><<set $corruption += $curse46.corr>>
+
+You have successfully taken on the $curse46.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Hypno Happytime [layer4]
+<<set $playerCurses.push($curse47)>><<set $corruption += $curse47.corr>>
+
+You have successfully taken on the $curse47.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+Warning: This may make future mental hazards in the abyss more dangerous!
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Crossdress Your Heart [layer4]
+<<set $playerCurses.push($curse48)>><<set $corruption += $curse48.corr>>
+
+You have successfully taken on the $curse48.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Lie Detector [layer4]
+<<set $playerCurses.push($curse49)>><<set $corruption += $curse49.corr>>
+
+You have successfully taken on the $curse49.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Megadontia [layer4]
+<<set $playerCurses.push($curse50)>><<set $corruption += $curse50.corr>>
+
+You have successfully taken on the $curse50.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Softie [layer4]
+<<set $playerCurses.push($curse51)>><<set $corruption += $curse51.corr>>
+
+You have successfully taken on the $curse51.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Hard Mode [layer4]
+<<set $playerCurses.push($curse52)>><<set $corruption += $curse52.corr>>
+
+You have successfully taken on the $curse52.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Lingual Leviathan [layer4]
+<<set $playerCurses.push($curse53)>><<set $corruption += $curse53.corr>>
+
+You have successfully taken on the $curse53.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Take on Tipping the Scales [layer4]
+<<set $playerCurses.push($curse54)>><<set $corruption += $curse54.corr>><<set $app.skinType = "reptilian scaled">>
+
+You have successfully taken on the $curse54.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+Please enter your new scale color:
+
+<<textbox "$app.skinColor" "green" "Layer4 Curses">>
+
+
+:: Take on Reptail [layer4]
+<<set $playerCurses.push($curse55)>><<set $corruption += $curse55.corr>><<set $tail = "large, spiked, scaled, reptile">>
+
+You have successfully taken on the $curse55.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses][$app.tail.push($tail)]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub][$app.tail.push($tail)]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4][$app.tail.push($tail)]]
+<<endif>>
+
+
+:: Take on Cold Blooded [layer4]
+<<set $playerCurses.push($curse56)>><<set $corruption += $curse56.corr>>
+
+You have successfully taken on the $curse56.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the fourth layer|Layer4 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 4|Layer4 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L4]]
+<<endif>>
+
+
+:: Layer4 Flasks [layer4]
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<if $items[2].count > 0>>
+		<<set $items[3].count += 1>>
+		<<set $items[2].count -= 1>>
+		<<set $waterL4 += 1>>
+	<<else>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+[img[setup.ImagePath+'Foraging/algalmeltwater.png']]
+
+<<if $abyssKnow == 0>>
+You ignite your campfire and melt some of the snow from the ground around you, slowly turning parts of the frozen wasteland around you into life-sustaining water. However, the moment you taste the water, you notice a strange taste, the hint of miasma, and feel a throbbing in your groin. You feel like this water is likely to have some effect on you down there.
+<<else>>
+Using your knowledge of the Abyss, you specifically look to make sure you can get some good water directly from the bluish-green snow that is found occasionally around the layer. The water has a slight green tint and a lightly minty flavor, but it seems pure and safe to you, allowing you to continue your journey with a larger store of water than before.
+<<endif>>
+[[Return to exploring your food and water options on this layer|Layer4 Forage]]
+
+
+:: Layer4 Steady1a [layer4]
+[img[setup.ImagePath+'Wonders/slantedshrine.png']]
+
+Which curse would you like to copy to your willing companion? It can't be too bad if they agreed to take it on.
+
+<<nobr>>
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+	<<capture $i>>
+		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady1b][$temp to $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<back>>
+
+
+:: Layer4 Steady 2a [layer4]
+[img[setup.ImagePath+'Wonders/slantedshrine.png']]
+
+Which curse would you like to force on your unwilling companion?
+
+You hear a muffled sound from your incapacitated companion as you ponder your options.
+
+<<nobr>>
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+	<<capture $i>>
+		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady2b][$temp to $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<back>>
+
+
+:: Layer4 Purity 1 [layer4]
+<<nobr>>
+<<set $purityUsed = 1>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[img[setup.ImagePath+'Wonders/puritytree.png']]
+
+What would you like to do with the Purity Tree?
+<<if $items[14].count > 0 || $cut == 1>>
+You can chop down the dead purity tree and use the 4 pieces to make crude protective gear for a total of +60 corruption immediately.
+
+[[Chop down the tree and make crude protective gear|Layer4 Hub][$corruption += 60]]
+
+You could also chop down the tree and save the wood pieces as relics, which you can either bring back to the surface and sell for 35 dubloons each or use the Relic Workshop to gain +25 corruption per section of wood (100 total).
+
+[[Chop down the tree and save the pieces to use them on the surface|Layer4 Hub][$ownedRelics.push($purityPlank), $ownedRelics.push($purityPlank), $ownedRelics.push($purityPlank), $ownedRelics.push($purityPlank)]]
+<<endif>>
+
+If you can't or don't want to cut down the tree, you can burn it down and bathe in the raw cleansing smoke to gain +20 corruption one time.
+
+[[Burn down the tree and bathe in its smoke|Layer4 Hub][$corruption += 20]]
+
+<<back>>
+
+
+:: Layer4 Steady1b [layer4]
+[img[setup.ImagePath+'Wonders/slantedshrine.png']]
+
+Which companion would you like to transfer $playerCurses[$temp].name to?
+
+<<nobr>>
+<<set $dubloons -= ($skewedUsed * 5)>>
+<<set $skewedUsed += 1>>
+<<set $corruption += Math.round(Math.max(($playerCurses[$temp].corr * 1 / 2) - $corRed, 0))>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<capture $i>>
+		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
+	<</capture>>
+<</for>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<back>>
+
+
+:: Layer4 Steady2b [layer4]
+[img[setup.ImagePath+'Wonders/slantedshrine.png']]
+
+Which companion would you like to force the curse of $playerCurses[$temp].name on?
+
+The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
+
+<<nobr>>
+<<set $dubloons -= ($skewedUsed * 5)>>
+<<set $skewedUsed += 1>>
+<<set $skewedForced += 1>>
+<<set $corruption += Math.round(Math.max(($playerCurses[$temp].corr * 1 / 2) - $corRed, 0))>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<capture $i>>
+		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
+	<</capture>>
+<</for>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<back>>
+
+
+:: Pick up the Ghost-righter Writing Down [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic34)>>
+<<set $corruption -= ($relic34.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic34.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic34.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Gilded Prison [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic35)>>
+<<set $corruption -= ($relic35.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic35.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic35.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Omoikane Circuit [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic36)>>
+<<set $corruption -= ($relic36.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic36.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic36.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Afar Wanderer [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic37)>>
+<<set $corruption -= ($relic37.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic37.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic37.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Kin Shifter [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic38)>>
+<<set $corruption -= ($relic38.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic38.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic38.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Brave Vector [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic39)>>
+<<set $corruption -= ($relic39.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic39.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic39.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Devil's Own [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic40)>>
+<<set $corruption -= ($relic40.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic40.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic40.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Verve Cell [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic41)>>
+<<set $corruption -= ($relic41.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic41.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic41.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Vessel Vivisector [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic42)>>
+<<set $corruption -= ($relic42.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic42.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic42.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Sated Artist [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic43)>>
+<<set $corruption -= ($relic43.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic43.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic43.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Timekeeper's Keepsake [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic44)>>
+<<set $corruption -= ($relic44.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic44.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic44.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Creator's Bolt [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic45)>>
+<<set $corruption -= ($relic45.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic45.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic45.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Perpetual Repose [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic46)>>
+<<set $corruption -= ($relic46.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic46.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic46.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Toral Wave [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic47)>>
+<<set $corruption -= ($relic47.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic47.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic47.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Pick up the Flamel's Folly [layer4]
+<<nobr>>
+<<set $ownedRelics.push($relic48)>>
+<<set $corruption -= ($relic48.corr - $corRed)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic48.time - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic48.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 4|Layer4 Relics]]
+[[Continue exploring the fourth layer|Layer4 Hub]]
+
+
+:: Layer4 Exit2 [layer4]
+<<nobr>><<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<if $items[11].count > 0 || $rope > 0>>
+	<<set $layerExitTime = (Math.max(8 - $timeRed + $status.penalty, 0))>>
+	<<else>>
+	<<set $layerExitTime = (Math.max(19 - $timeRed + $status.penalty, 0))>>
+	<<endif>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<endif>>
+
+<<for $i = 0; $i < 99; $i++>>
+	<<if $timeL4T1 > 6>>
+		<br>During your long trip down towards the fifth layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.
+
+[[Deal with the Drifting Swallower|Layer4 Threat1 Descend]]<br>
+		<<break>>
+	<<endif>>
+	<<if $items[1].count > 9>>
+		<<set $timeL4T1 += 1>>
+	<<endif>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2) - $bullRed, 1)>>
+	<<set $foodL4 += 1>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3)>>
+			<<else>>
+			<<set $app.height -= (3>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5)>>
+			<<else>>
+			<<set $app.height -= (0.5)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= 1>>
+<<endif>>
+<<for $i = 0; $i < 1; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+	<<set $time += 1>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+	<<set $layerExitTime -= 1>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<set $corruption -= (35 - $corRed)>>
+<<set $forageWater = 0>>
+<<set $forageFood = 0>>
+<<set $timeL5T1 = 0>>
+<<set $timeL5T2 = 0>>
+<</nobr>>
+You continue your hike and try to keep somewhat warm despite the bone-chilling cold and your treacherous journey along the pit of sheer ice. As you get closer to the bottom, the temperature rises and the air starts to dry out.
+
+[[Continue to the Fifth layer|Layer5 1]]
+
+<<endif>>
+
+
+:: Layer4 Ascend2 [layer4]
+<<nobr>><<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $layerExitTime = (Math.max(7 - $timeRed + $status.penalty, 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+	<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<set $tempTime -= 2>>
+	<<set $items[9].count -= 1>>
+<<endif>>
+<<endif>>
+
+<<for $i = 0; $i < 99; $i++>>
+	<<if $timeL4T1 > 6>>
+		<br>During your long hike back up towards the third layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.
+
+[[Deal with the Drifting Swallower|Layer4 Threat1 Ascend]]<br>
+		<<break>>
+	<<endif>>
+	<<if $items[1].count > 9>>
+		<<set $timeL4T1 += 1>>
+	<<endif>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2) - $bullRed, 1)>>
+	<<set $foodL4 += 1>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3)>>
+			<<else>>
+			<<set $app.height -= (3>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5)>>
+			<<else>>
+			<<set $app.height -= (0.5)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= 1>>
+<<endif>>
+<<for $i = 0; $i < 1; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+	<<set $time += 1>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+	<<set $layerExitTime -= 1>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+	<<set $timeRed += 1>>
+<<endif>>
+<<set $corruption -= (35 - $corRed)>>
+<<set $forageWater = 0>>
+<<set $forageFood = 0>>
+<</nobr>>
+You continue your hike and try to keep somewhat warm despite the bone-chilling cold, but eventually the temperature starts to rise. However, once you've gotten to the comfortable warmth of the cave systems, you find the light is once again disappearing, leaving you in the dim darkness of the third layer.
+
+[[Return to the third layer|Layer3 Hub]]
+
+<<endif>>
+
+
+:: Layer4 Threat1 Ascend [layer4]
+<<set $timeL4T1 -= 7>>
+[img[setup.ImagePath+'Threats/driftingswallower.png']]
+
+How do you want to deal with the creature descending upon you?
+
+
+<<nobr>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured by fighting it, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
+	[[Have Khemia fight it off with a sword|Layer4 Ascend2][$status.duration = (6 - $statRed), $status.penalty = 1]]<br><br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 4>>
+	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
+	[[Shoot it with your pistol|Layer4 Ascend2][$items[20].count -= (5 - $bullRed)]]<br><br>
+<<endif>>
+If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
+[[Allow it to overpower you|Layer4 Ascend2][$status.duration = 99, $status.penalty = 1]]
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Ascend2]]
+
+
+:: Layer4 Threat1 Descend [layer4]
+<<set $timeL4T1 -= 7>>
+[img[setup.ImagePath+'Threats/driftingswallower.png']]
+
+How do you want to deal with the creature descending upon you?
+
+
+<<nobr>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured by fighting it, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
+	[[Have Khemia fight it off with a sword|Layer4 Exit2][$status.duration = (6 - $statRed), $status.penalty = 1]]<br><br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 4>>
+	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
+	[[Shoot it with your pistol|Layer4 Exit2][$items[20].count -= (5 - $bullRed)]]<br><br>
+<<endif>>
+If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
+[[Allow it to overpower you|Layer4 Exit2][$status.duration = 99, $status.penalty = 1]]
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Exit2]]
+
+
+:: Layer4 Cherry Relic [layer4]
+<<nobr>>
+<<set $temp1 = random(0,14) + 33>>
+<<set $temp2 = random(0,14) + 33>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,14) + 33>>
+	<<if $temp1 !== $temp2>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[$temp2])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<</nobr>>
+
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer4 Hub]]
+
+
+:: Layer4 Cherry Curse [layer4]
+<<nobr>>
+<<set $temp1 = random(0,15) + 40>>
+<<set $temp2 = random(0,15) + 40>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,15) + 40>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1))>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $playerCurses.push($curses[$temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<</nobr>>
+
+The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
+
+Please enter your new scale color:
+
+<<textbox "$app.skinColor" "green" "Layer4 Hub">>
+
+<<else>>
+
+[[Continue on to the rest of the layer|Layer4 Hub]]
+
+<<endif>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness D")>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 2>>
+<<elseif $app.sex == "futa">>
+	<<set $app.breasts += 6>>
+	<<set $app.penis += 2>>
+<<else>>
+	<<set $app.breasts += 6>>
+<<endif>>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Reptail")>>
+	<<set $tail = "large, spiked, scaled, reptile">>
+	<<set $app.tail.push($tail)>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement C")>>
+<<set $app.libido += 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer4 Cherry Mix [layer4]
+<<nobr>>
+<<set $temp1 = random(0,14) + 33>>
+<<set $temp1 = random(0,15) + 40>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
+<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<</nobr>>
+
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
+
+Please enter your new scale color:
+
+<<textbox "$app.skinColor" "green" "Layer4 Hub">>
+
+<<else>>
+
+[[Continue on to the rest of the layer|Layer4 Hub]]
+
+<<endif>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness D")>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 2>>
+<<elseif $app.sex == "futa">>
+	<<set $app.breasts += 6>>
+	<<set $app.penis += 2>>
+<<else>>
+	<<set $app.breasts += 6>>
+<<endif>>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Reptail")>>
+	<<set $tail = "large, spiked, scaled, reptile">>
+	<<set $app.tail.push($tail)>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement C")>>
+<<set $app.libido += 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer4 Curses Random
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<set $temp1 = random(0,15) + 40>>
+	<<if ($temp1 == 40) && !($playerCurses.some(e => e.name === "Libido Reinforcement C"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 41) && !$playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
+		<<break>>
+	<<endif>>
+	<<if $temp == 42 && !($playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 43) && !$playerCurses.some(e => e.name === "Age Reduction B")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 44) && !(playerCurses.some(e => e.name === "Sleep Tight"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 45) && !$playerCurses.some(e => e.name === "Sweet Dreams")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 46) && !$playerCurses.some(e => e.name === "Hypno Happytime")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 47) && !($playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || ($playerCurses.some(e => e.name === "Clothing Restriction B") && $playerCurses.some(e => e.name === "Clothing Restriction C")))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 48) && !($playerCurses.some(e => e.name === "Lie Detector"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 49) && !($playerCurses.some(e => e.name === "Megadontia"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 50) && !($app.womb > 1 || $playerCurses.some(e => e.name === "Softie"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 51) && !($playerCurses.some(e => e.name === "Hard Mode"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 52) && !$playerCurses.some(e => e.name === "Lingual Leviathan")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 53) && !$playerCurses.some(e => e.name === "Tipping the Scales")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 54) && !$playerCurses.some(e => e.name === "Reptail")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 55) && !$playerCurses.some(e => e.name === "Cold Blooded")>>
+		<<break>>
+	<<endif>>
+
+	<<if $i > 900>>
+		<<set $temp1 = -1>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $temp1 >= 0>>
+The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your curse and the change in life that comes with it.
+
+<<print "[[Take on " + $curses[$temp1].name + "]]">>
+<<else>>
+There are no curses left for you to take on this layer.
+
+<<back>>
+<<endif>>
+
+
+:: Escape Balloon L4 [new layer4]
+<<nobr>><<set $currentLayer = 4>><<if !isPlaying("layer4")>>
+	<<masteraudio stop>><<audio "layer4" volume 0.2 play loop>>
+<<endif>><</nobr>>
+The chills of this layer don't seem to abate one bit when you aren't on the ground. You do feel a bit of relief to move rapidly through the enormous vertical tunnel at the lowest point of the ice though, rather than an agozing climb through the steep cliffs and frozen tunnels.
+
+[[Ascend to next layer|Escape Balloon L3][$corruption -= (35 - $corRed)]]
+[[Hover on this layer to take in a curse|Layer4 Curses]]
+[[Get off the balloon on this layer|Layer4 Hub][$escBalDepl=0]]

@@ -15,3 +15,7 @@ then
     echo "Unpacking SugarCube story format..."
     unzip -d "storyformats/" -o "storyformats/$SUGARCUBE_ARCHIVE"
 fi
+
+OUTPUT="Abyss Diver.html"
+echo "Compiling to: $OUTPUT"
+tweego src/* -o "$OUTPUT"

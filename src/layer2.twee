@@ -1,0 +1,1860 @@
+:: Layer2 1 [layer2 image]
+<<nobr>>
+<<set $currentLayer = 2>>
+<<if $items[14].count > 0 || $cut == 1>>
+	<<set $timeRed += 1>>
+<<endif>>
+<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
+<<set $timeL2T1 = 0>>
+<<set $tempTime = (Math.max(2 - $timeRed, 0))>>
+<<set $timeL1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL1 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL1 += 1>>
+			<<if $abyssKnow == 0>>
+			<<set $app.modpenis += 1>>
+			<<set $app.modbreasts += 1>>
+			<<if $app.sex == "male">>
+				<<set $app.penis += 1>>
+			<<elseif $app.sex == "female">>
+				<<set $app.breasts += 1>>
+			<<else>>
+				<<set $app.penis += 1>>
+				<<set $app.breasts += 1>>
+			<<endif>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<<set $forageWater = 0>>
+<<set $forageFood = 0>>
+<</nobr>>
+[img[setup.ImagePath+'Layer Intros/l2intro.png']]
+
+@@.layerTitle;LAYER 2 - DEWDROP RAIN UNDERBRUSH@@
+
+As you enter the second layer, the clear open fields of the first gradually give way to a convoluted mass of trees, vines, and thorns, a thicket more dense than any you've ever seen. You proceed further down, the inscrutable tangle of plant matter growing taller and taller above you, eventually completely shielding the first layer from view. You feel a light pinprick on your nose and look up, thinking it to be rain, but no - these drops are falling from the plants above you, tiny dewdrops coalescing on the vines, falling down as a light drizzle at first, gathering yet more water as they fall through the enormous jungle, and finally reachiing the roots of some of the tallest trees as a veritable monsoon.
+
+This layer is filled with a very dense growth of vines, bushes, and other plant life that impedes you and makes movement very time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
+
+[[Walk through the second layer of the Abyss|Layer2 Hub]]
+<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $visitL2 == 0>>
+	<<print "[[Use Cherry's chaotic luck|Layer2 Cherry]]">><br><<endif>>
+<<endif>><</nobr>>
+
+
+:: Layer2 Hub [layer2]
+<<set $currentLayer = 2>><<set $visitL2 = 1>><<if $timeL2T1 < 4>><<set $layerExit = 0>>
+The dew continually drips down around you, creating the illusion of a rainstorm without clouds. The atmosphere is heavy, partially with humdity, but mainly with the ever-present, creeping corruption of the miasma.
+
+This layer is filled with a vey dense growth of vines, bushes, and other plant life that impedes you and makes movement ver time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
+
+What do you want to do while you are here?
+
+<<nobr>>
+<<set $layerTemp = random(0,20)>>
+<<if $layerTemp == 1>>
+<br><br>Above you, a blood-curdling screech fills the air. Freezing in fear, a bird seems to fly from the canopy above you, paying no mind to you on the ground. Strangely, it looks almost like a hawk, but as if its mouth were turned sideways and it's wings were a bit too sharp-edged to match any bird you've seen before. However, you don't get a chance to get a good look at it before it flaps it's wings and and leaves you once again with only the sound of the dripping rain. <br><br>
+<<elseif $layerTemp == 2>>
+<br><br>At one point along your path, you spot a tangle of vines that seem to rustle slightly, but upon further inspection there is nothing inside them. After spending a minute watching them, you realize the sound comes from the speed at which the vines are growing, which seems to be a few centimeters a minute. You also hear a crunch, which seems to originate from the long-deadbskeleton of a small mammal being crushed by the vines. Wisely, you decide to move on and conclude this would not be a good place to make camp. <br><br>
+<<elseif $layerTemp == 3 && $hiredCompanions.some(e => e.name === "Saeko") && $hiredCompanions.some(e => e.name === "Lily")>>
+<br><br>You hear a loud hissing sound in one of the bushes nearby, and suddenly Saeko stops your group from moving forward. "Wait, we have to go around here. I'm not sure what would make a sound like that here, but I suspect it's not a good idea to find out. Lily almost walks forward on her own and rapidly comments, "I don't know either! I really want to find out though! It can't be that bad if it's only on the second layer, right?" Saeko grabs her collar and sighs, "I believe I heard of a certain diver who thought similarly, but he was lost a few years ago. Better not to fall prey to some unkown venomous creature here." Lily hesitates, but eventually agrees and your group ends up going around the potential threat.<br><br>
+<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.name === "Cherry")>>
+<br><br>A small feline-looking creature approaches you and gives a little mewling sound. As you hesitate with how to react, Cherry bends down and rubs it behind one of its furry ears. Her expression is blank and she sighs as the feline mews, whispering under her breath, "I remember this being fun. Why isn't this fun anymore?" She stands up and steps back, giving you a chance o touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.some(e => e.name === "Maru")>>Maru walk over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<<endif>><br><br>
+
+<<endif>>
+
+<<if $forageWater == 1>>
+	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily water on this layer">><br>
+<<endif>>
+<<if $forageFood == 1 && $mudHunt == 1>>
+	<<print "You are currently foraging for your daily food on this layer by spending 1 bullet each day to hunt mudgrazers">><br>
+	<<elseif $forageFood == 1>>
+	<<print "You are currently foraging for your daily food on this layer by finding flanberries to eat.">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily food on this layer">><br>
+<<endif>>
+<<if !isPlaying("layer2")>>
+	<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
+<<endif>>
+<</nobr>>
+
+[[Use Items]]
+
+[[Learn about the threats on this layer|Layer2 Threats]]
+[[Check for food and water you can forage for|Layer2 Forage]]
+[[Search for relics|Layer2 Relics]]
+[[Take on curses to purge your corruption|Layer2 Curses]]
+[[Look for any wonders you can take advantage|Layer2 Wonders]]
+[[View the Layer 2 habitation option|Layer2 Habitation]]
+
+[[Look up towards the surface|Layer2 Ascend 1]]
+[[Look down at the next layer|Layer2 Exit]]
+
+<<else>>
+
+You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path.
+
+[[Deal with the Baying Gourmet|Layer2 Threat1 Main]]
+
+<<endif>>
+
+
+:: Layer2 Cherry [layer2]
+[img[setup.ImagePath+'Surface/cherry.png']]
+
+How would you like to use Cherry's chaotic luck ability?
+
+[[Get 2 random relics for half cost|Layer2 Cherry Relic]]
+[[Get 2 random curses for +50% corruption|Layer2 Cherry Curse]]
+[[Get 1 relic and 1 curse|Layer2 Cherry Mix]]
+
+
+:: Layer2 Threats [layer2 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
+
+[[Return to exploring the second layer|Layer2 Hub]]
+
+
+:: Layer2 Forage [layer2 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-foraging.png']]
+
+If you decide to start foraging for food or water, it means that you will not reduce your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
+
+<<nobr>>
+<<if $forageWater == 0>>
+	<<print "[[Start foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 0]]">><br>
+<<endif>>
+<<if $forageFood == 0>>
+	<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
+	<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
+<<endif>>
+<<if $items[2].count > 0>>
+[[Fill your empty flasks with water from the layer|Layer2 Flasks]]<br>
+<<endif>>
+<</nobr>>
+
+[[Return to exploring the rest of the layer|Layer2 Hub]]
+
+
+:: Layer2 Relics [layer2 image]
+<<if $timeL2T1 < 4>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>
+Here are the relics on this layer which are available for you to spend corruption on:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-relics.png']]
+
+Only take relics which you are able to meet the requirements for in some way!
+
+<<nobr>><<if $totalRelics.some(e => e.name === "Firmament Pigment")>>
+	<<else>><<print "[[Pick up the Firmament Pigment]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Pearly Gates")>>
+	<<else>><<print "[[Pick up the Pearly Gates]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "World Stone")>>
+	<<else>><<print "[[Pick up the World Stone]]">>
+<<endif>><</nobr>>
+<<nobr>><<if ($totalRelics.some(e => e.name === "Forest's Gift")) || ($items[14].count < 1 && ($cut == 0))>>
+	<<else>><<print "[[Pick up the Forest's Gift]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Harmless Harmony")>>
+	<<else>><<print "[[Pick up the Harmless Harmony]]">>
+<<endif>><</nobr>>
+<<nobr>><<if ($totalRelics.some(e => e.name === "Umbra Trident")) || ($items[9].count < 1 && $items[10].count < 1 && ($light == 0))>>
+	<<else>><<print "[[Pick up the Umbra Trident]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Event Horizon")>>
+	<<else>><<print "[[Pick up the Event Horizon]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Heart-stealing Stole")>>
+	<<else>><<print "[[Pick up the Heart-stealing Stole]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Effacing Asperity")>>
+	<<else>><<print "[[Pick up the Effacing Asperity]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Wholly Ale")>>
+	<<else>><<print "[[Pick up the Wholly Ale]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Memoir Remnant")>>
+	<<else>><<print "[[Pick up the Memoir Remnant]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Gleam Dazer")>>
+	<<else>><<print "[[Pick up the Gleam Dazer]]">>
+<<endif>><</nobr>>
+
+[[Continue exploring the second layer|Layer2 Hub]]
+
+<<else>>
+
+You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path.
+
+[[Deal with the Baying Gourmet|Layer2 Threat1 Main]]
+
+<<endif>>
+
+
+:: Layer2 Curses [layer2 image altered]
+These are the curses available for you to take to help manage your corruption:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-curses.png']]
+
+<<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
+	<<else>><<print "[[Take on Libido Reinforcement B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Gender Reversal B")>>
+	<<else>><<print "[[Take on Gender Reversal B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
+	<<else>><<print "[[Take on Asset Robustness B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Age Reduction A")>>
+	<<else>><<print "[[Take on Age Reduction A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
+	<<else>><<print "[[Take on Fluffy Ears]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Fluffy Tail")>>
+	<<else>><<print "[[Take on Fluffy Tail]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Maximum Fluff")>>
+	<<else>><<print "[[Take on Maximum Fluff]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Heat/Rut")>>
+	<<else>><<print "[[Take on Heat/Rut]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Lightweight")>>
+	<<else>><<print "[[Take on Lightweight]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun")>>
+	<<else>><<print "[[Take on Sex Switcheroo]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Futa Fun") || $playerCurses.some(e => e.name === "Sex Switcheroo")>>
+	<<else>><<print "[[Take on Futa Fun]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Blushing Virgin")>>
+	<<else>><<print "[[Take on Blushing Virgin]]">>
+<<endif>><</nobr>>
+
+[[Allow the Abyss to bestow a random curse upon you|Layer2 Curses Random]]
+
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+
+:: Layer2 Wonders [layer2 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-wonders.png']]
+
+<<nobr>>
+<<if ($visitL3 == 0) && ($brokerUsed == 0) && ($corruption > -100)>>
+	Would you like to use the Empty-handed Broker?<br><br>
+	[[Yes, use the Broker|Layer2 Broker]]
+	<<else>>
+	You have already used the Empty-handed Broker or traveled further into the Abyss, you may not use it now.<br>
+<<endif>>
+<</nobr>>
+
+<<nobr>>
+<<if ($starUsed == 0) && ($hiredCompanions.length > 0)>>
+	Would you like to use the Fate-crossing Star?<br><br>
+	[[Yes, bathe in the Star's lake|Layer2 Star 1]]<br>
+	<<else>>
+	You must have companions and have not already used the Fate-crossing Star before if you wish to swap bodies with someone.<br>
+<<endif>>
+<</nobr>>
+<<back [[Layer2 Hub]]>>
+
+
+:: Layer2 Habitation [layer2 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-habitation.png']]
+
+<<return>>
+
+<<nobr>>
+<<if $corruption >= 0>>
+	[[Choose to stay on the second layer|Habitation Ending]]
+	<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<<endif>>
+<</nobr>>
+
+
+:: Layer2 Ascend 1 [layer2]
+Returning to the first layer will take 4 days, and cost 15 corruption.
+
+[[Continue your ascent|Layer2 Ascend2]]
+[[Turn back and continue your business on the second layer|Layer2 Hub]]
+
+
+:: Layer2 Exit [layer2]
+Descending to the next layer will take 5 days. As you travel further down, the layer tend to get larger, both vertically and horizontally.
+
+Accessing drinkable water tends to get a but more difficult from here on out, so having a fair emergency supply of water would be a good idea before continuing onward. At a minimum, about a week's worth of water should be enough to avoid the worst case scenario.
+
+[[Stay on layer 2|Layer2 Hub]]
+[[Descend down to the third layer|Layer2 Exit2]]
+
+
+:: Layer2 Cherry Relic [layer2]
+<<nobr>>
+<<set $temp1 = random(0,11) + 9>>
+<<set $temp2 = random(0,11) + 9>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 9>>
+	<<if $temp1 !== $temp2>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[$temp2])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<</nobr>>
+
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer2 Hub]]
+
+
+:: Layer2 Cherry Curse [layer2]
+<<nobr>>
+<<set $temp1 = random(0,11) + 12>>
+<<set $temp2 = random(0,11) + 12>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 12>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1))>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $playerCurses.push($curses[$temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<</nobr>>
+
+The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
+
+What type of ears would you like to gain?
+
+<<radiobutton "$app.ears" "furry cat" checked>> Cat
+<<radiobutton "$app.ears" "fluffy dog" >> Dog
+<<radiobutton "$app.ears" "floppy cow" >> Cow
+<<radiobutton "$app.ears" "furry monkey" >> Monkey
+<<radiobutton "$app.ears" "furry rabbit" >> Rabbit
+<<radiobutton "$app.ears" "furry fox" >> Fox
+<<radiobutton "$app.ears" "furry mouse" >> Mouse
+<<radiobutton "$app.ears" "pig" >> Pig
+<<radiobutton "$app.ears" "furry horse" >> Horse
+<<endif>><<if $playerCurses.some(e => e.name === "Fluffy Tail")>>
+
+What type of tail would you like to gain?
+
+<<radiobutton "$tail" "flowing cat" checked>> Cat
+<<radiobutton "$tail" "wagging dog" >> Dog
+<<radiobutton "$tail" "lazy cow" >> Cow
+<<radiobutton "$tail" "prehensile monkey" >> Monkey
+<<radiobutton "$tail" "fluffy rabbit" >> Rabbit
+<<radiobutton "$tail" "fluffy fox" >> Fox
+<<radiobutton "$tail" "long mouse" >> Mouse
+<<radiobutton "$tail" "twisted pig" >> Pig
+<<radiobutton "$tail" "swaying horse" >> Horse
+<<set $app.tail.push($tail)>><<endif>><<if $playerCurses.some(e => e.name === "Maximum Fluff")>>
+What type of fur would you like to gain?
+
+<<radiobutton "$app.skinType" "cat-furred" checked>> Cat
+<<radiobutton "$app.skinType" "dog-furred" >> Dog
+<<radiobutton "$app.skinType" "cow-furred" >> Cow
+<<radiobutton "$app.skinType" "monkey-furred" >> Monkey
+<<radiobutton "$app.skinType" "rabbit-furred" >> Rabbit
+<<radiobutton "$app.skinType" "fox-furred" >> Fox
+<<radiobutton "$app.skinType" "mouse-furred" >> Mouse
+<<radiobutton "$app.skinType" "pig-furred" >> Pig
+<<radiobutton "$app.skinType" "horse-furred" >> Horse
+<<endif>>
+
+
+[[Continue on to the rest of the layer|Layer2 Hub]]
+
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Gender Reversal B")>>
+	<<set $app.modgender += 1>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Asset Robustness B")>>
+<<set $app.modpenis += 1>>
+<<set $app.modbreasts += 2>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts += 2>>
+<<else>>
+	<<set $app.penis += 1>>
+	<<set $app.breasts += 2>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Sex Switcheroo")>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+	<<set $app.penis = 0>>
+	<<set $app.vag = 1>>
+	<<set $app.breasts += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+	<<set $app.penis = 3>>
+	<<set $app.vag = 0>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Futa Fun")>>
+<<if $app.osex == "male">>
+	<<set $app.vag = 1>>
+	<<set $app.breasts += 2>>
+<<else>>
+	<<set $app.penis = 3>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
+<<set $app.libido += 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer2 Cherry Mix [layer2]
+<<nobr>>
+<<set $temp1 = random(0,11) + 9>>
+<<set $temp2 = random(0,11) + 12>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<</nobr>>
+
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
+
+What type of ears would you like to gain?
+
+<<radiobutton "$app.ears" "furry cat" checked>> Cat
+<<radiobutton "$app.ears" "fluffy dog" >> Dog
+<<radiobutton "$app.ears" "floppy cow" >> Cow
+<<radiobutton "$app.ears" "furry monkey" >> Monkey
+<<radiobutton "$app.ears" "furry rabbit" >> Rabbit
+<<radiobutton "$app.ears" "furry fox" >> Fox
+<<radiobutton "$app.ears" "furry mouse" >> Mouse
+<<radiobutton "$app.ears" "pig" >> Pig
+<<radiobutton "$app.ears" "furry horse" >> Horse
+<<endif>><<if $playerCurses.some(e => e.name === "Fluffy Tail")>>
+
+What type of tail would you like to gain?
+
+<<radiobutton "$app.tail" "flowing cat" checked>> Cat
+<<radiobutton "$app.tail" "wagging dog" >> Dog
+<<radiobutton "$app.tail" "lazy cow" >> Cow
+<<radiobutton "$app.tail" "prehensile monkey" >> Monkey
+<<radiobutton "$app.tail" "fluffy rabbit" >> Rabbit
+<<radiobutton "$app.tail" "fluffy fox" >> Fox
+<<radiobutton "$app.tail" "long mouse" >> Mouse
+<<radiobutton "$app.tail" "twisted pig" >> Pig
+<<radiobutton "$app.tail" "swaying horse" >> Horse
+<<endif>><<if $playerCurses.some(e => e.name === "Maximum Fluff")>>
+What type of fur would you like to gain?
+
+<<radiobutton "$app.skinType" "cat-furred" checked>> Cat
+<<radiobutton "$app.tail" "dog-furred" >> Dog
+<<radiobutton "$app.tail" "cow-furred" >> Cow
+<<radiobutton "$app.tail" "monkey-furred" >> Monkey
+<<radiobutton "$app.tail" "rabbit-furred" >> Rabbit
+<<radiobutton "$app.tail" "fox-furred" >> Fox
+<<radiobutton "$app.tail" "mouse-furred" >> Mouse
+<<radiobutton "$app.tail" "pig-furred" >> Pig
+<<radiobutton "$app.tail" "horse-furred" >> Horse
+<<endif>>
+
+
+[[Continue on to the rest of the layer|Layer2 Hub]]
+
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Gender Reversal B")>>
+	<<set $app.modgender += 1>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Asset Robustness B")>>
+<<set $app.modpenis += 1>>
+<<set $app.modbreasts += 2>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts += 2>>
+<<else>>
+	<<set $app.penis += 1>>
+	<<set $app.breasts += 2>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Sex Switcheroo")>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+	<<set $app.penis = 0>>
+	<<set $app.vag = 1>>
+	<<set $app.breasts += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+	<<set $app.penis = 3>>
+	<<set $app.vag = 0>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Futa Fun")>>
+<<if $app.osex == "male">>
+	<<set $app.vag = 1>>
+	<<set $app.breasts += 2>>
+<<else>>
+	<<set $app.penis = 3>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
+<<set $app.libido += 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer2 Broker [layer2]
+<<nobr>>
+<<set $corruption += 100>>
+<<set $brokerUsed = 1>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(2 - $timeRed + $status.penalty, 0))>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
+
+After spending a few days seeking out the statue you heard may grant you a boon on this layer, you find it past a glade surrounded by dark, foreboding trees.
+
+As you place your hand on the alabaster hand of demonic statue before you, a shiver runs through your spine. You have a sense that the corruption is closing in on you, and for a moment you feel acute claustrophobia. But after another moment it passes, and as long as you keep your corruption above 0, you should be fine and come out on top of this deal.
+
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Layer2 Star 1 [layer2]
+[img[setup.ImagePath+'Wonders/fate-crossingstar.png']]
+
+After spending a few days seeking out the site where the star seems to have fallen, you find a lake surrounded by rugged rocks, slightly out of place among the dripping forest that surrounds it.
+
+You step into the cool, clear water of the lake. It's surprisingly comfortable given the circumstances, but something in your head itches just the slghtest bit as you immerse yourself in the water.
+
+In the morning, you wake up to a very different circumstance. Whose body do you wake up in?
+
+<<nobr>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<capture $i>>
+		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Switch|Layer2 Star 2][$temp to $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+
+:: Layer2 Star 2 [layer2]
+<<nobr>>
+<<set $temp2 = $carryWeight>>
+<<set $carryWeight = $hiredCompanions[$temp].carry>>
+<<set $corruption += 70>>
+<<set $starUsed = 1>>
+<<set $swapComp = $temp>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<<set $hiredCompanions[$swapComp].carry = $temp2>>
+<</nobr>>
+You've woken up in the body of $hiredCompanions[$swapComp].name! And $hiredCompanions[$swapComp].name has woken up in your body!
+
+How do you feel? Did you ask your companion before the switch? Be prepared for your relationship to change if they didn't want this.
+
+[[Continue exploring the layer|Layer2 Hub]]
+
+<<nobr>>
+
+<<set $app.osex = $hiredCompanions[$swapComp].osex>>
+<<set $app.sex = $hiredCompanions[$swapComp].osex>>
+<<set $app.breasts = $hiredCompanions[$swapComp].obreasts>>
+<<set $app.penis = $hiredCompanions[$swapComp].openis>>
+<<set $app.gender = $hiredCompanions[$swapComp].ogender>>
+
+<<if $playerCurses.some(e => e.name === "Futa Fun")>>
+<<if $app.osex == "male">>
+	<<set $app.vag = 1>>
+	<<set $app.breasts = Math.max((3 + ($app.penis - 3)), 1)>>
+<<else>>
+	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
+<<endif>>
+<<set $app.sex = "futa">>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Sex Switcheroo")>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+	<<set $app.breasts = $app.penis>>
+	<<set $app.penis = 0>>
+	<<set $app.vag = 1>>
+	<<set $app.sex = "female">>
+<<else>>
+	<<set $app.gender -= 1>>
+	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
+	<<set $app.vag = 0>>
+	<<set $app.sex = "male">>
+	<<set $app.breasts = 0>>
+<<endif>>
+<<endif>>
+
+
+<<set $app.oheight = $hiredCompanions[$swapComp].oheight>>
+<<set $app.height = $app.oheight + $app.modheight>>
+<<set $app.hairColor = $hiredCompanions[$swapComp].hairColor>>
+<<set $app.skinColor = $hiredCompanions[$swapComp].skinColor>>
+<<set $app.desc += $hiredCompanions[$swapComp].appDesc>>
+<<if $app.sex == "female" || $app.sex == "futa">>
+	<<set $app.breasts += $app.modbreasts>>
+<<endif>>
+<<if $app.sex == "male" || $app.sex == "futa">>
+	<<set $app.penis += $app.modpenis>>
+<<endif>>
+<<if $app.osex == "male">>
+	<<set $app.gender = $app.ogender + $app.modgender>>
+	<<else>>
+	<<set $app.gender = $app.ogender - $app.modgender>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
+<<if $app.sex == "male">>
+	<<set $app.penis = 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts = 1>>
+<<elseif $app.sex == "futa">>
+	<<set $app.penis = 1>>
+	<<set $app.breasts = 1>>
+<<endif>>
+<<endif>>
+
+<</nobr>>
+
+
+:: Take on Libido Reinforcement B [layer2]
+<<set $playerCurses.push($curse13)>><<set $corruption += $curse13.corr>>
+
+You have successfully taken on the $curse13.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+<<set $app.libido += 1>>
+
+
+:: Take on Gender Reversal B [layer2]
+<<set $playerCurses.push($curse14)>><<set $corruption += $curse14.corr>>
+
+You have successfully taken on the $curse14.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+<<nobr>>
+<<set $app.modgender += 1>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Asset Robustness B [layer2]
+<<set $playerCurses.push($curse15)>><<set $corruption += $curse15.corr>>
+
+You have successfully taken on the $curse15.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+<<nobr>>
+<<set $app.modpenis += 1>>
+<<set $app.modbreasts += 2>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts += 2>>
+<<else>>
+	<<set $app.penis += 1>>
+	<<set $app.breasts += 2>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Age Reduction A [layer2]
+<<set $playerCurses.push($curse16)>><<set $corruption += $curse16.corr>>
+
+You have successfully taken on the $curse16.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+<<nobr>>
+<<if $app.appAge <= 22>>
+	<<set $app.appAge -= 2>>
+	<<else>>
+	<<set $app.appAge = 20>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Fluffy Ears [layer2]
+<<set $playerCurses.push($curse17)>><<set $corruption += $curse17.corr>>
+
+You have successfully taken on the $curse17.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+What type of ears would you like to gain?
+
+<<radiobutton "$app.ears" "furry cat" checked>> Cat
+<<radiobutton "$app.ears" "fluffy dog" >> Dog
+<<radiobutton "$app.ears" "floppy cow" >> Cow
+<<radiobutton "$app.ears" "furry monkey" >> Monkey
+<<radiobutton "$app.ears" "furry rabbit" >> Rabbit
+<<radiobutton "$app.ears" "furry fox" >> Fox
+<<radiobutton "$app.ears" "furry mouse" >> Mouse
+<<radiobutton "$app.ears" "pig" >> Pig
+<<radiobutton "$app.ears" "furry horse" >> Horse
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+
+:: Take on Fluffy Tail [layer2]
+<<set $playerCurses.push($curse18)>><<set $corruption += $curse18.corr>>
+
+You have successfully taken on the $curse18.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+What type of tail would you like to gain?
+
+<<radiobutton "$tail" "flowing cat" checked>> Cat
+<<radiobutton "$tail" "wagging dog" >> Dog
+<<radiobutton "$tail" "lazy cow" >> Cow
+<<radiobutton "$tail" "prehensile monkey" >> Monkey
+<<radiobutton "$tail" "fluffy rabbit" >> Rabbit
+<<radiobutton "$tail" "fluffy fox" >> Fox
+<<radiobutton "$tail" "long mouse" >> Mouse
+<<radiobutton "$tail" "twisted pig" >> Pig
+<<radiobutton "$tail" "swaying horse" >> Horse
+
+[[Accept more curses from the second layer|Layer2 Curses][$app.tail.push($tail)]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub][$app.tail.push($tail)]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2][$app.tail.push($tail)]]
+<<endif>>
+
+
+:: Take on Maximum Fluff [layer2]
+<<set $playerCurses.push($curse19)>><<set $corruption += $curse19.corr>>
+
+You have successfully taken on the $curse19.name curse. Hopefully you are ok with accepting the permanent consequences.
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Hair Removal")>>
+	<<print "<br>You have lost the corruption gained from Hair Removal.<br>">><<set $corruption -= 5>>
+<<endif>>
+<</nobr>>
+What type of fur would you like to gain?
+
+<<radiobutton "$app.skinType" "cat-furred" checked>> Cat
+<<radiobutton "$app.skinType" "dog-furred" >> Dog
+<<radiobutton "$app.skinType" "cow-furred" >> Cow
+<<radiobutton "$app.skinType" "monkey-furred" >> Monkey
+<<radiobutton "$app.skinType" "rabbit-furred" >> Rabbit
+<<radiobutton "$app.skinType" "fox-furred" >> Fox
+<<radiobutton "$app.skinType" "mouse-furred" >> Mouse
+<<radiobutton "$app.skinType" "pig-furred" >> Pig
+<<radiobutton "$app.skinType" "horse-furred" >> Horse
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+
+:: Take on Heat/Rut [layer2]
+<<set $playerCurses.push($curse20)>><<set $corruption += $curse20.corr>>
+
+You have successfully taken on the $curse20.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+
+:: Take on Lightweight [layer2]
+<<set $playerCurses.push($curse21)>><<set $corruption += $curse21.corr>>
+
+You have successfully taken on the $curse21.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+
+:: Take on Sex Switcheroo [layer2]
+<<set $playerCurses.push($curse22)>><<set $corruption += $curse22.corr>>
+
+You have successfully taken on the $curse22.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+<<nobr>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+	<<set $app.breasts = $app.penis>>
+	<<set $app.penis = 0>>
+	<<set $app.vag = 1>>
+	<<set $app.sex = "female">>
+<<else>>
+	<<set $app.gender -= 1>>
+	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
+	<<set $app.vag = 0>>
+	<<set $app.sex = "male">>
+	<<set $app.breasts = 0>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Futa Fun [layer2]
+<<set $playerCurses.push($curse23)>><<set $corruption += $curse23.corr>>
+
+You have successfully taken on the $curse23.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+You seem to have been one of the people this curse leaves with both a penis and a vagina, a true futa, as the name of this curse implies. And it seems like your new parts did scale with your old ones!
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+<<nobr>>
+<<if $app.osex == "male">>
+	<<set $app.vag = 1>>
+	<<set $app.breasts = Math.max((3 + ($app.penis - 3)), 1)>>
+<<else>>
+	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
+<<endif>>
+<<set $app.sex = "futa">>
+<</nobr>>
+
+
+:: Take on Blushing Virgin [layer2]
+<<set $playerCurses.push($curse24)>><<set $corruption += $curse24.corr>>
+
+You have successfully taken on the $curse24.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the second layer|Layer2 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 2|Layer2 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L2]]
+<<endif>>
+
+
+:: Pick up the Firmament Pigment [layer2]
+<<set $ownedRelics.push($relic10)>><<set $corruption -= ($relic10.corr - $corRed)>><<set $light = 1>>
+
+You have successfully taken the $relic1.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Pearly Gates [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic11.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic11)>>
+<<set $corruption -= ($relic11.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic11.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the World Stone [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic12.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic12)>>
+<<set $corruption -= ($relic12.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic12.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Forest's Gift [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic13.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic13)>>
+<<set $corruption -= ($relic13.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic13.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Harmless Harmony [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic14.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic14)>>
+<<set $corruption -= ($relic14.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic14.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Umbra Trident [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic15.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic15)>>
+<<set $corruption -= ($relic15.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic15.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Event Horizon [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic16.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic16)>>
+<<set $corruption -= ($relic16.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic16.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Heart-stealing Stole [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic17.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic17)>>
+<<set $corruption -= ($relic17.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic17.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Effacing Asperity [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic18.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic18)>>
+<<set $corruption -= ($relic18.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic18.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Wholly Ale [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic19.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic19)>>
+<<set $corruption -= ($relic19.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic19.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Memoir Remnant [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic20.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic20)>>
+<<set $corruption -= ($relic20.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic20.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Pick up the Gleam Dazer [layer2]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic21.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic21)>>
+<<set $corruption -= ($relic21.corr - $corRed)>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic21.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Layer2 Threat1 Main [layer2 image]
+<<set $timeL2T1 -= 4>>
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
+
+How do you want to deal with the beast moving in on you?
+
+
+<<nobr>>
+<<if $items[14].count > 0>>
+	[[Fight it off with your sword|Layer2 Hub]]<br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 2>>
+	[[Shoot it 3 times with your pistol|Layer2 Hub][$items[20].count -= 3]]<br>
+<<endif>>
+<<if $items[1].count > 4>>
+	[[Feed it 5 days of your food rations|Layer2 Hub][$items[1].count -= 5]]<br>
+<<endif>>
+<<if $hiredCompanions.length > 3>>
+	[[Scare it off with your large group of companions|Layer2 Hub]]<br>
+<<endif>>
+[[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Hub]]
+
+
+:: Layer2 Flasks [layer2]
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<if $items[2].count > 0>>
+		<<set $items[3].count += 1>>
+		<<set $items[2].count -= 1>>
+		<<set $waterL1 += 1>>
+	<<else>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+[img[setup.ImagePath+'Foraging/bewitcherplants.png']]
+
+<<if $abyssKnow == 0>>
+You dip each of your flasks into the miasma-contaminated rainwater dripping all around you. You know that this will likely increase the size of your future family, but you need the water. Better to become a little bit more corrupted than to die of dehydration, right?
+<<else>>
+Using your knowledge of the Abyss, you look around briefly before finding the Bewitcher Plants you were looking for. Carefully, you extract water from the flowers, checking it to make sure it's pure before giving it a taste.
+
+A few tests and you can confirm you have pure water to fill your flasks with! Now is a great time to collect water for your future travels.
+<<endif>>
+
+[[Return to exploring your food and water options on this layer|Layer2 Forage]]
+
+
+:: Layer2 Exit2 [layer2]
+<<nobr>>
+<<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $layerExitTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
+<<endif>>
+
+<<for $i = 0; $i < 99; $i++>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
+	<<if $timeL2T1 > 3>>
+		<br>During your long hike towards the third layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
+
+[[Deal with the Baying Gourmet|Layer2 Threat1 Descend]]<br><br>
+		<<break>>
+	<<endif>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += 1>>
+	<<endif>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+				<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= 1>>
+	<<else>>
+	<<set $foodL2 += 1>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= 1>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += 1>>
+	<<endif>>
+<<endif>>
+	<<set $time += 1>>
+	<<set $layerExitTime -= 1>>
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
+
+[[Enter the deep caverns|Layer3 1]]
+
+<<endif>>
+
+
+:: Layer2 Threat1 Descend [layer2 image]
+<<set $timeL2T1 -= 4>>
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
+
+How do you want to deal with the beast moving in on you?
+
+
+<<nobr>>
+<<if $items[14].count > 0>>
+	[[Fight it off with your sword|Layer2 Exit2]]<br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 2>>
+	[[Shoot it 3 times with your pistol|Layer2 Exit2][$items[20].count -= 3]]<br>
+<<endif>>
+<<if $items[1].count > 4>>
+	[[Feed it 5 days of your food rations|Layer2 Exit2][$items[1].count -= 5]]<br>
+<<endif>>
+<<if $hiredCompanions.length > 3>>
+	[[Scare it off with your large group of companions|Layer2 Exit2]]<br>
+<<endif>>
+[[Allow it to overpower you|Layer2 Exit2][$status.duration = (4 - $statRed), $status.penalty = 1]]
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Exit2]]
+
+
+:: Layer2 Ascend2 [layer2 altered]
+<<nobr>><<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $layerExitTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
+<<endif>>
+
+<<for $i = 0; $i < 99; $i++>>
+	<<if $timeL2T1 > 3>>
+		<br>During your long hike back up towards the first layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
+
+[[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
+		<<break>>
+	<<endif>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += 1>>
+	<<endif>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+				<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= 1>>
+	<<else>>
+	<<set $foodL2 += 1>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= 1>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += 1>>
+	<<endif>>
+<<endif>>
+	<<set $time += 1>>
+	<<set $layerExitTime -= 1>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<if $items[14].count > 0 || $cut == 1>>
+	<<set $timeRed -= 1>>
+<<endif>>
+<<set $corruption -= (15 - $corRed)>>
+<<set $forageWater = 0>>
+<<set $forageFood = 0>>
+<</nobr>>
+
+
+You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.
+<<HeightCorrected>>
+<<BreastCorrected>>
+<<Threat1Criterion>>
+<<if $threat1Crit == 1>>
+		<br>Worn down by the long trek up through the dense jungle of the previous layer, you are happy when you finally reach the bridge to outcast village. The moment you walk up the bridge a figure appears from behind a column.
+
+		'Well well well, what do we have here?'
+
+		When you turn around you find yourself surrounded by more bandits emerging from the bushes behind you.
+
+		<<nobr>>
+		'It looks like a <<PerceivedStature>> <<PerceivedGender>>
+		<<if $hiredCompanions.length < 1>>
+		all by <<ObjectivePronoun>>self, with an aweful lot of stuff for 1 person.
+		<<elseif $hiredCompanions.length == 1 && $app.appAge>13 >>
+		on romantic date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date.
+		<<elseif $hiredCompanions.length == 1 && $app.appAge<=13 >>
+		on a stroll with <<PossesivePronoun>> babysitter. It seems you are carrying a lot of grownup stuff around you don't really need.
+		<<else>>
+		with <<PossesivePronoun>> merry ragtag of losers. Don't worry we wont bite, as long as you do as we nicely ask.
+		<<endif>>
+		<</nobr>>
+		Howabout we take that stuff of your hands so you don't have to worry about it anymore, hmm?'
+		<br><br>
+
+[[Deal with the oppotunistic bandits|Layer1 Threat1 Ascend]]<br>
+		<<else>>
+[[Return to the first layer|Layer1 Hub]]
+	<<endif>>
+
+
+
+<<endif>>
+
+
+:: Layer2 Threat1 Ascend [layer2 image]
+<<set $timeL2T1 -= 4>>
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
+
+How do you want to deal with the beast moving in on you?
+
+
+<<nobr>>
+<<if $items[14].count > 0>>
+	[[Fight it off with your sword|Layer2 Ascend2]]<br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 2>>
+	[[Shoot it 3 times with your pistol|Layer2 Ascend2][$items[20].count -= 3]]<br>
+<<endif>>
+<<if $items[1].count > 4>>
+	[[Feed it 5 days of your food rations|Layer2 Ascend2][$items[1].count -= 5]]<br>
+<<endif>>
+<<if $hiredCompanions.length > 3>>
+	[[Scare it off with your large group of companions|Layer2 Ascend2]]<br>
+<<endif>>
+[[Allow it to overpower you|Layer2 Ascend2][$status.duration = (4 - $statRed), $status.penalty = 1]]
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Ascend2]]
+
+
+:: Layer2 Curses Random
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<set $temp1 = random(0,11) + 12>>
+	<<if ($temp1 == 12) && !$playerCurses.some(e => e.name === "Libido Reinforcement B")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 13) && !$playerCurses.some(e => e.name === "Gender Reversal B")>>
+		<<break>>
+	<<endif>>
+	<<if $temp == 14 && !($playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 15) && !$playerCurses.some(e => e.name === "Age Reduction A")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 16) && !$playerCurses.some(e => e.name === "Fluffy Ears")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 17) && !$playerCurses.some(e => e.name === "Fluffy Tail")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 18) && !$playerCurses.some(e => e.name === "Maximum Fluff")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 19) && !$playerCurses.some(e => e.name === "Heat/Rut")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 20) && !$playerCurses.some(e => e.name === "Lightweight")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 21) && !($playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 22) && !($playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 23) && !$playerCurses.some(e => e.name === "Blushing Virgin")>>
+		<<break>>
+	<<endif>>
+
+	<<if $i > 900>>
+		<<set $temp1 = -1>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $temp1 >= 0>>
+The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your curse and the change in life that comes with it.
+
+<<print "[[Take on " + $curses[$temp1].name + "]]">>
+<<else>>
+There are no curses left for you to take on this layer.
+
+<<back>>
+<<endif>>
+
+
+:: Escape Balloon L2 [new layer2]
+<<nobr>><<set $currentLayer = 2>><<if !isPlaying("layer2")>>
+	<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
+<<endif>><</nobr>>
+The drops of the rain create a constant pattering sound on the surface of your balloon. Luckily it is soundly weather-proof, but a significant amount of the water drips down onto you, making your journey through this layer suitably wet, similar to the trip down.
+
+[[Ascend to next layer|Escape Balloon L1][$corruption -= (15 - $corRed)]]
+[[Hover on this layer to take in a curse|Layer2 Curses]]
+[[Get off the balloon on this layer|Layer2 Hub][$escBalDepl=0]]

@@ -1,0 +1,1697 @@
+:: Layer6 1 [layer6 image]
+<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>><<set $currentLayer = 6>>
+[img[setup.ImagePath+'Layer Intros/l6intro.png']]
+
+@@.layerTitle;LAYER 6 - CINDERS OF DIS@@
+
+The first hint of the sixth layer is a strong smell of smoke overwhelming your nostrils - a savory, meaty kind of smoke, almost like the smell of barbeque. It almost feels like the flowers beneath you are caressing your feet, but the air gets hotter and hotter as you head further down, and as the flowers begin to become charred and burned awar, the real culprit becomes clear: a squirming carpet of tentacles, thousands or millions of tiny villi completely covering almost every surface on the path ahead, forming an entire field of squirming creatures.
+
+They grow taller as you proceed, until you're wading through a thicket or navel-high tentacles, prodding and rubbing against your most sensitive areas. By this point, the heat has become truly intense, almost sauna-like. It's so hot that great swathes of the tentacle fields are actually aflame, thousands of tendrils being birned away and perpetually springing up again, a land of flesh doused in fire: a perfect vision of Hell. Some of the fire are in a familiar orange-red hue, while other come in more exotic greens, pinks, and purples, only lightly tickling when they lap at your skin. Small pieces of rubble, perhaps of some ancient structures, litter the layer...but the tentacles and flames have long since crushed and burned them into unrecognizable, meaningless rock.
+
+[[Walk through the sixth layer of the Abyss|Layer6 Hub]]
+
+<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $visitL6 == 0>>
+	<<print "[[Use Cherry's chaotic luck|Layer6 Cherry]]">><br><<endif>>
+<<endif>><</nobr>>
+
+
+:: Layer6 Hub [layer6]
+<<set $currentLayer = 6>><<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>><<set $visitL6 = 1>><<set $layerExit = 0>>
+What do you want to do while you are here?
+
+<<nobr>>
+<<if $forageWater == 1>>
+	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily water on this layer">><br>
+<<endif>>
+<<if $forageFood == 1>>
+	<<print "You are currently foraging for your daily food on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily food on this layer">><br><<endif>>
+<<if !isPlaying("layer6")>>
+	<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>>
+<<endif>>
+<</nobr>>
+
+[[Use Items]]
+
+[[Learn about the threats on this layer|Layer6 Threats]]
+[[Check for food and water you can forage for|Layer6 Forage]]
+[[Search for relics|Layer6 Relics]]
+[[Take on curses to purge your corruption|Layer6 Curses]]
+[[Look for any wonders you can take advantage|Layer6 Wonders]]
+[[View the Layer 5 habitation option|Layer6 Habitation]]
+
+[[Look up towards the surface|Layer6 Ascend 1]]
+[[Look down at the next layer|Layer6 Exit1]]
+
+<<elseif $timeL6T2 > 7 && $dragonKill < 5>>
+
+A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.
+
+[[Deal with the Fell Dragon|Layer6 Threat2 Main]]
+
+<<else>>
+
+Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?
+
+They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!
+
+[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Main1]]
+
+<<endif>>
+
+
+:: Layer6 Cherry [layer6]
+[img[setup.ImagePath+'Surface/cherry.png']]
+
+How would you like to use Cherry's chaotic luck ability?
+
+[[Get 2 random relics for half cost|Layer6 Cherry Relic]]
+[[Get 2 random curses for +50% corruption|Layer6 Cherry Curse]]
+[[Get 1 relic and 1 curse|Layer6 Cherry Mix]]
+
+
+:: Layer6 Threats [layer6 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-threats.png']]
+
+[[Return to exploring the sixth layer|Layer6 Hub]]
+
+
+:: Layer6 Forage [layer6 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-foraging.png']]
+
+If you decide to start foraging for food or water, it means that you will not reduce your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
+
+<<nobr>>
+<<if $forageWater == 0>>
+	<<print "[[Start foraging for water in The River Dycx|Layer6 Forage][$forageWater = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for water|Layer6 Forage][$forageWater = 0]]">><br>
+<<endif>>
+<<if $forageFood == 0>>
+	<<print "[[Start foraging for food from Omen Eyes|Layer6 Forage][$forageFood = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for food|Layer6 Forage][$forageFood = 0]]">><br>
+<<endif>>
+<<if $items[2].count > 0>>
+[[Fill your empty flasks with water from the layer|Layer6 Flasks]]<br>
+<<endif>>
+<</nobr>>
+
+[[Return to exploring the rest of the layer|Layer6 Hub]]
+
+
+:: Layer6 Relics [layer6 image]
+<<if $timeL4T1 < 7>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>
+Here are the relics on this layer which are available for you to spend corruption on:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-relics.png']]
+
+<<nobr>><<if $totalRelics.some(e => e.name === "Ring of the Devourer")>>
+	<<else>><<print "[[Pick up the Ring of the Devourer]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Pulse Bloom")>>
+	<<else>><<print "[[Pick up the Pulse Bloom]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Out of Mind")>>
+	<<else>><<print "[[Pick up the Out of Mind]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Still Film")>>
+	<<else>><<print "[[Pick up the Still Film]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Forbidden Grimoire") || ($items[15].count == 0 && $scuba == 0)>>
+	<<else>><<print "[[Pick up the Forbidden Grimoire]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Luminous Phantasmagoria")>>
+	<<else>><<print "[[Pick up the Luminous Phantasmagoria]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Relativity Eye")>>
+	<<else>><<print "[[Pick up the Relativity Eye]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Return to Sender")>>
+	<<else>><<print "[[Pick up the Return to Sender]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Yliaster Materia")>>
+	<<else>><<print "[[Pick up the Yliaster Materia]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Aeonglass")>>
+	<<else>><<print "[[Pick up the Aeonglass]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Apparatus Diaboli")>>
+	<<else>><<print "[[Pick up the Apparatus Diaboli]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Heavy is the Head")>>
+	<<else>><<print "[[Pick up the Heavy is the Head]]">>
+<<endif>><</nobr>>
+
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+<<else>>
+
+A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.
+
+[[Deal with the Drifting Swallower|Layer6 Threat1 Main1]]
+
+<<endif>>
+
+
+:: Layer6 Curses [layer6 image altered]
+These are the curses available for you to take to help manage your corruption:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-curses.png']]
+
+<<nobr>><<if $playerCurses.some(e => e.name === "Submissiveness Rectification B")>>
+	<<else>><<print "[[Take on Submissiveness Rectification B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+	<<else>><<print "[[Take on Lactation Rejuvination B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Pleasure Respecification B")>>
+	<<else>><<print "[[Take on Pleasure Respecification B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Age Reduction C")>>
+	<<else>><<print "[[Take on Age Reduction C]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $hornyCount > 1>>
+	<<else>><<print "[[Take on Horny]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Drawing Spades")>>
+	<<else>><<print "[[Take on Drawing Spades]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Tattoo Tally")>>
+	<<else>><<print "[[Take on Tattoo Tally]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Leaky")>>
+	<<else>><<print "[[Take on Leaky]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Wandering Hands")>>
+	<<else>><<print "[[Take on Wandering Hands]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $semenCount > 3>>
+	<<else>><<print "[[Take on Semen Demon]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $quotaCount > 3>>
+	<<else>><<print "[[Take on Quota]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $limelightCount > 3>>
+	<<else>><<print "[[Take on In the Limelight]]">>
+<<endif>><</nobr>>
+
+[[Allow the Abyss to bestow a random curse upon you|Layer6 Curses Random]]
+
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Layer6 Wonders [layer6 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
+
+Do you want to approach the Maw of Kimaris to get a copy of a relic from a higher layer?
+
+[[Approach the Maw|Layer6 Maw1]]
+
+
+<<back>>
+
+
+:: Layer6 Habitation [layer6 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-habitation.png']]
+
+<<return>>
+
+<<nobr>>
+<<if $corruption >= 0>>
+	[[Choose to stay on the sixth layer|Habitation Ending]]
+	<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<<endif>>
+<</nobr>>
+
+
+:: Layer6 Ascend 1 [layer6]
+Returning to the fragrantdesert of the previous layer will take 15 days of trekking, and cost 65 corruption.
+
+[[Continue your ascent|Layer6 Ascend2]]
+[[Turn back and continue your business on the sixth layer|Layer6 Hub]]
+
+
+:: Layer6 Exit1 [layer6]
+There is no indication of what you might find beyond layer 6. There are a few hints of a paved path that once existed before being crushed to pieces by the tentacles<<if $hiredCompanions.length > 0>>, but none of your companions have even heard a rumor of where it might lead<<endif>>. Do you want to push further into the unknown depths of the Abyss?
+
+Traversing down and past this hell will take 16 days.
+
+[[Turn back and continue your business on the sixth layer|Layer6 Hub]]
+[[Continue your descent to the seventh layer|Layer6 Exit2]]
+
+
+:: Layer6 Threat2 Main [layer6]
+<<set $timeL6T2 -= 8>>
+[img[setup.ImagePath+'Threats/felldragon.png']]
+
+How do you want to deal with the awe-inspiring dragon flying above your head?
+
+
+<<nobr>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
+The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration = 99, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
+You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
+	[[Offer 100 dubloons to appease the dragon|Layer6 Hub][$dubloons -= 100]]<br><br>
+If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
+	[[Try to run and accept the consequences|Layer6 Hub][$status.duration = 99, $status.penalty = 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the dragons|Layer6 Hub][$dragonKill += 1, $dubloons += 50]]
+
+
+:: Layer6 Threat1 Main1 [layer6]
+<<set $timeL6T1 -= 15>>
+[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
+
+As the enormous tentacle beast approaches, you must quickly decide on a course of action for defeating it, or fall into its slimy clutches and allow it to use you to sate its lust.
+
+<<nobr>>
+<<if $items[13].count > 0 && $items[20].count > 18>>
+	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
+	[[Shoot it with your pistol|Layer6 Hub][$items[20].count -= (19 - $bullRed)]]<br><br>
+<<endif>>
+<<if $items[14].count > 0>>
+Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
+	[[Fight it off with a sword|Layer6 Threat1 Main2][$tentacleFucked = 10]]<br>
+	<<if $items[4].count > 4>>[[Fight it off with a sword and use a medkit to cure the status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
+	[[Fight it off with Sunbeam|Layer6 Threat1 Main2][$tentacleFucked = 9]]<br>
+	<<if $items[4].count > 4>>[[Fight it off with Sunbeam and use a medkit to cure the status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
+	[[Have Khemia fight it off with a sword|Layer6 Threat1 Main2][$tentacleFucked = 2, $khemiaFucked = 1]]<br>
+	<<if $items[4].count > 4>>[[Have Khemia fight it off with a sword and use a medkit to cure his status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Main2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
+	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+<<endif>>
+If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
+[[Allow it to overpower you|Layer6 Threat1 Main2][$tentacleFucked = 12]]<br>
+	<<if $items[4].count > 4>>[[Allow it to overpower you and use a medkit to cure the status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+<</nobr>>
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to defeat the beast|Layer6 Hub]]
+
+
+:: Layer6 Flasks [layer6]
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<if $items[2].count > 0>>
+		<<set $items[3].count += 1>>
+		<<set $items[2].count -= 1>>
+		<<set $waterL6 += 1>>
+		<<set $hexflame += 1>>
+	<<else>>
+		<<break>>
+	<<endif>>
+	<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+		<<set $hexflame += 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+[img[setup.ImagePath+'Foraging/riverdycx.png']]
+
+<<if $hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0>>
+In an incredible collaboration with colleagues on the surface, Saeko managed to develop some incredibly innovative water filtration techniques. The water purified from the River Dycx using this technique is absolutely safe to drink, and it even has a pleasant, slightly sweet, cinnamon flavor to it. If this were more easily accessible maybe you could sell this as a unique drink to people on the surface.
+<<else>>
+There is a very easily accessible source of water on this layer, the River Dycx, which is bright red and leaves a cinnamon-like aftertaste in your mouth. Unfortunately it also leaves a bit of a burning hole in your heart, causing you to gain an additional jinxed flame counter for each day of water you drink here, making it even more unpleasant to leave. Watch out for how much water you drink here or you may find yourself never able to leave.
+<<endif>>
+[[Return to exploring your food and water options on this layer|Layer6 Forage]]
+
+
+:: Layer6 Maw1 [image layer6]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
+<<nobr>>
+<<set $totalRelics = $ownedRelics.concat($soldRelics)>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<nobr>>
+You may pick up a new relic for 10 dubloons and 1.5x its corruption cost:<br>
+<<for $i = 0; $i < $relics.length; $i++>>
+	<<capture $i>>
+	<<if !$totalRelics.some(e => e.name === $relics[$i].name) && $relics[$i].name != "Kin Shifter">>
+		<<print "[[$relics[$i].name|Layer6 Maw1][$temp = $i, $dubloons -= 10, $corruption -= Math.round(Math.max(($relics[$i].corr * 3 / 2) - $corRed, 10)), $ownedRelics.push($relics[$i])]]">><<print " ">><<print Math.round(Math.max(($relics[$i].corr * 3 / 2) - $corRed, 10))>><<print " corruption points">><br>
+	<<endif>>
+	<</capture>>
+<</for>><br>
+You may pick up a copy of an old relic for 20 dubloons and 2x its corruption cost:<br>
+<<for $i = 0; $i < $relics.length; $i++>>
+	<<capture $i>>
+	<<if $totalRelics.some(e => e.name === $relics[$i].name) && $relics[$i].name != "Kin Shifter">>
+		<<print "[[$relics[$i].name|Layer6 Maw1][$temp = $i, $dubloons -= 20, $corruption -= Math.round(Math.max(($relics[$i].corr * 2) - $corRed, 10)), $ownedRelics.push($relics[$i])]]">><<print " ">><<print Math.round(Math.max(($relics[$i].corr * 2) - $corRed, 10))>><<print " corruption points">><br>
+	<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+[[Return to exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Ring of the Devourer [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic61)>>
+<<set $corruption -= ($relic61.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic61.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic61.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Pulse Bloom [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic62)>>
+<<set $corruption -= ($relic62.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic62.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic62.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Out of Mind [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic63)>>
+<<set $corruption -= ($relic63.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic63.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic63.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Still Film [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic64)>>
+<<set $corruption -= ($relic64.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic64.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic64.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Forbidden Grimoire [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic65)>>
+<<set $corruption -= ($relic65.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic65.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic65.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Luminous Phantasmagoria [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic66)>>
+<<set $corruption -= ($relic66.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic66.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic66.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Relativity Eye [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic67)>>
+<<set $corruption -= ($relic67.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic67.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic67.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Return to Sender [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic68)>>
+<<set $corruption -= ($relic68.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic68.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic68.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Yliaster Materia [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic69)>>
+<<set $corruption -= ($relic69.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic69.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic69.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Aeonglass [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic70)>>
+<<set $corruption -= ($relic70.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic70.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic70.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Apparatus Diaboli [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic71)>>
+<<set $corruption -= ($relic71.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic71.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic71.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Pick up the Heavy is the Head [layer6]
+<<nobr>>
+<<set $ownedRelics.push($relic72)>>
+<<set $corruption -= ($relic72.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic72.time - $timeRed + $status.penalty, 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic72.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 6|Layer6 Relics]]
+[[Continue exploring the sixth layer|Layer6 Hub]]
+
+
+:: Take on Submissiveness Rectification B [layer6]
+<<set $playerCurses.push($curse73)>><<set $corruption += $curse73.corr>>
+
+You have successfully taken on the $curse73.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Lactation Rejuvination B [layer6]
+<<set $playerCurses.push($curse74)>><<set $corruption += $curse74.corr>>
+
+You have successfully taken on the $curse74.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Pleasure Respecification B [layer6]
+<<set $playerCurses.push($curse75)>><<set $corruption += $curse75.corr>>
+
+You have successfully taken on the $curse75.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Age Reduction C [layer6]
+<<set $playerCurses.push($curse76)>><<set $corruption += $curse76.corr>>
+
+You have successfully taken on the $curse76.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+<<nobr>>
+<<if $app.appAge <= 24>>
+	<<set $app.appAge -= 4>>
+	<<else>>
+	<<set $app.appAge = 20>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Horny [layer6]
+<<set $playerCurses.push($curse77)>><<set $corruption += $curse77.corr>><<set $hornyCount += 1>>
+
+You have successfully taken on the $curse77.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+<<nobr>>
+<</nobr>>
+
+
+:: Take on Drawing Spades [layer6]
+<<set $playerCurses.push($curse78)>><<set $corruption += $curse78.corr>>
+
+You have successfully taken on the $curse78.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+<<set $app.tail.push("cute, spade-tipped demon")>>
+
+
+:: Take on Tattoo Tally [layer6]
+<<set $playerCurses.push($curse79)>><<set $corruption += $curse79.corr>>
+
+You have successfully taken on the $curse79.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Leaky [layer6]
+<<nobr>>
+<<if $app.vagina > 0>>
+<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.">>
+<<endif>>
+<<if $app.penis > 0>>
+<<set $curse80.appDesc = "Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.">>
+<<endif>>
+<<if $app.vagina > 0 && $app.penis > 0>>
+<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and your penis is always leaking precum, so it only takes a little motivation to get a real stream going down there.">>
+<<endif>>
+<<set $playerCurses.push($curse80)>><<set $corruption += $curse80.corr>><</nobr>>
+
+You have successfully taken on the $curse80.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Wandering Hands [layer6]
+<<set $playerCurses.push($curse81)>><<set $corruption += $curse81.corr>>
+
+You have successfully taken on the $curse81.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Semen Demon [layer6]
+<<set $playerCurses.push($curse82)>><<set $corruption += $curse82.corr>><<set $semenCount += 1>>
+
+You have successfully taken on the $curse82.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on Quota [layer6]
+<<set $playerCurses.push($curse83)>><<set $corruption += $curse83.corr>><<set $quotaCount += 1>>
+
+You have successfully taken on the $curse83.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Take on In the Limelight [layer6]
+<<set $playerCurses.push($curse84)>><<set $corruption += $curse84.corr>><<set $limelightCount += 1>>
+
+You have successfully taken on the $curse84.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the sixth layer|Layer6 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 6|Layer6 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L6]]
+<<endif>>
+
+
+:: Layer6 Curses Random [layer6]
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<set $temp1 = random(0,11) + 72>>
+	<<if ($temp1 == 72) && !($playerCurses.some(e => e.name === "Submissiveness Rectification B"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 73) && !$playerCurses.some(e => e.name === "Lactation rejuvination B")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 74) && !$playerCurses.some(e => e.name === "Pleasure Respecification B")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 75) && !$playerCurses.some(e => e.name === "Age Reduction C")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 76) && $hornyCount < 2>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 77) && !(playerCurses.some(e => e.name === "Drawing Spades"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 78) && !$playerCurses.some(e => e.name === "Tattoo Tally")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 79) && !$playerCurses.some(e => e.name === "Leaky")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 80) && !$playerCurses.some(e => e.name === "Wandering Hands")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 81) && $semenCount < 4>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 82) && $quotaCount < 4>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 83) && $limelightCount < 4>>
+		<<break>>
+	<<endif>>
+
+
+	<<if $i > 900>>
+		<<set $temp1 = -1>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $temp1 >= 0>>
+The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your curse and the change in life that comes with it.
+
+<<print "[[Take on " + $curses[$temp1].name + "]]">>
+<<else>>
+There are no curses left for you to take on this layer.
+
+<<back>>
+<<endif>>
+
+
+:: Layer6 Cherry Relic [layer6]
+<<nobr>>
+<<set $temp1 = random(0,11) + 60>>
+<<set $temp2 = random(0,11) + 60>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 60>>
+	<<if $temp1 !== $temp2>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[$temp2])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<</nobr>>
+
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer6 Hub]]
+
+
+:: Layer6 Cherry Curse [layer6]
+<<nobr>>
+<<set $temp1 = random(0,11) + 72>>
+<<set $temp2 = random(0,11) + 72>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 72>>
+	<<if ($temp1 !== $temp2)>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $playerCurses.push($curses[$temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<</nobr>>
+
+The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer6 Hub]]
+
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Drawing Spades")>>
+<<set $app.tail.push("cute, spade-tipped demon")>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Age Reduction C")>>
+<<if $app.appAge <= 24>>
+	<<set $app.appAge -= 4>>
+	<<else>>
+	<<set $app.appAge = 20>>
+<<endif>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer6 Cherry Mix [layer6]
+<<nobr>>
+<<set $temp1 = random(0,11) + 60>>
+<<set $temp2 = random(0,11) + 72>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floot(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
+<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<</nobr>>
+
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer6 Hub]]
+
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Drawing Spades")>>
+<<set $app.tail.push("cute, spade-tipped demon")>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Age Reduction C")>>
+<<if $app.appAge <= 24>>
+	<<set $app.appAge -= 4>>
+	<<else>>
+	<<set $app.appAge = 20>>
+<<endif>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer6 Threat1 Main2 [layer6]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = $tentacleFucked>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $khemiaFucked == 0>>
+After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
+<<else>><<set $khemiaFucked = 0>>
+Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
+<<endif>>
+
+[[Return to exploring the sixth layer|Layer6 Hub]]
+
+
+:: Layer6 Ascend2 [layer6]
+<<nobr>>
+<<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+		<<set $layerExitTime = (Math.max(15 - $timeRed + $status.penalty, 0))>>
+	<<endif>>
+
+<<for $i = 0; $i < 99; $i++>>
+
+<<set $timeL6 += 1>>
+<<set $hexflame += 1>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += 1>>
+<<endif>>
+<<set $timeL6T1 += 1>>
+<<set $time += 1>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= 1>>
+	<<else>>
+	<<set $foodL6 += 1>>
+<<endif>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+	<<set $layerExitTime -= 1>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
+
+	<<if $timeL6T2 > 7 && $dragonKill < 5>>
+
+<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+
+[[Deal with the Fell Dragon|Layer6 Threat2 Ascend]]<br><br>
+
+		<<break>>
+	<<endif>>
+		<<if $timeL6T1 > 14>>
+		<br>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
+
+They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
+
+[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Ascend1]]<br><br>
+		<<break>>
+	<<endif>>
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<set $corruption -= (65 - $corRed)>>
+<<set $forageWater = 0>>
+<<set $forageFood = 0>>
+<<set $timeL5T1 = 0>>
+<<set $timeL5T2 = 0>>
+<</nobr>>
+You continue through the flaming fields of tentacles for much longer than you'd like, until you eventually reach the slightly less hellish heat of the fifth layer. The scent of burning meat is replaced with fragrant spices and the tentacles are replaced with sand, you've made it out of hell.
+
+[[Return to the fifth layer|Layer5 Hub]]
+
+<<endif>>
+
+
+:: Layer6 Threat2 Ascend [layer6]
+<<set $timeL6T2 -= 8>>
+[img[setup.ImagePath+'Threats/felldragon.png']]
+
+How do you want to deal with the awe-inspiring dragon flying above your head?
+
+
+<<nobr>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
+The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Ascend2][$status.duration = 99, $status.penalty = 2, $khemiaDragon = 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
+You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
+	[[Offer 100 dubloons to appease the dragon|Layer6 Ascend2][$dubloons -= 100]]<br><br>
+If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
+	[[Try to run and accept the consequences|Layer6 Ascend2][$status.duration = 99, $status.penalty = 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the dragons|Layer6 Ascend2][$dragonKill += 1, $dubloons += 50]]
+
+
+:: Layer6 Threat1 Ascend1 [layer6]
+<<set $timeL6T1 -= 15>>
+[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
+
+As the enormous tentacle beast approaches, you must quickly decide on a course of action for defeating it, or fall into its slimy clutches and allow it to use you to sate its lust.
+
+<<nobr>>
+<<if $items[13].count > 0 && $items[20].count > 18>>
+	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
+	[[Shoot it with your pistol|Layer6 Ascend2][$items[20].count -= (19 - $bullRed)]]<br><br>
+<<endif>>
+<<if $items[14].count > 0>>
+Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
+	[[Fight it off with a sword|Layer6 Threat1 Ascend2][$tentacleFucked = 10]]<br>
+	<<if $items[4].count > 4>>[[Fight it off with a sword and use a medkit to cure the status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
+	[[Fight it off with Sunbeam|Layer6 Threat1 Ascend2][$tentacleFucked = 9]]<br>
+	<<if $items[4].count > 4>>[[Fight it off with Sunbeam and use a medkit to cure the status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
+	[[Have Khemia fight it off with a sword|Layer6 Threat1 Ascend2][$tentacleFucked = 2, $khemiaFucked = 1]]<br>
+	<<if $items[4].count > 4>>[[Have Khemia fight it off with a sword and use a medkit to cure his status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Ascend2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
+	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+<<endif>>
+If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
+[[Allow it to overpower you|Layer6 Threat1 Ascend2][$tentacleFucked = 12]]<br>
+	<<if $items[4].count > 4>>[[Allow it to overpower you and use a medkit to cure the status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+<</nobr>>
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to defeat the beast|Layer6 Ascend2]]
+
+
+:: Layer6 Threat1 Ascend2 [layer6]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = $tentacleFucked>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $khemiaFucked == 0>>
+After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
+<<else>><<set $khemiaFucked = 0>>
+Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
+<<endif>>
+
+[[Return to exploring the sixth layer|Layer6 Ascend2]]
+
+
+:: Layer6 Exit2 [layer6]
+<<nobr>>
+<<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+		<<set $layerExitTime = (Math.max(16 - $timeRed + $status.penalty, 0))>>
+<<endif>>
+
+<<for $i = 0; $i < 99; $i++>>
+
+<<set $timeL6 += 1>>
+<<set $hexflame += 1>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += 1>>
+<<endif>>
+<<set $timeL6T1 += 1>>
+<<set $time += 1>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= 1>>
+	<<else>>
+	<<set $foodL6 += 1>>
+<<endif>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+	<<set $layerExitTime -= 1>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
+
+	<<if $timeL6T2 > 7 && $dragonKill < 5>>
+
+<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+
+[[Deal with the Fell Dragon|Layer6 Threat2 Descend]]<br><br>
+
+		<<break>>
+	<<endif>>
+		<<if $timeL6T1 > 14>>
+		<br>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
+
+They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
+
+[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Descend]]<br><br>
+		<<break>>
+	<<endif>>
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<set $forageWater = 0>>
+<<set $forageFood = 0>>
+<</nobr>>
+You continue through the playfully ticklish and hellishly hot tentacles for a long hike downward. You find some small hints of paved paths long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
+
+[[Descend down to the seventh layer|Layer7 1]]
+
+<<endif>>
+
+
+:: Layer6 Threat2 Descend [layer6]
+<<set $timeL6T2 -= 8>>
+[img[setup.ImagePath+'Threats/felldragon.png']]
+
+How do you want to deal with the awe-inspiring dragon flying above your head?
+
+
+<<nobr>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
+The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Exit2][$status.duration = 99, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
+You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
+	[[Offer 100 dubloons to appease the dragon|Layer6 Exit2][$dubloons -= 100]]<br><br>
+If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
+	[[Try to run and accept the consequences|Layer6 Exit2][$status.duration = 99, $status.penalty = 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the dragons|Layer6 Exit2][$dragonKill += 1, $dubloons += 50]]
+
+
+:: Layer6 Threat1 Descend [layer6]
+<<set $timeL6T1 -= 15>>
+[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
+
+As the enormous tentacle beast approaches, you must quickly decide on a course of action for defeating it, or fall into its slimy clutches and allow it to use you to sate its lust.
+
+<<nobr>>
+<<if $items[13].count > 0 && $items[20].count > 18>>
+	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
+	[[Shoot it with your pistol|Layer6 Exit2][$items[20].count -= (19 - $bullRed)]]<br><br>
+<<endif>>
+<<if $items[14].count > 0>>
+Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
+	[[Fight it off with a sword|Layer6 Threat1 Descend2][$tentacleFucked = 10]]<br>
+	<<if $items[4].count > 4>>[[Fight it off with a sword and use a medkit to cure the status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
+	[[Fight it off with Sunbeam|Layer6 Threat1 Descend2][$tentacleFucked = 9]]<br>
+	<<if $items[4].count > 4>>[[Fight it off with Sunbeam and use a medkit to cure the status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
+	[[Have Khemia fight it off with a sword|Layer6 Threat1 Descend2][$tentacleFucked = 2, $khemiaFucked = 1]]<br>
+	<<if $items[4].count > 4>>[[Have Khemia fight it off with a sword and use a medkit to cure his status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+	<<endif>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Descend2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
+	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+<<endif>>
+If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
+[[Allow it to overpower you|Layer6 Threat1 Descend2][$tentacleFucked = 12]]<br>
+	<<if $items[4].count > 4>>[[Allow it to overpower you and use a medkit to cure the status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+<</nobr>>
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
+[[Use a combination of relics not mentioned above you believe would be able to defeat the beast|Layer6 Exit2]]
+
+
+:: Layer6 Threat1 Descend2 [layer6]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = $tentacleFucked>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $khemiaFucked == 0>>
+After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
+<<else>><<set $khemiaFucked = 0>>
+Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
+<<endif>>
+
+[[Continue your descent to the seventh layer|Layer6 Exit2]]
+
+
+:: Escape Balloon L6 [new layer6]
+<<nobr>><<set $currentLayer = 6>><<if !isPlaying("layer6")>>
+	<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>>
+<<endif>><</nobr>>
+You wait as your balloon rapidly ascends and you can watch the infernal fields of tentacles gently ungulating below and around you. A far cry from having to tread through them, you can take a moment to breathe in the subtle smell of sulfur wafting up to you, even as you float through the layer.
+
+[[Ascend to next layer|Escape Balloon L5][$corruption -= (65 - $corRed)]]
+[[Hover on this layer to take in a curse|Layer6 Curses]]
+[[Get off the balloon on this layer|Layer6 Hub][$escBalDepl=0]]

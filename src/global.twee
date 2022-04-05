@@ -1,0 +1,899 @@
+:: StoryMenu
+[[Stats]]
+[[Appearance]]
+[[Inventory]]
+<br>
+
+
+:: Stats [noreturn]
+You have $dubloons dubloons.
+You have $corruption corruption points.
+You have been exploring the Abyss for $time days.
+<<nobr>>
+<<if $time > 0>>
+	[[View time spent in each layer|Time Stats]]<br>
+<<endif>>
+<<if $endSpectre > 0>>
+The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.
+<<endif>>
+<</nobr>><<nobr>><<if $debt>>
+	<<print "You have $debt dubloons of debt, and will also have to pay an extra 20% of that as interest at the end of your journey, for a total of " + Math.round(($debt * 1.2)) + " dubloons.">><br><<endif>>
+<<if $status.penalty > 0>>
+<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
+<<if $hexflame > 9>>
+You currently have <<print ($hexflame - 9)>> jinxed flame counters, increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.
+<<endif>>
+<<endif>>
+	<</nobr>>
+Your carry weight is $carryWeight kg.
+Your team has a total carrying capacity of $totalCarry kg.
+Your team is currently carrying <<nobr>>
+<<set $temp1 = 0>><<set $temp2 = 0>>
+<<for $i = 0; $i < $items.length; $i++>>
+		<<set $temp1 += ($items[$i].weight * $items[$i].count)>>
+<</for>>
+<<if $ownedRelics.length > 0>><<for $i = 0; $i < $ownedRelics.length; $i++>>
+		<<set $temp2 += $ownedRelics[$i].weight>>
+<</for>><<endif>>
+<<set $temp1 += $temp2>>
+<<print $temp1.toFixed(1)>><</nobr>> kg.
+<<nobr>>
+<<if $swapComp > -1>>
+	<<print "You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.">><br>
+<<endif>>
+<</nobr>>
+Your companions are:
+<<nobr>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+		<<capture $i>>
+		<<print "[[$hiredCompanions[$i].name|Companion Info][$temp = $i]]">><br>
+		<</capture>>
+<</for>>
+<</nobr>>
+
+Your curses are:
+<<nobr>>
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+		<<print $playerCurses[$i].name>><br>
+<</for>>
+<</nobr>>
+
+<<nobr>>
+<<if $waterL1 > 0>>
+	<<print "You have foraged for water on the first layer $waterL1 times.">><br>
+<<endif>>
+<<if $foodL1 > 0>>
+	<<print "You have foraged for food on the first layer $foodL1 times.">><br>
+<<endif>>
+<</nobr>>
+
+
+<<back [[$return]]>>
+
+
+:: Inventory [noreturn altered]
+You have $items[0].count days of single-use water rations.
+You have $items[1].count days of food.
+You have $items[2].count unfilled flasks.
+You have $items[3].count days of water in filled flasks.
+
+Your inventory and the count (if applicable) of each item is as follows:
+<<nobr>>
+<<for $i = 0; $i < $items.length; $i++>>
+	<<capture $i>>
+	<<if $items[$i].count > 1 || $items[$i].count < 0>>
+			<<print "[[$items[$i].name|Item Info][$temp = $i]]">><<print " ">><<print $items[$i].count>><br>
+	<<elseif $items[$i].count == 1>>
+		<<print "[[$items[$i].name|Item Info][$temp = $i]]">><br>
+	<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<print "[[$ownedRelics[$i].name|Relic Info][$temp = $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<set $total_value_relics=0>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+<<set $total_value_relics = $ownedRelics[$i].value + $total_value_relics>>
+<</for>>
+The total value of all your relics is $total_value_relics
+
+<<back [[$return]]>>
+
+
+:: Habitation Ending [ending]
+You've reached the end of your journey due to a successful habitation ending. Was it worth it? Did you find what you were looking for?
+
+You can find your collection of relics in your inventory, and your curses in the stats page.
+
+Feel free to begin a new journey, by restarting and choosing the new game+ option. Also feel free to post your build on the thread for the game, the creator of this adaptation always loves to see how people's adventures went!
+
+
+:: Adjustments [noreturn]
+Use this page ONLY to adjust numbers due to interactions that save you money or resources that are not already accounted for in the game, or if there was a bug.
+
+Do not cheat or fear the consequences of angering the things that lurk deep in the Abyss.
+
+
+[[Adjust dubloons]]
+[[Adjust corruption]]
+[[Adjust time]]
+[[Adjust water]]
+[[Adjust food]]
+[[Adjust bullets]]
+
+Many options have their abilities as something like a light source or heat source automatically accounted for, but if you find a relic or combination that you think should give you an ability and it doesn't, use one of the following options to give that ability to yourself.
+
+Click this if you have found something that can be used for cutting like a sword:
+[[I have a Cutting Instrument|Adjustments][$cut = 1]]
+[[No Cutting Instrument|Adjustments][$cut = 1]]
+
+Click this if you have found something that can be used as a light source:
+[[I have a Light|Adjustments][$light = 1]]
+[[No Light|Adjustments][$light = 0]]
+
+Click this if you have found something that can be used as a substantial heat source:
+[[I have a source of Heat|Adjustments][$heat = 1]]
+[[No Heat|Adjustments][$heat = 0]]
+
+Click this if you have found something that can be used as a climbing rope:
+[[I have something that can be a Rope|Adjustments][$rope = 1]]
+[[No Rope|Adjustments][$rope = 0]]
+
+Click this if you have found something that can be used for swimming underwater, similar to scuba gear:
+[[I have something that can be used for Swimming|Adjustments][$scuba = 1]]
+[[No Swimming|Adjustments][$scuba = 0]]
+
+<<if $abyssKnow == 1>>Click this if you'd like to disable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in more side effects from foraging):
+[[Turn off abyssal knowledge|Adjustments][$abyssKnow = 0]]
+<<endif>><<if $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
+[[Turn on abyssal knowledge|Adjustments][$abyssKnow = 1]]
+<<endif>>
+
+
+[[Confirm Adjustments|$return]]
+
+
+:: Time Stats [noreturn]
+<<nobr>><<if $timeL1 > 0>>
+	<<print "You have spent $timeL1 days on the first layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL2 > 0>>
+	<<print "You have spent $timeL2 days on the second layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL3 > 0>>
+	<<print "You have spent $timeL3 days on the third layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL4 > 0>>
+	<<print "You have spent $timeL4 days on the fourth layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL5 > 0>>
+	<<print "You have spent $timeL5 days on the fifth layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL6 > 0>>
+	<<print "You have spent $timeL6 days on the sixth layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL7 > 0>>
+	<<print "You have spent $timeL7 days on the seventh layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL8 > 0>>
+	<<print "You have spent $timeL8 days on the eighth layer of the Abyss.">>
+	<<endif>><</nobr>>
+<<nobr>><<if $timeL9 > 0>>
+	<<print "You have spent $timeL9 days on the ninth layer of the Abyss.">>
+	<<endif>><</nobr>>
+
+
+<<nobr>>
+<<if $waterL1 > 0>>
+	<<print "You have foraged for water on the first layer $waterL1 times.">><br>
+<<endif>>
+<<if $foodL1 > 0>>
+	<<print "You have foraged for food on the first layer $foodL1 times.">><br>
+<<endif>>
+<</nobr>><<nobr>>
+<<if $waterL2 > 0>>
+	<<print "You have foraged for water on the second layer $waterL2 times.">><br>
+<<endif>>
+<<if $foodL2 > 0>>
+	<<print "You have foraged for food on the second layer $foodL2 times.">><br>
+<<endif>>
+<</nobr>><<nobr>>
+<<if $waterL3 > 0>>
+	<<print "You have foraged for water on the third layer $waterL3 times.">><br>
+<<endif>>
+<<if $foodL3 > 0>>
+	<<print "You have foraged for food on the third layer $foodL3 times.">><br>
+<<endif>>
+<</nobr>><<nobr>>
+<<if $waterL4 > 0>>
+	<<print "You have foraged for water on the fourth layer $waterL4 times.">><br>
+<<endif>>
+<<if $foodL4 > 0>>
+	<<print "You have foraged for food on the fourth layer $foodL4 times.">><br>
+<<endif>>
+<</nobr>><<nobr>>
+<<if $waterL1 > 0>>
+	<<print "You have foraged for water on the fifth layer $waterL5 times.">><br>
+<<endif>>
+<<if $foodL1 > 0>>
+	<<print "You have foraged for food on the fifth layer $foodL5 times.">><br>
+<<endif>>
+<</nobr>>
+
+<<back>>
+
+
+:: Version End
+That's all for this version!
+
+Thank you for playing version 0.4 of the interactive adaptation of Abyss Diver by FloricSpacer.
+
+I'd like to hear any feedback about the current state of the game and any bugs or typos you've found!
+
+I'm working on adding the remaining layers quickly, though it is pretty labor intensive, so that depends on my free time irl. I think a lot of the systems from the first few layers should carry over to later ones well, but there are also a lot of new mechanics that need to be implemented. Hopefully it doesn't take long and I can post the rest of the layers soon!
+
+As I add more systems and the game gets more complicated under the hood, I expect many bugs that I didn't catch to manifest, so detailed bu reports for any errors you've encountered are very valuable.
+
+Thanks again for playing!
+
+
+:: Companion Info [noreturn]
+<<print $hiredCompanions[$temp].name>>
+
+[img[setup.ImagePath+$hiredCompanions[$temp].image]]
+
+<<print $hiredCompanions[$temp].desc>>
+
+<<nobr>>
+<<if $hiredCompanions[$temp].curses.length > 0>>
+	$hiredCompanions[$temp].name has the following curses:<br><br>
+	<<for $i = 0; $i < $hiredCompanions[$temp].curses.length; $i++>>
+			<<print $hiredCompanions[$temp].curses[$i].name>><br>
+	<</for>><br>
+<<endif>>
+<<if $temp == $swapComp>>
+	$hiredCompanions[$temp].name is in your original body after you swapped bodies using the Fate-crossing Star!<br><br>
+<<endif>>
+<</nobr>>
+<<back>>
+
+
+:: Appearance [noreturn altered]
+Your name is $app.name and you are a $app.sex.
+
+Your hair color is $app.hair.
+You have $app.skinColor colored $app.skinType skin.
+You are <<HeightCorrected>> $outputHeight cm tall.
+You have $app.ears ears.
+You are $app.age years old<<if $app.age != $app.appAge>>, but you appear to be <<print Math.round($app.appAge)>> years old<<endif>>.<<nobr>>
+<<if $hornyCount == 1>>
+<br>You have a noticeable demonic horn protruding from the center of your forehead.
+<<elseif $hornyCount == 2>>
+<br>You have 2 noticeable demonic horns protruding from your head.
+<<endif>>
+<br><br>$app.desc<<for $i = 0; $i < $playerCurses.length; $i++>>
+<<print $playerCurses[$i].appDesc>>
+<</for>>
+<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">>
+<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">>
+<<endif>>
+<<if $semenCount > 0>>
+You must drink <<print ($semenCount * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($semenCount * 2)>> loads per day.<<print " ">>
+<<endif>>
+<<if $quotaCount > 0>>
+You need to directly bring other people to orgasm <<if $playerCurses.some(e => e.name === "Sleep Tight")>><<print ($quotaCount * 3)>><<else>><<print ($quotaCount * 2)>><<endif>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<<endif>><<print " ">>
+<<endif>>
+<<if $limelightCount > 0>>
+You need to be the focus of <<print ($limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $playerCurses.some(e => e.name === "Semen Demon") || $playerCurses.some(e => e.name === "Quota")>>not only you have to have sex with so many people, but also <<endif>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <<endif>><<print " ">>
+<<endif>><br><br>
+<<if $bewitchBabies > 0>>
+Due to your consumption of the contaminated rainwater of the second layer, your fertility has greatly increased. The average amount of  babies born from any pregnancy you're involved in is increased by <<print $bewitchBabies>>.<<print " ">>
+<<endif>>
+<<if $algalSize > 0>>
+Your <<if $app.sex == "male">>testicles are<<elseif $app.sex == "female">>clitoris is<<else>>testicles and clitoris are<<endif>> approximately <<print (10 * $algalSize)>>% lager than usual due to drinking contaminated melted snow from the fourth layer.<<print " ">>
+<<endif>>
+<<if $crumbleFluid > 0>>
+Due to the consumption of crumbleweed from the fifth layer, your production of sexual fluids has increased by <<print $crumbleFluid>>%. <<if $crumbleFluid > 50>>Try not to get too dehydrated if you're especially sexually active.<<endif>><<print " ">>
+<<endif>>
+<</nobr>>
+
+<<nobr>>
+<<if $app.gender <= 1>>
+You look like a typical man, with a masculine facial structure and a body profile that would obviously seem male from a distance.
+<<elseif $app.gender == 2>>
+You look like man, but your features are a bit softer than average. No one would mistake you for a woman, but maybe the label of "twink" could apply to you.
+<<elseif $app.gender == 3>>
+You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very effeminate man, but others might see you as a butch woman.
+<<elseif $app.gender == 4>>
+You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very butch woman, but others might see you as an effeminate man.
+<<elseif $app.gender == 5>>
+You look like a woman, but a bit on the masculine side. Many people would likely assume you're a tomboy based on your appearance.
+<<elseif $app.gender >= 6>>
+You look like a typical woman, with a feminine face and a figure that looks clearly female from a distance.
+<<endif>>
+<br><br>
+<<if $app.libido <= 1>>
+You have a very low libido, without much interest at all in sex.
+<<elseif $app.libido == 2>>
+You have your normal libido, being somewhat interested in sex, but you can certainly control yourself.
+<<elseif $app.libido == 3>>
+You have a slightly elevated libido. You will feel hot and bothered more reularly than you are accustomed to. Uncomfortable, but manageable.
+<<elseif $app.libido == 4>>
+You have an elevated libido. Your sexual urges are frequent and very difficult to resist. Can be only barely hidden; leading a normal lifestyle will be possible, but frequently frustrating.
+<<elseif $app.libido == 5>>
+Your libido would be considered a symptom of a mental disorder. You're hopelessly addicted to sex, and it is impossible to keep your desired hidden.
+<<elseif $app.libido == 6>>
+You desire sex about as much as basic necessities as food and water, perhaps slightly more. You go to great lengths for sex, and it dominates your life.
+<<elseif $app.libido >= 7>>
+You need sex constantly - having sex will only sate your hunger for a matter of minutes, and you will find little meaning in things that don't lead to you having more sex.
+<<endif>>
+<br><br>
+<<if $app.penis == 1>>
+You have a very small penis, honestly barely larger than a large clitoris.
+<<elseif $app.penis == 2>>
+You have a slightly below average penis, nothing to be ashamed of, but nothing to write home about either.
+<<elseif $app.penis == 3>>
+You have a totally average penis, very typical for a man in your demographics.
+<<elseif $app.penis == 4>>
+You have a slghtly above average penis, not anything out of the ordinary, but some people enjoy it.
+<<elseif $app.penis == 5>>
+You have a large penis, people who like larger sizes are likely to be impressed.
+<<elseif $app.penis > 5>>
+You have a very large penis, size queens dream of meeting someone like you, but tighter orifices are a bit of an issue for you to work with.
+<<endif>>
+<br><br>
+<<if $app.vag == 1>>
+You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
+<<endif>>
+<<if $app.womb > 0>>
+<br>You have an extra womb in your $app.womb1.
+<<endif>>
+<<if $app.womb > 1>>
+<br>You have another extra womb in your $app.womb2.
+<<endif>>
+<br><br>
+<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
+	<<if $app.sex == "male">>
+		<<set $app.penis = 1>>
+	<<elseif $app.sex == "female">>
+		<<set $app.breasts = 1>>
+	<<elseif $app.sex == "futa">>
+		<<set $app.penis = 1>>
+		<<set $app.breasts = 1>>
+	<<endif>>
+<<endif>>
+<<BreastCorrected>>
+<<if $app.breastsCor < 1>>
+You have a flat, <<GenderPronoun>> chest.
+<<elseif $app.breastsCor < 2>>
+You have AA cup mosquito bites, much smaller than most women.
+<<elseif $app.breastsCor < 3>>
+You have cute A cup breasts, small but not out of the ordinary.
+<<elseif $app.breastsCor < 4>>
+You have supple B cup breasts.
+<<elseif $app.breastsCor < 5>>
+You have perfectly round C cup breasts.
+<<elseif $app.breastsCor < 6>>
+You have nice handfuls of D cup breasts.
+<<elseif $app.breastsCor < 7>>
+You have larger than most E cup breasts.
+<<elseif $app.breastsCor < 8>>
+Your sizes are starting to get cumbersome with your F cup breasts.
+<<elseif $app.breastsCor < 9>>
+You've got to watch out for back pain with your G cup breasts.
+<<elseif $app.breastsCor < 10>>
+You've got to watch out for back pain with your H cup breasts.
+<<elseif $app.breastsCor < 11>>
+You've got to watch out for serious back pain with your I cup breasts.
+<<elseif $app.breastsCor < 12>>
+You've got to watch out for serious back pain with your J cup breasts.
+<<elseif $app.breastsCor < 13>>
+You've got to watch out for serious back pain with your K cup breasts.
+<<elseif $app.breastsCor < 14>>
+You've got to watch out for serious back pain with your L cup breasts.
+<<elseif $app.breastsCor < 15>>
+You've got to watch out for serious back pain with your M cup breasts.
+<<elseif $app.breastsCor < 16>>
+You've got to watch out for very serious back pain with your N cup breasts.
+<<elseif $app.breastsCor < 17>>
+You've got to watch out for very serious back pain with your O cup breasts.
+<<elseif $app.breastsCor < 18>>
+You've got to watch out for very serious back pain with your P cup breasts.
+<<elseif $app.breastsCor < 19>>
+You've got to watch out for very serious back pain with your Q cup breasts.
+<<elseif $app.breastsCor >= 19>>
+You've got to watch out for very serious back pain with your R cup breasts.
+<<elseif $app.breastsCor > 19>>
+You've got to watch out for very serious back pain with your S cup breasts.
+<<endif>>
+<</nobr>>
+
+<<nobr>>
+<<if $app.tail.length > 0>>
+<<for $i = 0; $i < $app.tail.length; $i++>>
+		You have a $app.tail[$i] tail right above your butt.<br>
+<</for>>
+<<endif>>
+
+Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.
+
+<</nobr>>
+<<back [[$return]]>>
+
+
+:: Adjust dubloons [noreturn]
+<<set $temp = 0>>How many dubloons would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$dubloons += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust corruption [noreturn]
+<<set $temp = 0>>How many corruption points would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$corruption += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust time [noreturn]
+<<set $temp = 0>>How many days would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$time += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust water [noreturn]
+<<set $temp = 0>>How many water rations would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$items[0].count += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust food [noreturn]
+<<set $temp = 0>>How many food rations would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$items[1].count += (parseInt($temp))]]
+<<back>>
+
+
+:: Commerce Balloon [noreturn]
+Using your balloon, you're able to send up any relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
+
+<<nobr>>
+<<if $ownedRelics.some(e => e.name === "Purity Tree Plank") && $items[19].count > 0>>
+[[Ask someone on the surface to use the Relic Workshop with your Purity Tree Planks|Surface Workshop]]<br><br>
+<<endif>>
+<<if $tunnelUsed == 1>>
+[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
+<<endif>>
+<</nobr>>[[Sell relics|Balloon Sell1]]
+[[Buy items|Balloon Store1]]
+
+
+[[Finish using balloon to trade|$return][$comBalloon = 0]]
+
+
+:: Balloon Sell1 [noreturn]
+Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.
+
+Choose the relic you would like to sell:
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+[[Continue your business on the surface|Commerce Balloon]]
+
+
+:: Balloon Store1 [noreturn]
+Here are all of the items available for your to spend you $dubloons dubloons on:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 1-items.png']]
+
+[[Buy Water|Balloon Water]]
+[[Buy Food Rations|Balloon Food]]
+[[Buy Flasks|Balloon Flasks]]
+[[Buy Medkits|Balloon Medkits]]
+[[Buy Encyclopedia Abyssia|Balloon Encyclopedia]]
+[[Buy Messenger Baloons|Balloon Messenger]]
+[[Buy Commerce Balloons|Balloon Commerce]]
+[[Buy Escape Balloons|Balloon Escape]]
+[[Buy Torches|Balloon Torches]]
+[[Buy Flashlight|Balloon Flashlight]]
+[[Buy Rope|Balloon Rope]]
+[[Buy Compass|Balloon Compass]]
+[[Buy Pistol|Balloon Pistol]]
+[[Buy Bullets|Balloon Bullets]]
+[[Buy Sword|Balloon Sword]]
+[[Buy Scuba Gear|Balloon Scuba]]
+[[Buy Warding Braces|Balloon Warding]]
+[[Buy Smartphone|Balloon Smartphone]]
+[[Buy Inn Room Pass|Balloon Inn]]
+[[Buy Relic Workshop Pass|Balloon Workshop]]
+
+
+[[Continue using commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Sell 2 [noreturn]
+<<set $dubloons += ($ownedRelics[$temp].value + $sellAdd)>>
+The relic $ownedRelics[$temp].name has been successfully sold and you've gotten your dubloon payment. You notice the person you sold it to quickly runs off, either to make use of it or sell it again in the everlasting chain of capitalism. Either way, you won't be getting that relic back easily.<<run $ownedRelics.deleteAt($temp)>>
+
+[[Sell more relics|Balloon Sell1]]
+[[Continue your balloon business|Commerce Balloon]]
+
+
+:: Balloon Water [noreturn]
+How much water would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[0].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[0].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Food [noreturn]
+How many days of food rations would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[1].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[1].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Flasks [noreturn]
+How many water flasks would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[3].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[2].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Medkits [noreturn]
+How many days of medkits would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[4].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[4].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Encyclopedia [noreturn]
+How many copies of the Encyclopedia Abyssia would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 copy.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[5].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[5].cost), $abyssKnow = 1]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Messenger [noreturn]
+How many days of messenger balloons would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[6].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[6].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Commerce [noreturn]
+How many days of commerce balloons would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[7].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[7].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Escape [noreturn]
+How many days of escape balloons would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[8].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[8].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Torches [noreturn]
+How many days of torches would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[9].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[9].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Flashlight [noreturn]
+How many flashlights would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 flashlight.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[10].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[10].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Rope [noreturn]
+How many ropes would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 rope.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[11].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[11].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Compass [noreturn]
+How many compasses would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 compass.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[12].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[12].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Pistol [noreturn]
+How many pistols would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 pistol.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[13].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[13].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Bullets [noreturn]
+How many sets of 6 bullets would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[20].count += (parseInt($temp) * 6), $dubloons -= (parseInt($temp)*$items[20].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Sword [noreturn]
+How many swords would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 sword.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[14].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[14].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Scuba [noreturn]
+How many sets of scuba gear would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 set of scuba gear.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[15].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[15].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Warding [noreturn]
+How many warding braces would you like to buy?
+
+(Note: You are only allowed to buy 2 warding braces unless you have an effect or combination of relics that specifically would allow you to buy more.)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[16].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[16].cost), $corruption += (20 * $temp)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Smartphone [noreturn altered]
+How many smartphones would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 smartphone.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[17].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[17].cost), $abyssKnow = 1, $light = 1]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Inn [noreturn]
+How many inn room passes would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 inn room pass.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[18].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[18].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Workshop [noreturn]
+How many relic workshop passes would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 relic workshop pass.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[19].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[19].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Item Info [noreturn]
+<<print $items[$temp].name>><<nobr>>
+<<if $items[$temp].count > 1>>
+<br>Count: $items[$temp].count
+<<endif>><</nobr>>
+
+[img[setup.ImagePath+$items[$temp].image]]
+
+<<print $items[$temp].desc>>
+
+Weight: $items[$temp].weight kg
+Cost: $items[$temp].cost dubloons
+
+<<back>>
+
+
+:: Credits
+Thank you so much to anyone who has helped me out with this project! I appreciate all the feedback and suggestions I get, especially feature requests and bug reports! I try to respond promptly to these, so please let me know if you have an idea or find a bug!
+
+Thanks to Ilse91 for helping with a variety of code and adding some new features regarding height, widgets, and ending drafts.
+Thanks to Emmeken for transcribing the item descriptions for me.
+Thanks to dogflail for writing drafts for some of the curse appearance screen decriptions.
+Thanks to abiciendimittent for transcribing the relic and curse descriptions (will be added to the game when they are completed)
+Thanks to Stadler for finding many bugs and reporting them to me.
+Thanks to HiEv for having a great tutorial with sample code that I used in this project.
+Thanks to laevus for bug reports.
+Thanks to Kras for suggestions and bug reports.
+And thanks to Lily for encouraging me when I got some negative feedback early in the initial draft form of this game.
+
+I seriously appreciate all of your help and I'm really happy that people were willing to help improve this project with me.
+
+
+:: Surface Tunnel Retrieval
+You manage to find your items safely, retrieving all of them and putting them right back into your inventory where they belong. Luckily no one seems to have disturbed or taken anything in the time it took you to get back up here and find your items.
+
+<<if $comBalloon == 0>>
+[[Continue your business in Outset Town|Surface Hub]]
+<<else>>
+[[Continue using the commerce balloon|Commerce Balloon]]
+<<endif>>
+
+<<nobr>>
+<<for $i = 4; $i < $items.length; $i++>>
+	<<set $items[$i].count += $vaultItems[$i].count>>
+	<<set $vaultItems[$i].count = 0>>
+<</for>>
+<<set $dubloons += $tunnelDubloons>>
+<<set $tunnelUsed = 0>>
+<</nobr>>
+
+
+:: GameOver
+@@.layerTitle;YOU ARE DEAD@@
+
+<<if $items[1].count < -5>>
+Your food ration count has gone below -5, indicating that you have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
+<<else>>
+Your days of water remaining count has gone below -2, indicating that you managed to survive without water for a few days, but eventually died of dehydration. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
+<<endif>><<if $corruption < 0>>
+
+Due to your negative corruption, you are unable to accept a habitation option at this time. However, you can go back to the main part of the layer, then take curses until you have reached a corruption above 0 to survive. This is highly reccomended if you wish to avoid death.
+<<endif>>
+
+
+:: BrokerEnd
+YOU MAY NOT ALLOW YOUR CORRUPTION TO GO BELOW 0 DUE TO YOUR BROKER'S DEAL.
+
+You have chosen to accept the deal of the Empty-handed Broker and attempted to take an action that would reduce your corruption points below 0. Because this is not possible, you must go back to avoid performing this action.
+
+If you would still like to perform this action, you may go back to the main part of the layer you were on and accept curses to raise your corruption point total.
+
+<<back>>
+
+
+:: AgeLimit
+YOU MUST BE AT LEAST 18 TO PLAY THIS GAME
+
+If you are over 18, please go back and enter an age above 18 to continue.
+
+<<back>>
+
+
+:: Use Items [noreturn altered]
+<<nobr>>
+<<if $items[7].count > 0>>
+[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1, $comBalloon = 1]]<br>
+<<endif>>
+<<if $items[8].count > 0>>
+	<<if $currentLayer==0>>
+		You can't use an escape balloon while on the surface
+	<<elseif $currentLayer==1>>
+		[[Use an escape balloon to escape the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==2>>
+		[[Use an escape balloon to escape the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==3>>
+		[[Use an escape balloon to escape the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==4>>
+		[[Use an escape balloon to escape the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==5>>
+		[[Use an escape balloon to escape the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==6>>
+		[[Use an escape balloon to escape the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<endif>>
+<<endif>>
+<<if ($items[4].count > 0) && ($status.penalty > 0) && $dragonBurn == 0>>
+<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
+[[Use a medkit to cure your status condition instantly|Use Items][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
+	<<endif>>
+<<if ($items[4].count > 1) && ($status.penalty > 0) && $dragonBurn == 1>>
+<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
+[[Use a medkit to cure your status condition instantly|Use Items][$status.penalty = 0, $status.duration = 0, $items[4].count -= 2, $dragonBurn = 0]]<br>
+	<<endif>>
+<</nobr>>
+
+
+[[Perform other stat adjustments to correct for errors|Adjustments]]
+
+
+[[Return|$return]]
+
+
+:: Adjust bullets
+<<set $temp = 0>>How many bullets would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$items[20].count += (parseInt($temp))]]
+<<back>>
+
+
+:: AgeEnd
+Your physical age has been reduced to a point where it is not physically possible for you to continue your journey. Perhaps your companions can carry you back to the surface or you can hope to grow up in the Abyss in the habitation option of this layer. But at this point your own choices don't play much role in your fate, so the game will end here.
+
+You may undo your last choice which put you over this limit if you'd like to try to continue your journey with a young (but not too young) body.
+
+<<back>>
+
+
+:: Relic Info [noreturn]
+@@.relicTitle;$ownedRelics[$temp].name@@
+
+[img[setup.ImagePath+$ownedRelics[$temp].pic]]
+
+<<print $ownedRelics[$temp].desc>>
+
+Weight: $ownedRelics[$temp].weight kg
+Value: $ownedRelics[$temp].value dubloons
+Corruption cost: $ownedRelics[$temp].corr
+
+<<back>>

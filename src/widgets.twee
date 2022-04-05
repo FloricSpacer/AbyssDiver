@@ -1,0 +1,270 @@
+:: Change Height [widget new]
+<<widget "HeightCorrected">>\
+	<<nobr>>
+/*declare variables as follows when calling widget
+1) $app.heigth
+2) $app.oheight
+3) $app.gender
+4) $app.osex (= "female")
+5) $app.appAge
+*/
+
+	<<set $height_change = $app.height -$app.oheight>>
+
+	<<set $genderlvl = $app.gender-1>>
+	<<if $app.osex=="female">>
+		<<set $female_start=1>>
+	<<else>>
+		<<set $female_start=0>>
+	<<endif>>
+
+	<<set $x =18 - $app.appAge>>
+
+/* change in height with genderlevel changes and height increases/decreases it is modeled such that 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender
+*/
+
+	<<set $height_adult = $app.oheight + $height_change - $height_change * (1 - 0.92375) * $female_start + 0.01525 * $app.oheight * ($app.ogender - 1 - $genderlvl)>>
+
+	<<if $x<=0 +1/5 *$genderlvl>>
+		<<set $app.heightCor = $height_adult>>
+
+/* The puberty phase: it shifts for females as their ends earlier, for simplicity I assumed the start is the same regardless although this is not entirely correct. I ussed a polynomial here to simulate the 'reverse growth spurt'
+*/
+
+	<<elseif $x > 0+1/5*$genderlvl && $x<=6>>
+		<<set $C1=-4.70611e-3 +8.1433e-4  *$genderlvl>>
+    	<<set $C2=-1.1049e-4  +1.140e-5   *$genderlvl>>
+    	<<set $C3=-1.6698e-3  +1.3722e-4  *$genderlvl>>
+    	<<set $C4= 1.7701e-4  -2.114e-5   *$genderlvl>>
+    	<<set $x_rel = $x-1/5*$genderlvl>>
+    	<<set $app.heightCor = $height_adult *(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
+
+/* the second phase of linear growth or decline, its a decent approximation without making things to complicated. It ends at age 3 (originally 4, but changed it to not break the rest of the code) the calculation for the puberty growth spurt is in here to provide a starting point for the linear decline
+*/
+	<<elseif $x>6 && $x<=15>>
+		<<set $C1=-4.70611e-3 +8.1433e-4  *$genderlvl>>
+    	<<set $C2=-1.1049e-4  +1.140e-5   *$genderlvl>>
+    	<<set $C3=-1.6698e-3  +1.3722e-4  *$genderlvl>>
+    	<<set $C4= 1.7701e-4  -2.114e-5   *$genderlvl>>
+    	<<set $x_rel = 6-1/5*$genderlvl>>
+    	<<set $height_pub = $height_adult*(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
+
+    	<<set $app.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
+	<<endif>>
+
+	<<set $outputHeight=Math.round ($app.heightCor)>>
+	<</nobr>>\
+<</widget>>
+
+
+
++++++++++
+
+
+:: Change Breast [widget new]
+<<widget "BreastCorrected">>\
+	<<nobr>>
+	<<set $x = 18 -$app.appAge>>
+	<<set $app.breastsCor =$app.breasts>>
+	<<if $x>0 +1/5 *($app.gender-1)>>
+		<<set $app.breastsCor = $app.breasts - 0.1*$x*$app.breasts>>
+		<<if  $app.breastsCor<0>>
+			<<set $app.breastsCor =0>>
+		<<endif>>
+	<<endif>>
+
+		<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+		<<set $app.breastsCor +=2>>
+	<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+		<<set $app.breastsCor +=1>>
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+
+:: Pronoun widgets [widget new]
+<<widget "Pronoun">>\
+	<<nobr>>
+	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
+	<<if $app.appGender<5>>
+		he
+	<<else>>
+		she
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "ObjectivePronoun">>\
+	<<nobr>>
+	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
+	<<if $app.appGender<5 >>
+		him
+	<<else>>
+		her
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "PossesivePronoun">>\
+	<<nobr>>
+	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
+	<<if $app.appGender<5 >>
+		his
+	<<else>>
+		hers
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "GenderPronoun">>\
+	<<nobr>>
+
+	<<if $app.gender<2>>
+		manly
+	<<elseif $app.gender<3>>
+		boyish
+	<<elseif $app.gender<4>>
+		androgynous
+	<<elseif $app.gender<5>>
+		slightly feminine
+	<<else>>
+		girly
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+
+:: Perceived widgets [widget new]
+<<widget "PerceivedGender">>\
+	<<nobr>>
+	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
+	<<if $app.appGender<5>>
+		<<if $app.appAge>16>>
+			man
+		<<else>>
+			boy
+		<<endif>>
+	<<else>>
+		<<if $app.appAge>15.5>>
+			woman
+		<<else>>
+			girl
+		<<endif>>
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "PerceivedStature">>\
+	<<nobr>>
+	<<if $app.heightCor <160 >>
+			little
+	<<elseif $height >180>>
+			big
+	<<endif>>
+	<<if $app.appAge<12>>
+			young
+	<<elseif $app.appAge>40>>
+			old
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "PerceivedRace">>\
+	<<nobr>>
+	<<if $app.inhuman <2 >>
+			human
+	<<elseif $app.inhuman <6>>
+			humanoid
+	<<elseif $app.inhuman <10>>
+			antrophomorph
+	<<elseif $app.inhuman <10>>
+			monster
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+
+:: Threat1 Criterion [widget new]
+<<widget "Threat1Criterion">>\
+<<nobr>>
+<<if $app.heightCor<150>>
+	<<set $groupsize= $hiredCompanions.length >>
+<<else>>
+	<<set $groupsize= $hiredCompanions.length +1>>
+<<endif>>
+
+<<set $total_value_relics=0>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+<<set $total_value_relics = $ownedRelics[$i].value + $total_value_relics>>
+<</for>>
+
+<<if $groupsize<4 && $total_value_relics>=150>>
+	<<set $threat1Crit=1>>
+<<else>>
+	<<set $threat1Crit=0>>
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Lewdness function [widget new]
+<<widget "Lewdness">>\
+	<<nobr>>
+	<<set $lewdness=($app.libido-2)*3 +$crumbleFluid/10 +$limelightCount +$algalSize +$quotaCount +$semenCount>>
+
+	<<if $app.breastsCor>5>>
+		<<set $lewdness +=1>>
+	<<elseif $app.breastsCor>7>>
+		<<set $lewdness +=2>>
+	<<elseif $app.breastsCor>9>>
+		<<set $lewdness +=3>>
+	<<endif>>
+
+	<<if $app.penis>3>>
+		<<set $lewdness +=1>>
+	<<elseif $app.penis>5>>
+		<<set $lewdness +=2>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
+		<<set $lewdness +=1>>
+	<<endif>>
+	<<if $playerCurses.some(e => e.name === "Refractory Refactorization")>>
+		<<set $lewdness +=1>>
+	<<endif>>
+	<<if $playerCurses.some(e => e.name === "Increased Sensitivity") && $playerCurses.some(e => e.name === "Refractory Refactorization")>>
+			<<set $lewdness +=4>>
+	<<endif>>
+	<</nobr>>
+<</widget>>
+
+
+:: Inhuman function [widget new]
+<<widget "Inhuman">>\
+<<nobr>>
+<<set $app.inhuman =0>>
+<<if $app.ears != "normal human">>
+	<<set $app.inhuman +=1>>
+<<endif>>
+
+<<if $app.skinColor !=  "pale" && $app.skinColor !=  "tanned" && $app.skinColor !=  "olive" && $app.skinColor !=  "brown" && $app.skinColor !=  "dark brown"  >>
+	<<set $app.inhuman +=4>>
+<<endif>>
+
+<<if $app.skinType.length > 0>>
+	<<set $app.inhuman +=4>>
+<<endif>>
+
+<<if $hornyCount == 1>>
+	<<set $app.inhuman +=2>>
+<<elseif $hornyCount == 2>>
+	<<set $app.inhuman +=3>>
+<<endif>>
+
+<<if $app.tail.length > 0>>
+<<for $i = 0; $i < $app.tail.length; $i++>>
+		<<set $app.inhuman +=2>>
+<</for>>
+<<endif>>
+<</nobr>>\
+<</widget>>

@@ -1,0 +1,1263 @@
+:: Layer1 1 [layer1 image]
+<<nobr>>
+<<set $currentLayer = 1>>
+<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
+<<if $dubloons < 0>>
+	<<set $debt += (-1 * $dubloons)>>
+	<<set $dubloons = 0>>
+<<endif>>
+<</nobr>>
+[img[setup.ImagePath+'Layer Intros/l1intro.png']]
+
+@@.layerTitle;LAYER 1 - ARCADIA'S GARDEN@@
+
+Stepping across the sparse grasses, eyes occasionally catching on some flowers that are much more vulvic than any you've seen before, or perhaps a rock formation that seems far too phallic to be natural, you proceed down the relatively tranquil first layer of the Abyss. The town already begins to disappear from view above you, and below you is nothing but gentle, lush slopes leading further into the dark.
+
+Traveling back to the surface from here will take 1 day, and will cost 10 corruption. Leaving the abyss also requires that you don't have any negative corruption points even if you plan to come back.
+
+[[Walk through the first layer of the Abyss|Layer1 Hub]]
+<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $visitL1 == 0>>
+	<<print "[[Use Cherry's chaotic luck|Layer1 Cherry]]">><br><<endif>>
+<<endif>><</nobr>>
+
+
+:: Layer1 Hub [layer1]
+<<set $visitL1 = 1>><<set $currentLayer = 1>>
+You find yourself amidst the slightly-off natural splendor of the first layer. What do you want to do while you are here?
+<<nobr>>
+<<set $layerTemp = random(0,20)>>
+<<if $layerTemp == 1>>
+<br><br>Crawling up a tree you spot an odd looking caterpillar, it almost looks like a disembodied human phallus, but it seems to have sharp spines rather than hair. You probably wouldn't want to put this is any places you'd usually put a cock.<br><br>
+<<elseif $layerTemp == 2>>
+<br><br>In the distance you can hear some people yelling about something, but you can't quite make it out. When you get a bit closer, you can't seem to find any people, but you do see some spare clothes on the ground and some rustling in the bush nearby. Rather than waiting for the people to return, you choose to move on.<br><br>
+<<elseif $layerTemp == 3>>
+<br><br>Near the top of the layer, you notice a completely normal woman carrying a full pack trying to aproach the surface, but she seems to be having a great difficulty moving forward. "Why can't I just leave?" She calls out in exasperation to no one in particular. It seems the Abyss itself is impeding her, so you couldn't help her even if you tried.<br><br>
+<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.name === "Khemia")>>
+<br><br>Khemia turns towards you smugly, "You know $app.name, this whole layer is a breeze if you've been around a few times. I think we could probably clear out anything worth doing in less than a day if we took the right shortcuts. This is barely even a speed bump on our path to the bottom of the Abyss for the right people. And who do you think knows the shortcuts?" He smiles widely and puffs out his chest, gesturing to himself with his thumb before leading you down the most efficient path to your destination.<br><br>
+<<elseif $layerTemp == 5 && $hiredCompanions.some(e => e.name === "Saeko")>>
+<br><br>You spot Saeko crouching near a tree stump with some mold grown over it, wrinting in a notebook. She looks up at you and comments, "You know, this isn't really a tree stump. It's a fungus that's shaped itself like a dead tree, an interesting case of mimicry." She digs up a bit of the dirt by the base of the apparent stump and reveals a gray texture leaking a creamy white liquid below the surface. "I wonder what this is doing? The ecology here is so strange, even though it's so close to the surface..." Her musings trail off, but she stands up and you get moving again towards your destination.<br><br>
+
+<<endif>>
+
+
+
+<<if !isPlaying("layer1")>>
+	<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
+<<endif>>
+<<if $forageWater == 1>>
+	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily water on this layer">><br><<endif>>
+<<if $forageFood == 1>>
+	<<print "You are currently foraging for your daily food on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily food on this layer">><br><<endif>><</nobr>>
+[[Use Items]]
+
+[[Learn about the threats on this layer|Layer1 Threats]]
+[[Check for food and water you can forage for|Layer1 Forage]]
+[[Search for relics|Layer1 Relics]]
+[[Take on curses to purge your corruption|Layer1 Curses]]
+[[Look for any wonders you can take advantage|Layer1 Wonders]]
+[[View the Layer 1 habitation option|Layer1 Habitation]]
+
+[[Look up towards the surface|Layer1 Ascend]]
+[[Look down at the next layer|Layer1 Exit]]
+
+
+:: Layer1 Threats [layer1 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-threats.png']]
+
+[[Return to exploring layer 1|Layer1 Hub]]
+
+
+:: Layer1 Relics [layer1 image]
+<<set $totalRelics = $ownedRelics.concat($soldRelics)>>
+Here are the relics on this layer which are available for you to spend corruption on:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-relics.png']]
+
+<<nobr>><<if $totalRelics.some(e => e.name === "Star Compass")>>
+	<<else>><<print "[[Pick up the Star Compass]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Romer Stones")>>
+	<<else>><<print "[[Pick up the Romer Stones]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Creepy Doll")>>
+	<<else>><<print "[[Pick up the Creepy Doll]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Giddy Reaper")>>
+	<<else>><<print "[[Pick up the Giddy Reaper]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Silk Twister")>>
+	<<else>><<print "[[Pick up the Silk Twister]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Vertebra Key")>>
+	<<else>><<print "[[Pick up the Vertebra Key]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Chain of Lorelei")>>
+	<<else>><<print "[[Pick up the Chain of Lorelei]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Hive Tassel")>>
+	<<else>><<print "[[Pick up the Hive Tassel]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Smitten Mitt")>>
+	<<else>><<print "[[Pick up the Smitten Mitt]]">>
+<<endif>><</nobr>>
+
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Layer1 Curses [layer1 image altered]
+These are the curses available for you to take to help manage your corruption:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-curses.png']]
+
+<<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
+	<<else>><<print "[[Take on Libido Reinforcement A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Gender Reversal A")>>
+	<<else>><<print "[[Take on Gender Reversal A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness A") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
+	<<else>><<print "[[Take on Asset Robustness A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Clothing Restriction A")>>
+	<<else>><<print "[[Take on Clothing Restriction A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Shrunken Assets") || $playerCurses.some(e => e.name === "Asset Robustness A")|| $playerCurses.some(e => e.name === "Asset Robustness B")|| $playerCurses.some(e => e.name === "Asset Robustness C")|| $playerCurses.some(e => e.name === "Asset Robustness D")>>
+	<<else>><<print "[[Take on Shrunken Assets]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Hair Removal")>>
+	<<else>><<print "[[Take on Hair Removal]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Perma-dye")>>
+	<<else>><<print "[[Take on Perma-dye]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Freckle Speckle")>>
+	<<else>><<print "[[Take on Freckle Speckle]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Knife-ear")>>
+	<<else>><<print "[[Take on Knife-ear]]">>
+<<endif>><</nobr>>
+<<nobr>>
+<<if $dizzyCount < 5>>
+<<print "[[Take on Dizzying Heights]]">>
+<<endif>>
+<</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
+	<<else>><<print "[[Take on Increased Sensitivity]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Refractory Refactorization")>>
+	<<else>><<print "[[Take on Refractory Refactorization]]">>
+<<endif>><</nobr>>
+
+[[Allow the Abyss to bestow a random curse upon you|Layer1 Curses Random]]
+
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+
+:: Layer1 Forage [layer1 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-foraging.png']]
+
+If you decide to start foraging for food or water, it means that you will not reduce your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
+
+<<nobr>>
+<<if $forageWater == 0>>
+	<<print "[[Start foraging for water in Cloudpools|Layer1 Forage][$forageWater = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for water|Layer1 Forage][$forageWater = 0]]">><br>
+<<endif>>
+<<if $forageFood == 0>>
+	<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage][$forageFood = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for food|Layer1 Forage][$forageFood = 0]]">><br>
+<<endif>>
+<<if $items[2].count > 0>>
+[[Fill your empty flasks with water from the layer|Layer1 Flasks]]<br>
+<<endif>>
+<</nobr>>
+
+[[Return to exploring the rest of the layer|Layer1 Hub]]
+
+
+:: Layer1 Wonders [layer1 image]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-wonders.png']]
+
+<<nobr>>
+<<if $playerCurses.length > 0>>
+	<<if $iconUsed == 0>>
+		Would you like to use the Icon of Mercy?<br><br>
+		[[Yes, use the Icon|Layer1 Icon]]
+		<<else>>
+		You have already used the Icon of Mercy, you may not use it again.<br>
+	<<endif>>
+	<<else>>
+	You have no curses to remove, there's no need to use the Icon.
+<<endif>>
+<</nobr>>
+<<back [[Layer1 Hub]]>>
+
+
+:: Layer1 Habitation [layer1 image altered]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-habitation.png']]
+
+<<return>>
+<<nobr>>
+
+<<set $lewdCrit=10>>
+<<set $inhumanCrit=10>>
+<<set $AgeCrit=10>>
+<<set $DubCrit=250>>
+
+	<<if $corruption >= 0>>
+	Note: Current endings are drafts and subject to revision in future versions. Additionally, these endings should be taken as suggestions for what your possible future is. If you think something about your build would make you end up a different way, your imagination can supercede these pre-written endings, as long as it complies with the restrictions of the habitation on the layer.
+		<<HeightCorrected>> <<BreastCorrected>> <<Lewdness>> <<Inhuman>>
+	<<if $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew LInhum HAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew LInhum HAge LDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew LInhum LAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew LInhum LAge LDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew HInhum HAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew HInhum HAge LDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew HInhum LAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 LLew HInhum LAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew LInhum HAge HDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew LInhum HAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew LInhum LAge HDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew LInhum LAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew HInhum HAge HDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew HInhum HAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Outcast village|L1 HLew HInhum LAge HDub]]
+	<<else>>
+		[[Choose to settle in Outcast village|L1 HLew HInhum LAge LDub]]
+	<<endif>>
+<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<<endif>>
+
+<</nobr>>
+
+
+:: Layer1 Exit [layer1]
+Descending to the next layer will take 2 days. How are your supplied of food and water? It's only going to get harder from here.
+
+You notice the air is a bit more humid and the plants are a bit greener as you approach the path towards the second layer.
+
+[[Stay on layer 1|Layer1 Hub]]
+[[Descend down to the second layer|Layer2 1]]
+
+
+:: Layer1 Cherry [layer1]
+[img[setup.ImagePath+'Surface/cherry.png']]
+
+How would you like to use Cherry's chaotic luck ability?
+
+[[Get 2 random relics for half cost|Layer1 Cherry Relic]]
+[[Get 2 random curses for +50% corruption|Layer1 Cherry Curse]]
+[[Get 1 relic and 1 curse|Layer1 Cherry Mix]]
+
+
+:: Layer1 Cherry Relic [layer1]
+<<nobr>>
+<<set $temp1 = random(0,8)>>
+<<set $temp2 = random(0,8)>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,8)>>
+	<<if $temp1 !== $temp2>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[$temp2])>>
+<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<</nobr>>
+
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer1 Hub]]
+
+
+:: Layer1 Cherry Curse [layer1]
+<<nobr>>
+<<set $temp1 = random(0,11)>>
+<<set $temp2 = random(0,11)>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11)>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 6 && (Math.abs($temp1 - $temp2) !== 2))>>
+		<<break>>
+	<<endif>>
+<</for>>
+<<set $playerCurses.push($curses[$temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
+<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
+	<<set $dizzyCount +=1>>
+<<endif>>
+<</nobr>>
+
+The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<nobr>>
+<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
+<<if $height == "0">>
+<br><br>Would you like to increase or descrease your height?<br><br>
+
+<<radiobutton "$height" "-5" checked>> Decrease<br>
+<<radiobutton "$height" "5" >> Increase<br><br>
+<<endif>>
+<<endif>><</nobr>>
+
+[[Continue on to the rest of the layer|Layer1 Hub]]
+
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Gender Reversal A")>>
+	<<set $app.modgender += 1>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Asset Robustness A")>>
+<<set $app.modpenis += 1>>
+<<set $app.modbreasts += 1>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts += 1>>
+<<else>>
+	<<set $app.penis += 1>>
+	<<set $app.breasts += 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
+<<if $app.sex == "male">>
+	<<set $app.penis = 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts = 1>>
+<<elseif $app.sex == "futa">>
+	<<set $app.penis = 1>>
+	<<set $app.breasts = 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Hair Removal")>>
+	<<set $app.skinType = "hairless, smooth">>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Knife-ear")>>
+	<<set $app.ears = "pointed, elfish">>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
+<<set $app.libido += 1>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
+	<<set $app.height += parseInt($height)>>
+	<<set $app.modheight += parseInt($height)>>
+	<<set $app.oheight += parseInt($height)>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer1 Cherry Mix [layer1]
+<<nobr>>
+<<set $temp1 = random(0,8)>>
+<<set $temp2 = random(0,11)>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
+<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
+	<<set $dizzyCount +=1>>
+<<endif>>
+<</nobr>>
+
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<nobr>>
+<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
+<<if $height == "0">>
+<br><br>Would you like to increase or descrease your height?<br><br>
+
+<<radiobutton "$height" "-5" checked>> Decrease<br>
+<<radiobutton "$height" "5" >> Increase<br><br>
+<<endif>>
+<<endif>><</nobr>>
+
+[[Continue on to the rest of the layer|Layer1 Hub]]
+
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Gender Reversal A")>>
+<<set $app.modgender += 1>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Asset Robustness A")>>
+<<set $app.modpenis += 1>>
+<<set $app.modbreasts += 1>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts += 1>>
+<<else>>
+	<<set $app.penis += 1>>
+	<<set $app.breasts += 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
+<<if $app.osex == "male">>
+	<<set $app.penis = 1>>
+<<else>>
+	<<set $app.breasts = 1>>
+<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Hair Removal")>>
+<<set $app.skinType = "hairless, smooth">>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Knife-ear")>>
+<<set $app.ears = "pointed, elfish">>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
+<<set $app.libido += 1>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
+	<<set $app.height += parseInt($height)>>
+	<<set $app.modheight += parseInt($height)>>
+	<<set $app.oheight += parseInt($height)>>
+<<endif>>
+<</nobr>>
+
+
+:: Layer1 Icon [layer1]
+[img[setup.ImagePath+'Wonders/iconofmercy.png']]
+
+After spending a few days seeking it out, you find a well-known site where cursed travelers can remove a curse that the Abyss forced upon them, at the cost of losing the corruption points it granted you.
+
+Choose the curse you wish to remove:
+<<nobr>>
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+	<<capture $i>>
+		<<print $playerCurses[$i].name>><<print " ">><<print "[[Remove|Icon Removal][$temp to $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<back>>
+
+
+:: Pick up the Star Compass [layer1]
+<<set $ownedRelics.push($relic1)>><<set $corruption -= ($relic1.corr - $corRed)>>
+
+You have successfully taken the $relic1.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Romer Stones [layer1]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic2.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic2)>>
+<<set $corruption -= ($relic2.corr - $corRed)>>
+<<set $timeL1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL1 += $tempTime>>
+		<<if $abyssKnow == 0>>
+		<<set $app.modgender += $tempTime>>
+		<<if $app.osex == "male">>
+			<<set $app.gender += $tempTime>>
+		<<else>>
+			<<set $app.gender -= $tempTime>>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL1 += 1>>
+			<<if $abyssKnow == 0>>
+			<<set $app.modpenis += 1>>
+			<<set $app.modbreasts += 1>>
+			<<if $app.sex == "male">>
+				<<set $app.penis += 1>>
+			<<elseif $app.sex == "female">>
+				<<set $app.breasts += 1>>
+			<<else>>
+				<<set $app.penis += 1>>
+				<<set $app.breasts += 1>>
+			<<endif>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic2.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Creepy Doll [layer1]
+<<set $ownedRelics.push($relic3)>><<set $corruption -= ($relic3.corr - $corRed)>>
+
+<<if $app.appAge > 13>><<if $hiredCompanions.some(e => e.name === "Maru")>>
+
+As you and Maru search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
+
+You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. Maru notices your discovery, but looks worried and comments, "Why isn't the table rotting? I feel like something's wrong here..." his voice trails off, letting the comment hang for a moment more than you're both comfortable with.
+
+You try to comfort Maru, but he insists he isn't afraid of the doll. "It reminds me of something I used to play with, I think. But it can't be..." At the same time, you get sense that it is almost exactly like a doll you had as a child, except you know you definitely didn't have a doll like this one. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+"I don't thik we should take it." Maru crosses his arms, but after a few more words of encouragement from you, he accepts your decision. It can't really cause many problems, it's just a doll, right?
+
+Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was.
+
+<<elseif $hiredCompanions.some(e => e.name === "Saeko")>>
+
+As you and Saeko search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
+
+You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. Saeko notices your discovery, and eagerly inspects the find commenting, "Very curious, the table seems to be perfectly intact. I wonder if the relic has some influence on how the miasma or environment is decaying the structure here. Perhaps we aren't the only ones who feel an aversion to it?" She ponders the possibility for a moment, but doesn't come to any solid conclusion.
+
+As you listen to her comments, you get sense that it is almost exactly like a doll you had as a child, except you know you definitely didn't have a doll like this one. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+"I'm skeptical about the utility of this relic, but I am curious about its properties." You give your answer to her unasked question by picking up the doll and adding it to your relic collection. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was.
+
+<<else>>
+
+As you search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
+
+You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you had as a child, except you know you definitely didn't have a doll like this one. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was.
+
+<<endif>><<else>><<if $hiredCompanions.some(e => e.name === "Maru")>>
+
+As you and Maru search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
+
+You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you would play with now, except you know you definitely don't have a doll like this one. It really makes you feel like a child when you look at it, as if you want to play with it and are repulsed by it at the same time. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+Maru notices your discovery, but looks worried and comments, "Why isn't the table rotting? I feel like something's wrong here..." his voice trails off, letting the comment hang for a moment more than you're both comfortable with.
+
+You try to comfort Maru, but he insists he isn't afraid of the doll. "It reminds me of something I used to play with, I think. But it can't be..." It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+"I don't thik we should take it." Maru crosses his arms, but after a few more words of encouragement from you, he accepts your decision. It can't really cause many problems, it's just a doll, right?
+
+Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was. As you place it in your bag, you almost get a sense that maybe you could make use of the tea table to complete the tea party with the doll, but you shake off the thought, despite looking like a child.
+
+<<elseif $hiredCompanions.some(e => e.name === "Saeko")>>
+
+As you and Saeko search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
+
+You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you would play with now, except you know you definitely don't have a doll like this one. It really makes you feel like a child when you look at it, as if you want to play with it and are repulsed by it at the same time. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+Saeko notices your discovery, and eagerly inspects the find commenting, "Very curious, the table seems to be perfectly intact. I wonder if the relic has some influence on how the miasma or environment is decaying the structure here. Perhaps we aren't the only ones who feel an aversion to it?" She ponders the possibility for a moment, but doesn't come to any solid conclusion.
+
+Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was. As you place it in your bag, you almost get a sense that maybe you could make use of the tea table to complete the tea party with the doll, but you shake off the thought, despite looking like a child.
+
+<<else>>
+
+As you search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
+
+You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you would play with now, except you know you definitely don't have a doll like this one. It really makes you feel like a child when you look at it, as if you want to play with it and are repulsed by it at the same time. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
+
+Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was. As you place it in your bag, you almost get a sense that maybe you could make use of the tea table to complete the tea party with the doll, but you shake off the thought, despite looking like a child.
+
+<<endif>><<endif>>You have successfully taken the $relic3.name relic.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Giddy Reaper [layer1]
+<<set $ownedRelics.push($relic4)>><<set $corruption -= ($relic4.corr - $corRed)>><<set $cut = 1>>
+
+You have successfully taken the $relic4.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Silk Twister [layer1]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic5.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic5)>>
+<<set $corruption -= ($relic5.corr - $corRed)>>
+<<set $timeL1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL1 += $tempTime>>
+		<<if $abyssKnow == 0>>
+		<<set $app.modgender += $tempTime>>
+		<<if $app.osex == "male">>
+			<<set $app.gender += $tempTime>>
+		<<else>>
+			<<set $app.gender -= $tempTime>>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL1 += 1>>
+			<<if $abyssKnow == 0>>
+			<<set $app.modpenis += 1>>
+			<<set $app.modbreasts += 1>>
+			<<if $app.sex == "male">>
+				<<set $app.penis += 1>>
+			<<elseif $app.sex == "female">>
+				<<set $app.breasts += 1>>
+			<<else>>
+				<<set $app.penis += 1>>
+				<<set $app.breasts += 1>>
+			<<endif>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic5.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Vertebra Key [layer1]
+<<set $ownedRelics.push($relic6)>><<set $corruption -= ($relic6.corr - $corRed)>>
+
+You have successfully taken the $relic6.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Chain of Lorelei [layer1]
+<<set $ownedRelics.push($relic7)>><<set $corruption -= ($relic7.corr - $corRed)>>
+
+You have successfully taken the $relic7.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Hive Tassel [layer1]
+<<set $ownedRelics.push($relic8)>><<set $corruption -= Math.max(($relic8.corr - $corRed), 0)>>
+
+As you wander through a grove of trees in search of the mysterious tassel that's somehow connected to the bees, you notice something new. A constant buzzing surrounds you all at once, as if you were swallowed by a swarm of bees. And in fact, when you glance at the trees, you can see that their bark is now impossible to make out, instead covered in layers of yellow and black insects moving over each other.
+
+Then they begin to take flight, filling the air with black and yellow bugs and filling your ears with an intense droning sound.
+
+As you<<if $hiredCompanions.length > 0>> and your companions<<endif>> brace for the pain of the piercing stingers and nearly panic, you realize none of the bees are hurting you. In fact, none seem to be landing on you at all, leaving you a space of about a meter of peace within the ordered chaos of the swarm.
+
+The strange sight in front of you also gives you the chance to notice a few odd things. Firstly, the bees seem strangely proportioned, as if their heads were too big for their bodies, making them almost look like a different type of insect altogether if it weren't for their coloration and behavior. Second, the apparent bees are not moving randomly, they seem to be pairing up and rubbing their bodies quite vigorously against each other before leaving and moving to a new partner. It occurs to you that perhaps you're in the middle of an orgy for these pseudo-bees. Third, you hear a second buzzing sound, one that sounds less like the buzzing of a bee and more like someone hitting wood together very quickly.
+
+As you investigate the new sound, you spot a tree with a few branches vibrating and smacking against each other, with the apparent culprit being a small scrap of cloth gently wrapped around one of the branches. Spotting your goal, you're easily able to pull the vibrating tassel away from the tree, and as you leave the copulating swarm, the tassel becomes still, leaving only the strong smell of honey and its honeycomb pattern to signify there's anything unusual about it.
+
+
+You have successfully taken the $relic8.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Pick up the Smitten Mitt [layer1]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max($relic9.time - $timeRed + $status.penalty, 0))>>
+<<set $ownedRelics.push($relic9)>>
+<<set $corruption -= ($relic9.corr - $corRed)>>
+<<set $timeL1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL1 += $tempTime>>
+		<<if $abyssKnow == 0>>
+		<<set $app.modgender += $tempTime>>
+		<<if $app.osex == "male">>
+			<<set $app.gender += $tempTime>>
+		<<else>>
+			<<set $app.gender -= $tempTime>>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL1 += 1>>
+			<<if $abyssKnow == 0>>
+			<<set $app.modpenis += 1>>
+			<<set $app.modbreasts += 1>>
+			<<if $app.sex == "male">>
+				<<set $app.penis += 1>>
+			<<elseif $app.sex == "female">>
+				<<set $app.breasts += 1>>
+			<<else>>
+				<<set $app.penis += 1>>
+				<<set $app.breasts += 1>>
+			<<endif>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+You have successfully taken the $relic9.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+[[Continue searching for the relics of layer 1|Layer1 Relics]]
+[[Continue exploring the first layer|Layer1 Hub]]
+
+
+:: Take on Libido Reinforcement A [layer1]
+<<set $playerCurses.push($curse1)>><<set $corruption += $curse1.corr>>
+
+You have successfully taken on the $curse1.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+<<set $app.libido += 1>>
+
+
+:: Take on Gender Reversal A [layer1]
+<<set $playerCurses.push($curse2)>><<set $corruption += $curse2.corr>>
+
+You have successfully taken on the $curse2.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+<<nobr>>
+<<set $app.modgender += 1>>
+<<if $app.osex == "male">>
+	<<set $app.gender += 1>>
+<<else>>
+	<<set $app.gender -= 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Asset Robustness A [layer1]
+<<set $playerCurses.push($curse3)>><<set $corruption += $curse3.corr>>
+
+You have successfully taken on the $curse3.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+<<nobr>>
+<<set $app.modpenis += 1>>
+<<set $app.modbreasts += 1>>
+<<if $app.sex == "male">>
+	<<set $app.penis += 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts += 1>>
+<<else>>
+	<<set $app.penis += 1>>
+	<<set $app.breasts += 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Clothing Restriction A [layer1]
+<<set $playerCurses.push($curse4)>><<set $corruption += $curse4.corr>>
+
+You have successfully taken on the $curse4.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+
+:: Take on Shrunken Assets [layer1]
+<<set $playerCurses.push($curse5)>><<set $corruption += $curse5.corr>>
+
+You have successfully taken on the $curse5.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+<<nobr>>
+<<if $app.sex == "male">>
+	<<set $app.penis = 1>>
+<<elseif $app.sex == "female">>
+	<<set $app.breasts = 1>>
+<<elseif $app.sex == "futa">>
+	<<set $app.penis = 1>>
+	<<set $app.breasts = 1>>
+<<endif>>
+<</nobr>>
+
+
+:: Take on Hair Removal [layer1]
+<<set $playerCurses.push($curse6)>><<set $corruption += $curse6.corr>>
+
+You have successfully taken on the $curse6.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+<<nobr>>
+<<set $app.skinType = "hairless, smooth">>
+
+<</nobr>>
+
+
+:: Take on Perma-dye [layer1]
+<<set $playerCurses.push($curse7)>><<set $corruption += $curse7.corr>>
+
+You have successfully taken on the $curse7.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+Please enter your new hair color:
+
+<<textbox "$app.hair" "turquoise" "Layer1 Curses">>
+
+
+:: Take on Freckle Speckle [layer1]
+<<set $playerCurses.push($curse8)>><<set $corruption += $curse8.corr>>
+
+You have successfully taken on the $curse8.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+
+:: Take on Knife-ear [layer1]
+<<set $playerCurses.push($curse9)>><<set $corruption += $curse9.corr>>
+
+You have successfully taken on the $curse9.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+<<nobr>>
+<<set $app.ears = "pointed, elfish">>
+<</nobr>>
+
+
+:: Take on Dizzying Heights [layer1]
+<<set $playerCurses.push($curse10)>><<set $corruption += $curse10.corr>><<set $dizzyCount += 1>>
+
+You have successfully taken on the $curse10.name curse. Hopefully you are ok with accepting the permanent consequences.
+<<if $height == "0">>
+Would you like to increase or descrease your height?
+
+<<radiobutton "$height" -5 checked>> Decrease
+<<radiobutton "$height" 5 >> Increase
+
+<<endif>>
+
+[[Accept more curses from the first layer|Layer1 Curses][$app.height += parseInt($height), $app.modheight += parseInt($height), $app.oheight += parseInt($height)]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub][$app.height += parseInt($height), $app.modheight += parseInt($height), $app.oheight += parseInt($height)]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1][$app.height += parseInt($height), $app.modheight += parseInt($height), $app.oheight += parseInt($height)]]
+<<endif>>
+
+
+:: Take on Increased Sensitivity [layer1]
+<<set $playerCurses.push($curse11)>><<set $corruption += $curse11.corr>>
+
+You have successfully taken on the $curse11.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+
+:: Take on Refractory Refactorization [layer1]
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
+<<set $curse12.appDesc = "You do not have a refractory period, and can orgasm several times in a row. Sex is like a long sequence of orgasms for you. ">>
+<<else>>
+<<set $curse12.appDesc = "You do not have a refractory period, and can orgasm several times in a row. ">>
+<<endif>>
+<</nobr>><<set $playerCurses.push($curse12)>><<set $corruption += $curse12.corr>>
+
+You have successfully taken on the $curse12.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the first layer|Layer1 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 1|Layer1 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L1]]
+<<endif>>
+
+
+:: Icon Removal [layer1]
+<<nobr>>
+<<set $corruption -= $playerCurses[$temp].corr>>
+<<set $iconUsed = 1>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
+<<set $timeL1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL1 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<set $app.modgender += $tempTime>>
+		<<if $app.osex == "male">>
+			<<set $app.gender += $tempTime>>
+		<<else>>
+			<<set $app.gender -= $tempTime>>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0)>>
+			<<set $items[2].count += 1, 0)>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL1 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $app.modpenis += 1>>
+			<<set $app.modbreasts += 1>>
+			<<if $app.sex == "male">>
+				<<set $app.penis += 1>>
+			<<elseif $app.sex == "female">>
+				<<set $app.breasts += 1>>
+			<<else>>
+				<<set $app.penis += 1>>
+				<<set $app.breasts += 1>>
+			<<endif>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>
+The curse of $playerCurses[$temp].name has been successfully removed and your corruption has been refunded. <<run $playerCurses.deleteAt($temp)>>
+
+[[Continue exploring the layer|Layer1 Hub]]
+
+
+:: Layer1 Ascend [layer1]
+Traveling back to the surface from here will take 1 day, and will cost 10 corruption. Leaving the abyss also requires that you don't have any negative corruption points even if you plan to come back.
+<<if $corruption >= 10>>
+[[Continue your ascent|Layer1 Ascend2]]<<else>>
+You must have 0 or more corruption after traveling in order to return to the surface. Return to the Abyss and accept more curses to be able to return to the surface world.
+<<endif>>
+[[Turn back and continue your business on the first layer|Layer1 Hub]]
+
+
+:: Layer1 Flasks [layer1]
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<if $items[2].count > 0>>
+		<<set $items[3].count += 1>>
+		<<set $items[2].count -= 1>>
+		<<set $waterL1 += 1>>
+	<<else>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+[img[setup.ImagePath+'Foraging/cloudpools.png']]
+
+<<if $abyssKnow == 0>>
+You dip each of your flasks into the miasma-contaminated water in some of the lower cloudpools where it has collected. As you take a test-sip of the water you feel a subtle pulsing through your body, as if your body were trying to expand as quickly as it could. Despite this side-effect, you need the water, so you continue to fill your flasks for your future travels.
+<<else>>
+Using your knowledge of the Abyss, you specifically look to make sure you can get some good water directly from the clouds. You spot a couple easy pools where you could easily get a drink, but avoid the tainted water in favor of the pure water from a gentle waterfall you come across along your path. A taste test confirms that the water is indeed pure and you fill all of your empty flasks in preparation of continuing your journey.
+<<endif>>
+[[Return to exploring your food and water options on this layer|Layer1 Forage]]
+
+
+:: Layer1 Curses Random
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<set $temp1 = random(0,11)>>
+	<<if ($temp1 == 0) && !$playerCurses.some(e => e.name === "Libido Reinforcement A")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 1) && !$playerCurses.some(e => e.name === "Gender Reversal A")>>
+		<<break>>
+	<<endif>>
+	<<if $temp == 2 && !($playerCurses.some(e => e.name === "Asset Robustness A") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 3) && !$playerCurses.some(e => e.name === "Clothing Restriction A")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 4) && !($playerCurses.some(e => e.name === "Shrunken Assets") || $playerCurses.some(e => e.name === "Asset Robustness A")|| $playerCurses.some(e => e.name === "Asset Robustness B")|| $playerCurses.some(e => e.name === "Asset Robustness C")|| $playerCurses.some(e => e.name === "Asset Robustness D"))>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 5) && !$playerCurses.some(e => e.name === "Hair Removal")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 6) && !$playerCurses.some(e => e.name === "Perma-dye")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 7) && !$playerCurses.some(e => e.name === "Freckle Speckle")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 8) && !$playerCurses.some(e => e.name === "Knife-ear")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 9) && $dizzyCount < 5>>
+		<<break>>
+	<<endif>>
+		<<if ($temp1 == 10) && !$playerCurses.some(e => e.name === "Increased Sensitivity")>>
+		<<break>>
+	<<endif>>
+	<<if ($temp1 == 11) && !$playerCurses.some(e => e.name === "Refractory Refactorization")>>
+		<<break>>
+	<<endif>>
+
+	<<if $i > 900>>
+		<<set $temp1 = -1>>
+		<<break>>
+	<<endif>>
+<</for>>
+<</nobr>>
+
+<<if $temp1 >= 0>>
+The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your curse and the change in life that comes with it.
+
+<<print "[[Take on " + $curses[$temp1].name + "]]">>
+<<else>>
+There are no curses left for you to take on this layer.
+
+<<back>>
+<<endif>>
+
+
+:: Layer1 Threat1 Ascend [new layer1]
+<<set $timeL2T1 -= 4>>
+[img[setup.ImagePath+'Threats/opportunisticbandits.png']]
+
+How are you going to deal with the bandits surrounding you?
+
+
+<<if $items[14].count> 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	What you lack in numbers you make up for in fighting quality, at least Khemia does. You see him already reaching for his sword. You would only need to give him a signal. You feel certain that the bandits would flee with no issues upon seeing Khemia with his sword.
+	[[Let Khemia and his sword deal with these jokers|Layer1 Hub]]<br>
+<<endif>>
+<<if $items[13].count > 0 && $items[20].count > 2>>
+	If these bandits thought you would traverse the dangers of the abyss unprepared, they are very much mistaken. If they see that you have a real weapon, they should leave you alone.
+	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br>
+<<endif>>
+
+Maybe giving them what they want is the safer route. You can always get more relics anyway, right?
+[[Hand over the relics you have collected|Relic surrender][$surrVal to 0 ]]
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use and either flee or overpower the bandits.
+[[Use a combination of relics not mentioned above you believe would be able to outsmart of outmatch the bandits|Layer1 Hub]]
+
+
+:: Relic surrender [new layer1]
+[img[setup.ImagePath+'Threats/opportunisticbandits.png']]
+
+Nervously, you begin going trough your bag, attempting to decide which relics to surrender and which to keep, if any...
+
+<<if $surrVal < 150>>
+Choose the relic you would like to hand over:
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+	The bandits seem unsatisfied. One places a hand on the handle of a rusted blade, as if to remind you what's at stake here. One of them pushes you to hurry, "Come on! Don't be greedy now, if you know what's good for you then you'll hand over a bit more and we'll all be happy, right?"
+<<else>>
+  	The apparent bandit leader smiles widely, "Yeah, now we're talking. Off you go now, until next time." He waves you off and gives a toothy grin, showing some yellowing teeth as he picks through the loot you left him.
+	[[Make your escape|Layer1 Hub]]
+<<endif>>
+
+
+:: L1 LLew LInhum HAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+
+When you first saw Outcast village you already fell in love. Its rustic charm endeared you. So eventhough you weren't to severly effected by the curses from the abyss you decided you wanted to stay here anyway. Over time you quickly became closely connected with the rest of the small community. You enjoyed your life for the most part but as time grew on you started to mis some of the ammenities the top side could provide you. Although you still went to the surface on occasion to enjoy those you started to wonder if there wasn't something that could be done in Outcast village. You debated it a bit with the rest of the community and decided to put the fortune you had left over from your abyss diving days into water turbines to improve the power available for the village. Over time this modernised the town a bit as appliances from the surface started pouring in, but in the end Outcast village never really lost its rustic feel. For your efforts the community promoted you to the mayor of the town, which you gladly accepted. With a community of around 300 people it was more a title than a job anyway. And so you lived a long confortable and quite life in Outcast village.
+
+
+:: L1 LLew LInhum HAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+
+When you first saw Outcast village you already fell in love. Its rustic charm endeared you. So eventhough you weren't to severly effected by the curses from the abyss you decided you wanted to stay here anyway. Over time you quickly became closely connected with the rest of the small community. You enjoyed your life for the most part but as time grew on you started to mis some of the ammenities the top side could provide you. Although you still went to the surface on occasion to enjoy those you started to wonder if there wasn't something that could be done in Outcast village. Unfortunatly you didn't have the means to help the community out in any significant way. It didn't matter the slow life in Outcast village started to grow on you more and more. Some days after helping out in the fields you found that you could just enjoy yourself sitting near a water edge and laying back in the grass, listening to the sounds of nature around you. You became a valued and central member in the community of Outcast village, spending many evening drinking and sharing stories about your abyss diving days. In the end you lived a simple but happy life in Outcast village
+
+
+:: L1 LLew LInhum LAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+
+At some point enough is enough, and with your body regressed at much as yours was you felt it would be better to just call it quits. With your apperent young age you felt it would be difficult to return to the surface so you settled in Outcast village. While you could see various other ex-adventures that had also regressed quite far, most seem at least to still be at a teenager level, and you felt you were being treated more like a kid than the rest. Of course you looked at ways to provide for yourself but that proved more difficult than you thought. You couldn't help out in the fields around town and working on some of the construction projects was even more impossible. If it waren't for your considerable savings after you abyss diving adventure you wouldn't have known what to do. Outcast village was very accomodating to regressed divers so you were able to buy a place for yourself and maintain yourself for a while. You decided to still be frugal thought, not knowing how long it would take before your could work for your own food. Before long some people in the cummunity understood what was going and before you knew it you felt like you were constantly surrounded by people, bringing food or treating you to a diner. Sometimes you felt you were being babysat by 300 people, but at the same time being looked after by 300 people also felt nice. The family across the streat was especially nice, at some point you spend more than half the nights eating at their place. The days you stayed at home the father of the family would still check up on you in the morning and in the evening the mother would often stop by to bring you some left over diner (which tasted suspiciously fresh). SHe never left before giving you a big kiss and a big hug. Over time you became sort of the town mascot and every where you go people greeted you and asked if they could help you with stuff. When you first started to live Outcast village you worried that grow back up by yourself woudl be really hard but after a few years it was clear that your family that helped you allong the way was now bigger than ever.
+
+
+:: L1 LLew LInhum LAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+
+At some point enough is enough, and with your body regressed at much as yours was you felt it would be better to just call it quits. With your apperent young age you felt it would be difficult to return to the surface so you settled in Outcast village. While you could see various other ex-adventures that had also regressed quite far, most seem at least to still be at a teenager level. With not much left over from your abyss diving expedition you felt at a loss. You couldn't help out in the fields around town and working on some of the construction projects was even more impossible. Luckily the rest of the small community quickly recognised you plight. A small family basically adopted you into their household. Over time they really started to feel like a real family to. You looked up to your new stepdad, he worked so hard in the village but when he came home he always had time mess around with you, giving you horserides on his neck. He really loved his new little <<BreastCorrected>><<PerceivedGender>>. Your older stepsister wasn't always nice to you, she seemed to enjoy treating you like a little kid most out of everybody as she new it stung you a bit. When she was babysitting you she would sometimes give you her old sippycup instead of a regular glass to drink. While it annoyed you it wasn't all bad as she tend to forget she was teasing you after a while and started to genuinely play games with you. And finally there was your new stepmother, although she didn't tease you with your regressed condition she simply couldn't help herself pampering you as much as she did. This also annoyed you at first but over time you started to love every second of it. She was bathing you, doing your hair, dressing you and even feeding you during dinner. As the years would go by this would slowly grow less and less, while the love for you new family only increased. Nevertheless, after many many years thoughts about venturing into the deeper layers of the abyss were entering your mind again...
+
+
+:: L1 LLew HInhum HAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 LLew HInhum HAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 LLew HInhum LAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 LLew HInhum LAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew LInhum HAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew LInhum HAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew LInhum LAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew LInhum LAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew HInhum HAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew HInhum HAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew HInhum LAge HDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: L1 HLew HInhum LAge LDub [new ending layer1]
+[img[setup.ImagePath+'Habitation/outcastvillage.png']]
+[[test:go to end|Habitation Ending]]
+
+
+:: Escape Balloon L1 [new layer1]
+<<nobr>><<set $currentLayer = 1>><<if !isPlaying("layer1")>>
+	<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
+<<endif>><</nobr>>
+The trip through this layer is brief and almost indistinguishable to a trip in a balloon in the skies of the surface, with the more mundane world outside the Abyss so close.
+
+Your body feels a bit strange after moving upwards through the miasma so quickly giving a bit of a shock to your system, but hopefully you picked up enough curses along the way to successfully ascend to the surface.
+
+<<if $corruption >= 10>>[[Ascend to next layer|Surface Hub][$corruption -= (10 - $corRed), $escBalDepl=0]]<<endif>>
+[[Hover on this layer to take in a curse|Layer1 Curses]]
+[[Get off the balloon on this layer|Layer1 Hub][$escBalDepl=0]]
