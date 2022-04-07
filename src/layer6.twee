@@ -16,9 +16,25 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 <<endif>><</nobr>>
 
 
-:: Layer6 Hub [layer6]
-<<set $currentLayer = 6>><<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>><<set $visitL6 = 1>><<set $layerExit = 0>>
-What do you want to do while you are here?
+:: Layer6 Hub [layer6 altered]
+<<set $currentLayer = 6>><<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>><<set $visitL6 = 1>><<set $layerExit = 0>><<checkTime>><<HeightCorrected>><<CarryAdjust>>
+
+
+<<if $coolCloth && !$dollevent2>>
+	<<set $cool=1>>
+	You put on the self-cooling clothes. The romer stones that you incorperated in it feel like small airconditioning units although the clothes are light they still cover you very well and soon you feel them cool your entire body. You feel like you could run a mile in these clothes and still not overheat in this hellish landscape you find yourself. It looks like you'll be able to cover more distance wearing this than you would normally be able to, reducing all travel costs on this layer by 1 day.<br><br>
+What do you want to do while you are here?<br>
+
+<<elseif $dollevent2 && $coolCloth>>
+
+	By now you have accepted that you can't take of the tattered pink dress. But when you try to put the self-cooling clothes over your tattered dress you faint, only to wake up with the summer clothes off and neatly folded in your hands again. Looking at the doll you swear you can see it grinning at you. It seems you are stuck sweating it out in this worn down dress. If only it would be little hoter so that acursed doll would go up in flames..<br><br>
+What do you want to do while you are here?<br>
+
+<<elseif $dollevent2 && !$coolCloth>>
+	Dressed in only your tattered pink dress you feel very exposed to the heat on this layer. You whish you had something cooler and more insulating to wear to protect you. At the same time you wonder if you could even wear something else now that you are in this cursed dress. Damn that doll..<br><br>
+What do you want to do while you are here?<br>
+
+<<endif>>
 
 <<nobr>>
 <<if $forageWater == 1>>
@@ -33,16 +49,18 @@ What do you want to do while you are here?
 <<if !isPlaying("layer6")>>
 	<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>>
 <<endif>>
+<br>
+[[Use Items and Relics]]<br>
+<<if $hiredCompanions.length > 0>>
+[[Interact with party|Party overview]]<br>
+<<endif>>
 <</nobr>>
-
-[[Use Items]]
-
 [[Learn about the threats on this layer|Layer6 Threats]]
 [[Check for food and water you can forage for|Layer6 Forage]]
 [[Search for relics|Layer6 Relics]]
 [[Take on curses to purge your corruption|Layer6 Curses]]
 [[Look for any wonders you can take advantage|Layer6 Wonders]]
-[[View the Layer 5 habitation option|Layer6 Habitation]]
+[[View the Layer 6 habitation option|Layer6 Habitation]]
 
 [[Look up towards the surface|Layer6 Ascend 1]]
 [[Look down at the next layer|Layer6 Exit1]]
@@ -158,7 +176,7 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 <<endif>>
 
 
-:: Layer6 Curses [layer6 image altered]
+:: Layer6 Curses [layer6 image]
 These are the curses available for you to take to help manage your corruption:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-curses.png']]
@@ -235,7 +253,7 @@ Do you want to approach the Maw of Kimaris to get a copy of a relic from a highe
 
 
 :: Layer6 Ascend 1 [layer6]
-Returning to the fragrantdesert of the previous layer will take 15 days of trekking, and cost 65 corruption.
+Returning to the fragrant desert of the previous layer will take 15 days of trekking, and cost 65 corruption.
 
 [[Continue your ascent|Layer6 Ascend2]]
 [[Turn back and continue your business on the sixth layer|Layer6 Hub]]
@@ -309,6 +327,18 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 [[Allow it to overpower you|Layer6 Threat1 Main2][$tentacleFucked = 12]]<br>
 	<<if $items[4].count > 4>>[[Allow it to overpower you and use a medkit to cure the status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the titanic tentacle beast approaches you, suddenly you hear a voice talking to you.<br><br>
+<<say $creepydoll>>Oh, this one looks really scary! But don't worry, I'll make him go away. You might need to keep your eyes closed a little longer than normal, but just keep holding me tight and everything will be ok, I promise. <</say>><br>
+
+An intense, yet somehow comforting, warmth radiates from the Creepy Doll. You sense that it is a deep and powerful energy, but somehow, other descriptions of it elude you.<br><br>
+<<link "Hold the doll very tight and shut your eyes shut for a long time" "Layer6 Hub">>
+  <<dollTF>>
+  <<dollTF>>
+<</link>><br><br>
+<<endif>>
+
 <</nobr>>
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of relics not mentioned above you believe would be able to defeat the beast|Layer6 Hub]]
@@ -341,48 +371,17 @@ There is a very easily accessible source of water on this layer, the River Dycx,
 [[Return to exploring your food and water options on this layer|Layer6 Forage]]
 
 
-:: Layer6 Maw1 [image layer6]
+:: Layer6 Maw1 [image layer6 altered]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
 <<nobr>>
 <<set $totalRelics = $ownedRelics.concat($soldRelics)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 3>>
+<<include "Layer6Time">>
 <</nobr>>
 
 <<nobr>>
 You may pick up a new relic for 10 dubloons and 1.5x its corruption cost:<br>
-<<for $i = 0; $i < $relics.length; $i++>>
+<<for $i = 0; $i < 59; $i++>>
 	<<capture $i>>
 	<<if !$totalRelics.some(e => e.name === $relics[$i].name) && $relics[$i].name != "Kin Shifter">>
 		<<print "[[$relics[$i].name|Layer6 Maw1][$temp = $i, $dubloons -= 10, $corruption -= Math.round(Math.max(($relics[$i].corr * 3 / 2) - $corRed, 10)), $ownedRelics.push($relics[$i])]]">><<print " ">><<print Math.round(Math.max(($relics[$i].corr * 3 / 2) - $corRed, 10))>><<print " corruption points">><br>
@@ -390,7 +389,7 @@ You may pick up a new relic for 10 dubloons and 1.5x its corruption cost:<br>
 	<</capture>>
 <</for>><br>
 You may pick up a copy of an old relic for 20 dubloons and 2x its corruption cost:<br>
-<<for $i = 0; $i < $relics.length; $i++>>
+<<for $i = 0; $i < 59; $i++>>
 	<<capture $i>>
 	<<if $totalRelics.some(e => e.name === $relics[$i].name) && $relics[$i].name != "Kin Shifter">>
 		<<print "[[$relics[$i].name|Layer6 Maw1][$temp = $i, $dubloons -= 20, $corruption -= Math.round(Math.max(($relics[$i].corr * 2) - $corRed, 10)), $ownedRelics.push($relics[$i])]]">><<print " ">><<print Math.round(Math.max(($relics[$i].corr * 2) - $corRed, 10))>><<print " corruption points">><br>
@@ -402,43 +401,12 @@ You may pick up a copy of an old relic for 20 dubloons and 2x its corruption cos
 [[Return to exploring the sixth layer|Layer6 Hub]]
 
 
-:: Pick up the Ring of the Devourer [layer6]
+:: Pick up the Ring of the Devourer [layer6 altered]
 <<nobr>>
 <<set $ownedRelics.push($relic61)>>
 <<set $corruption -= ($relic61.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic61.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic61.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic61.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -451,39 +419,8 @@ You have successfully taken the $relic61.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic62)>>
 <<set $corruption -= ($relic62.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic62.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic62.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic62.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -496,39 +433,8 @@ You have successfully taken the $relic62.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic63)>>
 <<set $corruption -= ($relic63.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic63.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic63.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic63.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -541,39 +447,9 @@ You have successfully taken the $relic63.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic64)>>
 <<set $corruption -= ($relic64.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic64.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic64.time-$SibylBuff>>
+<<include "Layer6Time">>
+<</nobr>>
 <</nobr>>
 
 You have successfully taken the $relic64.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -586,42 +462,14 @@ You have successfully taken the $relic64.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic65)>>
 <<set $corruption -= ($relic65.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic65.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic65.time-$SibylBuff>>
+<<include "Layer6Time">>
+<</nobr>>
 <</nobr>>
 
 You have successfully taken the $relic65.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+You can use this to improve the boons granted by your companions one time, choose the beneficiary wisely.
 
 [[Continue searching for the relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
@@ -631,39 +479,9 @@ You have successfully taken the $relic65.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic66)>>
 <<set $corruption -= ($relic66.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic66.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic66.time-$SibylBuff>>
+<<include "Layer6Time">>
+<</nobr>>
 <</nobr>>
 
 You have successfully taken the $relic66.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -676,39 +494,9 @@ You have successfully taken the $relic66.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic67)>>
 <<set $corruption -= ($relic67.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic67.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic67.time-$SibylBuff>>
+<<include "Layer6Time">>
+<</nobr>>
 <</nobr>>
 
 You have successfully taken the $relic67.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -721,39 +509,8 @@ You have successfully taken the $relic67.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic68)>>
 <<set $corruption -= ($relic68.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic68.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic68.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic68.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -766,39 +523,8 @@ You have successfully taken the $relic68.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic69)>>
 <<set $corruption -= ($relic69.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic69.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic69.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic69.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -811,39 +537,8 @@ You have successfully taken the $relic69.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic70)>>
 <<set $corruption -= ($relic70.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic70.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic70.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic70.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -856,39 +551,8 @@ You have successfully taken the $relic70.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic71)>>
 <<set $corruption -= ($relic71.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic71.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic71.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic71.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -901,39 +565,8 @@ You have successfully taken the $relic71.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic72)>>
 <<set $corruption -= ($relic72.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic72.time - $timeRed + $status.penalty, 0))>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<<endif>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic72.time-$SibylBuff>>
+<<include "Layer6Time">>
 <</nobr>>
 
 You have successfully taken the $relic72.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -942,9 +575,9 @@ You have successfully taken the $relic72.name relic. Hopefully you can make good
 [[Continue exploring the sixth layer|Layer6 Hub]]
 
 
-:: Take on Submissiveness Rectification B [layer6]
+:: Take on Submissiveness Rectification B [layer6 altered]
 <<set $playerCurses.push($curse73)>><<set $corruption += $curse73.corr>>
-
+<<set $subdom -= 1>>
 You have successfully taken on the $curse73.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the sixth layer|Layer6 Curses]]
@@ -1198,9 +831,20 @@ There are no curses left for you to take on this layer.
 <<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 <</nobr>>
 
-The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
 
 [[Continue on to the rest of the layer|Layer6 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer6 Cherry Curse [layer6]
@@ -1234,7 +878,16 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 	<<set $app.appAge = 20>>
 <<endif>>
 <<endif>>
-<</nobr>>
+<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer6 Cherry Mix [layer6]
@@ -1249,7 +902,7 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.
 
 [[Continue on to the rest of the layer|Layer6 Hub]]
 
@@ -1264,7 +917,16 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 	<<set $app.appAge = 20>>
 <<endif>>
 <<endif>>
-<</nobr>>
+<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer6 Threat1 Main2 [layer6]
@@ -1313,7 +975,7 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 [[Return to exploring the sixth layer|Layer6 Hub]]
 
 
-:: Layer6 Ascend2 [layer6]
+:: Layer6 Ascend2 [layer6 altered]
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
@@ -1322,7 +984,7 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 		<<else>>
 		<<set $status.penalty = 0>>
 	<<endif>>
-		<<set $layerExitTime = (Math.max(15 - $timeRed + $status.penalty, 0))>>
+		<<set $layerExitTime = (Math.max(15 - $timeRed + $status.penalty - $cool, 0))>>
 	<<endif>>
 
 <<for $i = 0; $i < 99; $i++>>
@@ -1450,6 +1112,18 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 [[Allow it to overpower you|Layer6 Threat1 Ascend2][$tentacleFucked = 12]]<br>
 	<<if $items[4].count > 4>>[[Allow it to overpower you and use a medkit to cure the status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the titanic tentacle beast approaches you, suddenly you hear a voice talking to you.<br><br>
+<<say $creepydoll>>Oh, this one looks really scary! But don't worry, I'll make him go away. You might need to keep your eyes closed a little longer than normal, but just keep holding me tight and everything will be ok, I promise. <</say>><br>
+
+An intense, yet somehow comforting, warmth radiates from the Creepy Doll. You sense that it is a deep and powerful energy, but somehow, other descriptions of it elude you.<br><br>
+<<link "Hold the doll very tight and shut your eyes shut for a long time" "Layer6 Hub">>
+  <<dollTF>>
+  <<dollTF>>
+<</link>><br><br>
+<<endif>>
+
 <</nobr>>
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of relics not mentioned above you believe would be able to defeat the beast|Layer6 Ascend2]]
@@ -1501,7 +1175,7 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 [[Return to exploring the sixth layer|Layer6 Ascend2]]
 
 
-:: Layer6 Exit2 [layer6]
+:: Layer6 Exit2 [layer6 altered]
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
@@ -1510,7 +1184,7 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 		<<else>>
 		<<set $status.penalty = 0>>
 	<<endif>>
-		<<set $layerExitTime = (Math.max(16 - $timeRed + $status.penalty, 0))>>
+		<<set $layerExitTime = (Math.max(16 - $timeRed + $status.penalty - $cool, 0))>>
 <<endif>>
 
 <<for $i = 0; $i < 99; $i++>>
@@ -1568,8 +1242,9 @@ They push against you more persistantly than normal, but as you resist thr groun
 <<nobr>>
 <<set $forageWater = 0>>
 <<set $forageFood = 0>>
+<<set $timeL7T2 = 0>>
 <</nobr>>
-You continue through the playfully ticklish and hellishly hot tentacles for a long hike downward. You find some small hints of paved paths long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
+You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
 
 [[Descend down to the seventh layer|Layer7 1]]
 
@@ -1635,6 +1310,18 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 [[Allow it to overpower you|Layer6 Threat1 Descend2][$tentacleFucked = 12]]<br>
 	<<if $items[4].count > 4>>[[Allow it to overpower you and use a medkit to cure the status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the titanic tentacle beast approaches you, suddenly you hear a voice talking to you.<br><br>
+<<say $creepydoll>>Oh, this one looks really scary! But don't worry, I'll make him go away. You might need to keep your eyes closed a little longer than normal, but just keep holding me tight and everything will be ok, I promise. <</say>><br>
+
+An intense, yet somehow comforting, warmth radiates from the Creepy Doll. You sense that it is a deep and powerful energy, but somehow, other descriptions of it elude you.<br><br>
+<<link "Hold the doll very tight and shut your eyes shut for a long time" "Layer6 Hub">>
+  <<dollTF>>
+  <<dollTF>>
+<</link>><br><br>
+<<endif>>
+
 <</nobr>>
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of relics not mentioned above you believe would be able to defeat the beast|Layer6 Exit2]]
@@ -1686,7 +1373,7 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 [[Continue your descent to the seventh layer|Layer6 Exit2]]
 
 
-:: Escape Balloon L6 [new layer6]
+:: Escape Balloon L6 [layer6]
 <<nobr>><<set $currentLayer = 6>><<if !isPlaying("layer6")>>
 	<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>>
 <<endif>><</nobr>>
@@ -1695,3 +1382,80 @@ You wait as your balloon rapidly ascends and you can watch the infernal fields o
 [[Ascend to next layer|Escape Balloon L5][$corruption -= (65 - $corRed)]]
 [[Hover on this layer to take in a curse|Layer6 Curses]]
 [[Get off the balloon on this layer|Layer6 Hub][$escBalDepl=0]]
+
+
+:: Layer6 Preview [image layer6 altered noreturn]
+As you bring the charm up to your eye and gaze deep into the red crystal, your vision fades and a new image comes clearly into view:
+
+[img[setup.ImagePath+'Layer Intros/l6intro.png']]
+
+@@.layerTitle;LAYER 6 - CINDERS OF DIS@@
+
+You see yourself wading through a slimey field of slithering tentacles, with a deep heat and the smell of sulfur washing over you as you view the hell you are observing. Suddenly the image shifts and you see the splendor of the relics that are available on this layer.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-relics.png']]
+
+As an image of the wonders you might find on this layer starts to come into focus, an intense feeling of humility washes through you.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
+
+The mystical possibilities of the wonders fade from your view and you suddenly feel nauseous, as if a huge amount of miasma was suddenly sucked into your chest. You visualize the corruptions and curses that may afflict you in the layer below.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-curses.png']]
+
+Finally the nauseous feeling passes but is replaced by a brief sense of terror as you get a glimpse of the threaths that await you on the layer
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-threats.png']]
+
+Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the relic is cracked and broken.
+<<nobr>>
+<<if $ownedRelics.length==1>>
+	<<set $temp=0>>
+<<else>>
+	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
+		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
+			<<set $temp=$i>>
+			<<set $endloop=false>>
+		<<endif>>
+	<</for>>
+<<endif>>
+<</nobr>>
+[[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+
+
+:: Layer6Time [new]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
+<<set $timeL6 += $tempTime>>
+<<set $hexflame += $tempTime>>
+<<if $dubloons > 199>>
+	<<set $timeL6T2 += $tempTime>>
+<<endif>>
+<<set $timeL6T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL6 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+			<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL6 += 1>>
+		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+			<<set $hexflame += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>

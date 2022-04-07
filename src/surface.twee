@@ -14,10 +14,15 @@
 	<<set $app.osex = "female">>
 <<endif>>
 <<set $app.obreasts = $app.breasts>>
+<<set $app.breastsCor =parseInt($app.breasts)>>
 <<set $app.oheight = parseInt($app.oheight)>>
 <<set $app.height = $app.oheight>>
 <<set $app.age = parseInt($app.age)>>
 <<set $app.appAge = $app.age>>
+<<set $app.fit = parseInt($app.fit)>>
+<<set $ocarryWeight = parseInt($ocarryWeight)>>
+<<set $carryWeight = $ocarryWeight>>
+<<set $totalCarry = $carryWeight>>
 <</nobr>>
 <img @src="setup.ImagePath+'Surface/riko-intro.png'" width="50%"><<masteraudio stop>><<audio "surface" volume 0.2 play loop>>
 Hey, you're here to explore the Abyss, right? I'm sure you are; just about everyone who visits Outset Town dives down to explore it sooner or later. Our town is built around the outer edge of the Abyss, an enormous hole in the earth. Nobody can even begin to guess how deep it is. It goes at least several kilometers down, but nobody is known to have ever reached the bottom or even gotten close, so it could be much deeper. Of course, the biggest draw bringing so many explorers to challenge its depths is the Relics, mysterious tools with abilities that can't be explained by modern science. Many of these Relics have extremely useful or powerful magical effects, so while the risk is great, it can be well worth the effort for all the divers who venture into the Abyss after them.
@@ -80,41 +85,48 @@ Now I think you can have a look around the town and choose how to spend your dub
 [[Explore the town|Surface Hub]]
 
 
-:: Surface Hub [surface]
+:: Surface Hub [surface altered]
 <<nobr>>
 <<if $surfaceVisit == 0>>
+<<set $dubloons = 300>>
 <<if $app.sex == "male">>
 	<<set $app.penis = 3>>
 	<<set $app.gender = 1>>
+	<<set $app.ogender = 1>>
 	<<set $app.vag = 0>>
 	<<set $app.osex = "male">>
 	<<else>>
 	<<set $app.penis = 0>>
 	<<set $app.gender = 6>>
+	<<set $app.ogender = 6>>
 	<<set $app.vag = 1>>
 	<<set $app.osex = "female">>
 <<endif>>
 <<set $app.obreasts = $app.breasts>>
+<<set $app.breastsCor =parseInt($app.breasts)>>
 <<set $app.oheight = parseInt($app.oheight)>>
 <<set $app.height = $app.oheight>>
 <<set $app.age = parseInt($app.age)>>
 <<set $app.appAge = $app.age>>
+<<set $app.fit = parseInt($app.fit)>>
+<<set $ocarryWeight = parseInt($ocarryWeight)>>
+<<set $carryWeight = $ocarryWeight>>
+<<set $totalCarry = $carryWeight>>
 <<endif>>
 <<set $surfaceVisit = 1>>
-
+<<checkTime>>
 <<set $currentLayer = 0>>
 <<if !isPlaying("surface")>>
 	<<masteraudio stop>><<audio "surface" volume 0.2 play loop>>
 <<endif>>
+<<if $items[22].count>0>>
+	<<set $warmCloth=1>>
+<<endif>>
+<<HeightCorrected>><<CarryAdjust>><<checkTime>>
 <</nobr>><<if $dubloons >= 0 || $hiredCompanions.some(e => e.name === "Cloud")>>
 Here at Outset Town you can spend your $dubloons dubloons on hiring companions and buying equipment for your journey. On return visits you can also sell relics you've found in the abyss or settle down above the surface permanently.
 
 Whenever you're ready, feel free to start your expedition into the abyss!<<nobr>>
-<<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1)>>
-	<br><br>Due to your inn pass, you're able to eat and drink your fill, overcoming any deficits you've built up over time.<br><br>
-	<<set $items[0].count = Math.max($items[0].count, 0)>>
-	<<set $items[1].count = Math.max($items[1].count, 0)>>
-<<endif>>
 <<set $layerTemp = random(0,20)>>
 <<if $layerTemp == 1>>
 <br><br>As you walk around town, you notice a woman with hot pink hair and enormous breasts trying to haggle the price of a relic up. She holds a relatively mundane cup up towards the merchant in apparent exasperation, but he seems unfazed and simply shrugs his shoulders. After a moment of waiting, she sighs and hands him the cup, seemingly unsuccessful in her bargaining attempt.<br><br>
@@ -127,20 +139,25 @@ Whenever you're ready, feel free to start your expedition into the abyss!<<nobr>
 <<elseif $layerTemp == 5>>
 <br><br>A quiet black-haired young woman, who you seem to remember from the companion area, seems to be sitting on a bench in the middle of town with a notebook in her lap. She seems to be writing vigorously whenever an abnormal looking person walk by, but becomes still when no one atypical is in sight. When she notices you looking at her, she meets your eyes for a moment, but then goes back to her previous behavior of intermittent rapid scrawls when someone interesting happens by the town center.<br><br>
 <<endif>>
-
-
 <</nobr>>
 
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Purity Tree Plank") && $items[19].count > 0>>
-[[Use the Relic Workshop with your Purity Tree Planks|Surface Workshop]]<br><br>
-<<endif>>
 <<if $tunnelUsed == 1>>
 [[Look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
 <<endif>>
-<</nobr>>[[Enter the item shop|Surface Shop 1]]
+<<if $items[19].count > 0>>
+[[Go to the Relic shop|Surface Workshop]]
+<<endif>>
+<<if $items[18].count > 0>>
+[[Go to the Inn|Surface Inn]]
+<<endif>>
+[[Enter the item shop|Surface Shop 1]]
 [[Sell your relics|Surface Sell 1]]
-[[Check out the companions available to hire|Surface Companions]]
+<<nobr>>
+[[Check out the companions available to hire|Surface Companions]]<br>
+<<if $hiredCompanions.length > 0>>
+[[Interact with party|Party overview]]
+<<endif>>
+<</nobr>>
 [[Listen to a summary of the mechanics before continuing|Surface Summary]]
 [[View the Surface Habitation option|Surface Habitation]]
 
@@ -158,6 +175,7 @@ Go back to before you were in debt without Cloud's ability?
 
 
 :: Surface Shop 1 [surface image altered]
+<<HeightCorrected>><<CarryAdjust>>
 <<nobr>>
 Here are all of the items available for your to spend your $dubloons dubloons on. Your team is currently carrying
 <<set $temp1 = 0>><<set $temp2 = 0>>
@@ -168,7 +186,7 @@ Here are all of the items available for your to spend your $dubloons dubloons on
 		<<set $temp2 += $ownedRelics[$i].weight>>
 <</for>><<endif>>
 <<set $temp1 += $temp2>>
-<<print $temp1.toFixed(1)>><</nobr>> kg and your team has a total carrying capacity of $totalCarry kg.
+<<print Math.round($temp1.toFixed(1))>><</nobr>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 1-items.png']]
 
@@ -181,18 +199,39 @@ Here are all of the items available for your to spend your $dubloons dubloons on
 [[Buy Commerce Balloons]]
 [[Buy Escape Balloons]]
 [[Buy Torches]]
-[[Buy Flashlight]]
-[[Buy Rope]]
-[[Buy Compass]]
-[[Buy Pistol]]
-[[Buy Bullets]]
-[[Buy Sword]]
-[[Buy Scuba Gear]]
-[[Buy Warding Braces]]
-[[Buy Smartphone]]
-[[Buy Inn Room Pass]]
-[[Buy Relic Workshop Pass]]
-
+<<nobr>>
+<<if $items[10].count <1 >>
+	[[Buy Flashlight]]<br>
+<<endif>>
+<<if $items[11].count <1 >>
+	[[Buy Rope]]<br>
+<<endif>>
+<<if $items[12].count <1 >>
+	[[Buy Compass]]<br>
+<<endif>>
+<<if $items[13].count <1 >>
+	[[Buy Pistol]]<br>
+<<endif>>
+[[Buy Bullets]]<br>
+<<if $items[14].count <1 >>
+	[[Buy Sword]]<br>
+<<endif>>
+<<if $items[15].count <1 >>
+	[[Buy Scuba Gear]]<br>
+<<endif>>
+<<if $items[16].count <2 >>
+	[[Buy Warding Braces]]<br>
+<<endif>>
+<<if $items[17].count <1 >>
+	[[Buy Smartphone]]<br>
+<<endif>>
+<<if $items[18].count <1 >>
+	[[Buy Inn Room Pass]]<br>
+<<endif>>
+<<if $items[19].count <1 >>
+	[[Buy Relic Workshop Pass]]<br>
+<<endif>>
+<</nobr>>
 
 [[Back|Surface Hub]]
 
@@ -251,7 +290,7 @@ It won't take too long to make your way down to the Abyss proper - there's no co
 [[Descend into the Abyss|Layer1 1]]
 
 
-:: Hire Maru [surface]
+:: Hire Maru [surface altered]
 <<nobr>><<set $hiredCompanions.push($companion1)>>
 <<if $compTok == 1>>
 	<<set $compTok = 0>>
@@ -262,11 +301,11 @@ It won't take too long to make your way down to the Abyss proper - there's no co
 <</nobr>>
 You have successfully hired Maru. Hopefully she brings you a lot of joy and helps you along in your journey.
 
-[[Hire more companions|Surface Companions]]
-[[Return to Outset Town|Surface Hub]]
+[[Hire more companions|Surface Companions][$Maru_LastT=$time]]
+[[Return to Outset Town|Surface Hub][$Maru_LastT=$time]]
 
 
-:: Hire Lily [surface]
+:: Hire Lily [surface altered]
 <<nobr>><<set $hiredCompanions.push($companion2)>>
 <<if $compTok == 1>>
 	<<set $compTok = 0>>
@@ -277,11 +316,11 @@ You have successfully hired Maru. Hopefully she brings you a lot of joy and help
 <</nobr>><<set $sellAdd = 10>>
 You have successfully hired Lily. Hopefully her electric personality and excellent haggling serve you well in your journey.
 
-[[Hire more companions|Surface Companions]]
-[[Return to Outset Town|Surface Hub]]
+[[Hire more companions|Surface Companions][$Lily_LastT=$time]]
+[[Return to Outset Town|Surface Hub][$Lily_LastT=$time]]
 
 
-:: Hire Khemia [surface]
+:: Hire Khemia [surface altered]
 <<nobr>><<set $hiredCompanions.push($companion3)>>
 <<if $compTok == 1>>
 	<<set $compTok = 0>>
@@ -290,13 +329,13 @@ You have successfully hired Lily. Hopefully her electric personality and excelle
 <<endif>>
 <<set $totalCarry += $companion3.carry>>
 <</nobr>><<set $timeRed = 2>>
-You have successfully hired Khemia. Hopefully his fighting expertise and experience in traversing the abyss help you along in your journey.
+You have successfully hired Khemia. Hopefully his fighting expertise and experience in traversing the abyss help you along your journey.
 
-[[Hire more companions|Surface Companions]]
-[[Return to Outset Town|Surface Hub]]
+[[Hire more companions|Surface Companions][$Khemia_LastT=$time]]
+[[Return to Outset Town|Surface Hub][$Khemia_LastT=$time]]
 
 
-:: Hire Cherry [surface]
+:: Hire Cherry [surface altered]
 <<nobr>><<set $hiredCompanions.push($companion4)>>
 <<if $compTok == 1>>
 	<<set $compTok = 0>>
@@ -307,11 +346,11 @@ You have successfully hired Khemia. Hopefully his fighting expertise and experie
 <</nobr>><<set $statRed = 1>>
 You have successfully hired Cherry. Hopefully her chaotic luck and medical knowledge serve you well in your journey.
 
-[[Hire more companions|Surface Companions]]
-[[Return to Outset Town|Surface Hub]]
+[[Hire more companions|Surface Companions][$Cherry_LastT=$time]]
+[[Return to Outset Town|Surface Hub][$Cherry_LastT=$time]]
 
 
-:: Hire Cloud [surface]
+:: Hire Cloud [surface altered]
 <<nobr>><<set $hiredCompanions.push($companion5)>>
 <<if $compTok == 1>>
 	<<set $compTok = 0>>
@@ -322,11 +361,11 @@ You have successfully hired Cherry. Hopefully her chaotic luck and medical knowl
 <</nobr>><<set $bullRed = 2>>
 You have successfully hired Cloud! Hopefully he brings you a lot of joy and helps you along in your journey.
 
-[[Hire more companions|Surface Companions]]
-[[Return to Outset Town|Surface Hub]]
+[[Hire more companions|Surface Companions][$Cloud_LastT=$time]]
+[[Return to Outset Town|Surface Hub][$Cloud_LastT=$time]]
 
 
-:: Hire Saeko [surface]
+:: Hire Saeko [surface altered]
 <<nobr>><<set $hiredCompanions.push($companion6)>>
 <<if $compTok == 1>>
 	<<set $compTok = 0>>
@@ -337,11 +376,13 @@ You have successfully hired Cloud! Hopefully he brings you a lot of joy and help
 <</nobr>><<set $corRed = 5>><<set $abyssKnow = 1>>
 You have successfully hired Saeko. Hopefully her extensive knowledge of abyssal theory and corruption serve you well in your journey.
 
-[[Hire more companions|Surface Companions]]
-[[Return to Outset Town|Surface Hub]]
+[[Hire more companions|Surface Companions][$Saeko_LastT=$time]]
+[[Return to Outset Town|Surface Hub][$Saeko_LastT=$time]]
 
 
 :: Buy Water [surface]
+[img[setup.ImagePath+$items[0].image]]
+
 How much water would you like to buy?
 
 <<textbox "$temp" "">>
@@ -351,6 +392,8 @@ How much water would you like to buy?
 
 
 :: Buy Food Rations [surface]
+[img[setup.ImagePath+$items[1].image]]
+
 How many days of food rations would you like to buy?
 
 <<textbox "$temp" "">>
@@ -360,6 +403,8 @@ How many days of food rations would you like to buy?
 
 
 :: Buy Flasks [surface]
+[img[setup.ImagePath+$items[2].image]]
+
 How many water flasks would you like to buy?
 
 <<textbox "$temp" "">>
@@ -369,6 +414,8 @@ How many water flasks would you like to buy?
 
 
 :: Buy Medkits [surface]
+[img[setup.ImagePath+$items[4].image]]
+
 How many days of medkits would you like to buy?
 
 <<textbox "$temp" "">>
@@ -378,6 +425,8 @@ How many days of medkits would you like to buy?
 
 
 :: Buy Encyclopedia Abyssia [surface]
+[img[setup.ImagePath+$items[5].image]]
+
 You have bought 1 copy of the Encyclopedia Abyssia.
 
 (Note: there is no additional benefit for buying more than 1 copy.)
@@ -387,6 +436,8 @@ You have bought 1 copy of the Encyclopedia Abyssia.
 
 
 :: Buy Messenger Baloons [surface]
+[img[setup.ImagePath+$items[6].image]]
+
 How many days of messenger balloons would you like to buy?
 
 <<textbox "$temp" "">>
@@ -396,6 +447,8 @@ How many days of messenger balloons would you like to buy?
 
 
 :: Buy Commerce Balloons [surface]
+[img[setup.ImagePath+$items[7].image]]
+
 How many days of commerce balloons would you like to buy?
 
 <<textbox "$temp" "">>
@@ -405,6 +458,8 @@ How many days of commerce balloons would you like to buy?
 
 
 :: Buy Escape Balloons [surface]
+[img[setup.ImagePath+$items[8].image]]
+
 How many days of escape balloons would you like to buy?
 
 <<textbox "$temp" "">>
@@ -414,6 +469,8 @@ How many days of escape balloons would you like to buy?
 
 
 :: Buy Torches [surface]
+[img[setup.ImagePath+$items[9].image]]
+
 How many days of torches would you like to buy?
 
 <<textbox "$temp" "">>
@@ -424,6 +481,8 @@ How many days of torches would you like to buy?
 
 :: Buy Flashlight [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[10].image]]
+
 You have bought 1 flashlight.
 
 (Note: there is no additional benefit for buying more than 1 flashlight.)
@@ -434,6 +493,8 @@ You have bought 1 flashlight.
 
 :: Buy Rope [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[11].image]]
+
 You have bought a rope.
 
 (Note: there is no additional benefit for buying more than 1 rope.)
@@ -443,6 +504,8 @@ You have bought a rope.
 
 
 :: Buy Compass [surface]
+[img[setup.ImagePath+$items[12].image]]
+
 You have bought 1 compass.
 
 (Note: there is no additional benefit for buying more than 1 compass.)
@@ -453,6 +516,8 @@ You have bought 1 compass.
 
 :: Buy Pistol [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[13].image]]
+
 You have bought a pistol.
 
 (Note: there is no additional benefit for buying more than 1 pistol.)
@@ -463,6 +528,8 @@ You have bought a pistol.
 
 :: Buy Sword [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[14].image]]
+
 You have bought a sword.
 
 (Note: there is no additional benefit for buying more than 1 sword.)
@@ -473,6 +540,8 @@ You have bought a sword.
 
 :: Buy Scuba Gear [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[15].image]]
+
 You have bought a set of scuba gear.
 
 (Note: there is no additional benefit for buying more than 1 set of scuba gear.)
@@ -482,6 +551,8 @@ You have bought a set of scuba gear.
 
 
 :: Buy Warding Braces [surface]
+[img[setup.ImagePath+$items[16].image]]
+
 How many warding braces would you like to buy?
 
 (Note: You are only allowed to buy 2 warding braces unless you have an effect or combination of relics that specifically would allow you to buy more.)
@@ -492,8 +563,10 @@ How many warding braces would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Smartphone [surface altered]
+:: Buy Smartphone [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[17].image]]
+
 You have bought a smartphone.
 
 (Note: there is no additional benefit for buying more than 1 smartphone.)
@@ -504,6 +577,8 @@ You have bought a smartphone.
 
 :: Buy Inn Room Pass [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[18].image]]
+
 You have bought an inn room pass.
 
 (Note: there is no additional benefit for buying more than 1 inn room pass.)
@@ -514,6 +589,8 @@ You have bought an inn room pass.
 
 :: Buy Relic Workshop Pass [surface]
 <<set $temp = 1>>
+[img[setup.ImagePath+$items[19].image]]
+
 You have bought a relic workshop pass.
 
 (Note: there is no additional benefit for buying more than 1 relic workshop pass.)
@@ -523,6 +600,8 @@ You have bought a relic workshop pass.
 
 
 :: Buy Bullets [surface]
+[img[setup.ImagePath+$items[20].image]]
+
 How many sets of 6 bullets would you like to buy?
 
 <<textbox "$temp" "">>
@@ -531,21 +610,23 @@ How many sets of 6 bullets would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Surface Habitation [surface image altered]
+:: Surface Habitation [surface image]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 1-habitation.png']]
+
 <<return>>
+
 <<nobr>>
 
 <<set $lewdCrit=5>>
 <<set $inhumanCrit=5>>
 <<set $AgeCrit=13>>
 <<set $DubCrit=500>>
-<<if $timeL1 == 0 && $timeL2 == 0>>
-	You consider that maybe diving in the abyss isn't such a good idea after all. Sometimes it's better to sit a dangerous aventure out and walk away with a healthy bundle of cash for very little effort.
+<<if $visitL1 == 0>>
+	You consider that maybe diving in the abyss isn't such a good idea after all. Sometimes it's better to sit a dangerous aventure out and walk away with a healthy bundle of cash for very little effort.<br>
 [[Choose to stay on the surface|Habitation Ending]]
 <<else>>
 	<<if $corruption >= 0>>
-		Note: Current endings are drafts and subject to revision in future versions. Additionally, these endings should be taken as suggestions for what your possible future is. If you think something about your build would make you end up a different way, your imagination can supercede these pre-written endings, as long as it complies with the restrictions of the habitation on the layer.
+		Note: This ending is simply a possible future for you, assuming you go with the flow for the rest of your life. If you want to avoid them using the Companions, Relics, and Curses you have obtained, then you will be able to, as long as they are within the bounds of the habitation option you have selected.<br><br>
 		<<HeightCorrected>> <<BreastCorrected>> <<Lewdness>> <<Inhuman>>
 		<<if $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
 			[[Choose to stay on the surface|L0 LLew LInhum HAge HDub]]
@@ -621,14 +702,28 @@ You continue your hike and eventually you see the edge of the Abyss, then eventu
 [[Return to Outset Town|Surface Hub]]
 
 
-:: Surface Sell 1 [surface]
+:: Surface Sell 1 [surface altered]
 Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.
 
 Choose the relic you would like to sell:
 <<nobr>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
-		<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
+			You can't seem to part ways with the Creepy Doll<br>
+		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$colwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$hsswear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$SibylBuff=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companion2.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
+		<<elseif $ownedRelics[$i].name=="Everheavea">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+		<<else>>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<endif>>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -637,119 +732,319 @@ Choose the relic you would like to sell:
 
 
 :: Surface Sell 2 [surface]
-<<set $dubloons += ($ownedRelics[$temp].value + $sellAdd)>>
 The relic $ownedRelics[$temp].name has been successfully sold and you've gotten your dubloon payment. You notice the person you sold it to quickly runs off, either to make use of it or sell it again in the everlasting chain of capitalism. Either way, you won't be getting that relic back easily.<<run $ownedRelics.deleteAt($temp)>>
 
 [[Sell more relics|Surface Sell 1]]
 [[Continue your business on the surface|Surface Hub]]
 
 
-:: Surface Workshop [surface]
-Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?
+:: Surface Workshop [surface altered]
+[img[setup.ImagePath+$items[19].image]]
+
+You step into the Relic Workshop of Outset Town. The air is thick with the smell of glue, sawdust, and molten metal. You see a couple of other adventurers tinkering away at relics they found themselves. You approach one of the free workbenches and decide what you want to do.
 
 <<nobr>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
 	<<if $ownedRelics[$i].name == "Purity Tree Plank">>
-	[[Use Purity Wood Plank|Surface Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
+
+		<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
+
+		[[Use Purity Wood Plank|Surface Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
+	<<endif>>
+
+	<<if $ownedRelics[$i].name == "Romer Stones">>
+	<br><br>You muse over what you can do with the Romer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br>
+	You can either buy some winter clothers for 50 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 40 dubloons to craft some cooling summer clothes.<br>
+		[[Use the Romer Stones for self-warming winter gear|Surface Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=50,$warmCloth=1]]<br>
+		[[Use the Romer Stones for self-cooling summer gear|Surface Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=40, $coolCloth=1]]<br>
+	<<endif>>
+	<<if $ownedRelics[$i].name == "Creepy Doll" && $dollevent==false>>
+		<br><br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
+		[[Use scizzors to cut open the doll|Doll event]]<br>
 	<<endif>>
 	<</capture>>
 <</for>>
 <</nobr>>
 
-<<if $comBalloon == 0>>
 [[Continue your business in Outset Town|Surface Hub]]
-<<else>>
-[[Continue using the commerce balloon|Commerce Balloon]]
-<<endif>>
 
 
-:: L0 LLew LInhum HAge HDub [new ending surface]
+:: L0 LLew LInhum HAge HDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-You live a rich and comfortable life after your adventures. You have become somewhat of a legend in outset town and people started coming to you for advice when going on their own abyss dives. So much so much so that you decided to write a book called 'Finding the pot of gold in the Abyss, a min maxing guide by $app.name'. The book became a smashing success adding to your already comfortable bank account.
+Due to your significant haul of loot from the Abyss, you live a rich and comfortable life after your journey. You become somewhat of a legend in Outset Town, and people started coming to you for advice when going on their own abyss dives.
+
+Due to your well-known lucrative expedition with so few side effects, you wrote and marketed a very successful book titled "Finding the Gold in the Darkness, a Guide to Abyssal Success by $app.name". The book became a smashing success, adding to your already comfortable bank account.
+
+Of course not everyone who bought it was as successful as you in the Abyss, and not all of them came back rich or with the same form they went in with, but no one can blame you for that. Your healthy book sales continue throughout your life, ensuring your wealth after the expedition never fades and you have a comfortable living situation for as long as you desire.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 LLew LInhum HAge LDub [new ending surface]
+:: L0 LLew LInhum HAge LDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-You manage to come back from the abyss relatively unscathed. But you sank a small fortune into your expedition and you have little to show for in the end. Maybe abyss diving was not for you in the end? You decide to go back to your home town and get hired in a more mundane job trying to make back the money that dissapeared with your expedition. It's not a bad live, just not a very exciting one as well.
+You manage to come back from the abyss relatively unscathed by the corruption of the miasma, but unfortunately also without an enormous haul of loot.
+
+You sank a small fortune into your expedition (even if it was gifted to you) and you have little to show for it in the end. Maybe Abyss diving wasn't quite for you in the end?
+
+You head back to your home and essentially pick up life where it was left off $time days ago. While it seems like not much has changed, your time and experiences in the Abyss will always stay with you and the memories of your expedition will stay with you for the rest of your life.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 LLew LInhum LAge HDub [new ending surface]
+:: L0 LLew LInhum LAge HDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-You manage to come back from the abyss relatively unscathed, but with a coin-case that seems to almost spill over. You did lose a significant amount of years, but that's a small price to pay for your newly acquired wealth, and in a few years you'll be back to your adult self anyway, right? The reality turned out to be more troublesome. Because of your age people had a hard time believing you were actually the successful diver they heard about. In the end you had trouble because of your age every step of the way, when going to parties, buying a new house or just not being able to get a drivers licenses. In the end you had to spend a considerable amount of your fortune to hire a legal guardian to take care of all those issues in the years you were growing back up again. She was pretty helpful and loyal, probably because you payed her so well, but you were still happy to see here go once you turned 18 again and could finally enjoy the small amount that was left of diving treasure.
+You manage to come back from the abyss relatively unscathed, but with quite a haul of loot you can use to build a small fortune.
+
+However, you did lose a significant amount of years. But that's a small price to pay for your newly acquired wealth, and in a few years you'll be back to your adult self anyway, right? It's not like it was some sort of permanent change to yourself.
+
+The reality turned out to be a good bit more troublesome. Because of your age people had a hard time believing you were actually the successful diver they'd heard about. When you tried to sell advice to enterprising divers, you found that they weren't interested in listening to you, despite your mostly successful experience. Either they thought you were a fraudulent child or your age reduction proved the failure of your voyage.
+
+In the end, you had trouble because of your age in nearly every aspect of your life. When going to parties you were shooed away unless someone vouched for you. When buying a new house the seller wouldn't accept your money without the presence of an adult, for fear of illegally making a contract with a child. Of course any sort of love life needed to be put on hold, as no one you would want to be with would accept a relationship with someone who appeared to be a little <<PerceivedGender>>. Even the simple inability to get a driver's license brought you nearly endless headaches when trying to travel somewhere without public transport (and ride sharing services didn't take children due to legal liabilities.)
+
+In the end, you had to spend a considerable amount of your fortune to hire a legal guardian to take care of the many issues that seemed to pop up in the years while you grew up a second time. The woman you hired was pretty helpful and loyal, presumably because you payed her so well, but you were still happy to see her go after you turned 18 again.
+
+Once you reached your second adulthood, you could finally enjoy the small amount that was left of diving treasure and the respect that was deserved of a successful diver such as yourself.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 LLew LInhum LAge LDub [new ending surface]
+:: L0 LLew LInhum LAge LDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-When you come back you seem to not only have lost most of starting funds without much to show for but also most of your age has melted away. Although people are in general acceptic towards you, you start to run in all kinds of issues regarding your age, but also because of your lack of funds. People already had a hard time believing you were a diver, but you also had trouble with finding an apartment. Once you had found an affordable apartment they refused to sign it to you because 'you were just a kid'. At some point people started to think of you as a homeless kid with a wild imagination and you were assigned a legal guardian by the city. You're assigned legal gaurdian was strict and treated you as a child completely with early bedtimes and a return to school. After you second childhood was completed you where a free adult again ready to make his own decisions. Of course you needed a way to make money now again and started wondering about abyss diving once more.
+When you come back you seem to not only have much of your age melted away, but also without much of a haul of valuable loot. Although people were generally accepting towards you, there were a number of problems that popped up due to your new age, which you unfortunately didn't have the dubloons to resolve smoothly.
+
+People already had a hard time believing you were a diver, even if they knew some divers did come back younger. But you also had trouble with finding an apartment that would allow you to sign the lease and would fit into your budget. When you thought you had found an affordable apartment, they refused to let you sign a lease because "you were just a kid" and thus not able to legally sign the contract. Apparently the laws made to help former divers with reduced age mean nothing if people don't believe you aren't just some random kid.
+
+After a while, many people simply viewed you as a homeless kid with a wild imagination, and you were forcibly assigned a legal guardian by the city. Your assigned gaurdian was strict and treated you as the child they believed you to be, completel with early bedtimes and a return to school.
+
+Luckily, this was only a temporary state of affairs and eventually you did reach the age of 18 once again, leading to your complete legal freedom. Now that you were an adult again, you had a whole new adventure to embark on, the rest of your life.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 LLew HInhum HAge HDub [new ending surface]
-[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-When you returned from the abyss you were a changed person. You were now a wealthy person, but at the cost of some of your perceived humanity. You felt that on the inside you were largely still the same person as you was when you started the whole endeavour. However, the people of outset town were less sure about it. While not everybody was intolerant, you felt that an large you were shunt there by the local community. The only people you felt some akinship to fellow divers who else faced one or more curses from the deeper layers. After a while you felt you could put your riches to good use to start a institute where ex-divers with more serious curses could congregate, while at the same time the institute promoted awareness for this group in outset town. In the end it did help somewhat, but you still felt more at easy in your mansion just outside the town.
+:: L0 LLew HInhum HAge HDub [ending surface]
+[img[setup.ImagePath+'Habitation/surfacehabitation.png']]<<appGender>>
+
+Upon your return from the Abyss, you were a changed person, though some may not consider you to be as much of a person as you were before.
+
+You were now a wealthy <<PerceivedGender>>, but at the cost of some of your perceived humanity. Despite the fact that on the inside you were still the same person, many of the people on the surface didn't view you quite the same way.
+
+While not everybody was intolerant, you felt that in many ways you were shunned by many parts of the local community, even around Outset Town. The main people you felt some kinship with was fellow divers who had also been curses by the corruptive miasma of the Abyss.
+
+Of course it was even worse if you traveled farther from the Abyss, so you tended to keep nearby to avoid being branded a "demon" or "devil-worshiper" by people who didn't understand you. And while Outset Town did have laws to prevent discrimination against corrupted divers, they were rarely enforced. And many people feared that you might be some sort of sex-maniac who was unable to control your urges around people, despite not having any problems of the sort occur when you were on the surface.
+
+After a while, you felt that you could put your riches to better use by starting an organization where former divers with more serious curses could congregate, while also promoting awareness and tolerance for cursed divers around Outset Town.
+
+In the end, your efforts did help somewhat, and there was far less open fear of divers who were touched by the Abyss, but you still felt more at ease in your mansion on the outskirts of town.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 LLew HInhum HAge LDub [new ending surface]
-[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-
-When you returned from the abyss you were a changed person. You were now a wealthy person, but at the cost of some of your perceived humanity. You felt that on the inside you were largely still the same person as you was when you started the whole endeavour. However, the people of outset town were less sure about it. While not everybody was intolerant, you felt that an large you were shunt there by the local community. The only people you felt some akinship to fellow divers who else faced one or more curses from the deeper layers. Your lack of funds meant that you already had a harder time finding a roof over your head but it seemed everywhere that as soon as people saw you, prices went up with 20%. Finding a job wasn't that much easier. In the end, Harry, some other ex-diver employed you in his store and you shared an apartment with him. You either spend your days working in the store or organizing marches and demonstrations for fairer treatments of people with non-human afflictions.
-
-
-:: L0 LLew HInhum LAge HDub [new ending surface]
-[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-
-When you returned from the abyss you were a changed person. You were now a wealthy person, but at the cost of some of your perceived humanity and a lot of your age. You felt that on the inside you were largely still the same person as you was when you started the whole endeavour, maybe a bit more childish. However, the people of outset town started treating you very different. You felt that an large you were shunt there by the local community. Even fellow divers who also faced curses from the deeper layers seem to be unsure of how to treat you now that you looked so young as well. Sheela, A nice lady with a few fox like traits took pitty to you and helped you out in the end. You put your acquired wealth to work and together you set-up somewhat of a shelter for divers who also came back with severe age regression. While you funded the whole operation, Sheela managed the day to day affairs with all the children in the shelter. Sometimes you even forgot this was your project as well and just spend the days playing with the others or getting petted by Sheela.
-
-
-:: L0 LLew HInhum LAge LDub [new ending surface]
-[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-
-When you returned from the abyss you were a changed person. You failed to bring back significant amounts of treasure and it costed you some of your perceived humanity and a lot of your age. You felt that on the inside you were largely still the same person as you was when you started the whole endeavour, maybe a bit more childish. However, the people of outset town started treating you very different. You felt that an large you were shunt there by the local community. Even fellow divers who also faced curses from the deeper layers seem to be unsure of how to treat you now that you looked so young as well. Sheela, A nice lady with a few fox like traits took pitty to you and helped you out in the end. Although you both didn't have much you got by with each other. When you ask her if she didn't find it bothersome that she has to take care of you, tears started to flow over her face. She told that when see was young she was also a diver, but she wasn't only cursed with fox-like traits but with infertility as well. She had always regretted going down into the abyss because of that as she had a very strong wish for children. Finding you felt like the universe was giving her a second chance to motherhood. You remembered spending that entire evening hugging each other and you become the perfect odd family after that.
-
-
-:: L0 HLew LInhum HAge HDub [new ending surface]
-[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-
-You returned to outset town with a large pile of doubloons. You have become somewhat of a legend in outset town. However you had developed and almost unquenchable thirst for sex. At first you started giving exorbitant parties at you new estate. Your money made you feel like somebody straight out of the great Gatsby. However, you build somewhat of an infamous reputation among the people of outset town because of your focus on sex. A few police raids during the parties quickly killed you mood of giving them in the first place. In the end you used the rest of the fortune to start a brothel in outset town. While the police raids also continued when you had your brothel, you actually made a lot of money as well. It turned out that a lot of ex-divers where also inflicted with high libido's and had quite some coins to spend. While managing the brothel was certainly not an easy or happy endeavour from time to time, it never ceased to be fun for you. While you would sometimes invite your willing personnel over for an 'inspection', there were also enough days you enjoyed entertaining the customers yourself. You turned out to be a very hands on the job kind of boss trough your entire career.
-
-
-:: L0 HLew LInhum HAge LDub [new ending surface]
+:: L0 LLew HInhum HAge LDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-You returned to outset town largely empty handed. You have become somewhat of a legend in outset town. However, you had developed and almost unquenchable thirst for sex. While at first people reacted positively to you when you told them about your adventures as a diver, the constant sexual inuendo's, inappropriate behaviour in public and your, in general, sex orientated mind quickly build an infamous reputation among the people of onset town. You drifted from job to job when you tried to make money. But whether it was sleeping with your boss his college child or public masturbation, in the end you high libido always caused you to be fired. In the end you became so strapped for cash that you started offering your body at parties you infiltrated and in time even on the street. In the end your sex crazed mind couldn't fathom why you would do anything else for money. You lived your live among the street prostitutes of outset town, was it a happy life? You know you were happy, when somebody fucked your brains out, and that's what mattered right?
+Upon your return from the Abyss, you were a changed person, though some may not consider you to be as much of a person as you were before.
+
+Your journey had cost of some of your perceived humanity. Despite the fact that on the inside you were still the same person, many of the people on the surface didn't view you quite the same way.
+
+While not everybody was intolerant, you felt that in many ways you were shunned by many parts of the local community, even around Outset Town. The main people you felt some kinship with was fellow divers who had also been curses by the corruptive miasma of the Abyss.
+
+Of course it was even worse if you traveled farther from the Abyss, so you tended to keep nearby to avoid being branded a "demon" or "devil-worshiper" by people who didn't understand you. And while Outset Town did have laws to prevent discrimination against corrupted divers, they were rarely enforced. And many people feared that you might be some sort of sex-maniac who was unable to control your urges around people, despite not having any problems of the sort occur when you were on the surface.
+
+Your lack of funds meant that you immediately needed to find an apartment nearby, in Outset Town, but it seemed that as soon as people saw you, apartments were already sold. You might talk to someone on the phone, get a price, arrive for a tour, then get told the unit was sold and no longer available. You heard rumblings about some divers apparently being difficult clients to deal with, and despite the fact you never caused a problem, it seems that was projected onto you too.
+
+Finding a job wasn't much easier, unfortunately. In the end, and ex-diver named Harry employed you in his store and you shared an apartment with him. He had green, slimey skin, but he was a kind man that was always fair in his treatment of you.
+
+You now spend your days working in the store or participating in movements for fairer treatment of people with visibly inhuman afflictions.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 HLew LInhum LAge HDub [new ending surface]
+:: L0 LLew HInhum LAge HDub [ending surface]
+[img[setup.ImagePath+'Habitation/surfacehabitation.png']]<<appGender>>
+
+Upon your return from the Abyss, you were a changed person, though some may not consider you to be as much of a person as you were before. And of course, you had lost much of your age on the journey.
+
+You were now a wealthy <<PerceivedGender>>, but at the cost of some of your perceived humanity. Despite the fact that on the inside you were still the same person, many of the people on the surface didn't view you quite the same way.
+
+While not everybody was intolerant, you felt that in many ways you were shunned by many parts of the local community, even around Outset Town. The main people you felt some kinship with was fellow divers who had also been curses by the corruptive miasma of the Abyss. But even they didn't treat you as an equal due to how young you seemed to be.
+
+Of course it was even worse if you traveled farther from the Abyss, so you tended to keep nearby to avoid being branded a "demon" or "devil-worshiper" by people who didn't understand you. And while Outset Town did have laws to prevent discrimination against corrupted divers, they were rarely enforced. And many people feared that you might be some sort of sex-maniac who was unable to control your urges around people, despite not having any problems of the sort occur when you were on the surface.
+
+Eventually, Sheela, a nice lady with a pair of fox ears and an orange fox tail, took pity on you and aided you. You put your hard-earned wealth to work and together you set up a shelter for other divers who came back with severe age regression, similar to your own.
+
+While you funded the whole organization, Sheela managed the day-to-day affairs with the apparent children in the shelter. Sometimes it was nice to enjoy the fruits of your labor and spend some time relaxing in the shelter yourself, pretending you weren't the owner and you could just relax. And of course, getting soft pats from Sheela was always nice as well.
+
+@@.layerTitle;THE END@@
+
+
+:: L0 LLew HInhum LAge LDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-You returned to outset town with a big amount of wealth. You have become somewhat of a legend in outset town, but when they met you all they could see is a kid with mind that is way to dirty for their age. Because of you age you had trouble both with spending your wealth in any meaningful way, but also to sate you lust for sex. In the end you hired a legal guardian to buy a house for you, drive you around and more legal stuff that seemed to came up every day. However, you were non-stop bickering with her as she didn't like your sexually focused attitude. You had to pay her a costly wage just so she wouldn't quit and leave you to fend for yourself. At some point she insisted that she would get some control over your funds. You reluctantly agreed, but everything changed afterwards. Now, almost two years later you spend most of your time in your locked crib, with your but in a locked diaper and your hands in locking mittens to keep you from touching yourself. If you behave for a while your pacifier gag is removed, but only as long as you can keep yourself from using dirty words...
+Upon your return from the Abyss, you were a changed person, though some may not consider you to be as much of a person as you were before. And of course, you had lost much of your age on the journey.
+
+You had failed to bring back a large amount of loot, and paid the cost of some of your perceived humanity. Despite the fact that on the inside you were still the same person, many of the people on the surface didn't view you quite the same way.
+
+While not everybody was intolerant, you felt that in many ways you were shunned by many parts of the local community, even around Outset Town. The main people you felt some kinship with was fellow divers who had also been curses by the corruptive miasma of the Abyss. But even they didn't treat you as an equal due to how young you seemed to be.
+
+Of course it was even worse if you traveled farther from the Abyss, so you tended to keep nearby to avoid being branded a "demon" or "devil-worshiper" by people who didn't understand you. And while Outset Town did have laws to prevent discrimination against corrupted divers, they were rarely enforced. And many people feared that you might be some sort of sex-maniac who was unable to control your urges around people, despite not having any problems of the sort occur when you were on the surface.
+
+Eventually, Sheela, a nice lady with a pair of fox ears and an orange fox tail, took pity on you and aided you. While you didn't have much money to provide her, you did what you could to help her out.
+
+After living with Sheela for a while, you began to feel guilty for taking so much from her, without being able to give her enough in return. When you told her your thoughts, tears began to flow down her face. She explained that her foxy ears and tail were not the only side-effects of her time as a diver, she had also been cursed with absolute infertility. In her younger years it hadn't mattered as much to her, but by now she had yearned for children of her own, and taking care of you had brought her great joy in life. For years she had regretted her expedition, the meager earnings not worth the cost she paid, but now she was content with her life, accepting what had happened and accepting how her life had eventually turned out.
+
+Despite being an adult on the inside, you had formed a deep bond as she protected you from a world that viewed you as a child, and when she revealed her true feelings you couldn't help but hug her tightly. Many tears were shed on both sides that night.
+
+From that point on, you felt like you had formed a nice, though odd, family connection with her. Eventually you grew up, but you kept a strong connection with her for the rest of your life.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 HLew LInhum LAge LDub [new ending surface]
+:: L0 HLew LInhum HAge HDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
 
-L0 HLew LInhum LAge LDub end
+You return to Outset Town with a substantial pile of dubloons, giving you great financial freedom in your endeavors there. You also become somewhat of a legend amongst divers due to tales of your success.
+
+However, you also developed an almost unquenchable thirst for sex dueto the corruptive influence of the Abyss in your life. At first you began throwing exorbitant parties at you new estate. In many ways, your money made you feel like Gatsby himself.
+
+However, over time you build up an infamous reputation among the people of Outset Town due to your focus on sex above almost all other things in life. The police show up due to public disturbances during a few of your parties, killing the typical debaucherous mood.
+
+Eventually, you used the rest of your fortune to found an exotic brothel in Outset Town, where you hired many former divers wth mutations and particularly high libidos or sexual compulsions. You also found that many wealthy divers with curses felt more at home near Outset Town and were drawn to an outlet for their sexual frustrations, creating a great business opportunity for you.
+
+While managing the brothel was certainly not always easy, it never ceased to be enjoyable for you. You would sometimes invite your willing personnel over for a personal "inspection" by the owner, and there were some days where you enjoyed entertaining the eager customers yourself. You remained a very hands-on owner for the rest of your days.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 HLew HInhum HAge HDub [new ending surface]
+:: L0 HLew LInhum HAge LDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-L0 HLew HInhum HAge HDub end
+
+Unfortunately. you returned to Outset Town largely empty-handed. And your dive was well known among the people of the town, however, you had developed an almost unquenchable thirst for sex.
+
+At first people reacted positively to you when you told them about your adventures, but the constant sexual innuendos, inappropriate public conduct, and your generally sex-orientated behavior quickly built an infamous reputation amongst the people of Outset Town.
+
+Drifting from job to job, you tried to make money, but whether it was sleeping with your boss or public masturbation, in the end your high libido always caused you to be fired.
+
+Eventually, you became so strapped for cash that you started offering your body at parties you had infiltrated, and then also on the street. After all, why not get a little something back while also satisfying yourself? You wanted sex, some people wanted you, and you could make everyone happy.
+
+Of course you considered doing other things, but really, you had a good life when you thought about it. Despite the risks of being a prostitute, your brothel actually treated you well and you definitely enjoyed your job. There was really no reason to complain. You weren't rich, but you made enough money and had fun doing it, and that's what really matters, right?
+
+@@.layerTitle;THE END@@
 
 
-:: L0 HLew HInhum HAge LDub [new ending surface]
+:: L0 HLew LInhum LAge HDub [ending surface]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-L0 HLew HInhum HAge LDub end
+
+You return to Outset Town with a substantial pile of dubloons, giving you great financial freedom in your endeavors there. You also become somewhat of a legend amongst divers due to tales of your success, but people tend to be surprised when they see you and perceive you to be only a child. Some people who aren't intimately familiar with the changes the Abyss causes in people even believe that you are merely telling tales and simply inherited your wealth.
+
+Due to your perceived age, you occasionally have trouble with spending your wealth, especially on things that people think only adults should be buying, like a house. However, the larger difficulty was the fact that you had a great desire for sex due to the Abyss's corruption, but your appearance as a child made it very difficult to find people to indulge you.
+
+You hired a faux legal guardian to purchase a house for you, but you continually bickered with her due to your focus on sex and her treatment of you as child rather than a true equal. She was very helpful in your everyday as she drove you around and handled many legal issues, yet you still found yourself in conflict with her many times and had to pay her a sizable salary just to prevent her from quitting.
+
+Eventually, you signed some papers that you probably should have read more closely and gave her control over your funds until you once again reached the apparent age of 18. This turned out to be a grave mistake, and everthing changed afterwards as she had full control of your estate.
+
+Two years after that event, you spend most of your time effectively imprisoned within your own home. Your guardian greatly abused her power to control you, by placing mittens on you to prevent you from touching yourself and keeping you within a padded room styled to look like one for a small child. You are gagged with a pacifier to stop complaints, and she would not listen if she could hear you. And your "guardian" lives a life of luxury spending your hard-earned money.
+
+Luckily it will only be a few more years until you are able to legally leave and control your estate once again, but for now you are in quite a predicament.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 HLew HInhum LAge HDub [new ending surface]
+:: L0 HLew LInhum LAge LDub [ending surface new]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-L0 HLew HInhum LAge HDub end
+
+When you returned to Outset Town you had lost much and and gained little in return. But upon living in the surface again, you realized you could still lose more if society rejected you. It was already difficult to get by with so little cash, but you also looked like a child to any observers while also feeling like an uncontrollable sexual deviant within.
+
+After just a few days, you found yourself in a hard, cold cell after you were caught sneaking into a nightclub that had refused you entry. You were told that you were going to be send to a rehabilitation institute that specialized in people who were corrupted by the Abyss who also lacked legal guardians.
+
+A few days later you were taken to a place that resembled a mansion that was just outside of town. Unfortunately, it was not such a kind place to help people deal with their afflictions, it was instead a cruel place where people were forced to conform so that they did not cause problems for the "normal" people.
+
+In that facility you were degraded and forced to follow the strictest of lifestyles, with your actions heavily constrained by the nurses and guards present. They kept in purposefully child-like areas, sometimes even resembling cribs for mere infants. You regularly had meetings with doctors, though who knows if they truly had degrees, who insisted that you must be a child and must restrain yourself from any impure impulse.
+
+However, for you and many of the other inhabitants of the rehabilitation center, you never changed. The touch of the Abyss is not so easily controlled, and your mental Curses stayed with you for the rest of your life. The doctors rejected this, and tried to force you to conform. If you complied, you received some of your privileges back, and were able to retain a shred of dignity.
+
+Eventually, you were living a relatively normal life, assuming you were okay with being treated as a child as remaining imprisoned within the facility. Despite the fact you were treated like a child and your freedom had been taken away, life still went on. You were able to stroll through the gardens or speak to the other patients, though you were always watched by a member of the staff to ensure you didn't return to your deviant ways.
+
+While your mind never changed, and you always yearned to once again have control over your own life, the date of your release when you turned 18 was always on the horizon. In just a few years time you would be free to engage in all the debauchery you desired and control your own life once again. Perhaps you would even try to shut down the facility if you truly desired it and worked hard towards it.
+
+@@.layerTitle;THE END@@
 
 
-:: L0 HLew HInhum LAge LDub [new ending surface]
+:: L0 HLew HInhum HAge HDub [ending surface new]
 [img[setup.ImagePath+'Habitation/surfacehabitation.png']]
-L0 HLew HInhum LAge LDub end
+
+Upon your return to the surface, you pondered your journey, concluding that you had truly experienced the Abyss to the fullest. You collected many Relics and many Curses along your expedition, leaving you wealthy, but also marked for the rest of your life.
+
+You had undergone a not only physical change, something that wasn't unnoticed by the people of Outset Town, but also a strong mental change that oriented you towards lust. A day without at least some debauchery now seemed to be a day wasted.
+
+Despite wanting to enjoy the many parties in Outset Town, you found that you were sometimes excluded due to your inhuman appearance. There were other parties with physically Cursed divers, but they tended to be smaller and rarer, and certainly not enough to satisfy your newfound appetite.
+
+With the wealth you had accumulated, chose to purchase your own house where you didn't mind throwing parties quite frequently. In fact, you became well known for being very open and accepting to anyone who was interested in a night of depravity within your halls.
+
+Your reputation became solidified as someone who valued sex very highly and was willing to open your doors to some of the rowdier Cursed divers, both physically and mentally. It was sometimes a chore to corral the guests at your estate, but in the end it seemed to work out. Many Cursed divers felt a kinship towards you due to your own situation, leading to them being overrepresented at your parties, a nice outcome in your eyes.
+
+Occasionally you faced trouble due to your appearance and lust-adled mind, causing you to wonder if there may have been a better life for someone like you in the Abyss, but upon consideration you were always satisfied with the way your life turned out.
+
+@@.layerTitle;THE END@@
+
+
+:: L0 HLew HInhum HAge LDub [ending surface new]
+[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
+
+Upon your return to the surface, you pondered your journey, concluding that you had truly experienced the Abyss to the fullest. You collected many Relics and many Curses along your expedition, leaving you wealthy, but also marked for the rest of your life.
+
+You had undergone a not only physical change, something that wasn't unnoticed by the people of Outset Town, but also a strong mental change that oriented you towards lust. A day without at least some debauchery now seemed to be a day wasted.
+
+Despite wanting to enjoy the many parties in Outset Town, you found that you were sometimes excluded due to your inhuman appearance. There were other parties with physically Cursed divers, but they tended to be smaller and rarer, and certainly not enough to satisfy your newfound appetite.
+
+Eventually, your lack of funds caught up with you and you began to sneak into clubs or parties to enjoy them free of cost. This was only a temporary solution though, as you were quickly identified and over time all of the bouncers came to know your face.
+
+As time passed, you became more desperate to satisfy your urges and to obtain some dubloons, leading you to an obvious conclusion: prostitution.
+
+While your rates were always lower due to your appearance and the fact that you could never quite force yourself to demand a higher rate if it risked turning a customer away, you were able to make a solid living.
+
+Occasionally you faced trouble due to your appearance and mindset, causing you to wonder if there may have been a better life for someone like you in the Abyss, but upon consideration you were always satisfied with the way your life turned out.
+
+@@.layerTitle;THE END@@
+
+
+:: L0 HLew HInhum LAge HDub [ending surface new]
+[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
+
+You return to Outset Town with a substantial pile of dubloons, giving you great financial freedom in your endeavors there. You also become somewhat of a legend amongst divers due to tales of your success, and people tend to be surprised when they see you and perceive you to be only a child, but they can recognize that you are a diver as soon as they take a closer look at your inhuman features. Some people who aren't intimately familiar with the changes the Abyss causes in people even believe that you are merely telling tales and simply inherited your wealth.
+
+Due to your perceived age, you occasionally have trouble with spending your wealth, especially on things that people think only adults should be buying, like a house. Additionally, your appearance caused people to assume you'd be a horribly depraved person (they were correct in many ways, but having anyone see you and know that was inconvenient). However, the larger difficulty was the fact that you had a great desire for sex due to the Abyss's corruption, but your appearance as a child made it very difficult to find people to indulge you.
+
+While it was difficult due to you inhuman appearance, you managed to hire a faux legal guardian to purchase a house for you, but you continually bickered with her due to your focus on sex and her treatment of you as child rather than a true equal. She was very helpful in your everyday as she drove you around and handled many legal issues, yet you still found yourself in conflict with her many times and had to pay her a sizable salary just to prevent her from quitting.
+
+Eventually, you signed some papers that you probably should have read more closely and gave her control over your funds until you once again reached the apparent age of 18. This turned out to be a grave mistake, and everthing changed afterwards as she had full control of your estate.
+
+Two years after that event, you spend most of your time effectively imprisoned within your own home. Your guardian greatly abused her power to control you, by placing mittens on you to prevent you from touching yourself and keeping you within a padded room styled to look like one for a small child. You are gagged with a pacifier to stop complaints, and she would not listen if she could hear you. And your "guardian" lives a life of luxury spending your hard-earned money.
+
+Luckily it will only be a few more years until you are able to legally leave and control your estate once again, but for now you are in quite a predicament.
+
+@@.layerTitle;THE END@@
+
+
+:: L0 HLew HInhum LAge LDub [ending surface new]
+[img[setup.ImagePath+'Habitation/surfacehabitation.png']]
+
+When you returned to Outset Town you had lost much and and gained little in return. But upon living in the surface again, you realized you could still lose more if society rejected you. It was already difficult to get by with so little cash, but you also looked like an inhuman child to any observers while also feeling like an uncontrollable sexual deviant within.
+
+After just a few days, you found yourself in a hard, cold cell after you were caught sneaking into a nightclub that had refused you entry. You were told that you were going to be send to a rehabilitation institute that specialized in people who were corrupted by the Abyss who also lacked legal guardians.
+
+A few days later you were taken to a place that resembled a mansion that was just outside of town. Unfortunately, it was not such a kind place to help people deal with their afflictions, it was instead a cruel place where people were forced to conform so that they did not cause problems for the "normal" people.
+
+In that facility you were degraded and forced to follow the strictest of lifestyles, with your actions heavily constrained by the nurses and guards present. They kept in purposefully child-like areas, sometimes even resembling cribs for mere infants. You regularly had meetings with doctors, though who knows if they truly had degrees, who insisted that you must be a child and must restrain yourself from any impure impulse. Some also tried to hide your physical mutations, but that proved impossible as they resisted all attempts as suppression. Eventually the doctors found that it was futile to even attempt and they left that part of you alone.
+
+However, for you and many of the other inhabitants of the rehabilitation center, you never changed. The touch of the Abyss is not so easily controlled, and both your mental and physical Curses stayed with you for the rest of your life. But the doctors rejected this, and tried to force you to conform. If you complied, you received some of your privileges back and were able to retain a shred of dignity.
+
+Eventually, you were living a relatively normal life, assuming you were okay with being treated as a child as remaining imprisoned within the facility. Despite the fact you were treated like a child and your freedom had been taken away, life still went on. You were able to stroll through the gardens or speak to the other patients, though you were always watched by a member of the staff to ensure you didn't return to your deviant ways.
+
+While your mind never changed, and you always yearned to once again have control over your own life, the date of your release when you turned 18 was always on the horizon. In just a few years time you would be free to engage in all the debauchery you desired and control your own life once again. Perhaps you would even try to shut down the facility if you truly desired it and worked hard towards it, but it was difficult for people who looked like you to make big changes like that without any sort of funding or power.
+
+@@.layerTitle;THE END@@

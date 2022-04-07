@@ -16,13 +16,26 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 <<endif>><</nobr>>
 
 
-:: Layer5 Hub [layer5]
-<<set $currentLayer = 5>><<if $timeL5T1 < 7 && $timeL5T2 < 11>><<set $visitL5 = 1>><<set $layerExit = 0>>
+:: Layer5 Hub [layer5 altered]
+<<set $currentLayer = 5>><<if $timeL5T1 < 7 && $timeL5T2 < 11>><<set $visitL5 = 1>><<set $layerExit = 0>><<checkTime>><<HeightCorrected>><<CarryAdjust>>
+
 Your hike through the scorching heat of the sand dunes of the fifth layer, trying to keep yourself from overheating while you travel. Luckily you can enjoy the scent of the exotic flowers found all around the layer and seemingly always in bloom. In the distance you can spot the ruins of some long-dead civilization, apparently worn down by the Abyss until all that's left is the ruins you can search to find relics on this layer.
-
-What do you want to do while you are here?
-
 <<nobr>>
+<<if $coolCloth && !$dollevent2>>
+	<<set $cool=1>>
+	You put on the self-cooling clothes. The romer stones that you incorperated in it feel like small air-conditioning units although the clothes are light they still cover you very well and soon you feel them cool your entire body. You feel like you could run a mile in these clothes and still not overheat in this scorching landscape you find yourself. It looks like you'll be able to cover more distance wearing this than you would normally be able to. This reduced all travel costs by 1 day on this layer.<br><br>
+What do you want to do while you are here?<br>
+
+<<elseif $dollevent2 && $coolCloth>>
+
+	By now you have accepted that you can't take of the tattered pink dress. But when you try to put the self-cooling clothes over your tattered dress you faint, only to wake up with the summer clothes off and neatly folded in your hands again. Looking at the doll you swear you can see it grinning at you. It seems you are stuck sweating it out in this worn down dress. If only it would be little hotter so that acursed doll would go up in flames..<br><br>
+What do you want to do while you are here?<br>
+
+<<elseif $dollevent2 && !$coolCloth>>
+	Dressed in only your tattered pink dress you feel very exposed to the heat on this layer. You whish you had something cooler and more insulating to wear to protect you. At the same time you wonder if you could even wear something else now that you are in this cursed dress. Damn that doll..<br><br>
+What do you want to do while you are here?<br>
+
+<<endif>>
 <<if $forageWater == 0>>
 	<<print "You are not able to forage for daily water on this layer, due to the nature of the water source">>
 	<<endif>>
@@ -33,10 +46,12 @@ What do you want to do while you are here?
 <<if !isPlaying("layer5")>>
 	<<masteraudio stop>><<audio "layer5" volume 0.2 play loop>>
 <<endif>>
+<br>
+[[Use Items and Relics]]<br>
+<<if $hiredCompanions.length > 0>>
+[[Interact with party|Party overview]]<br>
+<<endif>>
 <</nobr>>
-
-[[Use Items]]
-
 [[Learn about the threats on this layer|Layer5 Threats]]
 [[Check for food and water you can forage for|Layer5 Forage]]
 [[Search for relics|Layer5 Relics]]
@@ -225,7 +240,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 <<endif>>
 
 
-:: Layer5 Curses [layer5 image altered]
+:: Layer5 Curses [layer5 image]
 These are the curses available for you to take to help manage your corruption:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-curses.png']]
@@ -449,50 +464,17 @@ Use the following option only if you have specifically considered your inventory
 <<endif>>
 
 
-:: Pocket Hoard [layer5]
+:: Pocket Hoard [layer5 altered]
 <<nobr>>
 <<set $ownedRelics.push($relic49)>>
 <<set $corruption -= ($relic49.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic49.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic49.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+A trip to the One-sided Tunnel might be worthwhile now to empower your new Relic and make it truly useful.
 
 [[Continue searching for the relics of layer 5|Layer5 Relics]]
 [[Continue exploring the fifth layer|Layer5 Hub]]
@@ -502,46 +484,13 @@ You have successfully taken the $relic49.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic50)>>
 <<set $corruption -= ($relic50.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic50.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic50.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+This Relic can see its true potential unleashed in the hands of a skilled swordsman, such as Khemia.
 
 [[Continue searching for the relics of layer 5|Layer5 Relics]]
 [[Continue exploring the fifth layer|Layer5 Hub]]
@@ -551,43 +500,8 @@ You have successfully taken the $relic50.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic51)>>
 <<set $corruption -= ($relic51.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic51.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic51.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -600,43 +514,8 @@ You have successfully taken the $relic51.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic52)>>
 <<set $corruption -= ($relic52.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic52.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic52.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -649,43 +528,8 @@ You have successfully taken the $relic52.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic53)>>
 <<set $corruption -= ($relic53.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic53.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic53.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -694,96 +538,28 @@ You have successfully taken the $relic53.name relic. Hopefully you can make good
 [[Continue exploring the fifth layer|Layer5 Hub]]
 
 
-:: Everheavea [layer5]
+:: Everheavea [layer5 altered]
 <<nobr>>
 <<set $ownedRelics.push($relic54)>>
 <<set $corruption -= ($relic54.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic54.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic54.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
-[[Continue searching for the relics of layer 5|Layer5 Relics]]
-[[Continue exploring the fifth layer|Layer5 Hub]]
+The Everheavea can be used as 2 flasks for as long as you hold it, so at the very least you have gained some additional water storage.
+
+[[Continue searching for the relics of layer 5|Layer5 Relics][ $items[2].count+=2]]
+[[Continue exploring the fifth layer|Layer5 Hub][$items[2].count+=2]]
 
 
 :: Reflex Emblem [layer5]
 <<nobr>>
 <<set $ownedRelics.push($relic55)>>
 <<set $corruption -= ($relic55.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic55.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic55.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -796,43 +572,8 @@ You have successfully taken the $relic55.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic56)>>
 <<set $corruption -= ($relic56.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic56.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic56.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -845,43 +586,8 @@ You have successfully taken the $relic56.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic57)>>
 <<set $corruption -= ($relic57.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic57.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic57.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -894,43 +600,8 @@ You have successfully taken the $relic57.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic58)>>
 <<set $corruption -= ($relic58.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic58.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic58.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -943,43 +614,8 @@ You have successfully taken the $relic58.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic59)>>
 <<set $corruption -= ($relic59.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic59.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic59.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -992,43 +628,8 @@ You have successfully taken the $relic59.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic60)>>
 <<set $corruption -= ($relic60.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic49.time - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic60.time-$SibylBuff>>
+<<include "Layer5Time">>
 <</nobr>>
 
 You have successfully taken the $relic60.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1112,9 +713,9 @@ You have successfully taken on the $curse61.name curse. Hopefully you are ok wit
 <<endif>>
 
 
-:: Take on DoS [layer5]
+:: Take on DoS [layer5 altered]
 <<set $playerCurses.push($curse62)>><<set $corruption += $curse62.corr>>
-
+<<set $subdom += 1>>
 You have successfully taken on the $curse62.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the fifth layer|Layer5 Curses]]
@@ -1125,9 +726,9 @@ You have successfully taken on the $curse62.name curse. Hopefully you are ok wit
 <<endif>>
 
 
-:: Take on DoM [layer5]
+:: Take on DoM [layer5 altered]
 <<set $playerCurses.push($curse63)>><<set $corruption += $curse63.corr>>
-
+<<set $subdom -= 1>>
 You have successfully taken on the $curse63.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the fifth layer|Layer5 Curses]]
@@ -1362,9 +963,20 @@ You have successfully taken on the $curse68.name curse. Hopefully you are ok wit
 <<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 <</nobr>>
 
-The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
 
 [[Continue on to the rest of the layer|Layer5 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer5 Cherry Curse [layer5]
@@ -1432,6 +1044,17 @@ Please enter your new exoskeleton color:
 <<endif>>
 <</nobr>>
 
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
+
 
 :: Layer5 Cherry Mix [layer5]
 <<nobr>>
@@ -1445,7 +1068,7 @@ Please enter your new exoskeleton color:
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Hemospectrum")>>
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Hemospectrum")>>
 
 What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
 
@@ -1492,45 +1115,22 @@ Please enter your new exoskeleton color:
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement D")>>
 <<set $app.libido += 1>>
 <<endif>>
-<</nobr>>
+<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
-:: Layer5 Tunnel [layer5]
+:: Layer5 Tunnel [layer5 altered]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(2 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 2>>
+<<include "Layer5Time">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/one-sidedtunnel.png']]
 
@@ -1565,43 +1165,11 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 <</nobr>>
 
 
-:: Layer5 Vault [layer5]
+:: Layer5 Vault [layer5 altered]
 [img[setup.ImagePath+'Wonders/miragevault.png']]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<<endif>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 3>>
+<<include "Layer5Time">>
 <<if $vaultTimer == 0>>
 <<set $vaultTimer = $time>>
 <br><br> You touch your hand against the ancient door and the number 60 appears on it, as if there was either a very high-resolution LCD inside the glass or some magic inside it had awakened by your touch.
@@ -1633,7 +1201,7 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 [[Return to exploring level 5|Layer5 Hub]]
 
 
-:: Layer5 Ascend2 [layer5]
+:: Layer5 Ascend2 [layer5 altered]
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
@@ -1643,7 +1211,7 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 		<<set $status.penalty = 0>>
 	<<endif>>
 	<<if $items[11].count > 0 || $rope == 1>>
-		<<set $layerExitTime = (Math.max(11 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
+		<<set $layerExitTime = (Math.max(11 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool, 0))>>
 		<<else>>
 		<<set $layerExitTime = (Math.max(24 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
 	<<endif>>
@@ -1772,7 +1340,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 [[Hide out in the ruins for the day|Layer5 Ascend2]]
 
 
-:: Layer5 Exit2 [layer5]
+:: Layer5 Exit2 [layer5 altered]
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
@@ -1781,7 +1349,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 		<<else>>
 		<<set $status.penalty = 0>>
 	<<endif>>
-	<<set $layerExitTime = (Math.max(13 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
+	<<set $layerExitTime = (Math.max(13 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10))- $cool, 0))>>
 <<endif>>
 
 <<for $i = 0; $i < 99; $i++>>
@@ -1908,7 +1476,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 [[Hide out in the ruins for the day|Layer5 Exit2]]
 
 
-:: Escape Balloon L5 [new layer5]
+:: Escape Balloon L5 [layer5]
 <<nobr>><<set $currentLayer = 5>><<if !isPlaying("layer5")>>
 	<<masteraudio stop>><<audio "layer5" volume 0.2 play loop>>
 <<endif>><</nobr>>
@@ -1917,3 +1485,84 @@ As you float gently above the scorching dunes below, you notice that even up her
 [[Ascend to next layer|Escape Balloon L4][$corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10))) ]]
 [[Hover on this layer to take in a curse|Layer5 Curses]]
 [[Get off the balloon on this layer|Layer5 Hub][$escBalDepl=0]]
+
+
+:: Layer5 Preview [image layer5 altered noreturn]
+As you bring the charm up to your eye and gaze deep into the red crystal, your vision fades and a new image comes clearly into view:
+
+[img[setup.ImagePath+'Layer Intros/l5intro.png']]
+
+@@.layerTitle;LAYER 5 - WINDSWEPT POTPOURI SANDS@@
+
+You see yourself hiking over immense sand dunes while dry storms of brightly colored petals rage by. Suddenly the image shifts and you see the splendor that you could find on this layer.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-relics.png']]
+
+As an image of the wonders you might find on this layer starts to come into focus, an intense feeling of humility washes through you.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-wonders.png']]
+
+The mystical possibilities of the wonders fade from your view and you suddenly feel nauseous, as if a huge amount of miasma was suddenly sucked into your chest. You visualize the corruptions and curses that may afflict you in the layer below.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-curses.png']]
+
+Finally the nauseous feeling passes but is replaced by a brief sense of terror as you get a glimpse of the threaths that await you on the layer
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-threats.png']]
+
+Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the relic is cracked and broken.
+<<nobr>>
+<<if $ownedRelics.length==1>>
+	<<set $temp=0>>
+<<else>>
+	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
+		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
+			<<set $temp=$i>>
+			<<set $endloop=false>>
+		<<endif>>
+	<</for>>
+<<endif>>
+<</nobr>>
+[[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+
+
+:: Layer5Time [new]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
+<<set $timeL5 += $tempTime>>
+<<if ($items[0].count + $items[3].count) > 10>>
+	<<set $timeL5T2 += $tempTime>>
+<<endif>>
+<<set $timeL5T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL5 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<set $crumbleFluid += (5 * $tempTime)>>
+		<<else>>
+		<<set $crumbleFluid += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL5 += 1>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>

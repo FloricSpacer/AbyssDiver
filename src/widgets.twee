@@ -1,4 +1,4 @@
-:: Change Height [widget new]
+:: Change Height [widget]
 <<widget "HeightCorrected">>\
 	<<nobr>>
 /*declare variables as follows when calling widget
@@ -8,9 +8,6 @@
 4) $app.osex (= "female")
 5) $app.appAge
 */
-
-	<<set $height_change = $app.height -$app.oheight>>
-
 	<<set $genderlvl = $app.gender-1>>
 	<<if $app.osex=="female">>
 		<<set $female_start=1>>
@@ -18,12 +15,13 @@
 		<<set $female_start=0>>
 	<<endif>>
 
+	<<set $height_change = $app.height -$app.oheight>>
 	<<set $x =18 - $app.appAge>>
 
 /* change in height with genderlevel changes and height increases/decreases it is modeled such that 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender
 */
 
-	<<set $height_adult = $app.oheight + $height_change - $height_change * (1 - 0.92375) * $female_start + 0.01525 * $app.oheight * ($app.ogender - 1 - $genderlvl)>>
+	<<set $height_adult = $app.oheight +$height_change -$height_change*(1-0.92375)*$female_start -0.01525*$app.oheight*$genderlvl +0.01525*$app.oheight*5*$female_start>>
 
 	<<if $x<=0 +1/5 *$genderlvl>>
 		<<set $app.heightCor = $height_adult>>
@@ -61,7 +59,7 @@
 +++++++++
 
 
-:: Change Breast [widget new]
+:: Change Breast [widget]
 <<widget "BreastCorrected">>\
 	<<nobr>>
 	<<set $x = 18 -$app.appAge>>
@@ -82,11 +80,10 @@
 <</widget>>
 
 
-:: Pronoun widgets [widget new]
+:: Pronoun widgets [widget]
 <<widget "Pronoun">>\
 	<<nobr>>
-	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
-	<<if $app.appGender<5>>
+	<<if $app.appGender<=5>>
 		he
 	<<else>>
 		she
@@ -96,8 +93,7 @@
 
 <<widget "ObjectivePronoun">>\
 	<<nobr>>
-	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
-	<<if $app.appGender<5 >>
+	<<if $app.appGender<=5 >>
 		him
 	<<else>>
 		her
@@ -107,8 +103,7 @@
 
 <<widget "PossesivePronoun">>\
 	<<nobr>>
-	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
-	<<if $app.appGender<5 >>
+	<<if $app.appGender<=5 >>
 		his
 	<<else>>
 		hers
@@ -126,19 +121,38 @@
 	<<elseif $app.gender<4>>
 		androgynous
 	<<elseif $app.gender<5>>
-		slightly feminine
+		girlish
 	<<else>>
-		girly
+		feminine
 	<<endif>>
 	<</nobr>>\
 <</widget>>
 
 
-:: Perceived widgets [widget new]
+:: Perceived widgets [widget altered]
+<<widget "appGender">>\
+	<<nobr>>
+	<<if $app.fit>7>>
+		<<set $app.appGender = 2*($app.gender-1) -0.5*($app.penis-2) +($app.breastsCor-3)+0.5*$colwear-1>>
+	<<else>>
+		<<set $app.appGender = 2*($app.gender-1) -0.5*($app.penis-2) +($app.breastsCor-3)+0.5*$colwear>>
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "mrms">>\
+	<<nobr>>
+	<<if $app.appGender<5>>
+		mr.
+	<<else>>
+		miss
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
 <<widget "PerceivedGender">>\
 	<<nobr>>
-	<<set $app.appGender = 2*($app.gender-1) -0.33*($app.penis-2) +0.67*($app.breastsCor-3)>>
-	<<if $app.appGender<5>>
+	<<if $app.appGender<=5>>
 		<<if $app.appAge>16>>
 			man
 		<<else>>
@@ -147,6 +161,24 @@
 	<<else>>
 		<<if $app.appAge>15.5>>
 			woman
+		<<else>>
+			girl
+		<<endif>>
+	<<endif>>
+	<</nobr>>\
+<</widget>>
+
+<<widget "PerceivedGender2">>\
+	<<nobr>>
+	<<if $app.appGender<=5>>
+		<<if $app.appAge>16>>
+			dude
+		<<else>>
+			boy
+		<<endif>>
+	<<else>>
+		<<if $app.appAge>15.5>>
+			lady
 		<<else>>
 			girl
 		<<endif>>
@@ -184,10 +216,10 @@
 <</widget>>
 
 
-:: Threat1 Criterion [widget new]
+:: Threat1 Criterion [widget]
 <<widget "Threat1Criterion">>\
 <<nobr>>
-<<if $app.heightCor<150>>
+<<if $app.heightCor<140>>
 	<<set $groupsize= $hiredCompanions.length >>
 <<else>>
 	<<set $groupsize= $hiredCompanions.length +1>>
@@ -207,10 +239,10 @@
 <</widget>>
 
 
-:: Lewdness function [widget new]
+:: Lewdness function [widget altered]
 <<widget "Lewdness">>\
 	<<nobr>>
-	<<set $lewdness=($app.libido-2)*3 +$crumbleFluid/10 +$limelightCount +$algalSize +$quotaCount +$semenCount>>
+	<<set $lewdness=($app.libido-2+$quotaCount +$semenCount+$limelightCount)*3 +$crumbleFluid/10  +$algalSize >>
 
 	<<if $app.breastsCor>5>>
 		<<set $lewdness +=1>>
@@ -226,6 +258,46 @@
 		<<set $lewdness +=2>>
 	<<endif>>
 
+	<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
+		<<set $lewdness +=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+		<<set $lewdness +=2>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
+		<<set $lewdness +=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Hard Mode")>>
+		<<set $lewdness +=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+		<<set $lewdness +=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Wandering Hands")>>
+		<<set $lewdness +=2>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Leaky")>>
+		<<set $lewdness +=2>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Softie")>>
+		<<set $lewdness -=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Blushing Virgin")>>
+		<<set $lewdness 1=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
+		<<set $lewdness -=2>>
+	<<endif>>
+
 	<<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
 		<<set $lewdness +=1>>
 	<<endif>>
@@ -239,7 +311,7 @@
 <</widget>>
 
 
-:: Inhuman function [widget new]
+:: Inhuman function [widget altered]
 <<widget "Inhuman">>\
 <<nobr>>
 <<set $app.inhuman =0>>
@@ -251,7 +323,7 @@
 	<<set $app.inhuman +=4>>
 <<endif>>
 
-<<if $app.skinType.length > 0>>
+<<if $app.skinType.length > 0 && $app.skinType!="hairless, smooth">>
 	<<set $app.inhuman +=4>>
 <<endif>>
 
@@ -267,4 +339,329 @@
 <</for>>
 <<endif>>
 <</nobr>>\
+<</widget>>
+
+
+:: Maru Conversations [new widget]
+<<widget "MaruConvos">>
+<<nobr>>
+<<if $MaruConvo0==0>>
+[[Introduce yourself to Maru|Maru Convo0][$MaruConvo0=1]]<br>
+<<elseif $MaruConvo1==0 && $companion1.affec>3 && $MaruConvo0 >>
+[[Chat with Maru|Maru Convo1][$MaruConvo1=true]]<br>
+<<elseif $MaruConvo2==0 && $companion1.affec>7 && $MaruConvo1>>
+[[Chat with Maru|Maru Convo2][$MaruConvo2=true]]<br>
+<<elseif $MaruConvo3==0 && $companion1.affec>10 && $app.appGender<4 && $subdom > -1 && $MaruConvo2 >>
+[[Chat with Maru|Maru Convo3][$MaruConvo3=true]]<br>
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Lily Conversations [new widget]
+<<widget "LilyConvos">>
+<<nobr>>
+<<if $LilyConvo0==0>>
+[[Introduce yourself to Lily|Lily Convo0][$LilyConvo0=true]]<br>
+<<endif>>
+<<if $LilyConvo1==0 && $companion2.affec>3 && $LilyConvo0>>
+[[Chat with Lily|Lily Convo1][$LilyConvo1=true]]<br>
+<<elseif $LilyConvo2==0 && $companion2.affec>7 && $LilyConvo1 >>
+[[Chat with Lily|Lily Convo2][$LilyConvo2=true]]<br>
+<<elseif $LilyConvo3==0 && $companion2.affec>10 && $app.appGender>7 && $subdom < 1 && $LilyConvo2 >>
+[[Chat with Lily|Lily Convo3][$LilyConvo3=true]]<br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
+	[[You see Lily lifting up the World Stone|Lily ConvoPr]]<br>
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Khemia Conversations [new widget]
+<<widget "KhemiaConvos">>
+<<nobr>>
+<<if $KhemiaConvo0==0>>
+[[Introduce yourself to Khemia|Khemia Convo0][$KhemiaConvo0=true]]
+<<endif>>
+<<if $KhemiaConvo1==0 && $companion3.affec>3 && $KhemiaConvo0>>
+[[Chat with Khemia|Khemia Convo1][$KhemiaConvo1=true]]
+<<elseif $KhemiaConvo2==0 && $companion3.affec>7 && $KhemiaConvo1 >>
+[[Chat with Khemia|Khemia Convo2][$KhemiaConvo2=true]]
+<<elseif $KhemiaConvo3==0 && $companion3.affec>10 && app.appGender>9 &&$subdom < 0 && $KhemiaConvo2 >>
+[[Chat with Khemia|Khemia Convo3][$KhemiaConvo3=true]]
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Cherry Conversations [new widget]
+<<widget "CherryConvos">>
+<<nobr>>
+<<if $CherryConvo0==0>>
+[[Introduce yourself to Cherry|Cherry Convo0][$CherryConvo0=true]]<br>
+<<elseif $CherryConvo1==0 && $companion4.affec>3 && $CherryConvo0>>
+[[Chat with Cherry|Cherry Convo1][$CherryConvo1=true]]<br>
+<<elseif $CherryConvo2==0 && $companion4.affec>7 && $CherryConvo1 >>
+[[Chat with Maru|Cherry Convo2][$CherryConvo2=true]]<br>
+<<elseif $CherryConvo3==0 && $companion4.affec>10 && $app.appGender<6 && $subdom > 0 && $CherryConvo2 >>
+[[Chat with Cherry|Cherry Convo3][$CherryConvo3=true]]<br>
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Cloud Conversations [new widget]
+<<widget "CloudConvos">>
+<<nobr>>
+<<if $CloudConvo0==0>>
+[[Introduce yourself to Cloud|Cloud Convo0][$CloudConvo0=true]]<br>
+<<endif>>
+<<if $CloudConvo1==0 && $CloudAffec>3 && $CloudConvo0>>
+[[Chat with Cloud|Cloud Convo1][$CloudConvo1=true]]<br>
+<<elseif $CloudConvo2==0 && $CloudAffec>7 && $CloudConvo1 >>
+[[Chat with Cloud|Cloud Convo2][$CloudConvo2=true]]<br>
+<<elseif $CloudConvo3==0 && $CloudAffec>10 && $subdom < 2 && $CloudConvo2 >>
+[[Chat with Cloud|Cloud Convo3][$CloudConvo3=true]]<br>
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Saeko Conversations [new widget]
+<<widget "SaekoConvos">>
+<<nobr>>
+
+<<if $SaekoConvo0==0>>
+[[Introduce yourself to Saeko|Saeko Convo0][$SaekoConvo0=true]]
+<<endif>>
+<<if $SaekoConvo1==0 && $companion6.affec>5 && $SaekoConvo0>>
+[[Chat with Saeko|Saeko Convo1][$SaekoConvo1=true]]
+<<elseif $SaekoConvo2==0 && $companion6.affec>10 && $SaekoConvo1 >>
+[[Chat with Saeko|Saeko Convo2][$SaekoConvo2=true]]
+<<elseif $SaekoConvo3==0 && $companion6.affec>15 && $SaekoConvo2 >>
+[[Chat with Saeko|Saeko Convo3][$SaekoConvo3=true]]
+<<endif>>
+
+<</nobr>>
+<</widget>>
+
+
+:: Speech settings [widget new]
+<<widget "Update_MC_Speech">>\
+	<<nobr>>
+	<<if $app.gender<=1 >>
+
+		<<if $app.appAge>18>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,1);background-color: black;">>
+		<<elseif $app.appAge>15>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.8);background-color: black;">>
+		<<elseif $app.appAge>12>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.6);background-color: black;">>
+		<<elseif $app.appAge>9>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.4);background-color: black;">>
+		<<else>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.2);background-color: black;">>
+		<<endif>>
+
+	<<elseif $app.gender==2 >>
+
+		<<if $app.appAge>18>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,1);background-color: black;">>
+		<<elseif $app.appAge>15>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.8);background-color: black;">>
+		<<elseif $app.appAge>12>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.6);background-color: black;">>
+		<<elseif $app.appAge>9>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.4);background-color: black;">>
+		<<else>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.2);background-color: black;">>
+		<<endif>>
+
+	<<elseif $app.gender==3 >>
+
+		<<if $app.appAge>18>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,1);background-color: black;">>
+		<<elseif $app.appAge>15>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.8);background-color: black;">>
+		<<elseif $app.appAge>12>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.6);background-color: black;">>
+		<<elseif $app.appAge>9>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.4);background-color: black;">>
+		<<else>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.2);background-color: black;">>
+		<<endif>>
+
+	<<elseif $app.gender==4 >>
+
+		<<if $app.appAge>18>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,1);background-color: black;">>
+		<<elseif $app.appAge>15>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.8);background-color: black;">>
+		<<elseif $app.appAge>12>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.6);background-color: black;">>
+		<<elseif $app.appAge>9>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.4);background-color: black;">>
+		<<else>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.2);background-color: black;">>
+		<<endif>>
+
+	<<elseif $app.gender==5 >>
+
+		<<if $app.appAge>18>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,1);background-color: black;">>
+		<<elseif $app.appAge>15>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.8);background-color: black;">>
+		<<elseif $app.appAge>12>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.6);background-color: black;">>
+		<<elseif $app.appAge>9>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.4);background-color: black;">>
+		<<else>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.2);background-color: black;">>
+		<<endif>>
+
+	<<else>>
+		<<if $app.appAge>18>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
+		<<elseif $app.appAge>15>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
+		<<elseif $app.appAge>12>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
+		<<elseif $app.appAge>9>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
+		<<else>>
+			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
+		<<endif>>
+
+	<<endif>>
+		<<set $mc = {
+	name: $app.name,
+	imageIcon: "icon.png",
+	genderVoice: $app.gender,
+	style: "border: 2px solid rgb(1,0,0);",
+	style1: $boxColor
+	}>>
+
+	<<if $app.appGender<5 >>
+		<<set $mc.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $mc.imageIcon="Icons/npcF.png">>
+	<<endif>>
+
+	<<if $app.gender<1 >>
+		<<set $mc.genderVoice=1>>
+	<<elseif $app.gender>6>>
+		<<set $mc.genderVoice=6>>
+	<<endif>>
+
+	<<if $colwear>>
+		<<set $mc.genderVoice=99>>
+	<<endif>>
+
+	<</nobr>>
+<</widget>>
+
+
+:: Doll transformation [widget new]
+<<widget "dollTF">>
+<<nobr>>
+<<set $app.gender += 1>>
+<<if $app.appAge>18>>
+	<<set $app.appAge = 17>>
+<<else>>
+	<<set $app.appAge -= 2>>
+<<endif>>
+<<set $creepydoll.affec += 1>>
+<<if $app.penis>0 >>
+	<<set $app.penis -=1>>
+<<else>>
+	<<if $app.vagina<1>>
+		<<set $app.vagina=1>>
+	<<endif>>
+<<endif>>
+<</nobr>>
+<</widget>>
+
+
+:: Time dependant variable updates [widget new]
+<<widget "checkTime">>
+<<nobr>>
+
+<<if $Maru_LastT<$time-10>>
+<<set $companion1.affec+=(1+$hsswear)>>
+<<set $Maru_LastT=$time>>
+<<if $MaruConvo1>>
+	<<set $items[1].count +=1 >>
+	Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
+<<endif>>
+<<endif>>
+
+<<if $Lily_LastT<$time-10>>
+<<set $companion2.affec+=(1+$hsswear)>>
+<<set $Lily_LastT=$time>>
+<<endif>>
+
+<<if $Khemia_LastT<$time-10>>
+<<set $companion3.affec+=(1+$hsswear)>>
+<<set $Khemia_LastT=$time>>
+<<endif>>
+
+<<if $Cherry_LastT<$time-10>>
+<<set $companion4.affec+=(1+$hsswear)>>
+<<set $Cherry_LastT=$time>>
+<<endif>>
+
+<<if $Cloud_LastT<$time-10>>
+<<set $companion5.affec+=(1+$hsswear)>>
+<<set $Cloud_LastT=$time>>
+<<set $altCloud = random(0,3)>>
+<<if $CloudConvo1>>
+	<<if $altCloud == 1>>
+	<<set $temp = random(2,3)
+	<<set $items[20].count += $temp >>
+	Cloud was able to scavenge some ammunition somehow! Yo aren't quite sure whether he found it or made it himself, but either way you have gained $temp bullets.<br><br>
+	<<elseif $altCloud == 2>>
+	<<set $temp = random(2,5)
+	<<set $dubloons += $temp >>
+	Cloud managed to scavenge a bit of cash, presumably left behind by a previous diver. You have gained $temp dubloons!<br><br>
+	<<endif>>
+<<endif>>
+<<endif>>
+
+<<if $Saeko_LastT<$time-10>>
+<<set $companion6.affec+=(1+$hsswear)>>
+<<set $Saeko_LastT=$time>>
+<<endif>>
+
+<<if $fit_adjustLastT<$time-20>>
+	<<if $fit>8>>
+	<<set $fit-=1>>
+	Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
+	<<elseif $fit<5>>
+	<<set $fit+=1>>
+	The constant physical activity of the expedition increases your fitness to somewhat more average levels<br><br>
+	<<endif>>
+<<endif>>
+
+<</nobr>>
+<</widget>>
+
+
+:: Carry afjustment widget [widget new]
+<<widget "CarryAdjust">>
+<<nobr>>
+<<set $totalCarry -= $carryWeight>>
+
+<<if $playerCurses.some(e => e.name === "Weakling")>>
+	<<set $app.fit=0>>
+<<endif>>
+
+<<if $app.ogender==1>>
+	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5-$app.gender+1) )>>
+<<else>>
+	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5+6-$app.gender) )>>
+<<endif>>
+
+<<set $totalCarry += $carryWeight>>
+<</nobr>>
 <</widget>>

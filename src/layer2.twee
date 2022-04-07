@@ -56,8 +56,10 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 <<endif>><</nobr>>
 
 
-:: Layer2 Hub [layer2]
-<<set $currentLayer = 2>><<set $visitL2 = 1>><<if $timeL2T1 < 4>><<set $layerExit = 0>>
+:: Layer2 Hub [layer2 altered]
+<<set $currentLayer = 2>><<set $visitL2 = 1>><<if $timeL2T1 < 4>><<set $layerExit = 0>><<HeightCorrected>><<checkTime>><<CarryAdjust>>
+
+
 The dew continually drips down around you, creating the illusion of a rainstorm without clouds. The atmosphere is heavy, partially with humdity, but mainly with the ever-present, creeping corruption of the miasma.
 
 This layer is filled with a vey dense growth of vines, bushes, and other plant life that impedes you and makes movement ver time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
@@ -92,10 +94,13 @@ What do you want to do while you are here?
 <<if !isPlaying("layer2")>>
 	<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
 <<endif>>
+
+<br>
+[[Use Items and Relics]]<br>
+<<if $hiredCompanions.length > 0>>
+[[Interact with party|Party overview]]<br>
+<<endif>>
 <</nobr>>
-
-[[Use Items]]
-
 [[Learn about the threats on this layer|Layer2 Threats]]
 [[Check for food and water you can forage for|Layer2 Forage]]
 [[Search for relics|Layer2 Relics]]
@@ -213,46 +218,60 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 
 
 :: Layer2 Curses [layer2 image altered]
+<<BreastCorrected>>
 These are the curses available for you to take to help manage your corruption:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-curses.png']]
 
-<<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
-	<<else>><<print "[[Take on Libido Reinforcement B]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Gender Reversal B")>>
-	<<else>><<print "[[Take on Gender Reversal B]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
-	<<else>><<print "[[Take on Asset Robustness B]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Age Reduction A")>>
-	<<else>><<print "[[Take on Age Reduction A]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
-	<<else>><<print "[[Take on Fluffy Ears]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Fluffy Tail")>>
-	<<else>><<print "[[Take on Fluffy Tail]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Maximum Fluff")>>
-	<<else>><<print "[[Take on Maximum Fluff]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Heat/Rut")>>
-	<<else>><<print "[[Take on Heat/Rut]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Lightweight")>>
-	<<else>><<print "[[Take on Lightweight]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun")>>
-	<<else>><<print "[[Take on Sex Switcheroo]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Futa Fun") || $playerCurses.some(e => e.name === "Sex Switcheroo")>>
-	<<else>><<print "[[Take on Futa Fun]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Blushing Virgin")>>
-	<<else>><<print "[[Take on Blushing Virgin]]">>
-<<endif>><</nobr>>
+<<nobr>>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement B") == false>>
+	[[Take on Libido Reinforcement B]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Gender Reversal B")==false>>
+	[[Take on Gender Reversal B]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Asset Robustness B")==false && $playerCurses.some(e => e.name === "Shrunken Assets")==false>>
+	[[Take on Asset Robustness B]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Age Reduction A")==false>>
+	[[Take on Age Reduction A]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Fluffy Ears")==false>>
+	[[Take on Fluffy Ears]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Fluffy Tail")==false>>
+	[[Take on Fluffy Tail]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Maximum Fluff")==false>>
+	[[Take on Maximum Fluff]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Heat/Rut")==false>>
+	[[Take on Heat/Rut]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Lightweight")==false>>
+	[[Take on Lightweight]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Sex Switcheroo")==false && $playerCurses.some(e => e.name === "Futa Fun")==false>>
+	[[Take on Sex Switcheroo]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Futa Fun")==false && $playerCurses.some(e => e.name === "Sex Switcheroo")==false>>
+	[[Take on Futa Fun]]<br>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Blushing Virgin")==false>>
+	[[Take on Blushing Virgin]]<br>
+<<endif>>
+<</nobr>>
 
 [[Allow the Abyss to bestow a random curse upon you|Layer2 Curses Random]]
 
@@ -288,16 +307,58 @@ These are the curses available for you to take to help manage your corruption:
 
 :: Layer2 Habitation [layer2 image]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-habitation.png']]
-
-<<return>>
-
 <<nobr>>
+<< set $lewdCrit=12>>
+<< set $inhumanCrit =12>>
+<< set $AgeCrit =10>>
+<< set $DubCrit =250>>
+
+
+
 <<if $corruption >= 0>>
-	[[Choose to stay on the second layer|Habitation Ending]]
+ <</nobr>>
+		Note: This ending is simply a possible future for you, assuming you go with the flow for the rest of your life. If you want to avoid them using the Companions, Relics, and Curses you have obtained, then you will be able to, as long as they are within the bounds of the habitation option you have selected.<br><br>
+		<<HeightCorrected>> <<BreastCorrected>> <<Lewdness>> <<Inhuman>>
+	<<if $playerCurses.some(e => e.name === "Gooey") && $app.heightCor<140>>
+		[[Choose to settle in Downcast village|L2 Gooey end]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew LInhum HAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew LInhum HAge LDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew LInhum LAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew LInhum LAge LDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew HInhum HAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew HInhum HAge LDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew HInhum LAge HDub]]
+	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 LLew HInhum LAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew LInhum HAge HDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew LInhum HAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew LInhum LAge HDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew LInhum LAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew HInhum HAge HDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && $dubloons<=$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew HInhum HAge LDub]]
+	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && $dubloons>$DubCrit >>
+		[[Choose to settle in Downcast village|L2 HLew HInhum LAge HDub]]
 	<<else>>
+		[[Choose to settle in Downcast village|L2 HLew HInhum LAge LDub]]
+	<<endif>>
+<<else>>
+	<</nobr>>
 	You must have a corruption value of 0 or greater to choose a habitation option.
 <<endif>>
-<</nobr>>
+<<return>>
 
 
 :: Layer2 Ascend 1 [layer2]
@@ -334,9 +395,20 @@ Accessing drinkable water tends to get a but more difficult from here on out, so
 <<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 <</nobr>>
 
-The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
 
 [[Continue on to the rest of the layer|Layer2 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer2 Cherry Curse [layer2]
@@ -442,7 +514,16 @@ What type of fur would you like to gain?
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
 <<set $app.libido += 1>>
 <<endif>>
-<</nobr>>
+<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer2 Cherry Mix [layer2]
@@ -456,7 +537,7 @@ What type of fur would you like to gain?
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.floor(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
 
 What type of ears would you like to gain?
 
@@ -543,49 +624,24 @@ What type of fur would you like to gain?
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
 <<set $app.libido += 1>>
 <<endif>>
-<</nobr>>
+<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer2 Broker [layer2]
 <<nobr>>
 <<set $corruption += 100>>
 <<set $brokerUsed = 1>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(2 - $timeRed + $status.penalty, 0))>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 2>>
+<<include "Layer2Time">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
 
@@ -614,49 +670,16 @@ In the morning, you wake up to a very different circumstance. Whose body do you 
 <</nobr>>
 
 
-:: Layer2 Star 2 [layer2]
+:: Layer2 Star 2 [layer2 altered]
 <<nobr>>
 <<set $temp2 = $carryWeight>>
 <<set $carryWeight = $hiredCompanions[$temp].carry>>
 <<set $corruption += 70>>
 <<set $starUsed = 1>>
 <<set $swapComp = $temp>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 3>>
+<<include "Layer2Time">>
+<</nobr>>
 <<set $hiredCompanions[$swapComp].carry = $temp2>>
 <</nobr>>
 You've woken up in the body of $hiredCompanions[$swapComp].name! And $hiredCompanions[$swapComp].name has woken up in your body!
@@ -699,12 +722,64 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 <<endif>>
 <<endif>>
 
-
 <<set $app.oheight = $hiredCompanions[$swapComp].oheight>>
 <<set $app.height = $app.oheight + $app.modheight>>
 <<set $app.hairColor = $hiredCompanions[$swapComp].hairColor>>
 <<set $app.skinColor = $hiredCompanions[$swapComp].skinColor>>
 <<set $app.desc += $hiredCompanions[$swapComp].appDesc>>
+
+<<if $hiredCompanions[$swapComp].name=="Maru">>
+	<<set $companion1.genderVoice = app.ogender>>
+	<<set $companion1.affec -= 5>>
+	<<set $companion1.swap = true>>
+<<elseif $hiredCompanions[$swapComp].name=="Lily">>
+	<<set $companion2.genderVoice = app.ogender>>
+	<<set $companion2.affec -= 5>>
+	<<set $companion2.swap = true>>
+<<elseif $hiredCompanions[$swapComp].name=="Khemia">>
+	<<set $companion3.genderVoice = app.ogender>>
+	<<set $companion3.affec -= 5>>
+	<<set $companion3.swap = true>>
+<<elseif $hiredCompanions[$swapComp].name=="Cherry">>
+	<<set $companion4.genderVoice = app.ogender>>
+	<<set $companion4.affec -= (5-$hsswear)>>
+	<<set $companion4.swap = true>>
+<<elseif $hiredCompanions[$swapComp].name=="Cloud">>
+	<<set $companion5.genderVoice = app.ogender>>
+	<<set $companion5.affec -= 5>>
+	<<set $companion5.swap = true>>
+<<elseif $hiredCompanions[$swapComp].name=="Saeko">>
+	<<set $companion6.genderVoice = app.ogender>>
+	<<set $companion6.affec -= 5>>
+	<<set $companion6.swap = true>>
+<<endif>>
+
+<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	<<set $companion1.genderVoice = app.ogender>>
+	<<set $companion1.affec -= (3-$hsswear)>>
+	<<set $companion1.swap = true>>
+<<elseif $hiredCompanions.some(e => e.name === "Lily")>>
+	<<set $companion2.genderVoice = app.ogender>>
+	<<set $companion2.affec -= (3-$hsswear)>>
+	<<set $companion2.swap = true>>
+<<elseif $hiredCompanions.some(e => e.name === "Khemia")>>
+	<<set $companion3.genderVoice = app.ogender>>
+	<<set $companion3.affec -= (3-$hsswear)>>
+	<<set $companion3.swap = true>>
+<<elseif $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<set $companion4.genderVoice = app.ogender>>
+	<<set $companion4.affec -= (3-$hsswear)>>
+	<<set $companion4.swap = true>>
+<<elseif $hiredCompanions.some(e => e.name === "Cloud")>>
+	<<set $companion5.genderVoice = app.ogender>>
+	<<set $companion5.affec -= (3-$hsswear)>>
+	<<set $companion5.swap = true>>
+<<elseif $hiredCompanions.some(e => e.name === "Saeko")>>
+	<<set $companion6.genderVoice = app.ogender>>
+	<<set $companion6.affec -= (3-$hsswear)>>
+	<<set $companion6.swap = true>>
+<<endif>>
+
 <<if $app.sex == "female" || $app.sex == "futa">>
 	<<set $app.breasts += $app.modbreasts>>
 <<endif>>
@@ -767,7 +842,7 @@ You have successfully taken on the $curse14.name curse. Hopefully you are ok wit
 <</nobr>>
 
 
-:: Take on Asset Robustness B [layer2]
+:: Take on Asset Robustness B [layer2 altered]
 <<set $playerCurses.push($curse15)>><<set $corruption += $curse15.corr>>
 
 You have successfully taken on the $curse15.name curse. Hopefully you are ok with accepting the permanent consequences.
@@ -782,12 +857,10 @@ You have successfully taken on the $curse15.name curse. Hopefully you are ok wit
 <<nobr>>
 <<set $app.modpenis += 1>>
 <<set $app.modbreasts += 2>>
-<<if $app.sex == "male">>
+<<if $app.penis > 0 >>
 	<<set $app.penis += 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts += 2>>
-<<else>>
-	<<set $app.penis += 1>>
+<<endif>>
+<<if $app.breastsCor >0 || $app.breasts >0>>
 	<<set $app.breasts += 2>>
 <<endif>>
 <</nobr>>
@@ -997,45 +1070,12 @@ You have successfully taken the $relic1.name relic. Hopefully you can make good 
 
 :: Pick up the Pearly Gates [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic11.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic11)>>
 <<set $corruption -= ($relic11.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic11.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
+
 
 You have successfully taken the $relic11.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -1045,47 +1085,15 @@ You have successfully taken the $relic11.name relic. Hopefully you can make good
 
 :: Pick up the World Stone [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic12.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic12)>>
 <<set $corruption -= ($relic12.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic12.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic12.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+You can try working out with this Relic. It can both improve your muscle tone and your carrying capacity if you exercise regularly.
 
 [[Continue searching for the relics of layer 2|Layer2 Relics]]
 [[Continue exploring the second layer|Layer2 Hub]]
@@ -1093,44 +1101,10 @@ You have successfully taken the $relic12.name relic. Hopefully you can make good
 
 :: Pick up the Forest's Gift [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic13.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic13)>>
 <<set $corruption -= ($relic13.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic13.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic13.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1141,44 +1115,10 @@ You have successfully taken the $relic13.name relic. Hopefully you can make good
 
 :: Pick up the Harmless Harmony [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic14.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic14)>>
 <<set $corruption -= ($relic14.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic14.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic14.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1189,44 +1129,10 @@ You have successfully taken the $relic14.name relic. Hopefully you can make good
 
 :: Pick up the Umbra Trident [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic15.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic15)>>
 <<set $corruption -= ($relic15.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic15.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic15.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1237,44 +1143,10 @@ You have successfully taken the $relic15.name relic. Hopefully you can make good
 
 :: Pick up the Event Horizon [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic16.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic16)>>
 <<set $corruption -= ($relic16.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic16.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic16.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1285,47 +1157,15 @@ You have successfully taken the $relic16.name relic. Hopefully you can make good
 
 :: Pick up the Heart-stealing Stole [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic17.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic17)>>
 <<set $corruption -= ($relic17.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic17.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic17.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+You may want to start wearing this Relic regularly, it can significantly speed up how long it takes your companions to warm up to you.
 
 [[Continue searching for the relics of layer 2|Layer2 Relics]]
 [[Continue exploring the second layer|Layer2 Hub]]
@@ -1333,44 +1173,10 @@ You have successfully taken the $relic17.name relic. Hopefully you can make good
 
 :: Pick up the Effacing Asperity [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic18.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic18)>>
 <<set $corruption -= ($relic18.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic18.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic18.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1381,44 +1187,10 @@ You have successfully taken the $relic18.name relic. Hopefully you can make good
 
 :: Pick up the Wholly Ale [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic19.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic19)>>
 <<set $corruption -= ($relic19.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic19.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic19.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1429,44 +1201,10 @@ You have successfully taken the $relic19.name relic. Hopefully you can make good
 
 :: Pick up the Memoir Remnant [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic20.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic20)>>
 <<set $corruption -= ($relic20.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic20.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic20.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1477,44 +1215,10 @@ You have successfully taken the $relic20.name relic. Hopefully you can make good
 
 :: Pick up the Gleam Dazer [layer2]
 <<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic21.time - $timeRed + $status.penalty, 0))>>
 <<set $ownedRelics.push($relic21)>>
 <<set $corruption -= ($relic21.corr - $corRed)>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<<endif>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
-	<<endif>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic21.time-$SibylBuff>>
+<<include "Layer2Time">>
 <</nobr>>
 
 You have successfully taken the $relic21.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1523,7 +1227,7 @@ You have successfully taken the $relic21.name relic. Hopefully you can make good
 [[Continue exploring the second layer|Layer2 Hub]]
 
 
-:: Layer2 Threat1 Main [layer2 image]
+:: Layer2 Threat1 Main [layer2 image altered]
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
 
@@ -1543,7 +1247,21 @@ How do you want to deal with the beast moving in on you?
 <<if $hiredCompanions.length > 3>>
 	[[Scare it off with your large group of companions|Layer2 Hub]]<br>
 <<endif>>
-[[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]
+
+[[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
+
+A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
+
+<<link "Hold the doll tight and squeeze your eyes shut" "Layer2 Hub">>
+  <<dollTF>>
+<</link>><br>
+<<endif>>
+
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
@@ -1637,7 +1355,7 @@ Subtle changes in your surroundings continue, large rocks start to appear in you
 <<endif>>
 
 
-:: Layer2 Threat1 Descend [layer2 image]
+:: Layer2 Threat1 Descend [layer2 image altered]
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
 
@@ -1658,6 +1376,18 @@ How do you want to deal with the beast moving in on you?
 	[[Scare it off with your large group of companions|Layer2 Exit2]]<br>
 <<endif>>
 [[Allow it to overpower you|Layer2 Exit2][$status.duration = (4 - $statRed), $status.penalty = 1]]
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
+
+A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
+
+<<link "Hold the doll tight and squeeze your eyes shut" "Layer2 Exit2">>
+  <<dollTF>>
+<</link>><br>
+<<endif>>
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
@@ -1728,42 +1458,41 @@ Use the following option only if you have specifically considered your inventory
 
 
 You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.
-<<HeightCorrected>>
 <<BreastCorrected>>
+<<appGender>>
+<<HeightCorrected>>
 <<Threat1Criterion>>
 <<if $threat1Crit == 1>>
-		<br>Worn down by the long trek up through the dense jungle of the previous layer, you are happy when you finally reach the bridge to outcast village. The moment you walk up the bridge a figure appears from behind a column.
+	<br>Worn down by the long trek up through the dense jungle of the previous layer, you're relieved when you finally reach the bridge to the Outcast Village. However, upon approaching the bridge a figure appears from behind a column.
 
-		'Well well well, what do we have here?'
+	<<say $Banditleader>> Well now, what do we have here?<</say>>
 
-		When you turn around you find yourself surrounded by more bandits emerging from the bushes behind you.
+	Turning around, you find yourself surrounded by a group of bandits, shrouded in ragged cloaks, emerging from the bushes behind you.
 
-		<<nobr>>
-		'It looks like a <<PerceivedStature>> <<PerceivedGender>>
-		<<if $hiredCompanions.length < 1>>
-		all by <<ObjectivePronoun>>self, with an aweful lot of stuff for 1 person.
-		<<elseif $hiredCompanions.length == 1 && $app.appAge>13 >>
-		on romantic date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date.
-		<<elseif $hiredCompanions.length == 1 && $app.appAge<=13 >>
-		on a stroll with <<PossesivePronoun>> babysitter. It seems you are carrying a lot of grownup stuff around you don't really need.
-		<<else>>
-		with <<PossesivePronoun>> merry ragtag of losers. Don't worry we wont bite, as long as you do as we nicely ask.
-		<<endif>>
-		<</nobr>>
-		Howabout we take that stuff of your hands so you don't have to worry about it anymore, hmm?'
-		<br><br>
-
-[[Deal with the oppotunistic bandits|Layer1 Threat1 Ascend]]<br>
-		<<else>>
-[[Return to the first layer|Layer1 Hub]]
+	<<nobr>>
+	<<if $hiredCompanions.length < 1>>
+		<<say $Banditleader>> It looks like a <<PerceivedStature>> <<PerceivedGender>> all by <<ObjectivePronoun>>self, with an awful lot of valuable stuff for 1 person. How about we take that stuff of your hands so you don't have to worry about it anymore, hmm?<</say>>
+	<<elseif $hiredCompanions.length == 1 && $app.appAge>13 >>
+		<<say $Banditleader>> It looks like a <<PerceivedStature>> <<PerceivedGender>> on date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date, hmm? How about we take some of that stuff off your hands, so you don't have to worry about it anymore?<</say>>
+	<<elseif $hiredCompanions.length == 1 && $app.appAge<=13 >>
+		<<say $Banditleader>> It looks like a <<PerceivedStature>> <<PerceivedGender>> on a stroll with <<PossesivePronoun>> babysitter. It seems you're carrying a lot of adult stuff that you don't really need. How about we take that stuff of your hands, so you don't have to worry about it anymore, hmm?<</say>> <br><br>
+	<<else>>
+		<<say $Banditleader>> It looks like a <<PerceivedStature>> <<PerceivedGender>> with <<PossesivePronoun>> merry band of losers. Don't worry, we wont bite. As long as you do as we ask, we're very friendly. How about we take that stuff off your hands, so you don't have to worry about keeping it safe anymore, hmm?<</say>><br><br>
 	<<endif>>
+	<</nobr>>
+
+	[[Deal with the opportunistic bandits|Layer1 Threat1 Ascend]]<br>
+<<else>>
+
+	[[Return to the first layer|Layer1 Hub]]
+<<endif>>
 
 
 
 <<endif>>
 
 
-:: Layer2 Threat1 Ascend [layer2 image]
+:: Layer2 Threat1 Ascend [layer2 image altered]
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
 
@@ -1783,50 +1512,75 @@ How do you want to deal with the beast moving in on you?
 <<if $hiredCompanions.length > 3>>
 	[[Scare it off with your large group of companions|Layer2 Ascend2]]<br>
 <<endif>>
-[[Allow it to overpower you|Layer2 Ascend2][$status.duration = (4 - $statRed), $status.penalty = 1]]
+
+[[Allow it to overpower you|Layer2 Ascend2][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
+
+A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
+
+<<link "Hold the doll tight and squeeze your eyes shut" "Layer2 Ascend2">>
+  <<dollTF>>
+<</link>><br>
+<<endif>>
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Ascend2]]
 
 
-:: Layer2 Curses Random
+:: Layer2 Curses Random [altered]
 <<nobr>>
 <<for $i = 0; $i < 999; $i++>>
 	<<set $temp1 = random(0,11) + 12>>
-	<<if ($temp1 == 12) && !$playerCurses.some(e => e.name === "Libido Reinforcement B")>>
+
+	<<if ($temp1 == 11) && !$playerCurses.some(e => e.name === "Libido Reinforcement B")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 13) && !$playerCurses.some(e => e.name === "Gender Reversal B")>>
+
+	<<if ($temp1 == 12) && !$playerCurses.some(e => e.name === "Gender Reversal B")>>
 		<<break>>
 	<<endif>>
-	<<if $temp == 14 && !($playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
+
+	<<if ($temp == 13) && !($playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 15) && !$playerCurses.some(e => e.name === "Age Reduction A")>>
+
+	<<if ($temp1 == 14) && !$playerCurses.some(e => e.name === "Age Reduction A")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 16) && !$playerCurses.some(e => e.name === "Fluffy Ears")>>
+
+	<<if ($temp1 == 15) && !$playerCurses.some(e => e.name === "Fluffy Ears")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 17) && !$playerCurses.some(e => e.name === "Fluffy Tail")>>
+
+	<<if ($temp1 == 16) && !$playerCurses.some(e => e.name === "Fluffy Tail")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 18) && !$playerCurses.some(e => e.name === "Maximum Fluff")>>
+
+	<<if ($temp1 == 17) && !$playerCurses.some(e => e.name === "Maximum Fluff")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 19) && !$playerCurses.some(e => e.name === "Heat/Rut")>>
+
+	<<if ($temp1 == 18) && !$playerCurses.some(e => e.name === "Heat/Rut")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 20) && !$playerCurses.some(e => e.name === "Lightweight")>>
+
+	<<if ($temp1 == 19) && !$playerCurses.some(e => e.name === "Lightweight")>>
 		<<break>>
 	<<endif>>
+
 	<<if ($temp1 == 21) && !($playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun"))>>
 		<<break>>
 	<<endif>>
+
 	<<if ($temp1 == 22) && !($playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun"))>>
 		<<break>>
 	<<endif>>
+
 	<<if ($temp1 == 23) && !$playerCurses.some(e => e.name === "Blushing Virgin")>>
 		<<break>>
 	<<endif>>
@@ -1835,6 +1589,7 @@ Use the following option only if you have specifically considered your inventory
 		<<set $temp1 = -1>>
 		<<break>>
 	<<endif>>
+
 <</for>>
 <</nobr>>
 
@@ -1849,7 +1604,7 @@ There are no curses left for you to take on this layer.
 <<endif>>
 
 
-:: Escape Balloon L2 [new layer2]
+:: Escape Balloon L2 [layer2]
 <<nobr>><<set $currentLayer = 2>><<if !isPlaying("layer2")>>
 	<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
 <<endif>><</nobr>>
@@ -1858,3 +1613,83 @@ The drops of the rain create a constant pattering sound on the surface of your b
 [[Ascend to next layer|Escape Balloon L1][$corruption -= (15 - $corRed)]]
 [[Hover on this layer to take in a curse|Layer2 Curses]]
 [[Get off the balloon on this layer|Layer2 Hub][$escBalDepl=0]]
+
+
+:: Layer2 Preview [image layer2 altered noreturn]
+As you bring the charm up to your eye and gaze deep into the red crystal, your vision fades and a new image comes clearly into view:
+
+[img[setup.ImagePath+'Layer Intros/l2intro.png']]
+
+@@.layerTitle;LAYER 2 - DEWDROP RAIN UNDERBRUSH@@
+
+You see yourself standing under the cover of a dense rainforrest, with great trees covering your view and continuous rain pouring down through the layers of branches and vines. Suddenly the image shifts and you see the splendor of the relics that are available on this layer.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-relics.png']]
+
+As an image of the wonders you might find on this layer starts to come into focus, an intense feeling of humility washes through you.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-wonders.png']]
+
+The mystical possibilities of the wonders fade from your view and you suddenly feel nauseous, as if a huge amount of miasma was suddenly sucked into your chest. You visualize the corruptions and curses that may afflict you in the layer below.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-curses.png']]
+
+Finally the nauseous feeling passes but is replaced by a brief sense of terror as you get a glimpse of the threaths that await you on the layer
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
+
+Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the relic is cracked and broken.
+<<nobr>>
+<<if $ownedRelics.length==1>>
+	<<set $temp=0>>
+<<else>>
+	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
+		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
+			<<set $temp=$i>>
+			<<set $endloop=false>>
+		<<endif>>
+	<</for>>
+<<endif>>
+<</nobr>>
+[[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+
+
+:: Layer2Time [new]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+<<set $timeL2 += $tempTime>>
+<<if $items[1].count > 9>>
+	<<set $timeL2T1 += $tempTime>>
+<<endif>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL2 += $tempTime>>
+	<<if $mudHunt == 1 && $items[20].count > 0>>
+		<<set $items[20].count -= $tempTime>>
+	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
+		<<set $app.libido += $tempTime>>
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL2 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $bewitchBabies += 1>>
+		<<endif>>
+	<<endif>>
+<</for>>
+<</nobr>>

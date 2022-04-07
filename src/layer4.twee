@@ -15,24 +15,47 @@ This layer is enveloped in a bitter, piercing cold, strengthened by Miasma to ef
 <<endif>><</nobr>>
 
 
-:: Layer4 Hub [layer4]
-<<set $currentLayer = 4>><<if $visitL4 == 0>><<set $endSpectre = $time>><<endif>><<if $timeL4T1 < 7>><<set $visitL4 = 1>><<set $layerExit = 0>>
+:: Layer4 Hub [layer4 altered]
+<<set $currentLayer = 4>><<if $visitL4 == 0>><<set $endSpectre = $time>><<endif>><<if $timeL4T1 < 7>><<set $visitL4 = 1>><<set $layerExit = 0>><<HeightCorrected>><<CarryAdjust>><<checkTime>>
+
 The deep cold of this layer seems to penetrate any clothing and shelter you rely on. Snow drifts gently to the ground around you, and everwhere you look is coated in either a powder of snow or a layer of clear, frozen ice. Your only relef is when you take the time to stop at camp to eat, drink, and enjoy the warmth of your nightly campfire.
 
 This layer is enveloped in a bitter, piercing cold, strengthened by Miasma to effectively penetrate any kind of insulating clothing or similar protection. Your only option for staying warm is an active source that radiates heat. Without somehing easily portable, like a torch, you'll need to frequently stop to take shelter to start campfires. If you have a portable heat source, you may subtract 2 days from all time costs on this page. The 5 romer stones together don't quite produce enough heat to keep you warm on their own.
 
-What do you want to do while you are here?
-
 <<nobr>>
-<<if $items[9].count > 0 && $torchUse == 0>>
-<br>[[Use torches to reduce travel times on this layer by 2 days each at the cost of 1 torch per travel|Layer4 Hub][$torchUse = 1]]<br><br>
+
+
+
+<<if $warmCloth && !$dollevent2>>
+	<<set $heat=1>>
+	You put on the self-warming winter clothes. The romer stones give off a small amount of heat at the locations where you incorperated them in the gear. At first you still feel cold and you wonder if it's going to be warm enough in the end. After a while though, the insulation does it's job trapping the heat and you feel almost comfortable in it.<br><br>
+What do you want to do while you are here?<br><br>
+
+
+<<else>>
+
+	<<if $dollevent2 && $warmCloth>>
+		By now you have accepted that you can't take of the tattered pink dress. But when you try to put the self-warming winter clothes over your tattered dress you faint, only to wake up with the winter clothes off and neatly folded in your hands again. Looking at the doll you swear you can see it grinning at you. It seems you are stuck using other sources of heat. If only you could burn that acursed doll..<br><br>
+What do you want to do while you are here?<br><br>
+
+	<<elseif $dollevent2 && !$warmCloth>>
+		Dressed in only your tattered pink dress you shiver from the freezing cold. You whish you had something warmer to wear. At the same time you wonder if you could even wear something warmer now that you are in this cursed dress. Damn that doll..<br><br>
+What do you want to do while you are here?<br><br>
+
+	<<endif>>
+
+	<<if $items[9].count > 0 && $torchUse == 0>>
+	<br>[[Use torches to reduce travel times on this layer by 2 days each at the cost of 1 torch per travel|Layer4 Hub][$torchUse = 1]]<br>		<br>
+	<<endif>>
+	<<if $items[9].count > 0 && $torchUse == 0>>
+	<br>[[Use your non-disposable heat source to reduce travel times on this layer by 2 days per travel|Layer4 Hub][$torchUse = 1]]<br><br>
+	<<endif>>
+	<<if $torchUse == 1>>
+	<br>[[Stop using torches to reduce travel time|Layer4 Hub][$torchUse = 0]]<br><br>
+	<<endif>>
+
 <<endif>>
-<<if $heat == 1 && $torchUse == 0>>
-<br>[[Use your non-disposable heat source to reduce travel times on this layer by 2 days per travel|Layer4 Hub][$torchUse = 1]]<br><br>
-<<endif>>
-<<if $torchUse == 1>>
-<br>[[Stop using torches to reduce travel time|Layer4 Hub][$torchUse = 0]]<br><br>
-<<endif>>
+
 <<if $forageWater == 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
@@ -50,10 +73,12 @@ What do you want to do while you are here?
 <<if !isPlaying("layer4")>>
 	<<masteraudio stop>><<audio "layer4" volume 0.2 play loop>>
 <<endif>>
+<br>
+[[Use Items and Relics]]<br>
+<<if $hiredCompanions.length > 0>>
+[[Interact with party|Party overview]]<br>
+<<endif>>
 <</nobr>>
-
-[[Use Items]]
-
 [[Learn about the threats on this layer|Layer4 Threats]]
 [[Check for food and water you can forage for|Layer4 Forage]]
 [[Search for relics|Layer4 Relics]]
@@ -183,6 +208,7 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 
 
 :: Layer4 Curses [layer4 image altered]
+<<BreastCorrected>>
 These are the curses available for you to take to help manage your corruption:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-curses.png']]
@@ -321,6 +347,19 @@ How do you want to deal with the creature descending upon you?
 <<endif>>
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Hub][$status.duration = 99, $status.penalty = 1]]
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br>As the nightmarish beast drifts closer to you, you suddenly hear a voice talking to you.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will dissapear <</say>><br>
+
+A pleasant warmth is radiating from the doll you found<br>
+<<link "Hold the doll tight and close your eyes" "Layer4 Hub">>
+  <<dollTF>>
+<</link>><br>
+
+<<endif>>
+
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
@@ -355,7 +394,7 @@ You have successfully taken on the $curse42.name curse. Hopefully you are ok wit
 <<endif>>
 
 
-:: Take on Asset Robustness D [layer4]
+:: Take on Asset Robustness D [layer4 altered]
 <<set $playerCurses.push($curse43)>><<set $corruption += $curse43.corr>>
 
 You have successfully taken on the $curse43.name curse. Hopefully you are ok with accepting the permanent consequences.
@@ -370,12 +409,12 @@ You have successfully taken on the $curse43.name curse. Hopefully you are ok wit
 <<nobr>>
 <<set $app.modpenis += 2>>
 <<set $app.modbreasts += 6>>
-<<if $app.sex == "male">>
+
+<<if $app.penis>0 >>
 	<<set $app.penis += 2>>
-<<elseif $app.sex == "futa">>
-	<<set $app.breasts += 6>>
-	<<set $app.penis += 2>>
-<<else>>
+<<endif>>
+
+<<if $app.breastsCor >0 || $app.breasts >0>>
 	<<set $app.breasts += 6>>
 <<endif>>
 <</nobr>>
@@ -617,58 +656,8 @@ You hear a muffled sound from your incapacitated companion as you ponder your op
 :: Layer4 Purity 1 [layer4]
 <<nobr>>
 <<set $purityUsed = 1>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 5>>
+<<include "Layer4Time">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/puritytree.png']]
 
@@ -704,60 +693,9 @@ Which companion would you like to transfer $playerCurses[$temp].name to?
 		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
 	<</capture>>
 <</for>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 5>>
+<<include "Layer4Time">>
 <</nobr>>
-
 <<back>>
 
 
@@ -778,58 +716,8 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
 	<</capture>>
 <</for>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max(5 - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = 5>>
+<<include "Layer4Time">>
 <</nobr>>
 
 <<back>>
@@ -839,59 +727,10 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<nobr>>
 <<set $ownedRelics.push($relic34)>>
 <<set $corruption -= ($relic34.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic34.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic34.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
+
 
 You have successfully taken the $relic34.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -903,58 +742,8 @@ You have successfully taken the $relic34.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic35)>>
 <<set $corruption -= ($relic35.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic35.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic35.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic35.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -967,58 +756,8 @@ You have successfully taken the $relic35.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic36)>>
 <<set $corruption -= ($relic36.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic36.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic36.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic36.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1031,58 +770,8 @@ You have successfully taken the $relic36.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic37)>>
 <<set $corruption -= ($relic37.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic37.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic37.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic37.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1095,61 +784,13 @@ You have successfully taken the $relic37.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic38)>>
 <<set $corruption -= ($relic38.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic38.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic38.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic38.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+You can use this Relic to copy other Relics you have to get more uses out of them or just get a great value by copying other valuable Relics!
 
 [[Continue searching for the relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
@@ -1159,58 +800,8 @@ You have successfully taken the $relic38.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic39)>>
 <<set $corruption -= ($relic39.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic39.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic39.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic39.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1223,61 +814,13 @@ You have successfully taken the $relic39.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic40)>>
 <<set $corruption -= ($relic40.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic40.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic40.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic40.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+If you have Cherry, this Relic will provide the useful boon of a single use reroll of her Chaotic Luck.
 
 [[Continue searching for the relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
@@ -1287,58 +830,8 @@ You have successfully taken the $relic40.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic41)>>
 <<set $corruption -= ($relic41.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic41.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic41.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic41.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1351,58 +844,8 @@ You have successfully taken the $relic41.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic42)>>
 <<set $corruption -= ($relic42.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic42.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic42.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic42.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1415,58 +858,8 @@ You have successfully taken the $relic42.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic43)>>
 <<set $corruption -= ($relic43.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic43.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic43.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic43.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1479,58 +872,8 @@ You have successfully taken the $relic43.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic44)>>
 <<set $corruption -= ($relic44.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic44.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic44.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic44.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1543,58 +886,8 @@ You have successfully taken the $relic44.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic45)>>
 <<set $corruption -= ($relic45.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic45.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic45.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic45.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1607,58 +900,8 @@ You have successfully taken the $relic45.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic46)>>
 <<set $corruption -= ($relic46.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic46.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic46.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic46.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1671,58 +914,8 @@ You have successfully taken the $relic46.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic47)>>
 <<set $corruption -= ($relic47.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic47.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic47.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic47.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1735,58 +928,8 @@ You have successfully taken the $relic47.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic48)>>
 <<set $corruption -= ($relic48.corr - $corRed)>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<<endif>>
-<<set $tempTime = (Math.max($relic48.time - $timeRed + $status.penalty, 0))>>
-<<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<endif>>
-<<set $timeL4 += $tempTime>>
-<<set $timeL4T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<<set $foodL4 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<if $height > 0>>
-			<<set $app.height += (3 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (3 * $tempTime)>>
-		<<endif>>
-		<<else>>
-		<<if $height > 0>>
-			<<set $app.height += (0.5 * $tempTime)>>
-			<<else>>
-			<<set $app.height -= (0.5 * $tempTime)>>
-		<<endif>>
-	<<endif>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<<endif>>
-	<<endif>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<<endif>>
-<</for>>
+<<set $tempTime = $relic48.time-$SibylBuff>>
+<<include "Layer4Time">>
 <</nobr>>
 
 You have successfully taken the $relic48.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1992,6 +1135,19 @@ How do you want to deal with the creature descending upon you?
 <<endif>>
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Ascend2][$status.duration = 99, $status.penalty = 1]]
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br>As the nightmarish beast drifts closer to you, you suddenly hear a voice talking to you.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will dissapear <</say>><br>
+
+A pleasant warmth is radiating from the doll you found<br>
+<<link "Hold the doll tight and close your eyes" "Layer4 Ascend2">>
+  <<dollTF>>
+<</link>><br>
+
+<<endif>>
+
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
@@ -2016,8 +1172,19 @@ How do you want to deal with the creature descending upon you?
 <<endif>>
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Exit2][$status.duration = 99, $status.penalty = 1]]
-<</nobr>>
 
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br>As the nightmarish beast drifts closer you, you suddenly hear a voice talking to you.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will dissapear <</say>><br>
+
+A pleasant warmth is radiating from the doll you found<br>
+<<link "Hold the doll tight and close your eyes" "Layer4 Exit2">>
+  <<dollTF>>
+<</link>><br>
+<<endif>>
+
+<</nobr>>
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Exit2]]
 
@@ -2040,9 +1207,20 @@ Use the following option only if you have specifically considered your inventory
 <<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 <</nobr>>
 
-The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
 
 [[Continue on to the rest of the layer|Layer4 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer4 Cherry Curse [layer4]
@@ -2092,11 +1270,22 @@ Please enter your new scale color:
 <<endif>>
 <</nobr>>
 
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
+
 
 :: Layer4 Cherry Mix [layer4]
 <<nobr>>
 <<set $temp1 = random(0,14) + 33>>
-<<set $temp1 = random(0,15) + 40>>
+<<set $temp2 = random(0,15) + 40>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
@@ -2105,7 +1294,7 @@ Please enter your new scale color:
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.round(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
 
 Please enter your new scale color:
 
@@ -2135,6 +1324,16 @@ Please enter your new scale color:
 <<set $app.libido += 1>>
 <<endif>>
 <</nobr>>
+<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+
+You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+<<link "Reroll with Devil's Own">>
+	<<set setup.devilsReroll = 1>>
+	<<run Engine.backward()>>
+<</link>>
+
+<<endif>>
 
 
 :: Layer4 Curses Random
@@ -2208,7 +1407,7 @@ There are no curses left for you to take on this layer.
 <<endif>>
 
 
-:: Escape Balloon L4 [new layer4]
+:: Escape Balloon L4 [layer4]
 <<nobr>><<set $currentLayer = 4>><<if !isPlaying("layer4")>>
 	<<masteraudio stop>><<audio "layer4" volume 0.2 play loop>>
 <<endif>><</nobr>>
@@ -2217,3 +1416,99 @@ The chills of this layer don't seem to abate one bit when you aren't on the grou
 [[Ascend to next layer|Escape Balloon L3][$corruption -= (35 - $corRed)]]
 [[Hover on this layer to take in a curse|Layer4 Curses]]
 [[Get off the balloon on this layer|Layer4 Hub][$escBalDepl=0]]
+
+
+:: Layer4 Preview [image layer4 altered noreturn]
+As you bring the charm up to your eye and gaze deep into the red crystal, your vision fades and a new image comes clearly into view:
+
+[img[setup.ImagePath+'Layer Intros/l4intro.png']]
+
+@@.layerTitle;LAYER 4 - HOARFROST WASTES@@
+
+You see yourself trudging through thick layers of snow, and even with only your sight to view the layer, a deep sense of chills runs through you, as if the cold here were able to seep into your very being. Suddenly the image shifts and you see the splendor that you could find on this layer.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-relics.png']]
+
+As an image of the wonders you might find on this layer starts to come into focus, an intense feeling of humility washes through you.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-wonders.png']]
+
+The mystical possibilities of the wonders fade from your view and you suddenly feel nauseous, as if a huge amount of miasma was suddenly sucked into your chest. You visualize the corruptions and curses that may afflict you in the layer below.
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-curses.png']]
+
+Finally the nauseous feeling passes but is replaced by a brief sense of terror as you get a glimpse of the threaths that await you on the layer
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-threats.png']]
+
+Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the relic is cracked and broken.
+<<nobr>>
+<<if $ownedRelics.length==1>>
+	<<set $temp=0>>
+<<else>>
+	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
+		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
+			<<set $temp=$i>>
+			<<set $endloop=false>>
+		<<endif>>
+	<</for>>
+<<endif>>
+<</nobr>>
+[[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+
+
+:: Layer4Time [new]
+<<nobr>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+<<if $torchUse == 1 && $heat == 1>>
+		<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+		<<set $tempTime -= 2>>
+		<<set $items[9].count -= 1>>
+<<endif>>
+<<set $timeL4 += $tempTime>>
+<<set $timeL4T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
+	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<set $foodL4 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<if $height > 0>>
+			<<set $app.height += (3 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (3 * $tempTime)>>
+		<<endif>>
+		<<else>>
+		<<if $height > 0>>
+			<<set $app.height += (0.5 * $tempTime)>>
+			<<else>>
+			<<set $app.height -= (0.5 * $tempTime)>>
+		<<endif>>
+	<<endif>>
+	<<else>>
+	<<set $items[1].count -= $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1, 0>>
+			<<set $items[2].count += 1, 0>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL4 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $algalSize += 1>>
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
