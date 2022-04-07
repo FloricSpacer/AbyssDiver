@@ -105,6 +105,9 @@ def split_file(path):
                     print("", file=out)
                     print("", file=out)
                 if filename.endswith(".twee"):
+                    tags = set(tags)
+                    tags.discard("new")
+                    tags.discard("altered")
                     if tags:
                         tags_str = " ".join(escape(tag) for tag in tags)
                         print(f":: {escape(name)} [{tags_str}]", file=out)
