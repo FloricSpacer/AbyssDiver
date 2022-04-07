@@ -109,7 +109,7 @@ def split_file(path):
                     tags.discard("new")
                     tags.discard("altered")
                     if tags:
-                        tags_str = " ".join(escape(tag) for tag in tags)
+                        tags_str = " ".join(escape(tag) for tag in sorted(tags))
                         print(f":: {escape(name)} [{tags_str}]", file=out)
                     else:
                         print(f":: {escape(name)}", file=out)
