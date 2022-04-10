@@ -49,7 +49,7 @@ What do you want to do while you are here?<br>
 <br>
 [[Use Items and Relics]]<br>
 <<if $hiredCompanions.length > 0>>
-[[Interact with party|Party overview]]<br>
+[[Interact with your party|Party overview]]<br>
 <<endif>>
 <</nobr>>
 [[Learn about the threats on this layer|Layer5 Threats]]
@@ -98,6 +98,10 @@ How do you want to deal with the enormous worm approaching you?
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer5 Hub][$time += 1]]<br><br>
+<<endif>>
+<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
+	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
+	[[Have Khemia fight it off with Joyous Sunder|Layer5 Hub]]<br><br>
 <<endif>>
 You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away.<br>
 	[[Use 10 days of water as a distraction to get away|Layer5 Hub][$items[0].count -= 10]]<br><br>
@@ -426,7 +430,10 @@ The trap would kill you due to your status condition, please go back and choose 
 
 <<back>>
 
-<<else>>
+<<else>><< if $ownedRelics.some(e => e.name === "Forest's Gift") && $booby == 3>>
+Fortunately for you, the scorpions in the pit are merely mundane scorpions, rather than an Abyss-twisted analogue of them. And because of your Relic the Forest's Gift, the scorpions are actually friendly towards you, rather than upset that you invaded the pit they live in. A brief conversation explaining what happened to them leads to them pointing you towards a safe exit, allowing easy and safe escape from the pit.<br>
+[[Escape with the Forest's Gift|Layer5 Booby2]]<br><br>
+<<endif>>
 [[Accept the injuries and pick up the relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to evade the trap.
@@ -437,6 +444,9 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Booby2 [layer5]
+Having dealt with the booby trap, you are able to move forwards freely and obtain your prize.
+
+<<nobr>>
 <<if $temp == 1>>
 [[Pick up the Pocket Hoard|Pocket Hoard]]
 <<elseif $temp == 2>>
@@ -462,6 +472,7 @@ Use the following option only if you have specifically considered your inventory
 <<elseif $temp == 12>>
 [[Pick up the Vain Sculpt|Vain Sculpt]]
 <<endif>>
+<</nobr>>
 
 
 :: Pocket Hoard [layer5]
@@ -490,7 +501,7 @@ A trip to the One-sided Tunnel might be worthwhile now to empower your new Relic
 
 You have successfully taken the $relic50.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
-This Relic can see its true potential unleashed in the hands of a skilled swordsman, such as Khemia.
+This Relic can only see its true potential unleashed in the hands of a skilled swordsman, such as Khemia.
 
 [[Continue searching for the relics of layer 5|Layer5 Relics]]
 [[Continue exploring the fifth layer|Layer5 Hub]]
@@ -605,6 +616,8 @@ You have successfully taken the $relic57.name relic. Hopefully you can make good
 <</nobr>>
 
 You have successfully taken the $relic58.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+This may be able to channel electricity, but without a source that ability is not useful.
 
 [[Continue searching for the relics of layer 5|Layer5 Relics]]
 [[Continue exploring the fifth layer|Layer5 Hub]]
@@ -1295,6 +1308,10 @@ How do you want to deal with the enormous worm approaching you?
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer5 Ascend2][$time += 1]]<br><br>
 <<endif>>
+<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
+	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
+	[[Have Khemia fight it off with Joyous Sunder|Layer5 Ascend2]]<br><br>
+<<endif>>
 You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away.<br>
 	[[Use 10 days of water as a distraction to get away|Layer5 Ascend2][$items[0].count -= 10]]<br><br>
 If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
@@ -1430,6 +1447,10 @@ How do you want to deal with the enormous worm approaching you?
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer5 Exit2][$time += 1]]<br><br>
+<<endif>>
+<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
+	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
+	[[Have Khemia fight it off with Joyous Sunder|Layer5 Exit2]]<br><br>
 <<endif>>
 You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away.<br>
 	[[Use 10 days of water as a distraction to get away|Layer5 Exit2][$items[0].count -= 10]]<br><br>

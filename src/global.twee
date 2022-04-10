@@ -1025,7 +1025,7 @@ Corruption cost: $ownedRelics[$temp].corr
 <<BreastCorrected>>
 <<appGender>>
 <<Update_MC_Speech>>
-<br>The following persons have been added to your party:<br><br>
+<br>The following companions are a part of your expedition's party:<br><br>
 
 <<for $i = 0; $i < $hiredCompanions.length; $i++>>
 	<<capture $i>>
@@ -2473,7 +2473,7 @@ You can use the balloon to send requests and relics back to Outset Town. You can
 		[[Use Purity Wood Plank|Balloon Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
 	<<endif>>
 
-	<<if $ownedRelics[$i].name == "Romer Stones">>
+	<<if $ownedRelics[$i].name == "Romer Stones" && $warmCloth == 0 && $coolCloth == 0>>
 	<br>You muse over what you can do with the Romer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either buy some winter clothers for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
 		[[Use the Romer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30,$warmCloth=1]]<br>
@@ -2483,6 +2483,10 @@ You can use the balloon to send requests and relics back to Outset Town. You can
 		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to reccomend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo. <br>
 		<br>The raw materials for this are relatively cheap, letting you reshape the Brave Vector for only 10 dubloons.<br>
 		[[Reshape the Brave Vector into a powerful slingshot|Balloon Workshop][$slingshot = 1, $dubloon -= 10]]<br>
+	<<endif>>
+	<<if $ownedRelics[$i].name == "Joyous Sunder" && $joyousSword == 0>>
+		<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. The materials to forge a sword from the Joyous Sunder would cost you 20 dubloons.<br>
+		[[Reshape the Joyous Sunder into a true sword|Balloon Workshop][$joyousSword = 1, $dubloon -= 20]]<br>
 	<<endif>>
 	<</capture>>
 <</for>>

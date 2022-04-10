@@ -52,7 +52,7 @@ What do you want to do while you are here?<br>
 <br>
 [[Use Items and Relics]]<br>
 <<if $hiredCompanions.length > 0>>
-[[Interact with party|Party overview]]<br>
+[[Interact with your party|Party overview]]<br>
 <<endif>>
 <</nobr>>
 [[Learn about the threats on this layer|Layer6 Threats]]
@@ -283,6 +283,14 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration = 99, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
 <<endif>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration = 3, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
+While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
+	[[Use your Relics to electrocute the dragon|Layer6 Hub][$status.duration = 3, $status.penalty = 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
 	[[Offer 100 dubloons to appease the dragon|Layer6 Hub][$dubloons -= 100]]<br><br>
 If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
@@ -327,6 +335,10 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Main2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
 	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Hub][$items[4].count -= 1]]<br><<endif>><br>
+<<endif>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
+	[[Have Khemia fight it off with Joyous Sunder|Layer6 Hub]<br><br>
 <<endif>>
 If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 [[Allow it to overpower you|Layer6 Threat1 Main2][$tentacleFucked = 12]]<br>
@@ -1072,6 +1084,14 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer6 Ascend2][$status.duration = 99, $status.penalty = 2, $khemiaDragon = 1, $dubloons += 50, $dragonKill += 1]]<br><br>
 <<endif>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration = 3, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
+While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
+	[[Use your Relics to electrocute the dragon|Layer6 Hub][$status.duration = 3, $status.penalty = 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
 	[[Offer 100 dubloons to appease the dragon|Layer6 Ascend2][$dubloons -= 100]]<br><br>
 If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
@@ -1116,6 +1136,10 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Ascend2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
 	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Ascend2][$items[4].count -= 1]]<br><<endif>><br>
+<<endif>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
+	[[Have Khemia fight it off with Joyous Sunder|Layer6 Ascend2]<br><br>
 <<endif>>
 If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 [[Allow it to overpower you|Layer6 Threat1 Ascend2][$tentacleFucked = 12]]<br>
@@ -1274,6 +1298,14 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer6 Exit2][$status.duration = 99, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
 <<endif>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
+	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration = 3, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
+While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
+	[[Use your Relics to electrocute the dragon|Layer6 Hub][$status.duration = 3, $status.penalty = 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<<endif>>
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
 	[[Offer 100 dubloons to appease the dragon|Layer6 Exit2][$dubloons -= 100]]<br><br>
 If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
@@ -1318,6 +1350,10 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Descend2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
 	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Exit2][$items[4].count -= 1]]<br><<endif>><br>
+<<endif>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
+	[[Have Khemia fight it off with Joyous Sunder|Layer6 Exit2]<br><br>
 <<endif>>
 If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 [[Allow it to overpower you|Layer6 Threat1 Descend2][$tentacleFucked = 12]]<br>

@@ -92,7 +92,7 @@ What do you want to do while you are here?
 <br>
 [[Use Items and Relics]]<br>
 <<if $hiredCompanions.length > 0>>
-[[Interact with party|Party overview]]<br>
+[[Interact with your party|Party overview]]<br>
 <<endif>>
 <</nobr>>
 [[Learn about the threats on this layer|Layer7 Threats]]
@@ -184,8 +184,8 @@ You are now forced to become a permanent resident of Layer 7.
 <<nobr>><<if $totalRelics.some(e => e.name === "Daedalus Mechanism")>>
 	<<else>><<print "[[Pick up the Daedalus Mechanism]]">>
 <<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Blind Divine") || $items[20].count < 4>>
-	<<else>><<print "[[Pick up the Blind Divine][$items[20].count -= 4]]">>
+<<nobr>><<if $totalRelics.some(e => e.name === "Blind Divine") || ($items[20].count < 4 && $slingshot == 0)>>
+	<<else>><<print "[[Pick up the Blind Divine][$items[20].count -= 4 - (4 * $slingshot)]]">>
 <<endif>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Lambent Specter")>>
 	<<else>><<print "[[Pick up the Lambent Specter]]">>
@@ -443,10 +443,13 @@ You have successfully taken the $relic73.name relic. Hopefully you can make good
 <<set $corruption -= ($relic74.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
 <<set $tempTime = $relic74.time-$SibylBuff>>
 <<include "Layer7Time">>
+<<set $light = 1>>
 
 <</nobr>>
 
 You have successfully taken the $relic74.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+This Relic grants you the ability to see in any dark place, removing the need for light in most cases as long as you posess it.
 
 [[Continue searching for the relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
@@ -533,10 +536,13 @@ You have successfully taken the $relic79.name relic. Hopefully you can make good
 <<set $corruption -= ($relic80.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
 <<set $tempTime = $relic80.time-$SibylBuff>>
 <<include "Layer7Time">>
+<<set $light = 1>>
 
 <</nobr>>
 
 You have successfully taken the $relic80.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+If you don't already have a source of light, the Glare Vantage will provide you with one on your journey.
 
 [[Continue searching for the relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
@@ -563,10 +569,14 @@ You have successfully taken the $relic81.name relic. Hopefully you can make good
 <<set $corruption -= ($relic82.corr - $corRed + (5 * Math.trunc($hexflame / 10)))>>
 <<set $tempTime = $relic82.time-$SibylBuff>>
 <<include "Layer7Time">>
+<<set $heat = 1>>
+<<set $cool = 1>>
 
 <</nobr>>
 
 You have successfully taken the $relic82.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
+
+This Relic provides you with comfort in the cold to reduce travel times by 2 days on layer 4 and comfort in the heat to reduce travel times by 1 day on layers 5 or 6.
 
 [[Continue searching for the relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
@@ -790,7 +800,9 @@ You have obtained $heavyLiftDubloons dubloons out of 80 dubloons max for this jo
 
 An average human working a full day at this task can make 5 dubloons per day doing this job.<<endif>><<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot move any loads without assistance. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<<endif>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can move many loads in your hands with ease. You can move up to 40 loads per day by grasping the loads in your hands, though you will need to take slightly longer paths to get to the destination.<<endif>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<<endif>><<if $totalRelics.some(e => e.name === "Afar Wanderer")>>
 
-You can use the Afar Wanderer on the cart to make the load significantly easier to move. While the wands becomes heavier, it doesn't gain the weight of the loads on top of the cart, so you can effectively drag the cart around much easier. If you use the Afar Wanderer, an average person could carry 10 loads per day on their own.<<endif>><<if $totalRelics.some(e => e.name === "Superpositional Skewer")>>
+You can use the Afar Wanderer on the cart to make the load significantly easier to move. While the wands becomes heavier, it doesn't gain the weight of the loads on top of the cart, so you can effectively drag the cart around much easier. If you use the Afar Wanderer, an average person could carry 10 loads per day on their own.<<endif>><<if $totalRelics.some(e => e.name === "Return to Sender")>>
+
+You can mark 10 of the objects with the Return to Sender Relic, allowing you to recall all of them to your position. Unfortunately, this will reach the maximum distance for Return to Sender, but it will let you very quickly complete 10 loads in a single day.<<endif>><<if $totalRelics.some(e => e.name === "Superpositional Skewer")>>
 
 You can use the Superpositional Skewer to touch the load with one end, then walk to the desired location, then tap yourself with the other end. This will result in you being transported back to the location of the loads and the load being transported to the destination. This effectively means you don't need to carry any heavy weights and only need to walk half the distance. This dramatically improves the efficiency of this job, allowing you to move up to 20 loads per day on your own!<<endif>>
 
@@ -842,7 +854,9 @@ You have obtained $cityPaintDubloons dubloons out of 80 dubloons max for this jo
 
 An average human working a full day at this task can make 1 dubloons per day doing this job.<<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<<endif>><<if $totalRelics.some(e => e.name === "Zelus Band")>>
 
-You can use the Zelus Band to make sure you stay focused. While this doesn't make you inherently any better at painting, you will find that being perfectly focused on a task like this can allow you to accomplish much more than you would otherwise. If you choose to wear the Zelus Band, you can earn up to 3 dubloons per day while working on this job alone.<<endif>>
+You can use the Zelus Band to make sure you stay focused. While this doesn't make you inherently any better at painting, you will find that being perfectly focused on a task like this can allow you to accomplish much more than you would otherwise. If you choose to wear the Zelus Band, you can earn up to 3 dubloons per day while working on this job alone.<<endif>><<if $totalRelics.some(e => e.name === "Red Thread Flourish")>>
+
+You can use the Red Thread Flourish to serve as additional hands to paint surfaces according to your will. The threads can move intricately and significantly increase the speed at which you can paint on your own. If you use the Red Thread Flourish while painting, you can earn up to 5 dubloons per day while working this job alone.<<endif>>
 
 If you will be working on this job, please enter the number of days you will be working on this job now and how many dubloons you will be making.
 
