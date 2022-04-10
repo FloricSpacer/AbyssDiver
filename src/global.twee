@@ -502,9 +502,9 @@ Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman
 Using your balloon, you're able to send up any relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
 
 <<nobr>>
-<<if $ownedRelics.some(e => e.name === "Purity Tree Plank") && $items[19].count > 0>>
-		Would you like to Ask someone on the surface to use the Relic Workshop with your Purity Tree Planks and craft them into protective gear for a value of +25 corruption each?
-[[Ask someone on the surface to use the Relic Workshop with your Purity Tree Planks|Commerce Balloon][$ownedRelics.deleteAt($i), $corruption += 25]]<br><br>
+<<if $items[19].count > 0>>
+[[Send a request to the Relic Workshop|Balloon Workshop]]
+<<endif>>
 <<endif>>
 
 <<if $tunnelUsed == 1>>
@@ -543,7 +543,7 @@ Choose the relic you would like to sell:
 <</for>>
 <</nobr>>
 
-[[Continue your business on the surface|Commerce Balloon]]
+[[Continue using the commerce balloon|Commerce Balloon]]
 
 
 :: Balloon Store1 [noreturn]
@@ -570,10 +570,10 @@ Here are all of the items available for your to spend you $dubloons dubloons on:
 [[Buy Warding Braces|Balloon Warding]]
 [[Buy Smartphone|Balloon Smartphone]]
 [[Buy Inn Room Pass|Balloon Inn]]
-[[Buy Relic Workshop Pass|Balloon Workshop]]
+[[Buy Relic Workshop Pass|Balloon Workshop1]]
 
 
-[[Continue using commerce balloon|Commerce Balloon]]
+[[Continue using the commerce balloon|Commerce Balloon]]
 
 
 :: Balloon Sell 2 [noreturn]
@@ -775,7 +775,7 @@ How many inn room passes would you like to buy?
 <<back [[Balloon Store1]]>>
 
 
-:: Balloon Workshop [noreturn]
+:: Balloon Workshop1 [noreturn]
 How many relic workshop passes would you like to buy?
 
 (Note: there is no additional benefit for buying more than 1 relic workshop pass.)
@@ -1025,8 +1025,7 @@ Corruption cost: $ownedRelics[$temp].corr
 <<BreastCorrected>>
 <<appGender>>
 <<Update_MC_Speech>>
-$LilyPromise
-The following persons have been added to your party:<br>
+<br>The following persons have been added to your party:<br><br>
 
 <<for $i = 0; $i < $hiredCompanions.length; $i++>>
 	<<capture $i>>
@@ -1564,7 +1563,7 @@ Double-click this passage to edit it.
 <<if $convoStart>>
 [[Greet her warmly with a hug|Cherry Convo0][$convoStart=0,$choice1=1,$companion4.affec-=(1-$hsswear)]]<br>
 [[Greet her with a firm handshake|Cherry Convo0][$convoStart=0,$choice1=2,$companion4.affec-=(1-$hsswear)]]<br>
-[[Greet him with a small wave from a distance|Cherry Convo0][$convoStart=0,$choice1=3,$companion4.affec+=(1+$hsswear)]]
+[[Greet her with a small wave from a distance|Cherry Convo0][$convoStart=0,$choice1=3,$companion4.affec+=(1+$hsswear)]]
 <<endif>>
 
 <<if $choice1==1>>
@@ -1883,7 +1882,7 @@ Cloud will now occasionally find and scavenge a small number of dubloons or bull
 <<if $convoStart>>
 [[Greet her warmly with a hug|Saeko Convo0][$convoStart=0,$choice1=1,$companion6.affec-=(1-$hsswear)]]<br>
 [[Greet her with a firm handshake|Saeko Convo0][$convoStart=0,$choice1=2,$companion6.affec+=(1+$hsswear)]]<br>
-[[Greet him with a small wave from a distance|Saeko Convo0][$convoStart=0,$choice1=3,$companion6.affec+=(1+$hsswear)]]
+[[Greet her with a small wave from a distance|Saeko Convo0][$convoStart=0,$choice1=3,$companion6.affec+=(1+$hsswear)]]
 <<endif>>
 
 <<if $choice1==1>>
@@ -2457,3 +2456,36 @@ You stand on the cupboard directly over the two man, a small camera relic in han
  "Gerard I finally got them" You say presenting him the camera. After working for him for many years now you are on a first-name basis with him."Oh just what i was expecting i take it you have undeniable proof ?"."Of course who do you think I am, some amateur?", "They were cunning though, it took weeks to find their headquarter".
 "Well you did well. As always, I might add. You should take a break before heading out again." He says.  "I would really like to get my hands on whatever they were try to steal in the end".You muse.
 "And I need to prepare a fitting punishment for them... Did they really think they could get away with trying to pin the blame on me for whatever they were after, fools..". You just shrug your shoulders and leave. What happens next is none of your business, as long as you get paid you are happy. In the end you started to understand why some people call curses a blessing.
+
+
+:: Balloon Workshop
+[img[setup.ImagePath+$items[19].image]]
+
+You can use the balloon to send requests and relics back to Outset Town. You can send up any Relics you have along with what you want done to them and the people at the workshop can reply and send back any modified Relics you want.
+
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+	<<if $ownedRelics[$i].name == "Purity Tree Plank">>
+
+		<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
+
+		[[Use Purity Wood Plank|Balloon Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
+	<<endif>>
+
+	<<if $ownedRelics[$i].name == "Romer Stones">>
+	<br>You muse over what you can do with the Romer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
+	You can either buy some winter clothers for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
+		[[Use the Romer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30,$warmCloth=1]]<br>
+		[[Use the Romer Stones for self-cooling summer gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1]]<br>
+	<<endif>>
+	<<if $ownedRelics[$i].name == "Brave Vector">>
+		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to reccomend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo. <br>
+		<br>The raw materials for this are relatively cheap, letting you reshape the Brave Vector for only 10 dubloons.<br>
+		[[Reshape the Brave Vector into a powerful slingshot|Balloon Workshop][$slingshot = 1, $dubloon -= 10]]<br>
+	<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+[[Continue using the commerce balloon|Commerce Balloon]]

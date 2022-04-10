@@ -62,7 +62,9 @@ What do you want to do while you are here?<br><br>
 	<<print "You are not currently foraging for your daily water on this layer">><br>
 <<endif>>
 <<if $forageFood == 1>>
-	<<if $items[20].count < 2>>
+	<<if $slingshot == 1>>
+	<<print "You are currently foraging for your daily food on this layer with your Brave Vector, allowing you to hunt with no daily bullet cost.">>
+	<<elseif $items[20].count < 2>>
 	<<print "You need a gun and at least 2 bullets to be able to hunt flairabou for your daily food on this layer.">>
 	<<else>>
 	<<print "You are currently foraging for your daily food on this layer, costing you 2 bullets a day in hunting.">><br>
@@ -344,6 +346,10 @@ How do you want to deal with the creature descending upon you?
 <<if $items[13].count > 0 && $items[20].count > 4>>
 	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
 	[[Shoot it with your pistol|Layer4 Hub][$items[20].count -= (5 - $bullRed)]]<br><br>
+<<endif>>
+	<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
+[[Defeat it with the Brave Vector|Layer4 Hub]]<br><br>
 <<endif>>
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Hub][$status.duration = 99, $status.penalty = 1]]
@@ -806,6 +812,8 @@ You can use this Relic to copy other Relics you have to get more uses out of the
 
 You have successfully taken the $relic39.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
+While this Relic may not be very functional in its current form as a bent pipe, a trip to the Relic Workshop could transform it into a powerful and efficient weapon.
+
 [[Continue searching for the relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
 
@@ -969,8 +977,10 @@ You have successfully taken the $relic48.name relic. Hopefully you can make good
 	<<if $items[1].count > 9>>
 		<<set $timeL4T1 += 1>>
 	<<endif>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2) - $bullRed, 1)>>
+<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+	<<if $slingshot == 0>>
+		<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<endif>>
 	<<set $foodL4 += 1>>
 	<<if $abyssKnow == 0>>
 		<<if $height > 0>>
@@ -1056,8 +1066,10 @@ You continue your hike and try to keep somewhat warm despite the bone-chilling c
 	<<if $items[1].count > 9>>
 		<<set $timeL4T1 += 1>>
 	<<endif>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2) - $bullRed, 1)>>
+<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+	<<if $slingshot == 0>>
+		<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<endif>>
 	<<set $foodL4 += 1>>
 	<<if $abyssKnow == 0>>
 		<<if $height > 0>>
@@ -1133,6 +1145,11 @@ How do you want to deal with the creature descending upon you?
 	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
 	[[Shoot it with your pistol|Layer4 Ascend2][$items[20].count -= (5 - $bullRed)]]<br><br>
 <<endif>>
+	<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
+[[Defeat it with the Brave Vector|Layer4 Ascend2]]<br><br>
+<<endif>>
+
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Ascend2][$status.duration = 99, $status.penalty = 1]]
 
@@ -1169,6 +1186,10 @@ How do you want to deal with the creature descending upon you?
 <<if $items[13].count > 0 && $items[20].count > 4>>
 	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
 	[[Shoot it with your pistol|Layer4 Exit2][$items[20].count -= (5 - $bullRed)]]<br><br>
+<<endif>>
+	<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
+[[Defeat it with the Brave Vector|Layer4 Exit2]]<br><br>
 <<endif>>
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of it's large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Exit2][$status.duration = 99, $status.penalty = 1]]
@@ -1474,8 +1495,10 @@ Finally, the vision fades, leaving you standing once again where you were before
 <<set $timeL4 += $tempTime>>
 <<set $timeL4T1 += $tempTime>>
 <<set $time += $tempTime>>
-<<if $forageFood == 1 && $items[13].count > 0 && $items[20].count > 1>>
-	<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+	<<if $slingshot == 0>>
+		<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+	<<endif>>
 	<<set $foodL4 += $tempTime>>
 	<<if $abyssKnow == 0>>
 		<<if $height > 0>>

@@ -57,7 +57,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 
 
 :: Layer2 Hub [layer2]
-<<set $currentLayer = 2>><<set $visitL2 = 1>><<if $timeL2T1 < 4>><<set $layerExit = 0>><<HeightCorrected>><<checkTime>><<CarryAdjust>>
+<<set $currentLayer = 2>><<set $visitL2 = 1>><<if $timeL2T1 < 4 || $hiredCompanions.length > 3>><<set $layerExit = 0>><<HeightCorrected>><<checkTime>><<CarryAdjust>>
 
 
 The dew continually drips down around you, creating the illusion of a rainstorm without clouds. The atmosphere is heavy, partially with humdity, but mainly with the ever-present, creeping corruption of the miasma.
@@ -162,7 +162,7 @@ If you decide to start foraging for food or water, it means that you will not re
 
 
 :: Layer2 Relics [image layer2]
-<<if $timeL2T1 < 4>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>
+<<if $timeL2T1 < 4 || $hiredCompanions.length > 3>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>
 Here are the relics on this layer which are available for you to spend corruption on:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-relics.png']]
@@ -1236,16 +1236,22 @@ How do you want to deal with the beast moving in on you?
 
 <<nobr>>
 <<if $items[14].count > 0>>
-	[[Fight it off with your sword|Layer2 Hub]]<br>
+	A simple beast like this could be fought off by even an amateur using a human weapon, like a sword.<br>[[Fight it off with your sword|Layer2 Hub]]<br><br>
 <<endif>>
 <<if $items[13].count > 0 && $items[20].count > 2>>
-	[[Shoot it 3 times with your pistol|Layer2 Hub][$items[20].count -= 3]]<br>
+	While the beast is large and burly, a few shots from a gun will easily bring it down.<br>
+	[[Shoot it 3 times with your pistol|Layer2 Hub][$items[20].count -= 3]]<br><br>
 <<endif>>
 <<if $items[1].count > 4>>
-	[[Feed it 5 days of your food rations|Layer2 Hub][$items[1].count -= 5]]<br>
+	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and cause it to leave you alone.<br>
+	[[Feed it 5 days of your food rations|Layer2 Hub][$items[1].count -= 5]]<br><br>
 <<endif>>
 <<if $hiredCompanions.length > 3>>
 	[[Scare it off with your large group of companions|Layer2 Hub]]<br>
+<<endif>>
+<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun and is able to easily dispatch the beast with only a few well-placed shots.
+[[Defeat it with the Brave Vector|Layer2 Hub]]
 <<endif>>
 
 [[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
@@ -1261,7 +1267,6 @@ A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close a
   <<dollTF>>
 <</link>><br>
 <<endif>>
-
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
@@ -1310,7 +1315,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<<if $layerExitTime == 0>>
 		<<break>>
 	<<endif>>
-	<<if $timeL2T1 > 3>>
+	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
 		<br>During your long hike towards the third layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
 
 [[Deal with the Baying Gourmet|Layer2 Threat1 Descend]]<br><br>
@@ -1364,18 +1369,25 @@ How do you want to deal with the beast moving in on you?
 
 <<nobr>>
 <<if $items[14].count > 0>>
-	[[Fight it off with your sword|Layer2 Exit2]]<br>
+	A simple beast like this could be fought off by even an amateur using a human weapon, like a sword.<br>[[Fight it off with your sword|Layer2 Exit2]]<br><br>
 <<endif>>
 <<if $items[13].count > 0 && $items[20].count > 2>>
-	[[Shoot it 3 times with your pistol|Layer2 Exit2][$items[20].count -= 3]]<br>
+	While the beast is large and burly, a few shots from a gun will easily bring it down.<br>
+	[[Shoot it 3 times with your pistol|Layer2 Exit2][$items[20].count -= 3]]<br><br>
 <<endif>>
 <<if $items[1].count > 4>>
-	[[Feed it 5 days of your food rations|Layer2 Exit2][$items[1].count -= 5]]<br>
+	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and cause it to leave you alone.<br>
+	[[Feed it 5 days of your food rations|Layer2 Exit2][$items[1].count -= 5]]<br><br>
 <<endif>>
 <<if $hiredCompanions.length > 3>>
 	[[Scare it off with your large group of companions|Layer2 Exit2]]<br>
 <<endif>>
-[[Allow it to overpower you|Layer2 Exit2][$status.duration = (4 - $statRed), $status.penalty = 1]]
+<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun and is able to easily dispatch the beast with only a few well-placed shots.
+[[Defeat it with the Brave Vector|Layer2 Exit2]]
+<<endif>>
+
+[[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
 
 <<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
 <br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
@@ -1406,7 +1418,7 @@ Use the following option only if you have specifically considered your inventory
 <<endif>>
 
 <<for $i = 0; $i < 99; $i++>>
-	<<if $timeL2T1 > 3>>
+	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
 		<br>During your long hike back up towards the first layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
 
 [[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
@@ -1501,16 +1513,22 @@ How do you want to deal with the beast moving in on you?
 
 <<nobr>>
 <<if $items[14].count > 0>>
-	[[Fight it off with your sword|Layer2 Ascend2]]<br>
+	A simple beast like this could be fought off by even an amateur using a human weapon, like a sword.<br>[[Fight it off with your sword|Layer2 Ascend2]]<br><br>
 <<endif>>
 <<if $items[13].count > 0 && $items[20].count > 2>>
-	[[Shoot it 3 times with your pistol|Layer2 Ascend2][$items[20].count -= 3]]<br>
+	While the beast is large and burly, a few shots from a gun will easily bring it down.<br>
+	[[Shoot it 3 times with your pistol|Layer2 Ascend2][$items[20].count -= 3]]<br><br>
 <<endif>>
 <<if $items[1].count > 4>>
-	[[Feed it 5 days of your food rations|Layer2 Ascend2][$items[1].count -= 5]]<br>
+	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and cause it to leave you alone.<br>
+	[[Feed it 5 days of your food rations|Layer2 Ascend2][$items[1].count -= 5]]<br><br>
 <<endif>>
 <<if $hiredCompanions.length > 3>>
 	[[Scare it off with your large group of companions|Layer2 Ascend2]]<br>
+<<endif>>
+<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun and is able to easily dispatch the beast with only a few well-placed shots.
+[[Defeat it with the Brave Vector|Layer2 Ascend2]]
 <<endif>>
 
 [[Allow it to overpower you|Layer2 Ascend2][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
