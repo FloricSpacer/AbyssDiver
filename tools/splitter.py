@@ -75,6 +75,10 @@ def classify_passage(name, tags, metadata):
     if name.startswith("Layer"):
         return name[:6].lower() + ".twee"
 
+    first_word = name.split()[0]
+    if first_word.startswith("L") and first_word[1:].isdigit():
+        return f"layer{first_word[1:]}.twee"
+
     return "global.twee"
 
 
