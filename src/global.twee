@@ -16,8 +16,8 @@ You have been exploring the Abyss for $time days.
 <<if $endSpectre > 0>>
 The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.
 <<endif>>
-<</nobr>><<nobr>><<if $debt>>
-	<<print "You have $debt dubloons of debt, and will also have to pay an extra 20% of that as interest at the end of your journey, for a total of " + Math.round(($debt * 1.2)) + " dubloons.">><br><<endif>>
+<</nobr>><<nobr>><<if $debt > 0>>
+	<<print "You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.">><br><<endif>>
 <<if $status.penalty > 0>>
 <br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
 <<if $hexflame > 9>>
@@ -274,9 +274,9 @@ Thanks again for playing!
 
 
 :: Appearance [noreturn]
-<<BreastCorrected>>
+<<nobr>><<BreastCorrected>>
 <<appGender>>
-<<Update_MC_Speech>>
+<<Update_MC_Speech>><</nobr>>
 Your name is $app.name and you are a $app.sex.
 
 Your hair color is $app.hair.
@@ -451,6 +451,7 @@ You've got to watch out for extremely serious back pain with your S cup breasts.
 Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>
 
 <</nobr>>
+
 <<back [[$return]]>>
 
 
@@ -503,6 +504,7 @@ Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman
 Using your balloon, you're able to send up any relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
 
 <<nobr>>
+[[Send a request to the Outset Town Administration|Balloon Admin]]
 <<if $items[19].count > 0>>
 [[Send a request to the Relic Workshop|Balloon Workshop]]<br>
 <<endif>>
@@ -805,7 +807,8 @@ Cost: $items[$temp].cost dubloons
 :: Credits
 Thank you so much to anyone who has helped me out with this project! I appreciate all the feedback and suggestions I get, especially feature requests and bug reports! I try to respond promptly to these, so please let me know if you have an idea or find a bug!
 
-Thanks to Ilse91 for helping with a huge variety of code and adding some new features regarding height, carry weight, companions, conversations, and endings.
+Thanks to Ilse91 for helping with a huge variety of code and adding some new features regarding height, carry weight, companions, conversations, and endings. She also helped in getting my motivation for working on the game back and her help is incredibly appreciated.
+
 Thanks to Emmeken for transcribing the item descriptions for me.
 Thanks to dogflail for writing drafts for some of the curse appearance screen decriptions.
 Thanks to abiciendimittent for transcribing the relic and curse descriptions (will be added to the game when they are completed)
@@ -1046,12 +1049,13 @@ Corruption cost: $ownedRelics[$temp].corr
 	<br>
 	<</capture>>
 <</for>>
-
+[[Test decrease affection Maru|Party overview][$companion1.affec-=(5-$hsswear)]]<br>
 [[Return|$return]]
 <</nobr>>
 
 
 :: Maru Convo1 [noreturn]
+<<nobr>>
 Maru cheerfully brings you a meal he made, checking to see if it is as satisfying as he hopes it is. <br><br>
 
 <<say $mc>> You know, we're traveling together in one of the most dangerous places in the world, yet I know almost nothing about you. Do you want to tell me anything about yourself?<</say>><br>
@@ -1125,7 +1129,7 @@ Maru tells you in detail how he prepared the dish. It's actually pretty simple, 
 Every 10 days, Maru will make a meal with 1 day worth of food that will keep you satisified for 2 days, saving you 1 day of food rations!<br>
 
 [[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0,$items[1].count+=1]]
-<<endif>>
+<<endif>><</nobr>>
 
 
 :: Maru Convo0 [noreturn]
@@ -1815,17 +1819,17 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 :: Cloud Convo1 [noreturn]
 <<nobr>>
 As you were walking, Cloud suddenly sprints ahead a few meters and kneels by the side of the road. When you walk over, you see him hunched over a body with multiple injuries which seem to be bullet wounds, or maybe stab wounds?<br><br>
-<<say $mc>> Oh no, what do you think happened to him? Do you think it could have been the bandits we were warned about earlier?<</say>><br>
-<<say $companion5>> Hard to say for sure, but it it were bandits, they were either cruel or simple amateurs.<</say>><br>
+<<say $mc>> What do you think happened to him? Do you think it could have been the bandits we were warned about earlier?<</say>><br>
+<<say $companion5>> Hard to say for sure, but it it were bandits, they were either cruel or simple amateurs, who wouldn't pose a real threat to us.<</say>><br>
 <<say $mc>> What makes you say that? <</say>><br>
 Cloud points to a spot on the back of the corpse.<br><br>
-<<say $companion5>> Look, here, he was shot in the back. <</say>>
+<<say $companion5>> Look, here. He was shot in the back. <</say>>
 You see cloud moving the body onto its belly to point at a gunshot wound in the upper back. <br><br>
 <<say $companion5>> But it seems off target, if you look at the angle of entry and the trauma around the shoulders, the bullet is probably lodged in there somewhere near the shoulder blades.<</say>><br>
 He then pushes the body onto its back and points at the other wounds.<br><br>
 <<say $companion5>> And these are stab wounds, but every single one missed a vital organ. Based on the amount of blood here, my guess is that he bled out in the end after managing to get away at first.<</say>><br>
-<<say $mc>> That sounds pretty gruesome. <</say>><br>
-<<say $companion5>> Indeed, check his bag. If my guess is right we might be able to find something useful. <</say>><br>
+<<say $mc>> That sounds pretty gruesome, why would they do that to him? <</say>><br>
+<<say $companion5>> Indeed, it must have been. Check his bag. If my guess is right, we might be able to find something useful. <</say>><br>
 
 <<if $convoStart>>
 [[Just follow his instructions|Cloud Convo1][$convoStart=0,$choice1=1,$companion5.affec-=0]]<br>
@@ -1848,9 +1852,11 @@ Cloud will now occasionally find and scavenge a small number of dubloons or bull
 <<say $mc>>You sure seem to know a lot about bandits. Have you had any experience with them?<</say>><br>
 You hunch to check the bag as you speak.<br><br>
 <<say $companion5>> Of course, I am a notorious former bandit. I'm surprised you didn't know.<</say>><br>
-Khemia grins and you simply stare at him in shock.<br><br>
-<<say $companion5>> I became quite infamous after stealing the hearts of countless ladies and a few men with my daring escapades.</say>><br>
-He has a big, goofy grin on his face, seemingly not worried about your response. You laugh a bit, but a part of you wonders whether it was truly a joke or if it had a hint of truth within it.<br><br><br>
+Cloud grins and you simply stare at him in shock.<br><br>
+<<say $companion5>> I became quite infamous after stealing the hearts of countless ladies and a few men with my daring escapades. Alas, those days are long gone and now I must work to change things in the world above so that all people can have true freedom, without fear of governments or bandits.</say>><br>
+He looks up wistfuly and has a big, goofy grin on his face, seemingly not worried about your response. You laugh a bit, but a part of you wonders whether it was truly a joke or if it had a hint of truth within.<br><br>
+
+You follow his instructions and reach into the small backpack besides the pale corpse. Inside, your fingers find the familiar jingle of dubloon coins. <br><br>
 
 <<say $mc>>You were right, he still had his money on him! <</say>><br>
 <<say $companion5>> So not cruel, just amateurs then, good to know. Okay, put it away and let's move on. <</say>><br>
@@ -1865,14 +1871,15 @@ Cloud will now occasionally find and scavenge a small number of dubloons or bull
 
 <<say $mc>>Why should we take anything from him? It's immoral, even if he is already dead<</say>><br>
 Cloud seems surprised for a moment, but then his face hardens.<br><br>
-<<say $companion5>> And how long do you think you're going to survive with that attitude, here in the Abyss? You have to be willing to get your hands dirty and do what it takes to get an advantage here. We didn't hurt him and its not like he'll be using the coins any more, right? We might as well make use of anything we can to make sure we survive. That's why I've been able to make so many expeditions.<</say>><br>
+<<say $companion5>> And how long do you think you're going to survive with that attitude, here in the Abyss? You have to be willing to get your hands dirty and do what it takes to get an advantage here. We didn't hurt him and its not like he'll be using the coins any more, right? We might as well make use of anything we can to make sure we survive. With the way the world is right now, that's what you have to do to survive.<</say>><br>
 He opens the pack on the ground, pulls out a few dubloons and tosses them your way. <br><br>
-<<say $companion5>> If you're not careful, you'll end up like this.<</say>><br>
+<<say $companion5>> If you're not careful, you'll end up like this. But maybe, just maybe, we can make the world better in the future.<</say>><br>
+Cloud looks up wistfully as if at some unseen dream, but then shakes his head and continues on his way.<br><br>
 
 Cloud will now occasionally find and scavenge a small number of dubloons or bullets for you!<br>
 [[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0,$dubloon+=5]]
 
-<<endif>>
+<<endif>><</nobr>>
 
 
 :: Saeko Convo0 [noreturn]
@@ -2072,22 +2079,6 @@ Talk more about research and let her reveal some stuff about the deepest layer o
 Double-click this passage to edit it.
 
 
-:: Doll event
-<<if $convoStart>>
-<<say $creepydoll>> AAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHH<</say>>
-A sudden sensation of intense pain surges through your body, making you double over. It feels as if your body has been engulfed by flames that sear each and every nerve in your skin, while a thousand needles are pushed deeper into you, all at once. Almost immediately, it becomes too much for you and you pass out.
-[[Darkness...|Doll event][$convoStart=0]]
-
-<<else>>
-You wake up in a corner of the Relic Workshop with the doll clutched tightly in your arms, pressed against your chest. It gives a pleasantly warm feeling, comforting you after your terrifying experience before you passed out. Somehow, as you hug the doll, you feel calm and satisfied for at least a moment. When you look down and check your skin, everything seems alright, no scars or burns anywhere. Luckily it seems that your body has not actually been torn apart, instead it was either a psychic attack of some sort or a vision of a possible future. Whatever the case, perhaps its better to not proceed with the plan to cut open the doll.
-<<link "Was there anything else I wanted to do here?" "Surface Workshop">>
-  <<dollTF>>
-  <<set $convoStart=1>>
-  <<set $dollevent=true>>
-<</link>>
-<<endif>>
-
-
 :: L2 LLew LInhum HAge HDub [ending]
 Its been a long journey but everything needs to end. After long contemplation, you decide that it is time to settle down and enjoy your life. With all the money you made you even had the chance to improve the lives of a lot of people. So you chose to stay on the second layer, where you could really make a difference. The first thing you needed to do was gain their trust, so you imported food from the first layer and surface. that act brings you into the good books of almost everyone and allows you to takel the next biggest problem. The criminal activity in the second layer was even worse than expected, but you had an idea how to solve it. You talked to the mayor of the Village and after a little "donation" he allows you to start a police force. With the money you had left you founded expeditions to get more relics which you sold to pay the police force and keep importing food. This continued some time and you became quickly the most popular person on the second layer and even got elected as the mayor. Under your rule Downcast village grow almost to twice its original size. one of your most ingenious ideas was to turn it into a beloved tourist spot. Sometimes you start to miss your old life, the excitement the adventure, and even the struggle to survive. But then you look down on the city you helpt to create and remember why you gave it all up, You wanted to do good in the Abyss, and by god you did it.
 
@@ -2170,109 +2161,6 @@ Double-click this passage to edit it.
 
 :: L2 HLew HInhum LAge LDub
 Double-click this passage to edit it.
-
-
-:: DollWarning
-<<Update_MC_Speech>>
-<<if $convoStart==1>>
-Suddenly, you start hearing the voice of the doll again, it almost sounds like it's coming from inside your own head.
-
-<<say $creepydoll>> Don't you sometimes get tired of all this adventuring?<</say>>
-
-Despite your surprise, you decide to answer the doll's question.
-
-<<say $mc>> Sometimes, I guess. It's not always easy, but the thrill of adventure more than makes up for it to me. <</say>>
-
-<<say $creepydoll>> You know, I can feel what you feel? And what I felt was sleepyness and tired thoughts and lots of doubt. Don't lie to me. Lying is not nice. Good girls don't lie. Only BAD people lie. IF YOU LIE YOU NEED TO GET PUNISHED. I HATE LIARS! HATE HATE HATE HATE HATE THEM<</say>>
-
-A strong, cold chill runs down your spine.
-
-<<say $mc>>I... I'm not lying I swear! It's just that with the changes to my body I fatigue much quicker than before. I have to try harder and harder to do the same things. But I swear that I still want to discover more of the Abyss. I can't just give up and I won't! I think it's worth it and I enjoy it!<</say>>
-
-The cold sensation dissipates and you feel a warm, soft aura comming from the doll once again.
-
-<<say $creepydoll>> Oh, I see! You just want to have fun! I also want to have fun! You know what doesn't make you sleepy and is super fun?<</say>>
-
-<<say $mc>> Uh, no? <</say>>
-
-<<say $creepydoll>> Playing games, silly. We should go to my house and play all day! That would be super fun! <</say>>
-
-You're a bit hesitant about going to god-forsaken corner of the Abyss to "play", so you try to weasle out of it while attempting to avoid the doll's anger.
-
-<<say $mc>>Maybe that could be fun someday, okay?<</say>>
-
-<<say $creepydoll>> Yay, I'm so happy! Because today is some day you know?<</say>>
-
-<<say $mc>> Um, sorry, I didn't mean today. I meant another day...<</say>>
-
-You feel very tired all of a sudden and your consciousness starts to slip away.
-
-You start to dream.
-
-You see yourself walking around with your dolly and at some point you recognize the outskirts of Outcast Village as you seem to pass it by. The next moment, you are in a playroom, in a house wearing a similar dress as your dolly. You look so cute together! You have tea time with her and you run around playing tag.
-
-It's so much fun you can hardly keep track of what's happening.<<nobr>>
-<<dollTF>>
-<</nobr>>
-As you run, you trip over something that somehow didn't seem to fully be there. The shock suddenly wakes you up, and you realize you fell over a rotting, collapsed wooden support beam. After looking around, you find yourself not in the playroom of a nice house, but in the decrepit room on the first layer where you found the creepy doll.
-
-<<say $creepydoll>> Aww, did you have an ouchie?<</say>>
-
-<<say $mc>> What...? Where am I? Why are we here? Why am I wearring this tattered dress?<</say>>
-
-<<say $creepydoll>> Because it makes us look like cute twins!<</say>>
-
-<<say $mc>> I... I don't want this. Or at least, I think I don't?<</say>>
-
-<<say $creepydoll>> Oh somebody is grumpy, so why don't you take a nap, and then we'll decide later?<</say>>
-
-[[Don't risk the dolls ire and take the nap|DollWarning][$convoStart=0, $choice1=1]]
-[[Insist you want to leave NOW!|DollWarning][$convoStart=0, $choice1=2]]
-
-<<elseif $convoStart==0 && $choice1==1>>
-<<say $creepydoll>> Good girl, we are going to have so much fun together when you wake up. <</say>>
-
-[[A soft, warm darkness washes over you|DollEnd][$convoStart=1, $choice1=0, $app.appAge=3, $app.penis=0, $app.vagina=1, $app.gender=6, $dollevent2=true]]
-<<elseif $convoStart==0 && $choice1==2>>
-<<say $mc>> I'd rather really not. To be honest, I just want to get my regular clothes back, to leave this place, and to go somewhere else. <</say>><br>
-<<say $creepydoll>> Hmm, thats okay. We already played a lot today. We'll just play some other time. Soon...<</say>>
-
-You scramble to get your clothes and hurry out of the rotten house, leaving this place and the doll far behind. Once there is some distance between you and the doll, you stop to change your clothes. But instead of grabbing your clothes, you find the doll in your hands, once again.
-
-<<say $mc>> What?! How?! I'm pretty sure I grabbed my clothes, right?<</say>><br>
-<<say $creepydoll>> Those smelly old things? Why would you need those? You look much better than this, you silly. Now we are cute twinsies. ISN'T THAT FUN?<</say>>
-
-You want to throw the doll away, but your body simply refuses. At the moment it seems there is nothing you can do. No matter what you want to do, you can neither get rid of the doll, nor change your clothes.
-
-[[Continue your adventure wearing the tattered dress and carrying the doll|Layer1 Hub][$creepydoll.affec += 10, $convoStart=1, $dollevent2=true, $choice1=0]]
-<<endif>>
-
-
-:: DollEnd
-When you go to sleep, you dream once again.
-
-You dream about the playroom you were in, with your dolly.
-
-Your tattered pink dress doesn't look tattered at all anymore. It looks just like your dolly's dress. In fact, you started to look more like your dolly as well. But that's okay. It makes you look like a cute pair of twins after all.
-
-You have tea time with your dolly, chatting away about how beautiful your dresses are, how tasty your tea is, and how nice it is to spend this time together.
-
-You also play house with your dolly, taking turns switching who is the mommy and who is the baby. And once you get tired of playing you cuddle with your dolly until you fall a sleep again, just so you could play with her more the next day! It's so much fun!
-
-Over time she even grows a lot so you can cuddle better! That's so nice of your dolly, she is the best! She's so considerate of you, making sure you're always content and comfortable where you are.
-
-Sometimes you get a feeling like you lost something. Somethin precious to you that is now gone and locked away. But the feeling never lasts long as you sink back into your happy and comfortable life.
-
-<<say $rndM>> Look! There they are! We found 'em! <</say>>
-<<say $rndF>> I don't know... They look pretty creepy to me.<</say>>
-<<say $rndM>> Duh, that's why they are called the Creepy Twin Dolls. What else did you expect? <</say>>
-<<say $rndF>> What do you think they do? I heard they're creepy, but there must be something more. Nothing is simple down here. <</say>>
-<<say $rndM>> I don't know. But a relic is relic. Worst case scenario we just sell 'em. But, who knows, they might just do something awesome! Here, take one, I'll keep the other.<</say>>
-<<say $rndF>> You know what, now that I'm holding one it actually doesn't feel as creepy anymore. In a weird way, it feels comforting. I think maybe I'll just keep her.<</say>>
-<<say $rndM>> Haha, that was a quick 180! But I sort of get what you mean. They can be our good luck charms, maybe they'll help keep us alive.<</say>>
-<<say $rndF>> Yeah, exactly. I think I'll call mine $mc.name.<</say>>
-
-@@.layerTitle;GAME OVER@@
 
 
 :: Use Items
@@ -2428,27 +2316,6 @@ After reading from the book, Saeko's looks a bit sad as she turns the last page,
 [[Return to exploring|$return]]
 
 
-:: Surface Inn
-[img[setup.ImagePath+'Surface/Inn Room.png']]
-
-<<nobr>>
-<<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1)>>
-	<br><br>Due to your inn pass, you're able to eat and drink your fill, overcoming any deficits you've built up over time after you visit the Inn.<br><br>
-	<<set $items[0].count = Math.max($items[0].count, 0)>>
-	<<set $items[1].count = Math.max($items[1].count, 0)>>
-<<endif>>
-
-<<if $innUsed != $time>>
-You can eat and drink enough to make yourself extra full and save a day of food and water on your travels. <br><br>
-	[[Eat and drink the delicious food and drink|Surface Inn][$items[0].count += 1, $items[1].count += 1, $innUsed = $time]]
-<<else>>
-You are already full, but you can come back another day to get more freshly cooked meals and clear, cool water when you come back later.
-<<endif>>
-<</nobr>>
-
-[[Return to Outset Town|Surface Hub]]
-
-
 :: L2 Gooey end [ending]
 You stand on the cupboard directly over the two man, a small camera relic in hand waiting for the perfect moment.
 "Are you sure mister Reed won't find out about this ?", " He is very ... unkind to traitors and what you are planning is ... . "He won't find out, the plan is as safe as safe can be, and afterward we'll be richer than he could ever imagine". the two man leave after checking the windows and locking the door and you start your job. You jump down from the cupboard without hurting yourself thanks to your slime-like body and look for the plans on the desk. Once you found them you use your camera to photograph them and crawl back up to the cupboard once again using your slime-like properties. Smiling to yourself you leave through a mousehole. At first, you were devastated by your new body, you tried your best to continue your journey with your small and slimy body but in the end, you had to give up. stranded on the second layer you cursed your fate. You survived the first month by stealing. You ended up getting crushed and squished more times than you can count but always bouncing back once everyone left thanks to your slimy body. After a while, mister Reed approached you with an offer to work as a spy for him. Mister Reed is one of the most dangerous people in the upper layers of the Abyss he has connections reaching all the way up to the surface and some rumors say even down on the fourth layer.
@@ -2493,3 +2360,165 @@ You can use the balloon to send requests and relics back to Outset Town. You can
 <</nobr>>
 
 [[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Admin [noreturn]
+You can send a request to the Outset Town Administration. There seem to be a number of services that are provided here for people who need them, including managing debts and changing your legal name.
+
+For a small fee of 10 dubloons, you can change your legal name from $app.name to whatever you wish.
+[[Change your name|Balloon Name]]
+
+<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
+[[Borrow more money|Balloon debt1]]
+<<endif>>
+<<if $debt > 0>>
+You currently have $debt dubloons of debt, which you can pay off now to allow yourself to settle down at a habitation option.
+[[Pay off your debt|Balloon debt2]]
+<<endif>>
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Name [noreturn]
+<<set $dubloons -= 10>>
+
+The balloon sends down some surprisingly concise forms where you can fill out your new name, changing it for all official purposes.
+
+What is your new name?
+<<textbox "$app.name" "Nana" "Commerce Balloon">>
+
+
+:: Balloon debt1 [noreturn]
+Cloud is willing to allow you to use his connections to fund your expedition, as long as you can pay back the loan after you're done, with interest of course.
+
+How many dubloons would you like to borrow?
+<<textbox "$temp" "">>
+
+[[Confirm|Commerce Balloon][$dubloons += parseInt($temp), $debt += parseInt(Math.round($temp * 1.2))]]
+<<back>>
+
+
+:: Balloon debt2 [noreturn]
+In order to finally settle down at an ending, you must pay off your debt to Cloud's mysterious connections. You currently owe $debt dubloons of debt to them.
+
+How many dubloons would you like to pay back?
+<<textbox "$temp" "">>
+
+[[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
+<<back>>
+
+
+:: Maru Leaving [noreturn]
+<<nobr>>
+Maru whimpers as tears begin to pour down his face.<br><br>
+
+<<say $companion1>>How can you be so mean?! I can't take this anymore!<</say>><br>
+
+Maru storms off, you consider chasing after him, but soon he is out of sight. You see no other option but to continue your expedition without him.<br>
+
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Maru'>>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $companion1.affec=-9>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[[Return|$return]]
+
+
+:: Lily Leaving [noreturn]
+<<nobr>>
+Lily looks shocked at your abhorrent actions.<br><br>
+
+<<say $companion2>>You really went too far this time! I can forgive a lot, but this...<</say>><br>
+
+Lily looks more disappointed than angry, but regardless of her feelings she collects her stuff and leaves you with your thoughts.<br>
+
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Lily'>>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $companion2.affec=-9>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[[Return|$return]]
+
+
+:: Khemia Leaving [noreturn]
+<<nobr>>
+Khemia gives you a cold, hard stare, none of his typically casual demeanor is visible.<br><br>
+
+<<say $companion3>>Well, <<PerceivedGender2>>, we're done here. I'll find a new group to travel with to the bottom of the Abyss. I don't want to spend another second with a person like you!<</say>><br>
+
+He shoves you aside as he begins to make his way back to the surface by himself.<br>
+
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Khemia'>>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $companion3.affec=-9>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[[Return|$return]]
+
+
+:: Cherry Leaving [noreturn]
+<<nobr>>
+Cherry's face contorts as she gives you a look of disgust, uncharacteristic of her typically stoic appearance.<br><br>
+
+<<say $companion4>> I honestly thought I didn't care much about anything anymore... But I guess I have to thank you because you made me realize that I do feel very strongly about staying the fuck away from you.<</say>><br>
+
+She starts wandering in a different direction. You try to call out and reason with her, but she simply ignores you and you are forced to give up and watch her leave.<br>
+
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Cherry'>>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $companion4.affec=-9>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[[Return|$return]]
+
+
+:: Cloud Leaving [noreturn]
+<<nobr>>
+When you walk back to your tent for the night, you spot a note. It appears to be from Cloud. It simply says "Without trust there can be no loyalty, and without loyalty there can be no true accomplishments". You look around to see if you can find Cloud to discuss the note, but even after searching for an hour he is nowhere to be found. He's gone, you realize, and he won't be coming back.<br>
+
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Cloud'>>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $companion5.affec=-9>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[[Return|$return]]
+
+
+:: Saeko Leaving [noreturn]
+<<nobr>>
+Saeko lets out a long sigh, obviously exasperated with your recent actions.<br><br>
+
+<<say $companion6>>In light of our unproductive collaboration, I feel forced to hand in my resignation from this expedition.<</say>><br>
+
+<<say $mc>> Huh? Why?<</say>><br>
+
+Saeko's face radiates agitation and her eye twitches subtly.<br><br>
+
+<<say $companion6>> What do you mean, why? After all the stunts you've pulled, I'm happy I can simply leave here safely as the same person I was when I entered! I...<</say>><br>
+
+She stops herself and takes a deep breath. <br><br>
+
+<<say $companion6>> Arguing is simply a waste of time at this point. I've made up my mind. I could say I wish you the best of luck, but unfortunately I don't think I do wish that for you.<</say>>
+
+She gathers all her materials and sets out for the surface once again.<br>
+
+
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Saeko'>>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $companion6.affec=-9>>
+	<<endif>>
+<</for>>
+<</nobr>>
+[[Return|$return]]

@@ -314,9 +314,16 @@ These are the curses available for you to take to help manage your corruption:
 << set $DubCrit =250>>
 
 
+<br><<return>><br><br>
 
-<<if $corruption >= 0>>
- <</nobr>>
+	<<if $corruption >= 0>>
+	[[Choose to stay on the second layer|Habitation Ending]]
+	<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<<endif>><</nobr>>
+
+/*<<nobr>>
+	<<if $corruption >= 0 && $debt <= 0>>
 		Note: This ending is simply a possible future for you, assuming you go with the flow for the rest of your life. If you want to avoid them using the Companions, Relics, and Curses you have obtained, then you will be able to, as long as they are within the bounds of the habitation option you have selected.<br><br>
 		<<HeightCorrected>> <<BreastCorrected>> <<Lewdness>> <<Inhuman>>
 	<<if $playerCurses.some(e => e.name === "Gooey") && $app.heightCor<140>>
@@ -353,12 +360,14 @@ These are the curses available for you to take to help manage your corruption:
 		[[Choose to settle in Downcast village|L2 HLew HInhum LAge HDub]]
 	<<else>>
 		[[Choose to settle in Downcast village|L2 HLew HInhum LAge LDub]]
+	<<elseif $corruption < 0>>
+		You must have a corruption value of 0 or greater to choose a habitation option.
+	<<else>>
+		You must pay off all of your debt to settle down for habitation on the surface. You have $debt dubloons of debt, which you can pay at the Administrative Building.
 	<<endif>>
-<<else>>
-	<</nobr>>
-	You must have a corruption value of 0 or greater to choose a habitation option.
-<<endif>>
 <<return>>
+<</nobr>>
+*/
 
 
 :: Layer2 Ascend 1 [layer2]
@@ -679,22 +688,27 @@ In the morning, you wake up to a very different circumstance. Whose body do you 
 <<set $swapComp = $temp>>
 <<set $tempTime = 3>>
 <<include "Layer2Time">>
-<</nobr>>
 <<set $hiredCompanions[$swapComp].carry = $temp2>>
 <</nobr>>
 You've woken up in the body of $hiredCompanions[$swapComp].name! And $hiredCompanions[$swapComp].name has woken up in your body!
 
 How do you feel? Did you ask your companion before the switch? Be prepared for your relationship to change if they didn't want this.
 
-[[Continue exploring the layer|Layer2 Hub]]
-
 <<nobr>>
-
+<<set $temp = $app.osex>>
+<<set $temp2 = $app.gender>>
 <<set $app.osex = $hiredCompanions[$swapComp].osex>>
 <<set $app.sex = $hiredCompanions[$swapComp].osex>>
 <<set $app.breasts = $hiredCompanions[$swapComp].obreasts>>
 <<set $app.penis = $hiredCompanions[$swapComp].openis>>
-<<set $app.gender = $hiredCompanions[$swapComp].ogender>>
+<<set $app.ogender = $hiredCompanions[$swapComp].ogender>>
+<<set $app.oheight = $hiredCompanions[$swapComp].oheight>>
+<<set $app.height = $app.oheight + $app.modheight>>
+<<set $app.hairColor = $hiredCompanions[$swapComp].hairColor>>
+<<set $app.skinColor = $hiredCompanions[$swapComp].skinColor>>
+<<set $app.desc += $hiredCompanions[$swapComp].appDesc>>
+
+
 
 <<if $playerCurses.some(e => e.name === "Futa Fun")>>
 <<if $app.osex == "male">>
@@ -722,70 +736,13 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 <<endif>>
 <<endif>>
 
-<<set $app.oheight = $hiredCompanions[$swapComp].oheight>>
-<<set $app.height = $app.oheight + $app.modheight>>
-<<set $app.hairColor = $hiredCompanions[$swapComp].hairColor>>
-<<set $app.skinColor = $hiredCompanions[$swapComp].skinColor>>
-<<set $app.desc += $hiredCompanions[$swapComp].appDesc>>
-
-<<if $hiredCompanions[$swapComp].name=="Maru">>
-	<<set $companion1.genderVoice = app.ogender>>
-	<<set $companion1.affec -= 5>>
-	<<set $companion1.swap = true>>
-<<elseif $hiredCompanions[$swapComp].name=="Lily">>
-	<<set $companion2.genderVoice = app.ogender>>
-	<<set $companion2.affec -= 5>>
-	<<set $companion2.swap = true>>
-<<elseif $hiredCompanions[$swapComp].name=="Khemia">>
-	<<set $companion3.genderVoice = app.ogender>>
-	<<set $companion3.affec -= 5>>
-	<<set $companion3.swap = true>>
-<<elseif $hiredCompanions[$swapComp].name=="Cherry">>
-	<<set $companion4.genderVoice = app.ogender>>
-	<<set $companion4.affec -= (5-$hsswear)>>
-	<<set $companion4.swap = true>>
-<<elseif $hiredCompanions[$swapComp].name=="Cloud">>
-	<<set $companion5.genderVoice = app.ogender>>
-	<<set $companion5.affec -= 5>>
-	<<set $companion5.swap = true>>
-<<elseif $hiredCompanions[$swapComp].name=="Saeko">>
-	<<set $companion6.genderVoice = app.ogender>>
-	<<set $companion6.affec -= 5>>
-	<<set $companion6.swap = true>>
-<<endif>>
-
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
-	<<set $companion1.genderVoice = app.ogender>>
-	<<set $companion1.affec -= (3-$hsswear)>>
-	<<set $companion1.swap = true>>
-<<elseif $hiredCompanions.some(e => e.name === "Lily")>>
-	<<set $companion2.genderVoice = app.ogender>>
-	<<set $companion2.affec -= (3-$hsswear)>>
-	<<set $companion2.swap = true>>
-<<elseif $hiredCompanions.some(e => e.name === "Khemia")>>
-	<<set $companion3.genderVoice = app.ogender>>
-	<<set $companion3.affec -= (3-$hsswear)>>
-	<<set $companion3.swap = true>>
-<<elseif $hiredCompanions.some(e => e.name === "Cherry")>>
-	<<set $companion4.genderVoice = app.ogender>>
-	<<set $companion4.affec -= (3-$hsswear)>>
-	<<set $companion4.swap = true>>
-<<elseif $hiredCompanions.some(e => e.name === "Cloud")>>
-	<<set $companion5.genderVoice = app.ogender>>
-	<<set $companion5.affec -= (3-$hsswear)>>
-	<<set $companion5.swap = true>>
-<<elseif $hiredCompanions.some(e => e.name === "Saeko")>>
-	<<set $companion6.genderVoice = app.ogender>>
-	<<set $companion6.affec -= (3-$hsswear)>>
-	<<set $companion6.swap = true>>
-<<endif>>
-
 <<if $app.sex == "female" || $app.sex == "futa">>
 	<<set $app.breasts += $app.modbreasts>>
 <<endif>>
 <<if $app.sex == "male" || $app.sex == "futa">>
 	<<set $app.penis += $app.modpenis>>
 <<endif>>
+
 <<if $app.osex == "male">>
 	<<set $app.gender = $app.ogender + $app.modgender>>
 	<<else>>
@@ -801,7 +758,192 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 	<<set $app.breasts = 1>>
 <<endif>>
 <<endif>>
+<<set $app.switch=true>>
+<<Update_MC_Speech>>
 
+<<if $hiredCompanions[$swapComp].name=="Maru">>
+	<<set $companion1.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companion1.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companion1.imageIcon="Icons/npcF.png">>
+	<<endif>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companion1.affec -= (7-$hsswear)>>
+	<<set $companion1.swap = true>>
+
+	<<say $companion1>> Huh? what happened to me? Why do I feel so strange? And why am I also standing right there?<</say>><br>
+	Your old body points at you, a look of confusion across their face.<br><br>
+	<<say $mc>> I'm sorry Maru, I had to do this. Trust me, it's better for the whole expedition in the long run.<</say>><br>
+	<<say $companion1>> You took my body? How... I... <</say>><br>
+	He breaks down in tears. It's strange to see your old body sobbing from this perspective.<br><br>
+	<<say $mc>> Please stop crying, we might even be able to reverse this eventually with another wonder!<</say>><br>
+	<<say $companion1>> You think? Do you promise to change me back if we do?<</say>><br>
+	<<say $mc>> Absolutely! <</say>><br>
+<<elseif $hiredCompanions[$swapComp].name=="Lily">>
+	<<set $companion2.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companion2.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companion2.imageIcon="Icons/npcF.png">>
+	<<endif>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companion2.affec -= (7-$hsswear)>>
+	<<set $companion2.swap = true>>
+		<<say $companion2>> What the hell? Why do I see myself over there?<</say>><br>
+	Your old body points towards you accusingly.<br><br>
+	<<say $mc>> I'm sorry Lily, I had to do this. Trust me it's better for the whole expedition in the long run<</say>><br>
+	As Lily looks down she notices she is not in her own body anymore.<br><br>
+	<<if $temp=='male'>>
+	<<say $companion2>> What? I'm your body now? Oh my god, I've turned into a man?! No I can't be! My beautiful face, I...<</say>><br>
+	She's gone in a full blown meltdown, bumbling incoherently<br><br>
+	<<say $mc>>Lily! Snap out of it! There are worse things than...<</say>><br>
+	Lily fixes her gaze at you and punches you in the face. You fall back, shocked<br><br>
+	<<say $companion2>> WORSE THAN THIS!?<</say>><br>
+	You look back up to her in shock, afraid that she may become even more violent. Looking back at you she softens slightly.<br><br>
+	<<say $companion2>> Ah shit, I'm sorry. I shouldn't have hit you, especially since it would now count as a guy hitting a girl.<</say>><br>
+	She scowls at that thought.<br><br>
+	<<say $mc>> It's okay, I guess I deserved that one.<</say>><br>
+	<<say $companion2>> Yeah, you kind of did. But at the very least I should avoid damaging that perfect face while you're borrowing it. Be sure to return it to me soon, okay?<</say>><br>
+	She gives you a bit of a wry smile and you nod in approval. You have never seen her so angry as just now and feel that she is probably still just as angry, even if she isn't showing it overtly. Apparently she valued her own body even more than you thought.<br><br>
+	<<set $companion2.affec-=-3>>
+	<<else>>
+	<<say $companion2>> What? I'm your body now? But my beautiful angelic face and my...<</say>><br>
+	She looks as if she is a about to have a meltdown, but then she grits her teeth and begins walking towards you.<br><br>
+	<<say $companion2>> You better fix this right now!<</say>><br>
+	She grabs you by your collar, looking like she might choke the life out of you.<br><br>
+	<<say $mc>> Stop! Stop! I promise I'll try to fix it if I find a way!<</say>><br>
+	<<say $companion2>> IF? you better pray for your own sake that there is a way!<</say>><br>
+	You gulp. You have never seen her so angry. Apparently she valued her own body even more than you thought.<br><br>
+	<<endif>>
+<<elseif $hiredCompanions[$swapComp].name=="Khemia">>
+	<<set $companion3.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companion3.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companion3.imageIcon="Icons/npcF.png">>
+	<<endif>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companion3.affec -= (7-$hsswear)>>
+	<<set $companion3.swap = true>>
+	<<say $companion3>> I feel weird, $mc.name. Why do I feel so sluggish?<</say>><br>
+	<<say $mc>> I'm sorry Khemia, I had to do this. Trust me it's better for the whole expedition in the long run.<</say>><br>
+	It seems he only just now notices that he is looking at his own former body.<br><br>
+	<<say $companion3>> What the hell?<</say>><br>
+	He looks down at himself and sees he is now the inhabitant of your former body instead of his own.<br><br>
+	<<if $temp=='female'>>
+		<<say $companion3>> You asshole! You switched our bodies? Do you know how long I've trained that body you now STOLE from me?!<</say>><br>
+		He stomps over as he seems ready to punch you in the face. His smaller feminine body however, looks much less intimidating as it struts over to you in a fit.<br><br>
+		<<say $mc>> Whoa, hold on, lets talk this out!<</say>><br>
+		<<say $companion3>> There is nothing to talk about, asshole. Not only did you steal my body, but on top off that I'm now stuck as a freaking chick as well!<</say>><br>
+		<<say $mc>> Look, it might not even be permanent, who knows?<</say>><br>
+		<<say $companion3>> WHO KNOWS? I KNOW I'M GOING TO FUCK YOU UP IF THIS IS PERMANENT!<</say>><br>
+		<<set companion3.affec-=3>>
+	<<else>>
+		<<say $companion3>> You asshole! you switched our bodies? Do you know how long I've trained that body you now STOLE from me?!<</say>><br>
+		He stomps over as he seems ready to punch you in the face.<br><br>
+		<<say $mc>> Whoa hold on, hold on, lets talk this out<</say>><br>
+		<<say $companion3>> There is nothing to talk about asshole. You stole my body, and in the Abyss we call people who steal things bandits, and I know how to handle bandits...<</say>><br>
+		<<say $mc>> Look, it might not even be permanent, who knows?<</say>><br>
+		<<say $companion3>> For your sake, it better not be... I guess I'll keep you safe for now, since you are holding my body hostage.<</say>><br>
+	<<endif>>
+
+<<elseif $hiredCompanions[$swapComp].name=="Cherry">>
+	<<set $companion4.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companion4.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companion4.imageIcon="Icons/npcF.png">>
+	<<endif>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companion4.affec -= (5-$hsswear)>>
+	<<set $companion4.swap = true>>
+	<<say $companion4>> Huh? What happened? Why am I looking at myself?<</say>><br>
+	<<say $mc>> I'm sorry Cherry, I had to do this. Trust me, it's better for the whole expedition in the long run.<</say>><br>
+	<<say $companion4>> You switched bodies with me?<</say>><br>
+	She looks down in silence. After a while you decide to speak up.<br><br>
+	<<say $mc>> Are you okay, Cherry?<</say>><br>
+	<<say $companion4>> I don't know... I thought after all this time I really stopped caring... But if that's true, why do I still feel sad now?</say>><br>
+	<<say $mc>> Ah, again, sorry I had to do this. If I can find a way to reverse this I absolutely will.<</say>><br>
+	<<say $companion4>> You saying that makes me a little less sad, I think.<</say>><br>
+<<elseif $hiredCompanions[$swapComp].name=="Cloud">>
+	<<set $companion5.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companion5.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companion5.imageIcon="Icons/npcF.png">>
+	<<endif>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companion5.affec -= (7-$hsswear)>>
+	<<set $companion5.swap = true>>
+	<<say $companion5>> There's something wrong...<</say>><br>
+	He immediately sticks two fingers in his throat and starts to throw up.<br>
+	<<say $companion5>> Quick, water, somebody! I think I've been poisoned, I'm hallucinating and I feel wrong.<</say>><br>
+	<<say $mc>> Stop! Look, I'm sorry Cloud, but I had to do this, I switched our bodies. Trust me, it's better for the whole expedition in the long run<</say>><br>
+	Cloud seems to calm down and look at you with an icy glare.<br><br>
+	<<say $companion5>> You fucking traitor, how could you? I trusted you, and trust is the most important thing on an expedition like this.<</say>><br>
+	<<say $mc>> Again, I'm sorry Cloud, if there is a way to switch our bodies ba...<</say>><br>
+	<<say $companion5>> You think I care about the body? Well, okay, maybe a little, but it's more that we were supposed to have each others backs down here. And you just screwed me over big time. But you know what, the jokes on you 'cause more than a few people want your new face dead. You better stick with me real close if you know what's good for you.<</say>><br>
+	You gulp<br><br>
+	<<say $mc>> Yes, sir!<</say>><br>
+	<<say $companion5>> And after this expedition's over, you're comming with me, because I can't really show up to some people looking like this...<</say>><br>
+<<elseif $hiredCompanions[$swapComp].name=="Saeko">>
+	<<set $companion6.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companion6.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companion6.imageIcon="Icons/npcF.png">>
+	<<endif>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companion6.affec -= (7-$hsswear)>>
+	<<set $companion6.swap = true>>
+	<<say $companion6>> Huh? What is...<</say>><br>
+	She inspects her own body and than looks up at her former body. You see her eyes go wide in sudden realization.<br><br>
+	<<say $companion6>> Tell me you didn't use the Fate Crossing Star pond to switch our bodies?<</say>><br>
+	<<say $mc>> Uh, I'm sorry, I kinda did. But it was for the benefit of...<</say>><br>
+	You stop talking as you see Saeko already sniffeling and on the verge of breaking down. After a moment of silence she partially collects herself.<br><br>
+	<<say $companion6>> I suppose I get it. Two people just switching bodies is better than one member becoming more increasingly hindered by curses. I get it. I get it.<</say>><br>
+	She still sniffles a bit between mumbling. <br><br>
+	<<say $mc>> Look, its just like you said. I...<</say>><br>
+	<<say $companion6>> I SAID I GET IT!<</say>><br>
+	You fall silent for a bit.<br><br>
+	<<say $mc>> If it makes you feel better, I'll promise to switch back our bodies as soon as I can.<</say>><br>
+	Saeko rolls her eyes dramatically in response. <br><br>
+	<<say $companion6>> Yeah, no problem, we'll just use the other body switching wonder we know of to trade back. <</say>><br>
+	<<say $mc>> Great! Where is it?<</say>><br>
+	<<say $companion6>> You're eiher an idiot or cruel, and I honestly can't tell which right now.<</say>><br>
+	She walks off with your body, still clearly very much annoyed.
+<<endif>>
+
+<<if $hiredCompanions.length>1>>
+The rest of your companions are clearly not aproving of your action as well<br><br>
+<<if $hiredCompanions.some(e => e.name === "Maru") && $companion1.swap==false>>
+	<<set $companion1.affec -= (3-$hsswear)>>
+	<<say $companion1>> That's not nice... <</say>><br>
+<<endif>>
+<<if $hiredCompanions.some(e => e.name === "Lily") && $companion2.swap==false>>
+	<<set $companion2.affec -= (3-$hsswear)>>
+	<<say $companion2>> How could you?! <</say>><br>
+<<endif>>
+<<if $hiredCompanions.some(e => e.name === "Khemia") && $companion3.swap==false>>
+	<<set $companion3.affec -= (3-$hsswear)>>
+	<<say $companion3>> Not cool! Why would you do that? <</say>><br>
+<<endif>>
+<<if $hiredCompanions.some(e => e.name === "Cherry") && $companion4.swap==false>>
+	<<set $companion4.affec -= (3-$hsswear)>>
+	<<say $companion4>> I thought you were different... <</say>><br>
+<<endif>>
+<<if $hiredCompanions.some(e => e.name === "Cloud") && $companion5.swap==false>>
+	<<set $companion5.affec -= (3-$hsswear)>>
+	<<say $companion5>> Tsk. Untrustworthy... <</say>><br>
+<<endif>>
+<<if $hiredCompanions.some(e => e.name === "Saeko") && $companion6.swap==false>>
+	<<set $companion6.affec -= (3-$hsswear)>>
+	<<say $companion6>> Your modus operandi has been noted... <</say>><br>
+<<endif>>
+<<endif>>
+
+[[Continue exploring the layer|Layer2 Hub]]
 <</nobr>>
 
 

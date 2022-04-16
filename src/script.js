@@ -18,6 +18,24 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
 		return "AgeEnd";
 	}
+	if (StoryVar.companion1.affec < -9 && !StoryVar.companion1.swap) {
+		return "Maru Leaving";
+	}
+	if (StoryVar.companion2.affec < -9 && !StoryVar.companion2.swap) {
+		return "Lily Leaving";
+	}
+	if (StoryVar.companion3.affec < -9 && !StoryVar.companion3.swap) {
+		return "Khemia Leaving";
+	}
+	if (StoryVar.companion4.affec < -12 && !StoryVar.companion4.swap) {
+		return "Cherry Leaving";
+	}
+	if (StoryVar.companion5.affec < -9 && !StoryVar.companion5.swap) {
+		return "Cloud Leaving";
+	}
+	if (StoryVar.companion6.affec < -9 && !StoryVar.companion6.swap) {
+		return "Saeko Leaving";
+	}
 	return destPassage;
 };
 

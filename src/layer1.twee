@@ -3,7 +3,7 @@
 <<set $currentLayer = 1>>
 <<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
 <<if $dubloons < 0>>
-	<<set $debt += (-1 * $dubloons)>>
+	<<set $debt += parseInt(Math.round(-1 * $dubloons * 1.2))>>
 	<<set $dubloons = 0>>
 <<endif>>
 <</nobr>>
@@ -222,7 +222,7 @@ If you decide to start foraging for food or water, it means that you will not re
 <<set $AgeCrit=10>>
 <<set $DubCrit=250>>
 
-	<<if $corruption >= 0>>
+	<<if $corruption >= 0 && $debt <= 0>>
 		Note: This ending is simply a possible future for you, assuming you go with the flow for the rest of your life. If you want to avoid them using the Companions, Relics, and Curses you have obtained, then you will be able to, as long as they are within the bounds of the habitation option you have selected.<br><br>
 		<<HeightCorrected>> <<BreastCorrected>> <<Lewdness>> <<Inhuman>>
 	<<if $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && $dubloons>$DubCrit >>
@@ -258,9 +258,11 @@ If you decide to start foraging for food or water, it means that you will not re
 	<<else>>
 		[[Choose to settle in Outcast village|L1 HLew HInhum LAge LDub]]
 	<<endif>>
-<<else>>
-	You must have a corruption value of 0 or greater to choose a habitation option.
-<<endif>>
+	<<elseif $corruption < 0>>
+		You must have a corruption value of 0 or greater to choose a habitation option.
+	<<else>>
+		You must pay off all of your debt to settle down for habitation on the surface. You have $debt dubloons of debt, which you can pay at the Administrative Building.
+	<<endif>>
 
 <</nobr>>
 
@@ -742,7 +744,9 @@ You have successfully taken on the $curse3.name curse. Hopefully you are ok with
 :: Take on Clothing Restriction A [layer1]
 <<set $playerCurses.push($curse4)>><<set $corruption += $curse4.corr>>
 
-You have successfully taken on the $curse4.name curse. Hopefully you are ok with accepting the permanent consequences.
+A sudden compulsion washes over you, you need to get of your accessories, immediately. It's like they have suddenly become an unbearably uncomfortable burden on your mind. Whether it is a hat, a necklace, or a ring, you cannot accept keeping it on your body for any longer.
+
+While it doesn't cause you any physical pain or anything like that, you do feel a fixation on removing it as soon as possible, as if you had a form of selective OCD that made your remove all of your accesories. And you know that from now on, you won't be wearing any accesories in the future, at least not of your own free will.
 
 [[Accept more curses from the first layer|Layer1 Curses]]
 <<if $escBalDepl==0>>
@@ -818,7 +822,9 @@ You shiver at the sensation, but it quickly passes. You're left with shaking the
 :: Take on Perma-dye [layer1]
 <<set $playerCurses.push($curse7)>><<set $corruption += $curse7.corr>>
 
-You have successfully taken on the $curse7.name curse. Hopefully you are ok with accepting the permanent consequences.
+A brief wave of ice washes through your hair, or at least that's what it feels like as the pigments in your hair seem to have instantaneously swapped with new ones.
+
+After the sudden wash, you instinctively reach a hand above your head to grab a lock of your hair and bring it before your eyes to see what's happened to it. The hair feels like a completely normal temperature, so that was apparently only an illusory sensation, but the change of color was real. You can see that your hair seems as if it had always been its new color. Now, what color do you see?
 
 Please enter your new hair color:
 
@@ -880,7 +886,11 @@ Would you like to increase or descrease your height?
 :: Take on Increased Sensitivity [layer1]
 <<set $playerCurses.push($curse11)>><<set $corruption += $curse11.corr>>
 
-You have successfully taken on the $curse11.name curse. Hopefully you are ok with accepting the permanent consequences.
+A brief tingle passes between your legs<<if $app.breasts > 0>> and your breasts<<endif>>, causing you to immediately come to attention at the momentary sensitivity. You have to stop as you are instantly made aware of the sensation of your underwear touching your skin, and your own movements have become distracting.
+
+<<if $app.sex == "female">>You can feel yourself moisten under your panties, causing you to figdet slightly with your legs, causing you to once again feel the touch of the fabric against yourself, exacerbating the issue.<<else>>You can feel yourself harden in your pants, causing you to rub against them even harder, creating a cycle that results in you being as erect as you have ever been in your life.<<endif>>
+
+You pause for a moment to catch your breath and wait for the sensation to pass, but it never does. It seems this is your new baseline of sensitivity from now on. You won't be going back to the way things were before, you'll just need to learn to deal with the new stimulation of any touch between your legs. It should be very pleasant when you're intentionally taking advantage of your newly increased sensitivity though.
 
 [[Accept more curses from the first layer|Layer1 Curses]]
 <<if $escBalDepl==0>>
@@ -1261,6 +1271,33 @@ Finally, the vision fades, leaving you standing once again where you were before
 [[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
 
+:: DollEnd [layer1]
+When you go to sleep, you dream once again.
+
+You dream about the playroom you were in, with your dolly.
+
+Your tattered pink dress doesn't look tattered at all anymore. It looks just like your dolly's dress. In fact, you started to look more like your dolly as well. But that's okay. It makes you look like a cute pair of twins after all.
+
+You have tea time with your dolly, chatting away about how beautiful your dresses are, how tasty your tea is, and how nice it is to spend this time together.
+
+You also play house with your dolly, taking turns switching who is the mommy and who is the baby. And once you get tired of playing you cuddle with your dolly until you fall a sleep again, just so you could play with her more the next day! It's so much fun!
+
+Over time she even grows a lot so you can cuddle better! That's so nice of your dolly, she is the best! She's so considerate of you, making sure you're always content and comfortable where you are.
+
+Sometimes you get a feeling like you lost something. Somethin precious to you that is now gone and locked away. But the feeling never lasts long as you sink back into your happy and comfortable life.
+
+<<say $rndM>> Look! There they are! We found 'em! <</say>>
+<<say $rndF>> I don't know... They look pretty creepy to me.<</say>>
+<<say $rndM>> Duh, that's why they are called the Creepy Twin Dolls. What else did you expect? <</say>>
+<<say $rndF>> What do you think they do? I heard they're creepy, but there must be something more. Nothing is simple down here. <</say>>
+<<say $rndM>> I don't know. But a relic is relic. Worst case scenario we just sell 'em. But, who knows, they might just do something awesome! Here, take one, I'll keep the other.<</say>>
+<<say $rndF>> You know what, now that I'm holding one it actually doesn't feel as creepy anymore. In a weird way, it feels comforting. I think maybe I'll just keep her.<</say>>
+<<say $rndM>> Haha, that was a quick 180! But I sort of get what you mean. They can be our good luck charms, maybe they'll help keep us alive.<</say>>
+<<say $rndF>> Yeah, exactly. I think I'll call mine $mc.name.<</say>>
+
+@@.layerTitle;GAME OVER@@
+
+
 :: Layer1Time
 <<nobr>>
 <<if $status.duration > 0>>
@@ -1268,7 +1305,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<else>>
 	<<set $status.penalty = 0>>
 <<endif>>
-<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty(1+$SizeHandicap), 0))>>
+<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 <<set $timeL1 += $tempTime>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
