@@ -254,8 +254,6 @@ Would you like to use the Gossamery Scales to gain corruption based on your dubl
 <<else>>
 You have already used the scales on your journey. You may not use them again.
 <<endif>>
-<</nobr>>
-<<nobr>>
 <<if ($hiredCompanions.length > 0) && ($skewedForced < 4)>>
 	Would you like to use the Skewed Shrine to give a curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, travel to the Skewed Shrine to transfer a curse" "Layer3 Skewed1a">>
@@ -273,7 +271,7 @@ You have already used the scales on your journey. You may not use them again.
 	You must have companions if you would like to use the Skewed Shrine.<br><br>
 <<endif>>
 <</nobr>>
-<<back [[Layer3 Hub]]>>
+<<[[Layer3 Hub]]>>
 
 
 :: Layer3 Habitation [image layer3]
@@ -888,13 +886,12 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<set $skewedUsed += 1>>
 <<set $skewedForced += 1>>
 <<if $convoStart==1>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
+	<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+		<<capture $i>>
 		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer3 Skewed2b][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $playerCurses.deleteAt($temp),$convoStart=0,$temp2=$i]]">><br>
-	<</capture>>
-<</for>>
-<<endif>>
-<<if $convoStart==0>>
+		<</capture>>
+	<</for>>
+<<else>>
 	<<if $hiredCompanions[$temp2].name=='Maru'>>
 		<<say $companion1>> No! Why did you do this? I relied on you...<</say>><br>
 		He starts crying while trying to come to grip with his new curse.<br><br>

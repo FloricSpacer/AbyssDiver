@@ -278,19 +278,23 @@ These are the curses available for you to take to help manage your corruption:
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-wonders.png']]
 
 <<nobr>>
-<<if ($hiredCompanions.length > 0) && ($skewedForced < 4)>>
-	Would you like to use the Skewed Shrine to copy a curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br><br>
-	[[Yes, use the Steady Shrine to copy a curse|Layer4 Steady1a]]<br><br>
-	Would you like to use the Steady Shrine to force a curse on one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br><br>
-	[[Yes, use the Steady Shrine to force a curse|Layer4 Steady 2a]]<br><br>
-	<<elseif $skewedForced > 4>>
-None of your companions trust you. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
-	<<else>>
+<<if ($hiredCompanions.length > 0) && ($steadyForced < 4)>>
+	Would you like to use the Steady Shrine to copy a curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
+	<<link "Yes, use the Steady Shrine to copy a curse" "Layer4 Skewed1a">>
+		<<set $tempTime = 3>>
+		<<include "Layer4Time">>
+	<</link>><br><br>
+	Would you like to use the Steady Shrine to force a curse on one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
+	<<link "Yes, use the Steady Shrine to force a curse" "Layer4 Skewed 2a">>
+		<<set $tempTime = 3>>
+		<<include "Layer4Time">>
+	<</link>><br><br>
+<<elseif $steadyForced > 4>>
+	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
+<<else>>
 	You must have companions if you would like to use the Steady Shrine.<br><br>
 <<endif>>
-<</nobr>>
 
-<<nobr>>
 <<if ($purityUsed == 0)>>
 	Would you like to use the Purity Tree?<br>
 	[[Yes, choose what you want to do with the tree|Layer4 Purity 1]]<br><br>
@@ -637,23 +641,114 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 [[Return to exploring your food and water options on this layer|Layer4 Forage]]
 
 
-:: Layer4 Steady1a [layer4]
+:: Layer4 Steady1a [layer4 noreturn]
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
-Which curse would you like to copy to your willing companion? It can't be too bad if they agreed to take it on.
+Which curse would you like to transfer to your willing companion? It can't be too bad if they agreed to take it on.
 
 <<nobr>>
-<<for $i = 0; $i < $playerCurses.length; $i++>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
 	<<capture $i>>
-		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady1b][$temp to $i]]">><br>
+	<<for $j = 0; $j < $playerCurses.length; $j++>>
+	<<capture $j>>
+
+		<<if $hiredCompanions[$i].name=="Maru">>
+
+			<<if $playerCurses[$j].name == "Gender Reversal A" || $playerCurses[$j].name == "Gender Reversal B" || 	$playerCurses[$j].name == "Gender Reversal C" || 	$playerCurses[$j].name == "Gender Reversal D" || 	$playerCurses[$j].name == "Gender Reversal E" || 	$playerCurses[$j].name == "Hair Removal" || 		$playerCurses[$j].name == "Increased Sensitivity" || $playerCurses[$j].name == "Age Reduction A" || 	$playerCurses[$j].name == "Age Reduction B" || 		$playerCurses[$j].name == "Submissiveness Rectification A" || $playerCurses[$j].name == "Crossdress Your Heart">>
+				<<if $j==0>>
+					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<endif>>
+				<<print "$playerCurses[$j].name">>
+				<<link "Choose" "Layer4 Skewed1a">>
+				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<</link>><br>
+
+			<<endif>>
+		<<endif>>
+
+		<<if $hiredCompanions[$i].name=="Lily">>
+			<<if $j==0>>
+				<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+			<<endif>>
+			<<if $playerCurses[$j].name == "Perma-dye" || $playerCurses[$j].name == "Power Dom" || 			$playerCurses[$j].name == "Absolute Pregnancy" || 		$playerCurses[$j].name == "Hair Removal" || 		$playerCurses[$j].name == "Age Reduction A" >>
+				<<if $j==0>>
+					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<endif>>
+				<<print "$playerCurses[$j].name">>
+				<<link "Choose" "Layer4 Skewed1a">>
+				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<</link>><br>
+			<<endif>>
+		<<endif>>
+
+		<<if $hiredCompanions[$i].name=="Cherry">>
+			<<if $playerCurses[$j].name == "Fluffy Ears" || $playerCurses[$j].name == "Fluffy Tail" || 			$playerCurses[$j].name == "Omnitool" || 			$playerCurses[$j].name == "Sleep Tight" >>
+				<<if $j==0>>
+					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<endif>>
+				<<print "$playerCurses[$j].name">>
+				<<link "Choose" "Layer4 Skewed1a">>
+				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<</link>><br>
+			<<endif>>
+		<<endif>>
+
+		<<if $hiredCompanions[$i].name=="Khemia">>
+			<<if $playerCurses[$j].name == "Asset Robustness A" || $playerCurses[$j].name == "Asset Robustness B" || 	$playerCurses[$j].name == "Asset Robustness C" || 	$playerCurses[$j].name == "Asset Robustness D" || 	$playerCurses[$j].name == "Clothing Restriction A" || 	$playerCurses[$j].name == "Clothing Restriction B" || 		$playerCurses[$j].name == "Power Dom" || 			$playerCurses[$j].name == "Absolute Birth Control" || 		$playerCurses[$j].name == "Pheromones" >>
+				<<if $j==0>>
+					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<endif>>
+				<<print "$playerCurses[$j].name">>
+				<<link "Choose" "Layer4 Skewed1a">>
+				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<</link>><br>
+			<<endif>>
+		<<endif>>
+
+		<<if $hiredCompanions[$i].name=="Cloud">>
+			<<if $playerCurses[$j].name == "Asset Robustness A" || $playerCurses[$j].name == "Asset Robustness B" || 		 		$playerCurses[$j].name == "Equal Opportunity" || 			 		$playerCurses[$j].name == "Pheromones" >>
+				<<if $j==0>>
+					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<endif>>
+				<<print "$playerCurses[$j].name">>
+				<<link "Choose" "Layer4 Skewed1a">>
+				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<</link>><br>
+			<<endif>>
+		<<endif>>
+
+		<<if $hiredCompanions[$i].name=="Saeko">>
+			<<if $playerCurses[$j].name == "Freckle Speckle" || 	$playerCurses[$j].name == "Hair Removal" || 		$playerCurses[$j].name == "20/20000000" || 					$playerCurses[$j].name == "Equal Opportunity" ||	 $playerCurses[$j].name == "Crossdress Your Heart">>
+				<<if $j==0>>
+					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<endif>>
+				<<print "$playerCurses[$j].name">>
+				<<link "Choose" "Layer4 Skewed1a">>
+				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<</link>><br>
+			<<endif>>
+		<<endif>>
 	<</capture>>
+	<</for>>
+<</capture>>
 <</for>>
 <</nobr>>
+[[On second thought, maybe a more forceful approach is warrented|Layer4 Skewed 2a]]
+[[Return to exploring layer 4|Layer4 Hub]]
 
-<<back>>
-
-
-:: Layer4 Steady 2a [layer4]
+:: Layer4 Steady 2a [layer4 noreturn]
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
 Which curse would you like to force on your unwilling companion?
@@ -663,7 +758,24 @@ You hear a muffled sound from your incapacitated companion as you ponder your op
 <<nobr>>
 <<for $i = 0; $i < $playerCurses.length; $i++>>
 	<<capture $i>>
-		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady2b][$temp to $i]]">><br>
+		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Skewed2b][$temp to $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<return>>
+
+
+
+:: Layer4 Steady1a [layer4]
+[img[setup.ImagePath+'Wonders/slantedshrine.png']]
+
+Which curse would you like to copy to your willing companion? It can't be too bad if they agreed to take it on.
+
+<<nobr>>
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+	<<capture $i>>
+		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady1b][$temp to $i]]">><br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -696,27 +808,6 @@ If you can't or don't want to cut down the tree, you can burn it down and bathe 
 
 <<back>>
 
-
-:: Layer4 Steady1b [layer4]
-[img[setup.ImagePath+'Wonders/slantedshrine.png']]
-
-Which companion would you like to transfer $playerCurses[$temp].name to?
-
-<<nobr>>
-<<set $dubloons -= ($skewedUsed * 5)>>
-<<set $skewedUsed += 1>>
-<<set $corruption += Math.round(Math.max(($playerCurses[$temp].corr * 1 / 2) - $corRed, 0))>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
-		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
-	<</capture>>
-<</for>>
-<<set $tempTime = 5>>
-<<include "Layer4Time">>
-<</nobr>>
-<<back>>
-
-
 :: Layer4 Steady2b [layer4]
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
@@ -727,19 +818,165 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<nobr>>
 <<set $dubloons -= ($skewedUsed * 5)>>
 <<set $skewedUsed += 1>>
-<<set $skewedForced += 1>>
+<<set $steadyForced += 1>>
 <<set $corruption += Math.round(Math.max(($playerCurses[$temp].corr * 1 / 2) - $corRed, 0))>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
+<<if $convoStart==1>>
+	<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+		<<capture $i>>
 		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
-	<</capture>>
-<</for>>
-<<set $tempTime = 5>>
-<<include "Layer4Time">>
+		<</capture>>
+	<</for>>
+<<else>>
+	<<if $hiredCompanions[$temp2].name=='Maru'>>
+		<<say $companion1>> No! Why did you do this? I relied on you...<</say>><br>
+		He starts crying while trying to come to grip with his new curse.<br><br>
+		<<set $companion1.affec-=(3-$hsswear)>>
+		<<if $hiredCompanions.some(e => e.name === "Lily")>>
+			<<set $companion2.affec-=(1-$hsswear)>>
+			<<say $companion2>> How could you?! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+			<<set $companion3.affec-=(1-$hsswear)>>
+			<<say $companion3>> Not cool! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+			<<set $companion4.affec-=(1-$hsswear)>>
+			<<say $companion4>> I thought you were different... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+			<<set $companion5.affec-=(1-$hsswear)>>
+			<<say $companion5>> Tsk. Untrustworthy... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+			<<set $companion6.affec-=(1-$hsswear)>>
+			<<say $companion6>> Your modus operandi has been noted... <</say>><br>
+		<<endif>>
+	<<elseif $hiredCompanions[$temp2].name=='Lily'>>
+		<<say $companion2>> Are you for real?! Did you just do what I think you did?!<</say>><br>
+		She pushes you aside and stomps off in a mixture of rage and anguish.<br><br>
+		<<set $companion2.affec-=(3-$hsswear)>>
+		<<if $hiredCompanions.some(e => e.name === "Maru")>>
+			<<set $companion1.affec-=(1-$hsswear)>>
+			<<say $companion1>> That's not nice... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+			<<set $companion3.affec-=(1-$hsswear)>>
+			<<say $companion3>> Not cool! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+			<<set $companion4.affec-=(1-$hsswear)>>
+			<<say $companion4>> I thought you were different... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+			<<set $companion5.affec-=(1-$hsswear)>>
+			<<say $companion5>> Tsk. Untrustworthy... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+			<<set $companion6.affec-=(1-$hsswear)>>
+			<<say $companion6>> Your modus operandi has been noted... <</say>><br>
+		<<endif>>
+	<<elseif $hiredCompanions[$temp2].name=='Khemia'>>
+		<<say $companion3>> ARE YOU FUCKING KIDDING ME WITH THIS?<</say>><br>
+		He grabs you at your collar and for a second you think he is going to hit you, but he puts you down without saying anything else and walks away, fists clenched.<br><br>
+		<<set $companion3.affec-=(3-$hsswear)>>
+		<<if $hiredCompanions.some(e => e.name === "Lily")>>
+			<<set $companion2.affec-=(1-$hsswear)>>
+			<<say $companion2>> How could you?! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Maru")>>
+			<<set $companion1.affec-=(1-$hsswear)>>
+			<<say $companion1>> That's not nice... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+			<<set $companion4.affec-=(1-$hsswear)>>
+			<<say $companion4>> I thought you were different... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+			<<set $companion5.affec-=(1-$hsswear)>>
+			<<say $companion5>> Tsk. Untrustworthy... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+			<<set $companion6.affec-=(1-$hsswear)>>
+			<<say $companion6>> Your modus operandi has been noted... <</say>><br>
+		<<endif>>
+	<<elseif $hiredCompanions[$temp2].name=='Cherry'>>
+		<<say $companion4>> I thought I didn't care about anything anymore, but then why am I feeling like this?<</say>><br>
+		A single tears rolls down her cheek as she stands in place silently. <br><br>
+		<<set $companion4.affec-=(2-$hsswear)>>
+		<<if $hiredCompanions.some(e => e.name === "Lily")>>
+			<<set $companion2.affec-=(1-$hsswear)>>
+			<<say $companion2>> How could you?! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+			<<set $companion3.affec-=(1-$hsswear)>>
+			<<say $companion3>> Not cool! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Maru")>>
+			<<set $companion1.affec-=(1-$hsswear)>>
+			<<say $companion1>> That's not nice... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+			<<set $companion5.affec-=(1-$hsswear)>>
+			<<say $companion5>> Tsk. Untrustworthy... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+			<<set $companion6.affec-=(1-$hsswear)>>
+			<<say $companion6>> Your modus operandi has been noted... <</say>><br>
+		<<endif>>
+	<<elseif $hiredCompanions[$temp2].name=='Cloud'>>
+		<<say $companion5>> I should have seen this coming. Now I know your true colors.<</say>><br>
+		He glares at you and walks off.<br><br>
+		<<set $companion5.affec-=(3-$hsswear)>>
+		<<if $hiredCompanions.some(e => e.name === "Lily")>>
+			<<set $companion2.affec-=(1-$hsswear)>>
+			<<say $companion2>> How could you?! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+			<<set $companion3.affec-=(1-$hsswear)>>
+			<<say $companion3>> Not cool! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+			<<set $companion4.affec-=(1-$hsswear)>>
+			<<say $companion4>> I thought you were different... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Maru")>>
+			<<set $companion1.affec-=(1-$hsswear)>>
+			<<say $companion1>> That's not nice... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+			<<set $companion6.affec-=(1-$hsswear)>>
+			<<say $companion6>> Your modus operandi has been noted... <</say>><br>
+		<<endif>>
+	<<elseif $hiredCompanions[$temp2].name=='Saeko'>>
+		She stands frozen, her face pale, as she tries to process what just happened to her.<br><br>
+		<<say $companion6>> This wasn't what we agreed to... I, how, why..?<</say>><br>
+		<<set $companion6.affec-=(3-$hsswear)>>
+		<<if $hiredCompanions.some(e => e.name === "Lily")>>
+			<<set $companion2.affec-=(1-$hsswear)>>
+			<<say $companion2>> How could you?! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+			<<set $companion3.affec-=(1-$hsswear)>>
+			<<say $companion3>> Not cool! <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+			<<set $companion4.affec-=(1-$hsswear)>>
+			<<say $companion4>> I thought you were different... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+			<<set $companion5.affec-=(1-$hsswear)>>
+			<<say $companion5>> Tsk. Untrustworthy... <</say>><br>
+		<<endif>>
+		<<if $hiredCompanions.some(e => e.name === "Maru")>>
+			<<set $companion1.affec-=(1-$hsswear)>>
+			<<say $companion1>> That's not nice... <</say>><br>
+		<<endif>>
+	<<endif>>
+<<endif>>
 <</nobr>>
-
-<<back>>
-
+[[Stand in front of the shrine to force another curse|Layer4 Skewed 2a][$convoStart=1,$choice1=0,$choice2=0]]
+[[On second thought, maybe a more diplomatic approach would be advisable|Layer4 Skewed1a][$convoStart=1,$choice1=0,$choice2=0]]
+[[Continue with your journey|Layer4 Hub][$convoStart=1,$choice1=0,$choice2=0]]
 
 :: Pick up the Ghost-righter Writing Down [layer4]
 <<nobr>>
