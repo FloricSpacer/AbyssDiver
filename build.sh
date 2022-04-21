@@ -1,9 +1,55 @@
 #!/bin/bash
 
-if ! which tweego > /dev/null
+TWEEGO="$(which ${TWEEGO:-tweego} 2> /dev/null)"
+if test -x "$TWEEGO"
 then
-    echo "Please install Tweego and add it to your PATH"
-    exit 1
+    echo "Using systemwide Tweego: $TWEEGO"
+else
+    TWEEGO_VERSION=2.1.1
+    TWEEGO_EXE="tweego"
+    case "$(uname -s)" in
+    Darwin)
+        TWEEGO_OS=macos
+        ;;
+    Linux)
+        TWEEGO_OS=linux
+        ;;
+    CYGWIN*|MSYS*|MINGW*)
+        TWEEGO_OS=windows
+        TWEEGO_EXE="tweego.exe"
+        ;;
+     *)
+        echo "No pre-built Tweego is available for OS $(uname -s)."
+        echo "Please build Tweego from source and either add it to your PATH " \
+             "or put its location in the TWEEGO environment variable."
+        exit 1
+        ;;
+    esac
+    case "$(uname -m)" in
+    i?86)
+        TWEEGO_ARCH=x86
+        ;;
+    x86_64|amd64|x64)
+        TWEEGO_ARCH=x64
+        ;;
+    *)
+        echo "No pre-built Tweego is available for CPU family $(uname -m)."
+        echo "Please build Tweego from source and either add it to your PATH " \
+             "or put its location in the TWEEGO environment variable"
+        exit 1
+        ;;
+    esac
+    TWEEGO_ARCHIVE="tweego-$TWEEGO_VERSION-$TWEEGO_OS-$TWEEGO_ARCH.zip"
+    TWEEGO="tools/$TWEEGO_EXE"
+    if ! test -f "tools/$TWEEGO_ARCHIVE"
+    then
+        echo "Downloading Tweego..."
+        curl -L "https://github.com/tmedwards/tweego/releases/download/v$TWEEGO_VERSION/$TWEEGO_ARCHIVE" -o "tools/$TWEEGO_ARCHIVE"
+        echo "Unpacking Tweego..."
+        unzip -d "tools/" -o "tools/$TWEEGO_ARCHIVE" "$TWEEGO_EXE"
+        chmod a+x "$TWEEGO"
+    fi
+    echo "Using downloaded Tweego: $TWEEGO"
 fi
 
 SUGARCUBE_VERSION=2.36.1
@@ -18,4 +64,4 @@ fi
 
 OUTPUT="Abyss Diver.html"
 echo "Compiling to: $OUTPUT"
-tweego src/* -o "$OUTPUT"
+"$TWEEGO" src/* -o "$OUTPUT"
