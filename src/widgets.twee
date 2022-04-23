@@ -1,5 +1,5 @@
-:: Change Height [widget]
-<<widget "HeightCorrected">>\<<nobr>>
+:: Change Height [widget nobr]
+<<widget "HeightCorrected">>
 /*declare variables as follows when calling widget
 1) $app.heigth
 2) $app.oheight
@@ -50,16 +50,15 @@
 	<<endif>>
 
 	<<set $outputHeight=Math.round ($app.heightCor)>>
-	<</nobr>>\<</widget>>
+<</widget>>
 
 
 
 +++++++++
 
 
-:: Change Breast [widget]
-<<widget "BreastCorrected">>\
-	<<nobr>>
+:: Change Breast [widget nobr]
+<<widget "BreastCorrected">>
 	<<set $x = 18 -$app.appAge>>
 	<<set $app.breastsCor =$app.breasts>>
 	<<if $x>0 +1/5 *($app.gender-1)>>
@@ -74,44 +73,35 @@
 	<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
 		<<set $app.breastsCor +=1>>
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
 
-:: Pronoun widgets [widget]
-<<widget "Pronoun">>\
-	<<nobr>>
+:: Pronoun widgets [widget nobr]
+<<widget "Pronoun">>
 	<<if $app.appGender<=5>>
 		he
 	<<else>>
 		she
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "ObjectivePronoun">>\
-	<<nobr>>
+<<widget "ObjectivePronoun">>
 	<<if $app.appGender<=5 >>
 		him
 	<<else>>
 		her
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "PossesivePronoun">>\
-	<<nobr>>
+<<widget "PossesivePronoun">>
 	<<if $app.appGender<=5 >>
 		his
 	<<else>>
 		hers
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "GenderPronoun">>\
-	<<nobr>>
-
+<<widget "GenderPronoun">>
 	<<if $app.gender<2>>
 		manly
 	<<elseif $app.gender<3>>
@@ -123,33 +113,27 @@
 	<<else>>
 		feminine
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
 
-:: Perceived widgets [widget]
-<<widget "appGender">>\
-	<<nobr>>
+:: Perceived widgets [widget nobr]
+<<widget "appGender">>
 	<<if $app.fit>7>>
 		<<set $app.appGender = 2*($app.gender-1) -0.5*($app.penis-2) +($app.breastsCor-3)+0.5*$colwear-1>>
 	<<else>>
 		<<set $app.appGender = 2*($app.gender-1) -0.5*($app.penis-2) +($app.breastsCor-3)+0.5*$colwear>>
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "mrms">>\
-	<<nobr>>
+<<widget "mrms">>
 	<<if $app.appGender<5>>
 		mr.
 	<<else>>
 		miss
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "PerceivedGender">>\
-	<<nobr>>
+<<widget "PerceivedGender">>
 	<<if $app.appGender<=5>>
 		<<if $app.appAge>16>>
 			man
@@ -163,11 +147,9 @@
 			girl
 		<<endif>>
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "PerceivedGender2">>\
-	<<nobr>>
+<<widget "PerceivedGender2">>
 	<<if $app.appGender<=5>>
 		<<if $app.appAge>16>>
 			dude
@@ -181,11 +163,9 @@
 			girl
 		<<endif>>
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "PerceivedStature">>\
-	<<nobr>>
+<<widget "PerceivedStature">>
 	<<if $app.heightCor <160 >>
 			little
 	<<elseif $height >180>>
@@ -196,11 +176,9 @@
 	<<elseif $app.appAge>40>>
 			old
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
-<<widget "PerceivedRace">>\
-	<<nobr>>
+<<widget "PerceivedRace">>
 	<<if $app.inhuman <2 >>
 			human
 	<<elseif $app.inhuman <6>>
@@ -210,13 +188,11 @@
 	<<elseif $app.inhuman <10>>
 			monster
 	<<endif>>
-	<</nobr>>\
 <</widget>>
 
 
-:: Threat1 Criterion [widget]
-<<widget "Threat1Criterion">>\
-<<nobr>>
+:: Threat1 Criterion [widget nobr]
+<<widget "Threat1Criterion">>
 <<if $app.heightCor<140>>
 	<<set $groupsize= $hiredCompanions.length >>
 <<else>>
@@ -233,13 +209,11 @@
 <<else>>
 	<<set $threat1Crit=0>>
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Lewdness function [widget]
-<<widget "Lewdness">>\
-	<<nobr>>
+:: Lewdness function [widget nobr]
+<<widget "Lewdness">>
 	<<set $lewdness=($app.libido-2+$quotaCount +$semenCount+$limelightCount)*3 +$crumbleFluid/10  +$algalSize >>
 
 	<<if $app.breastsCor>5>>
@@ -305,13 +279,11 @@
 	<<if $playerCurses.some(e => e.name === "Increased Sensitivity") && $playerCurses.some(e => e.name === "Refractory Refactorization")>>
 			<<set $lewdness +=4>>
 	<<endif>>
-	<</nobr>>
 <</widget>>
 
 
-:: Inhuman function [widget]
-<<widget "Inhuman">>\
-<<nobr>>
+:: Inhuman function [widget nobr]
+<<widget "Inhuman">>
 <<set $app.inhuman =0>>
 <<if $app.ears != "normal human">>
 	<<set $app.inhuman +=1>>
@@ -336,13 +308,11 @@
 		<<set $app.inhuman +=2>>
 <</for>>
 <<endif>>
-<</nobr>>\
 <</widget>>
 
 
-:: Maru Conversations [widget]
+:: Maru Conversations [widget nobr]
 <<widget "MaruConvos">>
-<<nobr>>
 <<if $MaruConvo0==0>>
 [[Introduce yourself to Maru|Maru Convo0][$MaruConvo0=1]]<br>
 <<elseif $MaruConvo1==0 && $companion1.affec>3 && $MaruConvo0 >>
@@ -352,13 +322,11 @@
 <<elseif $MaruConvo3==0 && $companion1.affec>10 && $app.appGender<4 && $subdom > -1 && $MaruConvo2 >>
 [[Chat with Maru|Maru Convo3][$MaruConvo3=true]]<br>
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Lily Conversations [widget]
+:: Lily Conversations [widget nobr]
 <<widget "LilyConvos">>
-<<nobr>>
 <<if $LilyConvo0==0>>
 [[Introduce yourself to Lily|Lily Convo0][$LilyConvo0=true]]<br>
 <<endif>>
@@ -372,13 +340,11 @@
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
 	[[You see Lily lifting up the World Stone|Lily ConvoPr]]<br>
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Khemia Conversations [widget]
+:: Khemia Conversations [widget nobr]
 <<widget "KhemiaConvos">>
-<<nobr>>
 <<if $KhemiaConvo0==0>>
 [[Introduce yourself to Khemia|Khemia Convo0][$KhemiaConvo0=true]]
 <<endif>>
@@ -389,13 +355,11 @@
 <<elseif $KhemiaConvo3==0 && $companion3.affec>10 && app.appGender>9 &&$subdom < 0 && $KhemiaConvo2 >>
 [[Chat with Khemia|Khemia Convo3][$KhemiaConvo3=true]]
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Cherry Conversations [widget]
+:: Cherry Conversations [widget nobr]
 <<widget "CherryConvos">>
-<<nobr>>
 <<if $CherryConvo0==0>>
 [[Introduce yourself to Cherry|Cherry Convo0][$CherryConvo0=true]]<br>
 <<elseif $CherryConvo1==0 && $companion4.affec>3 && $CherryConvo0 && 0>>
@@ -405,13 +369,11 @@
 <<elseif $CherryConvo3==0 && $companion4.affec>10 && $app.appGender<6 && $subdom > 0 && $CherryConvo2 >>
 [[Chat with Cherry|Cherry Convo3][$CherryConvo3=true]]<br>
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Cloud Conversations [widget]
+:: Cloud Conversations [widget nobr]
 <<widget "CloudConvos">>
-<<nobr>>
 <<if $CloudConvo0==0>>
 [[Introduce yourself to Cloud|Cloud Convo0][$CloudConvo0=true]]<br>
 <<endif>>
@@ -422,14 +384,11 @@
 <<elseif $CloudConvo3==0 && $CloudAffec>10 && $subdom < 2 && $CloudConvo2 >>
 [[Chat with Cloud|Cloud Convo3][$CloudConvo3=true]]<br>
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Saeko Conversations [widget]
+:: Saeko Conversations [widget nobr]
 <<widget "SaekoConvos">>
-<<nobr>>
-
 <<if $SaekoConvo0==0>>
 [[Introduce yourself to Saeko|Saeko Convo0][$SaekoConvo0=true]]
 <<endif>>
@@ -440,14 +399,11 @@
 <<elseif $SaekoConvo3==0 && $companion6.affec>15 && $SaekoConvo2 >>
 [[Chat with Saeko|Saeko Convo3][$SaekoConvo3=true]]
 <<endif>>
-
-<</nobr>>
 <</widget>>
 
 
-:: Speech settings [widget]
-<<widget "Update_MC_Speech">>\
-	<<nobr>>
+:: Speech settings [widget nobr]
+<<widget "Update_MC_Speech">>
 	<<if $app.gender<=1 >>
 
 		<<if $app.appAge>18>>
@@ -555,14 +511,11 @@
 	<<if $colwear>>
 		<<set $mc.genderVoice=99>>
 	<<endif>>
-
-	<</nobr>>
 <</widget>>
 
 
-:: Doll transformation [widget]
+:: Doll transformation [widget nobr]
 <<widget "dollTF">>
-<<nobr>>
 <<set $app.gender += 1>>
 <<if $app.appAge>18>>
 	<<set $app.appAge = 17>>
@@ -577,12 +530,11 @@
 		<<set $app.vagina=1>>
 	<<endif>>
 <<endif>>
-<</nobr>>
 <</widget>>
 
 
-:: Time dependant variable updates [widget]
-<<widget "checkTime">><<nobr>>
+:: Time dependant variable updates [widget nobr]
+<<widget "checkTime">>
 
 <<if $Maru_LastT<$time-10>>
 <<set $companion1.affec+=(1+$hsswear)>>
@@ -640,11 +592,11 @@
 	<<endif>>
 <<endif>>
 
-<</nobr>><</widget>>
+<</widget>>
 
 
-:: Carry adjustment widget [widget]
-<<widget "CarryAdjust">><<nobr>>
+:: Carry adjustment widget [widget nobr]
+<<widget "CarryAdjust">>
 <<set $totalCarry -= $carryWeight>>
 
 <<if $playerCurses.some(e => e.name === "Weakling")>>
@@ -658,4 +610,4 @@
 <<endif>>
 
 <<set $totalCarry += $carryWeight>>
-<</nobr>><</widget>>
+<</widget>>
