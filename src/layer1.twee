@@ -121,6 +121,10 @@ These are the curses available for you to take to help manage your corruption:
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-curses.png']]
 <<BreastCorrected>>
 
+<<set $temp =$playerCurses.filter(e => e.name === "Dizzying Heights (increase)" || e.name === "Dizzying Heights (decrease)" )>>
+<<if $temp.length < 5>>
+	[[Take on Dizzying Heights test]] 
+<<endif>>
 <<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
 	<<else>><<print "[[Take on Libido Reinforcement A]]">>
 <<endif>><</nobr>>
@@ -882,6 +886,46 @@ Would you like to increase or descrease your height?
 	[[Return to your balloon|Escape Balloon L1][$app.height += parseInt($height), $app.modheight += parseInt($height)]]
 <<endif>>
 
+:: Take on Dizzying Heights test [layer1]
+<<set $corruption += $curse10.corr>>
+You have successfully taken on the $curse10.name curse. Hopefully you are ok with accepting the permanent consequences.
+<<nobr>>
+<<if $HeightIncrease == 0>>
+	Would you like to increase or descrease your height?<br>
+	<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+	<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+<<elseif $HeightIncrease == 1>>
+	You feel yourself growing even more.<br>
+<<else>>
+	You feel yourself shrinking even more.<br>
+<<endif>>
+<</nobr>>
+
+<<link "Accept more curses from the first layer" "Layer1 Curses">>
+	<<if $HeightIncrease == 1 >>
+		<<set $playerCurses.push($curse10a)>>
+	<<elseif $HeightIncrease == -1 >>
+		<<set $playerCurses.push($curse10b)>>
+	<<endif>>
+<</link>>
+<<if $escBalDepl==0>>
+	<<link "Return to exploring layer 1" "Layer1 Hub">>
+	<<if $HeightIncrease == 1 >>
+		<<set $playerCurses.push($curse10a)>>
+	<<elseif $HeightIncrease == -1 >>
+		<<set $playerCurses.push($curse10b)>>
+	<<endif>>
+	<</link>>
+<<else>>
+	<<link "Return to your balloon" "Escape Balloon L1">>
+	<<if $HeightIncrease == 1 >>
+		<<set $playerCurses.push($curse10a)>>
+	<<elseif $HeightIncrease == -1 >>
+		<<set $playerCurses.push($curse10b)>>
+	<<endif>>
+	<</link>>
+<<endif>>
+
 
 :: Take on Increased Sensitivity [layer1]
 <<set $playerCurses.push($curse11)>><<set $corruption += $curse11.corr>>
@@ -1271,7 +1315,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 [[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
 
-:: DollEnd [layer1]
+:: DollEnd 
 When you go to sleep, you dream once again.
 
 You dream about the playroom you were in, with your dolly.

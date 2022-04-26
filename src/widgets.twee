@@ -57,6 +57,85 @@
 +++++++++
 
 
+:: Change Height test [widget nobr]
+<<widget "HeightCorrectedTest">>
+/*declare variables as follows when calling widget
+1) $app.heigth
+2) $app.oheight
+3) $app.gender
+4) $app.osex (= "female")
+5) $app.appAge
+*/
+	<<set $genderlvl = $app.gender-1>>
+	<<if $app.osex=="female">>
+		<<set $female_start=1>>
+	<<else>>
+		<<set $female_start=0>>
+	<<endif>>
+
+	<<set $app.modheight=$app.height>>
+
+	<<if $HeightIncrease==1>>
+		<<set $temp =$playerCurses.filter(e => e.name === "Dizzying Heights (increase)")>>
+		<<set $app.modheight=$app.modheight+5*$temp.length>>
+	<<else>>
+		<<set $temp =$playerCurses.filter(e => e.name === "Dizzying Heights (decrease)")>>
+		<<set $app.modheight=$app.modheight-5*$temp.length>>		
+	<<endif>>
+
+	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
+		<<set $app.modheight=$app.modheight*70>>
+		<<set $SizeHandicap=1>>
+	<<endif>>
+
+	<<if $playerCurses.some(e=> e.name === "Minish-ish")>>
+		<<set $app.modheight=$app.modheight/10>>
+		<<if $hiredCompanions.length < 1>>
+			<<set $SizeHandicap=1>>
+		<<endif>>
+	<<endif>>
+
+
+	<<set $height_change = $app.modheight -$app.oheight>>
+	<<set $x =18 - $app.appAge>>
+
+/* change in height with genderlevel changes and height increases/decreases it is modeled such that 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender
+*/
+
+	<<set $height_adult = $app.oheight +$height_change -$height_change*(1-0.92375)*$female_start -0.01525*$app.oheight*$genderlvl +0.01525*$app.oheight*5*$female_start>>
+
+	<<if $x<=0 +1/5 *$genderlvl>>
+		<<set $app.heightCor = $height_adult>>
+
+/* The puberty phase: it shifts for females as their ends earlier, for simplicity I assumed the start is the same regardless although this is not entirely correct. I ussed a polynomial here to simulate the 'reverse growth spurt'
+*/
+
+	<<elseif $x > 0+1/5*$genderlvl && $x<=6>>
+		<<set $C1=-4.70611e-3 +8.1433e-4  *$genderlvl>>
+    	<<set $C2=-1.1049e-4  +1.140e-5   *$genderlvl>>
+    	<<set $C3=-1.6698e-3  +1.3722e-4  *$genderlvl>>
+    	<<set $C4= 1.7701e-4  -2.114e-5   *$genderlvl>>
+    	<<set $x_rel = $x-1/5*$genderlvl>>
+    	<<set $app.heightCor = $height_adult *(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
+
+/* the second phase of linear growth or decline, its a decent approximation without making things to complicated. It ends at age 3 (originally 4, but changed it to not break the rest of the code) the calculation for the puberty growth spurt is in here to provide a starting point for the linear decline
+*/
+	<<elseif $x>6 && $x<=15>>
+		<<set $C1=-4.70611e-3 +8.1433e-4  *$genderlvl>>
+    	<<set $C2=-1.1049e-4  +1.140e-5   *$genderlvl>>
+    	<<set $C3=-1.6698e-3  +1.3722e-4  *$genderlvl>>
+    	<<set $C4= 1.7701e-4  -2.114e-5   *$genderlvl>>
+    	<<set $x_rel = 6-1/5*$genderlvl>>
+    	<<set $height_pub = $height_adult*(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
+
+    	<<set $app.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
+	<<endif>>
+
+
+	<<set $outputHeight2=Math.round ($app.heightCor)>>
+<</widget>>
+
+
 :: Change Breast [widget nobr]
 <<widget "BreastCorrected">>
 	<<set $x = 18 -$app.appAge>>
