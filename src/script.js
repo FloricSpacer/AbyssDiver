@@ -18,22 +18,22 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
 		return "AgeEnd";
 	}
-	if (StoryVar.companion1.affec < -9 && !StoryVar.companion1.swap) {
+	if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap) {
 		return "Maru Leaving";
 	}
-	if (StoryVar.companion2.affec < -9 && !StoryVar.companion2.swap) {
+	if (StoryVar.companionLily.affec < -9 && !StoryVar.companionLily.swap) {
 		return "Lily Leaving";
 	}
-	if (StoryVar.companion3.affec < -9 && !StoryVar.companion3.swap) {
+	if (StoryVar.companionKhemia.affec < -9 && !StoryVar.companionKhemia.swap) {
 		return "Khemia Leaving";
 	}
-	if (StoryVar.companion4.affec < -12 && !StoryVar.companion4.swap) {
+	if (StoryVar.companionCherry.affec < -12 && !StoryVar.companionCherry.swap) {
 		return "Cherry Leaving";
 	}
-	if (StoryVar.companion5.affec < -9 && !StoryVar.companion5.swap) {
+	if (StoryVar.companionCloud.affec < -9 && !StoryVar.companionCloud.swap) {
 		return "Cloud Leaving";
 	}
-	if (StoryVar.companion6.affec < -9 && !StoryVar.companion6.swap) {
+	if (StoryVar.companionSaeko.affec < -9 && !StoryVar.companionSaeko.swap) {
 		return "Saeko Leaving";
 	}
 	return destPassage;
