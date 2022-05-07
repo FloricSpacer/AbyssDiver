@@ -236,39 +236,22 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 <q>Ready to go when you are. I hope you know what you're doing.</q>
 
 
-:: Party overview [noreturn]
-<<nobr>>
+:: Party overview [noreturn nobr]
 <<BreastCorrected>>
 <<appGender>>
 <<Update_MC_Speech>>
 <br>The following companions are a part of your expedition's party:<br><br>
 
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
-	<<print "$hiredCompanions[$i].name :">>
-	<<if $hiredCompanions[$i].name=="Maru">>
-		<<MaruConvos>>
-	<<elseif $hiredCompanions[$i].name=="Lily">>
-		<<LilyConvos>>
-	<<elseif $hiredCompanions[$i].name=="Khemia">>
-		<<KhemiaConvos>>
-	<<elseif $hiredCompanions[$i].name=="Cherry">>
-		<<CherryConvos>>
-	<<elseif $hiredCompanions[$i].name=="Cloud">>
-		<<CloudConvos>>
-	<<elseif $hiredCompanions[$i].name=="Saeko">>
-		<<SaekoConvos>>
-	<<endif>>
+<<for _companion range $hiredCompanions>>
+	<<print "_companion.name :">>
+	<<include `_companion.name + " Conversations"`>>
 	<br>
-	<</capture>>
 <</for>>
 [[Test decrease affection Maru|Party overview][$companionMaru.affec-=(5-$hsswear)]]<br>
 [[Return|$return]]
-<</nobr>>
 
 
-:: Maru Conversations [widget nobr]
-<<widget "MaruConvos">>
+:: Maru Conversations [nobr]
 <<if $MaruConvo0==0>>
 [[Introduce yourself to Maru|Maru Convo0][$MaruConvo0=1]]<br>
 <<elseif $MaruConvo1==0 && $companionMaru.affec>3 && $MaruConvo0 >>
@@ -278,7 +261,6 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 <<elseif $MaruConvo3==0 && $companionMaru.affec>10 && $app.appGender<4 && $subdom > -1 && $MaruConvo2 >>
 [[Chat with Maru|Maru Convo3][$MaruConvo3=true]]<br>
 <<endif>>
-<</widget>>
 
 
 :: Maru Convo1 [noreturn]
@@ -461,8 +443,7 @@ He looks a little rattled by the firm handshake, but tries to respond energetica
 Double-click this passage to edit it.
 
 
-:: Lily Conversations [widget nobr]
-<<widget "LilyConvos">>
+:: Lily Conversations [nobr]
 <<if $LilyConvo0==0>>
 [[Introduce yourself to Lily|Lily Convo0][$LilyConvo0=true]]<br>
 <<endif>>
@@ -476,7 +457,6 @@ Double-click this passage to edit it.
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
 	[[You see Lily lifting up the World Stone|Lily ConvoPr]]<br>
 <<endif>>
-<</widget>>
 
 
 :: Lily Convo0 [noreturn]
@@ -711,8 +691,7 @@ She immediately picks up the World Stone to try it out once again. You see her s
 <</nobr>>
 
 
-:: Khemia Conversations [widget nobr]
-<<widget "KhemiaConvos">>
+:: Khemia Conversations [nobr]
 <<if $KhemiaConvo0==0>>
 [[Introduce yourself to Khemia|Khemia Convo0][$KhemiaConvo0=true]]
 <<endif>>
@@ -723,7 +702,6 @@ She immediately picks up the World Stone to try it out once again. You see her s
 <<elseif $KhemiaConvo3==0 && $companionKhemia.affec>10 && app.appGender>9 &&$subdom < 0 && $KhemiaConvo2 >>
 [[Chat with Khemia|Khemia Convo3][$KhemiaConvo3=true]]
 <<endif>>
-<</widget>>
 
 
 :: Khemia Convo0 [noreturn]
@@ -903,8 +881,7 @@ Double-click this passage to edit it.
 Double-click this passage to edit it.
 
 
-:: Cherry Conversations [widget nobr]
-<<widget "CherryConvos">>
+:: Cherry Conversations [nobr]
 <<if $CherryConvo0==0>>
 [[Introduce yourself to Cherry|Cherry Convo0][$CherryConvo0=true]]<br>
 <<elseif $CherryConvo1==0 && $companionCherry.affec>3 && $CherryConvo0 && 0>>
@@ -914,7 +891,6 @@ Double-click this passage to edit it.
 <<elseif $CherryConvo3==0 && $companionCherry.affec>10 && $app.appGender<6 && $subdom > 0 && $CherryConvo2 >>
 [[Chat with Cherry|Cherry Convo3][$CherryConvo3=true]]<br>
 <<endif>>
-<</widget>>
 
 
 :: Cherry Convo0 [noreturn]
@@ -1037,8 +1013,7 @@ When you look at her there is no sign of emotion, he expression seems totally bl
 Double-click this passage to edit it.
 
 
-:: Cloud Conversations [widget nobr]
-<<widget "CloudConvos">>
+:: Cloud Conversations [nobr]
 <<if $CloudConvo0==0>>
 [[Introduce yourself to Cloud|Cloud Convo0][$CloudConvo0=true]]<br>
 <<endif>>
@@ -1049,7 +1024,6 @@ Double-click this passage to edit it.
 <<elseif $CloudConvo3==0 && $CloudAffec>10 && $subdom < 2 && $CloudConvo2 >>
 [[Chat with Cloud|Cloud Convo3][$CloudConvo3=true]]<br>
 <<endif>>
-<</widget>>
 
 
 :: Cloud Convo0 [noreturn]
@@ -1270,8 +1244,7 @@ even more serious/close target practice while talking about revolution even less
 Double-click this passage to edit it.
 
 
-:: Saeko Conversations [widget nobr]
-<<widget "SaekoConvos">>
+:: Saeko Conversations [nobr]
 <<if $SaekoConvo0==0>>
 [[Introduce yourself to Saeko|Saeko Convo0][$SaekoConvo0=true]]
 <<endif>>
@@ -1282,7 +1255,6 @@ Double-click this passage to edit it.
 <<elseif $SaekoConvo3==0 && $companionSaeko.affec>15 && $SaekoConvo2 >>
 [[Chat with Saeko|Saeko Convo3][$SaekoConvo3=true]]
 <<endif>>
-<</widget>>
 
 
 :: Saeko Convo0 [noreturn]
