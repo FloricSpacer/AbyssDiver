@@ -432,108 +432,25 @@ As you pick up the dubloons from the scales, you notice that the luster of the s
 Which curse would you like to transfer to your willing companion? It can't be too bad if they agreed to take it on.
 
 <<nobr>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
-	<<for $j = 0; $j < $playerCurses.length; $j++>>
-	<<capture $j>>
-
-		<<if $hiredCompanions[$i].name=="Maru">>
-
-			<<if $playerCurses[$j].name == "Gender Reversal A" || $playerCurses[$j].name == "Gender Reversal B" || 	$playerCurses[$j].name == "Gender Reversal C" || 	$playerCurses[$j].name == "Gender Reversal D" || 	$playerCurses[$j].name == "Gender Reversal E" || 	$playerCurses[$j].name == "Hair Removal" || 		$playerCurses[$j].name == "Increased Sensitivity" || $playerCurses[$j].name == "Age Reduction A" || 	$playerCurses[$j].name == "Age Reduction B" || 		$playerCurses[$j].name == "Submissiveness Rectification A" || $playerCurses[$j].name == "Crossdress Your Heart">>
-				<<if $j==0>>
-					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
-				<<endif>>
-				<<print "$playerCurses[$j].name">>
-				<<link "Choose" "Layer3 Skewed1a">>
-				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
-				<<set $playerCurses.deleteAt($j)>>
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-				<</link>><br>
-
-			<<endif>>
-		<<endif>>
-
-		<<if $hiredCompanions[$i].name=="Lily">>
+<<for _companion range $hiredCompanions>>
+	<<capture _companion>>
+		<<for $j = 0; $j < $playerCurses.length; $j++>>
 			<<if $j==0>>
-				<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
+				<<print "_companion.name doesn't mind taking:">><br>
 			<<endif>>
-			<<if $playerCurses[$j].name == "Perma-dye" || $playerCurses[$j].name == "Power Dom" || 			$playerCurses[$j].name == "Absolute Pregnancy" || 		$playerCurses[$j].name == "Hair Removal" || 		$playerCurses[$j].name == "Age Reduction A" >>
-				<<if $j==0>>
-					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
-				<<endif>>
-				<<print "$playerCurses[$j].name">>
-				<<link "Choose" "Layer3 Skewed1a">>
-				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
-				<<set $playerCurses.deleteAt($j)>>
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-				<</link>><br>
+			<<if setup.willingCurses[_companion.name].includes($playerCurses[$j].name)>>
+				<<capture $j>>
+					<<print "$playerCurses[$j].name">>
+					<<link "Choose" "Layer3 Skewed1a">>
+						<<set _companion.curses.push($playerCurses[$j])>>
+						<<set $playerCurses.deleteAt($j)>>
+						<<set $dubloons -= ($skewedUsed * 5)>>
+						<<set $skewedUsed += 1>>
+					<</link>><br>
+				<</capture>>
 			<<endif>>
-		<<endif>>
-
-		<<if $hiredCompanions[$i].name=="Cherry">>
-			<<if $playerCurses[$j].name == "Fluffy Ears" || $playerCurses[$j].name == "Fluffy Tail" || 			$playerCurses[$j].name == "Omnitool" || 			$playerCurses[$j].name == "Sleep Tight" >>
-				<<if $j==0>>
-					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
-				<<endif>>
-				<<print "$playerCurses[$j].name">>
-				<<link "Choose" "Layer3 Skewed1a">>
-				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
-				<<set $playerCurses.deleteAt($j)>>
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-				<</link>><br>
-			<<endif>>
-		<<endif>>
-
-		<<if $hiredCompanions[$i].name=="Khemia">>
-			<<if $playerCurses[$j].name == "Asset Robustness A" || $playerCurses[$j].name == "Asset Robustness B" || 	$playerCurses[$j].name == "Asset Robustness C" || 	$playerCurses[$j].name == "Asset Robustness D" || 	$playerCurses[$j].name == "Clothing Restriction A" || 	$playerCurses[$j].name == "Clothing Restriction B" || 		$playerCurses[$j].name == "Power Dom" || 			$playerCurses[$j].name == "Absolute Birth Control" || 		$playerCurses[$j].name == "Pheromones" >>
-				<<if $j==0>>
-					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
-				<<endif>>
-				<<print "$playerCurses[$j].name">>
-				<<link "Choose" "Layer3 Skewed1a">>
-				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
-				<<set $playerCurses.deleteAt($j)>>
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-				<</link>><br>
-			<<endif>>
-		<<endif>>
-
-		<<if $hiredCompanions[$i].name=="Cloud">>
-			<<if $playerCurses[$j].name == "Asset Robustness A" || $playerCurses[$j].name == "Asset Robustness B" || 		 		$playerCurses[$j].name == "Equal Opportunity" || 			 		$playerCurses[$j].name == "Pheromones" >>
-				<<if $j==0>>
-					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
-				<<endif>>
-				<<print "$playerCurses[$j].name">>
-				<<link "Choose" "Layer3 Skewed1a">>
-				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
-				<<set $playerCurses.deleteAt($j)>>
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-				<</link>><br>
-			<<endif>>
-		<<endif>>
-
-		<<if $hiredCompanions[$i].name=="Saeko">>
-			<<if $playerCurses[$j].name == "Freckle Speckle" || 	$playerCurses[$j].name == "Hair Removal" || 		$playerCurses[$j].name == "20/20000000" || 					$playerCurses[$j].name == "Equal Opportunity" ||	 $playerCurses[$j].name == "Crossdress Your Heart">>
-				<<if $j==0>>
-					<<print "$hiredCompanions[$i].name doesn't mind taking:">><br>
-				<<endif>>
-				<<print "$playerCurses[$j].name">>
-				<<link "Choose" "Layer3 Skewed1a">>
-				<<set $hiredCompanions[$i].curses.push($playerCurses[$j])>>
-				<<set $playerCurses.deleteAt($j)>>
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-				<</link>><br>
-			<<endif>>
-		<<endif>>
+		<</for>>
 	<</capture>>
-	<</for>>
-<</capture>>
 <</for>>
 <</nobr>>
 [[On second thought, maybe a more forceful approach is warrented|Layer3 Skewed 2a]]
