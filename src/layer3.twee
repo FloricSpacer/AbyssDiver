@@ -799,24 +799,29 @@ Which companion would you like to force the curse of $playerCurses[$temp].name o
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<capture $i>>
+	<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer3 Skewed Apply][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $playerCurses.deleteAt($temp), $temp2=$i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+
+:: Layer3 Skewed Apply [layer3 noreturn]
+[img[setup.ImagePath+'Wonders/slantedshrine.png']]
+
+<<nobr>>
 <<set $dubloons -= ($skewedUsed * 5)>>
 <<set $skewedUsed += 1>>
 <<set $skewedForced += 1>>
-<<if $convoStart==1>>
-	<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-		<<capture $i>>
-		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer3 Skewed2b][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $playerCurses.deleteAt($temp),$convoStart=0,$temp2=$i]]">><br>
-		<</capture>>
-	<</for>>
-<<else>>
-	<<set _companionName = $hiredCompanions[$temp2].name>>
-	<<set _affectionPenalty = 4 - $hsswear>>
-	<<include "Companion Mistreatment Reaction">>
-<<endif>>
+<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _affectionPenalty = 4 - $hsswear>>
+<<include "Companion Mistreatment Reaction">>
 <</nobr>>
-[[Stand in front of the shrine to force another curse|Layer3 Skewed 2a][$convoStart=1,$choice1=0,$choice2=0]]
-[[On second thought, maybe a more diplomatic approach would be advisable|Layer3 Skewed1a][$convoStart=1,$choice1=0,$choice2=0]]
-[[Continue with your journey|Layer3 Hub][$convoStart=1,$choice1=0,$choice2=0]]
+[[Stand in front of the shrine to force another curse|Layer3 Skewed 2a][$choice1=0,$choice2=0]]
+[[On second thought, maybe a more diplomatic approach would be advisable|Layer3 Skewed1a][$choice1=0,$choice2=0]]
+[[Continue with your journey|Layer3 Hub][$choice1=0,$choice2=0]]
+
 
 :: Layer3 Threat1 Main [layer3]
 <<set $timeL3T1 -= 6>>
