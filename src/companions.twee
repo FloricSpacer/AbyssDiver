@@ -1440,6 +1440,69 @@ Talk more about research and let her reveal some stuff about the deepest layer o
 Double-click this passage to edit it.
 
 
+:: Companion Mistreatment Reaction [nobr]
+/* Arguments:
+	_companionName: name of the companion that was mistreated
+	_affectionPenalty: amount to decrease the companion's affection by
+*/
+
+/* Reaction of affected companion: */
+<<if _companionName == "Maru">>
+	<<say $companionMaru>> No! Why did you do this? I relied on you...<</say>><br>
+	He starts crying while trying to come to grip with his new curse.<br><br>
+	<<set $companionMaru.affec -= _affectionPenalty>>
+<<elseif _companionName == "Lily">>
+	<<say $companionLily>> Are you for real?! Did you just do what I think you did?!<</say>><br>
+	She pushes you aside and stomps off in a mixture of rage and anguish.<br><br>
+	<<set $companionLily.affec -= _affectionPenalty>>
+<<elseif _companionName == "Khemia">>
+	<<say $companionKhemia>> ARE YOU FUCKING KIDDING ME WITH THIS?<</say>><br>
+	He grabs you at your collar and for a second you think he is going to hit you, but he puts you down without saying anything else and walks away, fists clenched.<br><br>
+	<<set $companionKhemia.affec -= _affectionPenalty>>
+<<elseif _companionName == "Cherry">>
+	<<say $companionCherry>> I thought I didn't care about anything anymore, but then why am I feeling like this?<</say>><br>
+	A single tear rolls down her cheek as she stands in place silently. <br><br>
+	<<set $companionCherry.affec -= _affectionPenalty - 1>>
+<<elseif _companionName == "Cloud">>
+	<<say $companionCloud>> I should have seen this coming. Now I know your true colors.<</say>><br>
+	He glares at you and walks off.<br><br>
+	<<set $companionCloud.affec -= _affectionPenalty>>
+<<elseif _companionName == "Saeko">>
+	She stands frozen, her face pale, as she tries to process what just happened to her.<br><br>
+	<<say $companionSaeko>> This wasn't what we agreed to... I, how, why..?<</say>><br>
+	<<set $companionSaeko.affec -= _affectionPenalty>>
+<<endif>>
+
+/* Reaction of other companions: */
+<<set _affectionPenalty -= 2>>
+<<if _affectionPenalty > 0>>
+	<<if _companionName != "Maru" && $hiredCompanions.some(e => e.name === "Maru")>>
+		<<set $companionMaru.affec -= _affectionPenalty>>
+		<<say $companionMaru>> That's not nice... <</say>><br>
+	<<endif>>
+	<<if _companionName != "Lily" && $hiredCompanions.some(e => e.name === "Lily")>>
+		<<set $companionLily.affec -= _affectionPenalty>>
+		<<say $companionLily>> How could you?! <</say>><br>
+	<<endif>>
+	<<if _companionName != "Khemia" && $hiredCompanions.some(e => e.name === "Khemia")>>
+		<<set $companionKhemia.affec -= _affectionPenalty>>
+		<<say $companionKhemia>> Not cool! <</say>><br>
+	<<endif>>
+	<<if _companionName != "Cherry" && $hiredCompanions.some(e => e.name === "Cherry")>>
+		<<set $companionCherry.affec -= _affectionPenalty>>
+		<<say $companionCherry>> I thought you were different... <</say>><br>
+	<<endif>>
+	<<if _companionName != "Cloud" && $hiredCompanions.some(e => e.name === "Cloud")>>
+		<<set $companionCloud.affec -= _affectionPenalty>>
+		<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
+	<<endif>>
+	<<if _companionName != "Saeko" && $hiredCompanions.some(e => e.name === "Saeko")>>
+		<<set $companionSaeko.affec -= _affectionPenalty>>
+		<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
+	<<endif>>
+<<endif>>
+
+
 :: Maru Leaving [noreturn]
 <<nobr>>
 Maru whimpers as tears begin to pour down his face.<br><br>
