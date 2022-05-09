@@ -433,6 +433,9 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<if $temp1==15 || $temp2==15>>
+	<<set AgeLog.push($curse16)>>
+<<endif>>
 <</nobr>>
 
 The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
@@ -543,6 +546,9 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<if $temp2==15>>
+	<<set AgeLog.push($curse16)>>
+<<endif>>
 <</nobr>>
 
 With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.floor(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Fluffy Ears")>>
@@ -1008,7 +1014,7 @@ You have successfully taken on the $curse15.name curse. Hopefully you are ok wit
 
 
 :: Take on Age Reduction A [layer2]
-<<set $playerCurses.push($curse16)>><<set $corruption += $curse16.corr>>
+<<set $playerCurses.push($curse16)>><<set $corruption += $curse16.corr>><<set $AgeLog.push($curse16)>>
 
 You have successfully taken on the $curse16.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -1019,13 +1025,6 @@ You have successfully taken on the $curse16.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L2]]
 <<endif>>
 
-<<nobr>>
-<<if $app.appAge <= 22>>
-	<<set $app.appAge -= 2>>
-	<<else>>
-	<<set $app.appAge = 20>>
-<<endif>>
-<</nobr>>
 
 
 :: Take on Fluffy Ears [layer2]

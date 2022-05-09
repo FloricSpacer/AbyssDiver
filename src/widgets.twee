@@ -7,6 +7,7 @@
 4) $app.osex (= "female")
 5) $app.appAge
 */
+	<<AgeCorrected>>
 	<<set $genderlvl = $app.gender-1>>
 	<<if $app.osex=="female">>
 		<<set $female_start=1>>
@@ -66,6 +67,7 @@
 4) $app.osex (= "female")
 5) $app.appAge
 */
+	<<AgeCorrected>>
 	<<set $genderlvl = $app.gender-1>>
 	<<if $app.osex=="female">>
 		<<set $female_start=1>>
@@ -138,6 +140,7 @@
 
 :: Change Breast [widget nobr]
 <<widget "BreastCorrected">>
+	<<AgeCorrected>>
 	<<set $x = 18 -$app.appAge>>
 	<<set $app.breastsCor =$app.breasts>>
 	<<if $x>0 +1/5 *($app.gender-1)>>
@@ -154,6 +157,58 @@
 	<<endif>>
 <</widget>>
 
+:: Age widget [widget nobr]
+<<widget "AgeCorrected">>
+<<nobr>>
+<<set $app.appAge = $app.age>>
+<<if $AgeLog.length>0>>
+	<<for $i = 0; $i < $AgeLog.length; $i++>>
+
+			<<if $AgeLog[$i].name == "Age Reduction A" >>
+				<<if $app.appAge <= 22>>
+					<<set $app.appAge -= 2>>
+				<<else>>
+					<<set $app.appAge = 20>>
+				<<endif>>
+			<<endif>>
+
+			<<if $AgeLog[$i].name == "Age Reduction B" >>
+				<<if $app.appAge <= 23>>
+					<<set $app.appAge -= 3>>
+				<<else>>
+					<<set $app.appAge = 20>>
+				<<endif>>
+			<<endif>>
+
+
+			<<if $AgeLog[$i].name == "Age Reduction C" >>
+				<<if $app.appAge <= 24>>
+					<<set $app.appAge -= 4>>
+				<<else>>
+					<<set $app.appAge = 20>>
+				<<endif>>
+			<<endif>>
+
+			<<if $AgeLog[$i].name == "1 Day Forage Minor Impact" >>
+				<<set $app.appAge -= 0.08>>
+			<<endif>>
+
+			<<if $AgeLog[$i].name == "1 Day Forage Major Impact" >>
+				<<set $app.appAge -= 1>>
+			<<endif>>
+
+			<<if $AgeLog[$i].name == "Doll Transformation">>
+				<<if $app.appAge>18>>
+					<<set $app.appAge = 17>>
+				<<else>>
+					<<set $app.appAge -= 2>>
+				<<endif>>
+			<<endif>>
+
+	<</for>>
+<<endif>>
+<</nobr>>
+<</widget>>
 
 :: Pronoun widgets [widget nobr]
 <<widget "Pronoun">>
@@ -213,6 +268,7 @@
 <</widget>>
 
 <<widget "PerceivedGender">>\
+	<<AgeCorrected>>\
 	<<if $app.appGender<=5>>\
 		<<if $app.appAge>16>>\
 			man\
@@ -229,6 +285,7 @@
 <</widget>>
 
 <<widget "PerceivedGender2">>\
+	<<AgeCorrected>>\
 	<<if $app.appGender<=5>>\
 		<<if $app.appAge>16>>\
 			dude\
@@ -245,6 +302,7 @@
 <</widget>>
 
 <<widget "PerceivedStature">>
+	<<HeightCorrected>>\
 	<<if $app.heightCor <160 >>
 			little
 	<<elseif $height >180>>
@@ -504,12 +562,9 @@
 
 :: Doll transformation [widget nobr]
 <<widget "dollTF">>
+<<nobr>>
+<<set $AgeLog.push($DollTF)>>
 <<set $app.gender += 1>>
-<<if $app.appAge>18>>
-	<<set $app.appAge = 17>>
-<<else>>
-	<<set $app.appAge -= 2>>
-<<endif>>
 <<set $creepydoll.affec += 1>>
 <<if $app.penis>0 >>
 	<<set $app.penis -=1>>
@@ -518,6 +573,7 @@
 		<<set $app.vagina=1>>
 	<<endif>>
 <<endif>>
+<</nobr>>
 <</widget>>
 
 

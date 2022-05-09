@@ -631,7 +631,7 @@ You have successfully taken on the $curse75.name curse. Hopefully you are ok wit
 
 
 :: Take on Age Reduction C [layer6]
-<<set $playerCurses.push($curse76)>><<set $corruption += $curse76.corr>>
+<<set $playerCurses.push($curse76)>><<set $corruption += $curse76.corr>><<set $AgeLog.push($curse76)>>
 
 You have successfully taken on the $curse76.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -641,13 +641,7 @@ You have successfully taken on the $curse76.name curse. Hopefully you are ok wit
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
 <<endif>>
-<<nobr>>
-<<if $app.appAge <= 24>>
-	<<set $app.appAge -= 4>>
-	<<else>>
-	<<set $app.appAge = 20>>
-<<endif>>
-<</nobr>>
+
 
 
 :: Take on Horny [layer6]
@@ -881,6 +875,9 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<if $temp1==75 || $temp2==75>>
+	<<set AgeLog.push($curse76)>>
+<<endif>>
 <</nobr>>
 
 The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
@@ -920,6 +917,9 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<if $temp2==75>>
+	<<set AgeLog.push($curse76)>>
+<<endif>>
 <</nobr>>
 
 With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.

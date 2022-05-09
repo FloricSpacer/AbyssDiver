@@ -439,7 +439,7 @@ You have successfully taken on the $curse43.name curse. Hopefully you are ok wit
 
 
 :: Take on Age Reduction B [layer4]
-<<set $playerCurses.push($curse44)>><<set $corruption += $curse44.corr>>
+<<set $playerCurses.push($curse44)>><<set $corruption += $curse44.corr>><<set $AgeLog.push($curse44)>>
 
 You have successfully taken on the $curse44.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -1433,6 +1433,9 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<if $temp1==43 || $temp2==43>>
+	<<set AgeLog.push($curse44)>>
+<<endif>>
 <</nobr>>
 
 The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
@@ -1488,6 +1491,9 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<if $temp2==43>>
+	<<set AgeLog.push($curse44)>>
+<<endif>>
 <</nobr>>
 
 With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
