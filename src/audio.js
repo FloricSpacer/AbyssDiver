@@ -121,11 +121,6 @@
 	}
 }());
 
-// Check to see if trackID is currently loaded
-window.TrackExists = function (trackID) {
-	return SimpleAudio.tracks.has(trackID);
-};
-
 // Check to see if trackID is the currently playing track
 window.isPlaying = function (trackID) {
 	var track = SimpleAudio.tracks.get(trackID);
