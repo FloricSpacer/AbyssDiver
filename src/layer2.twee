@@ -483,44 +483,16 @@ What type of fur would you like to gain?
 
 <<nobr>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal B")>>
-	<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
+	<<set $GenderLog.push($curse14)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness B")>>
-<<set $app.modpenis += 1>>
-<<set $app.modbreasts += 2>>
-<<if $app.sex == "male">>
-	<<set $app.penis += 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts += 2>>
-<<else>>
-	<<set $app.penis += 1>>
-	<<set $app.breasts += 2>>
-<<endif>>
+	<<set $GenderLog.push($curse15)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Sex Switcheroo")>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-	<<set $app.penis = 0>>
-	<<set $app.vag = 1>>
-	<<set $app.breasts += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-	<<set $app.penis = 3>>
-	<<set $app.vag = 0>>
-<<endif>>
+	<<set $GenderLog.push($curse22)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Futa Fun")>>
-<<if $app.osex == "male">>
-	<<set $app.vag = 1>>
-	<<set $app.breasts += 2>>
-<<else>>
-	<<set $app.penis = 3>>
-<<endif>>
+	<<set $GenderLog.push($curse23)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
 <<set $app.libido += 1>>
@@ -596,44 +568,16 @@ What type of fur would you like to gain?
 
 <<nobr>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal B")>>
-	<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
+	<<set $GenderLog.push($curse14)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness B")>>
-<<set $app.modpenis += 1>>
-<<set $app.modbreasts += 2>>
-<<if $app.sex == "male">>
-	<<set $app.penis += 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts += 2>>
-<<else>>
-	<<set $app.penis += 1>>
-	<<set $app.breasts += 2>>
-<<endif>>
+	<<set $GenderLog.push($curse15)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Sex Switcheroo")>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-	<<set $app.penis = 0>>
-	<<set $app.vag = 1>>
-	<<set $app.breasts += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-	<<set $app.penis = 3>>
-	<<set $app.vag = 0>>
-<<endif>>
+	<<set $GenderLog.push($curse22)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Futa Fun")>>
-<<if $app.osex == "male">>
-	<<set $app.vag = 1>>
-	<<set $app.breasts += 2>>
-<<else>>
-	<<set $app.penis = 3>>
-<<endif>>
+	<<set $GenderLog.push($curse23)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
 <<set $app.libido += 1>>
@@ -713,56 +657,6 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 <<set $app.skinColor = $hiredCompanions[$swapComp].skinColor>>
 <<set $app.desc += $hiredCompanions[$swapComp].appDesc>>
 
-
-
-<<if $playerCurses.some(e => e.name === "Futa Fun")>>
-<<if $app.osex == "male">>
-	<<set $app.vag = 1>>
-	<<set $app.breasts = Math.max((3 + ($app.penis - 3)), 1)>>
-<<else>>
-	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
-<<endif>>
-<<set $app.sex = "futa">>
-<<endif>>
-
-<<if $playerCurses.some(e => e.name === "Sex Switcheroo")>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-	<<set $app.breasts = $app.penis>>
-	<<set $app.penis = 0>>
-	<<set $app.vag = 1>>
-	<<set $app.sex = "female">>
-<<else>>
-	<<set $app.gender -= 1>>
-	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
-	<<set $app.vag = 0>>
-	<<set $app.sex = "male">>
-	<<set $app.breasts = 0>>
-<<endif>>
-<<endif>>
-
-<<if $app.sex == "female" || $app.sex == "futa">>
-	<<set $app.breasts += $app.modbreasts>>
-<<endif>>
-<<if $app.sex == "male" || $app.sex == "futa">>
-	<<set $app.penis += $app.modpenis>>
-<<endif>>
-
-<<if $app.osex == "male">>
-	<<set $app.gender = $app.ogender + $app.modgender>>
-	<<else>>
-	<<set $app.gender = $app.ogender - $app.modgender>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
-<<if $app.sex == "male">>
-	<<set $app.penis = 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts = 1>>
-<<elseif $app.sex == "futa">>
-	<<set $app.penis = 1>>
-	<<set $app.breasts = 1>>
-<<endif>>
-<<endif>>
 <<set $app.switch=true>>
 <<Update_MC_Speech>>
 
@@ -968,7 +862,7 @@ You have successfully taken on the $curse13.name curse. Hopefully you are ok wit
 
 
 :: Take on Gender Reversal B [layer2]
-<<set $playerCurses.push($curse14)>><<set $corruption += $curse14.corr>>
+<<set $playerCurses.push($curse14)>><<set $corruption += $curse14.corr>><<set $GenderLog.push($curse14)>>
 
 You have successfully taken on the $curse14.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -979,18 +873,10 @@ You have successfully taken on the $curse14.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L2]]
 <<endif>>
 
-<<nobr>>
-<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
-<</nobr>>
 
 
 :: Take on Asset Robustness B [layer2]
-<<set $playerCurses.push($curse15)>><<set $corruption += $curse15.corr>>
+<<set $playerCurses.push($curse15)>><<set $corruption += $curse15.corr>><<set $GenderLog.push($curse15)>>
 
 You have successfully taken on the $curse15.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -1001,16 +887,6 @@ You have successfully taken on the $curse15.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L2]]
 <<endif>>
 
-<<nobr>>
-<<set $app.modpenis += 1>>
-<<set $app.modbreasts += 2>>
-<<if $app.penis > 0 >>
-	<<set $app.penis += 1>>
-<<endif>>
-<<if $app.breastsCor >0 || $app.breasts >0>>
-	<<set $app.breasts += 2>>
-<<endif>>
-<</nobr>>
 
 
 :: Take on Age Reduction A [layer2]
@@ -1135,7 +1011,7 @@ You have successfully taken on the $curse21.name curse. Hopefully you are ok wit
 
 
 :: Take on Sex Switcheroo [layer2]
-<<set $playerCurses.push($curse22)>><<set $corruption += $curse22.corr>>
+<<set $playerCurses.push($curse22)>><<set $corruption += $curse22.corr>><<set $GenderLog.push($curse22)>>
 
 You have successfully taken on the $curse22.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -1146,25 +1022,10 @@ You have successfully taken on the $curse22.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L2]]
 <<endif>>
 
-<<nobr>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-	<<set $app.breasts = $app.penis>>
-	<<set $app.penis = 0>>
-	<<set $app.vag = 1>>
-	<<set $app.sex = "female">>
-<<else>>
-	<<set $app.gender -= 1>>
-	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
-	<<set $app.vag = 0>>
-	<<set $app.sex = "male">>
-	<<set $app.breasts = 0>>
-<<endif>>
-<</nobr>>
 
 
 :: Take on Futa Fun [layer2]
-<<set $playerCurses.push($curse23)>><<set $corruption += $curse23.corr>>
+<<set $playerCurses.push($curse23)>><<set $corruption += $curse23.corr>><<set $GenderLog.push($curse23)>>
 
 You have successfully taken on the $curse23.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -1176,16 +1037,6 @@ You seem to have been one of the people this curse leaves with both a penis and 
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
 <<endif>>
-
-<<nobr>>
-<<if $app.osex == "male">>
-	<<set $app.vag = 1>>
-	<<set $app.breasts = Math.max((3 + ($app.penis - 3)), 1)>>
-<<else>>
-	<<set $app.penis = Math.max((3 + ($app.breasts - $app.obreasts)), 1)>>
-<<endif>>
-<<set $app.sex = "futa">>
-<</nobr>>
 
 
 :: Take on Blushing Virgin [layer2]

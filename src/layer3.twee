@@ -341,11 +341,11 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 		<<set $foodL3 += $tempTime>>
 		<<if $abyssKnow == 0>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageMajor)>>
+				<<set $AgeLog.push($ForageFoodMajor)>>
 			<</for>>
 		<<else>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageMinor)>>
+				<<set $AgeLog.push($ForageFoodMinor)>>
 			<</for>>
 		<<endif>>
 <<endif>>
@@ -492,7 +492,7 @@ You have successfully taken on the $curse25.name curse. Hopefully you are ok wit
 
 
 :: Take on Asset Robustness C [layer3]
-<<set $playerCurses.push($curse27)>><<set $corruption += $curse27.corr>>
+<<set $playerCurses.push($curse27)>><<set $corruption += $curse27.corr>><<set $GenderLog.push($curse27)>>
 
 You have successfully taken on the $curse27.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -503,19 +503,6 @@ You have successfully taken on the $curse27.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L3]]
 <<endif>>
 
-<<nobr>>
-<<set $app.modpenis += 2>>
-<<set $app.modbreasts += 4>>
-
-<<if $app.penis>0>>
-	<<set $app.penis += 2>>
-<<endif>>
-
-<<if $app.breastsCor >0 || $app.breasts >0>>
-	<<set $app.breasts += 4>>
-<<endif>>
-
-<</nobr>>
 
 
 :: Take on Clothing Restriction B [layer3]
@@ -711,7 +698,7 @@ You have successfully taken on the $curse40.name curse. Hopefully you are ok wit
 
 
 :: Take on Gender Reversal C [layer3]
-<<set $playerCurses.push($curse26)>><<set $corruption += $curse26.corr>>
+<<set $playerCurses.push($curse26)>><<set $corruption += $curse26.corr>><<set $GenderLog.push($curse26)>>
 
 You have successfully taken on the $curse26.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -721,16 +708,6 @@ You have successfully taken on the $curse26.name curse. Hopefully you are ok wit
 <<else>>
 	[[Return to your balloon|Escape Balloon L3]]
 <<endif>>
-
-<<nobr>>
-<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-	<<set $app.breasts += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
-<</nobr>>
 
 
 :: Layer3 Flasks [layer3]
@@ -1028,6 +1005,18 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<if $temp1==25>>
+	<<set $GenderLog.push($curse26)>>
+<<elseif $temp1==26>>
+	<<set $GenderLog.push($curse27)>>
+<<endif>>
+
+<<if $temp2==25>>
+	<<set $GenderLog.push($curse26)>>
+<<elseif $temp2==26>>
+	<<set $GenderLog.push($curse27)>>
+<<endif>>
+
 <</nobr>>
 
 The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Wacky Wombs")>>
@@ -1127,24 +1116,10 @@ Please enter your new skin/eye color:
 
 <<nobr>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal C")>>
-	<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
+	<<set $GenderLog.push($curse26)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness C")>>
-<<set $app.modpenis += 2>>
-<<set $app.modbreasts += 4>>
-<<if $app.sex == "male">>
-	<<set $app.penis += 2>>
-<<elseif $app.sex == "futa">>
-	<<set $app.breasts += 4>>
-	<<set $app.penis += 2>>
-<<else>>
-	<<set $app.breasts += 4>>
-<<endif>>
+	<<set $GenderLog.push($curse27)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Gooey")>>
 <<set $app.skinType = "sticky, slimy">>
@@ -1629,12 +1604,12 @@ Finally, the vision fades, leaving you standing once again where you were before
 		<<if $abyssKnow == 0>>
 			<<set $app.appAge -= $tempTime>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageMajor)>>
+				<<set $AgeLog.push($ForageFoodMajor)>>
 			<</for>>
 		<<else>>
 			<<set $app.appAge -= ($tempTime * 0.08)>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageMinor)>>
+				<<set $AgeLog.push($ForageFoodMinor)>>
 			<</for>>
 		<<endif>>
 <<endif>>
