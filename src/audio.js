@@ -27,7 +27,7 @@
 		setting  : true
 	};
 	Setting.load();
-	if (options.setting && settings.volume) {
+	if (options.setting && typeof settings.volume === 'number') {
 		options.current = parseInt(settings.volume);
 	}
 	var vol = {
