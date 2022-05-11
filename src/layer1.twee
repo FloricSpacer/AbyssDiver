@@ -121,10 +121,7 @@ These are the curses available for you to take to help manage your corruption:
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-curses.png']]
 <<BreastCorrected>>
 
-<<set $temp =$playerCurses.filter(e => e.name === "Dizzying Heights (increase)" || e.name === "Dizzying Heights (decrease)" )>>
-<<if $temp.length < 5>>
-	[[Take on Dizzying Heights test]] 
-<<endif>>
+
 <<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
 	<<else>><<print "[[Take on Libido Reinforcement A]]">>
 <<endif>><</nobr>>
@@ -336,70 +333,48 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>>
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
-<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
-	<<set $dizzyCount +=1>>
-<<endif>>
-<<if temp1==1>>
-	<<set $GenderLog.push($curse2)>>
-<<elseif temp1==2>>
-	<<set $GenderLog.push($curse3)>>
-<<elseif temp1==4>>
-	<<set $GenderLog.push($curse5)>>
-<<endif>>
-
-<<if temp2==1>>
-	<<set $GenderLog.push($curse2)>>
-<<elseif temp2==2>>
-	<<set $GenderLog.push($curse3)>>
-<<elseif temp2==4>>
-	<<set $GenderLog.push($curse5)>>
-<<endif>>
 
 <</nobr>>
 
 The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.<<nobr>>
-<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
-<<if $height == "0">>
-<br><br>Would you like to increase or descrease your height?<br><br>
-
-<<radiobutton "$height" "-5" checked>> Decrease<br>
-<<radiobutton "$height" "5" >> Increase<br><br>
+<<if $temp1==9>>
+	<<set $temp1=$temp2>>
+	<<set $temp2=9>>
 <<endif>>
-<<endif>><</nobr>>
 
+<<if $temp1==1>>
+	<<set $GenderLog.push($curse2)>>
+<<elseif $temp1==2>>
+	<<set $GenderLog.push($curse3)>>
+<<elseif $temp1==4>>
+	<<set $GenderLog.push($curse5)>>
+<<endif>>
+
+<<if $temp2==1>>
+	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
+<<elseif $temp2==2>>
+	<<set $GenderLog.push($curse3)>>[[Continue on to the rest of the layer|Layer1 Hub]]
+<<elseif $temp2==4>>
+	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
+<<elseif $temp2==9>>
+	<<set $dizzyCount +=1>>
+	<<if $HeightIncrease == 0>>
+		Would you like to increase or descrease your height?<br>
+		<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+		<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+	<<elseif $HeightIncrease == 1>>
+		You feel yourself growing even more.<br>
+	<<else>>
+		You feel yourself shrinking even more.<br>
+	<<endif>>
+
+	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
+		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
+	<</link>>
+<<else>>
 [[Continue on to the rest of the layer|Layer1 Hub]]
+<<endif>>
 
-<<nobr>>
-<<if $playerCurses.some(e => e.name === "Gender Reversal A")>>
-	<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Asset Robustness A")>>
-<<set $app.modpenis += 1>>
-<<set $app.modbreasts += 1>>
-<<if $app.sex == "male">>
-	<<set $app.penis += 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts += 1>>
-<<else>>
-	<<set $app.penis += 1>>
-	<<set $app.breasts += 1>>
-<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
-<<if $app.sex == "male">>
-	<<set $app.penis = 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts = 1>>
-<<elseif $app.sex == "futa">>
-	<<set $app.penis = 1>>
-	<<set $app.breasts = 1>>
-<<endif>>
-<<endif>>
 <<if $playerCurses.some(e => e.name === "Hair Removal")>>
 	<<set $app.skinType = "hairless, smooth">>
 <<endif>>
@@ -409,10 +384,7 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
 <<set $app.libido += 1>>
 <<endif>>
-<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
-	<<set $app.height += parseInt($height)>>
-	<<set $app.modheight += parseInt($height)>>
-<<endif>>
+
 <</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
 
 You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
@@ -435,59 +407,34 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $playerCurses.push($curses[$temp2])>>
 <<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
-<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
-	<<set $dizzyCount +=1>>
-<<endif>>
 <</nobr>>
 
 With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.<<nobr>>
-<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
-<<if $height == "0">>
-<br><br>Would you like to increase or descrease your height?<br><br>
+<<if $temp2==1>>
+	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
+<<elseif $temp2==2>>
+	<<set $GenderLog.push($curse3)>>[[Continue on to the rest of the layer|Layer1 Hub]]
+<<elseif $temp2==4>>
+	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
+<<elseif $temp2==9>>
+	<<set $dizzyCount +=1>>
+	<<if $HeightIncrease == 0>>
+		Would you like to increase or descrease your height?<br>
+		<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+		<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+	<<elseif $HeightIncrease == 1>>
+		You feel yourself growing even more.<br>
+	<<else>>
+		You feel yourself shrinking even more.<br>
+	<<endif>>
 
-<<radiobutton "$height" "-5" checked>> Decrease<br>
-<<radiobutton "$height" "5" >> Increase<br><br>
-<<endif>>
-<<endif>>
-<<if temp2==1>>
-	<<set $GenderLog.push($curse2)>>
-<<elseif temp2==2>>
-	<<set $GenderLog.push($curse3)>>
-<<elseif temp2==4>>
-	<<set $GenderLog.push($curse5)>>
-<<endif>>
-<</nobr>>
-
+	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
+		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
+	<</link>>
+<<else>>
 [[Continue on to the rest of the layer|Layer1 Hub]]
+<<endif>>
 
-<<nobr>>
-<<if $playerCurses.some(e => e.name === "Gender Reversal A")>>
-<<set $app.modgender += 1>>
-<<if $app.osex == "male">>
-	<<set $app.gender += 1>>
-<<else>>
-	<<set $app.gender -= 1>>
-<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Asset Robustness A")>>
-<<set $app.modpenis += 1>>
-<<set $app.modbreasts += 1>>
-<<if $app.sex == "male">>
-	<<set $app.penis += 1>>
-<<elseif $app.sex == "female">>
-	<<set $app.breasts += 1>>
-<<else>>
-	<<set $app.penis += 1>>
-	<<set $app.breasts += 1>>
-<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Shrunken Assets")>>
-<<if $app.osex == "male">>
-	<<set $app.penis = 1>>
-<<else>>
-	<<set $app.breasts = 1>>
-<<endif>>
-<<endif>>
 <<if $playerCurses.some(e => e.name === "Hair Removal")>>
 <<set $app.skinType = "hairless, smooth">>
 <<endif>>
@@ -496,10 +443,6 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
 <<set $app.libido += 1>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Dizzying Heights")>>
-	<<set $app.height += parseInt($height)>>
-	<<set $app.modheight += parseInt($height)>>
 <<endif>>
 <</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
 
@@ -859,26 +802,7 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 
 :: Take on Dizzying Heights [layer1]
-<<set $playerCurses.push($curse10)>><<set $corruption += $curse10.corr>><<set $dizzyCount += 1>>
-
-You have successfully taken on the $curse10.name curse. Hopefully you are ok with accepting the permanent consequences.
-<<if $height == "0">>
-Would you like to increase or descrease your height?
-
-<<radiobutton "$height" -5 checked>> Decrease
-<<radiobutton "$height" 5 >> Increase
-
-<<endif>>
-
-[[Accept more curses from the first layer|Layer1 Curses][$app.height += parseInt($height), $app.modheight += parseInt($height)]]
-<<if $escBalDepl==0>>
-	[[Return to exploring layer 1|Layer1 Hub][$app.height += parseInt($height), $app.modheight += parseInt($height)]]
-<<else>>
-	[[Return to your balloon|Escape Balloon L1][$app.height += parseInt($height), $app.modheight += parseInt($height)]]
-<<endif>>
-
-:: Take on Dizzying Heights test [layer1]
-<<set $corruption += $curse10.corr>>
+<<set $corruption += $curse10.corr>><<set $dizzyCount +=1>>
 You have successfully taken on the $curse10.name curse. Hopefully you are ok with accepting the permanent consequences.
 <<nobr>>
 <<if $HeightIncrease == 0>>
@@ -893,27 +817,16 @@ You have successfully taken on the $curse10.name curse. Hopefully you are ok wit
 <</nobr>>
 
 <<link "Accept more curses from the first layer" "Layer1 Curses">>
-	<<if $HeightIncrease == 1 >>
-		<<set $playerCurses.push($curse10a)>>
-	<<elseif $HeightIncrease == -1 >>
-		<<set $playerCurses.push($curse10b)>>
-	<<endif>>
+	<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
 <</link>>
+
 <<if $escBalDepl==0>>
 	<<link "Return to exploring layer 1" "Layer1 Hub">>
-	<<if $HeightIncrease == 1 >>
-		<<set $playerCurses.push($curse10a)>>
-	<<elseif $HeightIncrease == -1 >>
-		<<set $playerCurses.push($curse10b)>>
-	<<endif>>
+		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
 	<</link>>
 <<else>>
 	<<link "Return to your balloon" "Escape Balloon L1">>
-	<<if $HeightIncrease == 1 >>
-		<<set $playerCurses.push($curse10a)>>
-	<<elseif $HeightIncrease == -1 >>
-		<<set $playerCurses.push($curse10b)>>
-	<<endif>>
+		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
 	<</link>>
 <<endif>>
 
