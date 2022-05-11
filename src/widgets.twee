@@ -160,7 +160,7 @@
 <<widget "PenisCorrected">>
 
 	<<set $x = 16 -$app.appAge>>
-	<<set $app.PenisCor =$app.penis>>
+	<<set $app.penisCor =$app.penis>>
 	<<if $x>0 +1/5 *($app.gender-1)>>
 		<<set $app.penisCor = $app.penis - 0.083*$x*($app.penis-1)>>
 		<<if  $app.penisCor<1>>
@@ -185,7 +185,7 @@
 <<else>>
 	<<set $app.vag = 1>>
 <<endif>>
-
+penis1: $app.penis
 <<for _genderEvent range $GenderLog>>
 	<<BreastCorrected>>
 	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E"  >>
@@ -316,23 +316,23 @@
 		
 
 <</for>>
-	
-	<<if $GenderLog.some(e => e.name === "Shrunken Assets")>>
-		<<if $app.sex == "male">>
-			<<set $app.penis = 1>>
-			<<set $app.breasts = 0>>
-		<<elseif $app.sex == "female">>
-			<<set $app.penis = 0>>
-			<<set $app.breasts = 1>>
-		<<else>>
-			<<set $app.penis = 1>>
-			<<set $app.breasts = 1>>
-		<<endif>>
+penis2:$app.penis	
+<<if $GenderLog.some(e => e.name === "Shrunken Assets")>>
+	<<if $app.sex == "male">>
+		<<set $app.penis = 1>>
+		<<set $app.breasts = 0>>
+	<<elseif $app.sex == "female">>
+		<<set $app.penis = 0>>
+		<<set $app.breasts = 1>>
+	<<else>>
+		<<set $app.penis = 1>>
+		<<set $app.breasts = 1>>
 	<<endif>>
-	<<BreastCorrected>>
-	<<PenisCorrected>>
-	<<Update_MC_Speech>>
-
+<<endif>>
+<<BreastCorrected>>
+<<PenisCorrected>>
+<<Update_MC_Speech>>
+penis3:$app.penisCor
 <</widget>>
 
 :: Age widget [widget nobr]
@@ -413,13 +413,13 @@
 <</widget>>
 
 <<widget "GenderPronoun">>
-	<<if $app.gender<2>>
+	<<if $app.gender<2 && $app.appAge > 15>>
 		manly
-	<<elseif $app.gender<3>>
+	<<elseif $app.gender<3 >>
 		boyish
 	<<elseif $app.gender<4>>
 		androgynous
-	<<elseif $app.gender<5>>
+	<<elseif $app.gender<5 || $app.appAge < 15>>
 		girlish
 	<<else>>
 		feminine
@@ -445,7 +445,7 @@
 <</widget>>
 
 <<widget "PerceivedGender">>\
-	<<AgeCorrected>>\
+	<<AgeCorrected>>
 	<<if $app.appGender<=5>>\
 		<<if $app.appAge>16>>\
 			man\
@@ -462,7 +462,7 @@
 <</widget>>
 
 <<widget "PerceivedGender2">>\
-	<<AgeCorrected>>\
+	<<AgeCorrected>>
 	<<if $app.appGender<=5>>\
 		<<if $app.appAge>16>>\
 			dude\
@@ -479,7 +479,7 @@
 <</widget>>
 
 <<widget "PerceivedStature">>
-	<<HeightCorrected>>\
+	<<HeightCorrected>>
 	<<if $app.heightCor <160 >>
 			little
 	<<elseif $height >180>>
