@@ -26,14 +26,9 @@
 		step	 : 1,
 		setting  : true
 	};
-	Setting.load();
 	if (options.setting && typeof settings.volume === 'number') {
 		options.current = parseInt(settings.volume);
 	}
-	var vol = {
-		last: options.current,
-		start: (options.current / options.rangeMax).toFixed(2)
-	};
 
 	// Function to update the volume level.
 	function setVolume (val) {
@@ -43,7 +38,6 @@
 		options.current = Math.round(val * options.rangeMax);
 		if (options.setting) {
 			settings.volume = options.current;
-			Setting.save();
 		}
 		if ($('input[name=volume]').val() != options.current) {
 			$('input[name=volume]').val(options.current);
@@ -67,17 +61,10 @@
 		}
 	}
 
-	// Fix the initial volume level display.
-	postdisplay['volume-task'] = function (taskName) {
-		delete postdisplay[taskName];
-		setVolume(vol.start);
-	};
-
 	// Grab volume level changes from the volume slider.
 	$(document).on('input', 'input[name=volume]', function() {
 		var change = parseInt($('input[name=volume]').val());
 		setVolume(change / options.rangeMax);
-		vol.last = change;
 	});
 
 	// Create the <<volume>> macro.
