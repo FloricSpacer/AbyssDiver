@@ -1,6 +1,5 @@
 :: Change Height [widget nobr]
 <<widget "HeightCorrected">>
-<<nobr>>
 /*declare variables as follows when calling widget
 1) $app.heigth
 2) $app.oheight
@@ -75,12 +74,10 @@
     	<<set $app.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
 	<<endif>>
 
-<</nobr>>
 <</widget>>
 
 :: Change Breast [widget nobr]
 <<widget "BreastCorrected">>
-<<nobr>>
 	<<set $x = 18 -$app.appAge>>
 	<<set $app.breastsCor =$app.breasts>>
 	<<if $x>0 +1/5 *($app.gender-1)>>
@@ -95,12 +92,10 @@
 	<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
 		<<set $app.breastsCor +=1>>
 	<<endif>>
-<</nobr>>
 <</widget>>
 
 :: Change Penis [widget nobr]
 <<widget "PenisCorrected">>
-<<nobr>>
 
 <<if $app.sex != "female">>
 	<<set $x = 16 -$app.appAge>>
@@ -113,12 +108,10 @@
 	<<endif>>
 <<endif>>
 
-<</nobr>>
 <</widget>>
 
 :: Change Gender [widget nobr]
 <<widget "GenderCorrected">>
-<<nobr>>
 <<AgeCorrected>>
 
 <<set $app.sex = $app.osex>>
@@ -279,12 +272,10 @@
 <<BreastCorrected>>
 <<PenisCorrected>>
 <<Update_MC_Speech>>
-<</nobr>>
 <</widget>>
 
 :: Age widget [widget nobr]
 <<widget "AgeCorrected">>
-<<nobr>>
 <<set $app.appAge = $app.age>>
 <<for _ageEvent range $AgeLog>>
 
@@ -331,12 +322,10 @@
 
 <</for>>
 
-<</nobr>>
 <</widget>>
 
 :: Libido widget [widget nobr]
 <<widget "LibidoCorrected">>
-<<nobr>>
 <<set $app.libido = 2>>
 <<for _libidoEvent range $LibidoLog>>
 
@@ -355,7 +344,6 @@
 	<<endif>>
 
 <</for>>
-<</nobr>>
 <</widget>>
 
 :: Pronoun widgets [widget nobr]
@@ -383,7 +371,7 @@
 	<<endif>>
 <</widget>>
 
-<<widget "GenderPronoun">>
+<<widget "GenderPronoun">> 
 	<<if $app.gender<2 && $app.appAge > 15>>
 		manly
 	<<elseif $app.gender<3 >>
@@ -710,11 +698,9 @@
 
 :: Doll transformation [widget nobr]
 <<widget "dollTF">>
-<<nobr>>
 <<set $AgeLog.push($DollTF)>>
 <<set $GenderLog.push($DollTF)>>
 <<set $creepydoll.affec += 1>>
-<</nobr>>
 <</widget>>
 
 
@@ -796,4 +782,42 @@
 <<endif>>
 
 <<set $totalCarry += $carryWeight>>
+<</widget>>
+
+:: Miscellaneous appearance adjustment widget [widget nobr]
+<<widget "AppearanceCorrect">>
+
+<<set $app.hair = $app.ohair>> 
+<<set $app.ears= "normal human">>
+<<set $app.bodyHair= 1>>
+<<set $app.skinType= "">>
+<<set $app.skinColor= $app.oskinColor>>
+<<set $app.tail= []>>
+
+<<if $app.osex=='male'>>
+	<<set $app.womb= 0>>
+<<else>>
+	<<set $app.womb= 1>>
+<<endif>>
+
+<<set $app.womb1= "">>
+<<set $app.womb2= "">>
+<<set $app.desc= "">>
+<<set $app.blood="red">>
+
+<<for _appearEvent range $playerCurses>>
+
+	<<if _appearEvent.name == "Hair Removal">>
+		<<set $app.skinType = "hairless, smooth">>
+		<<set $app.bodyhair = 0>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Knife-ear">>
+		<<set $app.ears = "pointed, elfish">>
+	<<endif>>
+
+	<<if _appearEvent.name == "Perma-dye">>
+		<<set $app.ears = $curse7.variation>>
+	<<endif>>
+<</for>>
 <</widget>>
