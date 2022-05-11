@@ -24,17 +24,8 @@
 		<<endif>>
 		<<else>>
 		<<set $waterL1 += 1>>
-			<<if $abyssKnow == 0>>
-			<<set $app.modpenis += 1>>
-			<<set $app.modbreasts += 1>>
-			<<if $app.sex == "male">>
-				<<set $app.penis += 1>>
-			<<elseif $app.sex == "female">>
-				<<set $app.breasts += 1>>
-			<<else>>
-				<<set $app.penis += 1>>
-				<<set $app.breasts += 1>>
-			<<endif>>
+		<<if $abyssKnow == 0>>
+			<<set $GenderLog.push($ForageWaterMajor )>>
 		<<endif>>
 	<<endif>>
 <</for>>
@@ -493,7 +484,7 @@ What type of fur would you like to gain?
 	<<set $GenderLog.push($curse23)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
-<<set $app.libido += 1>>
+	<<set $LibidoLog.push($curse13)>>
 <<endif>>
 <</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
 
@@ -578,7 +569,7 @@ What type of fur would you like to gain?
 	<<set $GenderLog.push($curse23)>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B")>>
-<<set $app.libido += 1>>
+	<<set $LibidoLog.push($curse13)>>
 <<endif>>
 <</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
 
@@ -845,7 +836,7 @@ The rest of your companions are clearly not aproving of your action as well<br><
 
 
 :: Take on Libido Reinforcement B [layer2]
-<<set $playerCurses.push($curse13)>><<set $corruption += $curse13.corr>>
+<<set $playerCurses.push($curse13)>><<set $corruption += $curse13.corr>><<set $LibidoLog.push($curse13)>>
 
 You have successfully taken on the $curse13.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -855,8 +846,6 @@ You have successfully taken on the $curse13.name curse. Hopefully you are ok wit
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
 <<endif>>
-
-<<set $app.libido += 1>>
 
 
 :: Take on Gender Reversal B [layer2]
@@ -1336,8 +1325,12 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<<set $foodL2 += 1>>
 	<<if $mudHunt == 1 && $items[20].count > 0>>
 		<<set $items[20].count -= 1>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += 1>>
+	<<elseif $mudHunt == 0>>
+		<<if $abyssKnow == 0>>
+			<<set $LibidoLog.push($ForageFoodMajor )>>
+		<<else>>
+			<<set $lastFlan=$time+1>>
+		<<endif>>
 	<<endif>>
 <<endif>>
 	<<set $time += 1>>
@@ -1439,8 +1432,12 @@ Use the following option only if you have specifically considered your inventory
 	<<set $foodL2 += 1>>
 	<<if $mudHunt == 1 && $items[20].count > 0>>
 		<<set $items[20].count -= 1>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += 1>>
+	<<elseif $mudHunt == 0>>
+		<<if $abyssKnow == 0>>
+			<<set $LibidoLog.push($ForageFoodMajor )>>
+		<<else>>
+			<<set $lastFlan=$time+1>>
+		<<endif>>
 	<<endif>>
 <<endif>>
 	<<set $time += 1>>
@@ -1766,8 +1763,12 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<set $foodL2 += $tempTime>>
 	<<if $mudHunt == 1 && $items[20].count > 0>>
 		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0 && $abyssKnow == 0>>
-		<<set $app.libido += $tempTime>>
+	<<elseif $mudHunt == 0>>
+		<<if $abyssKnow == 0>>
+			<<set $LibidoLog.push($ForageFoodMajor )>>
+		<<else>>
+			<<set $lastFlan=$time+1>>
+		<<endif>>
 	<<endif>>
 <<endif>>
 <<for $i = 0; $i < $tempTime; $i++>>
