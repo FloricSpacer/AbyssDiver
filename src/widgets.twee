@@ -26,9 +26,6 @@
 		<<set _temp2 =$HeightLog.filter(e => e.name === "1 Day Food Forage Major Impact")>>
 		<<set _temp3 =$HeightLog.filter(e => e.name === "1 Day Food Forage Minor Impact")>>
 		<<set $height_change=-5*_temp1.length-3*_temp2-0.5*_temp3>>	
-		<<if _temp1+_temp2+_temp3>0 >>
-			<<set $HeightIncrease=-1>>
-		<<endif>>	
 	<<endif>>
 
 	<<if $HeightLog.some(e=> e.name === "Colossal-able")>>
@@ -78,8 +75,6 @@
     	<<set $app.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
 	<<endif>>
 
-
-	<<set $outputHeight2=Math.round ($app.heightCor)>>
 <</nobr>>
 <</widget>>
 
@@ -106,6 +101,8 @@
 :: Change Penis [widget nobr]
 <<widget "PenisCorrected">>
 <<nobr>>
+
+<<if $app.sex != "female">>
 	<<set $x = 16 -$app.appAge>>
 	<<set $app.penisCor =$app.penis>>
 	<<if $x>0 +1/5 *($app.gender-1)>>
@@ -114,6 +111,8 @@
 			<<set $app.penisCor =1>>
 		<<endif>>
 	<<endif>>
+<<endif>>
+
 <</nobr>>
 <</widget>>
 
@@ -208,7 +207,7 @@
 	<<if  _genderEvent.name == "Sex Switcheroo">>
 		<<if $app.osex == "male">>
 			<<set $app.gender = 6 - $app.modgender>>
-			<<set $app.breasts += 2 + $app.modbreasts>>
+			<<set $app.breasts += 3 + $app.modbreasts>>
 			<<set $app.penis = 0>>
 			<<set $app.vag = 1>>
 			<<set $app.sex = "female">>
@@ -224,7 +223,7 @@
 	<<if _genderEvent.name == "Futa Fun">>
 		<<if $app.osex == "male">>
 			<<set $app.vag = 1>>
-			<<set $app.breasts += 2 + $app.modbreasts>>
+			<<set $app.breasts += 3 + $app.modbreasts>>
 		<<else>>
 			<<set $app.penis = 3 + $app.modpenis>>
 		<<endif>>
