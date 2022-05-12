@@ -958,6 +958,35 @@ If you are over 18, please go back and enter an age above 18 to continue.
 			[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
 	<<endif>>
 
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		You look at the set of marbles known as the Managed Misfortune.
+		<<if $StoredCurse != "" && !$ManagedMisfortuneActive>>
+		You have stored the curse named $StoredCurse.name in them. <br>
+		<<link "Acitivate the stored curse" "Use Items and Relics">>
+		<<set $playerCurses.push($StoredCurse)>>
+		<<if $StoredCurse.type == "Height">>
+			<<set $HeightLog.push($StoredCurse)>>
+		<<elseif $StoredCurse.type == "Gender">>
+			<<set $GenderLog.push($StoredCurse)>>
+		<<elseif $StoredCurse.type == "Age">>
+			<<set $AgeLog.push($StoredCurse)>>
+		<<elseif $StoredCurse.type == "Libido">>
+			<<set $LibidoLog.push($StoredCurse)>>
+		<<endif>>
+		<<set $ManagedMisfortuneActive=true>>
+		<</link>>
+		<<elseif $ManagedMisfortuneActive >>
+		You are affected by the curse stored in the marbles called $StoredCurse.name. <br>
+		<<link "Deacitivate the stored curse" "Use Items and Relics">>
+			<<set $targetCurse = $StoredCurse>>
+			<<include "CurseRemoval">>
+			<<set $ManagedMisfortuneActive=false>>
+		<</link>>		
+		<<else>>
+		<br>You need to store a curse in the relic before you can use it<br>
+		<<endif>>
+	<<endif>>
+
 	<<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
 	<br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, relics, and curses await you further into the Abyss.<br>
 		<<if $currentLayer == 0>>
@@ -1022,10 +1051,6 @@ Value: $ownedRelics[$temp].value dubloons
 Corruption cost: $ownedRelics[$temp].corr
 
 <<back>>
-
-
-:: Use Items
-Double-click this passage to edit it.
 
 
 :: Kin Shifter Use [noreturn]
@@ -1215,5 +1240,24 @@ How many dubloons would you like to pay back?
 [[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
 
-:: Curse Removal
-<<>>
+:: CurseRemoval
+<<set _curseDeleted=false>>
+<<for _i = 0; _i < $playerCurses.length; _i++>>
+	<<if  !_curseDeleted && $playerCurses[_i].name == $targetCurse.name>>
+		<<if $targetCurse.type == "Height">>
+			<<set _j=$HeightLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $HeightLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Gender">>
+			<<set _j=$GenderLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $GenderLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Age">>
+			<<set _j=$AgeLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $AgeLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Libido">>
+			<<set _j=$LibidoLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $LibidoLog.deleteAt(_j)>>
+		<<endif>>
+		<<set $playerCurses.deleteAt(_i)>>
+		<<set _curseDeleted=true>>
+	<<endif>>
+<</for>>
