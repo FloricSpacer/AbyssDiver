@@ -17,7 +17,7 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 
 
 :: Layer5 Hub [layer5]
-<<set $currentLayer = 5>><<if $timeL5T1 < 7 && $timeL5T2 < 11>><<set $visitL5 = 1>><<set $layerExit = 0>><<checkTime>><<HeightCorrected>><<CarryAdjust>>
+<<set $currentLayer = 5>><<if $timeL5T1 < 7 && $timeL5T2 < 11>><<set $visitL5 = 1>><<set $layerExit = 0>><<checkTime>><<CarryAdjust>>
 
 Your hike through the scorching heat of the sand dunes of the fifth layer, trying to keep yourself from overheating while you travel. Luckily you can enjoy the scent of the exotic flowers found all around the layer and seemingly always in bloom. In the distance you can spot the ruins of some long-dead civilization, apparently worn down by the Abyss until all that's left is the ruins you can search to find relics on this layer.
 <<nobr>>
@@ -248,6 +248,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 These are the curses available for you to take to help manage your corruption:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-curses.png']]
+<<GenderCorrected>>
 
 <<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement D")>>
 	<<else>><<print "[[Take on Libido Reinforcement D]]">>
@@ -718,8 +719,7 @@ You have successfully taken on the $curse61.name curse. Hopefully you are ok wit
 
 
 :: Take on DoS [layer5]
-<<set $playerCurses.push($curse62)>><<set $corruption += $curse62.corr>>
-<<set $subdom += 1>>
+<<set $playerCurses.push($curse62)>><<set $corruption += $curse62.corr>><<set $LibidoLog.push($curse62)>>
 You have successfully taken on the $curse62.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the fifth layer|Layer5 Curses]]
@@ -731,8 +731,7 @@ You have successfully taken on the $curse62.name curse. Hopefully you are ok wit
 
 
 :: Take on DoM [layer5]
-<<set $playerCurses.push($curse63)>><<set $corruption += $curse63.corr>>
-<<set $subdom -= 1>>
+<<set $playerCurses.push($curse63)>><<set $corruption += $curse63.corr>><<set $LibidoLog.push($curse63)>>
 You have successfully taken on the $curse63.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the fifth layer|Layer5 Curses]]
@@ -781,9 +780,6 @@ You have successfully taken on the $curse66.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L5]]
 <<endif>>
 
-<<nobr>>
-<<set $app.skinType = "smooth, slightly rigid, plant-like">>
-<</nobr>>
 
 
 :: Take on Carapacian [layer5]
@@ -793,11 +789,7 @@ You have successfully taken on the $curse69.name curse. Hopefully you are ok wit
 
 Please enter your new exoskeleton color:
 
-<<textbox "$app.skinColor" "shiny black" "Layer5 Curses">>
-
-<<nobr>>
-<<set $app.skinType = "hard, shiny, chitin-exoskeleton">>
-<</nobr>>
+<<textbox "$curse69.variation" "shiny black" "Layer5 Curses">>
 
 
 :: Take on Hemospectrum [layer5]
@@ -807,22 +799,22 @@ You have successfully taken on the $curse70.name curse. Hopefully you are ok wit
 
 What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
 
-<<radiobutton "$app.blood" "blue" checked>> Blue
-<<radiobutton "$app.blood" "purple" >> Purple
-<<radiobutton "$app.blood" "green" >> Green
-<<radiobutton "$app.blood" "yellow" >> Yellow
-<<radiobutton "$app.blood" "orange" >> Orange
-<<radiobutton "$app.blood" "pink" >> Pink
-<<radiobutton "$app.blood" "black" >> Black
-<<radiobutton "$app.blood" "brown" >> Brown
-<<radiobutton "$app.blood" "white" >> White
+<<radiobutton "$curse70.variation" "blue" checked>> Blue
+<<radiobutton "$curse70.variation" "purple" >> Purple
+<<radiobutton "$curse70.variation" "green" >> Green
+<<radiobutton "$curse70.variation" "yellow" >> Yellow
+<<radiobutton "$curse70.variation" "orange" >> Orange
+<<radiobutton "$curse70.variation" "pink" >> Pink
+<<radiobutton "$curse70.variation" "black" >> Black
+<<radiobutton "$curse70.variation" "brown" >> Brown
+<<radiobutton "$curse70.variation" "white" >> White
 
-[[Accept more curses from the fifth layer|Layer5 Curses][$app.desc += "Your blood is now $app.blood colored, not a typical color for humans. "]]
+[[Accept more curses from the fifth layer|Layer5 Curses]]
 
 <<if $escBalDepl==0>>
-	[[Return to exploring layer 5|Layer5 Hub][$app.desc += "Your blood is now $app.blood colored, not a typical color for humans. "]]
+	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
-	[[Return to your balloon|Escape Balloon L5][$app.desc += "Your blood is now $app.blood colored, not a typical color for humans. "]]
+	[[Return to your balloon|Escape Balloon L5]]
 <<endif>>
 
 
@@ -999,31 +991,32 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
 <</nobr>>
 
-The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Hemospectrum")>>
+The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+
+<<if $playerCurses.some(e => e.name === "Hemospectrum")>>
 
 What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
 
-<<radiobutton "$app.blood" "blue" checked>> Blue
-<<radiobutton "$app.blood" "purple" >> Purple
-<<radiobutton "$app.blood" "green" >> Green
-<<radiobutton "$app.blood" "yellow" >> Yellow
-<<radiobutton "$app.blood" "orange" >> Orange
-<<radiobutton "$app.blood" "pink" >> Pink
-<<radiobutton "$app.blood" "black" >> Black
-<<radiobutton "$app.blood" "brown" >> Brown
-<<radiobutton "$app.blood" "white" >> White
+<<radiobutton "$curse70.variation" "blue" checked>> Blue
+<<radiobutton "$curse70.variation" "purple" >> Purple
+<<radiobutton "$curse70.variation" "green" >> Green
+<<radiobutton "$curse70.variation" "yellow" >> Yellow
+<<radiobutton "$curse70.variation" "orange" >> Orange
+<<radiobutton "$curse70.variation" "pink" >> Pink
+<<radiobutton "$curse70.variation" "black" >> Black
+<<radiobutton "$curse70.variation" "brown" >> Brown
+<<radiobutton "$curse70.variation" "white" >> White
 
-[[Continue on to the rest of the layer|Layer5 Hub][$app.desc += "Your blood is now $app.blood colored, not a typical color for humans. "]]
+[[Continue on to the rest of the layer|Layer5 Hub]]
 
-<<endif>><<if $playerCurses.some(e => e.name === "Carapacian")>>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Carapacian")>>
 
 Please enter your new exoskeleton color:
 
-<<textbox "$app.skinColor" "shiny black" "Layer5 Hub">>
+<<textbox "$curse69.variation" "shiny black" "Layer5 Hub">>
 
-<<nobr>>
-<<set $app.skinType = "hard, shiny, chitin-exoskeleton">>
-<</nobr>>
 <<else>>
 
 <<if !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<endif>>
@@ -1033,12 +1026,14 @@ Please enter your new exoskeleton color:
 <<if $playerCurses.some(e => e.name === "Gender Reversal D")>>
 	<<set $GenderLog.push($curse58)>>
 <<endif>>
-
-<<if $playerCurses.some(e => e.name === "Cellulose")>>
-<<set $app.skinType = "smooth, slightly rigid, plant-like">>
-<<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement D")>>
 	<<set $LibidoLog.push($curse57)>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "DoS")>>
+	<<set $LibidoLog.push($curse62)>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "DoM")>>
+	<<set $LibidoLog.push($curse63)>>
 <<endif>>
 <</nobr>>
 
@@ -1066,31 +1061,32 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Hemospectrum")>>
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.
+
+<<if $playerCurses.some(e => e.name === "Hemospectrum")>>
 
 What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
 
-<<radiobutton "$app.blood" "blue" checked>> Blue
-<<radiobutton "$app.blood" "purple" >> Purple
-<<radiobutton "$app.blood" "green" >> Green
-<<radiobutton "$app.blood" "yellow" >> Yellow
-<<radiobutton "$app.blood" "orange" >> Orange
-<<radiobutton "$app.blood" "pink" >> Pink
-<<radiobutton "$app.blood" "black" >> Black
-<<radiobutton "$app.blood" "brown" >> Brown
-<<radiobutton "$app.blood" "white" >> White
+<<radiobutton "$curse70.variation" "blue" checked>> Blue
+<<radiobutton "$curse70.variation" "purple" >> Purple
+<<radiobutton "$curse70.variation" "green" >> Green
+<<radiobutton "$curse70.variation" "yellow" >> Yellow
+<<radiobutton "$curse70.variation" "orange" >> Orange
+<<radiobutton "$curse70.variation" "pink" >> Pink
+<<radiobutton "$curse70.variation" "black" >> Black
+<<radiobutton "$curse70.variation" "brown" >> Brown
+<<radiobutton "$curse70.variation" "white" >> White
 
-[[Continue on to the rest of the layer|Layer5 Hub][$app.desc += "Your blood is now $app.blood colored, not a typical color for humans. "]]
+[[Continue on to the rest of the layer|Layer5 Hub]]
 
-<<endif>><<if $playerCurses.some(e => e.name === "Carapacian")>>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Carapacian")>>
 
 Please enter your new exoskeleton color:
 
-<<textbox "$app.skinColor" "shiny black" "Layer5 Hub">>
+<<textbox "$curse69.variation" "shiny black" "Layer5 Hub">>
 
-<<nobr>>
-<<set $app.skinType = "hard, shiny, chitin-exoskeleton">>
-<</nobr>>
 <<else>>
 
 <<if !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<endif>>
@@ -1100,13 +1096,16 @@ Please enter your new exoskeleton color:
 <<if $playerCurses.some(e => e.name === "Gender Reversal D")>>
 	<<set $GenderLog.push($curse58)>>
 <<endif>>
-
-<<if $playerCurses.some(e => e.name === "Cellulose")>>
-<<set $app.skinType = "smooth, slightly rigid, plant-like">>
-<<endif>>
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement D")>>
 	<<set $LibidoLog.push($curse57)>>
 <<endif>>
+<<if $playerCurses.some(e => e.name === "DoS")>>
+	<<set $LibidoLog.push($curse62)>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "DoM")>>
+	<<set $LibidoLog.push($curse63)>>
+<<endif>>
+
 <</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
 
 You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?

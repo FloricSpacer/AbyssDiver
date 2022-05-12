@@ -126,8 +126,10 @@
 <<else>>
 	<<set $app.vag = 1>>
 <<endif>>
+<<set $app.womb =0>>
 
 <<for _genderEvent range $GenderLog>>
+$app.womb
 	<<BreastCorrected>>
 	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E"  >>
 		<<set $app.modgender += 1>>
@@ -202,6 +204,7 @@
 			<<set $app.gender = 6 - $app.modgender>>
 			<<set $app.breasts += 3 + $app.modbreasts>>
 			<<set $app.penis = 0>>
+			<<set $app.penisCor = 0>>
 			<<set $app.vag = 1>>
 			<<set $app.sex = "female">>
 		<<else>>
@@ -221,6 +224,15 @@
 			<<set $app.penis = 3 + $app.modpenis>>
 		<<endif>>
 		<<set $app.sex = "futa">>
+	<<endif>>
+
+	<<if _genderEvent.name == "Wacky Wombs">>
+		<<if $app.womb ==0>>
+			<<set $app.womb1 = $curse35.variation1>>
+		<<else>>
+			<<set $app.womb2 = $curse35.variation2>>
+		<<endif>>
+		<<set $app.womb += 1>>
 	<<endif>>
 
 	<<if _genderEvent.name == "1 Day Water Forage Major Impact" >>
@@ -268,6 +280,18 @@
 		<<set $app.penis = 1>>
 		<<set $app.breasts = 1>>
 	<<endif>>
+<<endif>>
+
+<<if $playerCurses.some(e => e.name === "Leaky")>>
+
+	<<if $app.vagina > 0 && $app.penis > 0>>
+		<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and your penis is always leaking precum, so it only takes a little motivation to get a real stream going down there.">>
+	<<elseif $app.vagina > 0>>
+		<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.">>
+	<<elseif $app.penis > 0>>
+		<<set $curse80.appDesc = "Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.">>
+	<<endif>>
+
 <<endif>>
 <<BreastCorrected>>
 <<PenisCorrected>>
@@ -327,13 +351,35 @@
 :: Libido widget [widget nobr]
 <<widget "LibidoCorrected">>
 <<set $app.libido = 2>>
+<<set $subdom = 0>>
 <<for _libidoEvent range $LibidoLog>>
 
 	<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E"  >>
 		<<set $app.libido += 1>>
 	<<endif>>
 
-	<<if _ageEvent.name == "1 Day Food Forage Major Impact" >>
+
+	<<if _libidoEvent.name == "DoS" || _libidoEvent.name == "Submissiveness Rectification A" || _libidoEvent.name == "Submissiveness Rectification B" >>
+		<<set $subdom += 1>>
+	<<endif>>
+
+	<<if _libidoEvent.name == "DoM" || _libidoEvent.name == "Power Dom">>
+		<<set $subdom -= 1>>
+	<<endif>>
+
+	<<if _libidoEvent.name == "Semen Demon">>
+		<<set $semenCount += 1>>
+	<<endif>>
+
+	<<if _libidoEvent.name == "Quota">>
+		<<set $quotaCount += 1>>
+	<<endif>>
+
+	<<if _libidoEvent.name == "Limelight">>
+		<<set $limelightCount += 1>>
+	<<endif>>	
+
+	<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.libido += 1>>
 	<<endif>>
 
@@ -768,6 +814,7 @@
 
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
+<<HeightCorrected>>
 <<set $totalCarry -= $carryWeight>>
 
 <<if $playerCurses.some(e => e.name === "Weakling")>>
@@ -792,18 +839,13 @@
 <<set $app.bodyHair= 1>>
 <<set $app.skinType= "">>
 <<set $app.skinColor= $app.oskinColor>>
+<<set $app.eyeColor= $app.oeyeColor>>
 <<set $app.tail= []>>
 
-<<if $app.osex=='male'>>
-	<<set $app.womb= 0>>
-<<else>>
-	<<set $app.womb= 1>>
-<<endif>>
 
-<<set $app.womb1= "">>
-<<set $app.womb2= "">>
 <<set $app.desc= "">>
 <<set $app.blood="red">>
+<<set $hornyCount = 0>>
 
 <<for _appearEvent range $playerCurses>>
 
@@ -817,7 +859,65 @@
 	<<endif>>
 
 	<<if _appearEvent.name == "Perma-dye">>
-		<<set $app.ears = $curse7.variation>>
+		<<set $app.hair = $curse7.variation>>
 	<<endif>>
+
+	<<if _appearEvent.name == "Fluffy Ears">>
+		<<set $app.ears = $curse17.variation>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Fluffy Tail">>
+		<<set $app.tail.push($curse18.variation)>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Maximum Fluff">>
+		<<set $app.skinType = $curse19.variation>>
+		<<set $app.bodyhair = 1>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Gooey">>
+		<<set $app.skinType = "sticky, slimy">>
+		<<set $app.bodyhair = 0>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Rainbow Swirl">>
+		<<set $app.skinColor= $curse38.variation>>
+		<<set $app.eyeColor= $curse38.variation>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Tipping the Scales">>
+		<<set $app.skinType = "reptilian scaled">>
+		<<set $app.bodyhair = 0>>
+		<<set $app.skinColor = $curse54.variation>>
+	<<endif>>	
+	
+	<<if _appearEvent.name == "Reptail">>
+		<<set $app.tail.push("large, spiked, scaled reptile")>>
+	<<endif>>
+	
+	<<if _appearEvent.name == "Cellulose">>
+		<<set $app.skinType = "smooth, slightly rigid, plant-like">>
+		<<set $app.bodyhair = 0>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Carapacian">>
+		<<set $app.skinType = "hard, shiny, chitin-exoskeleton">>
+		<<set $app.skinColor = $curse69.variation >>
+		<<set $app.bodyhair = 0>>
+	<<endif>>
+
+	<<if _appearEvent.name == "Hemospectrum">>
+		<<set $app.blood = $curse70.variation>>
+		<<set $app.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
+	<<endif>>	
+
+	<<if _appearEvent.name == "Horny">>
+		<<set $hornyCount += 1>>
+	<<endif>>	
+
+	<<if _appearEvent.name == "Drawing Spades">>
+		<<set $app.tail.push("cute, spade-tipped demon")>>
+	<<endif>>	
+
 <</for>>
 <</widget>>
