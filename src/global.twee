@@ -962,26 +962,35 @@ If you are over 18, please go back and enter an age above 18 to continue.
 		You look at the set of marbles known as the Managed Misfortune.
 		<<if $StoredCurse != "" && !$ManagedMisfortuneActive>>
 		You have stored the curse named $StoredCurse.name in them. <br>
-			<<if $StoredCurse.name=="Perma-dye">>
-				As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
+			<<if $StoredCurse.name=="Perma-dye" && $curse7.variation=="">>
+				<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
 				The longer you look the more color if your hair seems to change in your reflection. After a while you can see that your hair seems as if it had always been its new color. Now, what color do you see?<br>
 				Please enter your new hair color:<br><br>
 
 				<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
+			<<else>>
+				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
+					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
+					You see your own reflection alternating between growing and shrinking. After a while you see the curse has settle on a height... <br><br>
+
+					<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+					<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+
+				<<endif>>
+				<<link "Acitivate the stored curse" "Use Items and Relics">>
+					<<set $playerCurses.push($StoredCurse)>>
+					<<if $StoredCurse.type == "Height">>
+						<<set $HeightLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Gender">>
+						<<set $GenderLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Age">>
+						<<set $AgeLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Libido">>
+						<<set $LibidoLog.push($StoredCurse)>>
+					<<endif>>
+					<<set $ManagedMisfortuneActive=true>>
+				<</link>>
 			<<endif>>
-		<<link "Acitivate the stored curse" "Use Items and Relics">>
-		<<set $playerCurses.push($StoredCurse)>>
-		<<if $StoredCurse.type == "Height">>
-			<<set $HeightLog.push($StoredCurse)>>
-		<<elseif $StoredCurse.type == "Gender">>
-			<<set $GenderLog.push($StoredCurse)>>
-		<<elseif $StoredCurse.type == "Age">>
-			<<set $AgeLog.push($StoredCurse)>>
-		<<elseif $StoredCurse.type == "Libido">>
-			<<set $LibidoLog.push($StoredCurse)>>
-		<<endif>>
-		<<set $ManagedMisfortuneActive=true>>
-		<</link>>
 		<<elseif $ManagedMisfortuneActive >>
 		You are affected by the curse stored in the marbles called $StoredCurse.name. <br>
 		<<link "Deacitivate the stored curse" "Use Items and Relics">>
