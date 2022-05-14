@@ -1277,3 +1277,171 @@ How many dubloons would you like to pay back?
 		<<set _curseDeleted=true>>
 	<<endif>>
 <</for>>
+
+:: GeneralTime
+<<nobr>>
+
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+
+<<if !$tempTimeFixed>>
+	<<if $layer==1>>
+		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+		<<set $timeL1 += $tempTime>>/* layer specific */
+	<<elseif $layer==2>>
+		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+		<<set $timeL2 += $tempTime>>
+		<<if $items[1].count > 9>>
+			<<set $timeL2T1 += $tempTime>>
+		<<endif>>
+	<<elseif $layer==3>>
+		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+		<<set $timeL3 += $tempTime>>
+		<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+			<<else>><<set $timeL3T2 += $tempTime>>
+		<<endif>>
+		<<set $timeL3T1 += $tempTime>>
+	<<elseif $layer==4>>
+		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+		<<if $torchUse == 1 && $heat == 1>>
+				<<set $tempTime -= 2>>
+			<<elseif $items[9].count > 0 && $torchUse == 1>>
+				<<set $tempTime -= 2>>
+				<<set $items[9].count -= 1>>
+		<<endif>>
+		<<set $timeL4 += $tempTime>>
+		<<set $timeL4T1 += $tempTime>>
+	<<elseif $layer==5>>
+		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
+		<<set $timeL5 += $tempTime>>
+		<<if ($items[0].count + $items[3].count) > 10>>
+			<<set $timeL5T2 += $tempTime>>
+		<<endif>>
+		<<set $timeL5T1 += $tempTime>>
+	<<elseif $layer==6>>
+		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
+		<<set $timeL6 += $tempTime>>
+		<<set $hexflame += $tempTime>>
+		<<if $dubloons > 199>>
+			<<set $timeL6T2 += $tempTime>>
+		<<endif>>
+		<<set $timeL6T1 += $tempTime>>
+	<<elseif $layer==7>>
+		<<set $timeL7 += $tempTime>>
+		<<set $timeL7T2 += $tempTime>>
+		<<set $time += $tempTime>>
+		<<if $dubloons >= 300>>
+			<<set $dubloons -= 1>>
+			<<elseif $dubloons >= 100>>
+			<<set $dubloons -= 2>>
+			<<else>>
+			<<set $dubloons -= 3>>
+		<<endif>>
+	<<endif>>
+<<endif>>
+
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+<<else>>
+	<<set $foodL1 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<for $i = 0; $i < $tempTime; $i++>>
+			<<if $layer==1>>
+				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
+			<<elseif $layer==2>>
+				<<if $mudHunt == 1 && $items[20].count > 0>>
+					<<set $items[20].count -= $tempTime>>
+				<<elseif $mudHunt == 0>>
+					<<set $LibidoLog.push($ForageFoodMajor)>>
+				<<endif>>
+			<<elseif $layer==3>>
+				<<set $AgeLog.push($ForageFoodMajor)>>
+			<<elseif $layer==4>>
+				<<set $HeightLog.push($ForageFoodMajor)>>
+			<<elseif $layer==5>>
+				<<set $crumbleFluid += (5 * $tempTime)>>
+			<<elseif $layer==6>>
+				<<set $foodL6 += $tempTime>>
+			<<endif>>
+		<</for>>
+	<<else>>
+		<<for $i = 0; $i < $tempTime; $i++>>
+			<<if $layer==2>>
+				<<if $mudHunt == 1 && $items[20].count > 0>>
+					<<set $items[20].count -= $tempTime>>
+				<<elseif $mudHunt == 0>>
+					<<set $lastFlan=$time+1>>
+				<<endif>>
+			<<elseif $layer==3>>
+				<<set $AgeLog.push($ForageFoodMinor)>>
+			<<elseif $layer==4>>
+				<<set $HeightLog.push($ForageFoodMinor)>>
+			<<elseif $layer==5>>
+				<<set $crumbleFluid += $tempTime>>
+			<<elseif $layer==6>>
+				<<set $foodL6 += $tempTime>>
+			<<endif>>
+		<</for>>	
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+	<<else>>
+		<<set $waterL1 += 1>>
+		<<if $abyssKnow == 0>>
+			<<for $i = 0; $i < $tempTime; $i++>>
+				<<if $layer==1>>
+					<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
+				<<elseif $layer==2>>
+					<<set $bewitchBabies += 1>>
+				<<elseif $layer==3>>
+					<<set $waterL2 += 1>>
+				<<elseif $layer==4>>
+					<<set $waterL4 += 1>>
+					<<if $abyssKnow == 0>>
+						<<set $algalSize += 1>>
+					<<endif>>
+				<<elseif $layer==5>>	
+					<<set $waterL5 += 1>>
+				<<elseif $layer==6>>
+					<<set $waterL6 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+						<<set $hexflame += 1>>
+					<<endif>>
+				<<endif>>			
+			<</for>>
+		<<else>>
+			<<for $i = 0; $i < $tempTime; $i++>>
+				<<if $layer==3>>
+					<<set $waterL2 += 1>>
+				<<elseif $layer==4>>
+					<<set $waterL4 += 1>>
+					<<if $abyssKnow == 0>>
+						<<set $algalSize += 1>>
+					<<endif>>
+				<<elseif $layer==5>>
+					<<set $waterL5 += 1>>
+				<<elseif $layer==6>>
+					<<set $waterL6 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+						<<set $hexflame += 1>>
+					<<endif>>
+				<<endif>>			
+			<</for>>		
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<</nobr>>
