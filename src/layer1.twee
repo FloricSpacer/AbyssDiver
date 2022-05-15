@@ -580,7 +580,8 @@ This may not be very useful in most circumstances, but perhaps at some point in 
 <<set $ownedRelics.push($relic2)>>
 <<set $corruption -= ($relic2.corr - $corRed)>>
 <<set $tempTime = $relic2.time>>
-<<include "Layer1Time">>
+/*<<include "Layer1Time">>*/
+<<include "GeneralTime">>
 <</nobr>>
 
 You have successfully taken the $relic2.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -676,7 +677,8 @@ You have successfully taken the $relic4.name relic. Hopefully you can make good 
 <<set $ownedRelics.push($relic5)>>
 <<set $corruption -= ($relic5.corr - $corRed)>>
 <<set $tempTime = $relic5.time>>
-<<include "Layer1Time">>
+/*<<include "Layer1Time">>*/
+<<include "GeneralTime">>
 <</nobr>>
 
 You have successfully taken the $relic5.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -730,7 +732,8 @@ You have successfully taken the $relic8.name relic. Hopefully you can make good 
 <<set $ownedRelics.push($relic9)>>
 <<set $corruption -= ($relic9.corr - $corRed)>>
 <<set $tempTime = $relic9.time>>
-<<include "Layer1Time">>
+/*<<include "Layer1Time">>*/
+<<include "GeneralTime">>
 <</nobr>>
 
 You have successfully taken the $relic9.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -946,6 +949,9 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 <<nobr>>
 <<set $corruption -= $playerCurses[$temp].corr>>
 <<set $iconUsed = 1>>
+<<set $temptime=3>>
+<<include "GeneralTime">>
+/* 
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>
 	<<else>>
@@ -981,8 +987,11 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 		<<endif>>
 	<<endif>>
 <</for>>
+*/
+<<set $targetCurse=$playerCurses[$temp]>>
 <</nobr>>
-The curse of $playerCurses[$temp].name has been successfully removed and your corruption has been refunded. <<run $playerCurses.deleteAt($temp)>>
+<<include "CurseRemoval">>
+The curse of $playerCurses[$temp].name has been successfully removed and your corruption has been refunded.
 
 [[Continue exploring the layer|Layer1 Hub]]
 
