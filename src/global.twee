@@ -1316,7 +1316,7 @@ How many dubloons would you like to pay back?
 	<<endif>>
 <</for>>
 
-:: GeneralTime
+:: GeneralTimeSetup
 <<nobr>>
 
 <<if $status.duration > 0>>
@@ -1325,62 +1325,64 @@ How many dubloons would you like to pay back?
 	<<set $status.penalty = 0>>
 <<endif>>
 
-<<if !$tempTimeFixed>>
-	<<if $layer==1>>
-		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-		<<set $timeL1 += $tempTime>>/* layer specific */
-	<<elseif $layer==2>>
-		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-		<<set $timeL2 += $tempTime>>
-		<<if $items[1].count > 9>>
-			<<set $timeL2T1 += $tempTime>>
-		<<endif>>
-	<<elseif $layer==3>>
-		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-		<<set $timeL3 += $tempTime>>
-		<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
-			<<else>><<set $timeL3T2 += $tempTime>>
-		<<endif>>
-		<<set $timeL3T1 += $tempTime>>
-	<<elseif $layer==4>>
-		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-		<<if $torchUse == 1 && $heat == 1>>
-				<<set $tempTime -= 2>>
-			<<elseif $items[9].count > 0 && $torchUse == 1>>
-				<<set $tempTime -= 2>>
-				<<set $items[9].count -= 1>>
-		<<endif>>
-		<<set $timeL4 += $tempTime>>
-		<<set $timeL4T1 += $tempTime>>
-	<<elseif $layer==5>>
-		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
-		<<set $timeL5 += $tempTime>>
-		<<if ($items[0].count + $items[3].count) > 10>>
-			<<set $timeL5T2 += $tempTime>>
-		<<endif>>
-		<<set $timeL5T1 += $tempTime>>
-	<<elseif $layer==6>>
-		<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
-		<<set $timeL6 += $tempTime>>
-		<<set $hexflame += $tempTime>>
-		<<if $dubloons > 199>>
-			<<set $timeL6T2 += $tempTime>>
-		<<endif>>
-		<<set $timeL6T1 += $tempTime>>
-	<<elseif $layer==7>>
-		<<set $timeL7 += $tempTime>>
-		<<set $timeL7T2 += $tempTime>>
-		<<set $time += $tempTime>>
-		<<if $dubloons >= 300>>
-			<<set $dubloons -= 1>>
-			<<elseif $dubloons >= 100>>
-			<<set $dubloons -= 2>>
-			<<else>>
-			<<set $dubloons -= 3>>
-		<<endif>>
+<<if $layer==1>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<set $timeL1 += $tempTime>>/* layer specific */
+<<elseif $layer==2>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<set $timeL2 += $tempTime>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += $tempTime>>
+	<<endif>>
+<<elseif $layer==3>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<set $timeL3 += $tempTime>>
+	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+		<<else>><<set $timeL3T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL3T1 += $tempTime>>
+<<elseif $layer==4>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<if $torchUse == 1 && $heat == 1>>
+			<<set $tempTime -= 2>>
+		<<elseif $items[9].count > 0 && $torchUse == 1>>
+			<<set $tempTime -= 2>>
+			<<set $items[9].count -= 1>>
+	<<endif>>
+	<<set $timeL4 += $tempTime>>
+	<<set $timeL4T1 += $tempTime>>
+<<elseif $layer==5>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
+	<<set $timeL5 += $tempTime>>
+	<<if ($items[0].count + $items[3].count) > 10>>
+		<<set $timeL5T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL5T1 += $tempTime>>
+<<elseif $layer==6>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
+	<<set $timeL6 += $tempTime>>
+	<<set $hexflame += $tempTime>>
+	<<if $dubloons > 199>>
+		<<set $timeL6T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL6T1 += $tempTime>>
+<<elseif $layer==7>>
+	<<set $timeL7 += $tempTime>>
+	<<set $timeL7T2 += $tempTime>>
+	<<set $time += $tempTime>>
+	<<if $dubloons >= 300>>
+		<<set $dubloons -= 1>>
+		<<elseif $dubloons >= 100>>
+		<<set $dubloons -= 2>>
+	<<else>>
+		<<set $dubloons -= 3>>
 	<<endif>>
 <<endif>>
 
+<</nobr>>
+
+:: GeneralTimeStats
+<<nobr>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
