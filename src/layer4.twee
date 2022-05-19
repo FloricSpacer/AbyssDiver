@@ -720,165 +720,28 @@ If you can't or don't want to cut down the tree, you can burn it down and bathe 
 Which companion would you like to force the curse of $playerCurses[$temp].name on?
 
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
+<<nobr>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<capture $i>>
+	<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Steady Apply][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $temp2=$i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+
+:: Layer4 Steady Apply [layer4 noreturn]
+[img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
 <<nobr>>
+<<set $targetCurse = $playerCurses[$temp]>>
+<<set $corruption += Math.round(Math.max(($targetCurse.corr * 1 / 2) - $corRed, 0))>>
+<<include "CurseRemoval" >>
 <<set $dubloons -= ($skewedUsed * 5)>>
 <<set $skewedUsed += 1>>
-<<set $steadyForced += 1>>
-<<set $corruption += Math.round(Math.max(($playerCurses[$temp].corr * 1 / 2) - $corRed, 0))>>
-<<if $convoStart==1>>
-	<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-		<<capture $i>>
-		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Hub][$hiredCompanions[$i].curses.push($playerCurses[$temp])]]">><br>
-		<</capture>>
-	<</for>>
-<<else>>
-	<<if $hiredCompanions[$temp2].name=='Maru'>>
-		<<say $companionMaru>> No! Why did you do this? I relied on you...<</say>><br>
-		He starts crying while trying to come to grip with his new curse.<br><br>
-		<<set $companionMaru.affec-=(3-$hsswear)>>
-		<<if $hiredCompanions.some(e => e.name === "Lily")>>
-			<<set $companionLily.affec-=(1-$hsswear)>>
-			<<say $companionLily>> How could you?! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-			<<set $companionKhemia.affec-=(1-$hsswear)>>
-			<<say $companionKhemia>> Not cool! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-			<<set $companionCherry.affec-=(1-$hsswear)>>
-			<<say $companionCherry>> I thought you were different... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-			<<set $companionCloud.affec-=(1-$hsswear)>>
-			<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-			<<set $companionSaeko.affec-=(1-$hsswear)>>
-			<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
-		<<endif>>
-	<<elseif $hiredCompanions[$temp2].name=='Lily'>>
-		<<say $companionLily>> Are you for real?! Did you just do what I think you did?!<</say>><br>
-		She pushes you aside and stomps off in a mixture of rage and anguish.<br><br>
-		<<set $companionLily.affec-=(3-$hsswear)>>
-		<<if $hiredCompanions.some(e => e.name === "Maru")>>
-			<<set $companionMaru.affec-=(1-$hsswear)>>
-			<<say $companionMaru>> That's not nice... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-			<<set $companionKhemia.affec-=(1-$hsswear)>>
-			<<say $companionKhemia>> Not cool! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-			<<set $companionCherry.affec-=(1-$hsswear)>>
-			<<say $companionCherry>> I thought you were different... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-			<<set $companionCloud.affec-=(1-$hsswear)>>
-			<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-			<<set $companionSaeko.affec-=(1-$hsswear)>>
-			<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
-		<<endif>>
-	<<elseif $hiredCompanions[$temp2].name=='Khemia'>>
-		<<say $companionKhemia>> ARE YOU FUCKING KIDDING ME WITH THIS?<</say>><br>
-		He grabs you at your collar and for a second you think he is going to hit you, but he puts you down without saying anything else and walks away, fists clenched.<br><br>
-		<<set $companionKhemia.affec-=(3-$hsswear)>>
-		<<if $hiredCompanions.some(e => e.name === "Lily")>>
-			<<set $companionLily.affec-=(1-$hsswear)>>
-			<<say $companionLily>> How could you?! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Maru")>>
-			<<set $companionMaru.affec-=(1-$hsswear)>>
-			<<say $companionMaru>> That's not nice... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-			<<set $companionCherry.affec-=(1-$hsswear)>>
-			<<say $companionCherry>> I thought you were different... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-			<<set $companionCloud.affec-=(1-$hsswear)>>
-			<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-			<<set $companionSaeko.affec-=(1-$hsswear)>>
-			<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
-		<<endif>>
-	<<elseif $hiredCompanions[$temp2].name=='Cherry'>>
-		<<say $companionCherry>> I thought I didn't care about anything anymore, but then why am I feeling like this?<</say>><br>
-		A single tears rolls down her cheek as she stands in place silently. <br><br>
-		<<set $companionCherry.affec-=(2-$hsswear)>>
-		<<if $hiredCompanions.some(e => e.name === "Lily")>>
-			<<set $companionLily.affec-=(1-$hsswear)>>
-			<<say $companionLily>> How could you?! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-			<<set $companionKhemia.affec-=(1-$hsswear)>>
-			<<say $companionKhemia>> Not cool! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Maru")>>
-			<<set $companionMaru.affec-=(1-$hsswear)>>
-			<<say $companionMaru>> That's not nice... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-			<<set $companionCloud.affec-=(1-$hsswear)>>
-			<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-			<<set $companionSaeko.affec-=(1-$hsswear)>>
-			<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
-		<<endif>>
-	<<elseif $hiredCompanions[$temp2].name=='Cloud'>>
-		<<say $companionCloud>> I should have seen this coming. Now I know your true colors.<</say>><br>
-		He glares at you and walks off.<br><br>
-		<<set $companionCloud.affec-=(3-$hsswear)>>
-		<<if $hiredCompanions.some(e => e.name === "Lily")>>
-			<<set $companionLily.affec-=(1-$hsswear)>>
-			<<say $companionLily>> How could you?! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-			<<set $companionKhemia.affec-=(1-$hsswear)>>
-			<<say $companionKhemia>> Not cool! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-			<<set $companionCherry.affec-=(1-$hsswear)>>
-			<<say $companionCherry>> I thought you were different... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Maru")>>
-			<<set $companionMaru.affec-=(1-$hsswear)>>
-			<<say $companionMaru>> That's not nice... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-			<<set $companionSaeko.affec-=(1-$hsswear)>>
-			<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
-		<<endif>>
-	<<elseif $hiredCompanions[$temp2].name=='Saeko'>>
-		She stands frozen, her face pale, as she tries to process what just happened to her.<br><br>
-		<<say $companionSaeko>> This wasn't what we agreed to... I, how, why..?<</say>><br>
-		<<set $companionSaeko.affec-=(3-$hsswear)>>
-		<<if $hiredCompanions.some(e => e.name === "Lily")>>
-			<<set $companionLily.affec-=(1-$hsswear)>>
-			<<say $companionLily>> How could you?! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-			<<set $companionKhemia.affec-=(1-$hsswear)>>
-			<<say $companionKhemia>> Not cool! <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-			<<set $companionCherry.affec-=(1-$hsswear)>>
-			<<say $companionCherry>> I thought you were different... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-			<<set $companionCloud.affec-=(1-$hsswear)>>
-			<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
-		<<endif>>
-		<<if $hiredCompanions.some(e => e.name === "Maru")>>
-			<<set $companionMaru.affec-=(1-$hsswear)>>
-			<<say $companionMaru>> That's not nice... <</say>><br>
-		<<endif>>
-	<<endif>>
-<<endif>>
+<<set $skewedForced += 1>>
+<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _affectionPenalty = 4 - $hsswear>>
+<<include "Companion Mistreatment Reaction">>
 <</nobr>>
 [[Stand in front of the shrine to force another curse|Layer4 Steady 2a][$convoStart=1,$choice1=0,$choice2=0]]
 [[On second thought, maybe a more diplomatic approach would be advisable|Layer4 Steady1a][$convoStart=1,$choice1=0,$choice2=0]]
