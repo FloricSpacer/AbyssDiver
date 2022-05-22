@@ -980,10 +980,12 @@ You have successfully taken the $relic48.name relic. Hopefully you can make good
 	<<set $layerExitTime = (Math.max(19 - $timeRed + $status.penalty, 0))>>
 	<<endif>>
 <<if $torchUse == 1 && $heat == 1>>
-	<<set $tempTime -= 2>>
+		<<set $tempTime -= 2>>
 	<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
+		<<set $tempTime -= 2>>
+		<<set $items[9].count -= 1>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
 <<endif>>
 <<endif>>
 
@@ -1060,10 +1062,12 @@ You continue your hike and try to keep somewhat warm despite the bone-chilling c
 	<<set $layerExitTime = (Math.max(7 - $timeRed + $status.penalty, 0))>>
 	<<if $torchUse == 1 && $heat == 1>>
 		<<set $tempTime -= 2>>
-		<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
 		<<set $tempTime -= 2>>
 		<<set $items[9].count -= 1>>
-	<<endif>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
+<<endif>>
 <<endif>>
 
 <<for $i = 0; $i < 99; $i++>>
@@ -1494,6 +1498,8 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<elseif $items[9].count > 0 && $torchUse == 1>>
 		<<set $tempTime -= 2>>
 		<<set $items[9].count -= 1>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
 <<endif>>
 <<set $timeL4 += $tempTime>>
 <<set $timeL4T1 += $tempTime>>
