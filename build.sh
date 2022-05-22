@@ -1,5 +1,7 @@
 #!/bin/bash
 
+WORKAREA=`dirname $0`
+
 TWEEGO="$(which ${TWEEGO:-tweego} 2> /dev/null)"
 if test -x "$TWEEGO"
 then
@@ -40,13 +42,13 @@ else
         ;;
     esac
     TWEEGO_ARCHIVE="tweego-$TWEEGO_VERSION-$TWEEGO_OS-$TWEEGO_ARCH.zip"
-    TWEEGO="tools/$TWEEGO_EXE"
-    if ! test -f "tools/$TWEEGO_ARCHIVE"
+    TWEEGO="$WORKAREA/tools/$TWEEGO_EXE"
+    if ! test -f "$WORKAREA/tools/$TWEEGO_ARCHIVE"
     then
         echo "Downloading Tweego..."
-        curl -L "https://github.com/tmedwards/tweego/releases/download/v$TWEEGO_VERSION/$TWEEGO_ARCHIVE" -o "tools/$TWEEGO_ARCHIVE"
+        curl -L "https://github.com/tmedwards/tweego/releases/download/v$TWEEGO_VERSION/$TWEEGO_ARCHIVE" -o "$WORKAREA/tools/$TWEEGO_ARCHIVE"
         echo "Unpacking Tweego..."
-        unzip -d "tools/" -o "tools/$TWEEGO_ARCHIVE" "$TWEEGO_EXE"
+        unzip -d "$WORKAREA/tools/" -o "$WORKAREA/tools/$TWEEGO_ARCHIVE" "$TWEEGO_EXE"
         chmod a+x "$TWEEGO"
     fi
     echo "Using downloaded Tweego: $TWEEGO"
@@ -54,14 +56,14 @@ fi
 
 SUGARCUBE_VERSION=2.36.1
 SUGARCUBE_ARCHIVE="sugarcube-$SUGARCUBE_VERSION-for-twine-2.1-local.zip"
-if ! test -f "storyformats/$SUGARCUBE_ARCHIVE"
+if ! test -f "$WORKAREA/storyformats/$SUGARCUBE_ARCHIVE"
 then
     echo "Downloading SugarCube story format..."
-    curl -L "https://github.com/tmedwards/sugarcube-2/releases/download/v$SUGARCUBE_VERSION/$SUGARCUBE_ARCHIVE" -o "storyformats/$SUGARCUBE_ARCHIVE"
+    curl -L "https://github.com/tmedwards/sugarcube-2/releases/download/v$SUGARCUBE_VERSION/$SUGARCUBE_ARCHIVE" -o "$WORKAREA/storyformats/$SUGARCUBE_ARCHIVE"
     echo "Unpacking SugarCube story format..."
-    unzip -d "storyformats/" -o "storyformats/$SUGARCUBE_ARCHIVE"
+    unzip -d "$WORKAREA/storyformats/" -o "$WORKAREA/storyformats/$SUGARCUBE_ARCHIVE"
 fi
 
 OUTPUT="Abyss Diver.html"
 echo "Compiling to: $OUTPUT"
-"$TWEEGO" src/ -o "$OUTPUT" "$@"
+TWEEGO_PATH="$WORKAREA/storyformats/" "$TWEEGO" "$WORKAREA/src/" -o "$OUTPUT" "$@"
