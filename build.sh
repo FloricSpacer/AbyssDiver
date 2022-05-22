@@ -64,4 +64,4 @@ fi
 
 OUTPUT="Abyss Diver.html"
 echo "Compiling to: $OUTPUT"
-"$TWEEGO" src/* -o "$OUTPUT"
+"$TWEEGO" src/ -o "$OUTPUT" "$@"
