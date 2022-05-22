@@ -2,5 +2,6 @@ This is a [Tweego](https://www.motoslave.net/tweego/) conversion of an [adult Tw
 
 To build:
 - install Git and clone this repo
-- install Tweego and add it to your shell's `PATH`
-- run `./build.sh`
+- run `./build.sh` from the command line
+
+If you want to use an already installed version of Tweego, either add it to your shell's `PATH` or set the `TWEEGO` environment variable to its location (including the name of the executable itself). Otherwise, the build script will try to automatically download a version of Tweego suitable for your operating system and use that.
