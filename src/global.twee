@@ -1429,9 +1429,65 @@ How many dubloons would you like to pay back?
 :: GeneralTimeStats
 <<nobr>>
 <<set $time += $tempTime>>
-<<if $currentLayer==3>>
+<<if $currentLayer==1>>
+
+	<<set $timeL1 += $tempTime>>
+
+<<elseif $currentLayer==2>>
+
+	<<set $timeL2 += $tempTime>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += 1>>
+	<<endif>>
+
+<<elseif $currentLayer==3>>
+
+	<<set $timeL3 += $tempTime>>
+	<<if $items[9].count > 0 && $torchUse == 1>>
+		<<set $items[9].count -= 1>>
+	<<elseif $items[9].count == 0 && $torchUse == 1>>
+		<<set $torchUse = 0>>
+	<<endif>>
+	<<set $timeL3T1 += 1>>
+	<<if $torchUse !=1 && $items[10].count < 1  && $light != 1>>
+		<<set $timeL3T2 += 1>>
+	<<endif>>
+	
+<<elseif $currentLayer==4>>
+
+	<<set $timeL4 += $tempTime>>
+	<<set $timeL4T1 += $tempTime>>
+
+<<elseif $currentLayer==5>>
+
+	<<set $timeL5 += $tempTime>>
+	<<if ($items[0].count + $items[3].count) > 10>>
+		<<set $timeL5T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL5T1 += $tempTime>>
+
+<<elseif $currentLayer==6>>
+
+	<<set $timeL6 += $tempTime>>
+	<<if $dubloons > 199>>
+		<<set $timeL6T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL6T1 += $tempTime>>
+
+<<elseif $currentLayer==7>>
+
+	<<set $timeL7 += $tempTime>>
+	<<set $timeL7T2 += $tempTime>>
+	<<if $dubloons >= 300>>
+		<<set $dubloons -= 1>>
+		<<elseif $dubloons >= 100>>
+		<<set $dubloons -= 2>>
+		<<else>>
+		<<set $dubloons -= 3>>
+	<<endif>>
 
 <<endif>>
+
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 <<else>>
@@ -1546,6 +1602,7 @@ How many dubloons would you like to pay back?
 <</for>>
 <<set $tempTimeFixed=0>>
 <</nobr>>
+
 :: Curse Descriptions
 <<nobr>>
 <<set $temp = random(0,$playerCurses.length - 1)>>
