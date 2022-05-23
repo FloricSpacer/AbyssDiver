@@ -1,34 +1,10 @@
 :: Layer2 1 [image layer2]
 <<nobr>>
 <<set $currentLayer = 2>>
-<<if $items[14].count > 0 || $cut == 1>>
-	<<set $timeRed += 1>>
-<<endif>>
 <<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
+<<set $tempTime = 2>>
 <<set $timeL2T1 = 0>>
-<<set $tempTime = (Math.max(2 - $timeRed, 0))>>
-<<set $timeL1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL1 += $tempTime>>
-<<endif>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<<endif>>
-		<<else>>
-		<<set $waterL1 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $GenderLog.push($ForageWaterMajor )>>
-		<<endif>>
-	<<endif>>
-<</for>>
+<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 [img[setup.ImagePath+'Layer Intros/l2intro.png']]
 

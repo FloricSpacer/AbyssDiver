@@ -1360,7 +1360,12 @@ How many dubloons would you like to pay back?
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<set $timeL1 += $tempTime>>/* layer specific */
 <<elseif $layer==2>>
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<if $items[14].count > 0 || $cut == 1>>
+		<<set _CutRed = 1>>
+	<<else>>
+		<<set _CutRed = 0>>
+	<<endif>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _CutRed), 0))>>
 	<<set $timeL2 += $tempTime>>
 	<<if $items[1].count > 9>>
 		<<set $timeL2T1 += $tempTime>>
