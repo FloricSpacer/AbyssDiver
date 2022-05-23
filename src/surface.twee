@@ -708,7 +708,7 @@ Choose the relic you would like to sell:
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
 		<<elseif $ownedRelics[$i].name=="Everheavea">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<endif>>
@@ -1173,6 +1173,39 @@ You can eat and drink enough to make yourself extra full and save a day of food 
 	[[Eat and drink the delicious food and drink|Surface Inn][$items[0].count += 1, $items[1].count += 1, $innUsed = $time]]
 <<else>>
 You are already full, but you can come back another day to get more freshly cooked meals and clear, cool water when you come back later.
+<<endif>><<if $innRelics.length > 0>>
+You can pick up any of the Relics you've previously stored in your inn room:
+
+<<nobr>><<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<print $ownedRelics[$i].name>><<print "[[Retrieve|Surface Inn][$soldRelics.push($ownedRelics[$i]), $ownedRelics.push($innRelics[$i]), $innRelics.deleteAt($i)]]">><br>
+	<</capture>>
+<</for>><</nobr>>
+
+<<endif>><<if $ownedRelics.length > 0>>
+You can store any Relics you're holding here for safe keeping or if you just want to reduce the weight you're holding.
+
+Choose a relic you would like to store here at the inn:
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
+			You can't seem to part ways with the Creepy Doll<br>
+		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
+			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$colwear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
+			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$hsswear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
+			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$SibylBuff=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Everheavea">>
+			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
+		<<else>>
+			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
 <<endif>>
 <</nobr>>
 
