@@ -1353,10 +1353,12 @@ How many dubloons would you like to pay back?
 <<elseif $layer==4>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<if $torchUse == 1 && $heat == 1>>
-			<<set $tempTime -= 2>>
-		<<elseif $items[9].count > 0 && $torchUse == 1>>
-			<<set $tempTime -= 2>>
-			<<set $items[9].count -= 1>>
+		<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+		<<set $tempTime -= 2>>
+		<<set $items[9].count -= 1>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
 	<<endif>>
 	<<set $timeL4 += $tempTime>>
 	<<set $timeL4T1 += $tempTime>>
@@ -1410,7 +1412,13 @@ How many dubloons would you like to pay back?
 			<<elseif $layer==3>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
 			<<elseif $layer==4>>
-				<<set $HeightLog.push($ForageFoodMajor)>>
+				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+					<<if $slingshot == 0>>
+						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+					<<endif>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMajor)>>
+				<<endif>>
 			<<elseif $layer==5>>
 				<<set $crumbleFluid += (5 * $tempTime)>>
 			<<elseif $layer==6>>
@@ -1428,7 +1436,13 @@ How many dubloons would you like to pay back?
 			<<elseif $layer==3>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
 			<<elseif $layer==4>>
-				<<set $HeightLog.push($ForageFoodMinor)>>
+				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+					<<if $slingshot == 0>>
+						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+					<<endif>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMinor)>>
+				<<endif>>
 			<<elseif $layer==5>>
 				<<set $crumbleFluid += $tempTime>>
 			<<elseif $layer==6>>
