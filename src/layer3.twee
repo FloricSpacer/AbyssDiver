@@ -178,54 +178,204 @@ As you wander through the semi-darkness by only the dimmest natural light, you b
 :: Layer3 Curses [image layer3]
 <<GenderCorrected>>[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 4-curses.png']]
 
-<<nobr>><<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom")>>
-	<<else>><<print "[[Take on Submissiveness Rectification A]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Gender Reversal C")>>
-	<<else>><<print "[[Take on Gender Reversal C]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
-	<<else>><<print "[[Take on Asset Robustness C]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
-	<<else>><<print "[[Take on Clothing Restriction B]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B")>>
-	<<else>><<print "[[Take on Power Dom]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "20/20000000")>>
-	<<else>><<print "[[Take on 20/20000000]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Comic Relief")>>
-	<<else>><<print "[[Take on Comic Relief]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Equal Opportunity")>>
-	<<else>><<print "[[Take on Equal Opportunity]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control")>>
-	<<else>><<print "[[Take on Absolute Pregnancy]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Absolute Birth Control") || $playerCurses.some(e => e.name === "Absolute Pregnancy")|| $playerCurses.some(e => e.name === "Wacky Wombs")|| $playerCurses.some(e => e.name === "Omnitool")>>
-	<<else>><<print "[[Take on Absolute Birth Control]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $app.womb > 1 || $playerCurses.some(e => e.name === "Absolute Birth Control")>>
-	<<else>><<print "[[Take on Wacky Wombs]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Omnitool") || $playerCurses.some(e => e.name === "Absolute Birth Control")>>
-	<<else>><<print "[[Take on Omnitool]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Gooey")>>
-	<<else>><<print "[[Take on Gooey]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Rainbow Swirl")>>
-	<<else>><<print "[[Take on Rainbow Swirl]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Double Pepperoni")>>
-	<<else>><<print "[[Take on Double Pepperoni]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
-	<<else>><<print "[[Take on Literal Blushing Virgin]]">>
-<<endif>><</nobr>>
+<<nobr>>
+<<set _table =  "<table>" >>
+<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dome">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+	<<set _table += "<tr><td>[[Take on Submissiveness Rectification A]]</td>">>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse25]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Gender Reversal C") || $StoredCurse.name == "Gender Reversal C">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Gender Reversal C]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse26]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness C" || $StoredCurse.name == "Shrunken Assets">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Asset Robustness C]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse27]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Clothing Restriction B") || $StoredCurse.name == "Clothing Restriction B">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Clothing Restriction B]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse28]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dome">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Power Dom]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse29]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "20/20000000") || $StoredCurse.name == "20/20000000">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on 20/20000000]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse30]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Comic Relief") || $StoredCurse.name == "Comic Relief">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Comic Relief]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse31]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Equal Opportunity") || $StoredCurse.name == "Equal Opportunity">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Equal Opportunity]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse32]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Absolute Pregnancy]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse33]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<set _pregCurse = $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
+<<if _pregCurse || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+	<<else>>
+	<<set _table += "<tr><td>[[Take on Absolute Birth Control]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse34]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if ($playerCurses.some(e => e.name === "Wacky Wombs") && $app.womb>1)|| ($playerCurses.some(e => e.name === "Wacky Wombs") && $StoredCurse.name == "Wacky Wombs") || ( $app.womb>1 && $StoredCurse.name == "Wacky Wombs") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Wacky Wombs]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse35]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Omnitool") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Omnitool" || $StoredCurse.name == "Absolute Birth Control">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Omnitool]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse36]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Gooey") || $StoredCurse.name == "Gooey" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Gooey]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse37]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Rainbow Swirl") || $StoredCurse.name == "Rainbow Swirl" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Rainbow Swirl]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse38]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Double Pepperoni") || $StoredCurse.name == "Double Pepperoni" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Double Pepperoni]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse39]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Literal Blushing Virgin") || $StoredCurse.name == "Literal Blushing Virgin" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Literal Blushing Virgin]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse40]]</td></tr>">>
+		<<endif>>
+	<<endif>>
+<<endif>>
+<<set _table +=  "</table>" >>
+<</nobr>>
+<<print _table>>
 
 [[Allow the Abyss to bestow a random curse upon you|Layer3 Curses Random]]
 
@@ -1455,54 +1605,55 @@ You have successfully taken the $relic33.name relic. Hopefully you can make good
 
 :: Layer3 Curses Random
 <<nobr>>
+<<set _pregCurse = $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
 <<for $i = 0; $i < 999; $i++>>
 	<<set $temp1 = random(0,11) + 24>>
-	<<if ($temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom"))>>
+	<<if ($temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dom") >>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C")>>
+	<<if ($temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C") && $StoredCurse.name != "Gender Reversal C">>
 		<<break>>
 	<<endif>>
-	<<if $temp == 26 && !($playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
+	<<if $temp == 26 && !($playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness C" || $StoredCurse.name == "Shrunken Assets")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B")>>
+	<<if ($temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B") && $StoredCurse.name != "Clothing Restriction B">>
 		<<break>>
 	<<endif>>
 	<<if ($temp1 == 28) && !(playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000")>>
+	<<if ($temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000") && $StoredCurse.name != "20/20000000">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief")>>
+	<<if ($temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief") && $StoredCurse.name != "Comic Relief">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity")>>
+	<<if ($temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity") && $StoredCurse.name != "Equal Opportunity">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control"))>>
+	<<if ($temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 33) && !($playerCurses.some(e => e.name === "Absolute Birth Control") || $playerCurses.some(e => e.name === "Absolute Pregnancy")|| $playerCurses.some(e => e.name === "Wacky Wombs")|| $playerCurses.some(e => e.name === "Omnitool"))>>
+	<<if ($temp1 == 33) && !_pregCurse && !$playerCurses.some(e => e.name === "Absolute Birth Control") && $StoredCurse.name != "Absolute Birth Control">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 34) && !($app.womb > 1 || $playerCurses.some(e => e.name === "Absolute Birth Control"))>>
+	<<if ($temp1 == 34) && !($app.womb > 1 || ($playerCurses.some(e => e.name === "Wacky Wombs") &&  $StoredCurse.name = "Wacky Wombs") ||$playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || $playerCurses.some(e => e.name === "Absolute Birth Control"))>>
+	<<if ($temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || || $StoredCurse.name == "Omnitool" || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey")>>
+	<<if ($temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey") && $StoredCurse.name != "Gooey">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl")>>
+	<<if ($temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl") && $StoredCurse.name != "Rainbow Swirl">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni")>>
+	<<if ($temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni") && $StoredCurse.name != "Double Pepperoni">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
+	<<if ($temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin") && $StoredCurse.name != "Literal Blushing Virgin">>
 		<<break>>
 	<<endif>>
 
