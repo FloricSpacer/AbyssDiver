@@ -1356,28 +1356,35 @@ How many dubloons would you like to pay back?
 	<<set $status.penalty = 0>>
 <<endif>>
 
-<<if $layer==1>>
+<<if $currentLayer==1>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<set $timeL1 += $tempTime>>/* layer specific */
-<<elseif $layer==2>>
+<<elseif $currentLayer==2>>
 	<<if $items[14].count > 0 || $cut == 1>>
-		<<set _CutRed = 1>>
+		<<set _cutRed = 1>>
 	<<else>>
-		<<set _CutRed = 0>>
+		<<set _cutRed = 0>>
 	<<endif>>
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _CutRed), 0))>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _cutRed), 0))>>
 	<<set $timeL2 += $tempTime>>
 	<<if $items[1].count > 9>>
 		<<set $timeL2T1 += $tempTime>>
 	<<endif>>
-<<elseif $layer==3>>
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+<<elseif $currentLayer==3>>
+	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+		<<set _lightRed = 1>>
+	<<else>>
+		<<set _lightRed = 0>>
+	<<endif>>
+
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _lightRed), 0))>>
 	<<set $timeL3 += $tempTime>>
+	
 	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
 		<<else>><<set $timeL3T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL3T1 += $tempTime>>
-<<elseif $layer==4>>
+<<elseif $currentLayer==4>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<if $torchUse == 1 && $heat == 1>>
 		<<set $tempTime -= 2>>
@@ -1389,14 +1396,14 @@ How many dubloons would you like to pay back?
 	<<endif>>
 	<<set $timeL4 += $tempTime>>
 	<<set $timeL4T1 += $tempTime>>
-<<elseif $layer==5>>
+<<elseif $currentLayer==5>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
 	<<set $timeL5 += $tempTime>>
 	<<if ($items[0].count + $items[3].count) > 10>>
 		<<set $timeL5T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL5T1 += $tempTime>>
-<<elseif $layer==6>>
+<<elseif $currentLayer==6>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
 	<<set $timeL6 += $tempTime>>
 	<<set $hexflame += $tempTime>>
@@ -1404,7 +1411,7 @@ How many dubloons would you like to pay back?
 		<<set $timeL6T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL6T1 += $tempTime>>
-<<elseif $layer==7>>
+<<elseif $currentLayer==7>>
 	<<set $timeL7 += $tempTime>>
 	<<set $timeL7T2 += $tempTime>>
 	<<set $time += $tempTime>>
@@ -1422,23 +1429,26 @@ How many dubloons would you like to pay back?
 :: GeneralTimeStats
 <<nobr>>
 <<set $time += $tempTime>>
+<<if $currentLayer==3>>
+
+<<endif>>
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 <<else>>
 	<<set $foodL1 += $tempTime>>
 	<<if $abyssKnow == 0>>
 		<<for $i = 0; $i < $tempTime; $i++>>
-			<<if $layer==1>>
+			<<if $currentLayer==1>>
 				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
-			<<elseif $layer==2>>
+			<<elseif $currentLayer==2>>
 				<<if $mudHunt == 1 && $items[20].count > 0>>
 					<<set $items[20].count -= $tempTime>>
 				<<elseif $mudHunt == 0>>
 					<<set $LibidoLog.push($ForageFoodMajor)>>
 				<<endif>>
-			<<elseif $layer==3>>
+			<<elseif $currentLayer==3>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
-			<<elseif $layer==4>>
+			<<elseif $currentLayer==4>>
 				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
 					<<if $slingshot == 0>>
 						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
@@ -1446,23 +1456,23 @@ How many dubloons would you like to pay back?
 					<<set $foodL4 += $tempTime>>
 					<<set $HeightLog.push($ForageFoodMajor)>>
 				<<endif>>
-			<<elseif $layer==5>>
+			<<elseif $currentLayer==5>>
 				<<set $crumbleFluid += (5 * $tempTime)>>
-			<<elseif $layer==6>>
+			<<elseif $currentLayer==6>>
 				<<set $foodL6 += $tempTime>>
 			<<endif>>
 		<</for>>
 	<<else>>
 		<<for $i = 0; $i < $tempTime; $i++>>
-			<<if $layer==2>>
+			<<if $currentLayer==2>>
 				<<if $mudHunt == 1 && $items[20].count > 0>>
 					<<set $items[20].count -= $tempTime>>
 				<<elseif $mudHunt == 0>>
 					<<set $lastFlan=$time+1>>
 				<<endif>>
-			<<elseif $layer==3>>
+			<<elseif $currentLayer==3>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
-			<<elseif $layer==4>>
+			<<elseif $currentLayer==4>>
 				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
 					<<if $slingshot == 0>>
 						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
@@ -1470,9 +1480,9 @@ How many dubloons would you like to pay back?
 					<<set $foodL4 += $tempTime>>
 					<<set $HeightLog.push($ForageFoodMinor)>>
 				<<endif>>
-			<<elseif $layer==5>>
+			<<elseif $currentLayer==5>>
 				<<set $crumbleFluid += $tempTime>>
-			<<elseif $layer==6>>
+			<<elseif $currentLayer==6>>
 				<<set $foodL6 += $tempTime>>
 			<<endif>>
 		<</for>>	
@@ -1490,20 +1500,20 @@ How many dubloons would you like to pay back?
 		<<set $waterL1 += 1>>
 		<<if $abyssKnow == 0>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<if $layer==1>>
+				<<if $currentLayer==1>>
 					<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
-				<<elseif $layer==2>>
+				<<elseif $currentLayer==2>>
 					<<set $bewitchBabies += 1>>
-				<<elseif $layer==3>>
+				<<elseif $currentLayer==3>>
 					<<set $waterL2 += 1>>
-				<<elseif $layer==4>>
+				<<elseif $currentLayer==4>>
 					<<set $waterL4 += 1>>
 					<<if $abyssKnow == 0>>
 						<<set $algalSize += 1>>
 					<<endif>>
-				<<elseif $layer==5>>	
+				<<elseif $currentLayer==5>>	
 					<<set $waterL5 += 1>>
-				<<elseif $layer==6>>
+				<<elseif $currentLayer==6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
 						<<set $hexflame += 1>>

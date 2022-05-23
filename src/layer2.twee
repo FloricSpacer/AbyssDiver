@@ -1379,20 +1379,12 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<if $status.duration > 0>>
-		<<set $status.duration -= 1>>
-		<<else>>
-		<<set $status.penalty = 0>>
-	<<endif>>
-	<<set $temptime=5>>
+	<<set $tempTime=5>>
 	<<include "GeneralTimeSetup">>
-	<<set $layerExitTime = $temptime>>
 <<endif>>
 
-<<for $i = 0; $i < 99; $i++>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-	<<endif>>
+<<for $layerExitTime=$tempTime; $layerExitTime >0; $layerExitTime-->>
+
 	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
 		<br>During your long hike towards the third layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
 
@@ -1432,9 +1424,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<<endif>>
 <<endif>>*/
 	<<set $time += 1>>
-	<<set $layerExitTime -= 1>>
 <</for>>
-
 
 <</nobr>><<if $layerExitTime == 0>>
 Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
@@ -1493,28 +1483,22 @@ Use the following option only if you have specifically considered your inventory
 :: Layer2 Ascend2 [layer2]
 <<nobr>><<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<if $status.duration > 0>>
-		<<set $status.duration -= 1>>
-		<<else>>
-		<<set $status.penalty = 0>>
-	<<endif>>
 	<<set $temptime=5>>
 	<<include "GeneralTimeSetup">>
-	<<set $layerExitTime = $temptime>>
 <<endif>>
 
-<<for $i = 0; $i < 99; $i++>>
+<<for $layerExitTime=$tempTime; $layerExitTime >0; $layerExitTime-->>
 	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
 		<br>During your long hike back up towards the first layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
 
-[[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
+		[[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
 		<<break>>
 	<<endif>>
-	<<if $items[1].count > 9>>
-		<<set $timeL2T1 += 1>>
-	<<endif>>
-	<<set $temptime=1>>
-	<<include "GeneralTimeStats">>
+		<<if $items[1].count > 9>>
+			<<set $timeL2T1 += 1>>
+		<<endif>>
+		<<set $temptime=1>>
+		<<include "GeneralTimeStats">>
 /*	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
 			<<set $items[3].count -= 1>>
@@ -1552,9 +1536,6 @@ Use the following option only if you have specifically considered your inventory
 
 <</nobr>><<if $layerExitTime == 0>>
 <<nobr>>
-<<if $items[14].count > 0 || $cut == 1>>
-	<<set $timeRed -= 1>>
-<<endif>>
 <<set $corruption -= (15 - $corRed)>>
 <</nobr>>
 
