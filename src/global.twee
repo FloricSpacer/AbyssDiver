@@ -1,0 +1,1875 @@
+:: StoryMenu
+[[Stats]]
+[[Appearance]]
+[[Inventory]]
+<br>
+
+
+:: Stats [noreturn]
+You have $dubloons dubloons.
+You have $corruption corruption points.
+You have been exploring the Abyss for $time days.
+<<nobr>>
+<<if $time > 0>>
+	[[View time spent in each layer|Time Stats]]<br>
+<</if>>
+<<if $endSpectre > 0>>
+The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.
+<<endif>>
+<</nobr>><<nobr>><<if $debt > 0>>
+	<<print "You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.">><br><<endif>>
+<<if $status.penalty > 0>>
+<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
+<<if $hexflame > 9>>
+You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.
+<<endif>>
+<<endif>>
+	<</nobr>>
+Your carry weight is <<print Math.round($carryWeight)>> kg.
+Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.
+Your team is currently carrying <<nobr>>
+<<set $temp1 = 0>><<set $temp2 = 0>>
+<<for $i = 0; $i < $items.length; $i++>>
+		<<set $temp1 += ($items[$i].weight * $items[$i].count)>>
+<</for>>
+<<if $ownedRelics.length > 0>><<for $i = 0; $i < $ownedRelics.length; $i++>>
+		<<set $temp2 += $ownedRelics[$i].weight>>
+<</for>><<endif>>
+<<set $temp1 += $temp2>>
+<<print $temp1.toFixed(1)>><</nobr>> kg.
+<<nobr>>
+<<if $swapComp > -1>>
+	<<print "You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.">><br>
+<<endif>>
+
+Your companions are:<br>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+		<<capture $i>>
+		<<print "[[$hiredCompanions[$i].name|Companion Info][$temp = $i]]">><br>
+		<</capture>>
+<</for>>
+<</nobr>>
+
+Your curses are:
+<<nobr>>
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+		<<print $playerCurses[$i].name>><br>
+<</for>>
+
+<<if $waterL1 > 0>>
+	<<print "You have foraged for water on the first layer $waterL1 times.">><br>
+<<endif>>
+<<if $foodL1 > 0>>
+	<<print "You have foraged for food on the first layer $foodL1 times.">><br>
+<<endif>>
+<</nobr>>
+
+
+<<back [[$return]]>>
+
+
+:: Inventory [noreturn]
+You have $items[0].count days of single-use water rations.
+You have $items[1].count days of food.
+You have $items[2].count unfilled flasks.
+You have $items[3].count days of water in filled flasks.
+
+Your inventory and the count (if applicable) of each item is as follows:
+<<nobr>>
+<<for $i = 0; $i < $items.length; $i++>>
+	<<capture $i>>
+	<<if $items[$i].count > 1 || $items[$i].count < 0>>
+			<<print "[[$items[$i].name|Item Info][$temp = $i]]">>		<<print " ">><<print $items[$i].count>><br>
+	<<elseif $items[$i].count == 1>>
+		<<print "[[$items[$i].name|Item Info][$temp = $i]] ">>
+		<br>
+	<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<print "[[$ownedRelics[$i].name|Relic Info][$temp = $i]]">><br>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<set $total_value_relics=0>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+<<set $total_value_relics = $ownedRelics[$i].value + $total_value_relics>>
+<</for>>
+The total value of all your relics is $total_value_relics dubloons.
+
+<<nobr>>
+<<if $relicSwap.length > 0>>
+	<<for $i = 0; $i < $relicSwap.length; $i++>>
+		<<capture $i>>
+		You have swapped the abilities of the $relicSwap[$i][0].name and the $relicSwap[$i][1].name.<br>
+		<</capture>>
+	<</for>>
+<<endif>>
+<</nobr>>
+<<back [[$return]]>>
+
+
+:: Habitation Ending [ending]
+You've reached the end of your journey due to a successful habitation ending. Was it worth it? Did you find what you were looking for?
+
+You can find your collection of relics in your inventory, and your curses in the stats page.
+
+Feel free to begin a new journey, by restarting and choosing the new game+ option. Also feel free to post your build on the thread for the game, the creator of this adaptation always loves to see how people's adventures went!
+
+
+:: Adjustments [noreturn]
+Use this page ONLY to adjust numbers due to interactions that save you money or resources that are not already accounted for in the game, or if there was a bug.
+
+Do not cheat or fear the consequences of angering the things that lurk deep in the Abyss.
+
+
+[[Adjust dubloons]]
+[[Adjust corruption]]
+[[Adjust time]]
+[[Adjust water]]
+[[Adjust food]]
+[[Adjust bullets]]
+
+Many options have their abilities as something like a light source or heat source automatically accounted for, but if you find a relic or combination that you think should give you an ability and it doesn't, use one of the following options to give that ability to yourself.
+
+Click this if you have found something that can be used for cutting like a sword:
+[[I have a Cutting Instrument|Adjustments][$cut = 1]]
+[[No Cutting Instrument|Adjustments][$cut = 1]]
+
+Click this if you have found something that can be used as a light source:
+[[I have a Light|Adjustments][$light = 1]]
+[[No Light|Adjustments][$light = 0]]
+
+Click this if you have found something that can be used as a substantial heat source:
+[[I have a source of Heat|Adjustments][$heat = 1]]
+[[No Heat|Adjustments][$heat = 0]]
+
+Click this if you have found something that can be used as a climbing rope:
+[[I have something that can be a Rope|Adjustments][$rope = 1]]
+[[No Rope|Adjustments][$rope = 0]]
+
+Click this if you have found something that can be used for swimming underwater, similar to scuba gear:
+[[I have something that can be used for Swimming|Adjustments][$scuba = 1]]
+[[No Swimming|Adjustments][$scuba = 0]]
+
+<<if $abyssKnow == 1>>Click this if you'd like to disable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in more side effects from foraging):
+	[[Turn off abyssal knowledge|Adjustments][$abyssKnow = 0]]
+<<endif>>
+<<if $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
+	[[Turn on abyssal knowledge|Adjustments][$abyssKnow = 1]]
+<<endif>>
+
+If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
+[[Simulate the functionality of a commerce balloon|Commerce Balloon][$comBalloon = 1]]
+
+
+[[Confirm Adjustments|$return]]
+
+
+:: Time Stats [noreturn]
+<<nobr>>
+<<if $timeL1 > 0>>
+	<<print "You have spent $timeL1 days on the first layer of the Abyss.">><br>
+<<endif>>
+<<if $timeL2 > 0>>
+	<<print "You have spent $timeL2 days on the second layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL3 > 0>>
+	<<print "You have spent $timeL3 days on the third layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL4 > 0>>
+	<<print "You have spent $timeL4 days on the fourth layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL5 > 0>>
+	<<print "You have spent $timeL5 days on the fifth layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL6 > 0>>
+	<<print "You have spent $timeL6 days on the sixth layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL7 > 0>>
+	<<print "You have spent $timeL7 days on the seventh layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL8 > 0>>
+	<<print "You have spent $timeL8 days on the eighth layer of the Abyss.">><br>
+	<<endif>>
+<<if $timeL9 > 0>>
+	<<print "You have spent $timeL9 days on the ninth layer of the Abyss.">><br>
+<<endif>>
+
+
+<<if $waterL1 > 0>>
+	<<print "You have foraged for water on the first layer $waterL1 times.">><br>
+<<endif>>
+<<if $foodL1 > 0>>
+	<<print "You have foraged for food on the first layer $foodL1 times.">><br>
+<<endif>>
+
+<<if $waterL2 > 0>>
+	<<print "You have foraged for water on the second layer $waterL2 times.">><br>
+<<endif>>
+<<if $foodL2 > 0>>
+	<<print "You have foraged for food on the second layer $foodL2 times.">><br>
+<<endif>>
+
+<<if $waterL3 > 0>>
+	<<print "You have foraged for water on the third layer $waterL3 times.">><br>
+<<endif>>
+<<if $foodL3 > 0>>
+	<<print "You have foraged for food on the third layer $foodL3 times.">><br>
+<<endif>>
+
+<<if $waterL4 > 0>>
+	<<print "You have foraged for water on the fourth layer $waterL4 times.">><br>
+<<endif>>
+<<if $foodL4 > 0>>
+	<<print "You have foraged for food on the fourth layer $foodL4 times.">><br>
+<<endif>>
+
+<<if $waterL1 > 0>>
+	<<print "You have foraged for water on the fifth layer $waterL5 times.">><br>
+<<endif>>
+<<if $foodL1 > 0>>
+	<<print "You have foraged for food on the fifth layer $foodL5 times.">><br>
+<<endif>>
+<</nobr>>
+
+<<back>>
+
+
+:: Version End
+That's all for this version!
+
+Thank you for playing version 0.4 of the interactive adaptation of Abyss Diver by FloricSpacer.
+
+I'd like to hear any feedback about the current state of the game and any bugs or typos you've found!
+
+I'm working on adding the remaining layers quickly, though it is pretty labor intensive, so that depends on my free time irl. I think a lot of the systems from the first few layers should carry over to later ones well, but there are also a lot of new mechanics that need to be implemented. Hopefully it doesn't take long and I can post the rest of the layers soon!
+
+As I add more systems and the game gets more complicated under the hood, I expect many bugs that I didn't catch to manifest, so detailed bug reports for any errors you've encountered are very valuable.
+
+If you're interested in seeing the most recent changes to the code or contributing yourself, you should visit our public Github! 
+
+https://github.com/FloricSpacer/AbyssDiver
+
+You can also join the new Discord server, where we have regular discussion regarding the game and development.
+
+https://discord.gg/gXnq5rmjxG
+
+Thanks again for playing!
+
+
+:: Appearance [noreturn]
+<<nobr>>
+<<HeightCorrected>>
+<<appGender>>
+<<LibidoCorrected>>
+<<AppearanceCorrect>>
+/*<<for $i = 0; $i < $GenderLog.length; $i++>>
+		<<print $GenderLog[$i].name>>
+<</for>>*/
+<</nobr>>Your name is $app.name and you are a $app.sex.
+
+Your hair color is $app.hair, while your eyes are colored $app.eyeColor.
+You have $app.skinColor colored $app.skinType skin.
+You are <<print Math.round($app.heightCor)>> cm tall.
+You have $app.ears ears.
+You are $app.age years old<<if $app.age != $app.appAge>>, but you appear to be <<print Math.round($app.appAge)>> years old<<endif>>.
+
+<<nobr>>
+<<if $dollevent2== true>>
+	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
+<<endif>>
+<<if $hornyCount == 1>>
+	<br>You have a noticeable demonic horn protruding from the center of your forehead.
+<<elseif $hornyCount == 2>>
+	<br>You have 2 noticeable demonic horns protruding from your head.
+<<endif>>
+
+<br><br>$app.desc
+<<for $i = 0; $i < $playerCurses.length; $i++>>
+	<<print $playerCurses[$i].appDesc>>
+<</for>>
+<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+	<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">>
+<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">>
+<<endif>>
+
+<<if $semenCount > 0>>
+	You must drink <<print ($semenCount * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($semenCount * 2)>> loads per day.<<print " ">>
+<<endif>>
+<<if $quotaCount > 0>>
+	You need to directly bring other people to orgasm <<if $playerCurses.some(e => e.name === "Sleep Tight")>><<print ($quotaCount * 3)>><<else>><<print ($quotaCount * 2)>><<endif>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<<endif>><<print " ">>
+<<endif>>
+<<if $limelightCount > 0>>
+	You need to be the focus of <<print ($limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $playerCurses.some(e => e.name === "Semen Demon") || $playerCurses.some(e => e.name === "Quota")>>not only you have to have sex with so many people, but also <<endif>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <<endif>><<print " ">>
+<<endif>><br><br>
+<<if $bewitchBabies > 0>>
+	Due to your consumption of the contaminated rainwater of the second layer, your fertility has greatly increased. The average amount of  babies born from any pregnancy you're involved in is increased by <<print $bewitchBabies>>.<<print " ">>
+<<endif>>
+<<if $algalSize > 0>>
+	Your <<if $app.sex == "male">>testicles are<<elseif $app.sex == "female">>clitoris is<<else>>testicles and clitoris are<<endif>> approximately <<print (10 * $algalSize)>>% lager than usual due to drinking contaminated melted snow from the fourth layer.<<print " ">>
+<<endif>>
+<<if $crumbleFluid > 0>>
+	Due to the consumption of crumbleweed from the fifth layer, your production of sexual fluids has increased by <<print $crumbleFluid>>%. <<if $crumbleFluid > 50>>Try not to get too dehydrated if you're especially sexually active.<<endif>><<print " ">>
+<<endif>>
+
+<<if $app.gender <= 1>>
+You look like a typical man, with a masculine facial structure and a body profile that would obviously seem male from a distance.
+<<elseif $app.gender == 2>>
+You look like man, but your features are a bit softer than average. No one would mistake you for a woman, but maybe the label of "twink" could apply to you.
+<<elseif $app.gender == 3>>
+You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very effeminate man, but others might see you as a butch woman.
+<<elseif $app.gender == 4>>
+You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very butch woman, but others might see you as an effeminate man.
+<<elseif $app.gender == 5>>
+You look like a woman, but a bit on the masculine side. Many people would likely assume you're a tomboy based on your appearance.
+<<elseif $app.gender >= 6>>
+You look like a typical woman, with a feminine face and a figure that looks clearly female from a distance.
+<<endif>>
+<<if $app.fit>8>>
+Working out with the World Stone has given you a fit body with especially well-toned arm muscles.
+<<elseif $app.fit>6>>
+You have a well-toned athletic body.
+<<elseif $app.fit>4>>
+You have a unremarkable but healthy body.
+<<else>>
+Your body looks rather out of shape, you could definitely benefit from some exercise.
+<<endif>>
+<br><br>
+<<if $app.libido <= 1>>
+You have a very low libido, without much interest at all in sex.
+<<elseif $app.libido == 2>>
+You have your normal libido, being somewhat interested in sex, but you can certainly control yourself.
+<<elseif $app.libido == 3>>
+You have a slightly elevated libido. You will feel hot and bothered more reularly than you are accustomed to. Uncomfortable, but manageable.
+<<elseif $app.libido == 4>>
+You have an elevated libido. Your sexual urges are frequent and very difficult to resist. Can be only barely hidden; leading a normal lifestyle will be possible, but frequently frustrating.
+<<elseif $app.libido == 5>>
+Your libido would be considered a symptom of a mental disorder. You're hopelessly addicted to sex, and it is impossible to keep your desired hidden.
+<<elseif $app.libido == 6>>
+You desire sex about as much as basic necessities as food and water, perhaps slightly more. You go to great lengths for sex, and it dominates your life.
+<<elseif $app.libido >= 7>>
+You need sex constantly - having sex will only sate your hunger for a matter of minutes, and you will find little meaning in things that don't lead to you having more sex.
+<<endif>>
+<br>
+<<if $app.penisCor>=1>>
+	<<if $app.penisCor == 1>>
+	You have a tiny penis of <<print Math.round($app.penisCor)*2.5>> cm, which is honestly barely larger than a clitoris.
+	<<elseif $app.penisCor <= 2.5>>
+	You have a very small penis of <<print Math.round($app.penisCor)*2.5>> cm. You need some very tight pants to show something that even remotely resembles a bulge in your crotch.
+	<<elseif $app.penisCor <= 3.5>>
+	You have a small penis of <<print Math.round($app.penisCor)*2.5>> cm. You are a bit self conscious about it, but it works perfectly well.
+	<<elseif $app.penisCor <= 4.5>>
+	You have a below average penis of <<print Math.round($app.penisCor)*2.5>> cm. Yeah, you know it's not that big, but you try not to get too hung up on it.
+	<<elseif $app.penisCor <= 5.5>>
+	You have a pretty average penis of <<print Math.round($app.penisCor)*2.5>> cm. Nothing to be ashamed of, but nothing to write home about either.
+	<<elseif $app.penisCor <= 6.5>>
+	You have a totally average penis of <<print Math.round($app.penisCor)*2.5>> cm, very typical for a man in your demographics.
+	<<elseif $app.penisCor <= 7.5>>
+	You have a slightly above average penis of <<print Math.round($app.penisCor)*2.5>> cm, not anything out of the ordinary, but some people may particularly enjoy it.
+	<<elseif $app.penisCor <= 8.5>>
+	You have a large penis of <<print Math.round($app.penisCor)*2.5>> cm, people who like larger sizes are likely to be impressed.
+	<<elseif $app.penisCor <= 9.5>>
+	You have a very large penis of <<print Math.round($app.penisCor)*2.5>> cm, size queens dream of meeting someone like you, but tighter orifices can be a bit of an issue occasionally.
+	<<elseif $app.penisCor > 9.5>>
+	You have an enormous penis of <<print Math.round($app.penisCor)*2.5>> cm. Are you even going to able to have sex with this monster schlong?
+	<<endif>>
+<<endif>>
+<br><br>
+<<if $app.vag == 1>>
+You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
+<<endif>>
+<<if $app.womb > 0>>
+<br>You have an extra womb in your $app.womb1.
+<<endif>>
+<<if $app.womb > 1>>
+<br>You have another extra womb in your $app.womb2.
+<<endif>>
+<br><br>
+
+<<BreastCorrected>>
+<<if $app.breastsCor < 1>>
+You have a flat, <<GenderPronoun>> chest.
+<<elseif $app.breastsCor < 2>>
+You have AA cup mosquito bites, much smaller than most women.
+<<elseif $app.breastsCor < 3>>
+You have cute A cup breasts, small but not out of the ordinary.
+<<elseif $app.breastsCor < 4>>
+You have supple B cup breasts.
+<<elseif $app.breastsCor < 5>>
+You have perfectly round C cup breasts.
+<<elseif $app.breastsCor < 6>>
+You have nice handfuls of D cup breasts.
+<<elseif $app.breastsCor < 7>>
+You have larger than most E cup breasts.
+<<elseif $app.breastsCor < 8>>
+Your sizes are starting to get cumbersome with your F cup breasts.
+<<elseif $app.breastsCor < 9>>
+You've got to watch out for back pain with your G cup breasts.
+<<elseif $app.breastsCor < 10>>
+You've got to watch out for back pain with your H cup breasts.
+<<elseif $app.breastsCor < 11>>
+You've got to watch out for serious back pain with your I cup breasts.
+<<elseif $app.breastsCor < 12>>
+You've got to watch out for serious back pain with your J cup breasts.
+<<elseif $app.breastsCor < 13>>
+You've got to watch out for serious back pain with your K cup breasts.
+<<elseif $app.breastsCor < 14>>
+You've got to watch out for serious back pain with your L cup breasts.
+<<elseif $app.breastsCor < 15>>
+You've got to watch out for serious back pain with your M cup breasts.
+<<elseif $app.breastsCor < 16>>
+You've got to watch out for very serious back pain with your N cup breasts.
+<<elseif $app.breastsCor < 17>>
+You've got to watch out for very serious back pain with your O cup breasts.
+<<elseif $app.breastsCor < 18>>
+You've got to watch out for very serious back pain with your P cup breasts.
+<<elseif $app.breastsCor < 19>>
+You've got to watch out for very serious back pain with your Q cup breasts.
+<<elseif $app.breastsCor >= 19>>
+You've got to watch out for very serious back pain with your R cup breasts.
+<<elseif $app.breastsCor > 19>>
+You've got to watch out for extremely serious back pain with your S cup breasts.
+<<endif>>
+
+<<if $app.tail.length > 0>>
+<<for $i = 0; $i < $app.tail.length; $i++>>
+		You have a $app.tail[$i] tail right above your butt.<br>
+<</for>>
+<<endif>>
+<br>
+Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.<br>
+<</nobr>>
+<<back [[$return]]>>
+
+:: Adjust dubloons [noreturn]
+<<set $temp = 0>>How many dubloons would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$dubloons += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust corruption [noreturn]
+<<set $temp = 0>>How many corruption points would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$corruption += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust time [noreturn]
+<<set $temp = 0>>How many days would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$time += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust water [noreturn]
+<<set $temp = 0>>How many water rations would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$items[0].count += (parseInt($temp))]]
+<<back>>
+
+
+:: Adjust food [noreturn]
+<<set $temp = 0>>How many food rations would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$items[1].count += (parseInt($temp))]]
+<<back>>
+
+
+:: Commerce Balloon [noreturn]
+Using your balloon, you're able to send up any relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
+
+<<nobr>>
+[[Send a request to the Outset Town Administration|Balloon Admin]]
+<<if $items[19].count > 0>>
+[[Send a request to the Relic Workshop|Balloon Workshop]]<br>
+<<endif>>
+
+<<if $tunnelUsed == 1>>
+[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
+<<endif>>
+<</nobr>>[[Sell relics|Balloon Sell1]]
+[[Buy items|Balloon Store1]]
+
+
+[[Finish using balloon to trade|$return][$comBalloon = 0]]
+
+
+:: Balloon Sell1 [noreturn]
+Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.
+
+Choose the relic you would like to sell:
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
+			You can't seem to part ways with the Creepy Doll<br>
+		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly. <br>
+		<<elseif $ownedRelics[$i].name=="Everheavea">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+		<<else>>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Store1 [noreturn]
+Here are all of the items available for your to spend you $dubloons dubloons on:
+
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 1-items.png']]
+
+[[Buy Water|Balloon Water]]
+[[Buy Food Rations|Balloon Food]]
+[[Buy Flasks|Balloon Flasks]]
+[[Buy Medkits|Balloon Medkits]]
+[[Buy Encyclopedia Abyssia|Balloon Encyclopedia]]
+[[Buy Messenger Baloons|Balloon Messenger]]
+[[Buy Commerce Balloons|Balloon Commerce]]
+[[Buy Escape Balloons|Balloon Escape]]
+[[Buy Torches|Balloon Torches]]
+[[Buy Flashlight|Balloon Flashlight]]
+[[Buy Rope|Balloon Rope]]
+[[Buy Compass|Balloon Compass]]
+[[Buy Pistol|Balloon Pistol]]
+[[Buy Bullets|Balloon Bullets]]
+[[Buy Sword|Balloon Sword]]
+[[Buy Scuba Gear|Balloon Scuba]]
+[[Buy Warding Braces|Balloon Warding]]
+[[Buy Smartphone|Balloon Smartphone]]
+[[Buy Inn Room Pass|Balloon Inn]]
+[[Buy Relic Workshop Pass|Balloon Workshop1]]
+
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Sell 2 [noreturn]
+<<set $dubloons += ($ownedRelics[$temp].value + $sellAdd)>>
+The relic $ownedRelics[$temp].name has been successfully sold and you've gotten your dubloon payment. You notice the person you sold it to quickly runs off, either to make use of it or sell it again in the everlasting chain of capitalism. Either way, you won't be getting that relic back easily.<<run $ownedRelics.deleteAt($temp)>>
+
+[[Sell more relics|Balloon Sell1]]
+[[Continue your balloon business|Commerce Balloon]]
+
+
+:: Balloon Water [noreturn]
+How much water would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[0].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[0].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Food [noreturn]
+How many days of food rations would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[1].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[1].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Flasks [noreturn]
+How many water flasks would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[3].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[2].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Medkits [noreturn]
+How many days of medkits would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[4].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[4].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Encyclopedia [noreturn]
+How many copies of the Encyclopedia Abyssia would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 copy.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[5].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[5].cost), $abyssKnow = 1]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Messenger [noreturn]
+How many days of messenger balloons would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[6].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[6].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Commerce [noreturn]
+How many days of commerce balloons would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[7].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[7].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Escape [noreturn]
+How many days of escape balloons would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[8].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[8].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Torches [noreturn]
+How many days of torches would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[9].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[9].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Flashlight [noreturn]
+How many flashlights would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 flashlight.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[10].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[10].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Rope [noreturn]
+How many ropes would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 rope.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[11].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[11].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Compass [noreturn]
+How many compasses would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 compass.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[12].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[12].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Pistol [noreturn]
+How many pistols would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 pistol.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[13].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[13].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Bullets [noreturn]
+How many sets of 6 bullets would you like to buy?
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[20].count += (parseInt($temp) * 6), $dubloons -= (parseInt($temp)*$items[20].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Sword [noreturn]
+How many swords would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 sword.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[14].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[14].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Scuba [noreturn]
+How many sets of scuba gear would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 set of scuba gear.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[15].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[15].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Warding [noreturn]
+How many warding braces would you like to buy?
+
+(Note: You are only allowed to buy 2 warding braces unless you have an effect or combination of relics that specifically would allow you to buy more.)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Balloon Store1][$items[16].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[16].cost), $corruption += (20 * $temp)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Smartphone [noreturn]
+How many smartphones would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 smartphone.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[17].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[17].cost), $abyssKnow = 1, $light = 1]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Inn [noreturn]
+How many inn room passes would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 inn room pass.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[18].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[18].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Balloon Workshop1 [noreturn]
+How many relic workshop passes would you like to buy?
+
+(Note: there is no additional benefit for buying more than 1 relic workshop pass.)
+
+<<textbox "$temp" "1">>
+
+[[Confirm|Balloon Store1][$items[19].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[19].cost)]]
+<<back [[Balloon Store1]]>>
+
+
+:: Item Info [noreturn]
+<<print $items[$temp].name>><<nobr>>
+<<if $items[$temp].count > 1>>
+<br>Count: $items[$temp].count
+<<endif>><</nobr>>
+
+[img[setup.ImagePath+$items[$temp].image]]
+
+<<print $items[$temp].desc>>
+
+Weight: $items[$temp].weight kg
+Cost: $items[$temp].cost dubloons
+
+<<back>>
+
+
+:: Credits
+<br>Thank you so much to anyone who has helped me out with this project! I appreciate all the feedback and every suggestion I get, especially feature requests and bug reports! I try to respond promptly to these, so please let me know if you have an idea or find a bug!
+
+Thanks to Ilse91 for helping with a huge variety of code and adding some new features regarding height, carry weight, companions, conversations, and endings. Additionally, she's been instrumental in helping update many systems to make them function better, such as Curses. She also helped in getting my motivation for working on the game back and her help is incredibly appreciated.
+
+Thanks to Emmeken for helping with the move to Tweego and Github, numerous formatting fixes and improvements, transcribing the item descriptions for me, and huge amounts of help generally with code improvements.
+
+Thanks to Nerevar for writing drafts of the Curse descriptions that appear when transitioning layers or occasionally in a layer hub.
+Thanks to dogflail for writing drafts for some of the Curse appearance screen decriptions.
+Thanks to abiciendimittent for transcribing the relic and curse descriptions (will be added to the game when they are completed)
+Thanks to Stadler for finding many bugs and reporting them to me.
+Thanks to HiEv for having a great tutorial with sample code that I used in this project.
+Thanks to laevus for bug reports.
+Thanks to Kras for suggestions and bug reports.
+And thanks to Lily for encouraging me when I got some negative feedback early in the initial draft form of this game.
+
+I seriously appreciate all of your help and I'm really happy that people were willing to help improve this project with me.
+<br>
+
+:: Surface Tunnel Retrieval
+You manage to find your items safely, retrieving all of them and putting them right back into your inventory where they belong. Luckily no one seems to have disturbed or taken anything in the time it took you to get back up here and find your items.
+
+<<if $comBalloon == 0>>
+[[Continue your business in Outset Town|Surface Hub]]
+<<else>>
+[[Continue using the commerce balloon|Commerce Balloon]]
+<<endif>>
+
+<<nobr>>
+<<for $i = 4; $i < $items.length; $i++>>
+	<<set $items[$i].count += $vaultItems[$i].count>>
+	<<set $vaultItems[$i].count = 0>>
+<</for>>
+<<set $dubloons += $tunnelDubloons>>
+<<set $tunnelUsed = 0>>
+<</nobr>>
+
+
+:: GameOver
+@@.layerTitle;YOU ARE DEAD@@
+
+<<if $items[1].count < -5>>
+Your food ration count has gone below -5, indicating that you have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
+<<else>>
+Your days of water remaining count has gone below -2, indicating that you managed to survive without water for a few days, but eventually died of dehydration. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
+<<endif>><<if $corruption < 0>>
+
+Due to your negative corruption, you are unable to accept a habitation option at this time. However, you can go back to the main part of the layer, then take curses until you have reached a corruption above 0 to survive. This is highly reccomended if you wish to avoid death.
+<<endif>>
+
+
+:: BrokerEnd
+YOU MAY NOT ALLOW YOUR CORRUPTION TO GO BELOW 0 DUE TO YOUR BROKER'S DEAL.
+
+You have chosen to accept the deal of the Empty-handed Broker and attempted to take an action that would reduce your corruption points below 0. Because this is not possible, you must go back to avoid performing this action.
+
+If you would still like to perform this action, you may go back to the main part of the layer you were on and accept curses to raise your corruption point total.
+
+<<back>>
+
+
+:: AgeLimit
+YOU MUST BE AT LEAST 18 TO PLAY THIS GAME
+
+If you are over 18, please go back and enter an age above 18 to continue.
+
+<<back>>
+
+
+:: Use Items and Relics [noreturn]
+<<nobr>>
+<<if $items[7].count > 0>>
+[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1, $comBalloon = 1]]<br>
+<<endif>>
+<<if $items[8].count > 0>>
+	<<if $currentLayer==0>>
+		There is no need to deploy your escape balloon while you are on the surface.
+	<<elseif $currentLayer==1>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==2>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==3>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==4>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==5>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==6>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<elseif $currentLayer==7>>
+		[[Use an escape balloon to escape towards the surface|Escape Balloon L7][$items[8].count -=1, $escBalDepl=1]]<br>
+	<<endif>>
+<<endif>>
+<<if ($items[4].count > 0) && ($status.penalty > 0) && $dragonBurn == 0>>
+<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
+[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
+	<<endif>>
+<<if ($items[4].count > 1) && ($status.penalty > 0) && $dragonBurn == 1>>
+<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
+[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -= 2, $dragonBurn = 0]]<br>
+	<<endif>>
+
+<<if $items[21].count > 0>>
+[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
+<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
+		<<if $hsswear>>
+		<br>You can take off the stole you are using to improve relations with your companions. This will remove the benefit in affection events you are gaining from the Relic.<br>
+		[[Take off the Heart-stealing Stole|Use Items and Relics][$hsswear=0]]<br>
+		<<else>>
+	<br>You can put on the majestic stole you have, it is sure to help sway the hearts of your companions to become more friendly and respect you as a leader. This increases the affection gain from any event that alters affection.<br>
+			[[Wear the Heart-stealing Stole|Use Items and Relics][$hsswear=1]]<br>
+		<<endif>>
+	<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "World Stone")>>
+		<<if $app.fit>=10>>
+			<br>You don't think you would get anymore fit than you are from working out with the World Stone. Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
+		<<elseif $LastEx < ($time-1)>>
+			<br> You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body. If you want to get stronger and more fit, using this relic is the best way to do it.<br>
+			[[Work out with the World Stone|Use Items and Relics][$app.fit+=1, $LastEx = $time]]<br>
+		<<else>>
+			<br>Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
+		<<endif>>
+	<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "Chain of Lorelei")>>
+		<<if $colwear>>
+			<br>Currently your voice is different than the one you were used to. Right now you have a feminine voice that sounds like its coming from someone with a natural talent for singing, as if you could be the central figure in an angelic chorus or make a career in music with only minimal training.<br>
+			[[Take the Chain of Lorelei off|Use Items and Relics][$colwear=0]]<br>
+		<<else>>
+		    <br>You have a fairly normal <<GenderPronoun>> voice, but perhaps you sound different if you took advantage of one of your Relics?<br>
+			[[Wear the Chain of Lorelei|Use Items and Relics][$colwear=1]]<br>
+		<<endif>>
+	<<endif>>
+
+
+	<<if $ownedRelics.some(e => e.name === "From Seafoam")>>
+		<<if !$scent>>
+			<br>Currently you have a rather neutral scent<br>
+			[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
+			[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
+		<<elseif $scent==1 >>
+			<br>Currently you have a sweet and floral scent lingering around you<br>
+			[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=0]]<br>
+			[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
+		<<else>>
+			<br>Currently you have a strong musky scent lingering around you<br>
+			[[Scrub yourself with the sponge while imagining the sponge to be odourless|Use Items and Relics][$scent=0]]<br>
+			[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
+		<<endif>>
+	<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "Sibyl Blend")>>
+		<br>You have posession of the Sibyl Blend, brewing it and looking in the leaves can point you in the direction of a Relic, saving you 1 day on your next Relic travel time.<br>
+		<<if $SibylBuff == 0>>
+			[[Use the Sibyl Blend to help find the next Relic more quickly|Use Items and Relics][$SibylBuff = 1]]<br>
+		<<else>>
+			<br>The Sibyl Blend tea leaves have pointed you in a clear direction for the next Relic. You are confident that finding it will take you 1 less day than it normally would.<br>
+			[[Stop using the Sibyl Blend to help find future Relics|Use Items and Relics][$SibylBuff = 0]]<br>
+		<<endif>>
+	<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "Kin Shifter")>>
+		<br>A glob of putty-like slime lays ready for you to copy other relics, if you desire to.<br>
+			[[Use the Kin Shifter to copy relics|Kin Shifter Use][$tempValue = 0]]<br><br>
+	<<endif>>
+	<<if $ownedRelics.some(e => e.name === "Forbidden Grimoire") && $hiredCompanions.length > 0>>
+		<br>A ragged book written in a strange, ancient language sits in your bag. It holds forgotten knowledge that can improve anyone's skills, doubling any numeric benefit they provide.<br>
+			[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
+	<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		You look at the glistening set of marbles known as the Managed Misfortune.
+		<<if $StoredCurse != "" && !$ManagedMisfortuneActive>>
+		You have stored the curse named $StoredCurse.name in them. <br>
+			<<if $StoredCurse.name=="Perma-dye" && $curse7.variation=="">>
+				<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
+				The longer you look the more color if your hair seems to change in your reflection. After a while you can see that your hair seems as if it had always been its new color. Now, what color do you see?<br>
+				Please enter your new hair color:<br><br>
+
+				<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
+			<<elseif $StoredCurse.name== "Fluffy Ears" && $curse17.variation=="">>
+
+				What type of ears would you like to gain?<br><br>
+
+				<<radiobutton "$curse17.variation" "furry cat" checked>> Cat<br>
+				<<radiobutton "$curse17.variation" "fluffy dog" >> Dog<br>
+				<<radiobutton "$curse17.variation" "floppy cow" >> Cow<br>
+				<<radiobutton "$curse17.variation" "furry monkey" >> Monkey<br>
+				<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit<br>
+				<<radiobutton "$curse17.variation" "furry fox" >> Fox<br>
+				<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
+				<<radiobutton "$curse17.variation" "pig" >> Pig<br>
+				<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
+			<<elseif $StoredCurse.name== "Fluffy Tail" && $curse18.variation=="">>
+
+				What type of tail would you like to gain?<br><br>
+
+				<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat<br>
+				<<radiobutton "$curse18.variation" "wagging dog" >> Dog<br>
+				<<radiobutton "$curse18.variation" "lazy cow" >> Cow<br>
+				<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey<br>
+				<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit<br>
+				<<radiobutton "$curse18.variation" "bushy fox" >> Fox<br>
+				<<radiobutton "$curse18.variation" "long mouse" >> Mouse<br>
+				<<radiobutton "$curse18.variation" "twisted pig" >> Pig<br>
+				<<radiobutton "$curse18.variation" "swaying horse" >> Horse<br>
+			<<elseif $StoredCurse.name== "Maximum Fluff" && $curse19.variation=="">>
+				What type of fur would you like to gain?<br><br>
+
+				<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
+				<<radiobutton "$curse19.variation" "dog-furred" >> Dog<br>
+				<<radiobutton "$curse19.variation" "cow-furred" >> Cow<br>
+				<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey<br>
+				<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit<br>
+				<<radiobutton "$curse19.variation" "fox-furred" >> Fox<br>
+				<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse<br>
+				<<radiobutton "$curse19.variation" "pig-furred" >> Pig<br>
+				<<radiobutton "$curse19.variation" "horse-furred" >> Horse<br>
+
+			<<elseif ($StoredCurse.name== "Wacky Wombs" && $curse19.variation1=="" ) || ($StoredCurse.name== "Wacky Wombs" && $playerCurses.some(e=> e.name === "Wacky Wombs" ) && $curse19.variation2=="") >>
+				What is the location of the womb you would like to add?
+				<<if $app.womb==0>> 
+					<<radiobutton "$curse35.variation1" "throat" checked>> Throat
+					<<radiobutton "$curse35.variation1" "urethra" >> Urethra
+					<<radiobutton "$curse35.variation1" "anus" >> Anus
+					<<if $vagina > 0 >>
+						<<radiobutton "$curse35.variation1" "vagina" >> Vagina
+					<<endif>>
+				<<else>>
+					<<radiobutton "$curse35.variation2" "throat" checked>> Throat
+					<<radiobutton "$curse35.variation2" "urethra" >> Urethra
+					<<radiobutton "$curse35.variation2" "anus" >> Anus
+					<<if $vagina > 0 >>
+						<<radiobutton "$curse35.variation2" "vagina" >> Vagina
+					<<endif>>
+				<<endif>>
+			
+			<<elseif $StoredCurse.name== "Rainbow Swirl" && $curse39.variation=="">>
+				<<textbox "$curse38.variation" "pink" "Layer3 Curses">>
+
+			<<else>>
+				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
+					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
+					You see your own reflection alternating between growing and shrinking. After a while you see the curse has settle on a height... <br><br>
+
+					<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+					<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+
+				<<endif>>
+				<<link "Activate the stored curse" "Use Items and Relics">>
+					<<set $playerCurses.push($StoredCurse)>>
+					<<if $StoredCurse.type == "Height">>
+						<<set $HeightLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Gender">>
+						<<set $GenderLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Age">>
+						<<set $AgeLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Libido">>
+						<<set $LibidoLog.push($StoredCurse)>>
+					<<endif>>
+					<<set $ManagedMisfortuneActive=true>>
+				<</link>>
+			<<endif>>
+		<<elseif $ManagedMisfortuneActive >>
+		You are affected by the Curse $StoredCurse.name stored in the marbles. <br>
+		<<link "Deactivate the stored curse" "Use Items and Relics">>
+			<<set $targetCurse = $StoredCurse>>
+			<<include "CurseRemoval">>
+			<<set $ManagedMisfortuneActive=false>>
+		<</link>>		
+		<<else>>
+		<br>You need to store a Curse in the Relic before you can use it<br>
+		<<endif>>
+	<<endif>>
+
+	<<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
+	<br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, relics, and curses await you further into the Abyss.<br>
+		<<if $currentLayer == 0>>
+			[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
+		<<endif>>
+		<<if $currentLayer == 1>>
+			[[Peek at what is waiting for you on the second layer|Layer2 Preview]]<br>
+		<<endif>>
+		<<if $currentLayer == 2>>
+			[[Peek at what is waiting for you on the third layer|Layer3 Preview]]<br>
+		<<endif>>
+		<<if $currentLayer == 3>>
+			[[Peek at what is waiting for you on the fourth layer|Layer4 Preview]]<br>
+		<<endif>>
+		<<if $currentLayer == 4>>
+			[[Peek at what is waiting for you on the fifth layer|Layer5 Preview]]<br>
+		<<endif>>
+		<<if $currentLayer == 5>>
+			[[Peek at what is waiting for you on the sixth layer|Layer6 Preview]]<br>
+		<<endif>>
+		<<if $currentLayer == 6>>
+			[[Peek at what is waiting for you on the seventh layer|Layer7 Preview]]<br>
+		<<endif>>
+	<<endif>>
+
+<</nobr>>
+[[Perform other stat adjustments to correct for errors|Adjustments]]
+
+
+[[Return|$return]]
+
+
+:: Adjust bullets [noreturn]
+<<set $temp = 0>>How many bullets would you like to add? (Use a negative number to subtract)
+
+<<textbox "$temp" "">>
+
+[[Confirm|Adjustments][$items[20].count += (parseInt($temp))]]
+<<back>>
+
+
+:: AgeEnd
+Your physical age has been reduced to a point where it is not physically possible for you to continue your journey. Perhaps your companions can carry you back to the surface or you can hope to grow up in the Abyss in the habitation option of this layer. But at this point your own choices don't play much role in your fate, so the game will end here.
+
+You may undo your last choice which put you over this limit if you'd like to try to continue your journey with a young (but not too young) body.
+
+<<back>>
+
+
+:: Relic Info [noreturn]
+@@.relicTitle;$ownedRelics[$temp].name@@
+
+[img[setup.ImagePath+$ownedRelics[$temp].pic]]
+
+<<print $ownedRelics[$temp].desc>>
+
+Weight: $ownedRelics[$temp].weight kg
+Value: $ownedRelics[$temp].value dubloons
+Corruption cost: $ownedRelics[$temp].corr
+
+<<back>>
+
+
+:: Kin Shifter Use [noreturn]
+[img[setup.ImagePath+"Relics/kinshifter.png"]]
+
+A glob of thick, putty-like slime. the face appears decorative. When touched to another relic that you own, a portion of the slime will break off and reshape itself into a perfect replica of that Relic, gaining all of its characteristics, abilities, value, and weight permanently. It cannot shift back to its original form. The amount that breaks off is dependent on the perceived value of the Relic, which can be measured with its dubloon value. The slime contains 70 dubloons worth of morphing power, and can be used on multiple Relics with that total value or less - however, the last Relic that is duplicated can put you over the 70 dubloon total, so long as that Relic is worth 70 dublooms or less. This Relic can also copy Relics woth over 70 dubloons, but in that case that Relic would have to be the sole Relic that you copy.
+
+Some examples: A : (20)->(30)->(20) = total 70, done.
+
+B: (20)->(30)->(40) = total 90, over 70, done.
+
+C: (120) done, only possible configuration for duplicating a Relic worth this much.
+
+<<nobr>>
+The current total value of relics you have copied is $tempValue dubloons.<br><br>
+
+<<if $tempValue == 0>>
+<<if $ownedRelics.length==1>>
+	<<set $temp=0>>
+<<else>>
+	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
+		<<if $ownedRelics[$i].name=="Kin Shifter" >>
+			<<set $temp=$i>>
+			<<set $endloop=false>>
+		<<endif>>
+	<</for>>
+	<<set $soldRelics.push($ownedRelics[$temp])>>
+	<<set $ownedRelics.deleteAt($temp)>>
+<<endif>>
+
+Please choose the relic you would like to copy:<br>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value]]">><br>
+	<</capture>>
+<</for>>
+
+<<elseif $tempValue <= 69>>
+Please choose the relic you would like to copy:<br>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<if $ownedRelics[$i].value < 70>>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value]]">><br>
+		<<endif>>
+	<</capture>>
+<</for>>
+
+<<else>>
+As you touched the final relic to the Kin Shifter, the last of the goo was used up and your relic was copied. The cute eyes faded as the slime transmuted into the new relic you chose. <br><br>
+
+Now that you have become better equipped, you can continue your journey.<br><br>
+
+[[Return to exploring|$return]]
+
+<<endif>>
+<</nobr>>
+
+
+:: Forbidden Grimoire Select [noreturn]
+[img[setup.ImagePath+"Relics/forbiddengrimoire.png"]]
+A grisly-looking ragged book written in an indecipherable language. Words can only be seen on the page when a person reads it alone, and they vanish as that one person reads them. This will take whatever skills the reader possesses and improve them greatly, leaving a blank, non-useful book behind. Mechanically speaking, if you let a companion use it, it would double the specific numeric benefit of their special ability - Khemia would reduce travel costs by 4 days, Cloud would redduce bullet costs by 4 (minimum 1), Cherry would reduce status effect lengths by2, and so on. (It doesn't really affect, say, Khemia's ability to slay monsters so much - he's already trained to nearly the maximum human limits, and if there's a monster he can't defeat, it's more about the monster simply being durable beyond the human body's limits than it is about any imperfections in his fighting sills.) Using it on yourself could help you in your normal life, but probably not very much on your journey - the benefit would be substantially less than that from using it on a companion, anyways. If one person were to read it twice (such as through Kin Shifter), the second use would have no benefit - best to spread it out among multiple companions.
+
+It's useless once it's been used once of course, so choose wisely who will get the benefit.
+
+Who do you want to give the grimoire to improve their skills?
+
+<<nobr>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+		<<capture $i>>
+		<<print "[[$hiredCompanions[$i].name|Forbidden Grimoire Outcome][$name = $hiredCompanions[$i].name]]">><br>
+		<</capture>>
+<</for>>
+<</nobr>>
+[[Put away the grimoire without using it|$return]]
+
+
+:: Forbidden Grimoire Outcome [noreturn]
+
+You have given the eldritch knowledge contained in the book to $name.
+
+<<include `"Forbidden Grimoire " + $name`>>
+
+After $name finishes reading, all words fade from the grimoire's pages, leaving it completely blank.
+<i>Note: This limitation is not implemented yet.</i>
+
+[[Return to exploring|$return]]
+
+:: Forbidden Grimoire Maru
+While Maru great appreciates your gift and improves the taste of his cooking, you don't gain any material benefit on your journey from giving it to him.
+
+:: Forbidden Grimoire Lily
+After reading from the book, Lily's tongue seems just the slightest bit quicker and she sounds more convincing than ever. You now gain 20 extra dubloons when selling Relics with her on the surface.<<set $sellAdd += 10>>
+
+:: Forbidden Grimoire Khemia
+After reading from the book, Khemia's seems to always spot even more efficient routes than before, as if he were intuitively able to tell the best paths through the Abyss. Travel times in the Abyss are now reduced by 4 days instead of 2 while he is with you.<<set $timeRed += 2>>
+
+:: Forbidden Grimoire Cherry
+After reading from the book, Cherry seems to somberly ponder what she read for a few minutes, occasionally looking at her own body as if she were truly seeing it for the first time. The duration of status effects with a predetermined length is now reduced by 2 days instead of 1.<<set $statRed += 1>>
+
+:: Forbidden Grimoire Cloud
+After reading from the book, Cloud lines up his finger with a rock in the distance, mime's a gunshot, then turns to you and smiles. <q>I've got to test out some of the stuff I saw in there, it's crazy stuff.</q> You now have to spend 4 less bullets for any task instead of 2 less.<<set $bullRed += 10>>
+
+:: Forbidden Grimoire Saeko
+After reading from the book, Saeko's looks a bit sad as she turns the last page, as if hoping there was more to learn. After that, she is able to use innovative techniques you've never seen before to minimzie your exposure to the miasma whenever possible. You now subtract 10 from all corruption costs in the Abyss, rather than 5.<<set $corrRed += 5>>
+
+
+:: Balloon Workshop [noreturn]
+[img[setup.ImagePath+$items[19].image]]
+
+You can use the balloon to send requests and relics back to Outset Town. You can send up any Relics you have along with what you want done to them and the people at the workshop can reply and send back any modified Relics you want.
+
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+	<<if $ownedRelics[$i].name == "Purity Tree Plank">>
+
+		<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
+
+		[[Use Purity Wood Plank|Balloon Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
+	<<endif>>
+
+	<<if $ownedRelics[$i].name == "Romer Stones" && $warmCloth == 0 && $coolCloth == 0>>
+	<br>You muse over what you can do with the Romer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
+	You can either buy some winter clothers for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
+		[[Use the Romer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30,$warmCloth=1]]<br>
+		[[Use the Romer Stones for self-cooling summer gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1]]<br>
+	<<endif>>
+	<<if $ownedRelics[$i].name == "Brave Vector" && $slingshot == 0>>
+		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to reccomend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo. <br>
+		<br>The raw materials for this are relatively cheap, letting you reshape the Brave Vector for only 10 dubloons.<br>
+		[[Reshape the Brave Vector into a powerful slingshot|Balloon Workshop][$slingshot = 1, $dubloon -= 10]]<br>
+	<<endif>>
+	<<if $ownedRelics[$i].name == "Joyous Sunder" && $joyousSword == 0>>
+		<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. The materials to forge a sword from the Joyous Sunder would cost you 20 dubloons.<br>
+		[[Reshape the Joyous Sunder into a true sword|Balloon Workshop][$joyousSword = 1, $dubloon -= 20]]<br>
+	<<endif>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Admin [noreturn]
+You can send a request to the Outset Town Administration. There seem to be a number of services that are provided here for people who need them, including managing debts and changing your legal name.
+
+For a small fee of 10 dubloons, you can change your legal name from $app.name to whatever you wish.
+[[Change your name|Balloon Name]]
+
+<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
+[[Borrow more money|Balloon debt1]]
+<<endif>>
+<<if $debt > 0>>
+You currently have $debt dubloons of debt, which you can pay off now to allow yourself to settle down at a habitation option.
+[[Pay off your debt|Balloon debt2]]
+<<endif>>
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Name [noreturn]
+<<set $dubloons -= 10>>
+
+The balloon sends down some surprisingly concise forms where you can fill out your new name, changing it for all official purposes.
+
+What is your new name?
+<<textbox "$app.name" "Nana" "Commerce Balloon">>
+
+
+:: Balloon debt1 [noreturn]
+Cloud is willing to allow you to use his connections to fund your expedition, as long as you can pay back the loan after you're done, with interest of course.
+
+How many dubloons would you like to borrow?
+<<textbox "$temp" "">>
+
+[[Confirm|Commerce Balloon][$dubloons += parseInt($temp), $debt += parseInt(Math.round($temp * 1.2))]]
+<<back>>
+
+
+:: Balloon debt2 [noreturn]
+In order to finally settle down at an ending, you must pay off your debt to Cloud's mysterious connections. You currently owe $debt dubloons of debt to them.
+
+How many dubloons would you like to pay back?
+<<textbox "$temp" "">>
+
+[[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
+<<back>>
+
+:: CurseRemoval
+<<set _curseDeleted=false>>
+<<for _i = 0; _i < $playerCurses.length; _i++>>
+	<<if  !_curseDeleted && $playerCurses[_i].name == $targetCurse.name>>
+		<<if $targetCurse.type == "Height">>
+			<<set _j=$HeightLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $HeightLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Gender">>
+			<<set _j=$GenderLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $GenderLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Age">>
+			<<set _j=$AgeLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $AgeLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Libido">>
+			<<set _j=$LibidoLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $LibidoLog.deleteAt(_j)>>
+		<<endif>>
+		<<set $playerCurses.deleteAt(_i)>>
+		<<set _curseDeleted=true>>
+	<<endif>>
+<</for>>
+
+:: GeneralTimeSetup
+<<nobr>>
+
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+
+<<if $currentLayer==1>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<set $timeL1 += $tempTime>>/* layer specific */
+<<elseif $currentLayer==2>>
+	<<if $items[14].count > 0 || $cut == 1>>
+		<<set _cutRed = 1>>
+	<<else>>
+		<<set _cutRed = 0>>
+	<<endif>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _cutRed), 0))>>
+	<<set $timeL2 += $tempTime>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += $tempTime>>
+	<<endif>>
+<<elseif $currentLayer==3>>
+	<<if $items[9].count > 0 || $items[10].count > 0 || $light == 1>>
+		<<set _lightRed = 1>>
+	<<else>>
+		<<set _lightRed = 0>>
+	<<endif>>
+
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _lightRed), 0))>>
+	<<set $timeL3 += $tempTime>>
+	
+	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+		<<else>><<set $timeL3T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL3T1 += $tempTime>>
+<<elseif $currentLayer==4>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+	<<if $torchUse == 1 && $heat == 1>>
+		<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+		<<set $tempTime -= 2>>
+		<<set $items[9].count -= 1>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
+	<<endif>>
+	<<set $timeL4 += $tempTime>>
+	<<set $timeL4T1 += $tempTime>>
+<<elseif $currentLayer==5>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
+	<<set $timeL5 += $tempTime>>
+	<<if ($items[0].count + $items[3].count) > 10>>
+		<<set $timeL5T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL5T1 += $tempTime>>
+<<elseif $currentLayer==6>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
+	<<set $timeL6 += $tempTime>>
+	<<set $hexflame += $tempTime>>
+	<<if $dubloons > 199>>
+		<<set $timeL6T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL6T1 += $tempTime>>
+<<elseif $currentLayer==7>>
+	<<set $timeL7 += $tempTime>>
+	<<set $timeL7T2 += $tempTime>>
+	<<set $time += $tempTime>>
+	<<if $dubloons >= 300>>
+		<<set $dubloons -= 1>>
+		<<elseif $dubloons >= 100>>
+		<<set $dubloons -= 2>>
+	<<else>>
+		<<set $dubloons -= 3>>
+	<<endif>>
+<<endif>>
+
+<</nobr>>
+
+:: GeneralTimeStats
+<<nobr>>
+<<set $time += $tempTime>>
+<<if $currentLayer==1>>
+
+	<<set $timeL1 += $tempTime>>
+
+<<elseif $currentLayer==2>>
+
+	<<set $timeL2 += $tempTime>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += 1>>
+	<<endif>>
+
+<<elseif $currentLayer==3>>
+
+	<<set $timeL3 += $tempTime>>
+	<<if $items[9].count > 0 && $torchUse == 1>>
+		<<set $items[9].count -= 1>>
+	<<elseif $items[9].count == 0 && $torchUse == 1>>
+		<<set $torchUse = 0>>
+	<<endif>>
+	<<set $timeL3T1 += 1>>
+	<<if $torchUse !=1 && $items[10].count < 1  && $light != 1 && !($ownedRelics.some(e => e.name === "Firmament Pigment"))>>
+		<<set $timeL3T2 += 1>>
+	<<endif>>
+	
+<<elseif $currentLayer==4>>
+
+	<<set $timeL4 += $tempTime>>
+	<<set $timeL4T1 += $tempTime>>
+
+<<elseif $currentLayer==5>>
+
+	<<set $timeL5 += $tempTime>>
+	<<if ($items[0].count + $items[3].count) > 10>>
+		<<set $timeL5T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL5T1 += $tempTime>>
+
+<<elseif $currentLayer==6>>
+
+	<<set $timeL6 += $tempTime>>
+	<<if $dubloons > 199>>
+		<<set $timeL6T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL6T1 += $tempTime>>
+
+<<elseif $currentLayer==7>>
+
+	<<set $timeL7 += $tempTime>>
+	<<set $timeL7T2 += $tempTime>>
+	<<if $dubloons >= 300>>
+		<<set $dubloons -= 1>>
+		<<elseif $dubloons >= 100>>
+		<<set $dubloons -= 2>>
+		<<else>>
+		<<set $dubloons -= 3>>
+	<<endif>>
+
+<<endif>>
+
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+<<else>>
+	<<set $foodL1 += $tempTime>>
+	<<if $abyssKnow == 0>>
+		<<for $i = 0; $i < $tempTime; $i++>>
+			<<if $currentLayer==1>>
+				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
+			<<elseif $currentLayer==2>>
+				<<if $mudHunt == 1>>
+					<<if $slingshot == 1>>
+					<<elseif ($items[13].count > 0 && $items[20].count > 0>>
+						<<set $items[20].count -= 1>>
+					<<else>>
+						<<set $LibidoLog.push($ForageFoodMajor)>>
+					<<endif>>
+				<<else>>
+					<<set $LibidoLog.push($ForageFoodMajor)>>
+				<<endif>>
+			<<elseif $currentLayer==3>>
+				<<set $AgeLog.push($ForageFoodMajor)>>
+			<<elseif $currentLayer==4>>
+				<<if $slingshot == 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMajor)>>
+				<<elseif $items[13].count > 0 && $items[20].count > 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
+					<<set $HeightLog.push($ForageFoodMajor)>>
+				<<else>>
+					<<set $items[1].count -= 1>>
+				<<endif>>
+			<<elseif $currentLayer==5>>
+				<<set $crumbleFluid += (5 * $tempTime)>>
+			<<elseif $currentLayer==6>>
+				<<set $foodL6 += $tempTime>>
+			<<endif>>
+		<</for>>
+	<<else>>
+		<<for $i = 0; $i < $tempTime; $i++>>
+			<<if $currentLayer==2>>
+				<<if $mudHunt == 1>>
+					<<if $slingshot == 1>>
+					<<elseif ($items[13].count > 0 && $items[20].count > 0>>
+						<<set $items[20].count -= 1>>
+					<<else>>
+						<<set $lastFlan=$time+1>>
+					<<endif>>
+				<<else>>
+					<<set $lastFlan=$time+1>>
+				<<endif>>
+			<<elseif $currentLayer==3>>
+				<<set $AgeLog.push($ForageFoodMinor)>>
+			<<elseif $currentLayer==4>>
+				<<if $slingshot == 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMinor)>>
+				<<elseif $items[13].count > 0 && $items[20].count > 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
+					<<set $HeightLog.push($ForageFoodMinor)>>
+				<<else>>
+					<<set $items[1].count -= 1>>
+				<<endif>>
+			<<elseif $currentLayer==5>>
+				<<set $crumbleFluid += $tempTime>>
+			<<elseif $currentLayer==6>>
+				<<set $foodL6 += $tempTime>>
+			<<endif>>
+		<</for>>	
+	<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+	<<else>>
+		<<set $waterL1 += 1>>
+		<<if $abyssKnow == 0>>
+			<<for $i = 0; $i < $tempTime; $i++>>
+				<<if $currentLayer==1>>
+					<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
+				<<elseif $currentLayer==2>>
+					<<set $bewitchBabies += 1>>
+				<<elseif $currentLayer==3>>
+					<<set $waterL2 += 1>>
+				<<elseif $currentLayer==4>>
+					<<set $waterL4 += 1>>
+					<<if $abyssKnow == 0>>
+						<<set $algalSize += 1>>
+					<<endif>>
+				<<elseif $currentLayer==5>>	
+					<<set $waterL5 += 1>>
+				<<elseif $currentLayer==6>>
+					<<set $waterL6 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+						<<set $hexflame += 1>>
+					<<endif>>
+				<<endif>>			
+			<</for>>
+		<<else>>
+			<<for $i = 0; $i < $tempTime; $i++>>
+				<<if $layer==3>>
+					<<set $waterL2 += 1>>
+				<<elseif $layer==4>>
+					<<set $waterL4 += 1>>
+					<<if $abyssKnow == 0>>
+						<<set $algalSize += 1>>
+					<<endif>>
+				<<elseif $layer==5>>
+					<<set $waterL5 += 1>>
+				<<elseif $layer==6>>
+					<<set $waterL6 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+						<<set $hexflame += 1>>
+					<<endif>>
+				<<endif>>			
+			<</for>>		
+		<<endif>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
+<<set $tempTimeFixed=0>>
+<</nobr>>
+
+:: Curse Descriptions
+<<nobr>>
+<<set $temp = random(0,$playerCurses.length - 1)>>
+<<set $tempCurse = $playerCurses[$temp]>>
+<<LibidoCorrected>>
+<<appGender>>
+<<AppearanceCorrect>>
+<<BreastCorrected>>
+<<if $tempCurse.name == "Libido Reinforcement A" || $tempCurse.name == "Libido Reinforcement B" || $tempCurse.name == "Libido Reinforcement C" || $tempCurse.name == "Libido Reinforcement D" || $tempCurse.name == "Libido Reinforcement E">>
+<<if $app.libido == 3>>
+Sex. It's not quite a constant obsession for you, not yet, but you'd certainly like some right now... and a few more times a day. It just feels so good. This might be the Libido Reinforcement curse that you took on talking, but seriously, orgasms add so much joy to life, and you'd just like to have more. It can change the way you look at others and yourself. Do others feel this need as much as you do? Probably not, since you remember not thinking about sex this much before you came to this Abyss. <br><br>Relax, now isn't the time for sex... even though you wish it were. <br><br>Surely there will be an opportunity soon? You hope so.
+<<elseif $app.libido == 4>>
+You masturbated forty minutes ago, why are you thinking about sex again? Now that your libido has been greatly elevated, your desires are getting harder to control. You used to be intimidated by the idea of propositioning people for sex, but your need has suppressed that instinct as a simple matter of practicality. You realize you're becoming a bit of a slut, but what can you do? These curses are just driving you into it. Despite how much of an issue it may be, you can't deny that a part of you is enjoying it.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Libido Reinforcement A">>
+No accessories for you. That's your reality after taking that Clothing Restriction curse. <br><br>Your fashion options are a bit more limited now, but not being able to use any hats or scarves is legitimately inconvenient in some weather! Luckily, ou've found that you're able to wear clothing with hoods attached, but as minor as this curse is, you're going to notice it as an annoyance in your daily life.
+<<endif>>
+<<if $tempCurse.name == "Hair Removal">>
+You didn't think losing your body hair would have been such a big deal, but now every time you brush against something the sensation is more intense. Even in places you shaved, it feels different than before. Somehow, missing those little hairs that would grow in between shaving sessions gives your skin a significantly different feeling a lot of the time, more than you would have expected before. It almost feels as if you've lost a layer of protection from the world. Somehow, it seems like your interaction with the world and people around you has become more... intimate. 
+<<endif>>	
+<<if $tempCurse.name == "Perma-dye">>
+Ha, you thought having $app.hair hair wouldn't be such a big deal. But now you're beginning to realize it's affecting the way others see you, and the way you see yourself. When you see your reflection it makes it just a little bit harder to recognize yourself, it takes just a moment longer before you can tell that the person in the mirror is you. Despite being such a minor change, it still feels strange.
+<<endif>>
+<<if $tempCurse.name == "Freckle Speckle">>
+With your skin now speckled with freckles, your appearance is much more unique. You chose where each freckle would appear, but you didn't exactly have a lot of time to really think about it or even a mirror to see what you'd look like! You hope that the next time you really get a good look at yourself you're happy with the choices you made. The Abyss is a strange place, but you're trying to make good choices while you're down here. That might get harder to do as the potential outcomes become harsher and harsher.
+<<endif>>
+<<if $tempCurse.name == "Knife-ear">>
+When you were cursed with knife-ears, you knew it would alter your appearance and the way other perceived you. But what you hadn't realized is just how sensitive the tips of your ears would become! Sometimes when you lay down your head on your pillow at night, if the angle is right, it feels almost sensual and you feel an urge to rub up against the pillow more. While it isn't too hard to control yourself, these new, pleasurable sensations are strange to deal with.
+<<endif>>
+<<if $tempCurse.name == "Dizzying Heights">>
+You wince as you stub your toe, once again. You're not quite used to your legs being this length, or really the new size of your whole body. With the Dizzying Heights curse and what scavenging you've done, you're now <<print Math.round($app.heightCor)>> cm tall. You didn't think that would be such a big deal, but you'd gotten used to your body being a certain size, and a lot of the motions that you practiced many times before are just producing awkward results now! The whole world feels like it has changed in size, even though you know it's the same, it's only you that's changed.
+<<endif>>
+<<if $tempCurse.name == "Increased Sensitivity">>
+A part of you knew that being cursed with Increased Sensitivity would be a major change in erotic situations and it might not be the most convenient thing in everyday life. However, the tantalizing excitement drew you in, and now you're living with the consequences. You hadn't fully understood how the brush of cloth against your nipples and between your legs would draw shivers of desire out of you. You hadn't expected that you'd be splattering your juices simply by brushing against something at the right angle and position, but here you are, hot and panting simply because you brushed against a boulder the wrong way as you were moving past it.
+<<endif>>
+<<if $tempCurse.name == "Refractory Refactorization">>
+Getting rid of your refractory period? What a fun idea, or so you'd thought. Then you found yourself in an erotic situation, and ended up cumming for seven minutes straight, not a moment's break in between. Your body was locked in spasms, and the experience was just so hot that you just kept on riding orgasm after orgasm in a continuous wave. Now however, you feel used up, worn out, desperately thirsty, and like your body pumped out something vital. Yet, your mind is abuzz with one of the most intense experiences of your life and you feel like you could go again at any moment.
+<<endif>>
+
+<<if $tempCurse.name == "Heat/Rut">>
+You frantically scan the abyss around you. There must be someone or something else here that you can fuck. You let out a bestial growl that gradually becomes a simple whine of need. You used to think it was a little bit funny when animals went into heat or rut, but now that the Abyss has cursed you with the same condition, you realize just how much being helplessly horny for long periods of time can warp your perspective. You've orgasmed multiple times in the past few hours, but the relief only lasts a few minutes before the need once again becomes all-consuming. It's a horniness that's relentless and unending, never giving you even a moment of respite. You've tried masturbating, but it's just not doing it for you. Not that fucking is giving you much relief either. <br><br>You want to scream. <br><br>Then you see somebody nearby. <br><br>Yes! You don't know who or what they are, but it doesn't even matter. You dash off towards them in complete desperation, so keyed up with arousal that you can't even think. Maybe tomorrow you'll remember this, with the haze of the Curse cleared.
+<<endif>>
+<<if $tempCurse.name == "Sex Switcheroo">>
+<<if $app.osex == "male">>
+When you were cursed to replace you cock with a cunt, did you realize just how distracting it would be? Perhaps, but now you can't stop thinking about your new equipment. <br><br>Yet, it's more than equipment, isn't it? It's part of who you are now. How is this going to affect the rest of your life? <br><br>Sure, the enlightened say that it doesn't really matter, and to some random surface dweller that you past on the street, it probably shouldn't matter unless you plan to sleep with them. For you though, this is your body, and it matters quite a lot.
+<<else>>
+When you were cursed to replace you cunt with a cock, did you realize just how distracting it would be? Perhaps, but now you can't stop thinking about your new equipment. <br><br>Yet, it's more than equipment, isn't it? It's part of who you are now. How is this going to affect the rest of your life? <br><br>Sure, the enlightened say that it doesn't really matter, and to some random surface dweller that you past on the street, it probably shouldn't matter unless you plan to sleep with them. For you though, this is your body, and it matters quite a lot.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Futa Fun">>
+Having both a penis and breasts comes with a different perspective. There are pleasures that are open to you that are closed to many others. However, as you encounter more of the Abyss, there's also a little trepidation that enters your mind of what else may change in the future. This place has a way of changing things, and you might have just opened a door for even more ways that it can change you. This Curse alone is a significant change, but are you prepared for what may follow if your body becomes even more corrupted?
+<<endif>>
+<<if $tempCurse.name == "Blushing Virgin">>
+Your face burns a brilliant red. They're looking at you. They see you! This is so embarrassing! <br><br>"But it's also exciting" murmurs a different part of your mind. You find yourself agreeing, but that only makes you more embarrassed. Part of you knows that this is a result of the Blushing Virgin curse, but you can't help the way you feel, or how your burning cheeks are only making you more aroused. You're so awkward, but that only adds a a novelty and vitality to the lewdness you engage in on a day to day basis.
+<<endif>>
+<<if $tempCurse.name == "Submissiveness Rectification A" || $tempCurse.name == "Submissiveness Rectification B" >>
+<<if $playerCurses.filter(e => e.name === "Submissiveness Rectification A").length + $playerCurses.filter(e => e.name === "Submissiveness Rectification B").length == 1>>
+You're a nice person. You want to help people. Sometimes you're not sure what's best, even for yourself, so letting others take the lead makes total sense. <br><br>You want to be open to trying new things, and generally be a fun person to be around. However, there's little doubt in your mind that the Submissiveness Rectification curse is amplifying this aspect of your personality somewhat, though you aren't quite sure how much. <br><br>Lately your dreams have been about getting tied up and letting strong dominant people do naughty things to you. Is this some idle fantasy, or a prediction for your future? The curses in the Abyss can warp things in such strange ways that you're not sure.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Clothing Restriction B">>
+<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+Oh gosh, you're perpetually naked now. No underwear, no clothes, no armor, just flashing everyone and everything all day long. If you're going to do anything but draw open-mouthed stares, you're going to have to get really good at using convincing body-paint, but even that won't work if anyone looks at you especially hard. Wherever you end up, this is going to have a big impact on your life. And there's no way to even unintentionally wear clothes, since the Curse makes them degrade immediately if you even attempt to get around it. <br><br>Maybe being naked isn't so bad, humans are the only creatures on the surface that wear clothes anyway. But when you think about everyone staring at your naked body, always, it conjures up a wild mix of emotions: embarrassment, fear, lust. If you live anywhere but a nudist colony, you're going to run afoul of a bunch of prudish people, or end up being followed by a bunch of horny people, let alone any laws you might be breaking!
+<<else>>Underwear is overrated, or at least that's what you'd been thinking when the Abyss bestowed this Clothing Restriction curse on you. Your experience since then has slightly contradicted that. Your clothing really used to fit a lot better and stayed on more easily when the cloth of your undergarments was helping to hold it there. <br><br>Now you're worried that when you stretch awkwardly some of your clothes are just going to fall right off. Anyone looking on wouldn't just get a glimpse of your underwear, which before you'd have thought was embarrassing, they'd see your naked body. Going commando is generally thought of as pretty promiscuous behavior. Back on the surface, people are bound to notice that you're doing so eventually. If not from seeing a glimpse beneath your clothes, then surely someone will notice from the outline of your more sensitive parts if you happen to wear anything light during a hot summer day.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Power Dom">>
+You just can't help yourself, you feel the need to try to dominate everything. You're not sure how the Power Dom curse was able to warp your personality, how it embedded this irresistible compulsion into you, but it sure feels good when it works out. Dominating battles, dominating conversations, dominating someone sexually... you just can't help but try to do it whenever you get a chance. The problem comes when you aren't actually able to succeed in the attempt. Sometimes the dissatisfaction you feel makes you wonder if this curse is turning you into a bad person. You don't want to be cruel or overbearing, you want to help, but you're having a much harder time dealing with any interaction where you're not on top. It just makes sense for you to be the one in charge! <br><br>You're worried about how many people are going to think you're a jerk, but if you're good enough, at leading, at giving pleasure, at talking, at fighting, at everything, then maybe a lot of people will really like who you've become. The prospect is daunting, but if you're going to insist on being in charge, don't you have the responsibility to make sure you at least do it well? The best way to get better is to practice. When you're the best no one can deny you your rightful place above them.
+<<endif>>
+<<if $tempCurse.name == "20/20000000">>
+Who needs vision? Or that must have been what you were foolishly thinking when you were cursed to see either a big dark blur or a big light blur when you don't have your glasses on. Sure, most of the time you have them on, but when they fall off, or you take them off to sleep, you can't help but realize just how vulnerable you are. All that someone with hostile intent would need to do is knock off your glasses, then you'd be totally unable to defend yourself without help. You're not sure whether you think wearing glasses improves your style, or whether your new vulnerability is just a little bit exciting, but your brain is telling you very sternly that trading your vision for a mere 20 corruption points was a not a very good trade after all.
+<<endif>>
+<<if $tempCurse.name == "Comic Relief">>
+AAAGGGHHHH! the Comic Relief curse is driving you crazy. It interferes in your life constantly in subtle ways. When you're trying to say something you can feel it slightly changing the words that come out of your mouth to make everything sound like a sexual innuendo, leaving you to embarrassingly try to backpedal and only make it worse. People just happen to walk in on you at the most embarrassing moments. You sometimes trip and fall in the most embarrassing ways. Every time it happens, at the edge of your consciousness, you can feel the curse just nudging the universe to make you the butt of a grand cosmic joke. <br><br>You'd try to explain it to other people, but you're sure that even if you made the attempt, the curse would just make you sound ridiculous. Well, even if people are laughing at you and blushing about you, at least you bring a bit of entertainment to their lives. You could try to pursue a career as an off-the-wall comedian once you're done with this, everything you do is hilarious whether you want it to be or not, so maybe you could at least take advantage of the situation!
+<<endif>>
+<<if $tempCurse.name == "Equal Opportunity">>
+Sexuality is complicated for a lot of people, but not so much for you now. The Equal Opportunity curse has opened your eyes to just how sexy everyone can be, just how much pleasure you could get from every kind of person, even people you didn't find the least bit sexual before. Not everyone is going to be interested in that kind of interaction with you, but that's okay. There are plenty of fish in the sea. Whether you're getting pounded by a massive cock or fisting a vagina, your newfound liberation from previous narrow-minded ideas about sexuality has really opened the door to new varieties of pleasure and new people to connect with in that intimate way.
+<<endif>>
+<<if $tempCurse.name == "Absolute Pregnancy">>
+They say that our biology calls on us to reproduce. You're not so sure about that, but there is something entrancingly intimate about having a living thing growing inside you. During the act of sex, it's possible to experience that intimacy briefly, but in pregnancy, the intimacy stretches out, grows, and brings a new life into the world. Now that you've been cursed with Absolute Pregnancy, you're going to be experiencing that deep sort of intimacy a lot more. You could try to be celibate, but you know that may not work out no mater how hard you try. <br><br>The certainty of getting pregnant from any sex means that you'll always live with pregnancy only a brief moment away. In a sense, it makes your sex feel much more intimate and the consequences much more real. Hopefully they're consequences that you'll be happy to live with.
+<<endif>>
+<<if $tempCurse.name == "Absolute Birth Control">>
+The thought of having children always frightened you. Whether it was the responsibility, the agonies, the commitment, or just losing your freedom, it just never appealed to you. It added a layer of hesitancy to your romantic life, it was a risk that could come up at any moment. <br><br>Now, because of the Absolute Birth Control curse that is bound to you, you never have to worry about that again. You don't have to let that fear hold back your intimacy any longer. Maybe it's time to live a little, free of the worry of being tied down to a child. <br><br>A part of you is sad about never getting a chance to continue your family line personally, but if you really want children then adoption is always available!
+<<endif>>
+<<if $tempCurse.name == "Wacky Wombs">>
+<<if $app.womb == 1>>
+You feel a twinge of sensation from the area of your $app.womb1 and wonder if you're pregnant. Could any sperm have found their way into it? You picture yourself with that region of your body swelling with new life, your organs rearranging to make room for it, your balance shifting, and culminating in a messy and painful birth many months from now. Was adding a womb to your $app.womb1 really a smart idea? Smart or not, you're stuck with it now. Even if you're not pregnant yet, and that twinge is just a result of the shifting internal folds of your new organs, the Abyss is a strange, perverse, and risky place. How long until someone or something compatible gets the better of you and you end up pregnant? Things are harder to predict down here, and sperm can get into the strangest places... and then start swimming.
+<<elseif $app.womb == 2>>
+You feel a twinge of sensation from two different spots near simultaneously. Your $app.womb1 and $app.womb2 both seem to clench in irritation and then relax. That's unnerving. You wonder, could you be pregnant in both of your added wombs? Could any sperm have found their way into those spots? You picture yourself with those regions of your body swelling with new life, your organs rearranging to make room for the pregnancies, your balance shifting, with it all culminating in messy and painful births many months from now. <br><br>Was adding two wombs to your $app.womb1 and $app.womb2 really a smart idea? Smart or not, you're stuck with it now. Even if you're not pregnant yet, and those twinges were just a result of the shifting internal folds of your new organs, the Abyss is a strange, perverse and risky place. How long until someone or something compatible gets the better of you and you end up pregnant? Things are harder to predict down here, and sperm can get into the strangest places... and then start swimming.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Omnitool">>
+Down here, in the Abyss, you've been exposed to many things that would be considered very strange back on the surface. Due to the Omnitool curse, you can now even reproduce with other species. Do you want to? Will you have a choice? What lives will your offspring live? Will you end up staying down here with them, trying to bring them back to the surface? The social implications seem like they may outweigh the biological ones. Yet... you've heard about dragons that live down here...<br><br>You mind wanders and wanders, bouncing between the consequences of this curse you've found yourself with. There don't seem to be any answers to many of these questions, and yet you can't keep yourself from asking them regardless. This curse will certainly keep you awake late on many nights as you consider what the rest of your life may look like.
+<<endif>>
+<<if $tempCurse.name == "Gooey">>
+Gloop, gloop, squelch. <br><br>These are now the sounds you make while moving around. Taking the Gooey curse has turned you into a creature much like the slimes you've heard about in stories and video games from the surface. It's a truly strange experience being so sticky and malleable, you have a hard time descriving the sensations to anyone who can't experience it for themselves. <br><br>Dirt and rocks stick to your feet as you walk, and even slip a tiny bit inside you before the goo that makes up your body instinctively spits them out. Sometimes air gets caught up in your goo and makes funny bubbling noises at it pops back out. You're a bit more transparent than you used to be, and you have no idea how your organs work now, or if you even have proper organs at all. You can feel that everything inside of you is goo. And while you still have orifices, strangely, you no longer produce excrement. Everything you eat just turns into more goo, but you also shed little bits of goo as you brush against things occasionally. Sometimes when you touch things and your goo spreads out on the surface, you just kind of shlorp it all back up while you slowly pull away. Sometimes little bits of it remain behind, clinging to the surface with their stickiness. That's not gross, right? Maybe it would seem gross if it weren't your own body doing it. Perhaps you should ask for a secon opinion? <br><br>Regardless, that is a distant thought for you because you figured out you can do something really really cool. Even if you stand still, you can manipulate your goo to slowly move you along a surface. You can do it standing up, just slowly gliding over the ground, you can do it lying down, you can do it while adopting all kinds of interesting postures. It's surprisingly fun! However, you can't use it to climb vertical surfaces or go upside-down. If you have hand-holds and foot-holds, you can climb just fine, but if you press yourself against a surface and try to move yourself up by your own stickiness, you start to go up, but then kind of just fold down in on yourself from gravity and flop into a deformed version of yourself on the ground and quickly squelch back into your proper shape. <br><br>You might be all goo, but the goo inside you is more sensitive than the goo outside of you, a lot more sensitive, as you've found from some cursory explorations of your body. This curse has certainly radically changed the way you live your everyday life.
+<<endif>>
+<<if $tempCurse.name == "Rainbow Swirl">>
+Ah, colors. You are now a work of art. The Rainbow Swirl curse let you choose how to colorize yourself, sort of. It let you turn your skin and eyes into incredibly striking and intriguing colors and patterns, but it absolutely would not let you make yourself look like other humans. In some ways, this change is entirely superficial, but it's also an expression of who you are, or at least who you're becoming. From now on, you'll stand out, especially if you're showing much skin., and you won't be able to hide the fact you've been touched by the Abyss.
+<<endif>>
+<<if $tempCurse.name == "Double Pepperoni">>
+How much did you think about your nipples before you took the Double Pepperoni curse? You're not entirely sure, but they're certainly a very notable part of your life now. They're just so big, and with so many nerves. When you get back to the surface, are you going to invest in a special bra to try to minimize the sensation, or maybe something to take advantage of it? You feel yourself growing aroused at the idea of somebody taking one of your engorged nipples into their mouth and starting to suck, maybe to gently nibble on it. No, no, no, you try to snap out of the distracting fantasy. You need to focus on surviving, not all the erotic things you want to do with very prominet and very sensitive nipples you've found yourself with.
+<<endif>>
+<<if $tempCurse.name == "Literal Blushing Virgin">>
+You're so nervous, but also really excited to finally lose your virginity. This is all new to you! To be this naked and vulnerable, moving against another person, your body being filled with strange sensations that are a little scary and wonderful at the same time. You don't really understand, but you're also feeling a strange sense of deja vu, like possibly you've done this before, except you haven't. You don't know what comes next. The confusion only heightens the intimacy, the sensations of skin on skin, sweat mingling in this kinetic experience, your body starts to tense up, and then a wave of sensation washes through your loins, flattening your thoughts, driving out everything else. As the moment ends, you shake your head to clear it. <br><br>Wait, you've done this before! Here you were being so passionate about losing your virginity, and it turns out that you're not even really a virgin? Oh dear. Then you remember the Literal Blushing Virgin curse and sigh. Yeah, the Abyss did this to you. Now that all your experiences have come rushing back to you, you think about all the ways that you could have prolonged the contact, brought out even more ecstasy from the experience, except you couldn't have, because you couldn't remember. It seems you'll never learn to be any better of a lover than you are now. Still, the feeling of something new lingers. You might have had many first times, but you can never forget any of them. It's impossible to get jaded about something that's always new!
+<<endif>>
+<<if $tempCurse.name == "Lactation Rejuvination A">>
+Milk. You took on a Curse that made you produce milk from your chest. It's not that big of a deal, right? <br><br>Sure, your breasts will gradually swell up, getting more sensitive as your milk ducts inflate, and to take care of yourself every several hours you need to stimulate your nipples sufficiently to initiate let down. It feels rather strange, slightly empowering, slightly erotic, but very wet and a bit sticky. <br><br>Maybe it is kind of a big deal after all. The biggest question is: what to do with all the milk? It's not that much, but it feels so wasteful to just let it fall on the ground. Should you maybe... share it with somebody? You're attempting to survive, and every drop of wasted milk is a drop of fluid and nutrients that you'll have to try to recover some other way. As you run your fingers over your nipples, preparing to milk yourself again, you lick your lips and think about how responsible it would be not to let it go to waste.
+<<endif>>
+<<if $tempCurse.name == "Sleep Tight">>
+<<if $playerCurses.some(e => e.name === "Sweet Dreams")>>
+Sleep calls to you once again. Soon you'll enter your dreams, where you'll be in the hands of those odd things the Abyss has conjured up. They'll do things to you. They'll warp and change your body to their desires. You'll be helpless before them, but they will satisfy both themselves and you. Their teeth, their claws, their tentacles and slime, their enormous barbed penises that spear into you again and again, their vaginas that suck you in and hold you there while they vibrate around you with malicious mirth... <br><br>You are their plaything, but even if they sometimes hurt you, it always feels sublime, and it's only a dream. The only real thing about them is the orgasms they'll rip from your body as you cry out during your slumber... or perhaps they're not as imaginary as you think. The Abyss can perform apparent miracles after all. Are these creatures just in your imagination, or is it an intrusion into your mind by creatures of the Abyss? You're not sure. <br><br>Somehow though, no matter how wicked and perverse the things they do to you, you always end up longing for more. You lick your lips and shiver in a mix of anticipation and fear as you close your eyes, and let a new journey begin tonight.
+<<else>>
+Warmth, softness, comfort, letting your mind lazily drift through thoughts and dreams. That's what half of every day is like for you now. You don't remember it clearly most of the time, but it's so nice, and preferable to being awake most of the time. However, you are still getting a lot done in your waking hours. Razor focus often comes upon you, and you feel that your getting close to your purpose for coming down here. Then sleep begins to call you again. You understand why cats sleep so much now; it is glorious to those who can appreciate the peace it offers.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Sweet Dreams">>
+<<if $playerCurses.some(e => e.name === "Sleep Tight")>>
+Sleep calls to you once again. Soon you'll enter your dreams, where you'll be in the hands of those odd things the Abyss has conjured up. They'll do things to you. They'll warp and change your body to their desires. You'll be helpless before them, but they will satisfy both themselves and you. Their teeth, their claws, their tentacles and slime, their enormous barbed penises that spear into you again and again, their vaginas that suck you in and hold you there while they vibrate around you with malicious mirth... <br><br>You are their plaything, but even if they sometimes hurt you, it always feels sublime, and it's only a dream. The only real thing about them is the orgasms they'll rip from your body as you cry out during your slumber... or perhaps they're not as imaginary as you think. The Abyss can perform apparent miracles after all. Are these creatures just in your imagination, or is it an intrusion into your mind by creatures of the Abyss? You're not sure. <br><br>Somehow though, no matter how wicked and perverse the things they do to you, you always end up longing for more. You lick your lips and shiver in a mix of anticipation and fear as you close your eyes, and let a new journey begin tonight.
+<<else>>
+You try to keep going, you don't want those things to get you again. They lurk in your thoughts as sinister laughs and prideful snarls. The things they do to you when you fall asleep... Sleep.... You need to sleep. The last two days you've only gotten 4 hours a night, both nights you woke up screaming while also cumming all over yourself. The mix of terror and ecstasy left you confused and exhausted. <br><br>You don't want to be at the mercy of those things again, and yet... part of you is loving the things they do to you. You were cursed with Sweet Dreams, that has to be what's causing your strange nightmares, but... you're too tired. They're just dreams. You're a person. People can adapt. Part of you expects that you'll find a way to deal with this new reality the Curse has bestowed on you. <br><br>In truth, more than half your fear is of your own adaptation. What kind of person will you have to become to sleep peacefully through the night? Probably one who enjoys and accepts all the strange and bizarre ways that the creatures in your nightmares milk orgasms from you. You can't keep your eyes open any longer, you're just too tired. Maybe this time won't be so bad.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Crossdress Your Heart">>
+<<if $app.penisCor>=1>>
+Skirts, dresses, and billowy blouses with ruffles and lace. Panties, bras, and not a single pair of pants in sight. That's what you feel most comfortable in right now, as embarrassing as it may be to be seen like that, in very feminine attire, that's what feels right. You can deviate from it a little bit, but deviate too much and before long the Crossdress Your Heart Curse starts taking a hold of you and pushing you in the right direction once again. Your penis feels quite strange wrapped in a lace thong as you move around in your light pink sundress. <br><br>You feel constricted, knowing that you're going to have to dress like this or similarly for the rest of your life, but somehow, you also feel free, beautiful; like you're trapped, but that it's wonderful at the same time. So much artistry and care went into these clothes, and at the center of them is you. It makes a warm little special feeling light up in your chest. Is it the Curse making you feel this way, or is this what you always wanted to be forced into?
+<<else>>
+Recently you've been completely unable to wear bras, and your chest hangs free, unsupported and sometimes leaving a nipple poking through your shirt. Power suits, muscle shirts, loose fitting pants and boxers are what you feel most comfortable in now that the Crossdress Your Heart Curse has taken a hold of you. If you go swimming, you know that you'll only be able to wear a pair of swim trunks, nothing covering your upper body. If you try to veer towards clothes that are gender-neutral, the Curse takes hold and picks the most masculine thing you can think of. <br><br>You can't even wear pants tailored for women! Wear a belt. In one sense, many women have been cross-dressing semi-frequently for a very long time. In another sense though, you're taking that practice far further than most would dare. You're worried that if you actually tried to wear something feminine that the Curse would somehow leave you topless, wearing only a loincloth, and dripping in sweat. You only feel comfortable when you're wearing dark colors in masculine styles. You'll need to be mindful of the other Curses you have. The larger your breasts are, the more you're going to stand out, as none of these clothes are tailored to accommodate them very well.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Lie Detector">>
+The Lie Detector Curse has really messed with your ability to communicate. You used to be able to be polite and say things that were nice, even if they weren't entirely true. Now your true thoughts always shine through your words. Other people don't seem to consciously understand that the Abyss has helped them see through you, they just have keen instinct into what you mean. There are times though that before you would have told a lie to people who had no business asking you something. You used to tell half-truths, carefully phrased so that deception may have been involved, but you weren't really lying. Doing that now just results badly. "What aren't you telling me?" is the most common response when you say a half-truth. For some things it might not matter, but for others it does. You're going to have to get better at saying nothing. The silver lining to all this is that trust is deeper. People might not understand why they trust you when you're honest, why they feel like they understand you better, but they do. You're wearing your heart on your sleeve, but you think your heart isn't so bad, and at least some people will have an easier time appreciating you for who you really are.
+<<endif>>
+<<if $tempCurse.name == "Megadontia">>
+Your teeth are so much more imposing with the Megadontia Curse's influence on you. They're fantastic for ripping into meat, for grabbing things, and for intimidation, but they're really not suited to chewing vegetables or even talking without a slightly strange new accent. You've had to adjust the way you move your tongue in your mouth to avoid getting it caught on all these sharp teeth, and while you can definitely talk, but your voice just sounds... different. The way you pronounce things has changed, and your smiles are positively crocodilian. Almost all animals react to the sight of your many teeth that are so large and so sharp. Did you realize you would look like a natural carnivore when you took this Curse?
+<<endif>>
+<<if $tempCurse.name == "Lingual Leviathan">>
+Tongues are absolutely amazing. They're incredibly strong, ridiculously flexible, they heal quickly, and they're covered in sensitive taste buds. But your tongue though goes a bit overboard. When you extend it, it has 30 cm of controllable, prehensile reach. Because you're creative, you understand just how awesome this can be, however, the downsides are pretty obvious too. Talking normally has gotten a little trickier, since you just have so much tongue in your mouth! <br><br>You are also struck with an observation you'd never realized before: many of the animals with truly glorious tongues, like frogs, have lost their teeth. If your tongue is good enough, teeth sort of only become a hindrance and liability. Maybe the Abyss will offer you some way to replace yours with smooth ridges of bone... which would be very weird, but perhaps more practical. This much tongue though, it wants to be doing something. Just having it cramped up in your mouth all the time makes you restless. Perhaps you can put it to use on yourself or someone else who may want some oral attention.
+<<endif>>
+<<if $tempCurse.name == "Tipping the Scales">>
+You stretch out on a rock, and see the faint iridescence of your $curse54.variation scales. It's a big change from what your skin used to be like, and is a mark that some parts of your physical humanity have been consumed by the Abyss. There's no point mourning what is gone though, and your scales are magnificent. They make you feel tough and confident, plus they look quite attractive to anyone who is inclined towards them. They're only on the outside though, and the skin inside you is not armored like your exterior. The contrast draws even more of your focus onto anything that manages to get past your scaly armor.
+<<endif>>
+<<if $tempCurse.name == "Reptail">>
+Your large scaly tail drags on the ground behind you. You could hold it upright, but at the moment you're trying to look around, and it's much easier this way rather than needing to put the effort into holding it up. If you want to keep it above the ground, it's almost like standing on your tiptoes for long periods of time. <br><br>You also hadn't anticipated just how much the Reptail Curse would alter your center of balance! Your tail is marvelous, powerful, strong, delightfully armored in elegant scales, but it actually is pretty heavy with its thick and muscular shape. When the Abyss bestowed the Curse on you, there were some other subtle things that you felt changing in your backbone and pelvis. Your body rearranged itself to be able to cope with such a large addition, but when walking on two legs it means you need to lean forward much more to maintain your balance, but less so when you let your tail drag. This tail is going to come in handy for self-defense, and it's going to be amazing for swimming, but sometimes it can also be cumbersome and get in the way. Part of you thinks about how far forward you're frequently leaning, and how close your arms are to the ground, and wonders if it wouldn't be more practical to start using your hands to help you move forward, scurrying around like a lizard.
+<<endif>>
+<<if $tempCurse.name == "Cold Blooded">>
+Cold isn't painful, it isn't stressful, but a little bit makes you feel very lethargic, and a lot makes you fall into a peaceful, sleep-like state. Even your thoughts slow down in the cold. Ever since you obtained the Cold Blooded Curse your metabolism has been wildly different. Now that your body isn't wasting so much of the energy you get from food on making heat, you've theoretically got a lot more energy for other stuff and when you're warm you feel so powerful! You can run around, lunge with enormous force, and you feel like as long as you can get enough oxygen to your muscles you can just keep going. <br><br>In the cold though... well, sometimes it's nice and relaxing to be slow, sometimes it can help you rest, but if you even want to think clearly you have to drag yourself somewhere warmer. If you end up staying down here in the Abyss, you're going to want to take this into account. Some layers are going to be much more hospitable to you, while others are just going to be miserable.
+<<endif>>
+<<if $tempCurse.name == "Pleasure Respecification A">>
+<<if $playerCurses.some(e => e.name === "Pleasure Respecification B")>>
+Your ragged breathing is a sign of what the Abyss has done to you. You're so horny right now that you can't think. Every time you try to get yourself off, you get so close, so tanatlizingly close, but you're never quite able to achieve orgasm. Every time you're fucking somebody else, the same thing happens. The feeling of need just keeps building, but there's never any relief. You calm down a little, but has anyone ever been this sexually frustrated? <br><br>The terrible truth is dawning on you. Only the Abyss can give you what you need. There are Curses that force you to have an orgasm, that circumvent all other rules and logic. Curses that will give you what you need. That's your only salvation now. Seek out those Curses and achieve release through the twisted and perverse whims of the Abyss. It's either that or stay this desperately horny and frustrated for the rest of your life.
+<<else>>
+Touching yourself feels amazing, but the pleasurable haze that clouds your mind only culminates in release when you're being touched by someone else... or fucking them. It's incredibly frustrating. The Abyss has done so many things to tempt you down the path of sex addiction, but with all of that, now you can't even obtain temporary relief on your own. You "need" to be with somebody else, or tat least hat's how you feel right now. The intensity of carnal relations with another person has only grown now that it's your only source of release. You need to be pressed against them, cumming your brains out. Nothing else will satisfy you, and you're just so horny!
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Clothing Restriction C">>
+<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
+Oh gosh, you're perpetually naked now. No underwear, no clothes, no armor, just flashing everyone and everything all day long. If you're going to do anything but draw open-mouthed stares, you're going to have to get really good at using convincing body-paint, but even that won't work if anyone looks at you especially hard. Wherever you end up, this is going to have a big impact on your life. And there's no way to even unintentionally wear clothes, since the Curse makes them degrade immediately if you even attempt to get around it. <br><br>Maybe being naked isn't so bad, humans are the only creatures on the surface that wear clothes anyway. But when you think about everyone staring at your naked body, always, it conjures up a wild mix of emotions: embarrassment, fear, lust. If you live anywhere but a nudist colony, you're going to run afoul of a bunch of prudish people, or end up being followed by a bunch of horny people, let alone any laws you might be breaking!
+<<else>>
+Underwear is as much as you can ever wear now. You have a deep feeling in your gut that if you even tried to put on a swimsuit, the Curse you took would prevent it. No, your underwear needs to really be underwear, and everyone is able to see it all the time. How many situations is that going to be appropriate in? You can think of very few that aren't supposed to be intimate or private. <br><br>As you explore another layer of the Abyss, you look down at your underwear and feel very vulnerable. In this context, you look like you're either soliciting sexual interactions, or like you lost your clothes and are in a desperate situation. You're not sure which one is worse.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Massacre Manicure">>
+Your claws are magnificent, but aside from dishing out painful slashes and catching things, they're not especially practical. In some situations they can help with climbing, but only if they can dig into the surface and find a hold. There are many tasks that have become more difficult, including social interactions. Unsurprisngly, many react with a bit more trepidation to a hand covered in claws. <br><br>There are things you could do to hide them, but some of them make you instinctively fearful of the possibility of one of your claws getting stuck. You've already experienced that once and it was agonizing as you dug your claw out. And regardless, it's not like the Abyss lets you hide the effects of a Curse for long. <br><br>There are a number of small ways that these are going to change your habits, but when you were Cursed with these calws you knew there would be consequences. All things considered, you can deal with this, but it's one more way the Abyss has changed you. You sure hope the Relics are worth it.
+<<endif>>
+<<if $tempCurse.name == "S">>
+Sadism. <br><br>One of the cardinal vices. An attribute that has driven countless individuals into unspeakably evil acts. Yet, you are now one of the most adamant followers of sadistic pleasure. What does that say about you? <br><br>Yesterday you nearly had an orgasm from violently squashing a bug. Sex is just going to be boring if you're not making someone else feel pain. True masochists might enjoy the experience with you, but you're now too extreme for nearly anyone else to have a good time succumbing to your cruelty. Hunting has become an erotic sport for you, but any decent hunter would be appalled when you fail to stop yourself once you get your hands on the prey. The pleasure that suffuses your mind and body just feels so good. Are you turning into some kind of monster?
+<<endif>>
+<<if $tempCurse.name == "M">>
+Masochism. <br><br>Oh, why do you feel this way? The Curse, you suppose. It's so wrong, but you struggle to stop yourself now. <br><br>You're poking yourself just to feel better. When you get back to the surface, you're dreaming of covering your body in tattoos and piercing absolutely everywhere. Not so much because you want that appearance, but when you imagine the pain of a needle piercing your skin, you can hardly stop yourself from getting excited. When you think erotic thoughts, you think of being whipped, of hot wax dripping onto your skin, of being fucked so hard that you scream out from it. <br><br>This isn't healthy, but as you withdraw a fingernail from an indentation it was making on your arm you still find yourself wanting more. You restrain yourself for now. Wait, is the absence of pleasure sufficient pain that it will cause some kind of pleasure of its own? That paradox scrambles your brain for a bit. Are nuns and monks secretly masochistic perverts who get off on their own self-denial? That thought seems rather taboo and a little unlikely, but it also opens up a little window for another path you could walk to extract some positive feelings from what this Curse has done to you.
+<<endif>>
+<<if $tempCurse.name == "Hijinks Ensue" && $currentLayer <= 5>>
+You're not sure if the Abyss hates you, or if it's just trying to turn you into a naughty slut, but the Hijinks Ensue Curse has certainly gotten you into quite a few embarrassing situations. There was that guy you were walking past on the trail, when you tripped on a rock that hadn't been there a second before, and you flung out your arms for support, but the only thing they encountered were his pants! Somehow, his pants came unbuckled as if his belt wasn't even there, his pants and underwear slid down as you crashed into him, and you face-planted into his crotch with his improbably erect penis in your MOUTH! <br><br>You must have looked like some super-slutty ninja pulling that off, except you were just trying to walk down the trail! Then there was the tree-branch incident... actually, you don't want to think about that, it was just too embarrassing. Somehow, you think the Curse is helping you get out of some of the consequences, nudging things into not being dangerous or detrimental in the long term, except for the embarrassment, and the damage to your reputation.
+<<endif>>
+<<if $tempCurse.name == "Flower Power">>
+Having leaves and flowers for hair is actually pretty nice, except for the occasional bugs it attracts. You used to feel when something brushed against your hair by the nerves in your scalp, but hair is mostly dead cells, and your new floral coating is very much alive. Now, you can notice any time something brushes against your much more sensitive hair, and haircuts may not be the most pleasant experience, as you feel a pinch any time you break off one of your hairs. <br><br>The flowers might have been a bad idea. You always thought of them as pleasant, but you hadn't thought about how they're essentially plant sex organs waving around inviting every pollinator in the world to interact with them. You suspect that plants experience the process a bit differently from you, but when a bee is rustling against your stamens and drinking your nectar, it feels like a toned down version of sexual activity, only it's on your head. You also caught a caterpillar munching on the leaves on the back of your head. It was only briefly, and you experienced it more as discomfort than pain, but the indignity of it all. How dare that caterpillar presume so much as to munch on you! <br><br>Still, the gentle breeze beneath your leaves and flowers makes everything more relaxing. It's going to be a lot harder to live normally back on the surface like this, but overall you are enjoying the Flower Power Curse.
+<<endif>>
+<<if $tempCurse.name == "Cellulose">>
+If only the Cellulose Curse had included a bit more lignin, which is what makes plants more stiff and strong. If your skin was made of lignin you'd be more like a dryad, and dryads are awesome. They're so tough and hardly anyone is stupid enough to try to fight a dryad. <br><br>You though, your skin is made of cellulose, it's more supple, a bit more delicate, and while it's kind of nifty, you're pretty terrified of how flammable you are now. Still, your new skin isn't all bad. If you had to blend in with a bunch of foliage, you'd have much more success, without even needing to paint yourself in camo. <br><br>However, going back to the surface is going to be much more socially difficult now. The change might be superficial, but people are often focused on the superficial and other creatures are even starting to treat you more like you were a plant. You think that carnivores might ignore you, but you've suddenly realized that things like termites, giraffes, and even cows, are going to look at you like a buffet. You never thought you'd be afraid of a cow.... but some instinct of self-preservation is warning you that you shouldn't get too close to them.
+<<endif>>
+<<if $tempCurse.name == "Chlorophyll">>
+As the miasmic light shines against your skin, you feel rejuvenated. The Chlorophyll Curse changed you in some pretty fundamental ways. You now have chloroplasts within your cells, like a plant. Some biologist would surely love to examine what happened more closely, but this is just who you are now. <<if $hiredCompanions.some(e => e.name === "Saeko")>>Perhaps Saeko may want to examine you? She doesn't have her equipment, but you've noticed she has been looking at your more closely since your change. <<endif>>Your skin has taken on a greenish hue. Even your dreams are filled with visions of standing naked in sunny fields as a gentle wind rustles the grasses at your feet. <br><br>As long as you have light, water, and air, you feel profound peace suffusing you. The people and animals you once found so normal now seem just a bit strange to you. They just seem so agitated as they buzz about. You can still act like them, but there's now a part of you that asks if it wouldn't be nicer to slow down and bask in the light.
+<<endif>>
+<<if $tempCurse.name == "Pheromones">>
+Is that love in the air? Perhaps, or maybe it's just the aromatic cloud of pheromones that you have streaming out of you thanks to the Curse the Abyss bestowed on you. It's a very subtle change, except when it's not so subtle. You definitely could use this to your advantage if you wanted to, but your inability to turn it off also makes it a pretty clumsy tool for manipulation. <br><br>It's great if what you want is to have better sex, or take advantage of people, or be in the middle of a giant orgy. But if you want to be part of a group working on some task, you're going to need to stand downwind of everyone else, lest their bodies start distracting them from the task at hand. You'll have to test that, blowing your pheromones around. Are they magical in themselves, or has the Curse just made you produce more of something you were already producing?
+<<endif>>
+<<if $tempCurse.name == "Carapacian">>
+Your exoskeleton is just so cool. It's like being encased in shiny hardened latex in some ways. It protects you, but it doesn't really dull the sensations you experience. You feel... snug inside your new chitinous armor. You can still feel everything you brush against, indeed, it's almost like your nerves have compensated, and the sensations are even more acute. They just don't hurt unless something could pierce your outer layers. And there are other sensations, more internal. You feel... a bit squishier inside. You don't know what that means, but it feels fine, so you're going to just roll with it.
+<<endif>>
+<<if $tempCurse.name == "Hemospectrum">>
+Changing the color of your blood for 35 free corruption points? What an easy decisions. Now though, as you look at that small scrape you got earlier, and see the $curse70.variation blood that has dried into a scab, you can't help but think about how this marks you as very different to any other human who sees you bleed. <br><br>It's subtly changed the coloring in your eyes, of the veins beneath your skin, you feel... less human. If they see you bleed, won't other humans see you as less human too? They might be afraid of you. Frequently people fear what they don't understand, right? When you set off into the Abyss, you knew you'd be changed, but these subtle reminders about how you keep changing are warping your identity. What are you now?
+<<endif>>
+<<if $tempCurse.name == "Wriggly Antennae">>
+Your antennae might shock and initially creep out many people, but they also definitely boost your senses. Subtle changes in the air stand out to you in ways you never noticed before. They respond to your thoughts, but you're not very good at controlling them yet. Their sensitivity affects you in one way you hadn't expected though. Gently rubbing them arouses you, awakening a deep warmth within you and a desire for someone else to touch them. You don't know what's going on in your brain, or why your body is responding this way, but you get the feeling that sufficient stimulation of your antennae might just send you over the edge. It's a bit of an awkward realization.
+<<endif>>
+<<if $tempCurse.name == "Eggxellent">>
+Your eggs. <br><br>You hadn't really understood what laying eggs would be like before you obtained the Eggxellent Curse, but now... well, it's an intense experience. Not quite painful, but they are large enough where the sensation borders on pain. As you look down at the small pile of eggs that just came out of you, you realize this is a bigger change to your life than you'd anticipated. As you recover, the memory of how those large, smooth, slippery eggs felt as they came out of you clings in your mind. <br><br>Not just any eggs though, your eggs.
+<<endif>>
+<<if $tempCurse.name == "Pleasure Respecification B">>
+<<if $playerCurses.some(e => e.name === "Pleasure Respecification A")>>
+Your ragged breathing is a sign of what the Abyss has done to you. You're so horny right now that you can't think. Every time you try to get yourself off, you get so close, so tanatlizingly close, but you're never quite able to achieve orgasm. Every time you're fucking somebody else, the same thing happens. The feeling of need just keeps building, but there's never any relief. You calm down a little, but has anyone ever been this sexually frustrated? <br><br>The terrible truth is dawning on you. Only the Abyss can give you what you need. There are Curses that force you to have an orgasm, that circumvent all other rules and logic. Curses that will give you what you need. That's your only salvation now. Seek out those Curses and achieve release through the twisted and perverse whims of the Abyss. It's either that or stay this desperately horny and frustrated for the rest of your life.
+<<else>>
+Getting fucked feels amazing, but the pleasurable haze that clouds your mind only culminates in release when you're the one touching yourself. It's frustrating and a bit embarrassing when you can't finish with another person. In so many cultures masturbation is taboo, and while you're not ashamed of doing it, the fact that it's the only way you can get off now makes your cheeks burn hot. The Abyss has done so many things to tempt you down the path of sex addiction, but with all of that, now you can't even properly enjoy sex! When you took the Pleasure Respecification B Curse, you now realize that the Abyss was asking you "Hey, do you want to go fuck yourself?" and you responded with "oh yes, I want to be fucking myself all the time". Somehow, that thought has become more erotic than it once would have been. Tonight you'll slink off and masturbate alone, and it will feel so, so good.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Horny">>
+You always wondered why all the depictions of incubi and succubi that you'd seen just has them standing around looking pretty or using magic, or fighting like humans with extra agility. They always have those horns on their heads, but they never seem to use them like horns are supposed to be used, for goring or ramming. Well, now that you have your own thanks to the Horny Curse, you understand. They're not meant for fighting. They're essentially extra sexual organs that are sprouting out of your head. <br><br>You're pretty happy with how yours look, but you have to admit that aside from being a bold fashion choice, these horns are simply a liability. Maybe true incubi or succubi could draw sexual energy through them or something similar, but for you, twirling your fingers around the tips of them is enough to bring you to orgasm, and the same is true if you rub the shafts enough. The thought of ramming them into anything though... well that's too painful to consider. When you smacked them into a low hanging branch it briefly left you curled into a ball from the pain. Your new distinctive appearance is almost secondary to the sensitivity of your new appendages. It's a lot to take in, but maybe you'll get more used to it over time.
+<<endif>>
+<<if $tempCurse.name == "Drawing Spades">>
+Your spade-tipped demon tail is just so naughty. You can feel the sensations from it, but it really has a mind of its own. You once came across a rabbit that had just reached sexual maturity, and it tried to have sex with absolutely everything around it. You're wondering if your tail has a similar spirit. It wraps around other people, especially any you find attractive, and it finds its way into their clothing if you don't pay attention and consciously hold it back. When you're alone, it tries to do the same to you. <br><br>If you really focus, you can control it, but it's easy to get distracted and then it once again tries to stimulate you. It seems to cooperate when you're in need of navigating obstacles or dealing with danger, but the rest of the time it seems focused on how it can make the most mischief, generally of the sexual variety. It's really annoying! But some part of you wonders whether it's only responding to what you subconsciously desire.
+<<endif>>
+<<if $tempCurse.name == "Tattoo Tally">>
+You feel a mix of embarrassment, shame, and pride as you look at the ornate Tattoo Tally that's permanently inked into your abdomen. It's not the only tattoo left by the Curse, and it's the one that's easiest for you to cover up, but when you look at it, the details of every lewd thing you've ever done or experienced jump into your mind. The people and beings that glimpse your tattoos stare at you. Their expressions take on various shades of hunger, wide-eyed lust, disgust, and envy. When you're not trying to inspire any of these emotions, it's very inconvenient, but... part of you wonders what you really do want going forward. Perhaps those aren't necessarily bad emotions to inspire. When you look at the tattoos yourself, they bring many thoughts and memories to your mind, but arousal always comes with them.
+<<endif>>
+<<if $tempCurse.name == "Leaky">>
+You might need to consider getting some super absorbent sanitary pads, ones that you can change out every few hours. The leaky Curse isn't just keeping your crotch moist, it's dripping your juices down your legs. It's not entirely unpleasant, a gentle euphoric feeling accompanies your condition, and offsets the irritation the stickiness causes. <br><br>However, the way the few other explorers you have encountered since you took on this Curse have looked at you has been awkward at best. One seemed to think you were wetting yourself, another caught on to what was happening and started giving you very lurid looks. The worst part is, this constant leakiness is not relieving arousal, it just makes you constantly ready. Maybe the lurid looks you got were in equal part due to your own appareny desperation.
+<<endif>>
+<<if $tempCurse.name == "Wandering Hands">>
+Your naughty, naughty fingers seem to be on auto-pilot whenever you're not forcing them to do something else, and autopilot is apparently fondling you and touching yourself in lewd ways. How many times a day do you find your hands doing something naughty? The answer is: constantly. The Wandering Hands Curse is unrelenting, always trying to edge you into sex addiction. It doesn't matter what you're trying to do, start a fire, draw a map, discuss a plan with others, before you know if you've got at least one hand rubbing between your legs.
+<<endif>>
+<<if $tempCurse.name == "Urine Reamplification A">>
+Pee... why did you take a Curse that makes you have to pee all the time? You're still continent, you can control it, you can hold it, or that's what you tell yourself. In truth, having to find a place to pee every fifteen to thirty minutes is quite a nuisance, and you've had multiple accidents while sleeping. Down here, it's a nuisance, but there are plenty of trees and rocks. What about back on the surface though? You're afraid of the social ramifications to this Curse. You might even have to start wearing diapers.
+<<endif>>
+<<if $tempCurse.name == "Barter System">>
+These reality warping Curses always seem to surprise you. When you accepted the Barter System Curse you didn't quite see yourself giving three guys blowjobs so you could replace the pair of shoes that you brought with you that have finally worn out. Once upon a time, when you didn't have money, those with goods to sell would fold their arms and expect you to leave. Now, the Curse seems to make them go far out of their way to find some way that you can get what you want by doing enough sexual favors for them, their friends, their clients, their workers, and on and on. <br><br>You're pretty sure that before you obtained this Curse, none of those people would have been interested, and none would have been shameless enough to actually work through an elaborate exchange of goods, favors, and funds on your behalf just so that you could purchase what you wanted by being a massive whore. When you get back to the surface (if you get back) you're half-inclined to try to use this Curse to buy a house, or a mansion, or a country. You're just curious what would happen, but also afraid that it might work, but that when you involve that many people in a proposal, you can't just say "no" after everything is worked out. Would you be forced to be a sex slave for life in return for buying an estate?
+<<endif>>
+<<if $tempCurse.name == "Shared Space">>
+One of the reasons so many people love pets is that they feel like they have permission to pet them, to hold them, to snuggle with them whenever they feel like it. And ever since you obtaiined the Shared Space Curse, people treat you like that, with one crucial difference. People generally don't have any sexual interest in pets, but they definitely have sexual interest in you. <br><br>Somehow, the Curse makes it so that even as people put their hands all over you in very inappropriate ways, everyone watching treats it as normally as a person petting a cat. The people groping you don't even realize they're doing anything too forward. All their perceptions around you are altered. You struggle with the change, and how you feel about it. Is it really the fault of others that they're treating you in accordance with the Curse? Is this how you want to be treated? You're still not sure. However, as abrupt as the touches of others can be, they're normally kind enough, and sometimes quite pleasant.
+<<endif>>
+<<if $tempCurse.name == "Weakling">>
+Taking the Weakling Curse has made you keenly aware that you're absolutely unable to defend yourself. The only thing you could wrestle is an empty cardboard box, and even then probably only if it's wet. Anyone else you encounter, everything else you encounter, they aren't just stronger than you, they're comically stronger than you. More than that though, just moving all your stuff around has become far more difficult. <br><br>That carry weight limit that they kept talking about on the surface is very real, and yours is now very low. Even that is a struggle for you though. It's a weird feeling. You can move about just fine with your body, but every bit of weight added to your body feels like its weight has been magically augmented on an incredible scale. You'd have as much luck lifting a mountain as lifting another person. But you can climb things as easily as ever as long as you're not carrying too much extra stuff. You swear, you can almost hear the Abyss snicker when you forget about your own weakness and fail to pick up something that should be relatively trivial and struggle.
+<<endif>>
+<<if $tempCurse.name == "Random Orgasms">>
+When you took the Random Orgasms Curse, you hadn't expected just how disruptive it would be to your everyday life. The other day you were trying to scale a small cliff when a random orgasm racked your body and very nearly made you fall off the cliff face. Death by orgasm, that would have been pretty embarrassing. <br><br>You're certain that the social ramifications are going to be very awkward, but now, after the cliff incident, you find yourself approaching every task by first asking "What happens if I randomly orgasm while doing this?". As humiliating as your condition is, as scary as it makes some things, the euphoria you feel during these intense events is undeniable. Even as part of you fears the next toe curling orgasm that will hit you, another part craves it, and that part seems to be growing.
+<<endif>>
+<<if $tempCurse.name == "Creature of the Night">>
+<<if $playerCurses.some(e => e.name === "Clothing Restriction A") && $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+You truly are a creature of the night now, not so much because vampires can't shelter from the sun while still being out in the day, but because you took this Curse in conjunction with multiple clothing restriction Curses. Some people say that vampires can turn into bats, that's not true, or at least you can't (you tried) but then you realized it hardly matters because you were already total dingbat to pick this combination of Curses. You're not just a vampire, you're "the" naked vampire. Going out exclusively in the dark is going to be very inconvenient, especially given your new thirst for blood and the fact that you can't enter anyone's home unless they give you permission. You absolutely have to drink blood now, but wherever you end up living you're probably going to have to reach some consensual arrangements to satisfy your thirst. You shiver at the prospect of what others might demand from you in exchange for both their blood and keeping your secret. Unless you're lucky enough to get some incredible combination of relics that can turn you into a super-fast super-strong predator, consensual feeding is probably your only option to keep your thirst fulfilled.
+<<else>>
+When the Abyss gave you a Curse as straightforward as Creature of the Night, you were sure there had to be a catch. Become a vampire? That's rather straight forward, isn't it? Well, there sort of wasn't a catch, except that drinking blood feel amazing, and being without it for a long time is an agony that would drive you mad. Also you need to be very careful around the sun to make sure whatever clothing and accessories you have are adequately protecting you. Going forward, you think you have 2 options. You can either find some willing blood donors for you, which would put you in their debt and might put you in an awkward position, or you could become a transient, finding victims through surprise or guile getting a meal, and then moving on. Technically, you're not alive anymore, but semantics aside, it's up to you what kind of life you want to try to live.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Minish-ish">>
+<<if $hiredCompanions.length > 0>>
+Thank goodness you didn't come down here alone. Now that the Minish-ish Curse has reduced you to mouse-like size, you're relying on a companion to carry basically everything for you. There are advantages to being this small. You can squeeze into tiny little places... don't think about that too much. Your ability to move and jump might be lower than it once was in objective terms, but for your size, you can do some amazing stuff. You can jump more than your entire body height, since being light has its advantages. Still, yesterday you were tired of running and asked $hiredCompanions[0].name to carry you. Their hands felt so huge around you, but in an odd way, it was wonderfully comforting and exciting.
+<<else>>
+Oh no, this is a disaster. The Minish-ish Curse has left you so tiny and you came down here alone. You're going to have to act like a squirrel and run back and forth with individual food parcels and individual bottles of water, moving them from 1 pile to another, if you want to get anywhere while still keeping even your food with you. Some relics are now impossible for you to move! What are you going to do? More than that, you're afraid of just leaving your stuff in a pile. What if some one or something sees it and just helps itself? Burying your supplies really is starting to make a lot of sense in this context. If only you had somebody big to help you on this giant journey, but you don't. This is going to be very tough.>
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Colossal-able">>
+It's not fair. You're huge. You should be able to move quickly, and you can, except the Abyss is so treacherous that everything is cramped. Cliff side paths you could once have walked along now are merely a crevice to put the first joint of your fingers in. Your body is tough enough to endure some of your new tribulations, but walking through a forest now means snapping dozens of tree branches with every step, or carefully lifting up your legs over the treetops and setting them down ahead of you (a process that still is not gentle for either you or the trees). Small trees are like prickly ground-cover to you, but large ones are like brambles that you have to wade through. Then there are cavern ceilings, which sometimes are low enough to force you to crawl or stop you altogether. <br><br>You could carry a small house in your hand, but ugh, everything is just so awkward now. There are some layers of the Abyss where you might feel comfortable taking up residence, and on the surface you'd be... very notable, but certainly able to stretch out. You're going to have to change the way you live life though. Your new size just doesn't match many of the skills you previously practiced.
+<<endif>>
+<</nobr>>
