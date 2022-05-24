@@ -1,10 +1,34 @@
 :: Layer2 1 [image layer2]
 <<nobr>>
 <<set $currentLayer = 2>>
+<<if $items[14].count > 0 || $cut == 1>>
+	<<set $timeRed += 1>>
+<<endif>>
 <<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
-<<set $tempTime = 2>>
 <<set $timeL2T1 = 0>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<set $tempTime = (Math.max(2 - $timeRed, 0))>>
+<<set $timeL1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+	<<set $items[1].count -= $tempTime>>
+	<<else>>
+	<<set $foodL1 += $tempTime>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL1 += 1>>
+		<<if $abyssKnow == 0>>
+			<<set $GenderLog.push($ForageWaterMajor )>>
+		<<endif>>
+	<<endif>>
+<</for>>
 <</nobr>>
 [img[setup.ImagePath+'Layer Intros/l2intro.png']]
 
@@ -186,15 +210,13 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement B") || $StoredCurse.name == "Libido Reinforcement B">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
-	<<set _table += "<tr><td>[[Take on Libido Reinforcement B]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+	<<set _table += "<tr><td>[[Take on Libido Reinforcement B]]</td>">>
 		<<if $ManagedMisfortuneActive>>
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse13]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal B") || $StoredCurse.name == "Gender Reversal B">>
@@ -207,8 +229,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse14]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness B" || $StoredCurse.name == "Shrunken Assets">>
@@ -221,8 +241,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse15]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Age Reduction A") || $StoredCurse.name == "Age Reduction A">>
@@ -235,8 +253,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse16]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Fluffy Ears") || $StoredCurse.name == "Fluffy Ears" >>
@@ -249,8 +265,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse17]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Fluffy Tail") || $StoredCurse.name == "Fluffy Tail">>
@@ -263,8 +277,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse18]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Maximum Fluff") || $StoredCurse.name == "Maximum Fluff">>
@@ -277,8 +289,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse19]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Heat/Rut") || $StoredCurse.name == "Heat/Rut">>
@@ -291,8 +301,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse20]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Lightweight") || $StoredCurse.name == "Lightweight">>
@@ -305,8 +313,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse21]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun") || $StoredCurse.name == "Sex Switcheroo" || $StoredCurse.name == "Futa Fun">>
@@ -319,8 +325,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse22]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun") || $StoredCurse.name == "Sex Switcheroo" || $StoredCurse.name == "Futa Fun">>
@@ -333,8 +337,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse23]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 <<if $playerCurses.some(e => e.name === "Blushing Virgin") || $StoredCurse.name == "Blushing Virgin" >>
@@ -347,8 +349,6 @@ You hear a quiet growling in the distance. After only a few more moments, it isn
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer2 Curses][$StoredCurse = $curse24]]</td></tr>">>
 		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
 
@@ -1403,17 +1403,28 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime=5>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $temptime=5>>
 	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime = $temptime>>
 <<endif>>
 
-<<for $layerExitTime=$tempTime; $layerExitTime >0; $layerExitTime-->>
-
+<<for $i = 0; $i < 99; $i++>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
 	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
 		<br>During your long hike towards the third layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
 
 [[Deal with the Baying Gourmet|Layer2 Threat1 Descend]]<br><br>
 		<<break>>
+	<<endif>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += 1>>
 	<<endif>>
 	<<set $tempTime = 1>>
 	<<include "GeneralTimeStats">>
@@ -1445,7 +1456,9 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<<endif>>
 <<endif>>*/
 	<<set $time += 1>>
+	<<set $layerExitTime -= 1>>
 <</for>>
+
 
 <</nobr>><<if $layerExitTime == 0>>
 Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
@@ -1505,14 +1518,21 @@ Use the following option only if you have specifically considered your inventory
 <<nobr>><<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 	<<set $tempTime=5>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $tempTime=5>>
 	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime = $temptime>>
 <<endif>>
 
-<<for $layerExitTime=$tempTime; $layerExitTime >0; $layerExitTime-->>
+<<for $i = 0; $i < 99; $i++>>
 	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
 		<br>During your long hike back up towards the first layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
 
-		[[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
+[[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
 		<<break>>
 	<<endif>>
 		<<if $items[1].count > 9>>
@@ -1557,6 +1577,9 @@ Use the following option only if you have specifically considered your inventory
 
 <</nobr>><<if $layerExitTime == 0>>
 <<nobr>>
+<<if $items[14].count > 0 || $cut == 1>>
+	<<set $timeRed -= 1>>
+<<endif>>
 <<set $corruption -= (15 - $corRed)>>
 <</nobr>>
 
