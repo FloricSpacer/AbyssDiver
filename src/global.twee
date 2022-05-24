@@ -1414,9 +1414,18 @@ How many dubloons would you like to pay back?
 				<<endif>>
 			<<elseif $layer==3>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
-			<<elseif $layer==4>>
-				<<set $HeightLog.push($ForageFoodMajor)>>
-			<<elseif $layer==5>>
+			<<elseif $currentLayer==4>>
+				<<if $slingshot == 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMajor)>>
+				<<elseif $items[13].count > 0 && $items[20].count > 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
+					<<set $HeightLog.push($ForageFoodMajor)>>
+				<<else>>
+					<<set $items[1].count -= 1>>
+				<<endif>>
+			<<elseif $currentLayer==5>>
 				<<set $crumbleFluid += (5 * $tempTime)>>
 			<<elseif $layer==6>>
 				<<set $foodL6 += $tempTime>>
@@ -1437,9 +1446,18 @@ How many dubloons would you like to pay back?
 				<<endif>>
 			<<elseif $layer==3>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
-			<<elseif $layer==4>>
-				<<set $HeightLog.push($ForageFoodMinor)>>
-			<<elseif $layer==5>>
+			<<elseif $currentLayer==4>>
+				<<if $slingshot == 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMinor)>>
+				<<elseif $items[13].count > 0 && $items[20].count > 1>>
+					<<set $foodL4 += $tempTime>>
+					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
+					<<set $HeightLog.push($ForageFoodMinor)>>
+				<<else>>
+					<<set $items[1].count -= 1>>
+				<<endif>>
+			<<elseif $currentLayer==5>>
 				<<set $crumbleFluid += $tempTime>>
 			<<elseif $layer==6>>
 				<<set $foodL6 += $tempTime>>
