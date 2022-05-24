@@ -152,7 +152,7 @@ Would you like to increase or descrease your height due to eating flairabou meat
 <<nobr>><<if $totalRelics.some(e => e.name === "Ghost-righter Writing Down")>>
 	<<else>><<print "[[Pick up the Ghost-righter Writing Down]]">>
 <<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Gilded Prison") || ($items[14].count < 1 && ($cut == 0)) || $torchUse == 1>>
+<<nobr>><<if $totalRelics.some(e => e.name === "Gilded Prison") || ($items[14].count < 1 && ($cut == 0)) || $torchUse == 0>>
 	<<else>><<print "[[Pick up the Gilded Prison]]">>
 <<endif>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Omoikane Circuit")>>
@@ -1487,13 +1487,13 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<set $status.penalty = 0>>
 <<endif>>
 <<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-<<if $torchUse == 1 || $heat == 1>>
-	<<set $tempTime -= 2>>
-<<elseif $items[9].count > 0 && $torchUse == 1>>
-	<<set $tempTime -= 2>>
-	<<set $items[9].count -= 1>>
-<<else>>
-	<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
+<<if $torchUse == 1 && $heat == 1>>
+		<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+		<<set $tempTime -= 2>>
+		<<set $items[9].count -= 1>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
 <<endif>>
 <<set $timeL4 += $tempTime>>
 <<set $timeL4T1 += $tempTime>>

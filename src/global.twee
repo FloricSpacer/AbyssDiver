@@ -980,7 +980,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				Please enter your new hair color:<br><br>
 
 				<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
-			<<elseif $StoredCurse.name== "Fluffy Ears" && $curse17.variation=="">>
+			<<elseif $playerCurses.some(e => e.name === "Fluffy Ears") && $curse17.variation=="">>
 
 				What type of ears would you like to gain?<br><br>
 
@@ -993,7 +993,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
 				<<radiobutton "$curse17.variation" "pig" >> Pig<br>
 				<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
-			<<elseif $StoredCurse.name== "Fluffy Tail" && $curse18.variation=="">>
+			<<elseif $playerCurses.some(e => e.name === "Fluffy Tail") && $curse18.variation=="">>
 
 				What type of tail would you like to gain?<br><br>
 
@@ -1006,7 +1006,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<radiobutton "$curse18.variation" "long mouse" >> Mouse<br>
 				<<radiobutton "$curse18.variation" "twisted pig" >> Pig<br>
 				<<radiobutton "$curse18.variation" "swaying horse" >> Horse<br>
-			<<elseif $StoredCurse.name== "Maximum Fluff" && $curse19.variation=="">>
+			<<elseif $playerCurses.some(e => e.name === "Maximum Fluff") && $curse19.variation=="">>
 				What type of fur would you like to gain?<br><br>
 
 				<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
@@ -1018,28 +1018,6 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse<br>
 				<<radiobutton "$curse19.variation" "pig-furred" >> Pig<br>
 				<<radiobutton "$curse19.variation" "horse-furred" >> Horse<br>
-
-			<<elseif ($StoredCurse.name== "Wacky Wombs" && $curse19.variation1=="" ) || ($StoredCurse.name== "Wacky Wombs" && $playerCurses.some(e=> e.name === "Wacky Wombs" ) && $curse19.variation2=="") >>
-				What is the location of the womb you would like to add?
-				<<if $app.womb==0>> 
-					<<radiobutton "$curse35.variation1" "throat" checked>> Throat
-					<<radiobutton "$curse35.variation1" "urethra" >> Urethra
-					<<radiobutton "$curse35.variation1" "anus" >> Anus
-					<<if $vagina > 0 >>
-						<<radiobutton "$curse35.variation1" "vagina" >> Vagina
-					<<endif>>
-				<<else>>
-					<<radiobutton "$curse35.variation2" "throat" checked>> Throat
-					<<radiobutton "$curse35.variation2" "urethra" >> Urethra
-					<<radiobutton "$curse35.variation2" "anus" >> Anus
-					<<if $vagina > 0 >>
-						<<radiobutton "$curse35.variation2" "vagina" >> Vagina
-					<<endif>>
-				<<endif>>
-			
-			<<elseif $StoredCurse.name== "Rainbow Swirl" && $curse39.variation=="">>
-				<<textbox "$curse38.variation" "pink" "Layer3 Curses">>
-
 			<<else>>
 				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
 					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
@@ -1356,54 +1334,40 @@ How many dubloons would you like to pay back?
 	<<set $status.penalty = 0>>
 <<endif>>
 
-<<if $currentLayer==1>>
+<<if $layer==1>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<set $timeL1 += $tempTime>>/* layer specific */
-<<elseif $currentLayer==2>>
-	<<if $items[14].count > 0 || $cut == 1>>
-		<<set _cutRed = 1>>
-	<<else>>
-		<<set _cutRed = 0>>
-	<<endif>>
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _cutRed), 0))>>
+<<elseif $layer==2>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<set $timeL2 += $tempTime>>
 	<<if $items[1].count > 9>>
 		<<set $timeL2T1 += $tempTime>>
 	<<endif>>
-<<elseif $currentLayer==3>>
-	<<if $items[9].count > 0 || $items[10].count > 0 || $light == 1>>
-		<<set _lightRed = 1>>
-	<<else>>
-		<<set _lightRed = 0>>
-	<<endif>>
-
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _lightRed), 0))>>
+<<elseif $layer==3>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<set $timeL3 += $tempTime>>
-	
 	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
 		<<else>><<set $timeL3T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL3T1 += $tempTime>>
-<<elseif $currentLayer==4>>
+<<elseif $layer==4>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<if $torchUse == 1 && $heat == 1>>
-		<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
-		<<set $tempTime -= 2>>
-		<<set $items[9].count -= 1>>
-	<<else>>
-		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
+			<<set $tempTime -= 2>>
+		<<elseif $items[9].count > 0 && $torchUse == 1>>
+			<<set $tempTime -= 2>>
+			<<set $items[9].count -= 1>>
 	<<endif>>
 	<<set $timeL4 += $tempTime>>
 	<<set $timeL4T1 += $tempTime>>
-<<elseif $currentLayer==5>>
+<<elseif $layer==5>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
 	<<set $timeL5 += $tempTime>>
 	<<if ($items[0].count + $items[3].count) > 10>>
 		<<set $timeL5T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL5T1 += $tempTime>>
-<<elseif $currentLayer==6>>
+<<elseif $layer==6>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
 	<<set $timeL6 += $tempTime>>
 	<<set $hexflame += $tempTime>>
@@ -1411,7 +1375,7 @@ How many dubloons would you like to pay back?
 		<<set $timeL6T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL6T1 += $tempTime>>
-<<elseif $currentLayer==7>>
+<<elseif $layer==7>>
 	<<set $timeL7 += $tempTime>>
 	<<set $timeL7T2 += $tempTime>>
 	<<set $time += $tempTime>>
@@ -1429,72 +1393,13 @@ How many dubloons would you like to pay back?
 :: GeneralTimeStats
 <<nobr>>
 <<set $time += $tempTime>>
-<<if $currentLayer==1>>
-
-	<<set $timeL1 += $tempTime>>
-
-<<elseif $currentLayer==2>>
-
-	<<set $timeL2 += $tempTime>>
-	<<if $items[1].count > 9>>
-		<<set $timeL2T1 += 1>>
-	<<endif>>
-
-<<elseif $currentLayer==3>>
-
-	<<set $timeL3 += $tempTime>>
-	<<if $items[9].count > 0 && $torchUse == 1>>
-		<<set $items[9].count -= 1>>
-	<<elseif $items[9].count == 0 && $torchUse == 1>>
-		<<set $torchUse = 0>>
-	<<endif>>
-	<<set $timeL3T1 += 1>>
-	<<if $torchUse !=1 && $items[10].count < 1  && $light != 1 && !($ownedRelics.some(e => e.name === "Firmament Pigment"))>>
-		<<set $timeL3T2 += 1>>
-	<<endif>>
-	
-<<elseif $currentLayer==4>>
-
-	<<set $timeL4 += $tempTime>>
-	<<set $timeL4T1 += $tempTime>>
-
-<<elseif $currentLayer==5>>
-
-	<<set $timeL5 += $tempTime>>
-	<<if ($items[0].count + $items[3].count) > 10>>
-		<<set $timeL5T2 += $tempTime>>
-	<<endif>>
-	<<set $timeL5T1 += $tempTime>>
-
-<<elseif $currentLayer==6>>
-
-	<<set $timeL6 += $tempTime>>
-	<<if $dubloons > 199>>
-		<<set $timeL6T2 += $tempTime>>
-	<<endif>>
-	<<set $timeL6T1 += $tempTime>>
-
-<<elseif $currentLayer==7>>
-
-	<<set $timeL7 += $tempTime>>
-	<<set $timeL7T2 += $tempTime>>
-	<<if $dubloons >= 300>>
-		<<set $dubloons -= 1>>
-		<<elseif $dubloons >= 100>>
-		<<set $dubloons -= 2>>
-		<<else>>
-		<<set $dubloons -= 3>>
-	<<endif>>
-
-<<endif>>
-
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 <<else>>
 	<<set $foodL1 += $tempTime>>
 	<<if $abyssKnow == 0>>
 		<<for $i = 0; $i < $tempTime; $i++>>
-			<<if $currentLayer==1>>
+			<<if $layer==1>>
 				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
 			<<elseif $currentLayer==2>>
 				<<if $mudHunt == 1>>
@@ -1507,19 +1412,13 @@ How many dubloons would you like to pay back?
 				<<else>>
 					<<set $LibidoLog.push($ForageFoodMajor)>>
 				<<endif>>
-			<<elseif $currentLayer==3>>
+			<<elseif $layer==3>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
-			<<elseif $currentLayer==4>>
-				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
-					<<if $slingshot == 0>>
-						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-					<<endif>>
-					<<set $foodL4 += $tempTime>>
-					<<set $HeightLog.push($ForageFoodMajor)>>
-				<<endif>>
-			<<elseif $currentLayer==5>>
+			<<elseif $layer==4>>
+				<<set $HeightLog.push($ForageFoodMajor)>>
+			<<elseif $layer==5>>
 				<<set $crumbleFluid += (5 * $tempTime)>>
-			<<elseif $currentLayer==6>>
+			<<elseif $layer==6>>
 				<<set $foodL6 += $tempTime>>
 			<<endif>>
 		<</for>>
@@ -1536,19 +1435,13 @@ How many dubloons would you like to pay back?
 				<<else>>
 					<<set $lastFlan=$time+1>>
 				<<endif>>
-			<<elseif $currentLayer==3>>
+			<<elseif $layer==3>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
-			<<elseif $currentLayer==4>>
-				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
-					<<if $slingshot == 0>>
-						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-					<<endif>>
-					<<set $foodL4 += $tempTime>>
-					<<set $HeightLog.push($ForageFoodMinor)>>
-				<<endif>>
-			<<elseif $currentLayer==5>>
+			<<elseif $layer==4>>
+				<<set $HeightLog.push($ForageFoodMinor)>>
+			<<elseif $layer==5>>
 				<<set $crumbleFluid += $tempTime>>
-			<<elseif $currentLayer==6>>
+			<<elseif $layer==6>>
 				<<set $foodL6 += $tempTime>>
 			<<endif>>
 		<</for>>	
@@ -1566,20 +1459,20 @@ How many dubloons would you like to pay back?
 		<<set $waterL1 += 1>>
 		<<if $abyssKnow == 0>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<if $currentLayer==1>>
+				<<if $layer==1>>
 					<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
-				<<elseif $currentLayer==2>>
+				<<elseif $layer==2>>
 					<<set $bewitchBabies += 1>>
-				<<elseif $currentLayer==3>>
+				<<elseif $layer==3>>
 					<<set $waterL2 += 1>>
-				<<elseif $currentLayer==4>>
+				<<elseif $layer==4>>
 					<<set $waterL4 += 1>>
 					<<if $abyssKnow == 0>>
 						<<set $algalSize += 1>>
 					<<endif>>
-				<<elseif $currentLayer==5>>	
+				<<elseif $layer==5>>	
 					<<set $waterL5 += 1>>
-				<<elseif $currentLayer==6>>
+				<<elseif $layer==6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
 						<<set $hexflame += 1>>
@@ -1612,7 +1505,6 @@ How many dubloons would you like to pay back?
 <</for>>
 <<set $tempTimeFixed=0>>
 <</nobr>>
-
 :: Curse Descriptions
 <<nobr>>
 <<set $temp = random(0,$playerCurses.length - 1)>>
@@ -1719,5 +1611,150 @@ How much did you think about your nipples before you took the Double Pepperoni c
 <<endif>>
 <<if $tempCurse.name == "Literal Blushing Virgin">>
 You're so nervous, but also really excited to finally lose your virginity. This is all new to you! To be this naked and vulnerable, moving against another person, your body being filled with strange sensations that are a little scary and wonderful at the same time. You don't really understand, but you're also feeling a strange sense of deja vu, like possibly you've done this before, except you haven't. You don't know what comes next. The confusion only heightens the intimacy, the sensations of skin on skin, sweat mingling in this kinetic experience, your body starts to tense up, and then a wave of sensation washes through your loins, flattening your thoughts, driving out everything else. As the moment ends, you shake your head to clear it. <br><br>Wait, you've done this before! Here you were being so passionate about losing your virginity, and it turns out that you're not even really a virgin? Oh dear. Then you remember the Literal Blushing Virgin curse and sigh. Yeah, the Abyss did this to you. Now that all your experiences have come rushing back to you, you think about all the ways that you could have prolonged the contact, brought out even more ecstasy from the experience, except you couldn't have, because you couldn't remember. It seems you'll never learn to be any better of a lover than you are now. Still, the feeling of something new lingers. You might have had many first times, but you can never forget any of them. It's impossible to get jaded about something that's always new!
+<<endif>>
+<<if $tempCurse.name == "Lactation Rejuvination A">>
+Milk. You took on a Curse that made you produce milk from your chest. It's not that big of a deal, right? <br><br>Sure, your breasts will gradually swell up, getting more sensitive as your milk ducts inflate, and to take care of yourself every several hours you need to stimulate your nipples sufficiently to initiate let down. It feels rather strange, slightly empowering, slightly erotic, but very wet and a bit sticky. <br><br>Maybe it is kind of a big deal after all. The biggest question is: what to do with all the milk? It's not that much, but it feels so wasteful to just let it fall on the ground. Should you maybe... share it with somebody? You're attempting to survive, and every drop of wasted milk is a drop of fluid and nutrients that you'll have to try to recover some other way. As you run your fingers over your nipples, preparing to milk yourself again, you lick your lips and think about how responsible it would be not to let it go to waste.
+<<endif>>
+<<if $tempCurse.name == "Sleep Tight">>
+<<if $playerCurses.some(e => e.name === "Sweet Dreams")>>
+Sleep calls to you once again. Soon you'll enter your dreams, where you'll be in the hands of those odd things the Abyss has conjured up. They'll do things to you. They'll warp and change your body to their desires. You'll be helpless before them, but they will satisfy both themselves and you. Their teeth, their claws, their tentacles and slime, their enormous barbed penises that spear into you again and again, their vaginas that suck you in and hold you there while they vibrate around you with malicious mirth... <br><br>You are their plaything, but even if they sometimes hurt you, it always feels sublime, and it's only a dream. The only real thing about them is the orgasms they'll rip from your body as you cry out during your slumber... or perhaps they're not as imaginary as you think. The Abyss can perform apparent miracles after all. Are these creatures just in your imagination, or is it an intrusion into your mind by creatures of the Abyss? You're not sure. <br><br>Somehow though, no matter how wicked and perverse the things they do to you, you always end up longing for more. You lick your lips and shiver in a mix of anticipation and fear as you close your eyes, and let a new journey begin tonight.
+<<else>>
+Warmth, softness, comfort, letting your mind lazily drift through thoughts and dreams. That's what half of every day is like for you now. You don't remember it clearly most of the time, but it's so nice, and preferable to being awake most of the time. However, you are still getting a lot done in your waking hours. Razor focus often comes upon you, and you feel that your getting close to your purpose for coming down here. Then sleep begins to call you again. You understand why cats sleep so much now; it is glorious to those who can appreciate the peace it offers.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Sweet Dreams">>
+<<if $playerCurses.some(e => e.name === "Sleep Tight")>>
+Sleep calls to you once again. Soon you'll enter your dreams, where you'll be in the hands of those odd things the Abyss has conjured up. They'll do things to you. They'll warp and change your body to their desires. You'll be helpless before them, but they will satisfy both themselves and you. Their teeth, their claws, their tentacles and slime, their enormous barbed penises that spear into you again and again, their vaginas that suck you in and hold you there while they vibrate around you with malicious mirth... <br><br>You are their plaything, but even if they sometimes hurt you, it always feels sublime, and it's only a dream. The only real thing about them is the orgasms they'll rip from your body as you cry out during your slumber... or perhaps they're not as imaginary as you think. The Abyss can perform apparent miracles after all. Are these creatures just in your imagination, or is it an intrusion into your mind by creatures of the Abyss? You're not sure. <br><br>Somehow though, no matter how wicked and perverse the things they do to you, you always end up longing for more. You lick your lips and shiver in a mix of anticipation and fear as you close your eyes, and let a new journey begin tonight.
+<<else>>
+You try to keep going, you don't want those things to get you again. They lurk in your thoughts as sinister laughs and prideful snarls. The things they do to you when you fall asleep... Sleep.... You need to sleep. The last two days you've only gotten 4 hours a night, both nights you woke up screaming while also cumming all over yourself. The mix of terror and ecstasy left you confused and exhausted. <br><br>You don't want to be at the mercy of those things again, and yet... part of you is loving the things they do to you. You were cursed with Sweet Dreams, that has to be what's causing your strange nightmares, but... you're too tired. They're just dreams. You're a person. People can adapt. Part of you expects that you'll find a way to deal with this new reality the Curse has bestowed on you. <br><br>In truth, more than half your fear is of your own adaptation. What kind of person will you have to become to sleep peacefully through the night? Probably one who enjoys and accepts all the strange and bizarre ways that the creatures in your nightmares milk orgasms from you. You can't keep your eyes open any longer, you're just too tired. Maybe this time won't be so bad.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Crossdress Your Heart">>
+<<if $app.penisCor>=1>>
+Skirts, dresses, and billowy blouses with ruffles and lace. Panties, bras, and not a single pair of pants in sight. That's what you feel most comfortable in right now, as embarrassing as it may be to be seen like that, in very feminine attire, that's what feels right. You can deviate from it a little bit, but deviate too much and before long the Crossdress Your Heart Curse starts taking a hold of you and pushing you in the right direction once again. Your penis feels quite strange wrapped in a lace thong as you move around in your light pink sundress. <br><br>You feel constricted, knowing that you're going to have to dress like this or similarly for the rest of your life, but somehow, you also feel free, beautiful; like you're trapped, but that it's wonderful at the same time. So much artistry and care went into these clothes, and at the center of them is you. It makes a warm little special feeling light up in your chest. Is it the Curse making you feel this way, or is this what you always wanted to be forced into?
+<<else>>
+Recently you've been completely unable to wear bras, and your chest hangs free, unsupported and sometimes leaving a nipple poking through your shirt. Power suits, muscle shirts, loose fitting pants and boxers are what you feel most comfortable in now that the Crossdress Your Heart Curse has taken a hold of you. If you go swimming, you know that you'll only be able to wear a pair of swim trunks, nothing covering your upper body. If you try to veer towards clothes that are gender-neutral, the Curse takes hold and picks the most masculine thing you can think of. <br><br>You can't even wear pants tailored for women! Wear a belt. In one sense, many women have been cross-dressing semi-frequently for a very long time. In another sense though, you're taking that practice far further than most would dare. You're worried that if you actually tried to wear something feminine that the Curse would somehow leave you topless, wearing only a loincloth, and dripping in sweat. You only feel comfortable when you're wearing dark colors in masculine styles. You'll need to be mindful of the other Curses you have. The larger your breasts are, the more you're going to stand out, as none of these clothes are tailored to accommodate them very well.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Lie Detector">>
+The Lie Detector Curse has really messed with your ability to communicate. You used to be able to be polite and say things that were nice, even if they weren't entirely true. Now your true thoughts always shine through your words. Other people don't seem to consciously understand that the Abyss has helped them see through you, they just have keen instinct into what you mean. There are times though that before you would have told a lie to people who had no business asking you something. You used to tell half-truths, carefully phrased so that deception may have been involved, but you weren't really lying. Doing that now just results badly. "What aren't you telling me?" is the most common response when you say a half-truth. For some things it might not matter, but for others it does. You're going to have to get better at saying nothing. The silver lining to all this is that trust is deeper. People might not understand why they trust you when you're honest, why they feel like they understand you better, but they do. You're wearing your heart on your sleeve, but you think your heart isn't so bad, and at least some people will have an easier time appreciating you for who you really are.
+<<endif>>
+<<if $tempCurse.name == "Megadontia">>
+Your teeth are so much more imposing with the Megadontia Curse's influence on you. They're fantastic for ripping into meat, for grabbing things, and for intimidation, but they're really not suited to chewing vegetables or even talking without a slightly strange new accent. You've had to adjust the way you move your tongue in your mouth to avoid getting it caught on all these sharp teeth, and while you can definitely talk, but your voice just sounds... different. The way you pronounce things has changed, and your smiles are positively crocodilian. Almost all animals react to the sight of your many teeth that are so large and so sharp. Did you realize you would look like a natural carnivore when you took this Curse?
+<<endif>>
+<<if $tempCurse.name == "Lingual Leviathan">>
+Tongues are absolutely amazing. They're incredibly strong, ridiculously flexible, they heal quickly, and they're covered in sensitive taste buds. But your tongue though goes a bit overboard. When you extend it, it has 30 cm of controllable, prehensile reach. Because you're creative, you understand just how awesome this can be, however, the downsides are pretty obvious too. Talking normally has gotten a little trickier, since you just have so much tongue in your mouth! <br><br>You are also struck with an observation you'd never realized before: many of the animals with truly glorious tongues, like frogs, have lost their teeth. If your tongue is good enough, teeth sort of only become a hindrance and liability. Maybe the Abyss will offer you some way to replace yours with smooth ridges of bone... which would be very weird, but perhaps more practical. This much tongue though, it wants to be doing something. Just having it cramped up in your mouth all the time makes you restless. Perhaps you can put it to use on yourself or someone else who may want some oral attention.
+<<endif>>
+<<if $tempCurse.name == "Tipping the Scales">>
+You stretch out on a rock, and see the faint iridescence of your $curse54.variation scales. It's a big change from what your skin used to be like, and is a mark that some parts of your physical humanity have been consumed by the Abyss. There's no point mourning what is gone though, and your scales are magnificent. They make you feel tough and confident, plus they look quite attractive to anyone who is inclined towards them. They're only on the outside though, and the skin inside you is not armored like your exterior. The contrast draws even more of your focus onto anything that manages to get past your scaly armor.
+<<endif>>
+<<if $tempCurse.name == "Reptail">>
+Your large scaly tail drags on the ground behind you. You could hold it upright, but at the moment you're trying to look around, and it's much easier this way rather than needing to put the effort into holding it up. If you want to keep it above the ground, it's almost like standing on your tiptoes for long periods of time. <br><br>You also hadn't anticipated just how much the Reptail Curse would alter your center of balance! Your tail is marvelous, powerful, strong, delightfully armored in elegant scales, but it actually is pretty heavy with its thick and muscular shape. When the Abyss bestowed the Curse on you, there were some other subtle things that you felt changing in your backbone and pelvis. Your body rearranged itself to be able to cope with such a large addition, but when walking on two legs it means you need to lean forward much more to maintain your balance, but less so when you let your tail drag. This tail is going to come in handy for self-defense, and it's going to be amazing for swimming, but sometimes it can also be cumbersome and get in the way. Part of you thinks about how far forward you're frequently leaning, and how close your arms are to the ground, and wonders if it wouldn't be more practical to start using your hands to help you move forward, scurrying around like a lizard.
+<<endif>>
+<<if $tempCurse.name == "Cold Blooded">>
+Cold isn't painful, it isn't stressful, but a little bit makes you feel very lethargic, and a lot makes you fall into a peaceful, sleep-like state. Even your thoughts slow down in the cold. Ever since you obtained the Cold Blooded Curse your metabolism has been wildly different. Now that your body isn't wasting so much of the energy you get from food on making heat, you've theoretically got a lot more energy for other stuff and when you're warm you feel so powerful! You can run around, lunge with enormous force, and you feel like as long as you can get enough oxygen to your muscles you can just keep going. <br><br>In the cold though... well, sometimes it's nice and relaxing to be slow, sometimes it can help you rest, but if you even want to think clearly you have to drag yourself somewhere warmer. If you end up staying down here in the Abyss, you're going to want to take this into account. Some layers are going to be much more hospitable to you, while others are just going to be miserable.
+<<endif>>
+<<if $tempCurse.name == "Pleasure Respecification A">>
+<<if $playerCurses.some(e => e.name === "Pleasure Respecification B")>>
+Your ragged breathing is a sign of what the Abyss has done to you. You're so horny right now that you can't think. Every time you try to get yourself off, you get so close, so tanatlizingly close, but you're never quite able to achieve orgasm. Every time you're fucking somebody else, the same thing happens. The feeling of need just keeps building, but there's never any relief. You calm down a little, but has anyone ever been this sexually frustrated? <br><br>The terrible truth is dawning on you. Only the Abyss can give you what you need. There are Curses that force you to have an orgasm, that circumvent all other rules and logic. Curses that will give you what you need. That's your only salvation now. Seek out those Curses and achieve release through the twisted and perverse whims of the Abyss. It's either that or stay this desperately horny and frustrated for the rest of your life.
+<<else>>
+Touching yourself feels amazing, but the pleasurable haze that clouds your mind only culminates in release when you're being touched by someone else... or fucking them. It's incredibly frustrating. The Abyss has done so many things to tempt you down the path of sex addiction, but with all of that, now you can't even obtain temporary relief on your own. You "need" to be with somebody else, or tat least hat's how you feel right now. The intensity of carnal relations with another person has only grown now that it's your only source of release. You need to be pressed against them, cumming your brains out. Nothing else will satisfy you, and you're just so horny!
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Clothing Restriction C">>
+<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
+Oh gosh, you're perpetually naked now. No underwear, no clothes, no armor, just flashing everyone and everything all day long. If you're going to do anything but draw open-mouthed stares, you're going to have to get really good at using convincing body-paint, but even that won't work if anyone looks at you especially hard. Wherever you end up, this is going to have a big impact on your life. And there's no way to even unintentionally wear clothes, since the Curse makes them degrade immediately if you even attempt to get around it. <br><br>Maybe being naked isn't so bad, humans are the only creatures on the surface that wear clothes anyway. But when you think about everyone staring at your naked body, always, it conjures up a wild mix of emotions: embarrassment, fear, lust. If you live anywhere but a nudist colony, you're going to run afoul of a bunch of prudish people, or end up being followed by a bunch of horny people, let alone any laws you might be breaking!
+<<else>>
+Underwear is as much as you can ever wear now. You have a deep feeling in your gut that if you even tried to put on a swimsuit, the Curse you took would prevent it. No, your underwear needs to really be underwear, and everyone is able to see it all the time. How many situations is that going to be appropriate in? You can think of very few that aren't supposed to be intimate or private. <br><br>As you explore another layer of the Abyss, you look down at your underwear and feel very vulnerable. In this context, you look like you're either soliciting sexual interactions, or like you lost your clothes and are in a desperate situation. You're not sure which one is worse.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Massacre Manicure">>
+Your claws are magnificent, but aside from dishing out painful slashes and catching things, they're not especially practical. In some situations they can help with climbing, but only if they can dig into the surface and find a hold. There are many tasks that have become more difficult, including social interactions. Unsurprisngly, many react with a bit more trepidation to a hand covered in claws. <br><br>There are things you could do to hide them, but some of them make you instinctively fearful of the possibility of one of your claws getting stuck. You've already experienced that once and it was agonizing as you dug your claw out. And regardless, it's not like the Abyss lets you hide the effects of a Curse for long. <br><br>There are a number of small ways that these are going to change your habits, but when you were Cursed with these calws you knew there would be consequences. All things considered, you can deal with this, but it's one more way the Abyss has changed you. You sure hope the Relics are worth it.
+<<endif>>
+<<if $tempCurse.name == "S">>
+Sadism. <br><br>One of the cardinal vices. An attribute that has driven countless individuals into unspeakably evil acts. Yet, you are now one of the most adamant followers of sadistic pleasure. What does that say about you? <br><br>Yesterday you nearly had an orgasm from violently squashing a bug. Sex is just going to be boring if you're not making someone else feel pain. True masochists might enjoy the experience with you, but you're now too extreme for nearly anyone else to have a good time succumbing to your cruelty. Hunting has become an erotic sport for you, but any decent hunter would be appalled when you fail to stop yourself once you get your hands on the prey. The pleasure that suffuses your mind and body just feels so good. Are you turning into some kind of monster?
+<<endif>>
+<<if $tempCurse.name == "M">>
+Masochism. <br><br>Oh, why do you feel this way? The Curse, you suppose. It's so wrong, but you struggle to stop yourself now. <br><br>You're poking yourself just to feel better. When you get back to the surface, you're dreaming of covering your body in tattoos and piercing absolutely everywhere. Not so much because you want that appearance, but when you imagine the pain of a needle piercing your skin, you can hardly stop yourself from getting excited. When you think erotic thoughts, you think of being whipped, of hot wax dripping onto your skin, of being fucked so hard that you scream out from it. <br><br>This isn't healthy, but as you withdraw a fingernail from an indentation it was making on your arm you still find yourself wanting more. You restrain yourself for now. Wait, is the absence of pleasure sufficient pain that it will cause some kind of pleasure of its own? That paradox scrambles your brain for a bit. Are nuns and monks secretly masochistic perverts who get off on their own self-denial? That thought seems rather taboo and a little unlikely, but it also opens up a little window for another path you could walk to extract some positive feelings from what this Curse has done to you.
+<<endif>>
+<<if $tempCurse.name == "Hijinks Ensue" && $currentLayer <= 5>>
+You're not sure if the Abyss hates you, or if it's just trying to turn you into a naughty slut, but the Hijinks Ensue Curse has certainly gotten you into quite a few embarrassing situations. There was that guy you were walking past on the trail, when you tripped on a rock that hadn't been there a second before, and you flung out your arms for support, but the only thing they encountered were his pants! Somehow, his pants came unbuckled as if his belt wasn't even there, his pants and underwear slid down as you crashed into him, and you face-planted into his crotch with his improbably erect penis in your MOUTH! <br><br>You must have looked like some super-slutty ninja pulling that off, except you were just trying to walk down the trail! Then there was the tree-branch incident... actually, you don't want to think about that, it was just too embarrassing. Somehow, you think the Curse is helping you get out of some of the consequences, nudging things into not being dangerous or detrimental in the long term, except for the embarrassment, and the damage to your reputation.
+<<endif>>
+<<if $tempCurse.name == "Flower Power">>
+Having leaves and flowers for hair is actually pretty nice, except for the occasional bugs it attracts. You used to feel when something brushed against your hair by the nerves in your scalp, but hair is mostly dead cells, and your new floral coating is very much alive. Now, you can notice any time something brushes against your much more sensitive hair, and haircuts may not be the most pleasant experience, as you feel a pinch any time you break off one of your hairs. <br><br>The flowers might have been a bad idea. You always thought of them as pleasant, but you hadn't thought about how they're essentially plant sex organs waving around inviting every pollinator in the world to interact with them. You suspect that plants experience the process a bit differently from you, but when a bee is rustling against your stamens and drinking your nectar, it feels like a toned down version of sexual activity, only it's on your head. You also caught a caterpillar munching on the leaves on the back of your head. It was only briefly, and you experienced it more as discomfort than pain, but the indignity of it all. How dare that caterpillar presume so much as to munch on you! <br><br>Still, the gentle breeze beneath your leaves and flowers makes everything more relaxing. It's going to be a lot harder to live normally back on the surface like this, but overall you are enjoying the Flower Power Curse.
+<<endif>>
+<<if $tempCurse.name == "Cellulose">>
+If only the Cellulose Curse had included a bit more lignin, which is what makes plants more stiff and strong. If your skin was made of lignin you'd be more like a dryad, and dryads are awesome. They're so tough and hardly anyone is stupid enough to try to fight a dryad. <br><br>You though, your skin is made of cellulose, it's more supple, a bit more delicate, and while it's kind of nifty, you're pretty terrified of how flammable you are now. Still, your new skin isn't all bad. If you had to blend in with a bunch of foliage, you'd have much more success, without even needing to paint yourself in camo. <br><br>However, going back to the surface is going to be much more socially difficult now. The change might be superficial, but people are often focused on the superficial and other creatures are even starting to treat you more like you were a plant. You think that carnivores might ignore you, but you've suddenly realized that things like termites, giraffes, and even cows, are going to look at you like a buffet. You never thought you'd be afraid of a cow.... but some instinct of self-preservation is warning you that you shouldn't get too close to them.
+<<endif>>
+<<if $tempCurse.name == "Chlorophyll">>
+As the miasmic light shines against your skin, you feel rejuvenated. The Chlorophyll Curse changed you in some pretty fundamental ways. You now have chloroplasts within your cells, like a plant. Some biologist would surely love to examine what happened more closely, but this is just who you are now. <<if $hiredCompanions.some(e => e.name === "Saeko")>>Perhaps Saeko may want to examine you? She doesn't have her equipment, but you've noticed she has been looking at your more closely since your change. <<endif>>Your skin has taken on a greenish hue. Even your dreams are filled with visions of standing naked in sunny fields as a gentle wind rustles the grasses at your feet. <br><br>As long as you have light, water, and air, you feel profound peace suffusing you. The people and animals you once found so normal now seem just a bit strange to you. They just seem so agitated as they buzz about. You can still act like them, but there's now a part of you that asks if it wouldn't be nicer to slow down and bask in the light.
+<<endif>>
+<<if $tempCurse.name == "Pheromones">>
+Is that love in the air? Perhaps, or maybe it's just the aromatic cloud of pheromones that you have streaming out of you thanks to the Curse the Abyss bestowed on you. It's a very subtle change, except when it's not so subtle. You definitely could use this to your advantage if you wanted to, but your inability to turn it off also makes it a pretty clumsy tool for manipulation. <br><br>It's great if what you want is to have better sex, or take advantage of people, or be in the middle of a giant orgy. But if you want to be part of a group working on some task, you're going to need to stand downwind of everyone else, lest their bodies start distracting them from the task at hand. You'll have to test that, blowing your pheromones around. Are they magical in themselves, or has the Curse just made you produce more of something you were already producing?
+<<endif>>
+<<if $tempCurse.name == "Carapacian">>
+Your exoskeleton is just so cool. It's like being encased in shiny hardened latex in some ways. It protects you, but it doesn't really dull the sensations you experience. You feel... snug inside your new chitinous armor. You can still feel everything you brush against, indeed, it's almost like your nerves have compensated, and the sensations are even more acute. They just don't hurt unless something could pierce your outer layers. And there are other sensations, more internal. You feel... a bit squishier inside. You don't know what that means, but it feels fine, so you're going to just roll with it.
+<<endif>>
+<<if $tempCurse.name == "Hemospectrum">>
+Changing the color of your blood for 35 free corruption points? What an easy decisions. Now though, as you look at that small scrape you got earlier, and see the $curse70.variation blood that has dried into a scab, you can't help but think about how this marks you as very different to any other human who sees you bleed. <br><br>It's subtly changed the coloring in your eyes, of the veins beneath your skin, you feel... less human. If they see you bleed, won't other humans see you as less human too? They might be afraid of you. Frequently people fear what they don't understand, right? When you set off into the Abyss, you knew you'd be changed, but these subtle reminders about how you keep changing are warping your identity. What are you now?
+<<endif>>
+<<if $tempCurse.name == "Wriggly Antennae">>
+Your antennae might shock and initially creep out many people, but they also definitely boost your senses. Subtle changes in the air stand out to you in ways you never noticed before. They respond to your thoughts, but you're not very good at controlling them yet. Their sensitivity affects you in one way you hadn't expected though. Gently rubbing them arouses you, awakening a deep warmth within you and a desire for someone else to touch them. You don't know what's going on in your brain, or why your body is responding this way, but you get the feeling that sufficient stimulation of your antennae might just send you over the edge. It's a bit of an awkward realization.
+<<endif>>
+<<if $tempCurse.name == "Eggxellent">>
+Your eggs. <br><br>You hadn't really understood what laying eggs would be like before you obtained the Eggxellent Curse, but now... well, it's an intense experience. Not quite painful, but they are large enough where the sensation borders on pain. As you look down at the small pile of eggs that just came out of you, you realize this is a bigger change to your life than you'd anticipated. As you recover, the memory of how those large, smooth, slippery eggs felt as they came out of you clings in your mind. <br><br>Not just any eggs though, your eggs.
+<<endif>>
+<<if $tempCurse.name == "Pleasure Respecification B">>
+<<if $playerCurses.some(e => e.name === "Pleasure Respecification A")>>
+Your ragged breathing is a sign of what the Abyss has done to you. You're so horny right now that you can't think. Every time you try to get yourself off, you get so close, so tanatlizingly close, but you're never quite able to achieve orgasm. Every time you're fucking somebody else, the same thing happens. The feeling of need just keeps building, but there's never any relief. You calm down a little, but has anyone ever been this sexually frustrated? <br><br>The terrible truth is dawning on you. Only the Abyss can give you what you need. There are Curses that force you to have an orgasm, that circumvent all other rules and logic. Curses that will give you what you need. That's your only salvation now. Seek out those Curses and achieve release through the twisted and perverse whims of the Abyss. It's either that or stay this desperately horny and frustrated for the rest of your life.
+<<else>>
+Getting fucked feels amazing, but the pleasurable haze that clouds your mind only culminates in release when you're the one touching yourself. It's frustrating and a bit embarrassing when you can't finish with another person. In so many cultures masturbation is taboo, and while you're not ashamed of doing it, the fact that it's the only way you can get off now makes your cheeks burn hot. The Abyss has done so many things to tempt you down the path of sex addiction, but with all of that, now you can't even properly enjoy sex! When you took the Pleasure Respecification B Curse, you now realize that the Abyss was asking you "Hey, do you want to go fuck yourself?" and you responded with "oh yes, I want to be fucking myself all the time". Somehow, that thought has become more erotic than it once would have been. Tonight you'll slink off and masturbate alone, and it will feel so, so good.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Horny">>
+You always wondered why all the depictions of incubi and succubi that you'd seen just has them standing around looking pretty or using magic, or fighting like humans with extra agility. They always have those horns on their heads, but they never seem to use them like horns are supposed to be used, for goring or ramming. Well, now that you have your own thanks to the Horny Curse, you understand. They're not meant for fighting. They're essentially extra sexual organs that are sprouting out of your head. <br><br>You're pretty happy with how yours look, but you have to admit that aside from being a bold fashion choice, these horns are simply a liability. Maybe true incubi or succubi could draw sexual energy through them or something similar, but for you, twirling your fingers around the tips of them is enough to bring you to orgasm, and the same is true if you rub the shafts enough. The thought of ramming them into anything though... well that's too painful to consider. When you smacked them into a low hanging branch it briefly left you curled into a ball from the pain. Your new distinctive appearance is almost secondary to the sensitivity of your new appendages. It's a lot to take in, but maybe you'll get more used to it over time.
+<<endif>>
+<<if $tempCurse.name == "Drawing Spades">>
+Your spade-tipped demon tail is just so naughty. You can feel the sensations from it, but it really has a mind of its own. You once came across a rabbit that had just reached sexual maturity, and it tried to have sex with absolutely everything around it. You're wondering if your tail has a similar spirit. It wraps around other people, especially any you find attractive, and it finds its way into their clothing if you don't pay attention and consciously hold it back. When you're alone, it tries to do the same to you. <br><br>If you really focus, you can control it, but it's easy to get distracted and then it once again tries to stimulate you. It seems to cooperate when you're in need of navigating obstacles or dealing with danger, but the rest of the time it seems focused on how it can make the most mischief, generally of the sexual variety. It's really annoying! But some part of you wonders whether it's only responding to what you subconsciously desire.
+<<endif>>
+<<if $tempCurse.name == "Tattoo Tally">>
+You feel a mix of embarrassment, shame, and pride as you look at the ornate Tattoo Tally that's permanently inked into your abdomen. It's not the only tattoo left by the Curse, and it's the one that's easiest for you to cover up, but when you look at it, the details of every lewd thing you've ever done or experienced jump into your mind. The people and beings that glimpse your tattoos stare at you. Their expressions take on various shades of hunger, wide-eyed lust, disgust, and envy. When you're not trying to inspire any of these emotions, it's very inconvenient, but... part of you wonders what you really do want going forward. Perhaps those aren't necessarily bad emotions to inspire. When you look at the tattoos yourself, they bring many thoughts and memories to your mind, but arousal always comes with them.
+<<endif>>
+<<if $tempCurse.name == "Leaky">>
+You might need to consider getting some super absorbent sanitary pads, ones that you can change out every few hours. The leaky Curse isn't just keeping your crotch moist, it's dripping your juices down your legs. It's not entirely unpleasant, a gentle euphoric feeling accompanies your condition, and offsets the irritation the stickiness causes. <br><br>However, the way the few other explorers you have encountered since you took on this Curse have looked at you has been awkward at best. One seemed to think you were wetting yourself, another caught on to what was happening and started giving you very lurid looks. The worst part is, this constant leakiness is not relieving arousal, it just makes you constantly ready. Maybe the lurid looks you got were in equal part due to your own appareny desperation.
+<<endif>>
+<<if $tempCurse.name == "Wandering Hands">>
+Your naughty, naughty fingers seem to be on auto-pilot whenever you're not forcing them to do something else, and autopilot is apparently fondling you and touching yourself in lewd ways. How many times a day do you find your hands doing something naughty? The answer is: constantly. The Wandering Hands Curse is unrelenting, always trying to edge you into sex addiction. It doesn't matter what you're trying to do, start a fire, draw a map, discuss a plan with others, before you know if you've got at least one hand rubbing between your legs.
+<<endif>>
+<<if $tempCurse.name == "Urine Reamplification A">>
+Pee... why did you take a Curse that makes you have to pee all the time? You're still continent, you can control it, you can hold it, or that's what you tell yourself. In truth, having to find a place to pee every fifteen to thirty minutes is quite a nuisance, and you've had multiple accidents while sleeping. Down here, it's a nuisance, but there are plenty of trees and rocks. What about back on the surface though? You're afraid of the social ramifications to this Curse. You might even have to start wearing diapers.
+<<endif>>
+<<if $tempCurse.name == "Barter System">>
+These reality warping Curses always seem to surprise you. When you accepted the Barter System Curse you didn't quite see yourself giving three guys blowjobs so you could replace the pair of shoes that you brought with you that have finally worn out. Once upon a time, when you didn't have money, those with goods to sell would fold their arms and expect you to leave. Now, the Curse seems to make them go far out of their way to find some way that you can get what you want by doing enough sexual favors for them, their friends, their clients, their workers, and on and on. <br><br>You're pretty sure that before you obtained this Curse, none of those people would have been interested, and none would have been shameless enough to actually work through an elaborate exchange of goods, favors, and funds on your behalf just so that you could purchase what you wanted by being a massive whore. When you get back to the surface (if you get back) you're half-inclined to try to use this Curse to buy a house, or a mansion, or a country. You're just curious what would happen, but also afraid that it might work, but that when you involve that many people in a proposal, you can't just say "no" after everything is worked out. Would you be forced to be a sex slave for life in return for buying an estate?
+<<endif>>
+<<if $tempCurse.name == "Shared Space">>
+One of the reasons so many people love pets is that they feel like they have permission to pet them, to hold them, to snuggle with them whenever they feel like it. And ever since you obtaiined the Shared Space Curse, people treat you like that, with one crucial difference. People generally don't have any sexual interest in pets, but they definitely have sexual interest in you. <br><br>Somehow, the Curse makes it so that even as people put their hands all over you in very inappropriate ways, everyone watching treats it as normally as a person petting a cat. The people groping you don't even realize they're doing anything too forward. All their perceptions around you are altered. You struggle with the change, and how you feel about it. Is it really the fault of others that they're treating you in accordance with the Curse? Is this how you want to be treated? You're still not sure. However, as abrupt as the touches of others can be, they're normally kind enough, and sometimes quite pleasant.
+<<endif>>
+<<if $tempCurse.name == "Weakling">>
+Taking the Weakling Curse has made you keenly aware that you're absolutely unable to defend yourself. The only thing you could wrestle is an empty cardboard box, and even then probably only if it's wet. Anyone else you encounter, everything else you encounter, they aren't just stronger than you, they're comically stronger than you. More than that though, just moving all your stuff around has become far more difficult. <br><br>That carry weight limit that they kept talking about on the surface is very real, and yours is now very low. Even that is a struggle for you though. It's a weird feeling. You can move about just fine with your body, but every bit of weight added to your body feels like its weight has been magically augmented on an incredible scale. You'd have as much luck lifting a mountain as lifting another person. But you can climb things as easily as ever as long as you're not carrying too much extra stuff. You swear, you can almost hear the Abyss snicker when you forget about your own weakness and fail to pick up something that should be relatively trivial and struggle.
+<<endif>>
+<<if $tempCurse.name == "Random Orgasms">>
+When you took the Random Orgasms Curse, you hadn't expected just how disruptive it would be to your everyday life. The other day you were trying to scale a small cliff when a random orgasm racked your body and very nearly made you fall off the cliff face. Death by orgasm, that would have been pretty embarrassing. <br><br>You're certain that the social ramifications are going to be very awkward, but now, after the cliff incident, you find yourself approaching every task by first asking "What happens if I randomly orgasm while doing this?". As humiliating as your condition is, as scary as it makes some things, the euphoria you feel during these intense events is undeniable. Even as part of you fears the next toe curling orgasm that will hit you, another part craves it, and that part seems to be growing.
+<<endif>>
+<<if $tempCurse.name == "Creature of the Night">>
+<<if $playerCurses.some(e => e.name === "Clothing Restriction A") && $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+You truly are a creature of the night now, not so much because vampires can't shelter from the sun while still being out in the day, but because you took this Curse in conjunction with multiple clothing restriction Curses. Some people say that vampires can turn into bats, that's not true, or at least you can't (you tried) but then you realized it hardly matters because you were already total dingbat to pick this combination of Curses. You're not just a vampire, you're "the" naked vampire. Going out exclusively in the dark is going to be very inconvenient, especially given your new thirst for blood and the fact that you can't enter anyone's home unless they give you permission. You absolutely have to drink blood now, but wherever you end up living you're probably going to have to reach some consensual arrangements to satisfy your thirst. You shiver at the prospect of what others might demand from you in exchange for both their blood and keeping your secret. Unless you're lucky enough to get some incredible combination of relics that can turn you into a super-fast super-strong predator, consensual feeding is probably your only option to keep your thirst fulfilled.
+<<else>>
+When the Abyss gave you a Curse as straightforward as Creature of the Night, you were sure there had to be a catch. Become a vampire? That's rather straight forward, isn't it? Well, there sort of wasn't a catch, except that drinking blood feel amazing, and being without it for a long time is an agony that would drive you mad. Also you need to be very careful around the sun to make sure whatever clothing and accessories you have are adequately protecting you. Going forward, you think you have 2 options. You can either find some willing blood donors for you, which would put you in their debt and might put you in an awkward position, or you could become a transient, finding victims through surprise or guile getting a meal, and then moving on. Technically, you're not alive anymore, but semantics aside, it's up to you what kind of life you want to try to live.
+<<endif>>
+<<endif>>
+<<if $tempCurse.name == "Minish-ish">>
+<<if $hiredCompanions.length > 0>>
+Thank goodness you didn't come down here alone. Now that the Minish-ish Curse has reduced you to mouse-like size, you're relying on a companion to carry basically everything for you. There are advantages to being this small. You can squeeze into tiny little places... don't think about that too much. Your ability to move and jump might be lower than it once was in objective terms, but for your size, you can do some amazing stuff. You can jump more than your entire body height, since being light has its advantages. Still, yesterday you were tired of running and asked $hiredCompanions[0].name to carry you. Their hands felt so huge around you, but in an odd way, it was wonderfully comforting and exciting.
+<<else>>
+Oh no, this is a disaster. The Minish-ish Curse has left you so tiny and you came down here alone. You're going to have to act like a squirrel and run back and forth with individual food parcels and individual bottles of water, moving them from 1 pile to another, if you want to get anywhere while still keeping even your food with you. Some relics are now impossible for you to move! What are you going to do? More than that, you're afraid of just leaving your stuff in a pile. What if some one or something sees it and just helps itself? Burying your supplies really is starting to make a lot of sense in this context. If only you had somebody big to help you on this giant journey, but you don't. This is going to be very tough.>
+<<endif>>
+<<if $tempCurse.name == "Colossal-able">>
+It's not fair. You're huge. You should be able to move quickly, and you can, except the Abyss is so treacherous that everything is cramped. Cliff side paths you could once have walked along now are merely a crevice to put the first joint of your fingers in. Your body is tough enough to endure some of your new tribulations, but walking through a forest now means snapping dozens of tree branches with every step, or carefully lifting up your legs over the treetops and setting them down ahead of you (a process that still is not gentle for either you or the trees). Small trees are like prickly ground-cover to you, but large ones are like brambles that you have to wade through. Then there are cavern ceilings, which sometimes are low enough to force you to crawl or stop you altogether. <br><br>You could carry a small house in your hand, but ugh, everything is just so awkward now. There are some layers of the Abyss where you might feel comfortable taking up residence, and on the surface you'd be... very notable, but certainly able to stretch out. You're going to have to change the way you live life though. Your new size just doesn't match many of the skills you previously practiced.
 <<endif>>
 <</nobr>>
