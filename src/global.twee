@@ -1401,10 +1401,15 @@ How many dubloons would you like to pay back?
 		<<for $i = 0; $i < $tempTime; $i++>>
 			<<if $layer==1>>
 				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
-			<<elseif $layer==2>>
-				<<if $mudHunt == 1 && $items[20].count > 0>>
-					<<set $items[20].count -= $tempTime>>
-				<<elseif $mudHunt == 0>>
+			<<elseif $currentLayer==2>>
+				<<if $mudHunt == 1>>
+					<<if $slingshot == 1>>
+					<<elseif ($items[13].count > 0 && $items[20].count > 0>>
+						<<set $items[20].count -= 1>>
+					<<else>>
+						<<set $LibidoLog.push($ForageFoodMajor)>>
+					<<endif>>
+				<<else>>
 					<<set $LibidoLog.push($ForageFoodMajor)>>
 				<<endif>>
 			<<elseif $layer==3>>
@@ -1419,10 +1424,15 @@ How many dubloons would you like to pay back?
 		<</for>>
 	<<else>>
 		<<for $i = 0; $i < $tempTime; $i++>>
-			<<if $layer==2>>
-				<<if $mudHunt == 1 && $items[20].count > 0>>
-					<<set $items[20].count -= $tempTime>>
-				<<elseif $mudHunt == 0>>
+			<<if $currentLayer==2>>
+				<<if $mudHunt == 1>>
+					<<if $slingshot == 1>>
+					<<elseif ($items[13].count > 0 && $items[20].count > 0>>
+						<<set $items[20].count -= 1>>
+					<<else>>
+						<<set $lastFlan=$time+1>>
+					<<endif>>
+				<<else>>
 					<<set $lastFlan=$time+1>>
 				<<endif>>
 			<<elseif $layer==3>>
