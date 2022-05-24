@@ -1,10 +1,14 @@
 :: Layer3 1 [image layer3]
 <<nobr>>
 <<set $currentLayer = 3>>
-
+<<if $items[14].count > 0  || $cut == 1>>
+	<<set $timeRed -= 1>>
+<<endif>>
 <<set $timeL3T1 = 0>>
 <<set $timeL3T2 = 0>>
-
+<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+	<<set $timeRed += 1>>
+<<endif>>
 <<masteraudio stop>><<audio "layer3" volume 0.2 play loop>>
 <<set $forageWater = 0>>
 <</nobr>>
@@ -43,13 +47,6 @@ What do you want to do while you are here?
 <<elseif $layerTemp == 3>>
 <br><br>A few glowing crabs skitter in front of you and quickly dart into a hole in the wall. You notice what they're running from a moment after them as a small bundle of tentacles slides across the ground, reaching a long arm forward to grab one of the crabs. Once it has a hold of the crab, it seems to extend a number of tiny feeler tentacles that gently caress the crab over its entire body and over time work themselves into all of the crab's orifices. After a minute of infiltration, the tentacle blob turns around to where it came, crab in tow, and seems to be more leasuirely in its pace. Something inside you feels some empathy for that crab, given your own situation in the Abyss.<br><br>
 
-<<endif>>
-
-<<if $items[9].count > 0 && $torchUse == 0>>
-	<br>[[Use torches to ward of some threats at the cost of 1 torch per travel|Layer3 Hub][$torchUse = 1]]<br><br>
-<<endif>>
-<<if $torchUse == 1>>
-	<br>[[Stop using torches to ward of threats|Layer3 Hub][$torchUse = 0]]<br><br>
 <<endif>>
 
 <<if $forageWater == 0>>
@@ -181,236 +178,54 @@ As you wander through the semi-darkness by only the dimmest natural light, you b
 :: Layer3 Curses [image layer3]
 <<GenderCorrected>>[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 4-curses.png']]
 
-<<nobr>>
-<<set _table =  "<table>" >>
-<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dome">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Submissiveness Rectification A]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse25]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Gender Reversal C") || $StoredCurse.name == "Gender Reversal C">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Gender Reversal C]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse26]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness C" || $StoredCurse.name == "Shrunken Assets">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Asset Robustness C]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse27]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Clothing Restriction B") || $StoredCurse.name == "Clothing Restriction B">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Clothing Restriction B]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse28]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dome">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Power Dom]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse29]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "20/20000000") || $StoredCurse.name == "20/20000000">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on 20/20000000]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse30]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Comic Relief") || $StoredCurse.name == "Comic Relief">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Comic Relief]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse31]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Equal Opportunity") || $StoredCurse.name == "Equal Opportunity">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Equal Opportunity]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse32]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Absolute Pregnancy]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse33]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<set _pregCurse = $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
-<<if _pregCurse || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
-	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-	<<else>>
-	<<set _table += "<tr><td>[[Take on Absolute Birth Control]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse34]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if ($playerCurses.some(e => e.name === "Wacky Wombs") && $app.womb>1)|| ($playerCurses.some(e => e.name === "Wacky Wombs") && $StoredCurse.name == "Wacky Wombs") || ( $app.womb>1 && $StoredCurse.name == "Wacky Wombs") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Wacky Wombs]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse35]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Omnitool") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Omnitool" || $StoredCurse.name == "Absolute Birth Control">>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Omnitool]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse36]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Gooey") || $StoredCurse.name == "Gooey" >>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Gooey]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse37]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Rainbow Swirl") || $StoredCurse.name == "Rainbow Swirl" >>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Rainbow Swirl]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse38]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Double Pepperoni") || $StoredCurse.name == "Double Pepperoni" >>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Double Pepperoni]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse39]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<if $playerCurses.some(e => e.name === "Literal Blushing Virgin") || $StoredCurse.name == "Literal Blushing Virgin" >>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<else>>
-	<<set _table += "<tr><td>[[Take on Literal Blushing Virgin]]</td>">>
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		<<if $ManagedMisfortuneActive>>
-			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
-		<<else>>
-			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer3 Curses][$StoredCurse = $curse40]]</td></tr>">>
-		<<endif>>
-	<<else>>
-		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
-<<set _table +=  "</table>" >>
-<</nobr>>
-<<print _table>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom")>>
+	<<else>><<print "[[Take on Submissiveness Rectification A]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Gender Reversal C")>>
+	<<else>><<print "[[Take on Gender Reversal C]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
+	<<else>><<print "[[Take on Asset Robustness C]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
+	<<else>><<print "[[Take on Clothing Restriction B]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B")>>
+	<<else>><<print "[[Take on Power Dom]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "20/20000000")>>
+	<<else>><<print "[[Take on 20/20000000]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Comic Relief")>>
+	<<else>><<print "[[Take on Comic Relief]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Equal Opportunity")>>
+	<<else>><<print "[[Take on Equal Opportunity]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<else>><<print "[[Take on Absolute Pregnancy]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Absolute Birth Control") || $playerCurses.some(e => e.name === "Absolute Pregnancy")|| $playerCurses.some(e => e.name === "Wacky Wombs")|| $playerCurses.some(e => e.name === "Omnitool")>>
+	<<else>><<print "[[Take on Absolute Birth Control]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $app.womb > 1 || $playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<else>><<print "[[Take on Wacky Wombs]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Omnitool") || $playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<else>><<print "[[Take on Omnitool]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Gooey")>>
+	<<else>><<print "[[Take on Gooey]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Rainbow Swirl")>>
+	<<else>><<print "[[Take on Rainbow Swirl]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Double Pepperoni")>>
+	<<else>><<print "[[Take on Double Pepperoni]]">>
+<<endif>><</nobr>>
+<<nobr>><<if $playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
+	<<else>><<print "[[Take on Literal Blushing Virgin]]">>
+<<endif>><</nobr>>
 
 [[Allow the Abyss to bestow a random curse upon you|Layer3 Curses Random]]
 
@@ -437,14 +252,12 @@ You have already used the scales on your journey. You may not use them again.
 	Would you like to use the Skewed Shrine to give a curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, travel to the Skewed Shrine to transfer a curse" "Layer3 Skewed1a">>
 		<<set $tempTime = 3>>
-		/*<<include "Layer3Time">>*/
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+		<<include "Layer3Time">>
 	<</link>><br><br>
 	Would you like to use the Skewed Shrine to force a curse on one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, travel to the Skewed Shrine to force a curse" "Layer3 Skewed 2a">>
 		<<set $tempTime = 3>>
-		/*<<include "Layer3Time">>*/
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+		<<include "Layer3Time">>
 	<</link>><br><br>
 	<<elseif $skewedForced > 4>>
 	None of your companions trust you at this shrine. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
@@ -493,17 +306,16 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-
-	<<set $tempTime=6>>
-	<<include "GeneralTimeSetup">>
-	<<set $layerExitTime = $temptime>>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $layerExitTime = (Math.max(6 - $timeRed + $status.penalty, 0))>>
 <<endif>>
 
-<<include "GeneralTimeStats">>
 <<for $i = 0; $i < 99; $i++>>
-	<<set $tempTime=1>>
-	<<include "GeneralTimeStats">>	
-/* 		<<set $timeL3T1 += 1>>
+		<<set $timeL3T1 += 1>>
 	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
 		<<else>><<set $timeL3T2 += 1>>
 	<<endif>>
@@ -535,42 +347,52 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
 	<<endif>>
-	*/
 	<<set $layerExitTime -= 1>>
 	<<if $layerExitTime == 0>>
 		<<break>>
-		<<set $corruption -= (25 - $corRed)>>
-		<br>You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
-		<br><br>
-		<br>[[Return to the second layer|Layer2 Hub]]
 	<<endif>>
 
 	<<if $timeL3T1 > 5>>
 
-		<br>Out of nowhere, you notice a slimy tendril reaching towards you from the darkness in front of you. As it rapidly closes in on you, the fact that the only thing the tentacle is attached to is a mass of more tentacles becomes apparent, and it becomes clear what you're dealing with. It appears that you've caught the attention of a lesser tentacle beast.<br><br>
+<br>Out of nowhere, you notice a slimy tendril reaching towards you from the darkness in front of you. As it rapidly closes in on you, the fact that the only thing the tentacle is attached to is a mass of more tentacles becomes apparent, and it becomes clear what you're dealing with. It appears that you've caught the attention of a lesser tentacle beast.<br><br>
 
-		[[Deal with the lesser tentacle beast|Layer3 Threat1 Ascend]]<br>
+[[Deal with the lesser tentacle beast|Layer3 Threat1 Ascend]]<br>
 
 		<<break>>
 	<<endif>>
-
-	<<if $timeL3T2 > 4>>
+		<<if $timeL3T2 > 4>>
 		<br>As you wander through the semi-darkness by only the dimmest natural light, you bump into something wet. When you look down, you realize it's actually a transparent slime you didn't notice due to the dark! It seems like you've been caught by a slackslime.<br><br>
 
-		[[Deal with the slackslime|Layer3 Threat2 Ascend]]<br>
+[[Deal with the slackslime|Layer3 Threat2 Ascend]]<br>
 		<<break>>
 	<<endif>>
-
 <</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<if $items[14].count > 0 || $cut == 1>>
+	<<set $timeRed += 1>>
+<<endif>>
+<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+	<<set $timeRed -= 1>>
+<<endif>>
+<<set $corruption -= (25 - $corRed)>>
 <</nobr>>
+You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
+
+[[Return to the second layer|Layer2 Hub]]
+
+<<endif>>
+
+
 :: Layer3 Scales 1 [layer3]
 <<nobr>>
 <<set $temp = Math.round($corruption / 5)>>
 <<set $dubloons += $temp>>'
 <<set $scalesUsed = 1>>
 <<set $tempTime = 2>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
@@ -587,8 +409,7 @@ Once you pick them up, the luster of the scales fades, indicating that they will
 <<set $corruption += $temp>>
 <<set $scalesUsed = 1>>
 <<set $tempTime = 2>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
@@ -882,9 +703,48 @@ You have successfully taken on the $curse26.name curse. Hopefully you are ok wit
 :: Layer3 Flasks [layer3]
 <<nobr>>
 <<set $riverVisit = 1>>
-<<set $tempTime = (Math.max(3 -$abyssKnow, 0))>>
+<<if $status.duration > 0>>
+	<<set $status.duration -= 1>>
+	<<else>>
+	<<set $status.penalty = 0>>
+<<endif>>
+<<set $tempTime = (Math.max(4 - $timeRed + $status.penalty - $riverVisit -$abyssKnow, 0))>>
+<<set $timeL3 += $tempTime>>
+<<if $items[9].count < 1 && $items[10].count < 1 && !($ownedRelics.some(e => e.name === "Firmament Pigment"))>>
+	<<set $timeL3T2 += $tempTime>>
+<<endif>>
+<<set $timeL3T1 += $tempTime>>
+<<set $time += $tempTime>>
+<<if $forageFood == 0>>
+		<<set $items[1].count -= $tempTime>>
+	<<else>>
+		<<set $foodL3 += $tempTime>>
+		<<if $abyssKnow == 0>>
+			<<for $i = 0; $i < $tempTime; $i++>>
+				<<set $AgeLog.push($ForageFoodMajor)>>
+			<</for>>
+		<<else>>
+			<<for $i = 0; $i < $tempTime; $i++>>
+				<<set $AgeLog.push($ForageFoodMinor)>>
+			<</for>>
+		<<endif>>
+<<endif>>
+<<for $i = 0; $i < $tempTime; $i++>>
+	<<if $forageWater == 0>>
+		<<if $items[3].count > 0>>
+			<<set $items[3].count -= 1>>
+			<<set $items[2].count += 1>>
+		<<else>>
+			<<set $items[0].count -= 1>>
+		<<endif>>
+		<<else>>
+		<<set $waterL3 += 1>>
+	<<endif>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<<endif>>
+<</for>>
 
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 
 <<for $i = 0; $i < 999; $i++>>
 	<<if $items[2].count > 0>>
@@ -1271,15 +1131,19 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime = 6>>
-	<<include "GeneralTimeSetup">>
+	<<if $status.duration > 0>>
+		<<set $status.duration -= 1>>
+		<<else>>
+		<<set $status.penalty = 0>>
+	<<endif>>
+	<<set $layerExitTime = (Math.max(6 - $timeRed + $status.penalty, 0))>>
 <<endif>>
 
-<<for $layerExitTime=$tempTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-	/* 
+<<for $i = 0; $i < 99; $i++>>
+		<<set $timeL3T1 += 1>>
+	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+		<<else>><<set $timeL3T2 += 1>>
+	<<endif>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
 			<<set $items[3].count -= 1>>
@@ -1308,35 +1172,41 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
 	<<endif>>
-	*/
+	<<set $layerExitTime -= 1>>
+	<<if $layerExitTime == 0>>
+		<<break>>
+	<<endif>>
 
 	<<if $timeL3T1 > 5>>
 
-		<br>Out of nowhere, you notice a slimy tendril reaching towards you from the darkness in front of you. As it rapidly closes in on you, the fact that the only thing the tentacle is attached to is a mass of more tentacles becomes apparent, and it becomes clear what you're dealing with. It appears that you've caught the attention of a lesser tentacle beast.<br><br>
+<br>Out of nowhere, you notice a slimy tendril reaching towards you from the darkness in front of you. As it rapidly closes in on you, the fact that the only thing the tentacle is attached to is a mass of more tentacles becomes apparent, and it becomes clear what you're dealing with. It appears that you've caught the attention of a lesser tentacle beast.<br><br>
 
-		[[Deal with the lesser tentacle beast|Layer3 Threat1 Descend]]<br><br>
+[[Deal with the lesser tentacle beast|Layer3 Threat1 Descend]]<br><br>
 
 		<<break>>
 	<<endif>>
-	
-	<<if $timeL3T2 > 4>>
+		<<if $timeL3T2 > 4>>
 		<br>As you wander through the semi-darkness by only the dimmest natural light, you bump into something wet. When you look down, you realize it's actually a transparent slime you didn't notice due to the dark! It seems like you've been caught by a slackslime.<br><br>
 
-		[[Deal with the slackslime|Layer3 Threat2 Descend]]<br><br>
+[[Deal with the slackslime|Layer3 Threat2 Descend]]<br><br>
 		<<break>>
 	<<endif>>
-
 <</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+<<nobr>>
+<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
+	<<set $timeRed -= 1>>
+<<endif>>
+<<set $timeL4T1 = 0>>
 <</nobr>>
-<<if $layerExitTime == 0>>
-	<<nobr>>
-	<<set $timeL4T1 = 0>>
-	<</nobr>>
-	You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. But rather than the wet forest from above, you feel the air getting colder, and occasionally notice frost on the walls of the caves.
+You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. But rather than the wet forest from above, you feel the air getting colder, and occasionally notice frost on the walls of the caves.
 
-	Eventually you notice a bright, cool light at the end of the tunnel, it seems like you've made it to the end of the third layer.
+Eventually you notice a bright, cool light at the end of the tunnel, it seems like you've made it to the end of the third layer.
 
-	[[Emerge onto the fourth layer|Layer4 1]]
+[[Emerge onto the fourth layer|Layer4 1]]
+
 <<endif>>
 
 
@@ -1416,8 +1286,7 @@ The process lasts two days before the slime finally moves on and allows you to g
 <<set $ownedRelics.push($relic22)>>
 <<set $corruption -= ($relic22.corr - $corRed)>>
 <<set $tempTime = $relic22.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic22.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1433,8 +1302,7 @@ You can choose to start using this Relic to reduce the travel times to all futur
 <<set $ownedRelics.push($relic23)>>
 <<set $corruption -= ($relic23.corr - $corRed)>>
 <<set $tempTime = $relic23.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic23.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1448,8 +1316,7 @@ You have successfully taken the $relic23.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic24)>>
 <<set $corruption -= ($relic24.corr - $corRed)>>
 <<set $tempTime = $relic24.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic24.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1463,8 +1330,7 @@ You have successfully taken the $relic24.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic25)>>
 <<set $corruption -= ($relic25.corr - $corRed)>>
 <<set $tempTime = $relic25.time>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic25.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1478,8 +1344,7 @@ You have successfully taken the $relic25.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic26)>>
 <<set $corruption -= ($relic26.corr - $corRed)>>
 <<set $tempTime = $relic26.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic26.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1493,8 +1358,7 @@ You have successfully taken the $relic26.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic27)>>
 <<set $corruption -= ($relic27.corr - $corRed)>>
 <<set $tempTime = $relic27.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic27.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1510,8 +1374,7 @@ Perhaps this Relic could be useful to evade a predator that senses its prey base
 <<set $ownedRelics.push($relic28)>>
 <<set $corruption -= ($relic28.corr - $corRed)>>
 <<set $tempTime = $relic22.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic28.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1525,8 +1388,7 @@ You have successfully taken the $relic28.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic29)>>
 <<set $corruption -= ($relic29.corr - $corRed)>>
 <<set $tempTime = $relic29.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic29.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1540,8 +1402,7 @@ You have successfully taken the $relic29.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic30)>>
 <<set $corruption -= ($relic30.corr - $corRed)>>
 <<set $tempTime = $relic30.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic30.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1554,8 +1415,7 @@ You have successfully taken the $relic30.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic31)>>
 <<set $corruption -= ($relic31.corr - $corRed)>>
 <<set $tempTime = $relic31.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic31.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1570,8 +1430,7 @@ You have successfully taken the $relic31.name relic. Hopefully you can make good
 <<set $corruption -= ($relic32.corr - $corRed)>>
 <<set $cut = 1>>
 <<set $tempTime = $relic32.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic32.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1585,8 +1444,7 @@ You have successfully taken the $relic32.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic33)>>
 <<set $corruption -= ($relic33.corr - $corRed)>>
 <<set $tempTime = $relic33.time-$SibylBuff>>
-/*<<include "Layer3Time">>*/
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<include "Layer3Time">>
 <</nobr>>
 
 You have successfully taken the $relic33.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
@@ -1597,55 +1455,54 @@ You have successfully taken the $relic33.name relic. Hopefully you can make good
 
 :: Layer3 Curses Random
 <<nobr>>
-<<set _pregCurse = $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
 <<for $i = 0; $i < 999; $i++>>
 	<<set $temp1 = random(0,11) + 24>>
-	<<if ($temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dom") >>
+	<<if ($temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C") && $StoredCurse.name != "Gender Reversal C">>
+	<<if ($temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C")>>
 		<<break>>
 	<<endif>>
-	<<if $temp == 26 && !($playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness C" || $StoredCurse.name == "Shrunken Assets")>>
+	<<if $temp == 26 && !($playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B") && $StoredCurse.name != "Clothing Restriction B">>
+	<<if ($temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B")>>
 		<<break>>
 	<<endif>>
 	<<if ($temp1 == 28) && !(playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000") && $StoredCurse.name != "20/20000000">>
+	<<if ($temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief") && $StoredCurse.name != "Comic Relief">>
+	<<if ($temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity") && $StoredCurse.name != "Equal Opportunity">>
+	<<if ($temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control")>>
+	<<if ($temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 33) && !_pregCurse && !$playerCurses.some(e => e.name === "Absolute Birth Control") && $StoredCurse.name != "Absolute Birth Control">>
+	<<if ($temp1 == 33) && !($playerCurses.some(e => e.name === "Absolute Birth Control") || $playerCurses.some(e => e.name === "Absolute Pregnancy")|| $playerCurses.some(e => e.name === "Wacky Wombs")|| $playerCurses.some(e => e.name === "Omnitool"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 34) && !($app.womb > 1 || ($playerCurses.some(e => e.name === "Wacky Wombs") &&  $StoredCurse.name = "Wacky Wombs") ||$playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
+	<<if ($temp1 == 34) && !($app.womb > 1 || $playerCurses.some(e => e.name === "Absolute Birth Control"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || || $StoredCurse.name == "Omnitool" || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
+	<<if ($temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || $playerCurses.some(e => e.name === "Absolute Birth Control"))>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey") && $StoredCurse.name != "Gooey">>
+	<<if ($temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl") && $StoredCurse.name != "Rainbow Swirl">>
+	<<if ($temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni") && $StoredCurse.name != "Double Pepperoni">>
+	<<if ($temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin") && $StoredCurse.name != "Literal Blushing Virgin">>
+	<<if ($temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
 		<<break>>
 	<<endif>>
 
