@@ -980,7 +980,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				Please enter your new hair color:<br><br>
 
 				<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
-			<<elseif $playerCurses.some(e => e.name === "Fluffy Ears") && $curse17.variation=="">>
+			<<elseif $StoredCurse.name== "Fluffy Ears" && $curse17.variation=="">>
 
 				What type of ears would you like to gain?<br><br>
 
@@ -993,7 +993,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
 				<<radiobutton "$curse17.variation" "pig" >> Pig<br>
 				<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
-			<<elseif $playerCurses.some(e => e.name === "Fluffy Tail") && $curse18.variation=="">>
+			<<elseif $StoredCurse.name== "Fluffy Tail" && $curse18.variation=="">>
 
 				What type of tail would you like to gain?<br><br>
 
@@ -1006,7 +1006,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<radiobutton "$curse18.variation" "long mouse" >> Mouse<br>
 				<<radiobutton "$curse18.variation" "twisted pig" >> Pig<br>
 				<<radiobutton "$curse18.variation" "swaying horse" >> Horse<br>
-			<<elseif $playerCurses.some(e => e.name === "Maximum Fluff") && $curse19.variation=="">>
+			<<elseif $StoredCurse.name== "Maximum Fluff" && $curse19.variation=="">>
 				What type of fur would you like to gain?<br><br>
 
 				<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
@@ -1018,6 +1018,28 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse<br>
 				<<radiobutton "$curse19.variation" "pig-furred" >> Pig<br>
 				<<radiobutton "$curse19.variation" "horse-furred" >> Horse<br>
+
+			<<elseif ($StoredCurse.name== "Wacky Wombs" && $curse19.variation1=="" ) || ($StoredCurse.name== "Wacky Wombs" && $playerCurses.some(e=> e.name === "Wacky Wombs" ) && $curse19.variation2=="") >>
+				What is the location of the womb you would like to add?
+				<<if $app.womb==0>> 
+					<<radiobutton "$curse35.variation1" "throat" checked>> Throat
+					<<radiobutton "$curse35.variation1" "urethra" >> Urethra
+					<<radiobutton "$curse35.variation1" "anus" >> Anus
+					<<if $vagina > 0 >>
+						<<radiobutton "$curse35.variation1" "vagina" >> Vagina
+					<<endif>>
+				<<else>>
+					<<radiobutton "$curse35.variation2" "throat" checked>> Throat
+					<<radiobutton "$curse35.variation2" "urethra" >> Urethra
+					<<radiobutton "$curse35.variation2" "anus" >> Anus
+					<<if $vagina > 0 >>
+						<<radiobutton "$curse35.variation2" "vagina" >> Vagina
+					<<endif>>
+				<<endif>>
+			
+			<<elseif $StoredCurse.name== "Rainbow Swirl" && $curse39.variation=="">>
+				<<textbox "$curse38.variation" "pink" "Layer3 Curses">>
+
 			<<else>>
 				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
 					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
@@ -1334,40 +1356,54 @@ How many dubloons would you like to pay back?
 	<<set $status.penalty = 0>>
 <<endif>>
 
-<<if $layer==1>>
+<<if $currentLayer==1>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<set $timeL1 += $tempTime>>/* layer specific */
-<<elseif $layer==2>>
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+<<elseif $currentLayer==2>>
+	<<if $items[14].count > 0 || $cut == 1>>
+		<<set _cutRed = 1>>
+	<<else>>
+		<<set _cutRed = 0>>
+	<<endif>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _cutRed), 0))>>
 	<<set $timeL2 += $tempTime>>
 	<<if $items[1].count > 9>>
 		<<set $timeL2T1 += $tempTime>>
 	<<endif>>
-<<elseif $layer==3>>
-	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+<<elseif $currentLayer==3>>
+	<<if $items[9].count > 0 || $items[10].count > 0 || $light == 1>>
+		<<set _lightRed = 1>>
+	<<else>>
+		<<set _lightRed = 0>>
+	<<endif>>
+
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _lightRed), 0))>>
 	<<set $timeL3 += $tempTime>>
+	
 	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
 		<<else>><<set $timeL3T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL3T1 += $tempTime>>
-<<elseif $layer==4>>
+<<elseif $currentLayer==4>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<if $torchUse == 1 && $heat == 1>>
-			<<set $tempTime -= 2>>
-		<<elseif $items[9].count > 0 && $torchUse == 1>>
-			<<set $tempTime -= 2>>
-			<<set $items[9].count -= 1>>
+		<<set $tempTime -= 2>>
+	<<elseif $items[9].count > 0 && $torchUse == 1>>
+		<<set $tempTime -= 2>>
+		<<set $items[9].count -= 1>>
+	<<else>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
 	<<endif>>
 	<<set $timeL4 += $tempTime>>
 	<<set $timeL4T1 += $tempTime>>
-<<elseif $layer==5>>
+<<elseif $currentLayer==5>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
 	<<set $timeL5 += $tempTime>>
 	<<if ($items[0].count + $items[3].count) > 10>>
 		<<set $timeL5T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL5T1 += $tempTime>>
-<<elseif $layer==6>>
+<<elseif $currentLayer==6>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
 	<<set $timeL6 += $tempTime>>
 	<<set $hexflame += $tempTime>>
@@ -1375,7 +1411,7 @@ How many dubloons would you like to pay back?
 		<<set $timeL6T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL6T1 += $tempTime>>
-<<elseif $layer==7>>
+<<elseif $currentLayer==7>>
 	<<set $timeL7 += $tempTime>>
 	<<set $timeL7T2 += $tempTime>>
 	<<set $time += $tempTime>>
@@ -1393,45 +1429,116 @@ How many dubloons would you like to pay back?
 :: GeneralTimeStats
 <<nobr>>
 <<set $time += $tempTime>>
+<<if $currentLayer==1>>
+
+	<<set $timeL1 += $tempTime>>
+
+<<elseif $currentLayer==2>>
+
+	<<set $timeL2 += $tempTime>>
+	<<if $items[1].count > 9>>
+		<<set $timeL2T1 += 1>>
+	<<endif>>
+
+<<elseif $currentLayer==3>>
+
+	<<set $timeL3 += $tempTime>>
+	<<if $items[9].count > 0 && $torchUse == 1>>
+		<<set $items[9].count -= 1>>
+	<<elseif $items[9].count == 0 && $torchUse == 1>>
+		<<set $torchUse = 0>>
+	<<endif>>
+	<<set $timeL3T1 += 1>>
+	<<if $torchUse !=1 && $items[10].count < 1  && $light != 1 && !($ownedRelics.some(e => e.name === "Firmament Pigment"))>>
+		<<set $timeL3T2 += 1>>
+	<<endif>>
+	
+<<elseif $currentLayer==4>>
+
+	<<set $timeL4 += $tempTime>>
+	<<set $timeL4T1 += $tempTime>>
+
+<<elseif $currentLayer==5>>
+
+	<<set $timeL5 += $tempTime>>
+	<<if ($items[0].count + $items[3].count) > 10>>
+		<<set $timeL5T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL5T1 += $tempTime>>
+
+<<elseif $currentLayer==6>>
+
+	<<set $timeL6 += $tempTime>>
+	<<if $dubloons > 199>>
+		<<set $timeL6T2 += $tempTime>>
+	<<endif>>
+	<<set $timeL6T1 += $tempTime>>
+
+<<elseif $currentLayer==7>>
+
+	<<set $timeL7 += $tempTime>>
+	<<set $timeL7T2 += $tempTime>>
+	<<if $dubloons >= 300>>
+		<<set $dubloons -= 1>>
+		<<elseif $dubloons >= 100>>
+		<<set $dubloons -= 2>>
+		<<else>>
+		<<set $dubloons -= 3>>
+	<<endif>>
+
+<<endif>>
+
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 <<else>>
 	<<set $foodL1 += $tempTime>>
 	<<if $abyssKnow == 0>>
 		<<for $i = 0; $i < $tempTime; $i++>>
-			<<if $layer==1>>
+			<<if $currentLayer==1>>
 				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
-			<<elseif $layer==2>>
+			<<elseif $currentLayer==2>>
 				<<if $mudHunt == 1 && $items[20].count > 0>>
 					<<set $items[20].count -= $tempTime>>
 				<<elseif $mudHunt == 0>>
 					<<set $LibidoLog.push($ForageFoodMajor)>>
 				<<endif>>
-			<<elseif $layer==3>>
+			<<elseif $currentLayer==3>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
-			<<elseif $layer==4>>
-				<<set $HeightLog.push($ForageFoodMajor)>>
-			<<elseif $layer==5>>
+			<<elseif $currentLayer==4>>
+				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+					<<if $slingshot == 0>>
+						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+					<<endif>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMajor)>>
+				<<endif>>
+			<<elseif $currentLayer==5>>
 				<<set $crumbleFluid += (5 * $tempTime)>>
-			<<elseif $layer==6>>
+			<<elseif $currentLayer==6>>
 				<<set $foodL6 += $tempTime>>
 			<<endif>>
 		<</for>>
 	<<else>>
 		<<for $i = 0; $i < $tempTime; $i++>>
-			<<if $layer==2>>
+			<<if $currentLayer==2>>
 				<<if $mudHunt == 1 && $items[20].count > 0>>
 					<<set $items[20].count -= $tempTime>>
 				<<elseif $mudHunt == 0>>
 					<<set $lastFlan=$time+1>>
 				<<endif>>
-			<<elseif $layer==3>>
+			<<elseif $currentLayer==3>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
-			<<elseif $layer==4>>
-				<<set $HeightLog.push($ForageFoodMinor)>>
-			<<elseif $layer==5>>
+			<<elseif $currentLayer==4>>
+				<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
+					<<if $slingshot == 0>>
+						<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
+					<<endif>>
+					<<set $foodL4 += $tempTime>>
+					<<set $HeightLog.push($ForageFoodMinor)>>
+				<<endif>>
+			<<elseif $currentLayer==5>>
 				<<set $crumbleFluid += $tempTime>>
-			<<elseif $layer==6>>
+			<<elseif $currentLayer==6>>
 				<<set $foodL6 += $tempTime>>
 			<<endif>>
 		<</for>>	
@@ -1449,20 +1556,20 @@ How many dubloons would you like to pay back?
 		<<set $waterL1 += 1>>
 		<<if $abyssKnow == 0>>
 			<<for $i = 0; $i < $tempTime; $i++>>
-				<<if $layer==1>>
+				<<if $currentLayer==1>>
 					<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
-				<<elseif $layer==2>>
+				<<elseif $currentLayer==2>>
 					<<set $bewitchBabies += 1>>
-				<<elseif $layer==3>>
+				<<elseif $currentLayer==3>>
 					<<set $waterL2 += 1>>
-				<<elseif $layer==4>>
+				<<elseif $currentLayer==4>>
 					<<set $waterL4 += 1>>
 					<<if $abyssKnow == 0>>
 						<<set $algalSize += 1>>
 					<<endif>>
-				<<elseif $layer==5>>	
+				<<elseif $currentLayer==5>>	
 					<<set $waterL5 += 1>>
-				<<elseif $layer==6>>
+				<<elseif $currentLayer==6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
 						<<set $hexflame += 1>>
@@ -1495,6 +1602,7 @@ How many dubloons would you like to pay back?
 <</for>>
 <<set $tempTimeFixed=0>>
 <</nobr>>
+
 :: Curse Descriptions
 <<nobr>>
 <<set $temp = random(0,$playerCurses.length - 1)>>
