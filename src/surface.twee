@@ -1157,18 +1157,18 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 <<endif>>
 
 
-:: Surface Inn [surface]
+:: Surface Inn [surface noreturn]
 
 [img[setup.ImagePath+'Surface/Inn Room.png']]
 
 <<nobr>>
-<<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1)>>
+<<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1) && $comBalloon == 0>>
 	<br><br>Due to your inn pass, you're able to eat and drink your fill, overcoming any deficits you've built up over time after you visit the Inn.<br><br>
 	<<set $items[0].count = Math.max($items[0].count, 0)>>
 	<<set $items[1].count = Math.max($items[1].count, 0)>>
 <<endif>>
 
-<<if $innUsed != $time>>
+<<if $innUsed != $time && $comBalloon == 0>>
 You can eat and drink enough to make yourself extra full and save a day of food and water on your travels. <br><br>
 	[[Eat and drink the delicious food and drink|Surface Inn][$items[0].count += 1, $items[1].count += 1, $innUsed = $time]]
 <<else>>
@@ -1178,11 +1178,11 @@ You can store any of your dubloons here, in case you'd like to pick them up late
 <<textbox "$temp" "0">>
 [[Stash your dubloons|Surface Inn][$dubloons -= parseInt($temp), $innDubloons += parseInt($temp)]]
 
-<endif>><<if $innDubloons > 0>><
+<<endif>><<if $innDubloons > 0>><
 You can retrieve all of the dubloons you have stored in your inn room. You currently have $innDubloons stored here.
 [[Retrieve your dubloons|Surface Inn][$dubloons += $innDubloons, $innDubloons = 0]]
 
-<endif>><<if $innRelics.length > 0>>
+<<endif>><<if $innRelics.length > 0>>
 You can pick up any of the Relics you've previously stored in your inn room:
 
 <<nobr>><<for $i = 0; $i < $ownedRelics.length; $i++>>
@@ -1218,7 +1218,11 @@ Choose a relic you would like to store here at the inn:
 <<endif>>
 <</nobr>>
 
+<<if $comBalloon == 0>>
 [[Return to Outset Town|Surface Hub]]
+<<else>>
+[[Continue using the commerce balloon|Commerce Balloon]]
+<<endif>>
 
 
 :: Surface Admin [surface]
