@@ -164,15 +164,35 @@ If you decide to start foraging for food or water, it means that you will not re
 
 <<nobr>>
 <<if $forageFood == 0>>
-	<<print "[[Start foraging for Crumbleweed for food|Layer5 Forage][$forageFood = 1]]">><br>
+	<<print "[[Start foraging for Crumbleweed for food|Layer5 Forage][$forageFood = 1]]">><br><br>
 	<<else>>
-	<<print "[[Stop foraging for food|Layer5 Forage][$forageFood = 0]]">><br>
+	<<print "[[Stop foraging for food|Layer5 Forage][$forageFood = 0]]">><br><br>
 <<endif>>
 <<if $items[2].count > 0>>
-[[Fill your empty flasks with water from an Oasis|Layer5 Flasks]]<br>
+[[Fill your empty flasks with water from an Oasis|Layer5 Flasks]]<br><br>
 <<else>>
-You need empty flasks to fill them with water from the Oasis.<br>
+You need empty flasks to fill them with water from the Oasis.<br><br>
 <<endif>>
+You can also wait at the Oasis if you'd like to pass the time while waiting for something. How many days would you like to wait at the oasis?<br>
+<<textbox "$temp" "0">>
+<<nobr>><<link "Wait" "Layer5 Forage">>
+	<<if $items[2].count + $items[3].count >= 5>>
+		<<for $i = 0; $i < 999; $i++>>
+			<<if $items[2].count > 0>>
+				<<set $items[3].count += 1>>
+				<<set $items[2].count -= 1>>
+				<<set $waterL5 += 1>>
+			<<else>>
+				<<break>>
+			<<endif>>
+	<<else>>
+		<<set $items[3].count = $items[2].count + $items[3].count>>
+		<<set $items[2].count = 0>>
+		<<set $items[0].count += (5 - $items[3].count)>>
+	<<endif>>
+	<<set $tempTime = parseInt($temp)>>
+	<<include "GeneralTimeStats">>
+<</link>><br><br><</nobr>>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer5 Hub]]
@@ -1170,8 +1190,12 @@ You can also utilize your Superpositional Skewer to sync with your commerce ball
 :: Layer5 Vault [layer5]
 [img[setup.ImagePath+'Wonders/miragevault.png']]
 <<nobr>>
-<<set $tempTime = 3>>
-<<include "Layer5Time">>
+<<if $vaultWait == 0>>
+	<<set $tempTime = 3>>
+	<<include "Layer5Time">>
+<<else>>
+	<<set $vaultWait = 0>>
+<<endif>>
 <<if $vaultTimer == 0>>
 <<set $vaultTimer = $time>>
 <br><br> You touch your hand against the ancient door and the number 60 appears on it, as if there was either a very high-resolution LCD inside the glass or some magic inside it had awakened by your touch.
@@ -1179,6 +1203,14 @@ You can also utilize your Superpositional Skewer to sync with your commerce ball
 <</nobr>>
 <<if (60 - $time + $vaultTimer) > -6>>
 The timer on the door reads <<print (60 - $time + $vaultTimer)>>.
+
+You can wait here for a while if you'd like to check when the door is open. If you'd like to wait, enter the number of days you'd like to wait and choose to wait.
+<<textbox "$temp" "0">>
+<<nobr>><<link "Wait" "Layer5 Vault">>
+	<<set $tempTime = parseInt($temp)>>
+	<<set $vaultWait = 1>>
+	<<include "GeneralTimeStats">>
+<</link>><br><br><</nobr>>
 
 <<if (60 - $time + $vaultTimer) > 0>>
 The door remains locked. You must wait until the timer is between 0 and -5 for it to open and reveal the treasures within.
