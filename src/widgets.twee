@@ -843,7 +843,7 @@
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
 <<HeightCorrected>>
-<<set $totalCarry -= $carryWeight>>
+/*<<set $totalCarry -= $carryWeight>>*/
 
 <<if $playerCurses.some(e => e.name === "Weakling")>>
 	<<set $ocarryWeight = 7.5>>
@@ -863,7 +863,37 @@
 		<<endif>>
 	<<endif>>
 <</for>>
-<<set $totalCarry += $carryWeight>>
+
+<<set $totalCarry = $carryWeight>>
+
+<<if $hiredCompanions.some(e=> e.name === 'Maru')>>
+	<<set $totalCarry += $companionMaru.carry>>
+<<endif>>
+
+<<if $hiredCompanions.some(e=> e.name === 'Lily')>>
+	<<set $totalCarry += $companionLily.carry>>
+	<<if $LilyConvo1==true>>
+		<<set $totalCarry += 5>>
+	<<endif>>
+<<endif>>
+
+<<if $hiredCompanions.some(e=> e.name === 'Khemia')>>
+	<<set $totalCarry += $companionKhemia.carry>>
+<<endif>>
+
+<<if $hiredCompanions.some(e=> e.name === 'Cherry')>>
+	<<set $totalCarry += $companionCherry.carry>>
+<<endif>>
+
+<<if $hiredCompanions.some(e=> e.name === 'Cloud')>>
+	<<set $totalCarry += $companionCloud.carry>>
+<<endif>>
+
+<<if $hiredCompanions.some(e=> e.name === 'Saeko')>>
+	<<set $totalCarry += $companionSaeko.carry>>
+<<endif>>
+
+
 <<set $temp1 = 0>><<set $temp2 = 0>>
 <<for $i = 0; $i < $items.length; $i++>>
 		<<set _temp1 += ($items[$i].weight * $items[$i].count)>>
