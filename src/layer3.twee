@@ -485,11 +485,9 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<set $layerExit = 1>>
 	<<set $tempTime=6>>
 	<<include "GeneralTimeSetup">>
-	<<set $layerExitTime = $tempTime>>
 <<endif>>
 
-<<include "GeneralTimeStats">>
-<<for $i = 0; $i < 99; $i++>>
+<<for $layerExitTime=$tempTime; $layerExitTime >0; $layerExitTime-->>
 	<<set $tempTime=1>>
 	<<include "GeneralTimeStats">>	
 /* 		<<set $timeL3T1 += 1>>
@@ -525,14 +523,6 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 		<<set $hexflame -= 1>>
 	<<endif>>
 	*/
-	<<set $layerExitTime -= 1>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-		<<set $corruption -= (25 - $corRed)>>
-		<br>You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
-		<br><br><<include "Curse Descriptions">><br><br>
-		<br>[[Return to the second layer|Layer2 Hub]]
-	<<endif>>
 
 	<<if $timeL3T1 > 5>>
 
@@ -551,6 +541,13 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<endif>>
 
 <</for>>
+<<if $layerExitTime == 0>>
+	<<break>>
+	<<set $corruption -= (25 - $corRed)>>
+	<br>You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
+	<br><br><<include "Curse Descriptions">><br><br>
+	<br>[[Return to the second layer|Layer2 Hub]]
+<<endif>>
 <</nobr>>
 :: Layer3 Scales 1 [layer3]
 <<nobr>>
