@@ -1360,7 +1360,6 @@ How many dubloons would you like to pay back?
 
 <<if $currentLayer==1>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-	<<set $timeL1 += $tempTime>>/* layer specific */
 <<elseif $currentLayer==2>>
 	<<if $items[14].count > 0 || $cut == 1>>
 		<<set _cutRed = 1>>
@@ -1368,24 +1367,13 @@ How many dubloons would you like to pay back?
 		<<set _cutRed = 0>>
 	<<endif>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _cutRed), 0))>>
-	<<set $timeL2 += $tempTime>>
-	<<if $items[1].count > 9>>
-		<<set $timeL2T1 += $tempTime>>
-	<<endif>>
 <<elseif $currentLayer==3>>
 	<<if $items[9].count > 0 || $items[10].count > 0 || $light == 1>>
 		<<set _lightRed = 1>>
 	<<else>>
 		<<set _lightRed = 0>>
 	<<endif>>
-
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _lightRed), 0))>>
-	<<set $timeL3 += $tempTime>>
-	
-	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
-		<<else>><<set $timeL3T2 += $tempTime>>
-	<<endif>>
-	<<set $timeL3T1 += $tempTime>>
 <<elseif $currentLayer==4>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 	<<if $torchUse == 1 && $heat == 1>>
@@ -1394,36 +1382,14 @@ How many dubloons would you like to pay back?
 		<<set $tempTime -= 2>>
 		<<set $items[9].count -= 1>>
 	<<else>>
-		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded")>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>>
 	<<endif>>
-	<<set $timeL4 += $tempTime>>
-	<<set $timeL4T1 += $tempTime>>
 <<elseif $currentLayer==5>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
-	<<set $timeL5 += $tempTime>>
-	<<if ($items[0].count + $items[3].count) > 10>>
-		<<set $timeL5T2 += $tempTime>>
-	<<endif>>
-	<<set $timeL5T1 += $tempTime>>
 <<elseif $currentLayer==6>>
 	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool), 0))>>
-	<<set $timeL6 += $tempTime>>
-	<<set $hexflame += $tempTime>>
-	<<if $dubloons > 199>>
-		<<set $timeL6T2 += $tempTime>>
-	<<endif>>
-	<<set $timeL6T1 += $tempTime>>
 <<elseif $currentLayer==7>>
-	<<set $timeL7 += $tempTime>>
-	<<set $timeL7T2 += $tempTime>>
-	<<set $time += $tempTime>>
-	<<if $dubloons >= 300>>
-		<<set $dubloons -= 1>>
-		<<elseif $dubloons >= 100>>
-		<<set $dubloons -= 2>>
-	<<else>>
-		<<set $dubloons -= 3>>
-	<<endif>>
+	<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10))), 0))>>
 <<endif>>
 
 <</nobr>>
@@ -1475,6 +1441,7 @@ How many dubloons would you like to pay back?
 		<<set $timeL6T2 += $tempTime>>
 	<<endif>>
 	<<set $timeL6T1 += $tempTime>>
+	<<set $hexflame += $tempTime>>
 
 <<elseif $currentLayer==7>>
 
