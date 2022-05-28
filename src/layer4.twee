@@ -208,54 +208,236 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 :: Layer4 Curses [image layer4]
 <<GenderCorrected>>[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-curses.png']]
 
-<<nobr>><<if $playerCurses.some(e => e.name === "Libido Reinforcement C")>>
-	<<else>><<print "[[Take on Libido Reinforcement C]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
-	<<else>><<print "[[Take on Lactation Rejuvination A]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets")>>
-	<<else>><<print "[[Take on Asset Robustness D]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Age Reduction B")>>
-	<<else>><<print "[[Take on Age Reduction B]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Sleep Tight")>>
-	<<else>><<print "[[Take on Sleep Tight]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Sweet Dreams")>>
-	<<else>><<print "[[Take on Sweet Dreams]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Hypno Happytime")>>
-	<<else>><<print "[[Take on Hypno Happytime]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || ($playerCurses.some(e => e.name === "Clothing Restriction B") && $playerCurses.some(e => e.name === "Clothing Restriction C"))>>
-	<<else>><<print "[[Take on Crossdress Your Heart]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Lie Detector")>>
-	<<else>><<print "[[Take on Lie Detector]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Megadontia")>>
-	<<else>><<print "[[Take on Megadontia]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Softie") || $playerCurses.some(e => e.name === "Hard Mode")>>
-	<<else>><<print "[[Take on Softie]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Softie") || $playerCurses.some(e => e.name === "Hard Mode")>>
-	<<else>><<print "[[Take on Hard Mode]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>
-	<<else>><<print "[[Take on Lingual Leviathan]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
-	<<else>><<print "[[Take on Tipping the Scales]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Reptail")>>
-	<<else>><<print "[[Take on Reptail]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Cold Blooded")>>
-	<<else>><<print "[[Take on Cold Blooded]]">>
-<<endif>><</nobr>>
+<<set _clothCurse = $playerCurses.some(e => e.name === "Clothing Restriction B") || $playerCurses.some(e => e.name === "Clothing Restriction C") || $StoredCurse.name == "Clothing Restriction B" || $StoredCurse.name == "Clothing Restriction C">>
+<<nobr>>
+<<set _table =  "<table>" >>
+<<if $playerCurses.some(e => e.name === "Libido Reinforcement C")  || $StoredCurse.name == "Libido Reinforcement C" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Libido Reinforcement C]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse41]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $StoredCurse.name == "Lactation Rejuvination A">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Lactation Rejuvination A]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse42]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness D" || $StoredCurse.name == "Shrunken Assets">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Asset Robustness D]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse43]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Age Reduction B") || $StoredCurse.name == "Age Reduction B">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Age Reduction B]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse44]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Sleep Tight")  $StoredCurse.name == "Sleep Tight" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Sleep Tight]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse45]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Sweet Dreams") || $StoredCurse.name == "Sweet Dreams">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Sweet Dreams]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse46]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Hypno Happytime") || $StoredCurse.name == "Hypno Happytime">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Hypno Happytime]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse47]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || $StoredCurse.name == "Crossdress Your Heart" || $StoredCurse.name == "Futa Fun" || _clothCurse>>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Equal Opportunity]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse48]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Lie Detector") || $StoredCurse.name == "Lie Detector" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Lie Detector]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse49]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Megadontia") || $StoredCurse.name == "Megadontia">>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+	<<else>>
+	<<set _table += "<tr><td>[[Take on Megadontia]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse50]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Softie") || $playerCurses.some(e => e.name === "Hard Mode") || $StoredCurse.name == "Softie" || $StoredCurse.name == "Hard Mode">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Softie]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse51]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Softie") || $playerCurses.some(e => e.name === "Hard Mode") || $StoredCurse.name == "Softie" || $StoredCurse.name == "Hard Mode">>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Hard Mode]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse52]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Lingual Leviathan") || $StoredCurse.name == "Lingual Leviathan" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Lingual Leviathan]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse53]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Tipping the Scales") || $StoredCurse.name == "Tipping the Scales" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Tipping the Scales]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse54]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Reptail") || $StoredCurse.name == "Reptail" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Reptail]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse55]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<if $playerCurses.some(e => e.name === "Cold Blooded") || $StoredCurse.name == "Cold Blooded" >>
+<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<else>>
+	<<set _table += "<tr><td>[[Take on Cold Blooded]]</td>">>
+	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+		<<if $ManagedMisfortuneActive>>
+			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
+		<<else>>
+			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer4 Curses][$StoredCurse = $curse56]]</td></tr>">>
+		<<endif>>
+	<<else>>
+		<<set _table += "</tr>">>
+	<<endif>>
+<<endif>>
+<<set _table +=  "</table>" >>
+<</nobr>>
+<<print _table>>
 
 [[Allow the Abyss to bestow a random curse upon you|Layer4 Curses Random]]
 
@@ -1343,54 +1525,55 @@ You have a single chance to bend fate using the mystical luck of the Devil's Own
 
 :: Layer4 Curses Random
 <<nobr>>
+<<set _clothCurse = $playerCurses.some(e => e.name === "Clothing Restriction B") || $playerCurses.some(e => e.name === "Clothing Restriction C") || $StoredCurse.name == "Clothing Restriction B" || $StoredCurse.name == "Clothing Restriction C">>
 <<for $i = 0; $i < 999; $i++>>
 	<<set $temp1 = random(0,15) + 40>>
-	<<if ($temp1 == 40) && !($playerCurses.some(e => e.name === "Libido Reinforcement C"))>>
+	<<if ($temp1 == 40) && !$playerCurses.some(e => e.name === "Libido Reinforcement C") && $StoredCurse.name != "Libido Reinforcement C">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 41) && !$playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
+	<<if ($temp1 == 41) && !$playerCurses.some(e => e.name === "Lactation Rejuvination A") && $StoredCurse.name != "Lactation Rejuvination A">>
 		<<break>>
 	<<endif>>
-	<<if $temp == 42 && !($playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets"))>>
+	<<if $temp == 42 && !($playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name != "Asset Robustness D" || $StoredCurse.name != "Shrunken Assets")>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 43) && !$playerCurses.some(e => e.name === "Age Reduction B")>>
+	<<if ($temp1 == 43) && !$playerCurses.some(e => e.name === "Age Reduction B") && $StoredCurse.name != "Age Reduction B">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 44) && !(playerCurses.some(e => e.name === "Sleep Tight"))>>
+	<<if ($temp1 == 44) && !playerCurses.some(e => e.name === "Sleep Tight") && $StoredCurse.name != "Sleep Tight">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 45) && !$playerCurses.some(e => e.name === "Sweet Dreams")>>
+	<<if ($temp1 == 45) && !$playerCurses.some(e => e.name === "Sweet Dreams") && $StoredCurse.name != "Sweet Dreams">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 46) && !$playerCurses.some(e => e.name === "Hypno Happytime")>>
+	<<if ($temp1 == 46) && !$playerCurses.some(e => e.name === "Hypno Happytime") && $StoredCurse.name != "Hypno Happytime">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 47) && !($playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || ($playerCurses.some(e => e.name === "Clothing Restriction B") && $playerCurses.some(e => e.name === "Clothing Restriction C")))>>
+	<<if ($temp1 == 47) && !($playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || $StoredCurse.name == "Crossdress Your Heart" || $StoredCurse.name == "Futa Fun" || _clothCurse )>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 48) && !($playerCurses.some(e => e.name === "Lie Detector"))>>
+	<<if ($temp1 == 48) && !$playerCurses.some(e => e.name === "Lie Detector") && $StoredCurse.name != "Lie Detector">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 49) && !($playerCurses.some(e => e.name === "Megadontia"))>>
+	<<if ($temp1 == 49) && !$playerCurses.some(e => e.name === "Megadontia") && $StoredCurse.name != "Megadontia">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 50) && !($app.womb > 1 || $playerCurses.some(e => e.name === "Softie"))>>
+	<<if ($temp1 == 50) && $playerCurses.some(e => e.name === "Softie") && $StoredCurse.name != "Softie">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 51) && !($playerCurses.some(e => e.name === "Hard Mode"))>>
+	<<if ($temp1 == 51) && !$playerCurses.some(e => e.name === "Hard Mode") && $StoredCurse.name != "Hard Mode">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 52) && !$playerCurses.some(e => e.name === "Lingual Leviathan")>>
+	<<if ($temp1 == 52) && !$playerCurses.some(e => e.name === "Lingual Leviathan") && $StoredCurse.name != "Lingual Leviathan">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 53) && !$playerCurses.some(e => e.name === "Tipping the Scales")>>
+	<<if ($temp1 == 53) && !$playerCurses.some(e => e.name === "Tipping the Scales") && $StoredCurse.name != "Tipping the Scales">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 54) && !$playerCurses.some(e => e.name === "Reptail")>>
+	<<if ($temp1 == 54) && !$playerCurses.some(e => e.name === "Reptail") && $StoredCurse.name != "Reptail">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 55) && !$playerCurses.some(e => e.name === "Cold Blooded")>>
+	<<if ($temp1 == 55) && !$playerCurses.some(e => e.name === "Cold Blooded") && $StoredCurse.name != "Cold Blooded">>
 		<<break>>
 	<<endif>>
 
