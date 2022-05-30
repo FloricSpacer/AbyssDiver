@@ -132,57 +132,44 @@ Would you like to go back to before you were in debt without a creditor, like Cl
 <<endif>>
 
 
-:: Surface Shop 1 [image surface]
-<<CarryAdjust>>\
-Here are the items available for your to spend your $dubloons dubloons on.
+:: Surface Shop 1 [surface shop nobr]
 
-Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.
+<<CarryAdjust>>
 
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 1-items.png']]
+<p>Here are the items available for your to spend your $dubloons dubloons on.</p>
 
-[[Buy Water]]
-[[Buy Food Rations]]
-[[Buy Flasks]]
-[[Buy Medkits]]
-[[Buy Encyclopedia Abyssia]]
-[[Buy Messenger Baloons]]
-[[Buy Commerce Balloons]]
-[[Buy Escape Balloons]]
-[[Buy Torches]]
-<<nobr>>
-<<if $items[10].count <1 >>
-	[[Buy Flashlight]]<br>
+<p>Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
+
+<div class="shop-grid">
+<<set _shopItems = [$item2, $item1, $item3].concat($items.slice(4, 20), $itemMoney)>>
+<<for _item range _shopItems>>
+<div>
+[img[setup.ImagePath + _item.image]]
+<h2><<print _item.name == "Empty Flask" ? "Flask" : _item.name>></h2>
+<p>
+<<if $items.some(e => e.name === _item.name && e.count >= _item.maxCount)>>
+<<if _item.name == "Pistol">>
+<<button `"Buy 6 bullets for " + $items[20].cost + " dubloons"` `"Buy Bullets"`>><</button>>
+<<else>>
+<button class="link-internal macro-button" type="button" disabled>Already bought</button>
 <<endif>>
-<<if $items[11].count <1 >>
-	[[Buy Rope]]<br>
+<<elseif _item.cost>>
+<<button `"Buy for " + _item.cost + (_item.cost == 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
+<<else>>
+<<button `"Exchange dubloons"` `"Exchange dubloons"`>><</button>>
 <<endif>>
-<<if $items[12].count <1 >>
-	[[Buy Compass]]<br>
-<<endif>>
-<<if $items[13].count <1 >>
-	[[Buy Pistol]]<br>
-<<endif>>
-[[Buy Bullets]]<br>
-<<if $items[14].count <1 >>
-	[[Buy Sword]]<br>
-<<endif>>
-<<if $items[15].count <1 >>
-	[[Buy Scuba Gear]]<br>
-<<endif>>
-<<if $items[16].count <2 >>
-	[[Buy Warding Braces]]<br>
-<<endif>>
-<<if $items[17].count <1 >>
-	[[Buy Smartphone]]<br>
-<<endif>>
-<<if $items[18].count <1 >>
-	[[Buy Inn Room Pass]]<br>
-<<endif>>
-<<if $items[19].count <1 >>
-	[[Buy Relic Workshop Pass]]<br>
-<<endif>>
-<</nobr>>
-[[Continue your business on the surface|Surface Hub]]
+</p>
+<p>
+<<print _item.desc>>
+<<if _item.weight>><br><br><<print _item.weight>> kg<<endif>><<if _item.name == "Commerce Balloon" || _item.name == "Escape Balloon">>. Folds up for easy storage.<<endif>>
+<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<<endif>>
+<<if _item.name == "Warding Brace">> each<<endif>>
+</p>
+</div>
+<</for>>
+</div>
+
+<p>[[Continue your business on the surface|Surface Hub]]</p>
 
 
 :: Surface Companions [surface shop nobr]
@@ -202,7 +189,7 @@ These are descriptions of the companions when they first join you on your expedi
 <div class="shop-grid">
 <<for _companion range $companions>>
 <div>
-[img[setup.ImagePath+_companion.image]]
+[img[setup.ImagePath + _companion.image]]
 <h2><<print _companion.name>></h2>
 <p>
 <<if $hiredCompanions.some(e => e.name === _companion.name)>>
@@ -367,7 +354,7 @@ How many days of food rations would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Flasks [surface]
+:: Buy Flask [surface]
 
 [img[setup.ImagePath+$items[2].image]]
 
@@ -379,7 +366,7 @@ How many water flasks would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Medkits [surface]
+:: Buy Medkit [surface]
 
 [img[setup.ImagePath+$items[4].image]]
 
@@ -403,7 +390,7 @@ You have bought 1 copy of the Encyclopedia Abyssia.
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Messenger Baloons [surface]
+:: Buy Messenger Baloon [surface]
 
 [img[setup.ImagePath+$items[6].image]]
 
@@ -415,7 +402,7 @@ How many days of messenger balloons would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Commerce Balloons [surface]
+:: Buy Commerce Balloon [surface]
 
 [img[setup.ImagePath+$items[7].image]]
 
@@ -427,7 +414,7 @@ How many days of commerce balloons would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Escape Balloons [surface]
+:: Buy Escape Balloon [surface]
 
 [img[setup.ImagePath+$items[8].image]]
 
@@ -439,7 +426,7 @@ How many days of escape balloons would you like to buy?
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Torches [surface]
+:: Buy Torch [surface]
 
 [img[setup.ImagePath+$items[9].image]]
 
@@ -523,7 +510,7 @@ You have bought a set of scuba gear.
 <<back [[Surface Shop 1]]>>
 
 
-:: Buy Warding Braces [surface]
+:: Buy Warding Brace [surface]
 
 [img[setup.ImagePath+$items[16].image]]
 
@@ -582,6 +569,15 @@ How many sets of 6 bullets would you like to buy?
 <<textbox "$temp" "">>
 
 [[Confirm|Surface Shop 1][$items[20].count += (parseInt($temp) * 6), $dubloons -= (parseInt($temp)*$items[20].cost)]]
+<<back [[Surface Shop 1]]>>
+
+
+:: Exchange dubloons [surface]
+
+Cashing out, really? Where is your sense of adventure?
+
+...I'm going to assume you clicked that button by mistake...
+
 <<back [[Surface Shop 1]]>>
 
 
