@@ -827,14 +827,21 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 
 [[Continue on to the rest of the layer|Layer6 Hub]]
 
-<<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
-You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-<<link "Reroll with Devil's Own">>
-	<<set setup.devilsReroll = 1>>
-	<<run Engine.backward()>>
-<</link>>
+	<<link "Reroll with Devil's Own" "Layer6 Cherry Relic">>
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+		
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+
+		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
+		<<set $soldRelics.push($ownedRelics[_temp])>>
+		<<set $ownedRelics.deleteAt(_temp)>>
+	<</link>>
 
 <<endif>>
 
@@ -873,14 +880,35 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<if $playerCurses.some(e => e.name === "Age Reduction C")>>
 	<<set $AgeLog.push($curse76)>>
 <<endif>>
-<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+<</nobr>>
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
-You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-<<link "Reroll with Devil's Own">>
-	<<set setup.devilsReroll = 1>>
-	<<run Engine.backward()>>
-<</link>>
+	<<link "Reroll with Devil's Own" "Layer6 Cherry Mix">>
+		<<set $targetCurse = $curses[$temp1]>>
+		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
+		<<if $curses[$temp1].type == "Gender" >>
+			<<set _temp = $GenderLog.length>>
+			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
+				<<set $GenderLog.deleteAt(_temp-1)>>
+			<<endif>>
+		<<endif>>
+		<<include "CurseRemoval">>
+		
+		<<set $targetCurse = $curses[$temp2]>>
+		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
+		<<if $curses[$temp2].type == "Gender" >>
+			<<set _temp = $GenderLog.length>>
+			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
+				<<set $GenderLog.deleteAt(_temp-1)>>
+			<<endif>>
+		<<endif>>
+		<<include "CurseRemoval">>
+		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
+		<<set $soldRelics.push($ownedRelics[_temp])>>
+		<<set $ownedRelics.deleteAt(_temp)>>
+	<</link>>
 
 <<endif>>
 
@@ -914,14 +942,28 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 <<if $playerCurses.some(e => e.name === "Age Reduction C")>>
 	<<set $AgeLog.push($curse76)>>
 <<endif>>
-<</nobr>><<if $ownedRelics.some(e => e.name === "Devil's Own") && setup.devilsReroll == 0>>
+<</nobr>>
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
-You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-<<link "Reroll with Devil's Own">>
-	<<set setup.devilsReroll = 1>>
-	<<run Engine.backward()>>
-<</link>>
+	<<link "Reroll with Devil's Own" "Layer6 Cherry Mix">>
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+		
+		<<set $targetCurse = $curses[$temp2]>>
+		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
+		<<if $curses[$temp2].type == "Gender" >>
+			<<set _temp = $GenderLog.length>>
+			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
+				<<set $GenderLog.deleteAt(_temp-1)>>
+			<<endif>>
+		<<endif>>
+		<<include "CurseRemoval">>
+		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
+		<<set $soldRelics.push($ownedRelics[_temp])>>
+		<<set $ownedRelics.deleteAt(_temp)>>
+	<</link>>
 
 <<endif>>
 
