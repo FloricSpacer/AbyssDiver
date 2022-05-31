@@ -789,22 +789,35 @@ If you choose to place 2 Relics in the Clockwork Forge, along with 4 dubloons, y
 <<back>>
 
 
-:: Layer7 Vend [layer7]
-Here are all of the items available for your to spend your $dubloons dubloons on in the Vend-o-matic 6900.
+:: Layer7 Vend [layer7 shop nobr]
 
-Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.
+<<CarryAdjust>>
 
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 8-wonders.png']]
+<p>Here are all of the items available for your to spend your $dubloons dubloons on in the Vend-o-matic 6900.</p>
 
-[[Buy Water|Layer7 Water]]
-[[Buy Food Rations|Layer7 Food]]
-[[Buy Flasks|Layer7 Flask]]
-[[Buy Medkits|Layer7 Medkit]]
-[[Buy Energy Rations|Layer7 Energy]]
-[[Buy Ward Water|Layer7 Ward]]
+<p>Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
 
+<div class="shop-grid">
+<<for _item range [
+	setup.itemVendFood, setup.itemVendWater, setup.itemVendFlask,
+	$item25, $item26, setup.itemVendMedkit
+]>>
+<div>
+[img[setup.ImagePath + _item.image]]
+<h2><<print _item.name == "Empty Flask" ? "Flask" : _item.name>></h2>
+<p>
+<<button `"Buy for " + _item.cost + (_item.cost == 1 ? " dubloon" : " dubloons")` `"Layer7 " + _item.name`>><</button>>
+</p>
+<p>
+<<print _item.desc>>
+<<if _item.weight>><br><br><<print _item.weight>> kg<<endif>>
+<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<<endif>>
+</p>
+</div>
+<</for>>
+</div>
 
-[[Finish Shopping|Layer7 Hub]]
+<p>[[Finish Shopping|Layer7 Hub]]</p>
 
 
 :: Layer7 Recycle [layer7]
@@ -836,8 +849,8 @@ Choose the relic you would like to sell:
 [[Continue your business on the seventh layer|Layer7 Hub]]
 
 
-:: Layer7 Water [layer7]
-[img[setup.ImagePath+$items[0].image]]
+:: Layer7 Water [layer7 item]
+[img[setup.ImagePath + setup.itemVendWater.image]]
 
 How much water would you like to buy?
 
@@ -847,8 +860,8 @@ How much water would you like to buy?
 <<back>>
 
 
-:: Layer7 Food [layer7]
-[img[setup.ImagePath+$items[1].image]]
+:: Layer7 Food Rations [layer7 item]
+[img[setup.ImagePath + setup.itemVendFood.image]]
 
 How many days of food rations would you like to buy?
 
@@ -858,8 +871,8 @@ How many days of food rations would you like to buy?
 <<back>>
 
 
-:: Layer7 Flask [layer7]
-[img[setup.ImagePath+$items[3].image]]
+:: Layer7 Flask [layer7 item]
+[img[setup.ImagePath + setup.itemVendFlask.image]]
 
 How many water flasks would you like to buy?
 
@@ -869,10 +882,12 @@ How many water flasks would you like to buy?
 <<back>>
 
 
-:: Layer7 Medkit [layer7]
-[img[setup.ImagePath+$items[4].image]]
+:: Layer7 Medkit [layer7 item]
+[img[setup.ImagePath + setup.itemVendMedkit.image]]
 
 How many days of medkits would you like to buy?
+
+Note: These are currently not lighter than the Outset Town medkits!
 
 <<textbox "$temp" "">>
 
@@ -880,7 +895,7 @@ How many days of medkits would you like to buy?
 <<back>>
 
 
-:: Layer7 Energy [layer7]
+:: Layer7 Energy Rations [layer7 item]
 [img[setup.ImagePath+$items[24].image]]
 
 How many days of energy rations would you like to buy?
@@ -893,7 +908,7 @@ Note: These are currently not functional!
 <<back>>
 
 
-:: Layer7 Ward [layer7]
+:: Layer7 Ward Water [layer7 item]
 [img[setup.ImagePath+$items[25].image]]
 
 How many days of ward water would you like to buy?
