@@ -808,12 +808,12 @@ Which curse would you like to transfer to your willing companion? It can't be to
 				<<print "_companion.name doesn't mind taking:">><br>
 			<<endif>>
 			<<set _curse = $playerCurses[$j]>>
-			<<if setup.willingCurses[_companion.name].includes(_curse.name)>>
+			<<if setup.willingCurses[_companion.name].includes(_curse.name) && !_companion.curses.some(e=> e.name === _curse.name )>>
 				<<capture _curse>>
 					<<print "_curse.name">>
 					<<link "Choose" "Layer4 Steady1a">>
 						<<set _companion.curses.push(_curse)>>
-						<<set $corruption += _curse.corr >>
+						<<set $corruption += Math.round(_curse.corr / 2 ) >>
 						/* The CYOA states that the cost counter is shared between shrines. */
 						<<set $dubloons -= ($skewedUsed * 5)>>
 						<<set $skewedUsed += 1>>
@@ -881,7 +881,9 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<nobr>>
 <<for $i = 0; $i < $hiredCompanions.length; $i++>>
 	<<capture $i>>
-	<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Steady Apply][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $temp2=$i]]">><br>
+	<<if !$hiredCompanions[$i].curses.some(e=> e.name === $playerCurses[$temp].name ) >>
+		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Transfer|Layer4 Steady Apply][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $temp2=$i]]">><br>
+	<<endif>>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -891,14 +893,12 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
 <<nobr>>
-<<set $targetCurse = $playerCurses[$temp]>>
-<<set $corruption += Math.round(Math.max(($targetCurse.corr * 1 / 2) - $corRed, 0))>>
-<<include "CurseRemoval" >>
+<<set $corruption += Math.round($playerCurses[$temp].corr / 2)>>
 <<set $dubloons -= ($skewedUsed * 5)>>
 <<set $skewedUsed += 1>>
 <<set $skewedForced += 1>>
 <<set _companionName = $hiredCompanions[$temp2].name>>
-<<set _affectionPenalty = 4 - $hsswear>>
+<<set _affectionPenalty = 3 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
 [[Stand in front of the shrine to force another curse|Layer4 Steady 2a][$convoStart=1,$choice1=0,$choice2=0]]
