@@ -371,18 +371,6 @@
 		<<set $subdom -= 1>>
 	<<endif>>
 
-	<<if _libidoEvent.name == "Semen Demon">>
-		<<set $semenCount += 1>>
-	<<endif>>
-
-	<<if _libidoEvent.name == "Quota">>
-		<<set $quotaCount += 1>>
-	<<endif>>
-
-	<<if _libidoEvent.name == "Limelight">>
-		<<set $limelightCount += 1>>
-	<<endif>>	
-
 	<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.libido += 1>>
 	<<endif>>
@@ -537,7 +525,10 @@
 
 :: Lewdness function [widget nobr]
 <<widget "Lewdness">>
-	<<set $lewdness=($app.libido-2+$quotaCount +$semenCount+$limelightCount)*3 +$crumbleFluid/10  +$algalSize >>
+	<<set _semenCount = setup.activeCurseCount("Semen Demon")>>
+	<<set _quotaCount = setup.activeCurseCount("Quota")>>
+	<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
+	<<set $lewdness = ($app.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize >>
 
 	<<if $app.breastsCor>5>>
 		<<set $lewdness +=1>>
@@ -628,9 +619,10 @@
 	<<set $app.inhuman +=2>>
 <<endif>>
 
-<<if $hornyCount == 1>>
+<<set _hornyCount = setup.activeCurseCount("Horny")>>
+<<if _hornyCount == 1>>
 	<<set $app.inhuman +=2>>
-<<elseif $hornyCount == 2>>
+<<elseif _hornyCount == 2>>
 	<<set $app.inhuman +=3>>
 <<endif>>
 
@@ -921,7 +913,6 @@
 
 <<set $app.desc= "">>
 <<set $app.blood="red">>
-<<set $hornyCount = 0>>
 
 <<for _appearEvent range $playerCurses>>
 
@@ -985,10 +976,6 @@
 	<<if _appearEvent.name == "Hemospectrum">>
 		<<set $app.blood = $curse70.variation>>
 		<<set $app.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
-	<<endif>>	
-
-	<<if _appearEvent.name == "Horny">>
-		<<set $hornyCount += 1>>
 	<<endif>>	
 
 	<<if _appearEvent.name == "Drawing Spades">>
