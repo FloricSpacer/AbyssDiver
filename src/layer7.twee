@@ -320,9 +320,8 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<set $randomOrgasms =$playerCurses.filter(e => e.name === "Random Orgasms").length>>
-<<if (  $randomOrgasms<4 && $StoredCurse.name != "Random Orgasms" )||  $randomOrgasms<5>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("Random Orgasms") >= 5>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on Leaky]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -1238,8 +1237,7 @@ Note: Some effects of this curse are not yet implemented.
 	<<if ($temp1 == 90) && !$playerCurses.some(e => e.name === "Weakling") && $StoredCurse.name != "Weakling">>
 		<<break>>
 	<<endif>>
-	<<set $randomOrgasms = $playerCurses.filter(e => e.name === "Random Orgasms").length>>
-	<<if ($temp1 == 91) && (($limelightCount < 5 && $StoredCurse.name !="Random Orgasms" ) || ($limelightCount < 4 )) >>
+	<<if ($temp1 == 91) && setup.takenCurseCount("Random Orgasms") < 5>>
 		<<break>>
 	<<endif>>
 	<<if ($temp1 == 92) && !$playerCurses.some(e => e.name === "Beastly") && $StoredCurse.name != "Beastly">>

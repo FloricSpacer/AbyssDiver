@@ -232,8 +232,8 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if ( $hornyCount>0 && $StoredCurse.name != "Horny" )|| $hornyCount>1>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("Horny") >= 2>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on Horny]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -302,9 +302,9 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if (  $semenCount>2 && $StoredCurse.name != "Semen Demon" )||  $semenCount>3>>
+<<if setup.takenCurseCount("Semen Demon") >= 4>>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-	<<else>>
+<<else>>
 	<<set _table += "<tr><td>[[Take on Semen Demon]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 		<<if $ManagedMisfortuneActive>>
@@ -316,8 +316,8 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if ( $quotaCount>2 && $StoredCurse.name != "Quota" )|| $quotaCount>3>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("Quota") >= 4>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on Quota]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -330,8 +330,8 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if ( $limelightCount>2 && $StoredCurse.name != "In the Limelight" )|| $limelightCount>3>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("In the Limelight") >= 4>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on In the Limelight]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -899,7 +899,7 @@ You have successfully taken on the $curse84.name curse. Hopefully you are ok wit
 	<<if ($temp1 == 75) && !$playerCurses.some(e => e.name === "Age Reduction C") && $StoredCurse.name != "Age Reduction C">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 76) && (($hornyCount < 2 && $StoredCurse.name !="Horny" ) || ($hornyCount < 1 )) >>
+	<<if ($temp1 == 76) && setup.takenCurseCount("Horny") < 2>>
 		<<break>>
 	<<endif>>
 	<<if ($temp1 == 77) && !playerCurses.some(e => e.name === "Drawing Spades") && $StoredCurse.name != "Drawing Spades">>
@@ -914,13 +914,13 @@ You have successfully taken on the $curse84.name curse. Hopefully you are ok wit
 	<<if ($temp1 == 80) && !$playerCurses.some(e => e.name === "Wandering Hands") && $StoredCurse.name != "Wandering Hands">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 81) &&  (($semenCount  < 4 && $StoredCurse.name !="Semen Demon" ) || ($semenCount < 3 )) >>
+	<<if ($temp1 == 81) && setup.takenCurseCount("Semen Demon") < 4>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 82)  &&   (($quotaCount < 4 && $StoredCurse.name !="Quota" ) || ($quotaCount < 3 )) >>
+	<<if ($temp1 == 82) && setup.takenCurseCount("Quota") < 4>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 83) && (($limelightCount < 4 && $StoredCurse.name !="In the Limelight" ) || ($limelightCount < 3 ))>>
+	<<if ($temp1 == 83) && setup.takenCurseCount("In the Limelight") < 4>>
 		<<break>>
 	<<endif>>
 
