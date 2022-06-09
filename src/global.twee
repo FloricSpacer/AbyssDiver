@@ -78,7 +78,7 @@ Your curses are:
 <</nobr>>
 
 
-<<back [[$return]]>>
+<<back [[$menuReturn]]>>
 
 
 :: Inventory [noreturn]
@@ -124,7 +124,7 @@ The total value of all your relics is $total_value_relics dubloons.
 	<</for>>
 <<endif>>
 <</nobr>>
-<<back [[$return]]>>
+<<back [[$menuReturn]]>>
 
 
 :: Habitation Ending [ending]
@@ -181,7 +181,7 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 [[Simulate the functionality of a commerce balloon|Commerce Balloon][$comBalloon = 1]]
 
 
-[[Confirm Adjustments|$return]]
+[[Confirm Adjustments|$menuReturn]]
 
 
 :: Time Stats [noreturn]
@@ -463,7 +463,7 @@ You've got to watch out for extremely serious back pain with your S cup breasts.
 <br>
 Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.<br>
 <</nobr>>
-<<back [[$return]]>>
+<<back [[$menuReturn]]>>
 
 :: Adjust dubloons [noreturn]
 <<set $temp = 0>>How many dubloons would you like to add? (Use a negative number to subtract)
@@ -510,7 +510,7 @@ Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman
 <<back>>
 
 
-:: Commerce Balloon [balloon noreturn]
+:: Commerce Balloon [balloon]
 Using your balloon, you're able to send up any relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
 
 <<nobr>>
@@ -528,10 +528,10 @@ Using your balloon, you're able to send up any relics you want to sell and get b
 [[Buy items|Balloon Store1]]
 
 
-[[Finish using balloon to trade|$return][$comBalloon = 0]]
+[[Finish using balloon to trade|$layerReturn][$comBalloon = 0]]
 
 
-:: Balloon Sell1 [balloon noreturn]
+:: Balloon Sell1 [balloon]
 Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.
 
 Choose the relic you would like to sell:
@@ -560,7 +560,7 @@ Choose the relic you would like to sell:
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Store1 [balloon shop noreturn nobr]
+:: Balloon Store1 [balloon shop nobr]
 <p><<CarryAdjust>></p>
 <p>[[Continue using the commerce balloon|Commerce Balloon]]</p>
 
@@ -568,7 +568,7 @@ Choose the relic you would like to sell:
 
 <p>[[Continue using the commerce balloon|Commerce Balloon]]</p>
 
-:: Balloon Sell 2 [balloon noreturn]
+:: Balloon Sell 2 [balloon]
 <<set $dubloons += ($ownedRelics[$temp].value + $sellAdd)>>
 The relic $ownedRelics[$temp].name has been successfully sold and you've gotten your dubloon payment. You notice the person you sold it to quickly runs off, either to make use of it or sell it again in the everlasting chain of capitalism. Either way, you won't be getting that relic back easily.<<run $ownedRelics.deleteAt($temp)>>
 
@@ -661,7 +661,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <<back>>
 
 
-:: Use Items and Relics [noreturn]
+:: Use Items and Relics
 <<nobr>>
 <<if $items[7].count > 0>>
 [[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1, $comBalloon = 1]]<br>
@@ -898,6 +898,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 	<<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
 	<br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, relics, and curses await you further into the Abyss.<br>
+		<<set $previewReturn = $layerReturn>>
 		<<if $currentLayer == 0>>
 			[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
 		<<endif>>
@@ -925,7 +926,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 [[Perform other stat adjustments to correct for errors|Adjustments]]
 
 
-[[Return|$return]]
+[[Return|$layerReturn]]
 
 
 :: Adjust bullets [noreturn]
@@ -959,7 +960,7 @@ Corruption cost: $ownedRelics[$temp].corr
 <<back>>
 
 
-:: Kin Shifter Use [noreturn]
+:: Kin Shifter Use
 [img[setup.ImagePath+"Relics/kinshifter.png"]]
 
 A glob of thick, putty-like slime. the face appears decorative. When touched to another relic that you own, a portion of the slime will break off and reshape itself into a perfect replica of that Relic, gaining all of its characteristics, abilities, value, and weight permanently. It cannot shift back to its original form. The amount that breaks off is dependent on the perceived value of the Relic, which can be measured with its dubloon value. The slime contains 70 dubloons worth of morphing power, and can be used on multiple Relics with that total value or less - however, the last Relic that is duplicated can put you over the 70 dubloon total, so long as that Relic is worth 70 dublooms or less. This Relic can also copy Relics woth over 70 dubloons, but in that case that Relic would have to be the sole Relic that you copy.
@@ -1009,13 +1010,13 @@ As you touched the final relic to the Kin Shifter, the last of the goo was used 
 
 Now that you have become better equipped, you can continue your journey.<br><br>
 
-[[Return to exploring|$return]]
+[[Return to exploring|$layerReturn]]
 
 <<endif>>
 <</nobr>>
 
 
-:: Forbidden Grimoire Select [noreturn]
+:: Forbidden Grimoire Select
 [img[setup.ImagePath+"Relics/forbiddengrimoire.png"]]
 A grisly-looking ragged book written in an indecipherable language. Words can only be seen on the page when a person reads it alone, and they vanish as that one person reads them. This will take whatever skills the reader possesses and improve them greatly, leaving a blank, non-useful book behind. Mechanically speaking, if you let a companion use it, it would double the specific numeric benefit of their special ability - Khemia would reduce travel costs by 4 days, Cloud would redduce bullet costs by 4 (minimum 1), Cherry would reduce status effect lengths by2, and so on. (It doesn't really affect, say, Khemia's ability to slay monsters so much - he's already trained to nearly the maximum human limits, and if there's a monster he can't defeat, it's more about the monster simply being durable beyond the human body's limits than it is about any imperfections in his fighting sills.) Using it on yourself could help you in your normal life, but probably not very much on your journey - the benefit would be substantially less than that from using it on a companion, anyways. If one person were to read it twice (such as through Kin Shifter), the second use would have no benefit - best to spread it out among multiple companions.
 
@@ -1030,10 +1031,10 @@ Who do you want to give the grimoire to improve their skills?
 		<</capture>>
 <</for>>
 <</nobr>>
-[[Put away the grimoire without using it|$return]]
+[[Put away the grimoire without using it|$layerReturn]]
 
 
-:: Forbidden Grimoire Outcome [noreturn]
+:: Forbidden Grimoire Outcome
 
 You have given the eldritch knowledge contained in the book to $name.
 
@@ -1042,7 +1043,7 @@ You have given the eldritch knowledge contained in the book to $name.
 After $name finishes reading, all words fade from the grimoire's pages, leaving it completely blank.
 <i>Note: This limitation is not implemented yet.</i>
 
-[[Return to exploring|$return]]
+[[Return to exploring|$layerReturn]]
 
 :: Forbidden Grimoire Maru
 While Maru great appreciates your gift and improves the taste of his cooking, you don't gain any material benefit on your journey from giving it to him.
@@ -1063,7 +1064,7 @@ After reading from the book, Cloud lines up his finger with a rock in the distan
 After reading from the book, Saeko's looks a bit sad as she turns the last page, as if hoping there was more to learn. After that, she is able to use innovative techniques you've never seen before to minimzie your exposure to the miasma whenever possible. You now subtract 10 from all corruption costs in the Abyss, rather than 5.<<set $corrRed += 5>>
 
 
-:: Balloon Inn [balloon nobr noreturn]
+:: Balloon Inn [balloon nobr]
 [img[setup.ImagePath+'Surface/Inn Room.png']]
 <br><br>
 
@@ -1072,7 +1073,7 @@ After reading from the book, Saeko's looks a bit sad as she turns the last page,
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Workshop [balloon noreturn]
+:: Balloon Workshop [balloon]
 [img[setup.ImagePath+$items[19].image]]
 
 You can use the balloon to send requests and relics back to Outset Town. You can send up any Relics you have along with what you want done to them and the people at the workshop can reply and send back any modified Relics you want.
@@ -1109,7 +1110,7 @@ You can use the balloon to send requests and relics back to Outset Town. You can
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Admin [balloon noreturn]
+:: Balloon Admin [balloon]
 You can send a request to the Outset Town Administration. There seem to be a number of services that are provided here for people who need them, including managing debts and changing your legal name.
 
 For a small fee of 10 dubloons, you can change your legal name from $app.name to whatever you wish.
@@ -1127,7 +1128,7 @@ You currently have $debt dubloons of debt, which you can pay off now to allow yo
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Name [balloon noreturn]
+:: Balloon Name [balloon]
 <<set $dubloons -= 10>>
 
 The balloon sends down some surprisingly concise forms where you can fill out your new name, changing it for all official purposes.
@@ -1136,7 +1137,7 @@ What is your new name?
 <<textbox "$app.name" "Nana" "Commerce Balloon">>
 
 
-:: Balloon debt1 [balloon noreturn]
+:: Balloon debt1 [balloon]
 Cloud is willing to allow you to use his connections to fund your expedition, as long as you can pay back the loan after you're done, with interest of course.
 
 How many dubloons would you like to borrow?
@@ -1146,7 +1147,7 @@ How many dubloons would you like to borrow?
 <<back>>
 
 
-:: Balloon debt2 [balloon noreturn]
+:: Balloon debt2 [balloon]
 In order to finally settle down at an ending, you must pay off your debt to Cloud's mysterious connections. You currently owe $debt dubloons of debt to them.
 
 How many dubloons would you like to pay back?

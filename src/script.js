@@ -43,7 +43,12 @@ Config.history.maxStates = 20;
 
 predisplay["Menu Return"] = function (taskName) {
 	if (! tags().contains("noreturn")) {
-		State.variables.return = passage();
+		State.variables.menuReturn = passage();
+	}
+};
+predisplay["Layer Return"] = function (taskName) {
+	if (tags().some(t => t === "surface" || t.startsWith("layer"))) {
+		State.variables.layerReturn = passage();
 	}
 };
 
