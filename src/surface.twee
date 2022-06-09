@@ -1219,71 +1219,76 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 <<endif>>
 
 
-:: Surface Inn [surface noreturn]
+:: Surface Inn [surface noreturn nobr]
 
 [img[setup.ImagePath+'Surface/Inn Room.png']]
+<br><br>
 
-<<nobr>>
 <<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1) && $comBalloon == 0>>
-	<br><br>Due to your inn pass, you're able to eat and drink your fill, overcoming any deficits you've built up over time after you visit the Inn.<br><br>
+	Due to your inn pass, you're able to eat and drink your fill, overcoming any deficits you've built up over time after you visit the Inn.
+	<br><br>
 	<<set $items[0].count = Math.max($items[0].count, 0)>>
 	<<set $items[1].count = Math.max($items[1].count, 0)>>
 <<endif>>
 
 <<if $innUsed != $time && $comBalloon == 0>>
-You can eat and drink enough to make yourself extra full and save a day of food and water on your travels. <br><br>
+	You can eat and drink enough to make yourself extra full and save a day of food and water on your travels.<br>
 	[[Eat and drink the delicious food and drink|Surface Inn][$items[0].count += 1, $items[1].count += 1, $innUsed = $time]]
 <<else>>
-You are already full, but you can come back another day to get more freshly cooked meals and clear, cool water when you come back later.
-<<endif>><<if $dubloons > 0>><
-You can store any of your dubloons here, in case you'd like to pick them up later. If you'd like to stash your dubloons here, enter the amount you'd like to store and press Stash.
-<<textbox "$temp" "0">>
-[[Stash your dubloons|Surface Inn][$dubloons -= parseInt($temp), $innDubloons += parseInt($temp)]]
-
-<<endif>><<if $innDubloons > 0>><
-You can retrieve all of the dubloons you have stored in your inn room. You currently have $innDubloons stored here.
-[[Retrieve your dubloons|Surface Inn][$dubloons += $innDubloons, $innDubloons = 0]]
-
-<<endif>><<if $innRelics.length > 0>>
-You can pick up any of the Relics you've previously stored in your inn room:
-
-<<nobr>><<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<print $ownedRelics[$i].name>><<print "[[Retrieve|Surface Inn][$soldRelics.push($ownedRelics[$i]), $ownedRelics.push($innRelics[$i]), $innRelics.deleteAt($i)]]">><br>
-	<</capture>>
-<</for>><</nobr>>
-
-<<endif>><<if $ownedRelics.length > 0>>
-You can store any Relics you're holding here for safe keeping or if you just want to reduce the weight you're holding.
-
-Choose a relic you would like to store here at the inn:
-<<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-			You can't seem to part ways with the Creepy Doll<br>
-		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$colwear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$hsswear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$SibylBuff=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
-		<<else>>
-			<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<endif>>
-	<</capture>>
-<</for>>
-<</nobr>>
-
+	You are already full, but you can come back another day to get more freshly cooked meals and clear, cool water when you come back later.
 <<endif>>
-<</nobr>>
+<br><br>
+
+<<if $dubloons > 0>>
+	You can store any of your dubloons here, in case you'd like to pick them up later. If you'd like to stash your dubloons here, enter the amount you'd like to store and press Stash.<br>
+	<<textbox "$temp" "0">>
+	[[Stash your dubloons|Surface Inn][$dubloons -= parseInt($temp), $innDubloons += parseInt($temp)]]
+	<br><br>
+<<endif>>
+
+<<if $innDubloons > 0>>
+	You can retrieve all of the dubloons you have stored in your inn room. You currently have $innDubloons stored here.<br>
+	[[Retrieve your dubloons|Surface Inn][$dubloons += $innDubloons, $innDubloons = 0]]
+	<br><br>
+<<endif>>
+
+<<if $innRelics.length > 0>>
+	You can pick up any of the Relics you've previously stored in your inn room:<br>
+	<<for $i = 0; $i < $ownedRelics.length; $i++>>
+		<<capture $i>>
+			<<print $ownedRelics[$i].name + " [[Retrieve|Surface Inn][$soldRelics.push($ownedRelics[$i]), $ownedRelics.push($innRelics[$i]), $innRelics.deleteAt($i)]]">><br>
+		<</capture>>
+	<</for>>
+	<br>
+<<endif>>
+
+<<if $ownedRelics.length > 0>>
+	You can store any Relics you're holding here for safe keeping or if you just want to reduce the weight you're holding.
+	Choose a relic you would like to store here at the inn:<br>
+	<<for $i = 0; $i < $ownedRelics.length; $i++>>
+		<<capture $i>>
+			<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
+				You can't seem to part ways with the Creepy Doll<br>
+			<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
+				<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$colwear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
+				<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$hsswear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
+				<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$SibylBuff=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Everhevea">>
+				<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
+			<<else>>
+				<<print $ownedRelics[$i].name>><<print " [[Store|Surface Inn][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<endif>>
+		<</capture>>
+	<</for>>
+	<br>
+<<endif>>
 
 <<if $comBalloon == 0>>
-[[Return to Outset Town|Surface Hub]]
+	[[Return to Outset Town|Surface Hub]]
 <<else>>
-[[Continue using the commerce balloon|Commerce Balloon]]
+	[[Continue using the commerce balloon|Commerce Balloon]]
 <<endif>>
 
 
