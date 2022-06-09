@@ -50,6 +50,15 @@ predisplay["Layer Return"] = function (taskName) {
 	if (tags().some(t => t === "surface" || t.startsWith("layer"))) {
 		State.variables.layerReturn = passage();
 	}
+	if (State.variables.comBalloon) {
+		$(document.body).addClass("balloon");
+	} else if (State.variables.layerReturn) {
+		for (var tag of tags(State.variables.layerReturn)) {
+			if (tag === "surface" || tag.startsWith("layer")) {
+				$(document.body).addClass(tag);
+			}
+		}
+	}
 };
 
 if ((0 || 0 || 0)) {
