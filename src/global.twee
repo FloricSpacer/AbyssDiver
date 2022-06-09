@@ -515,7 +515,7 @@ Using your balloon, you're able to send up any relics you want to sell and get b
 
 <<nobr>>
 <<if $tunnelUsed == 1>>
-<br>[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
+<br>[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Balloon Tunnel Retrieval]]<br><br>
 <<endif>>
 [[Send a request to the Outset Town Administration|Balloon Admin]]<br>
 <<if $items[19].count > 0>>
@@ -611,23 +611,28 @@ And thanks to Lily for encouraging me when I got some negative feedback early in
 
 I seriously appreciate all of your help and I'm really happy that people were willing to help improve this project with me.
 
-:: Surface Tunnel Retrieval
+
+:: Surface Tunnel Retrieval [surface]
+<<include "Tunnel Retrieval">>\
 You manage to find your items safely, retrieving all of them and putting them right back into your inventory where they belong. Luckily no one seems to have disturbed or taken anything in the time it took you to get back up here and find your items.
 
-<<if $comBalloon == 0>>
 [[Continue your business in Outset Town|Surface Hub]]
-<<else>>
-[[Continue using the commerce balloon|Commerce Balloon]]
-<<endif>>
 
-<<nobr>>
-<<for $i = 4; $i < $items.length; $i++>>
-	<<set $items[$i].count += $vaultItems[$i].count>>
-	<<set $vaultItems[$i].count = 0>>
+
+:: Balloon Tunnel Retrieval [balloon]
+<<include "Tunnel Retrieval">>\
+Helpful people on the surface managed to find your items safely, retrieving all of them and sending them back to you via the commerce balloon. Luckily nothing went missing.
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Tunnel Retrieval [nobr]
+<<for _i = 4; _i < $items.length; _i++>>
+	<<set $items[_i].count += $vaultItems[_i].count>>
+	<<set $vaultItems[_i].count = 0>>
 <</for>>
 <<set $dubloons += $tunnelDubloons>>
 <<set $tunnelUsed = 0>>
-<</nobr>>
 
 
 :: GameOver
