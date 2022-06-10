@@ -5,6 +5,19 @@
 <br>
 
 
+:: Count Curse Instances [script]
+setup.activeCurseCount = function(name) {
+	return variables().playerCurses.countWith(
+		e => e.name === name
+	);
+}
+setup.takenCurseCount = function(name) {
+	return variables().playerCurses.concat(variables().StoredCurse).countWith(
+		e => e.name === name
+	);
+}
+
+
 :: Calculate Carried Weight [script]
 setup.calcCarriedWeight = function() {
 	return (
@@ -65,7 +78,7 @@ Your curses are:
 <</nobr>>
 
 
-<<back [[$return]]>>
+<<back [[$menuReturn]]>>
 
 
 :: Inventory [noreturn]
@@ -111,7 +124,7 @@ The total value of all your relics is $total_value_relics dubloons.
 	<</for>>
 <<endif>>
 <</nobr>>
-<<back [[$return]]>>
+<<back [[$menuReturn]]>>
 
 
 :: Habitation Ending [ending]
@@ -165,10 +178,10 @@ Click this if you have found something that can be used for swimming underwater,
 <<endif>>
 
 If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
-[[Simulate the functionality of a commerce balloon|Commerce Balloon][$comBalloon = 1]]
+[[Simulate the functionality of a commerce balloon|Commerce Balloon]]
 
 
-[[Confirm Adjustments|$return]]
+[[Confirm Adjustments|$menuReturn]]
 
 
 :: Time Stats [noreturn]
@@ -284,9 +297,10 @@ You are $app.age years old<<if $app.age != $app.appAge>>, but you appear to be <
 <<if $dollevent2== true>>
 	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
 <<endif>>
-<<if $hornyCount == 1>>
+<<set _hornyCount = setup.activeCurseCount("Horny")>>
+<<if _hornyCount == 1>>
 	<br>You have a noticeable demonic horn protruding from the center of your forehead.
-<<elseif $hornyCount == 2>>
+<<elseif _hornyCount == 2>>
 	<br>You have 2 noticeable demonic horns protruding from your head.
 <<endif>>
 
@@ -300,14 +314,17 @@ You are $app.age years old<<if $app.age != $app.appAge>>, but you appear to be <
 	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">>
 <<endif>>
 
-<<if $semenCount > 0>>
-	You must drink <<print ($semenCount * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($semenCount * 2)>> loads per day.<<print " ">>
+<<set _semenCount = setup.activeCurseCount("Semen Demon")>>
+<<if _semenCount > 0>>
+	You must drink <<print (_semenCount * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print (_semenCount * 2)>> loads per day.<<print " ">>
 <<endif>>
-<<if $quotaCount > 0>>
-	You need to directly bring other people to orgasm <<if $playerCurses.some(e => e.name === "Sleep Tight")>><<print ($quotaCount * 3)>><<else>><<print ($quotaCount * 2)>><<endif>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<<endif>><<print " ">>
+<<set _quotaCount = setup.activeCurseCount("Quota")>>
+<<if _quotaCount > 0>>
+	You need to directly bring other people to orgasm <<if $playerCurses.some(e => e.name === "Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><<endif>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<<endif>><<print " ">>
 <<endif>>
-<<if $limelightCount > 0>>
-	You need to be the focus of <<print ($limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $playerCurses.some(e => e.name === "Semen Demon") || $playerCurses.some(e => e.name === "Quota")>>not only you have to have sex with so many people, but also <<endif>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <<endif>><<print " ">>
+<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
+<<if _limelightCount > 0>>
+	You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $playerCurses.some(e => e.name === "Semen Demon") || $playerCurses.some(e => e.name === "Quota")>>not only you have to have sex with so many people, but also <<endif>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <<endif>><<print " ">>
 <<endif>><br><br>
 <<if $bewitchBabies > 0>>
 	Due to your consumption of the contaminated rainwater of the second layer, your fertility has greatly increased. The average amount of  babies born from any pregnancy you're involved in is increased by <<print $bewitchBabies>>.<<print " ">>
@@ -446,7 +463,7 @@ You've got to watch out for extremely serious back pain with your S cup breasts.
 <br>
 Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.<br>
 <</nobr>>
-<<back [[$return]]>>
+<<back [[$menuReturn]]>>
 
 :: Adjust dubloons [noreturn]
 <<set $temp = 0>>How many dubloons would you like to add? (Use a negative number to subtract)
@@ -493,28 +510,28 @@ Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman
 <<back>>
 
 
-:: Commerce Balloon [balloon noreturn]
+:: Commerce Balloon [balloon]
 Using your balloon, you're able to send up any relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
 
 <<nobr>>
 <<if $tunnelUsed == 1>>
-<br>[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
+<br>[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Balloon Tunnel Retrieval]]<br><br>
 <<endif>>
 [[Send a request to the Outset Town Administration|Balloon Admin]]<br>
 <<if $items[19].count > 0>>
 [[Send a request to the Relic Workshop|Balloon Workshop]]<br>
 <<endif>>
 <<if $items[18].count > 0>>
-[[Send a request to the inn on the surface|Surface Inn]]<br>
+[[Send a request to the inn on the surface|Balloon Inn]]<br>
 <<endif>>
 <</nobr>>[[Sell relics|Balloon Sell1]]
 [[Buy items|Balloon Store1]]
 
 
-[[Finish using balloon to trade|$return][$comBalloon = 0]]
+[[Finish using balloon to trade|$layerReturn]]
 
 
-:: Balloon Sell1 [balloon noreturn]
+:: Balloon Sell1 [balloon]
 Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.
 
 Choose the relic you would like to sell:
@@ -543,7 +560,7 @@ Choose the relic you would like to sell:
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Store1 [balloon shop noreturn nobr]
+:: Balloon Store1 [balloon shop nobr]
 <p><<CarryAdjust>></p>
 <p>[[Continue using the commerce balloon|Commerce Balloon]]</p>
 
@@ -551,7 +568,7 @@ Choose the relic you would like to sell:
 
 <p>[[Continue using the commerce balloon|Commerce Balloon]]</p>
 
-:: Balloon Sell 2 [balloon noreturn]
+:: Balloon Sell 2 [balloon]
 <<set $dubloons += ($ownedRelics[$temp].value + $sellAdd)>>
 The relic $ownedRelics[$temp].name has been successfully sold and you've gotten your dubloon payment. You notice the person you sold it to quickly runs off, either to make use of it or sell it again in the everlasting chain of capitalism. Either way, you won't be getting that relic back easily.<<run $ownedRelics.deleteAt($temp)>>
 
@@ -594,23 +611,28 @@ And thanks to Lily for encouraging me when I got some negative feedback early in
 
 I seriously appreciate all of your help and I'm really happy that people were willing to help improve this project with me.
 
-:: Surface Tunnel Retrieval
+
+:: Surface Tunnel Retrieval [surface]
+<<include "Tunnel Retrieval">>\
 You manage to find your items safely, retrieving all of them and putting them right back into your inventory where they belong. Luckily no one seems to have disturbed or taken anything in the time it took you to get back up here and find your items.
 
-<<if $comBalloon == 0>>
 [[Continue your business in Outset Town|Surface Hub]]
-<<else>>
-[[Continue using the commerce balloon|Commerce Balloon]]
-<<endif>>
 
-<<nobr>>
-<<for $i = 4; $i < $items.length; $i++>>
-	<<set $items[$i].count += $vaultItems[$i].count>>
-	<<set $vaultItems[$i].count = 0>>
+
+:: Balloon Tunnel Retrieval [balloon]
+<<include "Tunnel Retrieval">>\
+Helpful people on the surface managed to find your items safely, retrieving all of them and sending them back to you via the commerce balloon. Luckily nothing went missing.
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Tunnel Retrieval [nobr]
+<<for _i = 4; _i < $items.length; _i++>>
+	<<set $items[_i].count += $vaultItems[_i].count>>
+	<<set $vaultItems[_i].count = 0>>
 <</for>>
 <<set $dubloons += $tunnelDubloons>>
 <<set $tunnelUsed = 0>>
-<</nobr>>
 
 
 :: GameOver
@@ -644,10 +666,10 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <<back>>
 
 
-:: Use Items and Relics [noreturn]
+:: Use Items and Relics
 <<nobr>>
 <<if $items[7].count > 0>>
-[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1, $comBalloon = 1]]<br>
+[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]<br>
 <<endif>>
 <<if $items[8].count > 0>>
 	<<if $currentLayer==0>>
@@ -881,6 +903,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 	<<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
 	<br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, relics, and curses await you further into the Abyss.<br>
+		<<set $previewReturn = $layerReturn>>
 		<<if $currentLayer == 0>>
 			[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
 		<<endif>>
@@ -908,7 +931,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 [[Perform other stat adjustments to correct for errors|Adjustments]]
 
 
-[[Return|$return]]
+[[Return|$layerReturn]]
 
 
 :: Adjust bullets [noreturn]
@@ -942,7 +965,7 @@ Corruption cost: $ownedRelics[$temp].corr
 <<back>>
 
 
-:: Kin Shifter Use [noreturn]
+:: Kin Shifter Use
 [img[setup.ImagePath+"Relics/kinshifter.png"]]
 
 A glob of thick, putty-like slime. the face appears decorative. When touched to another relic that you own, a portion of the slime will break off and reshape itself into a perfect replica of that Relic, gaining all of its characteristics, abilities, value, and weight permanently. It cannot shift back to its original form. The amount that breaks off is dependent on the perceived value of the Relic, which can be measured with its dubloon value. The slime contains 70 dubloons worth of morphing power, and can be used on multiple Relics with that total value or less - however, the last Relic that is duplicated can put you over the 70 dubloon total, so long as that Relic is worth 70 dublooms or less. This Relic can also copy Relics woth over 70 dubloons, but in that case that Relic would have to be the sole Relic that you copy.
@@ -992,13 +1015,13 @@ As you touched the final relic to the Kin Shifter, the last of the goo was used 
 
 Now that you have become better equipped, you can continue your journey.<br><br>
 
-[[Return to exploring|$return]]
+[[Return to exploring|$layerReturn]]
 
 <<endif>>
 <</nobr>>
 
 
-:: Forbidden Grimoire Select [noreturn]
+:: Forbidden Grimoire Select
 [img[setup.ImagePath+"Relics/forbiddengrimoire.png"]]
 A grisly-looking ragged book written in an indecipherable language. Words can only be seen on the page when a person reads it alone, and they vanish as that one person reads them. This will take whatever skills the reader possesses and improve them greatly, leaving a blank, non-useful book behind. Mechanically speaking, if you let a companion use it, it would double the specific numeric benefit of their special ability - Khemia would reduce travel costs by 4 days, Cloud would redduce bullet costs by 4 (minimum 1), Cherry would reduce status effect lengths by2, and so on. (It doesn't really affect, say, Khemia's ability to slay monsters so much - he's already trained to nearly the maximum human limits, and if there's a monster he can't defeat, it's more about the monster simply being durable beyond the human body's limits than it is about any imperfections in his fighting sills.) Using it on yourself could help you in your normal life, but probably not very much on your journey - the benefit would be substantially less than that from using it on a companion, anyways. If one person were to read it twice (such as through Kin Shifter), the second use would have no benefit - best to spread it out among multiple companions.
 
@@ -1013,10 +1036,10 @@ Who do you want to give the grimoire to improve their skills?
 		<</capture>>
 <</for>>
 <</nobr>>
-[[Put away the grimoire without using it|$return]]
+[[Put away the grimoire without using it|$layerReturn]]
 
 
-:: Forbidden Grimoire Outcome [noreturn]
+:: Forbidden Grimoire Outcome
 
 You have given the eldritch knowledge contained in the book to $name.
 
@@ -1025,7 +1048,7 @@ You have given the eldritch knowledge contained in the book to $name.
 After $name finishes reading, all words fade from the grimoire's pages, leaving it completely blank.
 <i>Note: This limitation is not implemented yet.</i>
 
-[[Return to exploring|$return]]
+[[Return to exploring|$layerReturn]]
 
 :: Forbidden Grimoire Maru
 While Maru great appreciates your gift and improves the taste of his cooking, you don't gain any material benefit on your journey from giving it to him.
@@ -1046,7 +1069,16 @@ After reading from the book, Cloud lines up his finger with a rock in the distan
 After reading from the book, Saeko's looks a bit sad as she turns the last page, as if hoping there was more to learn. After that, she is able to use innovative techniques you've never seen before to minimzie your exposure to the miasma whenever possible. You now subtract 10 from all corruption costs in the Abyss, rather than 5.<<set $corrRed += 5>>
 
 
-:: Balloon Workshop [balloon noreturn]
+:: Balloon Inn [balloon nobr]
+[img[setup.ImagePath+'Surface/Inn Room.png']]
+<br><br>
+
+<<include "Inn Storage">>
+
+[[Continue using the commerce balloon|Commerce Balloon]]
+
+
+:: Balloon Workshop [balloon]
 [img[setup.ImagePath+$items[19].image]]
 
 You can use the balloon to send requests and relics back to Outset Town. You can send up any Relics you have along with what you want done to them and the people at the workshop can reply and send back any modified Relics you want.
@@ -1061,11 +1093,11 @@ You can use the balloon to send requests and relics back to Outset Town. You can
 		[[Use Purity Wood Plank|Balloon Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
 	<<endif>>
 
-	<<if $ownedRelics[$i].name == "Romer Stones" && $warmCloth == 0 && $coolCloth == 0>>
-	<br>You muse over what you can do with the Romer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
+	<<if $ownedRelics[$i].name == "Rømer Stones" && $warmCloth == 0 && $coolCloth == 0>>
+	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either buy some winter clothers for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
-		[[Use the Romer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30,$warmCloth=1]]<br>
-		[[Use the Romer Stones for self-cooling summer gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1]]<br>
+		[[Use the Rømer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30,$warmCloth=1]]<br>
+		[[Use the Rømer Stones for self-cooling summer gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1]]<br>
 	<<endif>>
 	<<if $ownedRelics[$i].name == "Brave Vector" && $slingshot == 0>>
 		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to reccomend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo. <br>
@@ -1083,7 +1115,7 @@ You can use the balloon to send requests and relics back to Outset Town. You can
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Admin [balloon noreturn]
+:: Balloon Admin [balloon]
 You can send a request to the Outset Town Administration. There seem to be a number of services that are provided here for people who need them, including managing debts and changing your legal name.
 
 For a small fee of 10 dubloons, you can change your legal name from $app.name to whatever you wish.
@@ -1101,7 +1133,7 @@ You currently have $debt dubloons of debt, which you can pay off now to allow yo
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
-:: Balloon Name [balloon noreturn]
+:: Balloon Name [balloon]
 <<set $dubloons -= 10>>
 
 The balloon sends down some surprisingly concise forms where you can fill out your new name, changing it for all official purposes.
@@ -1110,7 +1142,7 @@ What is your new name?
 <<textbox "$app.name" "Nana" "Commerce Balloon">>
 
 
-:: Balloon debt1 [balloon noreturn]
+:: Balloon debt1 [balloon]
 Cloud is willing to allow you to use his connections to fund your expedition, as long as you can pay back the loan after you're done, with interest of course.
 
 How many dubloons would you like to borrow?
@@ -1120,7 +1152,7 @@ How many dubloons would you like to borrow?
 <<back>>
 
 
-:: Balloon debt2 [balloon noreturn]
+:: Balloon debt2 [balloon]
 In order to finally settle down at an ending, you must pay off your debt to Cloud's mysterious connections. You currently owe $debt dubloons of debt to them.
 
 How many dubloons would you like to pay back?
