@@ -146,7 +146,7 @@
 	<<BreastCorrected>>
 	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E"  >>
 		<<set $app.modgender += 1>>
-		<<if $app.sex == "male">>
+		<<if $app.osex == "male">>
 			<<set $app.gender += 1>>
 		<<else>>
 			<<set $app.gender -= 1>>
@@ -262,7 +262,7 @@
 
 	<<if _genderEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.modgender += 1>>
-		<<if $app.sex == "male">>
+		<<if $app.osex == "male">>
 			<<set $app.gender += 1>>
 		<<else>>
 			<<set $app.gender -= 1>>
@@ -379,18 +379,6 @@
 	<<if _libidoEvent.name == "DoM" || _libidoEvent.name == "Power Dom">>
 		<<set $subdom -= 1>>
 	<<endif>>
-
-	<<if _libidoEvent.name == "Semen Demon">>
-		<<set $semenCount += 1>>
-	<<endif>>
-
-	<<if _libidoEvent.name == "Quota">>
-		<<set $quotaCount += 1>>
-	<<endif>>
-
-	<<if _libidoEvent.name == "Limelight">>
-		<<set $limelightCount += 1>>
-	<<endif>>	
 
 	<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.libido += 1>>
@@ -517,7 +505,7 @@
 			humanoid
 	<<elseif $app.inhuman <10>>
 			antrophomorph
-	<<elseif $app.inhuman <10>>
+	<<else>>
 			monster
 	<<endif>>
 <</widget>>
@@ -546,7 +534,10 @@
 
 :: Lewdness function [widget nobr]
 <<widget "Lewdness">>
-	<<set $lewdness=($app.libido-2+$quotaCount +$semenCount+$limelightCount)*3 +$crumbleFluid/10  +$algalSize >>
+	<<set _semenCount = setup.activeCurseCount("Semen Demon")>>
+	<<set _quotaCount = setup.activeCurseCount("Quota")>>
+	<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
+	<<set $lewdness = ($app.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize >>
 
 	<<if $app.breastsCor>5>>
 		<<set $lewdness +=1>>
@@ -621,9 +612,9 @@
 	<<set $app.inhuman +=1>>
 <<endif>>
 
-<<if $app.skinColor !=  "pale" && $app.skinColor !=  "tanned" && $app.skinColor !=  "olive" && $app.skinColor !=  "brown" && $app.skinColor !=  "dark brown"  >>
-	<<set $app.inhuman +=4>>
-<<endif>>
+<<if !["pale", "tanned", "olive", "brown", "dark brown"].includes($app.skinColor) >>
+    <<set $app.inhuman +=4>>
+<</if>>
 
 <<if $app.eyeColor !=  "blue" && $app.eyeColor !=  "brown" && $app.eyeColor !=  "gray" && $app.eyeColor !=  "green" && $app.eyeColor !=  "hazel"  >>
 	<<set $app.inhuman +=1>>
@@ -637,9 +628,10 @@
 	<<set $app.inhuman +=2>>
 <<endif>>
 
-<<if $hornyCount == 1>>
+<<set _hornyCount = setup.activeCurseCount("Horny")>>
+<<if _hornyCount == 1>>
 	<<set $app.inhuman +=2>>
-<<elseif $hornyCount == 2>>
+<<elseif _hornyCount == 2>>
 	<<set $app.inhuman +=3>>
 <<endif>>
 
@@ -930,7 +922,6 @@
 
 <<set $app.desc= "">>
 <<set $app.blood="red">>
-<<set $hornyCount = 0>>
 
 <<for _appearEvent range $playerCurses>>
 
@@ -994,10 +985,6 @@
 	<<if _appearEvent.name == "Hemospectrum">>
 		<<set $app.blood = $curse70.variation>>
 		<<set $app.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
-	<<endif>>	
-
-	<<if _appearEvent.name == "Horny">>
-		<<set $hornyCount += 1>>
 	<<endif>>	
 
 	<<if _appearEvent.name == "Drawing Spades">>

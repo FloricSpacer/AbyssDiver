@@ -43,7 +43,21 @@ Config.history.maxStates = 20;
 
 predisplay["Menu Return"] = function (taskName) {
 	if (! tags().contains("noreturn")) {
-		State.variables.return = passage();
+		State.variables.menuReturn = passage();
+	}
+};
+predisplay["Layer Return"] = function (taskName) {
+	if (tags().some(t => t === "surface" || t.startsWith("layer"))) {
+		State.variables.layerReturn = passage();
+	}
+	if (State.variables.comBalloon) {
+		$(document.body).addClass("balloon");
+	} else if (State.variables.layerReturn) {
+		for (var tag of tags(State.variables.layerReturn)) {
+			if (tag === "surface" || tag.startsWith("layer")) {
+				$(document.body).addClass(tag);
+			}
+		}
 	}
 };
 

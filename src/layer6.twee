@@ -1,9 +1,13 @@
-:: Layer6 1 [image layer6]
-<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>><<set $currentLayer = 6>>[img[setup.ImagePath+'Layer Intros/l6intro.png']]
-
-@@.layerTitle;LAYER 6 - CINDERS OF DIS@@
-
-The first hint of the sixth layer is a strong smell of smoke overwhelming your nostrils - a savory, meaty kind of smoke, almost like the smell of barbeque. It almost feels like the flowers beneath you are caressing your feet, but the air gets hotter and hotter as you head further down, and as the flowers begin to become charred and burned awar, the real culprit becomes clear: a squirming carpet of tentacles, thousands or millions of tiny villi completely covering almost every surface on the path ahead, forming an entire field of squirming creatures.
+:: Layer6 1 [layer6]
+<<nobr>>
+<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>>
+<<set $currentLayer = 6>>
+<</nobr>>\
+\
+@@.layerTitle;
+[img[setup.ImagePath+'Layer Intros/l6intro.png']]
+!Layer 6 - Cinders of Dis
+@@The first hint of the sixth layer is a strong smell of smoke overwhelming your nostrils - a savory, meaty kind of smoke, almost like the smell of barbeque. It almost feels like the flowers beneath you are caressing your feet, but the air gets hotter and hotter as you head further down, and as the flowers begin to become charred and burned awar, the real culprit becomes clear: a squirming carpet of tentacles, thousands or millions of tiny villi completely covering almost every surface on the path ahead, forming an entire field of squirming creatures.
 
 They grow taller as you proceed, until you're wading through a thicket or navel-high tentacles, prodding and rubbing against your most sensitive areas. By this point, the heat has become truly intense, almost sauna-like. It's so hot that great swathes of the tentacle fields are actually aflame, thousands of tendrils being birned away and perpetually springing up again, a land of flesh doused in fire: a perfect vision of Hell. Some of the fire are in a familiar orange-red hue, while other come in more exotic greens, pinks, and purples, only lightly tickling when they lap at your skin. Small pieces of rubble, perhaps of some ancient structures, litter the layer...but the tentacles and flames have long since crushed and burned them into unrecognizable, meaningless rock.
 
@@ -232,8 +236,8 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if ( $hornyCount>0 && $StoredCurse.name != "Horny" )|| $hornyCount>1>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("Horny") >= 2>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on Horny]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -302,9 +306,9 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if (  $semenCount>2 && $StoredCurse.name != "Semen Demon" )||  $semenCount>3>>
+<<if setup.takenCurseCount("Semen Demon") >= 4>>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-	<<else>>
+<<else>>
 	<<set _table += "<tr><td>[[Take on Semen Demon]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 		<<if $ManagedMisfortuneActive>>
@@ -316,8 +320,8 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if ( $quotaCount>2 && $StoredCurse.name != "Quota" )|| $quotaCount>3>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("Quota") >= 4>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on Quota]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -330,8 +334,8 @@ A great hissing sound, as if a blimp were leaking its helium, fills your ears as
 		<<set _table += "</tr>">>
 	<<endif>>
 <<endif>>
-<<if ( $limelightCount>2 && $StoredCurse.name != "In the Limelight" )|| $limelightCount>3>>
-<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
+<<if setup.takenCurseCount("In the Limelight") >= 4>>
+	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on In the Limelight]]</td>">>
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -899,7 +903,7 @@ You have successfully taken on the $curse84.name curse. Hopefully you are ok wit
 	<<if ($temp1 == 75) && !$playerCurses.some(e => e.name === "Age Reduction C") && $StoredCurse.name != "Age Reduction C">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 76) && (($hornyCount < 2 && $StoredCurse.name !="Horny" ) || ($hornyCount < 1 )) >>
+	<<if ($temp1 == 76) && setup.takenCurseCount("Horny") < 2>>
 		<<break>>
 	<<endif>>
 	<<if ($temp1 == 77) && !playerCurses.some(e => e.name === "Drawing Spades") && $StoredCurse.name != "Drawing Spades">>
@@ -914,13 +918,13 @@ You have successfully taken on the $curse84.name curse. Hopefully you are ok wit
 	<<if ($temp1 == 80) && !$playerCurses.some(e => e.name === "Wandering Hands") && $StoredCurse.name != "Wandering Hands">>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 81) &&  (($semenCount  < 4 && $StoredCurse.name !="Semen Demon" ) || ($semenCount < 3 )) >>
+	<<if ($temp1 == 81) && setup.takenCurseCount("Semen Demon") < 4>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 82)  &&   (($quotaCount < 4 && $StoredCurse.name !="Quota" ) || ($quotaCount < 3 )) >>
+	<<if ($temp1 == 82) && setup.takenCurseCount("Quota") < 4>>
 		<<break>>
 	<<endif>>
-	<<if ($temp1 == 83) && (($limelightCount < 4 && $StoredCurse.name !="In the Limelight" ) || ($limelightCount < 3 ))>>
+	<<if ($temp1 == 83) && setup.takenCurseCount("In the Limelight") < 4>>
 		<<break>>
 	<<endif>>
 
@@ -1594,7 +1598,7 @@ You wait as your balloon rapidly ascends and you can watch the infernal fields o
 [[Get off the balloon on this layer|Layer6 Hub][$escBalDepl=0]]
 
 
-:: Layer6 Preview [image layer6 noreturn]
+:: Layer6 Preview [image layer6]
 As you bring the charm up to your eye and gaze deep into the red crystal, your vision fades and a new image comes clearly into view:
 
 [img[setup.ImagePath+'Layer Intros/l6intro.png']]
@@ -1630,7 +1634,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <<endif>>
 <</nobr>>
-[[Return|$return][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
 
 :: Layer6Time
