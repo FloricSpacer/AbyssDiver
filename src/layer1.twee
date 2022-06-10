@@ -81,18 +81,52 @@ You spot Saeko crouching near a tree stump with some mold grown over it, wrintin
 [[Return to exploring layer 1|Layer1 Hub]]
 
 
-:: Layer1 Relics [image layer1 nobr]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-relics.png']]
-<br><br>
+:: Layer1 Relics [layer1 cards nobr]
+<h1>Relics</h1>
 
+<p>
+@@.floatr;[img[setup.ImagePath+'icon.png']]@@
+
+If there were ever any powerful, versatile, noteworthy Relics to be found in such an early layer, they were likely claimed by someone else by now. Of course, almost any Relic can be useful under the right circumstances or with some lateral thinking &mdash; these are just a bit harder to find applications for than the rarer Relics you can find deeper in.
+<br><br>
+Some Relic may be particularly well-hidden or require significant detours, causing them to incur a day cost in the search for them, in addition to the standard corruption cost.
+</p>
+
+<p>[[Continue exploring the first layer|Layer1 Hub]]</p>
+
+<div class="cards-grid">
 <<set _totalRelics = $ownedRelics.concat($soldRelics)>>
 <<set _layerRelics = ["Star Compass", "Rømer Stones", "Creepy Doll", "Giddy Reaper", "Silk Twister", "Vertebra Key", "Chain of Lorelei", "Hive Tassel", "Smitten Mitt"]>>
 <<for _name range _layerRelics>>
-	<<if !_totalRelics.some(e => e.name === _name)>><<print "[[Pick up the " + _name + "]]">><br><<endif>>
+<div>
+<<set _relic = $relics.find(r => r.name === _name)>>
+[img[setup.ImagePath + _relic.pic]]
+<h2>_name</h2>
+<p class="cost">
+Cost: <<print _relic.corr>> corruption
+<<if _relic.time > 0>>
++ <<print _relic.time>> day<<if _relic.time > 1>>s<<endif>>
+<<endif>>
+</p>
+<p>
+<<if _totalRelics.some(e => e.name === _name)>>
+Already taken
+<<else>>
+<<print "[[Pick up the " + _name + "]]">>
+<<endif>>
+</p>
+<p>
+<<print _relic.desc>>
+</p>
+<p>
+<<print _relic.weight>> kg,
+<<print _relic.value>> dubloons
+</p>
+</div>
 <</for>>
+</div>
 
-<br>
-[[Continue exploring the first layer|Layer1 Hub]]
+<p>[[Continue exploring the first layer|Layer1 Hub]]</p>
 
 
 :: Layer1 Curses [image layer1]
