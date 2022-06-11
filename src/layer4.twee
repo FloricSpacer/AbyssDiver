@@ -1626,7 +1626,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<else>>
 	<<set $status.penalty = 0>>
 <<endif>>
-<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
+<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty)>>
 <<if $torchUse == 1 && $heat == 1>>
 		<<set $tempTime -= 2>>
 	<<elseif $items[9].count > 0 && $torchUse == 1>>
@@ -1635,6 +1635,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<else>>
 		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>>
 <<endif>>
+<<set $tempTime = Math.max(0, $tempTime)>>
 <<set $timeL4 += $tempTime>>
 <<set $timeL4T1 += $tempTime>>
 <<set $time += $tempTime>>
