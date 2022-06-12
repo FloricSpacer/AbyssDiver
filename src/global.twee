@@ -27,6 +27,36 @@ setup.calcCarriedWeight = function() {
 }
 
 
+:: Check Availability of Cutting Tool [script]
+setup.haveCuttingTool = function() {
+	return variables().cut != 0 || variables().items[14].count > 0 || variables().ownedRelics.some(
+		r => r.name === "Giddy Reaper" || r.name === "Sharing Shears" || r.name === "Sunbeam"
+	);
+}
+
+
+:: Check Availability of Light Source [script]
+// Light sources that are not going to run out during an expedition.
+setup.haveUnlimitedLightSource = function() {
+	return variables().light != 0 || variables().items[10].count > 0 || variables().items[17].count > 0 || variables().ownedRelics.some(
+		r => r.name === "Sunbeam" || r.name === "Glare Vantage"
+	);
+}
+// Light sources that either consume supplies or can only be used in short bursts.
+// Use this function to check for relic reachability.
+setup.havePotentialLightSource = function() {
+	return variables().items[9].count > 0 || variables().ownedRelics.some(
+		r => r.name === "Firmament Pigment"
+	) || setup.haveUnlimitedLightSource();
+}
+// Use this function to check whether a light source is on while traversing the Abyss.
+setup.haveTravelLightSource = function() {
+	return variables().torchUse == 1 || variables().ownedRelics.some(
+		r => r.name === "Blind Divine"
+	) || setup.haveUnlimitedLightSource();
+}
+
+
 :: Stats [noreturn]
 You have $dubloons dubloons.
 You have $corruption corruption points.
@@ -152,7 +182,7 @@ Many options have their abilities as something like a light source or heat sourc
 
 Click this if you have found something that can be used for cutting like a sword:
 [[I have a Cutting Instrument|Adjustments][$cut = 1]]
-[[No Cutting Instrument|Adjustments][$cut = 1]]
+[[No Cutting Instrument|Adjustments][$cut = 0]]
 
 Click this if you have found something that can be used as a light source:
 [[I have a Light|Adjustments][$light = 1]]
@@ -1200,18 +1230,10 @@ How many dubloons would you like to pay back?
 <<if $currentLayer==1>>
 	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty)>>
 <<elseif $currentLayer==2>>
-	<<if $items[14].count > 0 || $cut == 1>>
-		<<set _cutRed = 1>>
-	<<else>>
-		<<set _cutRed = 0>>
-	<</if>>
+	<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
 	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _cutRed)>>
 <<elseif $currentLayer==3>>
-	<<if $items[9].count > 0 || $items[10].count > 0 || $light == 1>>
-		<<set _lightRed = 1>>
-	<<else>>
-		<<set _lightRed = 0>>
-	<</if>>
+	<<set _lightRed = setup.haveTravelLightSource() ? 1 : 0>>
 	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty - _lightRed)>>
 <<elseif $currentLayer==4>>
 	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty)>>
@@ -1258,7 +1280,7 @@ How many dubloons would you like to pay back?
 		<<set $torchUse = 0>>
 	<<endif>>
 	<<set $timeL3T1 += 1>>
-	<<if $torchUse !=1 && $items[10].count < 1  && $light != 1 >>
+	<<if !setup.haveTravelLightSource()>>
 		<<set $timeL3T2 += 1>>
 	<<endif>>
 	

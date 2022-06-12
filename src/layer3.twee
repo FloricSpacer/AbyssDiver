@@ -493,8 +493,8 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<set $tempTime=1>>
 	<<include "GeneralTimeStats">>	
 /* 		<<set $timeL3T1 += 1>>
-	<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
-		<<else>><<set $timeL3T2 += 1>>
+	<<if !setup.haveTravelLightSource()>>
+		<<set $timeL3T2 += 1>>
 	<<endif>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1530,7 +1530,6 @@ You have successfully taken the $relic31.name relic. Hopefully you can make good
 <<nobr>>
 <<set $ownedRelics.push($relic32)>>
 <<set $corruption -= ($relic32.corr - $corRed)>>
-<<set $cut = 1>>
 <<set $tempTime = $relic32.time-$SibylBuff>>
 /*<<include "Layer3Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
@@ -1688,8 +1687,8 @@ Finally, the vision fades, leaving you standing once again where you were before
 <<endif>>
 <<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 <<set $timeL3 += $tempTime>>
-<<if $items[9].count > 0 || $items[10].count > 0 || $items[10].count > 0 || $light == 1>>
-	<<else>><<set $timeL3T2 += $tempTime>>
+<<if !setup.haveTravelLightSource()>>
+	<<set $timeL3T2 += $tempTime>>
 <<endif>>
 <<set $timeL3T1 += $tempTime>>
 <<set $time += $tempTime>>
