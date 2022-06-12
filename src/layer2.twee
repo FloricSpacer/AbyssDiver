@@ -124,55 +124,64 @@ Note: If you try to forage for meat, but run out of bullets or don't have a gun,
 [[Return to exploring the rest of the layer|Layer2 Hub]]
 
 
-:: Layer2 Relics [image layer2]
-<<if $timeL2T1 < 4 || $hiredCompanions.length > 3>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-relics.png']]
+:: Layer2 Relics [layer2 cards nobr]
+<<if $timeL2T1 < 4 || $hiredCompanions.length > 3>>
 
-Only take relics which you are able to meet the requirements for in some way!
+<h1>Relics</h1>
 
-<<nobr>><<if $totalRelics.some(e => e.name === "Firmament Pigment")>>
-	<<else>><<print "[[Pick up the Firmament Pigment]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Pearly Gates")>>
-	<<else>><<print "[[Pick up the Pearly Gates]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "World Stone")>>
-	<<else>><<print "[[Pick up the World Stone]]">>
-<<endif>><</nobr>>
-<<nobr>><<if ($totalRelics.some(e => e.name === "Forest's Gift")) || ($items[14].count < 1 && ($cut == 0))>>
-	<<else>><<print "[[Pick up the Forest's Gift]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Harmless Harmony")>>
-	<<else>><<print "[[Pick up the Harmless Harmony]]">>
-<<endif>><</nobr>>
-<<nobr>><<if ($totalRelics.some(e => e.name === "Umbra Trident")) || ($items[9].count < 1 && $items[10].count < 1 && ($light == 0))>>
-	<<else>><<print "[[Pick up the Umbra Trident]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Event Horizon")>>
-	<<else>><<print "[[Pick up the Event Horizon]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Heart-stealing Stole")>>
-	<<else>><<print "[[Pick up the Heart-stealing Stole]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Effacing Asperity")>>
-	<<else>><<print "[[Pick up the Effacing Asperity]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Wholly Ale")>>
-	<<else>><<print "[[Pick up the Wholly Ale]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Memoir Remnant")>>
-	<<else>><<print "[[Pick up the Memoir Remnant]]">>
-<<endif>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Gleam Dazer")>>
-	<<else>><<print "[[Pick up the Gleam Dazer]]">>
-<<endif>><</nobr>>
+<p>
+@@.floatr;[img[setup.ImagePath+'icon.png']]@@
 
-[[Continue exploring the second layer|Layer2 Hub]]
+Some Relics may have special obstacles that must be overcome and certain supplies required in order to reach them. If you cannot retrieve such Relics, @@.unreachable;red text@@ will tell you why.
+<br><br>
+By default, your companions' reward for coming down here with you is the dubloons you hired them with (and the experience of travelling the Abyss and possibly learing useful information), and the won't be taking any Relics home. Maybe you'd like to give a few Relics to them as gifts? It could really improve your relationship, especially if you give them Relics in line with their goals or personality. After all, if you forge a lifelong bond with them, you'll still get to see and use those gifted Relics whenever you're with them!
+</p>
+
+<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+
+<div class="cards-grid">
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<set _layerRelics = ["Firmament Pigment", "Pearly Gates", "World Stone", "Forest's Gift", "Harmless Harmony", "Umbra Trident", "Event Horizon", "Heart-stealing Stole", "Effacing Asperity", "Wholly Ale", "Memoir Remnant", "Gleam Dazer"]>>
+<<for _name range _layerRelics>>
+<div>
+<<set _relic = $relics.find(r => r.name === _name)>>
+[img[setup.ImagePath + _relic.pic]]
+<h2>_name</h2>
+<p class="cost">
+Cost: <<print _relic.corr>> corruption
+<<if _relic.time > 0>>
++ <<print _relic.time>> day<<if _relic.time > 1>>s<<endif>>
+<<endif>>
+</p>
+<p>
+<<if _totalRelics.some(e => e.name === _name)>>
+Already taken
+<<elseif _name === "Forest's Gift" && !setup.haveCuttingTool()>>
+@@.unreachable;Located in a cavern completely covered in hard brambles. You cannot retrieve this Relic unless you find some kind of cutting tool.@@
+<<elseif _name === "Umbra Trident" && !setup.havePotentialLightSource()>>
+@@.unreachable;Located in a side cavern that is completely unlit. Due to this Relic's properties, it is impossible to move it in complete darkness, and a source of light is required to retrieve it.@@
+<<else>>
+<<print "[[Pick up the " + _name + "]]">>
+<<endif>>
+</p>
+<p>
+<<print _relic.desc>>
+</p>
+<p>
+<<print _relic.weight>> kg,
+<<print _relic.value>> dubloons
+</p>
+</div>
+<</for>>
+</div>
+
+<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
 
 <<else>>
 
-You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path.
+<p>You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path.</p>
 
-[[Deal with the Baying Gourmet|Layer2 Threat1 Main]]
+<p>[[Deal with the Baying Gourmet|Layer2 Threat1 Main]]</p>
 
 <<endif>>
 
@@ -1116,7 +1125,7 @@ You have successfully taken on the $curse24.name curse. Hopefully you are ok wit
 
 
 :: Pick up the Firmament Pigment [layer2]
-<<set $ownedRelics.push($relic10)>><<set $corruption -= ($relic10.corr - $corRed)>><<set $light = 1>>
+<<set $ownedRelics.push($relic10)>><<set $corruption -= ($relic10.corr - $corRed)>>
 
 You have successfully taken the $relic1.name relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
