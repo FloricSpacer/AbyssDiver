@@ -13,7 +13,7 @@
 		<<set $female_start=1>>
 	<<else>>
 		<<set $female_start=0>>
-	<<endif>>
+	<</if>>
 
 	<<if $HeightIncrease==1>>
 		<<set _temp1 =$HeightLog.filter(e => e.name === "Dizzying Heights").length>>
@@ -25,19 +25,19 @@
 		<<set _temp2 =$HeightLog.filter(e => e.name === "1 Day Food Forage Major Impact").length>>
 		<<set _temp3 =$HeightLog.filter(e => e.name === "1 Day Food Forage Minor Impact").length>>
 		<<set $height_change=-5*_temp1-3*_temp2-0.5*_temp3>>	
-	<<endif>>
+	<</if>>
 
 	<<if $HeightLog.some(e=> e.name === "Colossal-able")>>
 		<<set $height_change=$app.height*70-$app.height>>
 		<<set $SizeHandicap=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $HeightLog.some(e=> e.name === "Minish-ish")>>
 		<<set $height_change=$app.modheight/10-$app.height>>
 		<<if $hiredCompanions.length < 1>>
 			<<set $SizeHandicap=1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 
 	<<set $x =18 - $app.appAge>>
@@ -72,7 +72,7 @@
     	<<set $height_pub = $height_adult*(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
 
     	<<set $app.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
-	<<endif>>
+	<</if>>
 
 <</widget>>
 
@@ -84,18 +84,18 @@
 		<<set $app.breastsCor = $app.breasts - 0.1*$x*$app.breasts>>
 		<<if  $app.breastsCor<0>>
 			<<set $app.breastsCor =0>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
 		<<set $app.breastsCor +=2>>
 	<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
 		<<set $app.breastsCor +=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Double Pepperoni") && $app.breastsCor == 0>>
 			<<set $app.breastsCor +=1>>
-	<<endif>>
+	<</if>>
 
 <</widget>>
 
@@ -109,18 +109,18 @@
 		<<set $app.penisCor = $app.penis - 0.083*$x*($app.penis-1)>>
 		<<if  $app.penisCor<1>>
 			<<set $app.penisCor =1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
 		<<set $app.penisCor = $app.penisCor*70>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e=> e.name === "Minish-ish")>>
 		<<set $app.penisCor=$app.penisCor/10>>
-	<<endif>>
+	<</if>>
 
-<<endif>>
+<</if>>
 
 <</widget>>
 
@@ -139,7 +139,7 @@
 	<<set $app.vag = 0>>
 <<else>>
 	<<set $app.vag = 1>>
-<<endif>>
+<</if>>
 <<set $app.womb =0>>
 
 <<for _genderEvent range $GenderLog>>
@@ -150,30 +150,30 @@
 			<<set $app.gender += 1>>
 		<<else>>
 			<<set $app.gender -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
  
 	<<if _genderEvent.name == "Asset Robustness A" >>
 		<<set $app.modpenis += 1>>
 		<<set $app.modbreasts += 1>>
 		<<if $app.penis>0>>
 			<<set $app.penis += 1>>
-		<<endif>>
+		<</if>>
 			<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact A")>>
 			<<set $app.breasts += 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "Asset Robustness B">>
 		<<set $app.modpenis += 2>>
 		<<set $app.modbreasts += 2>>
 		<<if $app.penis>0>>
 			<<set $app.penis += 2>>
-		<<endif>>
+		<</if>>
 		<<if $app.breasts >0 ||  $GenderLog.some(e=> e.name==="Interact B")>>
 				<<set $app.breasts += 2>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "Asset Robustness C">>
 		<<set $app.modpenis += 4>>
@@ -181,12 +181,12 @@
 
 		<<if $app.penis>0>>
 			<<set $app.penis += 4>>
-		<<endif>>
+		<</if>>
 
 		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact C")>>
 			<<set $app.breasts += 4>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "Asset Robustness D">>
 		<<set $app.modpenis += 6>>
@@ -194,23 +194,23 @@
 
 		<<if $app.penis>0>>
 			<<set $app.penis += 6>>
-		<<endif>>
+		<</if>>
 
 		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact D")>>
 			<<set $app.breasts += 6>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "Asset Robustness E">>
 		<<set $app.modpenis += 8>>
 		<<set $app.modbreasts += 8>>
 		<<if $app.penis>0>>
 			<<set $app.penis += 8>>
-		<<endif>>
+		<</if>>
 		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact E")>>
 			<<set $app.breasts += 8>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if  _genderEvent.name == "Sex Switcheroo">>
 		<<if $app.osex == "male">>
@@ -226,8 +226,8 @@
 			<<set $app.vag = 0>>
 			<<set $app.sex = "male">>
 			<<set $app.breasts = 0>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "Futa Fun">>
 		<<if $app.osex == "male">>
@@ -235,30 +235,30 @@
 			<<set $app.breasts += 3 + $app.modbreasts>>
 		<<else>>
 			<<set $app.penis = 3 + $app.modpenis>>
-		<<endif>>
+		<</if>>
 		<<set $app.sex = "futa">>
-	<<endif>>
+	<</if>>
 
 	<<if _genderEvent.name == "Wacky Wombs">>
 		<<if $app.womb ==0>>
 			<<set $app.womb1 = $curse35.variation1>>
 		<<else>>
 			<<set $app.womb2 = $curse35.variation2>>
-		<<endif>>
+		<</if>>
 		<<set $app.womb += 1>>
-	<<endif>>
+	<</if>>
 
 	<<if _genderEvent.name == "1 Day Water Forage Major Impact" >>
 		<<set $app.modpenis += 1>>
 		<<set $app.modbreasts += 1>>
 		<<if $app.penis>0>>
 			<<set $app.penis += 1>>
-		<<endif>>
+		<</if>>
 
 		<<if $app.breasts >0 || $app.breastsCor > 0 >>
 			<<set $app.breasts += 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.modgender += 1>>
@@ -266,8 +266,8 @@
 			<<set $app.gender += 1>>
 		<<else>>
 			<<set $app.gender -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _genderEvent.name == "Doll Transformation">>
 		<<set $app.gender += 1>>
@@ -276,9 +276,9 @@
 		<<else>>
 			<<if $app.vagina<1>>
 				<<set $app.vagina=1>>
-			<<endif>>
-		<<endif>>
-	<<endif>>
+			<</if>>
+		<</if>>
+	<</if>>
 		
 <</for>>
 
@@ -292,8 +292,8 @@
 	<<else>>
 		<<set $app.penis = 1>>
 		<<set $app.breasts = 1>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Leaky")>>
 
@@ -303,9 +303,9 @@
 		<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.">>
 	<<elseif $app.penis > 0>>
 		<<set $curse80.appDesc = "Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.">>
-	<<endif>>
+	<</if>>
 
-<<endif>>
+<</if>>
 <<BreastCorrected>>
 <<PenisCorrected>>
 <<Update_MC_Speech>>
@@ -321,16 +321,16 @@
 			<<set $app.appAge -= 2>>
 		<<else>>
 			<<set $app.appAge = 20>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _ageEvent.name == "Age Reduction B" >>
 		<<if $app.appAge <= 23>>
 			<<set $app.appAge -= 3>>
 		<<else>>
 			<<set $app.appAge = 20>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 
 	<<if _ageEvent.name == "Age Reduction C" >>
@@ -338,24 +338,24 @@
 			<<set $app.appAge -= 4>>
 		<<else>>
 			<<set $app.appAge = 20>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if _ageEvent.name == "1 Day Food Forage Minor Impact" >>
 		<<set $app.appAge -= 0.08>>
-	<<endif>>
+	<</if>>
 
 	<<if _ageEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.appAge -= 1>>
-	<<endif>>
+	<</if>>
 
 	<<if _ageEvent.name == "Doll Transformation">>
 		<<if $app.appAge>18>>
 			<<set $app.appAge = 17>>
 		<<else>>
 			<<set $app.appAge -= 2>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 <</for>>
 
@@ -369,26 +369,26 @@
 
 	<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E"  >>
 		<<set $app.libido += 1>>
-	<<endif>>
+	<</if>>
 
 
 	<<if _libidoEvent.name == "DoS" || _libidoEvent.name == "Submissiveness Rectification A" || _libidoEvent.name == "Submissiveness Rectification B" >>
 		<<set $subdom += 1>>
-	<<endif>>
+	<</if>>
 
 	<<if _libidoEvent.name == "DoM" || _libidoEvent.name == "Power Dom">>
 		<<set $subdom -= 1>>
-	<<endif>>
+	<</if>>
 
 	<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
 		<<set $app.libido += 1>>
-	<<endif>>
+	<</if>>
 
 	<<if $lastFlan >0 >>
 		<<if $lastFlan==$day>>
 			<<set $app.libido += 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 <</for>>
 <</widget>>
@@ -399,7 +399,7 @@
 		he
 	<<else>>
 		she
-	<<endif>>
+	<</if>>
 <</widget>>
 
 <<widget "ObjectivePronoun">>
@@ -407,7 +407,7 @@
 		him
 	<<else>>
 		her
-	<<endif>>
+	<</if>>
 <</widget>>
 
 <<widget "PossesivePronoun">>
@@ -415,7 +415,7 @@
 		his
 	<<else>>
 		hers
-	<<endif>>
+	<</if>>
 <</widget>>
 
 <<widget "GenderPronoun">> 
@@ -429,7 +429,7 @@
 		girlish
 	<<else>>
 		feminine
-	<<endif>>
+	<</if>>
 <</widget>>
 
 
@@ -439,7 +439,7 @@
 		<<set $app.appGender = 2*($app.gender-1) -0.25*($app.penisCor-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent-1>>
 	<<else>>
 		<<set $app.appGender = 2*($app.gender-1) -0.25*($app.penisCor-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent>>
-	<<endif>>
+	<</if>>
 <</widget>>
 
 <<widget "mrms">>\
@@ -447,7 +447,7 @@
 		mr.\
 	<<else>>\
 		miss\
-	<<endif>>\
+	<</if>>\
 <</widget>>
 
 <<widget "PerceivedGender">>\
@@ -457,14 +457,14 @@
 			man\
 		<<else>>\
 			boy\
-		<<endif>>\
+		<</if>>\
 	<<else>>\
 		<<if $app.appAge>15.5>>\
 			woman\
 		<<else>>\
 			girl\
-		<<endif>>\
-	<<endif>>\
+		<</if>>\
+	<</if>>\
 <</widget>>
 
 <<widget "PerceivedGender2">>\
@@ -474,14 +474,14 @@
 			dude\
 		<<else>>\
 			boy\
-		<<endif>>\
+		<</if>>\
 	<<else>>\
 		<<if $app.appAge>15.5>>\
 			lady\
 		<<else>>\
 			girl\
-		<<endif>>\
-	<<endif>>\
+		<</if>>\
+	<</if>>\
 <</widget>>
 
 <<widget "PerceivedStature">>
@@ -490,12 +490,12 @@
 			little
 	<<elseif $height >180>>
 			big
-	<<endif>>
+	<</if>>
 	<<if $app.appAge<12>>
 			young
 	<<elseif $app.appAge>40>>
 			old
-	<<endif>>
+	<</if>>
 <</widget>>
 
 <<widget "PerceivedRace">>
@@ -507,7 +507,7 @@
 			antrophomorph
 	<<else>>
 			monster
-	<<endif>>
+	<</if>>
 <</widget>>
 
 
@@ -517,7 +517,7 @@
 	<<set $groupsize= $hiredCompanions.length >>
 <<else>>
 	<<set $groupsize= $hiredCompanions.length +1>>
-<<endif>>
+<</if>>
 
 <<set $total_value_relics=0>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
@@ -528,7 +528,7 @@
 	<<set $threat1Crit=1>>
 <<else>>
 	<<set $threat1Crit=0>>
-<<endif>>
+<</if>>
 <</widget>>
 
 
@@ -545,63 +545,63 @@
 		<<set $lewdness +=2>>
 	<<elseif $app.breastsCor>9>>
 		<<set $lewdness +=3>>
-	<<endif>>
+	<</if>>
 
 	<<if $app.penis>6>>
 		<<set $lewdness +=1>>
 	<<elseif $app.penis>10>>
 		<<set $lewdness +=2>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
 		<<set $lewdness +=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
 		<<set $lewdness +=2>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
 		<<set $lewdness +=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Hard Mode")>>
 		<<set $lewdness +=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Hijinks Ensue")>>
 		<<set $lewdness +=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Wandering Hands")>>
 		<<set $lewdness +=2>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Leaky")>>
 		<<set $lewdness +=2>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Softie")>>
 		<<set $lewdness -=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Blushing Virgin")>>
 		<<set $lewdness -=1>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
 		<<set $lewdness -=2>>
-	<<endif>>
+	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
 		<<set $lewdness +=1>>
-	<<endif>>
+	<</if>>
 	<<if $playerCurses.some(e => e.name === "Refractory Refactorization")>>
 		<<set $lewdness +=1>>
-	<<endif>>
+	<</if>>
 	<<if $playerCurses.some(e => e.name === "Increased Sensitivity") && $playerCurses.some(e => e.name === "Refractory Refactorization")>>
 			<<set $lewdness +=4>>
-	<<endif>>
+	<</if>>
 <</widget>>
 
 
@@ -610,7 +610,7 @@
 <<set $app.inhuman =0>>
 <<if $app.ears != "normal human">>
 	<<set $app.inhuman +=1>>
-<<endif>>
+<</if>>
 
 <<if !["pale", "tanned", "olive", "brown", "dark brown"].includes($app.skinColor) >>
     <<set $app.inhuman +=4>>
@@ -618,48 +618,48 @@
 
 <<if $app.eyeColor !=  "blue" && $app.eyeColor !=  "brown" && $app.eyeColor !=  "gray" && $app.eyeColor !=  "green" && $app.eyeColor !=  "hazel"  >>
 	<<set $app.inhuman +=1>>
-<<endif>>
+<</if>>
 
 <<if $app.skinType.length > 0 && $app.skinType!="hairless, smooth">>
 	<<set $app.inhuman +=4>>
-<<endif>>
+<</if>>
 
 <<if $app.blood !="red">>
 	<<set $app.inhuman +=2>>
-<<endif>>
+<</if>>
 
 <<set _hornyCount = setup.activeCurseCount("Horny")>>
 <<if _hornyCount == 1>>
 	<<set $app.inhuman +=2>>
 <<elseif _hornyCount == 2>>
 	<<set $app.inhuman +=3>>
-<<endif>>
+<</if>>
 
 <<if $app.tail.length > 0>>
 <<for $i = 0; $i < $app.tail.length; $i++>>
 		<<set $app.inhuman +=2>>
 <</for>>
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Megadontia")>>
 	<<set $app.inhuman +=1>>
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>
 	<<set $app.inhuman +=1>>
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
 	<<set $app.inhuman +=1>>
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Flower Power")>>
 	<<set $app.inhuman +=4>>
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Wriggly Antennae")>>
 	<<set $app.inhuman +=2>>
-<<endif>>
+<</if>>
 
 <</widget>>
 
@@ -678,7 +678,7 @@
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.4);background-color: black;">>
 		<<else>>
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.2);background-color: black;">>
-		<<endif>>
+		<</if>>
 
 	<<elseif $app.gender==2 >>
 
@@ -692,7 +692,7 @@
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.4);background-color: black;">>
 		<<else>>
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.2);background-color: black;">>
-		<<endif>>
+		<</if>>
 
 	<<elseif $app.gender==3 >>
 
@@ -706,7 +706,7 @@
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.4);background-color: black;">>
 		<<else>>
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.2);background-color: black;">>
-		<<endif>>
+		<</if>>
 
 	<<elseif $app.gender==4 >>
 
@@ -720,7 +720,7 @@
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.4);background-color: black;">>
 		<<else>>
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.2);background-color: black;">>
-		<<endif>>
+		<</if>>
 
 	<<elseif $app.gender==5 >>
 
@@ -734,7 +734,7 @@
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.4);background-color: black;">>
 		<<else>>
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.2);background-color: black;">>
-		<<endif>>
+		<</if>>
 
 	<<else>>
 		<<if $app.appAge>18>>
@@ -747,9 +747,9 @@
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
 		<<else>>
 			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
-		<<endif>>
+		<</if>>
 
-	<<endif>>
+	<</if>>
 		<<set $mc = {
 	name: $app.name,
 	imageIcon: "icon.png",
@@ -762,17 +762,17 @@
 		<<set $mc.imageIcon="Icons/npcM.png">>
 	<<else>>
 		<<set $mc.imageIcon="Icons/npcF.png">>
-	<<endif>>
+	<</if>>
 
 	<<if $app.gender<1 >>
 		<<set $mc.genderVoice=1>>
 	<<elseif $app.gender>6>>
 		<<set $mc.genderVoice=6>>
-	<<endif>>
+	<</if>>
 
 	<<if $colwear>>
 		<<set $mc.genderVoice=99>>
-	<<endif>>
+	<</if>>
 <</widget>>
 
 
@@ -793,23 +793,23 @@
 <<if $MaruConvo1>>
 	<<set $items[1].count +=1 >>
 	Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
-<<endif>>
-<<endif>>
+<</if>>
+<</if>>
 
 <<if $Lily_LastT<$time-10>>
 <<set $companionLily.affec+=(1+$hsswear)>>
 <<set $Lily_LastT=$time>>
-<<endif>>
+<</if>>
 
 <<if $Khemia_LastT<$time-10>>
 <<set $companionKhemia.affec+=(1+$hsswear)>>
 <<set $Khemia_LastT=$time>>
-<<endif>>
+<</if>>
 
 <<if $Cherry_LastT<$time-10>>
 <<set $companionCherry.affec+=(1+$hsswear)>>
 <<set $Cherry_LastT=$time>>
-<<endif>>
+<</if>>
 
 <<if $Cloud_LastT<$time-10>>
 <<set $companionCloud.affec+=(1+$hsswear)>>
@@ -824,14 +824,14 @@
 	<<set $temp = random(2,5)
 	<<set $dubloons += $temp >>
 	Cloud managed to scavenge a bit of cash, presumably left behind by a previous diver. You have gained $temp dubloons!<br><br>
-	<<endif>>
-<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
+<</if>>
 
 <<if $Saeko_LastT<$time-10>>
 <<set $companionSaeko.affec+=(1+$hsswear)>>
 <<set $Saeko_LastT=$time>>
-<<endif>>
+<</if>>
 
 <<if $fit_adjustLastT<$time-20>>
 	<<if $fit>8>>
@@ -840,8 +840,8 @@
 	<<elseif $fit<5>>
 	<<set $fit+=1>>
 	The constant physical activity of the expedition increases your fitness to somewhat more average levels<br><br>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 
 <</widget>>
 
@@ -854,57 +854,57 @@
 <<if $playerCurses.some(e => e.name === "Weakling")>>
 	<<set $ocarryWeight = 7.5>>
 	<<set $app.fit=0>>
-<<endif>>
+<</if>>
 
 <<if $app.osex=='male'>>
 	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5-$app.gender+1) )>>
 <<else>>
 	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5+6-$app.gender) )>>
-<<endif>>
+<</if>>
 
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<if $ownedRelics[$i].name == "Pocket Hoard">>
 		<<if $ownedRelics[$i].active == 1>>
 			<<set $carryWeight += 999>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 <</for>>
 
 <<set $totalCarry = $carryWeight>>
 
 <<if $hiredCompanions.some(e => e.name === "Maru")>>
 	<<set $totalCarry += $companionMaru.carry>>
-<<endif>>
+<</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Lily")>>
 	<<set $totalCarry += $companionLily.carry>>
 	<<if $LilyConvo1>>
 		<<set $totalCarry += 5>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Khemia")>>
 	<<set $totalCarry += $companionKhemia.carry>>
-<<endif>>
+<</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Cherry")>>
 	<<set $totalCarry += $companionCherry.carry>>
-<<endif>>
+<</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Cloud")>>
 	<<set $totalCarry += $companionCloud.carry>>
-<<endif>>
+<</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Saeko")>>
 	<<set $totalCarry += $companionSaeko.carry>>
-<<endif>>
+<</if>>
 
 <<set _carriedWeight = setup.calcCarriedWeight()>>
 <<if $totalCarry*1.1 < _carriedWeight >>
 	<br>@@.alert2; You are severely overburdened!@@<br>
 <<elseif $totalCarry*1 < _carriedWeight  >>
 	<br>@@.alert1; You are overburdened!@@<br>
-<<endif>>
+<</if>>
 
 <</widget>>
 
@@ -928,68 +928,68 @@
 	<<if _appearEvent.name == "Hair Removal">>
 		<<set $app.skinType = "hairless, smooth">>
 		<<set $app.bodyhair = 0>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Knife-ear">>
 		<<set $app.ears = "pointed, elfish">>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Perma-dye">>
 		<<set $app.hair = $curse7.variation>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Fluffy Ears">>
 		<<set $app.ears = $curse17.variation>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Fluffy Tail">>
 		<<set $app.tail.push($curse18.variation)>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Maximum Fluff">>
 		<<set $app.skinType = $curse19.variation>>
 		<<set $app.bodyhair = 1>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Gooey">>
 		<<set $app.skinType = "sticky, slimy">>
 		<<set $app.bodyhair = 0>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Rainbow Swirl">>
 		<<set $app.skinColor= $curse38.variation>>
 		<<set $app.eyeColor= $curse38.variation>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Tipping the Scales">>
 		<<set $app.skinType = "reptilian scaled">>
 		<<set $app.bodyhair = 0>>
 		<<set $app.skinColor = $curse54.variation>>
-	<<endif>>	
+	<</if>>	
 	
 	<<if _appearEvent.name == "Reptail">>
 		<<set $app.tail.push("large, spiked, scaled reptile")>>
-	<<endif>>
+	<</if>>
 	
 	<<if _appearEvent.name == "Cellulose">>
 		<<set $app.skinType = "smooth, slightly rigid, plant-like">>
 		<<set $app.bodyhair = 0>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Carapacian">>
 		<<set $app.skinType = "hard, shiny, chitin-exoskeleton">>
 		<<set $app.skinColor = $curse69.variation >>
 		<<set $app.bodyhair = 0>>
-	<<endif>>
+	<</if>>
 
 	<<if _appearEvent.name == "Hemospectrum">>
 		<<set $app.blood = $curse70.variation>>
 		<<set $app.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
-	<<endif>>	
+	<</if>>	
 
 	<<if _appearEvent.name == "Drawing Spades">>
 		<<set $app.tail.push("cute, spade-tipped demon")>>
-	<<endif>>	
+	<</if>>	
 
 <</for>>
 <</widget>>
@@ -1006,32 +1006,32 @@
 	<<set _temp += 1 >>
 <<elseif $MaruConvo3==0 && $companionMaru.affec>20 && $app.appGender<4 && $subdom > -1 && $MaruConvo2 >>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 
 <<if $LilyConvo0==0 && $hiredCompanions.some(e=> e.name === 'Lily')>>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 <<if $LilyConvo1==0 && $companionLily.affec>6 && $LilyConvo0 >>
 	<<set _temp += 1 >>
 <<elseif $LilyConvo2==0 && $companionLily.affec>15 && $LilyConvo1 && 0>>
 	<<set _temp += 1 >>
 <<elseif $LilyConvo3==0 && $companionLily.affec>20 && $app.appGender>7 && $subdom < 1 && $LilyConvo2 >>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 
 <<if $KhemiaConvo0==0 && $hiredCompanions.some(e=> e.name === 'Khemia')>>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 <<if $KhemiaConvo1==0 && $companionKhemia.affec>6 && $KhemiaConvo0 && 0>>
 	<<set _temp += 1 >>
 <<elseif $KhemiaConvo2==0 && $companionKhemia.affec>15 && $KhemiaConvo1 >>
 	<<set _temp += 1 >>
 <<elseif $KhemiaConvo3==0 && $companionKhemia.affec>20 && app.appGender>9 &&$subdom < 0 && $KhemiaConvo2 >>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 
 <<if $CherryConvo0==0 && $hiredCompanions.some(e=> e.name === 'Cherry')>>
 	<<set _temp += 1 >>
@@ -1041,32 +1041,32 @@
 	<<set _temp += 1 >>
 <<elseif $CherryConvo3==0 && $companionCherry.affec>20 && $app.appGender<6 && $subdom > 0 && $CherryConvo2 >>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 
 <<if $CloudConvo0==0 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 <<if $CloudConvo1==0 && $CloudAffec>6 && $CloudConvo0>>
 	<<set _temp += 1 >>
 <<elseif $CloudConvo2==0 && $CloudAffec>15 && $CloudConvo1 && 0>>
 	<<set _temp += 1 >>
 <<elseif $CloudConvo3==0 && $CloudAffec>20 && $subdom < 2 && $CloudConvo2 >>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 
 <<if $SaekoConvo0==0 && $hiredCompanions.some(e=> e.name === 'Saeko')>>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 <<if $SaekoConvo1==0 && $companionSaeko.affec>10 && $SaekoConvo0 && 0>>
 	<<set _temp += 1 >>
 <<elseif $SaekoConvo2==0 && $companionSaeko.affec>20 && $SaekoConvo1 >>
 	<<set _temp += 1 >>
 <<elseif $SaekoConvo3==0 && $companionSaeko.affec>30 && $SaekoConvo2 >>
 	<<set _temp += 1 >>
-<<endif>>
+<</if>>
 
 <<if _temp > 0>>
 @@.alert1; You have available conversations! @@ 
-<<endif>>
+<</if>>
 
 <</widget>>

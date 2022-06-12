@@ -77,10 +77,10 @@ Now I think you can have a look around the town and choose how to spend your dub
 <<set $currentLayer = 0>>
 <<if !isPlaying("surface")>>
 	<<masteraudio stop>><<audio "surface" volume 0.2 play loop>>
-<<endif>>
+<</if>>
 <<if $items[22].count>0>>
 	<<set $warmCloth=1>>
-<<endif>>
+<</if>>
 <<CarryAdjust>><<checkTime>>
 <</nobr>><<if $dubloons >= 0 || $hiredCompanions.some(e => e.name === "Cloud")>>Here at Outset Town you can spend your $dubloons dubloons on hiring companions and buying equipment for your journey. On return visits you can also sell relics you've found in the abyss or settle down above the surface permanently.
 
@@ -88,7 +88,7 @@ Now I think you can have a look around the town and choose how to spend your dub
 <<if $visitL1 == 0>>Whenever you're ready, feel free to start your expedition into the Abyss!<br>
 <<else>>
 Whenever you're ready, you can continue your expedition into the Abyss!
-<<endif>>
+<</if>>
 <<set $layerTemp = random(0,20)>>
 <<if $layerTemp == 1>>
 <br><br>As you walk around town, you notice a woman with hot pink hair and enormous breasts trying to haggle the price of a relic up. She holds a relatively mundane cup up towards the merchant in apparent exasperation, but he seems unfazed and simply shrugs his shoulders. After a moment of waiting, she sighs and hands him the cup, receiving a small amount of dubloons in return, seemingly unsuccessful in her bargaining attempt.<br><br>
@@ -100,24 +100,24 @@ Whenever you're ready, you can continue your expedition into the Abyss!
 <br><br>An apparently quite young boy, seemingly barely even a teenager, seems to be getting into a fight with a very scantily-clad woman in front of a non-descript building with a few similarly-dressed women inside watching. At first the words are indistinct, but then the boy gets louder as he tries to offer money and is refused for obvious reasons. He tries to give some justification and offer the money again, but the woman calls a large man in an imposing security uniform who escorts him away from the premises. The boy complains, but ultimately walks away disappointed.<br><br>
 <<elseif $layerTemp == 5>>
 <br><br>A quiet black-haired young woman, who you seem to remember from the companion area, seems to be sitting on a bench in the middle of town with a notebook in her lap. She seems to be writing vigorously whenever an abnormal looking person walk by, but becomes still when no one atypical is in sight. When she notices you looking at her, she meets your eyes for a moment, but then goes back to her previous behavior of intermittent rapid scrawls when someone interesting happens by the town center.<br><br>
-<<endif>>
+<</if>>
 <</nobr>>
 
 <<nobr>>
 <<if $tunnelUsed == 1>>
 [[Look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
-<<endif>>
+<</if>>
 <<if $hiredCompanions.length > 0 || $items[21].count>0>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
-<<endif>>
+<</if>>
 [[Use Items and Relics]]<br>
 [[Visit the Administrative Building|Surface Admin]]<br>
 <<if $items[19].count > 0>>
 [[Go to the Relic Workshop|Surface Workshop]]<br>
-<<endif>>
+<</if>>
 <<if $items[18].count > 0>>
 [[Go to the Inn|Surface Inn]]<br>
-<<endif>>
+<</if>>
 [[Enter the item shop|Surface Shop 1]]<br>
 [[Sell your relics|Surface Sell 1]]<br>
 <<nobr>>
@@ -136,7 +136,7 @@ You must have a positive dubloon total or hire Cloud so you can go into debt.
 Would you like to go back to before you were in debt without a creditor, like Cloud?
 
 <<back [[Go back to before you were in debt|Surface Hub]]>>
-<<endif>>
+<</if>>
 
 :: ShopInventory [nobr]
 <p>Here are the items available for your to spend your $dubloons dubloons on.</p>
@@ -154,18 +154,18 @@ Would you like to go back to before you were in debt without a creditor, like Cl
 <<button `"Buy 6 bullets for " + $items[20].cost + " dubloons"` `"Buy Bullets"`>><</button>>
 <<else>>
 <button class="link-internal macro-button" type="button" disabled>Already bought</button>
-<<endif>>
+<</if>>
 <<elseif _item.cost>>
 <<button `"Buy for " + _item.cost + (_item.cost == 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
 <<else>>
 <<button `"Exchange dubloons"` `"Exchange dubloons"`>><</button>>
-<<endif>>
+<</if>>
 </p>
 <p>
 <<print _item.desc>>
-<<if _item.weight>><br><br><<print _item.weight>> kg<<endif>><<if _item.name == "Commerce Balloon" || _item.name == "Escape Balloon">>. Folds up for easy storage.<<endif>>
-<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<<endif>>
-<<if _item.name == "Warding Brace">> each<<endif>>
+<<if _item.weight>><br><br><<print _item.weight>> kg<</if>><<if _item.name == "Commerce Balloon" || _item.name == "Escape Balloon">>. Folds up for easy storage.<</if>>
+<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<</if>>
+<<if _item.name == "Warding Brace">> each<</if>>
 </p>
 </div>
 <</for>>
@@ -190,7 +190,7 @@ Would you like to go back to before you were in debt without a creditor, like Cl
 <p>
 You currently have 1 companion token due to playing in easy mode. This allows you to hire any single companion for free one time, no matter what their normal cost is. It only works one time, so spend it wisely!
 </p>
-<<endif>>
+<</if>>
 
 <p>
 These are descriptions of the companions when they first join you on your expedition, but if you get closer to them over time or fulfill other criteria, then you can have additional conversations with them and they might just have other skills they can use to help you!
@@ -206,7 +206,7 @@ These are descriptions of the companions when they first join you on your expedi
 <button class="link-internal macro-button" type="button" disabled>Already hired</button>
 <<else>>
 <<button `"Hire for " + _companion.cost + " dubloons"` `"Hire " + _companion.name`>><</button>>
-<<endif>>
+<</if>>
 </p>
 <p><<include `_companion.name + " Introduction"`>></p>
 </div>
@@ -247,7 +247,7 @@ It won't take too long to make your way down to the Abyss proper &mdash; there's
 	<<set $compTok = 0>>
 <<else>>
 	<<set $dubloons -= $companionMaru.cost>>
-<<endif>>
+<</if>>
 <</nobr>>
 You have successfully hired Maru. Hopefully he brings you a lot of joy and helps you along in your journey.
 
@@ -262,7 +262,7 @@ You have successfully hired Maru. Hopefully he brings you a lot of joy and helps
 	<<set $compTok = 0>>
 <<else>>
 	<<set $dubloons -= $companionLily.cost>>
-<<endif>>
+<</if>>
 <</nobr>><<set $sellAdd = 10>>
 You have successfully hired Lily. Hopefully her electric personality and excellent haggling serve you well in your journey.
 
@@ -276,7 +276,7 @@ You have successfully hired Lily. Hopefully her electric personality and excelle
 	<<set $compTok = 0>>
 <<else>>
 	<<set $dubloons -= $companionKhemia.cost>>
-<<endif>>
+<</if>>
 <</nobr>><<set $timeRed = 2>>
 You have successfully hired Khemia. Hopefully his fighting expertise and experience in traversing the abyss help you along your journey.
 
@@ -291,7 +291,7 @@ You have successfully hired Khemia. Hopefully his fighting expertise and experie
 	<<set $compTok = 0>>
 <<else>>
 	<<set $dubloons -= $companionCherry.cost>>
-<<endif>>
+<</if>>
 <</nobr>><<set $statRed = 1>>
 You have successfully hired Cherry. Hopefully her chaotic luck and medical knowledge serve you well in your journey.
 
@@ -306,7 +306,7 @@ You have successfully hired Cherry. Hopefully her chaotic luck and medical knowl
 	<<set $compTok = 0>>
 <<else>>
 	<<set $dubloons -= $companionCloud.cost>>
-<<endif>>
+<</if>>
 <</nobr>><<set $bullRed = 2>>
 You have successfully hired Cloud! Hopefully he brings you a lot of joy and helps you along in your journey.
 
@@ -322,7 +322,7 @@ You have successfully hired Cloud! Hopefully he brings you a lot of joy and help
 	<<set $compTok = 0>>
 <<else>>
 	<<set $dubloons -= $companionSaeko.cost>>
-<<endif>>
+<</if>>
 <</nobr>><<set $corRed = 5>><<set $abyssKnow = 1>>
 You have successfully hired Saeko. Hopefully her extensive knowledge of abyssal theory and corruption serve you well in your journey.
 
@@ -623,13 +623,13 @@ Cashing out, really? Where is your sense of adventure?
 			[[Choose to stay on the surface|L0 HLew HInhum LAge HDub]]
 		<<else>>
 			[[Choose to stay on the surface|L0 HLew HInhum LAge LDub]]
-		<<endif>>
+		<</if>>
 	<<elseif $corruption < 0>>
 		You must have a corruption value of 0 or greater to choose a habitation option.
 	<<else>>
 		You must pay off all of your debt to settle down for habitation on the surface. You have $debt dubloons of debt, which you can pay at the Administrative Building.
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -640,7 +640,7 @@ Cashing out, really? Where is your sense of adventure?
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $tempTime = (Math.max(1 - $timeRed + $status.penalty, 0))>>
 <<set $corruption -= (10 - $corRed)>>
 <<set $timeL1 += $tempTime>>
@@ -649,7 +649,7 @@ Cashing out, really? Where is your sense of adventure?
 	<<set $items[1].count -= $tempTime>>
 	<<else>>
 	<<set $foodL1 += $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -657,10 +657,10 @@ Cashing out, really? Where is your sense of adventure?
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 		<<else>>
 		<<set $waterL1 += 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>><<masteraudio stop>><<audio "surface" volume 0.2 play loop>>
 You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
@@ -672,7 +672,7 @@ You continue your hike and eventually you see the edge of the Abyss, then eventu
 
 :: Surface Sell 1 [surface]
 
-Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions<<if $debt > 0>>, pay off your debt,<<endif>> or just get a nice payday at the end of your expedition.
+Here you can permanently sell any of your collected relics for a nice haul of dubloons. You can use this to fund further expeditions<<if $debt > 0>>, pay off your debt,<</if>> or just get a nice payday at the end of your expedition.
 
 Choose the relic you would like to sell:
 <<nobr>>
@@ -692,7 +692,7 @@ Choose the relic you would like to sell:
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<endif>>
+		<</if>>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -722,36 +722,36 @@ You step into the Relic Workshop of Outset Town. The air is thick with the smell
 		<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
 
 		[[Use Purity Wood Plank|Surface Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
-	<<endif>>
+	<</if>>
 
 	<<if $ownedRelics[$i].name == "Rømer Stones" && $warmCloth == 0 && $coolCloth == 0>>
 	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will use all of the Rømer stones to craft.<br>
 		[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1,$warmCloth=1]]<br>
 		[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $coolCloth=1]]<br>
-	<<endif>>
+	<</if>>
 	<<if $ownedRelics[$i].name == "Creepy Doll" && $dollevent==false>>
 		<br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
 		[[Use scizzors to cut open the doll|Doll event]]<br>
-	<<endif>>
+	<</if>>
 	<<if $ownedRelics[$i].name == "Brave Vector" && $slingshot == 0>>
 		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to reccomend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo.<br>
 		[[Reshape the Brave Vector into a powerful slingshot|Surface Workshop][$slingshot = 1]]<br>
-	<<endif>>
+	<</if>>
 	<<if $ownedRelics[$i].name == "Joyous Sunder" && $joyousSword == 0>>
 		<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. <br>
 		[[Reshape the Joyous Sunder into a true sword|Surface Workshop][$joyousSword = 1]]<br>
-	<<endif>>
+	<</if>>
 	<<if $ownedRelics[$i].name == "Omoikane Circuit" && $items[17].count > 0>>
 		<br>You heard that the Omoikone Circuit was a relic designed to put in your phone. So why don't you try putting it here within the safety of the relic workshop?<br>
 		[[Time to upgrade that phone!|AI ConvoIn][$items[17].count  = 0, $items[21].count  = 1, $ownedRelics.deleteAt($i) ]]<br>
-	<<endif>>
+	<</if>>
 	<</capture>>
 <</for>>
 <<if $items[21].count > 0>>
 	<br>Is listening to that snarky AI worth the spec upgrade to the Omoikone Smartphone?<br>
 	[[Hell no, time for a downgrade|AI ConvoOut][$items[17].count  = 1, $items[21].count  = 0, $ownedRelics.push($relic36) ]]<br>
-<<endif>>
+<</if>>
 <</nobr>>
 
 [[Continue your business in Outset Town|Surface Hub]]
@@ -1067,7 +1067,7 @@ You wake up in a corner of the Relic Workshop with the doll clutched tightly in 
   <<set $convoStart=1>>
   <<set $dollevent=true>>
 <</link>>
-<<endif>>
+<</if>>
 
 
 :: DollWarning 
@@ -1143,7 +1143,7 @@ You scramble to get your clothes and hurry out of the rotten house, leaving this
 You want to throw the doll away, but your body simply refuses. At the moment it seems there is nothing you can do. No matter what you want to do, you can neither get rid of the doll, nor change your clothes.
 
 [[Continue your adventure wearing the tattered dress and carrying the doll|Layer1 Hub][$creepydoll.affec += 10, $convoStart=1, $dollevent2=true, $choice1=0]]
-<<endif>>
+<</if>>
 
 
 :: Surface Inn [surface indoor nobr]
@@ -1156,14 +1156,14 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 	<br><br>
 	<<set $items[0].count = Math.max($items[0].count, 0)>>
 	<<set $items[1].count = Math.max($items[1].count, 0)>>
-<<endif>>
+<</if>>
 
 <<if $innUsed != $time>>
 	You can eat and drink enough to make yourself extra full and save a day of food and water on your travels.<br>
 	[[Eat and drink the delicious food and drink|Surface Inn][$items[0].count += 1, $items[1].count += 1, $innUsed = $time]]
 <<else>>
 	You are already full, but you can come back another day to get more freshly cooked meals and clear, cool water when you come back later.
-<<endif>>
+<</if>>
 <br><br>
 
 <<include "Inn Storage">>
@@ -1177,14 +1177,14 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 	You can retrieve all of the dubloons you have stored in your inn room. You currently have $innDubloons stored.<br>
 	[[Retrieve your dubloons|passage()][$dubloons += $innDubloons, $innDubloons = 0]]
 	<br><br>
-<<endif>>
+<</if>>
 
 <<if $dubloons > 0>>
 	You can store any of your dubloons at the inn, in case you'd like to pick them up later. If you'd like to stash your dubloons, enter the amount you'd like to store and press Stash.<br>
 	<<textbox "$temp" "0">>
 	[[Stash your dubloons|passage()][$dubloons -= parseInt($temp), $innDubloons += parseInt($temp)]]
 	<br><br>
-<<endif>>
+<</if>>
 
 <<if $innRelics.length > 0>>
 	You can pick up any of the Relics you've previously stored in your inn room:<br>
@@ -1194,7 +1194,7 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 		<</capture>>
 	<</for>>
 	<br>
-<<endif>>
+<</if>>
 
 <<if $ownedRelics.length > 0>>
 	You can store any Relics you're holding here for safe keeping or if you just want to reduce the weight you're holding.
@@ -1213,11 +1213,11 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
 			<<else>>
 				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-			<<endif>>
+			<</if>>
 		<</capture>>
 	<</for>>
 	<br>
-<<endif>>
+<</if>>
 
 
 :: Surface Admin [surface indoor]
@@ -1230,11 +1230,11 @@ For a small fee of 10 dubloons, you can change your legal name from $app.name to
 
 You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
 [[Borrow more money|Surface debt1]]
-<<endif>><<if $debt > 0>>
+<</if>><<if $debt > 0>>
 
 You currently have $debt dubloons of debt, which you can pay off now to allow yourself to settle down at a habitation option.
 [[Pay off your debt|Surface debt2]]
-<<endif>>
+<</if>>
 
 [[Continue your business on the surface|Surface Hub]]
 
