@@ -5,7 +5,7 @@
 <<if $dubloons < 0>>
 	<<set $debt += parseInt(Math.round(-1 * $dubloons * 1.2))>>
 	<<set $dubloons = 0>>
-<<endif>>
+<</if>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -18,8 +18,8 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 [[Walk through the first layer of the Abyss|Layer1 Hub]]
 <<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
 	<<if $visitL1 == 0>>
-	<<print "[[Use Cherry's chaotic luck|Layer1 Cherry]]">><br><<endif>>
-<<endif>><</nobr>>
+	<<print "[[Use Cherry's chaotic luck|Layer1 Cherry]]">><br><</if>>
+<</if>><</nobr>>
 
 
 :: Layer1 Hub [layer1]
@@ -42,27 +42,27 @@ You spot Saeko crouching near a tree stump with some mold grown over it, writing
 <<elseif $layerTemp >= 19>>
 <<include "Curse Descriptions">><br><br>
 
-<<endif>>
+<</if>>
 
 
 
 <<if !isPlaying("layer1")>>
 	<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
-<<endif>>
+<</if>>
 
 <<if $forageWater == 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
-	<<print "You are not currently foraging for your daily water on this layer">><br><<endif>>
+	<<print "You are not currently foraging for your daily water on this layer">><br><</if>>
 <<if $forageFood == 1>>
 	<<print "You are currently foraging for your daily food on this layer">><br>
 	<<else>>
-	<<print "You are not currently foraging for your daily food on this layer">><br><<endif>>
+	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
 <br>
 [[Use Items and Relics]]<br>
 <<if $hiredCompanions.length > 0 || $items[21].count>0>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
-<<endif>>
+<</if>>
 <</nobr>>
 [[Learn about the threats on this layer|Layer1 Threats]]
 [[Check for food and water you can forage for|Layer1 Forage]]
@@ -105,15 +105,15 @@ Some Relic may be particularly well-hidden or require significant detours, causi
 <p class="cost">
 Cost: <<print _relic.corr>> corruption
 <<if _relic.time > 0>>
-+ <<print _relic.time>> day<<if _relic.time > 1>>s<<endif>>
-<<endif>>
++ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
+<</if>>
 </p>
 <p>
 <<if _totalRelics.some(e => e.name === _name)>>
 Already taken
 <<else>>
 <<print "[[Pick up the " + _name + "]]">>
-<<endif>>
+<</if>>
 </p>
 <p>
 <<print _relic.desc>>
@@ -143,11 +143,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse1]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal A") || $StoredCurse.name == "Gender Reversal A">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -157,12 +157,12 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse2]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
+	<</if>>
 	
-<<endif>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness A") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness A" || $StoredCurse.name == "Shrunken Assets">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -172,11 +172,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse3]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Clothing Restriction A") || $StoredCurse.name == "Clothing Restriction A">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -186,22 +186,22 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse4]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness A")|| $playerCurses.some(e => e.name === "Asset Robustness B")|| $playerCurses.some(e => e.name === "Asset Robustness C")|| $playerCurses.some(e => e.name === "Asset Robustness D")|| $playerCurses.some(e => e.name === "Asset Robustness E")>>
 	<<set _anyAssetRob=true>>
 <<else>>
 	<<set _anyAssetRob=false>>
-<<endif>>
+<</if>>
 
 <<if $StoredCurse.name == "Asset Robustness A" || $StoredCurse.name == "Asset Robustness B"|| $StoredCurse.name == "Asset Robustness C"|| $StoredCurse.name == "Asset Robustness D"|| $StoredCurse.name == "Asset Robustness E">>
 	<<set _anyAssetRobMM=true>>
 <<else>>
 	<<set _anyAssetRobMM=false>>
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Shrunken Assets" || _anyAssetRob || _anyAssetRobMM>>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
@@ -212,11 +212,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse5]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Hair Removal") || $StoredCurse.name == "Hair Removal">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -226,11 +226,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse6]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Perma-dye") || $StoredCurse.name == "Perma-dye">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -240,11 +240,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse7]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Freckle Speckle") || $StoredCurse.name == "Freckle Speckle">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -254,11 +254,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse8]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Knife-ear") || $StoredCurse.name == "Knife-ear">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -268,11 +268,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse9]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 
 <<set _temp1 =$HeightLog.filter(e => e.name === "Dizzying Heights").length>>
 <<if _temp1 < 5 || ($StoredCurse.name == "Dizzying Heights" && _temp1 < 4 && $ManagedMisfortuneActive==false)>>
@@ -282,13 +282,13 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse10]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
+	<</if>>
 <<else>>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
-<<endif>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Increased Sensitivity") || $StoredCurse.name == "Increased Sensitivity">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -298,11 +298,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse11]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Refractory Refactorization") || $StoredCurse.name == "Refractory Refactorization">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -312,11 +312,11 @@ Already taken
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer1 Curses][$StoredCurse = $curse12]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<set _table +=  "</table>" >>
 <</nobr>>
 <<print _table>>
@@ -326,7 +326,7 @@ Already taken
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Layer1 Forage [image layer1]
@@ -339,15 +339,15 @@ If you decide to start foraging for food or water, it means that you will not re
 	<<print "[[Start foraging for water in Cloudpools|Layer1 Forage][$forageWater = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for water|Layer1 Forage][$forageWater = 0]]">><br>
-<<endif>>
+<</if>>
 <<if $forageFood == 0>>
 	<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage][$forageFood = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for food|Layer1 Forage][$forageFood = 0]]">><br>
-<<endif>>
+<</if>>
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from the layer|Layer1 Flasks]]<br>
-<<endif>>
+<</if>>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer1 Hub]]
@@ -363,10 +363,10 @@ If you decide to start foraging for food or water, it means that you will not re
 		[[Yes, use the Icon|Layer1 Icon]]<br>
 		<<else>>
 		You have already used the Icon of Mercy, you may not use it again.<br>
-	<<endif>>
+	<</if>>
 	<<else>>
 	You have no curses to remove, there's no need to use the Icon.<br>
-<<endif>>
+<</if>>
 <</nobr>>
 <<back [[Layer1 Hub]]>>
 
@@ -420,12 +420,12 @@ If you decide to start foraging for food or water, it means that you will not re
 		[[Choose to settle in Outcast village|L1 HLew HInhum LAge HDub]]
 	<<else>>
 		[[Choose to settle in Outcast village|L1 HLew HInhum LAge LDub]]
-	<<endif>>
+	<</if>>
 	<<elseif $corruption < 0>>
 		You must have a corruption value of 0 or greater to choose a habitation option.
 	<<else>>
 		You must pay off all of your debt to settle down for habitation on the surface. You have $debt dubloons of debt, which you can pay at the Administrative Building.
-	<<endif>>
+	<</if>>
 
 <</nobr>>
 
@@ -458,7 +458,7 @@ How would you like to use Cherry's chaotic luck ability?
 	<<set $temp2 = random(0,8)>>
 	<<if $temp1 !== $temp2>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
@@ -478,7 +478,7 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 	<<set $temp2 = random(0,11)>>
 	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 6 && (Math.abs($temp1 - $temp2) !== 2))>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <<set $playerCurses.push($curses[$temp1])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>>
@@ -492,20 +492,20 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<if $temp1==9>>
 	<<set $temp1=$temp2>>
 	<<set $temp2=9>>
-<<endif>>
+<</if>>
 
 <<if $temp1==1>>
 	<<set $GenderLog.push($curse2)>>
 <<elseif $temp1==2>>
-	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><<endif>>
+	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>
 <<elseif $temp1==4>>
 	<<set $GenderLog.push($curse5)>>
-<<endif>>
+<</if>>
 <br>
 <<if $temp2==1>>
 	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==2>>
-	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><<endif>>[[Continue on to the rest of the layer|Layer1 Hub]]
+	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==4>>
 	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==9>>
@@ -518,18 +518,18 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 		You feel yourself growing even more.<br>
 	<<else>>
 		You feel yourself shrinking even more.<br>
-	<<endif>>
+	<</if>>
 
 	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
 		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
 	<</link>>
 <<else>>
 [[Continue on to the rest of the layer|Layer1 Hub]]
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
 	<<set $LibidoLog.push($curse1)>>
-<<endif>>
+<</if>>
 
 <</nobr>>
 
@@ -551,7 +551,7 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 <<if $temp2==1>>
 	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==2>>
-	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><<endif>>[[Continue on to the rest of the layer|Layer1 Hub]]
+	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==4>>
 	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==9>>
@@ -564,18 +564,18 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 		You feel yourself growing even more.<br>
 	<<else>>
 		You feel yourself shrinking even more.<br>
-	<<endif>>
+	<</if>>
 
 	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
 		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
 	<</link>>
 <<else>>
 [[Continue on to the rest of the layer|Layer1 Hub]]
-<<endif>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
 	<<set $LibidoLog.push($curse1)>>
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -658,7 +658,7 @@ You enter the ruined home, and after exploring each of the rooms, you happen to 
 
 Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was.
 
-<<endif>><<else>><<if $hiredCompanions.some(e => e.name === "Maru")>>
+<</if>><<else>><<if $hiredCompanions.some(e => e.name === "Maru")>>
 
 As you and Maru search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
 
@@ -690,7 +690,7 @@ You enter the ruined home, and after exploring each of the rooms, you happen to 
 
 Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was. As you place it in your bag, you almost get a sense that maybe you could make use of the tea table to complete the tea party with the doll, but you shake off the thought, despite looking like a child.
 
-<<endif>><<endif>>You have successfully taken the $relic3.name relic.
+<</if>><</if>>You have successfully taken the $relic3.name relic.
 
 [[Continue searching for the relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
@@ -747,7 +747,7 @@ As you wander through a grove of trees in search of the mysterious tassel that's
 
 Then they begin to take flight, filling the air with black and yellow bugs and filling your ears with an intense droning sound.
 
-As you<<if $hiredCompanions.length > 0>> and your companions<<endif>> brace for the pain of the piercing stingers and nearly panic, you realize none of the bees are hurting you. In fact, none seem to be landing on you at all, leaving you a space of about a meter of peace within the ordered chaos of the swarm.
+As you<<if $hiredCompanions.length > 0>> and your companions<</if>> brace for the pain of the piercing stingers and nearly panic, you realize none of the bees are hurting you. In fact, none seem to be landing on you at all, leaving you a space of about a meter of peace within the ordered chaos of the swarm.
 
 The strange sight in front of you also gives you the chance to notice a few odd things. Firstly, the bees seem strangely proportioned, as if their heads were too big for their bodies, making them almost look like a different type of insect altogether if it weren't for their coloration and behavior. Second, the apparent bees are not moving randomly, they seem to be pairing up and rubbing their bodies quite vigorously against each other before leaving and moving to a new partner. It occurs to you that perhaps you're in the middle of an orgy for these pseudo-bees. Third, you hear a second buzzing sound, one that sounds less like the buzzing of a bee and more like someone hitting wood together very quickly.
 
@@ -785,7 +785,7 @@ You have successfully taken on the $curse1.name curse. Hopefully you are ok with
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 :: Take on Gender Reversal A [layer1]
 <<set $playerCurses.push($curse2)>><<set $corruption += $curse2.corr>><<set $GenderLog.push($curse2)>>
@@ -797,11 +797,11 @@ You have successfully taken on the $curse2.name curse. Hopefully you are ok with
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Take on Asset Robustness A [layer1]
-<<set $playerCurses.push($curse3)>><<set $corruption += $curse3.corr>><<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><<endif>>
+<<set $playerCurses.push($curse3)>><<set $corruption += $curse3.corr>><<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>
 
 You have successfully taken on the $curse3.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -810,7 +810,7 @@ You have successfully taken on the $curse3.name curse. Hopefully you are ok with
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Take on Clothing Restriction A [layer1]
@@ -825,7 +825,7 @@ While it doesn't cause you any physical pain or anything like that, you do feel 
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Take on Shrunken Assets [layer1]
@@ -849,7 +849,7 @@ Just when you feel like the effect is done, you feel an intense squeezing sensat
 
 Instinctively, your hands move up to your chest in response to the strange sensation, and you feel your flesh squirming and pulsing under your fingers. It feels like your body is trying to burst out of some imaginary constraint, but is failing, and each attempt is more feeble than the last. And after a few more attempts, your body succumbs and the sensation fades, leaving you with much smaller assets than you had before. A quick evaluation tells you that you seem to have AA cup breasts now, with no way to increase that size.
 
-<<endif>>
+<</if>>
 <</nobr>>
 
 [[Accept more curses from the first layer|Layer1 Curses]]
@@ -857,7 +857,7 @@ Instinctively, your hands move up to your chest in response to the strange sensa
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Take on Hair Removal [layer1]
@@ -872,7 +872,7 @@ You shiver at the sensation, but it quickly passes. You're left with shaking the
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 :: Take on Perma-dye [layer1]
 <<set $playerCurses.push($curse7)>><<set $corruption += $curse7.corr>>
@@ -895,7 +895,7 @@ A brief period of tingling on your cheeks was immediately followed by a similar 
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Take on Knife-ear [layer1]
@@ -910,7 +910,7 @@ It seems that you now look like either an elf out of a storybook or someone who 
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 :: Take on Dizzying Heights [layer1]
 <<set $corruption += $curse10.corr>><<set $dizzyCount +=1>>
@@ -924,7 +924,7 @@ You have successfully taken on the $curse10.name curse. Hopefully you are ok wit
 	You feel yourself growing even more.<br>
 <<else>>
 	You feel yourself shrinking even more.<br>
-<<endif>>
+<</if>>
 <</nobr>>
 
 <<link "Accept more curses from the first layer" "Layer1 Curses">>
@@ -939,15 +939,15 @@ You have successfully taken on the $curse10.name curse. Hopefully you are ok wit
 	<<link "Return to your balloon" "Escape Balloon L1">>
 		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
 	<</link>>
-<<endif>>
+<</if>>
 
 
 :: Take on Increased Sensitivity [layer1]
 <<set $playerCurses.push($curse11)>><<set $corruption += $curse11.corr>>
 
-A brief tingle passes between your legs<<if $app.breasts > 0>> and your breasts<<endif>>, causing you to immediately come to attention at the momentary sensitivity. You have to stop as you are instantly made aware of the sensation of your underwear touching your skin, and your own movements have become distracting.
+A brief tingle passes between your legs<<if $app.breasts > 0>> and your breasts<</if>>, causing you to immediately come to attention at the momentary sensitivity. You have to stop as you are instantly made aware of the sensation of your underwear touching your skin, and your own movements have become distracting.
 
-<<if $app.sex == "female">>You can feel yourself moisten under your panties, causing you to figdet slightly with your legs, causing you to once again feel the touch of the fabric against yourself, exacerbating the issue.<<else>>You can feel yourself harden in your pants, causing you to rub against them even harder, creating a cycle that results in you being as erect as you have ever been in your life.<<endif>>
+<<if $app.sex == "female">>You can feel yourself moisten under your panties, causing you to figdet slightly with your legs, causing you to once again feel the touch of the fabric against yourself, exacerbating the issue.<<else>>You can feel yourself harden in your pants, causing you to rub against them even harder, creating a cycle that results in you being as erect as you have ever been in your life.<</if>>
 
 You pause for a moment to catch your breath and wait for the sensation to pass, but it never does. It seems this is your new baseline of sensitivity from now on. You won't be going back to the way things were before, you'll just need to learn to deal with the new stimulation of any touch between your legs. It should be very pleasant when you're intentionally taking advantage of your newly increased sensitivity though.
 
@@ -956,7 +956,7 @@ You pause for a moment to catch your breath and wait for the sensation to pass, 
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Take on Refractory Refactorization [layer1]
@@ -965,7 +965,7 @@ You pause for a moment to catch your breath and wait for the sensation to pass, 
 <<set $curse12.appDesc = "You do not have a refractory period, and can orgasm several times in a row. Sex is like a long sequence of orgasms for you. ">>
 <<else>>
 <<set $curse12.appDesc = "You do not have a refractory period, and can orgasm several times in a row. ">>
-<<endif>>
+<</if>>
 <</nobr>><<set $playerCurses.push($curse12)>><<set $corruption += $curse12.corr>>
 
 You have successfully taken on the $curse12.name curse. Hopefully you are ok with accepting the permanent consequences.
@@ -975,7 +975,7 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
-<<endif>>
+<</if>>
 
 
 :: Icon Removal [layer1]
@@ -989,7 +989,7 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
 <<set $timeL1 += $tempTime>>
 <<set $time += $tempTime>>
@@ -1001,8 +1001,8 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 		<<for $i = 0; $i < $tempTime; $i++>>
 			<<set $GenderLog.push($ForageFoodMajor)>>
 		<</for>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1010,15 +1010,15 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 			<<set $items[2].count += 1, 0)>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 		<<else>>
 		<<set $waterL1 += 1>>
 		<<if $abyssKnow == 0>>
 			<<for $i = 0; $i < $tempTime; $i++>>
 				<<set $GenderLog.push($ForageWaterMajor)>>
 			<</for>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 <</for>>
 */
 <<set $targetCurse=$playerCurses[$temp]>>
@@ -1034,7 +1034,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <<if $corruption >= 10>>
 [[Continue your ascent|Layer1 Ascend2]]<<else>>
 You must have 0 or more corruption after traveling in order to return to the surface. Because the trip back to the surface costs 10 corruption points, you must have a value of at least 10 corruption points before ascending. Return to the Abyss and accept more curses to be able to return to the surface world.
-<<endif>>
+<</if>>
 [[Turn back and continue your business on the first layer|Layer1 Hub]]
 
 
@@ -1047,7 +1047,7 @@ You must have 0 or more corruption after traveling in order to return to the sur
 		<<set $waterL1 += 1>>
 	<<else>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 
@@ -1057,7 +1057,7 @@ You must have 0 or more corruption after traveling in order to return to the sur
 You dip each of your flasks into the miasma-contaminated water in some of the lower cloudpools where it has collected. As you take a test-sip of the water you feel a subtle pulsing through your body, as if your body were trying to expand as quickly as it could. Despite this side-effect, you need the water, so you continue to fill your flasks for your future travels.
 <<else>>
 Using your knowledge of the Abyss, you specifically look to make sure you can get some good water directly from the clouds. You spot a couple easy pools where you could easily get a drink, but avoid the tainted water in favor of the pure water from a gentle waterfall you come across along your path. A taste test confirms that the water is indeed pure and you fill all of your empty flasks in preparation of continuing your journey.
-<<endif>>
+<</if>>
 [[Return to exploring your food and water options on this layer|Layer1 Forage]]
 
 
@@ -1067,48 +1067,48 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 	<<set $temp1 = random(0,11)>>
 	<<if ($temp1 == 0) && !$playerCurses.some(e => e.name === "Libido Reinforcement A") && $StoredCurse.name != "Libido Reinforcement A">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 1) && !$playerCurses.some(e => e.name === "Gender Reversal A") && $StoredCurse.name != "Gender Reversal A">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if $temp == 2 && !($playerCurses.some(e => e.name === "Asset Robustness A") || $playerCurses.some(e => e.name === "Shrunken Assets")) && $StoredCurse.name != "Asset Robustness A" && $StoredCurse.name != "Shrunken Assets">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 3) && !$playerCurses.some(e => e.name === "Clothing Restriction A") && $StoredCurse.name != "Clothing Restriction A">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<set _playerCurseRobust = ($playerCurses.some(e => e.name === "Shrunken Assets") || $playerCurses.some(e => e.name === "Asset Robustness A")|| $playerCurses.some(e => e.name === "Asset Robustness B")|| $playerCurses.some(e => e.name === "Asset Robustness C")|| $playerCurses.some(e => e.name === "Asset Robustness D")|| $playerCurses.some(e => e.name === "Asset Robustness E"))>>
 	<<set _StoredCurseRobust = ($StoredCurse.name == "Shrunken Assets" || $StoredCurse.name == "Asset Robustness A"|| $StoredCurse.name == "Asset Robustness B"|| $StoredCurse.name == "Asset Robustness C"|| $StoredCurse.name == "Asset Robustness D" || $StoredCurse.name ==  "Asset Robustness E")>>
 	<<if ($temp1 == 4) && !_playerCurseRobust && !_StoredCurseRobust>>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 5) && !$playerCurses.some(e => e.name === "Hair Removal") && $StoredCurse.name != "Hair Removal">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 6) && !$playerCurses.some(e => e.name === "Perma-dye") && $StoredCurse.name != "Perma-dye">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 7) && !$playerCurses.some(e => e.name === "Freckle Speckle") && $StoredCurse.name != "Freckle Speckle">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 8) && !$playerCurses.some(e => e.name === "Knife-ear") && $StoredCurse.name != "Knife-ear">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<set _temp2 =$HeightLog.filter(e => e.name === "Dizzying Heights").length>>
 	<<if ($temp1 == 9) && _temp2 < 5 || ($StoredCurse.name == "Dizzying Heights" && _temp2 < 4 && $ManagedMisfortuneActive==false)>>
 		<<break>>
-	<<endif>>
+	<</if>>
 		<<if ($temp1 == 10) && !$playerCurses.some(e => e.name === "Increased Sensitivity" && $StoredCurse.name != "Increased Sensitivity")>>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 11) && !$playerCurses.some(e => e.name === "Refractory Refactorization" && $StoredCurse.name != "Refractory Refactorization")>>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 	<<if $i > 900>>
 		<<set $temp1 = -1>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 
@@ -1120,7 +1120,7 @@ The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not
 There are no curses left for you to take on this layer.
 
 <<back>>
-<<endif>>
+<</if>>
 
 
 :: Layer1 Threat1 Ascend [layer1]
@@ -1133,15 +1133,15 @@ How are you going to deal with the bandits surrounding you?
 <<if $items[14].count> 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
 	What you lack in numbers you make up for in fighting quality, at least Khemia does. You see him already reaching for his sword. You would only need to give him a signal. You feel certain that the bandits would flee with no issues upon seeing Khemia with his sword.
 	[[Let Khemia and his sword deal with these jokers|Layer1 Hub]]<br>
-<<endif>>
+<</if>>
 <<if $items[13].count > 0 && $items[20].count > 2>>
 	If these bandits thought you would traverse the dangers of the abyss unprepared, they are very much mistaken. If they see that you have a real weapon, they should leave you alone.
 	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br>
-<<endif>>
+<</if>>
 <<if $slingshot == 1>>
 Use the power of the Brave Vector and scare away the bandits. If they hear a few pebbles crashing into the ground, they won't want to get any closer.
 [[Scare them off with the Brave Vector|Layer1 Hub]]
-<<endif>>
+<</if>>
 
 Perhaps giving them what they want is the safer route. You can always collect more relics anyway, right?
 [[Hand over some of the relics you've collected|Relic surrender][$surrVal to 0 ]]
@@ -1179,7 +1179,7 @@ Choose the relic you would like to hand over:
 
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<endif>>
+		<</if>>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -1189,7 +1189,7 @@ Choose the relic you would like to hand over:
 <<else>>
   	The apparent bandit leader smiles widely. <<say $Banditleader>> Yeah, now we're talking. Off you go now, until next time.<</say>> She waves you off and gives a toothy grin, showing some yellowing teeth as she picks through the loot you left her.
 	[[Make your escape|Layer1 Hub]]
-<<endif>>
+<</if>>
 
 
 :: L1 LLew LInhum HAge HDub [image ending layer1]
@@ -1280,12 +1280,12 @@ At some point enough is enough, and with your body regressed at much as yours wa
 :: Escape Balloon L1 [layer1]
 <<nobr>><<set $currentLayer = 1>><<if !isPlaying("layer1")>>
 	<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 The trip through this layer is brief and almost indistinguishable to a trip in a balloon in the skies of the surface, with the more mundane world outside the Abyss so close.
 
 Your body feels a bit strange after moving upwards through the miasma so quickly giving a bit of a shock to your system, but hopefully you picked up enough curses along the way to successfully ascend to the surface.
 
-<<if $corruption >= 10>>[[Ascend to next layer|Surface Hub][$corruption -= (10 - $corRed), $escBalDepl=0]]<<endif>>
+<<if $corruption >= 10>>[[Ascend to next layer|Surface Hub][$corruption -= (10 - $corRed), $escBalDepl=0]]<</if>>
 [[Hover on this layer to take in a curse|Layer1 Curses]]
 [[Get off the balloon on this layer|Layer1 Hub][$escBalDepl=0]]
 
@@ -1322,9 +1322,9 @@ Finally, the vision fades, leaving you standing once again where you were before
 		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
 			<<set $temp=$i>>
 			<<set $endloop=false>>
-		<<endif>>
+		<</if>>
 	<</for>>
-<<endif>>
+<</if>>
 <</nobr>>
 [[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
@@ -1362,7 +1362,7 @@ Sometimes you get a feeling like you lost something. Somethin precious to you th
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
 <<set $timeL1 += $tempTime>>
 <<set $time += $tempTime>>
@@ -1374,8 +1374,8 @@ Sometimes you get a feeling like you lost something. Somethin precious to you th
 		<<for $i = 0; $i < $tempTime; $i++>>
 			<<set $GenderLog.push($ForageFoodMajor)>>
 		<</for>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1383,14 +1383,14 @@ Sometimes you get a feeling like you lost something. Somethin precious to you th
 			<<set $items[2].count += 1>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set $waterL1 += 1>>
 		<<if $abyssKnow == 0>>
 			<<for $i = 0; $i < $tempTime; $i++>>
 				<<set $GenderLog.push($ForageWaterMajor)>>
 			<</for>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 <</for>>
 <</nobr>>

@@ -15,8 +15,8 @@ This layer seems to be quite a bit smaller than the last few, and its paved road
 
 [[Walk through the seventh layer of the Abyss|Layer7 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
 	<<if $visitL7 == 0>>
-	<<print "[[Use Cherry's chaotic luck|Layer7 Cherry]]">><br><<endif>>
-<<endif>><</nobr>>
+	<<print "[[Use Cherry's chaotic luck|Layer7 Cherry]]">><br><</if>>
+<</if>><</nobr>>
 
 
 :: Layer7 Preview [image layer7]
@@ -51,9 +51,9 @@ Finally, the vision fades, leaving you standing once again where you were before
 		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
 			<<set $temp=$i>>
 			<<set $endloop=false>>
-		<<endif>>
+		<</if>>
 	<</for>>
-<<endif>>
+<</if>>
 <</nobr>>
 [[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
@@ -77,7 +77,7 @@ You are now forced to become a permanent resident of Layer 7.
 <<set $layerTemp = random(0,20)>>
 <<if $layerTemp >= 19>>
 <<include "Curse Descriptions">><br><br>
-<<endif>>
+<</if>>
 
 <</nobr>>
 
@@ -85,19 +85,19 @@ You are now forced to become a permanent resident of Layer 7.
 <<nobr>>
 <<if $forageWater == 0>>
 	<<print "You are not able to forage for daily water on this layer, due to the nature of the water source.">><br>
-	<<endif>>
+	<</if>>
 <<if $forageFood == 0>>
 	<<print "You are not able to forage for daily food on this layer, due to the nature of the food source.">><br>
-	<<endif>>
+	<</if>>
 <<if !isPlaying("layer7")>>
 	<<masteraudio stop>><<audio "layer7" volume 0.2 play loop>>
-<<endif>>
+<</if>>
 <br>
 What do you want to do while you're here?<br><br>
 [[Use Items and Relics]]<br>
 <<if $hiredCompanions.length > 0>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
-<<endif>>
+<</if>>
 <</nobr>>
 [[Learn about the threats on this layer|Layer7 Threats]]
 [[Check for food and water you can forage for|Layer7 Forage]]
@@ -116,7 +116,7 @@ A an enormous rumbling catches your attention as you walk through the seventh la
 And suddenly, it's here, reaching down to grab you with shining metallic arms and pull you into its shell.
 
 [[Get rehabilitated|Layer7 Threat2 Main]]
-<<endif>>
+<</if>>
 
 
 :: Layer7 Cherry [layer7]
@@ -172,40 +172,40 @@ You are now forced to become a permanent resident of Layer 7.
 
 <<nobr>><<if $totalRelics.some(e => e.name === "Daedalus Mechanism")>>
 	<<else>><<print "[[Pick up the Daedalus Mechanism]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Blind Divine") || ($items[20].count < 4 && $slingshot == 0)>>
 	<<else>><<print "[[Pick up the Blind Divine][$items[20].count -= 4 - (4 * $slingshot)]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Lambent Specter")>>
 	<<else>><<print "[[Pick up the Lambent Specter]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Phoenix Obol") || !setup.havePotentialLightSource()>>
 	<<else>><<print "[[Pick up the Phoenix Obol]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Granted Granite") || setup.calcCarriedWeight() < 200>>
 	<<else>><<print "[[Pick up the Granted Granite]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Joyous Sunder")>>
 	<<else>><<print "[[Pick up the Joyous Sunder]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Azure Aozora")>>
 	<<else>><<print "[[Pick up the Azure Aozora]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Glare Vantage")>>
 	<<else>><<print "[[Pick up the Glare Vantage]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Final Stage")>>
 	<<else>><<print "[[Pick up the Final Stage]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Solace Lace")>>
 	<<else>><<print "[[Pick up the Solace Lace]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Red Thread Flourish")>>
 	<<else>><<print "[[Pick up the Red Thread Fluorish]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Triage Rain")>>
 	<<else>><<print "[[Pick up the Triage Rain]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 
 [[Continue exploring the seventh layer|Layer7 Hub]]
 
@@ -219,7 +219,7 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 
 [[Get rehabilitated|Layer7 Threat2 Main]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Curses [image layer7]
@@ -236,11 +236,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse85]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal E") || $StoredCurse.name == "Gender Reversal E">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -250,11 +250,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse86]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Asset Robustness E") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness E" || $StoredCurse.name == "Shrunken Assets">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -264,11 +264,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse87]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $StoredCurse.name == "Urine Reamplification A" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -278,11 +278,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse88]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Barter System") || $StoredCurse.name == "Barter System" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -292,11 +292,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse89]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Shared Space") || $StoredCurse.name == "Shared Space">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -306,11 +306,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse90]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Weakling") || $StoredCurse.name == "Weakling">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -320,11 +320,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse91]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if setup.takenCurseCount("Random Orgasms") >= 5>>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -334,11 +334,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse92]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Beastly") || $StoredCurse.name == "Beastly" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -348,11 +348,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse93]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Creature of the Night") || $StoredCurse.name == "Creature of the Night" >>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 	<<else>>
@@ -362,11 +362,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse94]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Minish-ish") || $StoredCurse.name == "Minish-ish" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -376,11 +376,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse95]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Colossal-able") || $StoredCurse.name == "Colossal-able" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -390,11 +390,11 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer7 Curses][$StoredCurse = $curse96]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<set _table +=  "</table>" >>
 <</nobr>>
 <<print _table>>
@@ -405,7 +405,7 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Layer7 Wonders [image layer7]
@@ -433,7 +433,7 @@ Do you want to visit the Recycling Centers to recycle some of your Relics?
 	[[Choose to stay on the seventh layer|Habitation Ending]]
 	<<else>>
 	You must have a corruption value of 0 or greater to choose a habitation option.
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -467,11 +467,11 @@ If you're not dissuade and will continue onward, it will take you 8 days to reac
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -479,11 +479,11 @@ If you're not dissuade and will continue onward, it will take you 8 days to reac
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
@@ -541,7 +541,7 @@ Eventually you are released though, with no harm done, and ready to continue you
 
 [[Return to exploring the city|Layer7 Hub]]
 
-<<endif>>
+<</if>>
 
 
 :: Pick up the Daedalus Mechanism [layer7]
@@ -739,11 +739,11 @@ You have successfully taken the $relic84.name relic. Hopefully you can make good
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<if $dubloons < 500>>
 	<<set $timeL7T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $time += $tempTime>>
 <<if $dubloons >= 300>>
 	<<set $dubloons -= 1>>
@@ -751,11 +751,11 @@ You have successfully taken the $relic84.name relic. Hopefully you can make good
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -763,11 +763,11 @@ You have successfully taken the $relic84.name relic. Hopefully you can make good
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 
@@ -808,8 +808,8 @@ If you choose to place 2 Relics in the Clockwork Forge, along with 4 dubloons, y
 </p>
 <p>
 <<print _item.desc>>
-<<if _item.weight>><br><br><<print _item.weight>> kg<<endif>>
-<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<<endif>>
+<<if _item.weight>><br><br><<print _item.weight>> kg<</if>>
+<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<</if>>
 </p>
 </div>
 <</for>>
@@ -838,7 +838,7 @@ Choose the relic you would like to sell:
 			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<endif>>
+		<</if>>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -925,13 +925,13 @@ You'll be moving large, heavy metal loads (ostensibly, construction materials) a
 
 You have obtained $heavyLiftDubloons dubloons out of 80 dubloons max for this job.
 
-An average human working a full day at this task can make 5 dubloons per day doing this job.<<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot move any loads without assistance. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<<endif>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can move many loads in your hands with ease. You can move up to 40 loads per day by grasping the loads in your hands, though you will need to take slightly longer paths to get to the destination.<<endif>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<<endif>><<if $totalRelics.some(e => e.name === "Afar Wanderer")>>
+An average human working a full day at this task can make 5 dubloons per day doing this job.<<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot move any loads without assistance. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<</if>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can move many loads in your hands with ease. You can move up to 40 loads per day by grasping the loads in your hands, though you will need to take slightly longer paths to get to the destination.<</if>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<</if>><<if $totalRelics.some(e => e.name === "Afar Wanderer")>>
 
-You can use the Afar Wanderer on the cart to make the load significantly easier to move. While the wands becomes heavier, it doesn't gain the weight of the loads on top of the cart, so you can effectively drag the cart around much easier. If you use the Afar Wanderer, an average person could carry 10 loads per day on their own.<<endif>><<if $totalRelics.some(e => e.name === "Return to Sender")>>
+You can use the Afar Wanderer on the cart to make the load significantly easier to move. While the wands becomes heavier, it doesn't gain the weight of the loads on top of the cart, so you can effectively drag the cart around much easier. If you use the Afar Wanderer, an average person could carry 10 loads per day on their own.<</if>><<if $totalRelics.some(e => e.name === "Return to Sender")>>
 
-You can mark 10 of the objects with the Return to Sender Relic, allowing you to recall all of them to your position. Unfortunately, this will reach the maximum distance for Return to Sender, but it will let you very quickly complete 10 loads in a single day.<<endif>><<if $totalRelics.some(e => e.name === "Superpositional Skewer")>>
+You can mark 10 of the objects with the Return to Sender Relic, allowing you to recall all of them to your position. Unfortunately, this will reach the maximum distance for Return to Sender, but it will let you very quickly complete 10 loads in a single day.<</if>><<if $totalRelics.some(e => e.name === "Superpositional Skewer")>>
 
-You can use the Superpositional Skewer to touch the load with one end, then walk to the desired location, then tap yourself with the other end. This will result in you being transported back to the location of the loads and the load being transported to the destination. This effectively means you don't need to carry any heavy weights and only need to walk half the distance. This dramatically improves the efficiency of this job, allowing you to move up to 20 loads per day on your own!<<endif>>
+You can use the Superpositional Skewer to touch the load with one end, then walk to the desired location, then tap yourself with the other end. This will result in you being transported back to the location of the loads and the load being transported to the destination. This effectively means you don't need to carry any heavy weights and only need to walk half the distance. This dramatically improves the efficiency of this job, allowing you to move up to 20 loads per day on your own!<</if>>
 
 If you will be working on this job, please enter the number of days you will be working on this job now and how many dubloons you will be making.
 
@@ -954,9 +954,9 @@ You'll be clearing out large chunks of dirt and stone from the walls of the Abys
 
 You have obtained $landExcavDubloons dubloons out of 80 dubloons max for this job.
 
-An average human working a full day at this task can make 2 dubloons per day doing this job.<<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot excavate any significant amount of earth on your own. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<<endif>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can move a large amount of earth with ease. While you won't have any tools, you can dig up to 40 2x2x2 cubic meters of land by digging with your bulldozer-sized hands.<<endif>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<<endif>><<if $totalRelics.some(e => e.name === "Yliaster Materia")>>
+An average human working a full day at this task can make 2 dubloons per day doing this job.<<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot excavate any significant amount of earth on your own. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<</if>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can move a large amount of earth with ease. While you won't have any tools, you can dig up to 40 2x2x2 cubic meters of land by digging with your bulldozer-sized hands.<</if>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<</if>><<if $totalRelics.some(e => e.name === "Yliaster Materia")>>
 
-You can use the Yliaster Materia to melt or vaporize the land you are excavating to make it much easier to move. Liquid can slide away and gas can disperse, as long as you're careful not to breathe any in. This doesn't completely trivialize the work, but it does make it go by significantly faster. The whip can help so much in the land excavation that if you use it, you alone can move up to 20 2x2x2 cubic meter chunks of earth in one day of labor.<<endif>>
+You can use the Yliaster Materia to melt or vaporize the land you are excavating to make it much easier to move. Liquid can slide away and gas can disperse, as long as you're careful not to breathe any in. This doesn't completely trivialize the work, but it does make it go by significantly faster. The whip can help so much in the land excavation that if you use it, you alone can move up to 20 2x2x2 cubic meter chunks of earth in one day of labor.<</if>>
 
 If you will be working on this job, please enter the number of days you will be working on this job now and how many dubloons you will be making.
 
@@ -979,11 +979,11 @@ You'll be redoing the paint on a number of buildings throughout the city, where 
 
 You have obtained $cityPaintDubloons dubloons out of 80 dubloons max for this job.
 
-An average human working a full day at this task can make 1 dubloons per day doing this job.<<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<<endif>><<if $totalRelics.some(e => e.name === "Zelus Band")>>
+An average human working a full day at this task can make 1 dubloons per day doing this job.<<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<</if>><<if $totalRelics.some(e => e.name === "Zelus Band")>>
 
-You can use the Zelus Band to make sure you stay focused. While this doesn't make you inherently any better at painting, you will find that being perfectly focused on a task like this can allow you to accomplish much more than you would otherwise. If you choose to wear the Zelus Band, you can earn up to 3 dubloons per day while working on this job alone.<<endif>><<if $totalRelics.some(e => e.name === "Red Thread Flourish")>>
+You can use the Zelus Band to make sure you stay focused. While this doesn't make you inherently any better at painting, you will find that being perfectly focused on a task like this can allow you to accomplish much more than you would otherwise. If you choose to wear the Zelus Band, you can earn up to 3 dubloons per day while working on this job alone.<</if>><<if $totalRelics.some(e => e.name === "Red Thread Flourish")>>
 
-You can use the Red Thread Flourish to serve as additional hands to paint surfaces according to your will. The threads can move intricately and significantly increase the speed at which you can paint on your own. If you use the Red Thread Flourish while painting, you can earn up to 5 dubloons per day while working this job alone.<<endif>>
+You can use the Red Thread Flourish to serve as additional hands to paint surfaces according to your will. The threads can move intricately and significantly increase the speed at which you can paint on your own. If you use the Red Thread Flourish while painting, you can earn up to 5 dubloons per day while working this job alone.<</if>>
 
 If you will be working on this job, please enter the number of days you will be working on this job now and how many dubloons you will be making.
 
@@ -1006,11 +1006,11 @@ You'll be generating some energy to power the city, to be stored in case all of 
 
 You have obtained $energyGenDubloons dubloons out of 80 dubloons max for this job.
 
-An average human working a full day at this task can make 2 dubloons per day doing this job.<<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot generate any significant amount of energy by running on the hamster wheel on your own. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<<endif>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can simply use your enormous hands to rapidly spin the hamster wheel and generate a large amount of energy. Using this method, you can generate 4kWh per day for 16 dubloons payment, on your own.<<endif>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<<endif>><<if $totalRelics.some(e => e.name === "Breathless Exhale")>>
+An average human working a full day at this task can make 2 dubloons per day doing this job.<<if $playerCurses.some(e => e.name === "Weakling") || $playerCurses.some(e => e.name === "Minish-ish") && !$playerCurses.some(e => e.name === "Colossal-able")>> However, due to your weak body, you cannot generate any significant amount of energy by running on the hamster wheel on your own. You'll need to either assign a companion to work this job alone or use a Relic to make any progress.<</if>><<if $playerCurses.some(e => e.name === "Colossal-able")>> However, due to your enormous size, you can simply use your enormous hands to rapidly spin the hamster wheel and generate a large amount of energy. Using this method, you can generate 4kWh per day for 16 dubloons payment, on your own.<</if>><<if $hiredCompanions.length > 0>> Your $hiredCompanions.length can also help, effectively multiplying your daily output by <<print ($hiredCompanions.length + 1)>>.<</if>><<if $totalRelics.some(e => e.name === "Breathless Exhale")>>
 
-By attaching fans to the hamster wheel and blowing it with the Breathless Exhale, you can generate much more energy with much less effort than you could by running yourself. This method could generate up to 4 kWh per day, yielding 16 dubloons per day of using the Breathless Exhale to power the wheel.<<endif>><<if $totalRelics.some(e => e.name === "Toral Wave")>>
+By attaching fans to the hamster wheel and blowing it with the Breathless Exhale, you can generate much more energy with much less effort than you could by running yourself. This method could generate up to 4 kWh per day, yielding 16 dubloons per day of using the Breathless Exhale to power the wheel.<</if>><<if $totalRelics.some(e => e.name === "Toral Wave")>>
 
-The Toral Wave generate a significant amount of energy on its own, and you should be able to find a wire to connect it to the battery realtively easily within this city. Because the maximum output of the Toral Wave is 3000 W, you can generate 3kWh per hour you use it. So in only 1 day of "work" you can generate the full 20 kWh to get 80 dubloons, without needing to do much work yourself, though you do need to stay nearby to correct occasional disconnections and errors.<<endif>>
+The Toral Wave generate a significant amount of energy on its own, and you should be able to find a wire to connect it to the battery realtively easily within this city. Because the maximum output of the Toral Wave is 3000 W, you can generate 3kWh per hour you use it. So in only 1 day of "work" you can generate the full 20 kWh to get 80 dubloons, without needing to do much work yourself, though you do need to stay nearby to correct occasional disconnections and errors.<</if>>
 
 If you will be working on this job, please enter the number of days you will be working on this job now and how many dubloons you will be making.
 
@@ -1033,7 +1033,7 @@ You'll be servicing various robots with artificial genitals in a wide variety of
 
 You have obtained $roboProstituteDubloons dubloons out of 50 dubloons max for this job.
 
-An average human working a full day at this task can make 10 dubloons per day doing this job.<<if $hiredCompanions.length > 0>> Your companions are unwilling to do this job, so they do not provide a multiplier here. You must be the prostitute yourself to make the dubloons.<<endif>>
+An average human working a full day at this task can make 10 dubloons per day doing this job.<<if $hiredCompanions.length > 0>> Your companions are unwilling to do this job, so they do not provide a multiplier here. You must be the prostitute yourself to make the dubloons.<</if>>
 
 If you will be working on this job, please enter the number of days you will be working on this job now and how many dubloons you will be making.
 
@@ -1058,7 +1058,7 @@ You have successfully taken on the $curse85.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Gender Reversal E [layer7]
@@ -1071,11 +1071,11 @@ You have successfully taken on the $curse86.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Asset Robustness E [layer7]
-<<set $playerCurses.push($curse87)>><<set $corruption += $curse87.corr>><<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><<endif>>
+<<set $playerCurses.push($curse87)>><<set $corruption += $curse87.corr>><<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><</if>>
 
 You have successfully taken on the $curse87.name curse. Hopefully you are ok with accepting the permanent consequences.
 
@@ -1084,7 +1084,7 @@ You have successfully taken on the $curse87.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 
@@ -1098,7 +1098,7 @@ You have successfully taken on the $curse88.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Barter System [layer7]
@@ -1111,7 +1111,7 @@ You have successfully taken on the $curse89.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Shared Space [layer7]
@@ -1124,7 +1124,7 @@ You have successfully taken on the $curse90.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Weakling [layer7]
@@ -1137,7 +1137,7 @@ You have successfully taken on the $curse91.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 <<nobr>>
 <<CarryAdjust>>
 <</nobr>>
@@ -1152,7 +1152,7 @@ You have successfully taken on the $curse92.name curse. Hopefully you are fine w
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Beastly [layer7]
@@ -1165,7 +1165,7 @@ You have successfully taken on the $curse93.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Creature of the Night [layer7]
@@ -1178,7 +1178,7 @@ You have successfully taken on the $curse94.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 
 
 :: Take on Minish-ish [layer7]
@@ -1193,7 +1193,7 @@ Note: Some effects of this curse are not yet implemented.
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 <<nobr>>
 <<CarryAdjust>>
 <</nobr>>
@@ -1210,7 +1210,7 @@ Note: Some effects of this curse are not yet implemented.
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
-<<endif>>
+<</if>>
 <<nobr>>
 <<CarryAdjust>>
 <</nobr>>
@@ -1221,47 +1221,47 @@ Note: Some effects of this curse are not yet implemented.
 	<<set $temp1 = random(0,11) + 84>>
 	<<if ($temp1 == 84) && !$playerCurses.some(e => e.name === "Libido Reinforcement E") && $StoredCurse.name != "Libido Reinforcement E">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 85) && !$playerCurses.some(e => e.name === "Gender Reversal E") && $StoredCurse.name != "Gender Reversal E">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 86) && !$playerCurses.some(e => e.name === "Asset Robustness E") && !$playerCurses.some(e => e.name === "Shrunken Assets") && $StoredCurse.name != "Asset Robustness E" && $StoredCurse.name != "Shrunken Assets">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 87) && !$playerCurses.some(e => e.name === "Urine Reamplification A") && $StoredCurse.name != "Urine Reamplification A">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 88) && !$playerCurses.some(e => e.name === "Barter System") && $StoredCurse.name != "Barter System">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 89) && !(playerCurses.some(e => e.name === "Shared Space")) && $StoredCurse.name != "Shared Space">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 90) && !$playerCurses.some(e => e.name === "Weakling") && $StoredCurse.name != "Weakling">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 91) && setup.takenCurseCount("Random Orgasms") < 5>>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 92) && !$playerCurses.some(e => e.name === "Beastly") && $StoredCurse.name != "Beastly">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 93) && !$playerCurses.some(e => e.name === "Creature of the Night") && $StoredCurse.name != "Creature of the Night">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 94) && !$playerCurses.some(e => e.name === "Minish-ish") && $StoredCurse.name != "Minish-ish">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 95) && !$playerCurses.some(e => e.name === "Colossal-able") && $StoredCurse.name != "Colossal-able">>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 
 
 	<<if $i > 900>>
 		<<set $temp1 = -1>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 
@@ -1273,13 +1273,13 @@ The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not
 There are no curses left for you to take on this layer.
 
 <<back>>
-<<endif>>
+<</if>>
 
 
 :: Escape Balloon L7 [layer7]
 <<nobr>><<set $currentLayer = 7>><<if !isPlaying("layer7")>>
 	<<masteraudio stop>><<audio "layer7" volume 0.2 play loop>>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 You wait as your balloon rapidly ascends and you can watch the metallic buildings shrink beneath you. Swarms of robots seems to pursue their mysterious duties as if they were ants scurrying about an anthill. Luckily they don't seem to pay much attention to the air, and even the occasional flying robot pays you no notice as you ascend towards the gate to the sixth layer.
 
 [[Ascend to next layer|Escape Balloon L6][$corruption -= (80 - $corRed)]]
@@ -1295,7 +1295,7 @@ You wait as your balloon rapidly ascends and you can watch the metallic building
 	<<set $temp2 = random(0,11) + 72>>
 	<<if $temp1 !== $temp2>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
@@ -1325,7 +1325,7 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $ownedRelics.deleteAt(_temp)>>
 	<</link>>
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Cherry Curse [layer7]
@@ -1336,7 +1336,7 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 	<<set $temp2 = random(0,11) + 84>>
 	<<if ($temp1 !== $temp2)>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <<set $playerCurses.push($curses[$temp1])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
@@ -1351,22 +1351,22 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<nobr>>
 <<if $curses[$temp1].name == "Libido Reinforcement E" || $curses[$temp2].name == "Libido Reinforcement E">>
 	<<set $LibidoLog.push($curse85)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "Gender Reversal E" || $curses[$temp2].name == "Gender Reversal E" >>
 	<<set $GenderLog.push($curse86)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "Asset Robustness E" || $curses[$temp2].name == "Asset Robustness E" >>
-	<<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><<endif>>
-<<endif>>
+	<<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><</if>>
+<</if>>
 <<if $curses[$temp1].name == "Weakling" || $curses[$temp2].name == "Weakling">>
 	<<set $playerCurses.push($curse91)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "Minish-ish" || $curses[$temp2].name == "Minish-ish">>
 	<<set $HeightLog.push($curse95)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "Colossal-able" || $curses[$temp2].name == "Colossal-able">>
 	<<set $HeightLog.push($curse96)>>
-<<endif>>
+<</if>>
 
 <</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
@@ -1380,8 +1380,8 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 			<<set _temp = $GenderLog.length>>
 			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
 				<<set $GenderLog.deleteAt(_temp-1)>>
-			<<endif>>
-		<<endif>>
+			<</if>>
+		<</if>>
 		<<include "CurseRemoval">>
 		
 		<<set $targetCurse = $curses[$temp2]>>
@@ -1390,8 +1390,8 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 			<<set _temp = $GenderLog.length>>
 			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
 				<<set $GenderLog.deleteAt(_temp-1)>>
-			<<endif>>
-		<<endif>>
+			<</if>>
+		<</if>>
 		<<include "CurseRemoval">>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
@@ -1399,7 +1399,7 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 		<<set $ownedRelics.deleteAt(_temp)>>
 	<</link>>
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Cherry Mix [layer7]
@@ -1421,22 +1421,22 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 <<nobr>>
 <<if $curses[$temp2].name == "Libido Reinforcement E">>
 	<<set $LibidoLog.push($curse85)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "Gender Reversal E">>
 	<<set $GenderLog.push($curse86)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "Asset Robustness E">>
-	<<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><<endif>>
-<<endif>>
+	<<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><</if>>
+<</if>>
 <<if $curses[$temp2].name == "Weakling">>
 	<<set $playerCurses.push($curse91)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "Minish-ish">>
 	<<set $HeightLog.push($curse95)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "Colossal-able">>
 	<<set $HeightLog.push($curse96)>>
-<<endif>>
+<</if>>
 
 <</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
@@ -1453,15 +1453,15 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 			<<set _temp = $GenderLog.length>>
 			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
 				<<set $GenderLog.deleteAt(_temp-1)>>
-			<<endif>>
-		<<endif>>
+			<</if>>
+		<</if>>
 		<<include "CurseRemoval">>
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
 		<<set $soldRelics.push($ownedRelics[_temp])>>
 		<<set $ownedRelics.deleteAt(_temp)>>
 	<</link>>
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Forge2 [layer7]
@@ -1477,7 +1477,7 @@ Choose the first Relic you would like to swap:<br><br>
 Choose the second Relic you would like to swap:<br><br>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
-		<<if $i != $temp1>><<print "[[$ownedRelics[$i].name|Layer7 Forge2][$temp2 = $i]]">><br><<endif>>
+		<<if $i != $temp1>><<print "[[$ownedRelics[$i].name|Layer7 Forge2][$temp2 = $i]]">><br><</if>>
 	<</capture>>
 <</for>>
 <<else>>
@@ -1495,7 +1495,7 @@ You retrieve your Relics and find that you have successfully switched the abilit
 <<set $relicSwap.push([$ownedRelics[$temp1], $ownedRelics[$temp2]])>>
 
 
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -1515,9 +1515,9 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 		<<set $status.duration -= 1>>
 		<<else>>
 		<<set $status.penalty = 0>>
-	<<endif>>
+	<</if>>
 		<<set $layerExitTime = (Math.max(7 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-	<<endif>>
+	<</if>>
 
 <<for $i = 0; $i < 99; $i++>>
 <<set $tempTime = 1>>
@@ -1525,11 +1525,11 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<if $dubloons < 500>>
 	<<set $timeL7T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $time += $tempTime>>
 <<if $dubloons >= 300>>
 	<<set $dubloons -= 1>>
@@ -1537,11 +1537,11 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1549,17 +1549,17 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 	<<set $layerExitTime -= 1>>
 	<<if $layerExitTime == 0>>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 	<<if $dubloons < 0>>
 
@@ -1578,7 +1578,7 @@ You are now forced to become a permanent resident of Layer 7.<br><br>
 
 
 		<<break>>
-	<<endif>>
+	<</if>>
 		<<if $timeL7T2 > 5>>
 <br>A an enormous rumbling catches your attention as you walk through the seventh layer. A brief glance around reveals the source, an enormous, building-sized machine that is now rapidly approaching you. You consider running, but the Security Robot is moving at an incredible speed, leaving you no chance to get away. <br><br>
 
@@ -1588,7 +1588,7 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 
 [[Get rehabilitated|Layer7 Threat2 Ascend]]<br><br>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 
@@ -1606,7 +1606,7 @@ When you reach the pinacle of the layer, you once again approach the series of b
 
 [[Return to the Sixth layer|Layer6 Hub]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Threat2 Ascend [layer7]
@@ -1621,11 +1621,11 @@ When you reach the pinacle of the layer, you once again approach the series of b
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1633,11 +1633,11 @@ When you reach the pinacle of the layer, you once again approach the series of b
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
@@ -1695,7 +1695,7 @@ Eventually you are released though, with no harm done, and ready to continue you
 
 [[Continue your ascent to the sixth layer|Layer7 Ascend2]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Exit2 [layer7]
@@ -1706,9 +1706,9 @@ Eventually you are released though, with no harm done, and ready to continue you
 		<<set $status.duration -= 1>>
 		<<else>>
 		<<set $status.penalty = 0>>
-	<<endif>>
+	<</if>>
 		<<set $layerExitTime = (Math.max(8 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-	<<endif>>
+	<</if>>
 
 <<for $i = 0; $i < 99; $i++>>
 <<set $tempTime = 1>>
@@ -1716,11 +1716,11 @@ Eventually you are released though, with no harm done, and ready to continue you
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<if $dubloons < 500>>
 	<<set $timeL7T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $time += $tempTime>>
 <<if $dubloons >= 300>>
 	<<set $dubloons -= 1>>
@@ -1728,11 +1728,11 @@ Eventually you are released though, with no harm done, and ready to continue you
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1740,17 +1740,17 @@ Eventually you are released though, with no harm done, and ready to continue you
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 	<<set $layerExitTime -= 1>>
 	<<if $layerExitTime == 0>>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 	<<if $dubloons < 0>>
 
@@ -1769,7 +1769,7 @@ You are now forced to become a permanent resident of Layer 7.<br><br>
 
 
 		<<break>>
-	<<endif>>
+	<</if>>
 		<<if $timeL7T2 > 5>>
 <br>A an enormous rumbling catches your attention as you walk through the seventh layer. A brief glance around reveals the source, an enormous, building-sized machine that is now rapidly approaching you. You consider running, but the Security Robot is moving at an incredible speed, leaving you no chance to get away. <br><br>
 
@@ -1779,7 +1779,7 @@ And suddenly, it's here, reaching down to grab you with shining metallic arms an
 
 [[Get rehabilitated|Layer7 Threat2 Descend]]<br><br>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 
@@ -1794,7 +1794,7 @@ The rest of the layer slopes up all around it, every direction funneling down in
 
 [[Descend into the circular gate|Layer8 1]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer7 Threat2 Descend [layer7]
@@ -1809,11 +1809,11 @@ The rest of the layer slopes up all around it, every direction funneling down in
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1821,11 +1821,11 @@ The rest of the layer slopes up all around it, every direction funneling down in
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
@@ -1883,7 +1883,7 @@ Eventually you are released though, with no harm done, and ready to continue you
 
 [[Continue your descent to the eighth layer|Layer7 Exit2]]
 
-<<endif>>
+<</if>>
 
 
 :: Work on Heavy Lifting 2 [layer7]
@@ -1897,18 +1897,18 @@ Eventually you are released though, with no harm done, and ready to continue you
 	<<else>>
 	<<set $temp2 = 80 - $heavyLiftDubloons>>
 	<<set $heavyLiftDubloons += $temp2>>
-<<endif>>
+<</if>>
 <<set $dubloons += $temp2>>
 
 <<set $tempTime = $temp1>>
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
-<<endif>>
+<</if>>
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<set $timeL7T2 += $tempTime>>
 <<set $time += $tempTime>>
@@ -1918,11 +1918,11 @@ Eventually you are released though, with no harm done, and ready to continue you
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1930,11 +1930,11 @@ Eventually you are released though, with no harm done, and ready to continue you
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/heavylifting.png']]
@@ -1955,18 +1955,18 @@ You have worked $temp1 days and moved $temp2 loads of "construction material" to
 	<<else>>
 	<<set $temp2 = 80 - $landExcavDubloons>>
 	<<set $landExcavDubloons += $temp2>>
-<<endif>>
+<</if>>
 <<set $dubloons += $temp2>>
 
 <<set $tempTime = $temp1>>
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
-<<endif>>
+<</if>>
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<set $timeL7T2 += $tempTime>>
 <<set $time += $tempTime>>
@@ -1976,11 +1976,11 @@ You have worked $temp1 days and moved $temp2 loads of "construction material" to
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1988,11 +1988,11 @@ You have worked $temp1 days and moved $temp2 loads of "construction material" to
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/landexcavation.png']]
@@ -2013,18 +2013,18 @@ You have worked $temp1 days and excavated $temp2 2x2x2 cubic meters of earth to 
 	<<else>>
 	<<set $temp2 = 80 - $cityPaintDubloons>>
 	<<set $cityPaintDubloons += $temp2>>
-<<endif>>
+<</if>>
 <<set $dubloons += $temp2>>
 
 <<set $tempTime = $temp1>>
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
-<<endif>>
+<</if>>
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<set $timeL7T2 += $tempTime>>
 <<set $time += $tempTime>>
@@ -2034,11 +2034,11 @@ You have worked $temp1 days and excavated $temp2 2x2x2 cubic meters of earth to 
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -2046,11 +2046,11 @@ You have worked $temp1 days and excavated $temp2 2x2x2 cubic meters of earth to 
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/citypainter.png']]
@@ -2071,18 +2071,18 @@ You have worked $temp1 days and painted $temp2 square km of building surface to 
 	<<else>>
 	<<set $temp2 = 80 - $energyGenDubloons>>
 	<<set $energyGenDubloons += $temp2>>
-<<endif>>
+<</if>>
 <<set $dubloons += $temp2>>
 
 <<set $tempTime = $temp1>>
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
-<<endif>>
+<</if>>
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<set $timeL7T2 += $tempTime>>
 <<set $time += $tempTime>>
@@ -2092,11 +2092,11 @@ You have worked $temp1 days and painted $temp2 square km of building surface to 
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 	<<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -2104,11 +2104,11 @@ You have worked $temp1 days and painted $temp2 square km of building surface to 
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/energygenerator.png']]
@@ -2129,18 +2129,18 @@ You have worked $temp1 days and generated <<print ($temp2 / 4)>> kWh of energy t
 	<<else>>
 	<<set $temp2 = 80 - $roboProstituteDubloons>>
 	<<set $roboProstituteDubloons += $temp2>>
-<<endif>>
+<</if>>
 <<set $dubloons += $temp2>>
 
 <<set $tempTime = $temp1>>
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
-<<endif>>
+<</if>>
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $timeL7 += $tempTime>>
 <<set $timeL7T2 += $tempTime>>
 <<set $time += $tempTime>>
@@ -2150,11 +2150,11 @@ You have worked $temp1 days and generated <<print ($temp2 / 4)>> kWh of energy t
 	<<set $dubloons -= 2>>
 	<<else>>
 	<<set $dubloons -= 3>>
-<<endif>>
+<</if>>
 <<if $forageFood == 1>>
 <<else>>
 	<<set $items[1].count -= $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -2162,11 +2162,11 @@ You have worked $temp1 days and generated <<print ($temp2 / 4)>> kWh of energy t
 			<<set $items[2].count += 1, 0>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/energygenerator.png']]

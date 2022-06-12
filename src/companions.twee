@@ -233,16 +233,16 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<nobr>>
 <<if $hiredCompanions[$temp].name == "Cloud">>
 <<include "Cloud Ability">>
-<<endif>>
+<</if>>
 <<if $hiredCompanions[$temp].curses.length > 0>>
 	$hiredCompanions[$temp].name has the following curses:<br><br>
 	<<for $i = 0; $i < $hiredCompanions[$temp].curses.length; $i++>>
 			<<print $hiredCompanions[$temp].curses[$i].name>><br>
 	<</for>><br>
-<<endif>>
+<</if>>
 <<if $temp == $swapComp>>
 	$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
-<<endif>>
+<</if>>
 <</nobr>>
 <<back>>
 
@@ -326,9 +326,9 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 	<<elseif $currentLayer==5>>
 	<<elseif $currentLayer==6>>
 	<<elseif $currentLayer==7>>
-	<<endif>>
+	<</if>>
 
-<<endif>>
+<</if>>
 
 [[Return|$layerReturn]]
 
@@ -342,7 +342,7 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 [[Chat with Maru|Maru Convo2][$MaruConvo2=true]]<br>
 <<elseif $MaruConvo3==false && $companionMaru.affec>20 && $app.appGender<4 && $subdom > -1 && $MaruConvo2 >>
 [[Chat with Maru|Maru Convo3][$MaruConvo3=true]]<br>
-<<endif>>
+<</if>>
 
 
 :: Maru Convo1
@@ -358,7 +358,7 @@ Maru cheerfully brings you a meal he made, checking to see if it is as satisfyin
 [[Could you tell me something about your childhood?|Maru Convo1][$convoStart=0,$choice1=1,$companionMaru.affec+=(1+$hsswear)]]<br>
 [[Why do you wear such feminine clothes if you're a guy? It's really weird|Maru Convo1][$convoStart=0,$choice1=2,$companionMaru.affec-=(1-$hsswear)]]<br>
 [[What's in this meal? It's really tasty!|Maru Convo1][$convoStart=0,$choice1=3,$companionMaru.affec-=0]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 <<say $mc>>Could you tell me something about your childhood?<</say>><br>
@@ -421,7 +421,7 @@ Maru tells you in detail how he prepared the dish. It's actually pretty simple, 
 Every 10 days, Maru will make a meal with 1 day worth of food that will keep you satisified for 2 days, saving you 1 day of food rations!<br>
 
 [[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0,$items[1].count+=1]]
-<<endif>><</nobr>>
+<</if>><</nobr>>
 
 
 :: Maru Convo0
@@ -433,7 +433,7 @@ Every 10 days, Maru will make a meal with 1 day worth of food that will keep you
 [[Greet him warmly with a hug|Maru Convo0][$convoStart=0,$choice1=1,$companionMaru.affec+=(1+$hsswear)]]<br>
 [[Greet him with a firm handshake|Maru Convo0][$convoStart=0,$choice1=2,$companionMaru.affec+=0]]<br>
 [[Greet him with a small wave from a distance|Maru Convo0][$convoStart=0,$choice1=3,$companionMaru.affec+=0]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You give Maru a tight hug, his body feels warm between your arms. <br><br>
@@ -444,7 +444,7 @@ At first he seems shocked, but after only a few moments he loosens up and hugs y
 	<<if $choice2==0>>
 	[[An extra person means extra carrying cappacity, so don't worry about it!|Maru Convo0][$convoStart=0,$choice2=1,$companionMaru.affec-=(1-$hsswear)]]<br>
 	[[Don't worry about it. Everybody has their strong points. What are you good at?|Maru Convo0][$convoStart=0,$choice2=2,$companionMaru.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 	<<if $choice2==1>>
 
 	<<say $mc>>An extra person already means extra carrying cappacity, so don't worry about it!<</say>><br>
@@ -461,7 +461,7 @@ Maru smile gently towards you, seemingly appreciating your caring demeanor. <br>
 
 	<<say $mc>>Great! I'm already looking forward to it!<</say>><br>
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 
 <<elseif $choice1==2>>
 
@@ -474,7 +474,7 @@ He looks a little rattled by the firm handshake, but tries to respond energetica
 	<<if $choice2==0>>
 	[[Me too! I have a lot of stuff I'll need you to take care of once we get going on our expedition|Maru Convo0][$convoStart=0,$choice2=1,$MaruAffec-=(1-$hsswear)]]<br>
 	[[Me too! Lets make this an exciting adventure together!|Maru Convo0][$convoStart=0,$choice2=2,$companionMaru.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -488,7 +488,7 @@ He looks a little rattled by the firm handshake, but tries to respond energetica
 
 	<<say $companionMaru>>Oh, I'm really looking forward to it now! Thank you for the encouragement!<</say>><br>
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 <<elseif $choice1==3>>
 
 	You stand a bit akwardly and wave hello over at him. <br><br>
@@ -500,7 +500,7 @@ He looks a little rattled by the firm handshake, but tries to respond energetica
 	<<if $choice2==0>>
 		[[Uh... I don't know exactly. I guess we'll figure it out over time|Maru Convo0][$convoStart=0,$choice2=1,$companionMaru.affec+=0]]<br>
 		[[Hmm... Maybe you can carry some of our equipment?|Maru Convo0][$convoStart=0,$choice2=2,$companionMaru.affec-=(1-$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -514,8 +514,8 @@ He looks a little rattled by the firm handshake, but tries to respond energetica
 
 		<<say $companionMaru>>Uh... I'll try my best, but I don't know if I'll be able to manage very much by myself.<</say>><br>
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -530,17 +530,17 @@ Double-click this passage to edit it.
 :: Lily Conversations [nobr]
 <<if $LilyConvo0==0>>
 [[Introduce yourself to Lily|Lily Convo0][$LilyConvo0=true,$lilyJoke=false]]<br>
-<<endif>>
+<</if>>
 <<if $LilyConvo1==false && $companionLily.affec>6 && $LilyConvo0>>
 [[Lily seems quiet|Lily Convo1][$LilyConvo1=true]]<br>
 <<elseif $LilyConvo2==false && $companionLily.affec>15 && $LilyConvo1 && 0 >>
 [[Chat with Lily|Lily Convo2][$LilyConvo2=true]]<br>
 <<elseif $LilyConvo3==false && $companionLily.affec>20 && $app.appGender>7 && $subdom < 1 && $LilyConvo2 >>
 [[Chat with Lily|Lily Convo3][$LilyConvo3=true]]<br>
-<<endif>>
+<</if>>
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
 	[[You see Lily lifting up the World Stone|Lily ConvoPr]]<br>
-<<endif>>
+<</if>>
 
 
 :: Lily Convo0
@@ -555,7 +555,7 @@ She points her thumb at her chest and stands proudly, as if to show that she is 
 [[Greet her warmly with a hug|Lily Convo0][$convoStart=0,$choice1=1,$companionLily.affec+=(1+$hsswear)]]<br>
 [[Greet her with a firm handshake|Lily Convo0][$convoStart=0,$choice1=2,$companionLily.affec+=0]]<br>
 [[Greet her with a small wave from a distance|Lily Convo0][$convoStart=0,$choice1=3,$companionLily.affec-=(1-$hsswear)]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You give Lily a big hug and you immediately feel her firmly squeezing you back, even lifting your feet a litlle bit from the ground in her excitement.<br><br>
@@ -568,7 +568,7 @@ She winks at you and grins as she finishes her comment. You weren't sure if you 
 	[[Oh thanks! Well, if you insist, then I'll stay close and be sure to let you take care of me|Lily Convo0][$convoStart=0,$choice2=1,$companionLily.affec+=(1+$hsswear)]]<br>
 	[[Look who's talking! I'll make sure to protect that cute face of yours and keep you safe too!|Lily Convo0][$convoStart=0,$choice2=2,$companionLily.affec-=(1-$hsswear)]]<br>
 	[[If she's already this into you, maybe you can take this to the next level and lean in for a kiss?|Lily Convo0][$convoStart=0,$choice2=3,$companionLily.affec-=(3-$hsswear)]]
-	<<endif>>
+	<</if>>
 	<<if $choice2==1>>
 
 	<<say $mc>>Oh thanks! Well, if you insist, then I'll stay close and be sure to let you take care of me.<</say>><br>
@@ -620,7 +620,7 @@ She starts snicker at her own joke. You're not quite sure if it's a joke at your
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0,$companionLily.affec+=(1+$hsswear)]]
 
 
-	<<endif>>
+	<</if>>
 
 <<elseif $choice1==2>>
 
@@ -634,7 +634,7 @@ She shrugs and chuckles lightly.<br><br>
 	<<if $choice2==0>>
 	[[Why not? I do actually want to get to know you better, and asking about you is the best way to do that!|Lily Convo0][$convoStart=0,$choice2=1,$companionLily.affec+=(1+$hsswear)]]<br>
 	[[Don't worry, I won't!|Lily Convo0][$convoStart=0,$choice2=2,$companionLily.affec-=(1-$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -665,7 +665,7 @@ Before you can finish your sentence, she interrupts you.<br><br>
 	She playfully sticks her tongue at you. Although the conversation could have gone a bit smoother, she still made you laugh in the end.<br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 <<elseif $choice1==3>>
 
 	You stand a bit awkwardly and wave hello to her from a distance. <br><br>
@@ -679,7 +679,7 @@ Before you can finish your sentence, she interrupts you.<br><br>
 	<<if $choice2==0>>
 		[[Please, bite me|Lily Convo0][$convoStart=0,$choice2=1,$companionLily.affec-=(1-$hsswear)]]<br>
 		[[I, uh, think I'd rather have you not do that|Lily Convo0][$convoStart=0,$choice2=2,$companionLily.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -700,8 +700,8 @@ Before you can finish your sentence, she interrupts you.<br><br>
 		You talk for quite some time afterwards. She is actually quite attentive and interested in what you have to say, although she does tend to go on a rambling streak from time to time when you give her the chance.<br>
 
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -713,7 +713,7 @@ While normally you've gotten to know Lily as a bright light in any conversation,
 [[Try to cheer her up with a joke.|Lily Convo1][$convoStart=0,$choice1=1,$companionLily.affec+=(1+$hsswear)]]<br>
 [[Don't say anything and hope she starts talking herself. |Party overview][$convoStart=1,$choice1=0,$choice2=0,$companionLily.affec-=(2-$hsswear),$LilyConvo1=false]]<br>
 [[Sit her down and ask her what's wrong.|Lily Convo1][$convoStart=0,$choice1=3]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 	<<say $mc>>Hey Lily, do you know what sits at the bottom of the sea and twitches?<</say>><br>
@@ -741,15 +741,15 @@ While normally you've gotten to know Lily as a bright light in any conversation,
 		<<say $companionLily>> Yeah, because you told it to me already, silly! <</say>><br>
 
 		Lily giggles and a grin spreads across her face.<br><br>
-	<<endif>>
+	<</if>>
 
 		<<if $choice2==0>>
 		<<if $lilyJoke==false>>
 			[[Well, if you liked them there's a whole lot more where those came from!|Lily Convo1][$convoStart=0,$choice2=1,$companionLily.affec-=(2-$hsswear)]]<br>
-		<<endif>>
+		<</if>>
 		[[I'm glad you're back to your normal upbeat self|Lily Convo1][$convoStart=0,$choice2=2,$companionLily.affec+=(1+$hsswear)]]<br>
 		[[So, uh, can I ask what's been bothering you?|Lily Convo1][$convoStart=0,$choice2=3,$companionLily.affec+=(2+$hsswear)]]
-		<<endif>>
+		<</if>>
 		<<if $choice2==1>>
 
 			<<say $mc>>Well, if you liked them there's a whole lot more where those came from!<</say>><br>
@@ -818,7 +818,7 @@ While normally you've gotten to know Lily as a bright light in any conversation,
 			[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
 
 
-		<<endif>>
+		<</if>>
 
 <<elseif $choice1==3>>
 	You begin walking close by to Lily and match her pace.<br><br>
@@ -837,7 +837,7 @@ While normally you've gotten to know Lily as a bright light in any conversation,
 		[[...because I need you at your best. You know I rely on you, Lily. | Lily Convo1][$convoStart=0,$choice2=1,$companionLily.affec+=(2+$hsswear)]]<br>
 		[[...because a smile fits a pretty lady like you much better than a frown. |Lily Convo1][$convoStart=0,$choice2=2,$companionLily.affec-=(1-$hsswear)]]
 		[[...because you being happy makes me happy too. |Lily Convo1][$convoStart=0,$choice2=3,$companionLily.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -924,8 +924,8 @@ While normally you've gotten to know Lily as a bright light in any conversation,
 		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ <br>
 
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -952,7 +952,7 @@ You chuckle a little at the fact that you made a woman who could easily outmatch
 You chuckle a little at the fact that you made a woman who is possibly stronger than you squeak like a little girl<br><br>
 <<else>>
 You chuckle a little at the fact that you made a woman who could give you a fair physical competition squeak like a little girl.<br><br>
-<<endif>>
+<</if>>
 
 <<say $companionLily>>Look, it's just that I like to stay in shape so I can keep going on these long adventures. Even when I'm at home I actually work out a lot, you know? And this Relc is great for keeping in tip-top shape!<</say>><br>
 
@@ -993,7 +993,7 @@ Lily's expression falls and she looks down in disappointment.<br><br>
 She immediately picks up the World Stone to try it out once again. You see her strain after a couple reps and shudder to think what the weight of the World Stone must be now.<br><br>
 
 [[End the conversation|Party overview][$choice1=0, $convoStart=1, $LilyPromise=true]]
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -1001,14 +1001,14 @@ She immediately picks up the World Stone to try it out once again. You see her s
 
 <<if $KhemiaConvo0==0>>
 [[Introduce yourself to Khemia|Khemia Convo0][$KhemiaConvo0=true]]
-<<endif>>
+<</if>>
 <<if $KhemiaConvo1==0 && $companionKhemia.affec>6 && $KhemiaConvo0 && 0>>
 [[Chat with Khemia|Khemia Convo1][$KhemiaConvo1=true]]
 <<elseif $KhemiaConvo2==0 && $companionKhemia.affec>15 && $KhemiaConvo1 >>
 [[Chat with Khemia|Khemia Convo2][$KhemiaConvo2=true]]
 <<elseif $KhemiaConvo3==0 && $companionKhemia.affec>20 && app.appGender>9 &&$subdom < 0 && $KhemiaConvo2 >>
 [[Chat with Khemia|Khemia Convo3][$KhemiaConvo3=true]]
-<<endif>>
+<</if>>
 
 
 :: Khemia Convo0
@@ -1024,9 +1024,9 @@ She immediately picks up the World Stone to try it out once again. You see her s
 <<else>>
 	[[Greet him warmly with a hug|Khemia Convo0][$convoStart=0,$choice1=1,$companionKhemia.affec+=(1+$hsswear)]]<br>
 	[[Greet him with a firm handshake|Khemia Convo0][$convoStart=0,$choice1=2,$companionKhemia.affec+=0]]<br>
-<<endif>>
+<</if>>
 [[Greet him with a small wave from a distance|Khemia Convo0][$convoStart=0,$choice1=3,$companionKhemia.affec-=0]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You give Khemia a big hug, and while he seems hesitant for a moment, he reciprocates and gives you a big hug back.<br><br>
@@ -1037,7 +1037,7 @@ You give Khemia a big hug, and while he seems hesitant for a moment, he reciproc
 <<else>>
 	<<say $companionKhemia >> Ah you're the hugging type of gal, aren't you? Don't worry, I may look tough but there's always room for a hug from a cutie like you! Just make sure you don't get too distracted by me when we are down there. <</say>><br>
 	He gives you a wide grin and embraces your hug.<br><br>
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==0>>
 	[[Okay, maybe we can tone down the whole physical contact thing a little bit|Khemia Convo0][$convoStart=0,$choice2=1,$companionKhemia.affec-=0]]<br>
@@ -1045,8 +1045,8 @@ You give Khemia a big hug, and while he seems hesitant for a moment, he reciproc
 			[[Haha, sure, I'll try. But no promises!|Khemia Convo0][$convoStart=0,$choice2=2,$companionKhemia.affec-=0]]
 		<<else>>
 			[[Haha, sure, I'll try. But no promises!|Khemia Convo0][$convoStart=0,$choice2=2,$companionKhemia.affec+=(1+$hsswear)]]
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 	<<if $choice2==1>>
 
 	<<say $mc>>Okay, maybe we can tone down the whole physical contact thing a little bit.<</say>><br>
@@ -1080,7 +1080,7 @@ You give Khemia an enthusiastic nod in response, now it's time to get on with yo
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
 
-	<<endif>>
+	<</if>>
 
 <<elseif $choice1==2>>
 
@@ -1094,7 +1094,7 @@ He has a clear smug expression as he mentions his extensive experience in the Ab
 	<<if $choice2==0>>
 	[[Wow, you must have some incredible stories to tell!|Khemia Convo0][$convoStart=0,$choice2=1,$companionKhemia.affec+=(1+$hsswear)]]<br>
 	[[Great! Then I'm sure you'll prove useful to the team|Khemia Convo0][$convoStart=0,$choice2=2,$companionKhemia.affec-=0]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1121,7 +1121,7 @@ He has a clear smug expression as he mentions his extensive experience in the Ab
 	<<say $companionKhemia>>You think I might be useful, my <<PerceivedGender2>>? Someday, our drill will pierce through the Abyss straight into hell, and I'll be there when that happens!<</say>><br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 <<elseif $choice1==3>>
 
 	You stand a bit awkwardly near Khemia and wave a small greeting to him. <br><br>
@@ -1137,8 +1137,8 @@ He has a clear smug expression as he mentions his extensive experience in the Ab
 		<<else>>
 			[[Well, to be honest, with my leadership it was always going to be a breeze!|Khemia Convo0][$convoStart=0,$choice2=1,$companionKhemia.affec+=0]]<br>
 			[[I'm so glad you said that. I'll be putting my trust and the fate of this expedition in your capable hands|Khemia Convo0][$convoStart=0,$choice2=2,$companionKhemia.affec+=(1+$hsswear)]]
-		<<endif>>
-	<<endif>>
+		<</if>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1151,7 +1151,7 @@ He has a clear smug expression as he mentions his extensive experience in the Ab
 		<<else>>
 			<<say $companionKhemia>> Well, what do you know? Here I was thinking you must have been scared because of a trip into the Abyss, but it seems like there's a tough girl hidden in you after all! But don't sweat it, honey, I'll handle the heavy lifting from here.<</say>><br>
 		Khemia gives you a bit of a suggestive wink and puffs out his chest to show his strength. Despite the good intentions of his reassurances, you can't help but feel he's being a little disrespectful of your own abilities.<br><br>
-		<<endif>>
+		<</if>>
 
 
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
@@ -1169,11 +1169,11 @@ He has a clear smug expression as he mentions his extensive experience in the Ab
 			<<say $mc>> Yeah, I think you already said that. <</say>><br>
 			<<say $companionKhemia>> Oh, did I now? Oh right, so uh, yeah... Did we bring a sword? I can always do with a good sword on trips like these, you know?<</say>><br>
 			He mumbles and rambles a bit, half talking to you half rummaging through the equipment you'd brought along.<br>
-		<<endif>>
+		<</if>>
 
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -1199,7 +1199,7 @@ Double-click this passage to edit it.
 [[Chat with Maru|Cherry Convo2][$CherryConvo2=true]]<br>
 <<elseif $CherryConvo3==0 && $companionCherry.affec>20 && $app.appGender<6 && $subdom > 0 && $CherryConvo2 >>
 [[Chat with Cherry|Cherry Convo3][$CherryConvo3=true]]<br>
-<<endif>>
+<</if>>
 
 
 :: Cherry Convo0
@@ -1211,7 +1211,7 @@ Double-click this passage to edit it.
 [[Greet her warmly with a hug|Cherry Convo0][$convoStart=0,$choice1=1,$companionCherry.affec-=(1-$hsswear)]]<br>
 [[Greet her with a firm handshake|Cherry Convo0][$convoStart=0,$choice1=2,$companionCherry.affec-=(1-$hsswear)]]<br>
 [[Greet her with a small wave from a distance|Cherry Convo0][$convoStart=0,$choice1=3,$companionCherry.affec+=(1+$hsswear)]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You give Cherry a firm hug, but you feel her entire body rapidly tense up. You quickly release her, but she still seems a bit surprised from the sudden hug. <br><br>
@@ -1224,7 +1224,7 @@ She shuffles around awkwardly before responding.<br><br>
 	<<if $choice2==0>>
 	[[I hope you are just as excited about this trip as I am!|Cherry Convo0][$convoStart=0,$choice2=1,$companionCherry.affec-=(1-$hsswear)]]<br>
 	[[So, could you tell me a little bit more about yourself before we start the journey?|Cherry Convo0][$convoStart=0,$choice2=2,$companionCherry.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 	<<if $choice2==1>>
 
 	<<say $mc>>I hope you are just as excited about this trip as I am!<</say>><br>
@@ -1239,7 +1239,7 @@ She shuffles around awkwardly before responding.<br><br>
 
 	<<say $mc>>That sounds great, it seems like your medical knowledge might be really useful for us. Let's hope that today can be the start of our own grand story!<</say>><br>
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 
 <<elseif $choice1==2>>
 
@@ -1252,7 +1252,7 @@ When you look at her there is no sign of emotion, he expression seems totally bl
 	<<if $choice2==0>>
 	[[I hope we are going to get along well with each other!|Cherry Convo0][$convoStart=0,$choice2=1]]<br>
 	[[So, is there anything in particular I should know about you before we get to exploring?|Cherry Convo0][$convoStart=0,$choice2=2]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1277,7 +1277,7 @@ When you look at her there is no sign of emotion, he expression seems totally bl
 	<<say $companionCherry>>Mostly trouble. Or sadness. But maybe I can find a Relic once in a while.<</say>><br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 <<elseif $choice1==3>>
 
 	You stand a bit akwardly and wave hello over at her. <br><br>
@@ -1289,7 +1289,7 @@ When you look at her there is no sign of emotion, he expression seems totally bl
 	<<if $choice2==0>>
 		[[Haha, yeah. I guess I'm just a bit awkward with new people|Cherry Convo0][$convoStart=0, $choice2=1, $companionCherry.affec+=(1+$hsswear)]]<br>
 		[[I was just trying to make conversation, because you were so silent. You don't need to state the obvious|Cherry Convo0][$convoStart=0, $choice2=2, $companionCherry.affec-=(2-$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1306,8 +1306,8 @@ When you look at her there is no sign of emotion, he expression seems totally bl
 		<<say $companionCherry>>Oh, I see. No need to make conversation then.<</say>><br>
 		She turns around and walks off. What happened? Did you annoy her or something? Somehow you get the feeling she didn't appreciate your response.<br>
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -1326,14 +1326,14 @@ Double-click this passage to edit it.
 :: Cloud Conversations [nobr]
 <<if $CloudConvo0==0>>
 [[Introduce yourself to Cloud|Cloud Convo0][$CloudConvo0=true]]<br>
-<<endif>>
+<</if>>
 <<if $CloudConvo1==0 && $CloudAffec>6 && $CloudConvo0>>
 [[Chat with Cloud|Cloud Convo1][$CloudConvo1=true]]<br>
 <<elseif $CloudConvo2==0 && $CloudAffec>15 && $CloudConvo1 && 0>>
 [[Chat with Cloud|Cloud Convo2][$CloudConvo2=true]]<br>
 <<elseif $CloudConvo3==0 && $CloudAffec>20 && $subdom < 2 && $CloudConvo2 >>
 [[Chat with Cloud|Cloud Convo3][$CloudConvo3=true]]<br>
-<<endif>>
+<</if>>
 
 
 :: Cloud Convo0
@@ -1345,7 +1345,7 @@ Double-click this passage to edit it.
 [[Greet him warmly with a hug|Cloud Convo0][$convoStart=0,$choice1=1,$companionCloud.affec-=0]]<br>
 [[Greet him with a firm handshake|Cloud Convo0][$convoStart=0,$choice1=2,$companionCloud.affec-=0]]<br>
 [[Greet him with a small wave from a distance|Cloud Convo0][$convoStart=0,$choice1=3,$companionCloud.affec-=(1-$hsswear)]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You give Cloud a firm hug. He seems a bit suprised but keeps his cool and reciprocates, matching your strength. <br><br>
@@ -1359,7 +1359,7 @@ Cloud grins widely as he replies.<br><br>
 	<<if $choice2==0>>
 	[[Yeah, but having a good relationship with everyone on an expedition like this is important, right?|Cloud Convo0][$convoStart=0,$choice2=1,$companionCloud.affec+=(1+$hsswear)]]<br>
 	[[Well, I've heard you have some powerful connections, so being a little extra nice couldn't hurt|Cloud Convo0][$convoStart=0,$choice2=2,$companionCloud.affec-=(1-$hsswear)]]
-	<<endif>>
+	<</if>>
 	<<if $choice2==1>>
 
 	<<say $mc>>Yeah, but having a good relationship with everyone on an expedition like this is important, right?<</say>><br>
@@ -1391,7 +1391,7 @@ Cloud chuckles a bit and a genuine smile flows across his lips.<br><br>
 	You spend a few more minutes exchanging casual banter with Cloud before moving on to the other tasks you had to work on.<br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 
 <<elseif $choice1==2>>
 
@@ -1403,7 +1403,7 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 	<<if $choice2==0>>
 	[[I've heard you're an excellent marksman, so I'd appreciate it if you can keep me safe and keep the expedition on track!|Cloud Convo0][$convoStart=0,$choice2=1,$companionCloud.affec+=(1+$hsswear)]]<br>
 	[[I've heard you're an excelent marksman, so I was wondering if you've ever killed someone?|Cloud Convo0][$convoStart=0,$choice2=2,$companionCloud.affec-=(2-$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1437,7 +1437,7 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 	The awkwardness is defused as he walks off, laughing at his own joke, and leaving you standing there feeling a little silly. <br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 <<elseif $choice1==3>>
 
 	You stand around a bit akwardly and wave hello over at him from a distance. <br><br>
@@ -1450,7 +1450,7 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 		[[Oh no, is it that obvious? It's true I've never done this before, but I'll do my best to become a capable expedition leader as soon as I can!|Cloud Convo0][$convoStart=0, $choice2=1, $companionCloud.affec+=(2+$hsswear)]]<br>
 		[[*Lie* Nah, I have loads of experience, the Abyss is going to be a piece of cake, just one more place to conquer|Cloud Convo0][$convoStart=0, $choice2=2, $companionCloud.affec-=(2-$hsswear)]]<br>
 		[[*Truth* Nah, I have loads of experience. It may have been in another life, or a vision, but I have an idea of what to expect down there, in the Abyss|Cloud Convo0][$convoStart=0, $choice2=3, $companionCloud.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1476,8 +1476,8 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 		Although that wasn't the smoothest conversation ever, you did get a feeling that Cloud liked you.<br>
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
 
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -1501,7 +1501,7 @@ He then pushes the body onto its back and points at the other wounds.<br><br>
 [[Just follow his instructions|Cloud Convo1][$convoStart=0,$choice1=1,$companionCloud.affec-=0]]<br>
 [[You sure seem to know a lot about bandits. Have you had any experience with them?|Cloud Convo1][$convoStart=0,$choice1=2,$companionCloud.affec+=(1+$hsswear)]]<br>
 [[Why should we take anything from him? It's immoral, even if he is already dead|Cloud Convo1][$convoStart=0,$choice1=3,$companionCloud.affec-=(1-$hsswear)]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You follow his instructions and reach into the small backpack besides the pale corpse. Inside, your fingers find the familiar jingle of dubloon coins. <br><br>
@@ -1545,7 +1545,7 @@ Cloud looks up wistfully as if at some unseen dream, but then shakes his head an
 Cloud will now occasionally find and scavenge a small number of dubloons or bullets for you!<br>
 [[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0,$dubloon+=5]]
 
-<<endif>><</nobr>>
+<</if>><</nobr>>
 
 
 :: Cloud Convo2
@@ -1559,14 +1559,14 @@ Double-click this passage to edit it.
 :: Saeko Conversations [nobr]
 <<if $SaekoConvo0==0>>
 [[Introduce yourself to Saeko|Saeko Convo0][$SaekoConvo0=true]]
-<<endif>>
+<</if>>
 <<if $SaekoConvo1==0 && $companionSaeko.affec>10 && $SaekoConvo0 && 0>>
 [[Chat with Saeko|Saeko Convo1][$SaekoConvo1=true]]
 <<elseif $SaekoConvo2==0 && $companionSaeko.affec>20 && $SaekoConvo1 >>
 [[Chat with Saeko|Saeko Convo2][$SaekoConvo2=true]]
 <<elseif $SaekoConvo3==0 && $companionSaeko.affec>30 && $SaekoConvo2 >>
 [[Chat with Saeko|Saeko Convo3][$SaekoConvo3=true]]
-<<endif>>
+<</if>>
 
 
 :: Saeko Convo0
@@ -1578,7 +1578,7 @@ Double-click this passage to edit it.
 [[Greet her warmly with a hug|Saeko Convo0][$convoStart=0,$choice1=1,$companionSaeko.affec-=(1-$hsswear)]]<br>
 [[Greet her with a firm handshake|Saeko Convo0][$convoStart=0,$choice1=2,$companionSaeko.affec+=(1+$hsswear)]]<br>
 [[Greet her with a small wave from a distance|Saeko Convo0][$convoStart=0,$choice1=3,$companionSaeko.affec+=(1+$hsswear)]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 You give Saeko a firm hug, after a few seconds of surprise she returns your hug limply. <br><br>
@@ -1592,7 +1592,7 @@ She speaks matter of factly, as if she were simply stating the sky was blue.<br>
 	<<if $choice2==0>>
 	[[Yeah, I'm excited to discover all the magical wonders the Abyss has in store for us!|Saeko Convo0][$convoStart=0,$choice2=1,$companionSaeko.affec-=(1-$hsswear)]]<br>
 	[[Yeah, I'm thrilled to delve into all the mysteries the Abyss holds!|Saeko Convo0][$convoStart=0,$choice2=2,$companionSaeko.affec+=(1+$hsswear)]]
-	<<endif>>
+	<</if>>
 	<<if $choice2==1>>
 
 	<<say $mc>>Yeah, I'm excited to discover all the magical wonders the Abyss has in store for us!<</say>><br>
@@ -1623,7 +1623,7 @@ She speaks matter of factly, as if she were simply stating the sky was blue.<br>
 	Saeko continues her explanation for a while, posing more questions, hypotheses, and experiments she'd like to do to test them. You can't quite follow everything she says, as she's clearly a better researcher than teacher, but she's glad you're paying attention and tries to explain anything you ask about.<br><br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 
 <<elseif $choice1==2>>
 
@@ -1636,7 +1636,7 @@ Even though you meant it as a joke, you see no sign of her dropping her professi
 	<<if $choice2==0>>
 	[[Very good, what is your ambition for this field expedition?|Saeko Convo0][$convoStart=0,$choice2=1,$companionSaeko.affec+=(1+$hsswear)]]<br>
 	[[Uh, sorry, I was just joking...|Saeko Convo0][$convoStart=0,$choice2=2,$companionSaeko.affec-=(1-$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1670,7 +1670,7 @@ While she doesn't seem great at picking up on sarcasm sometimes, you found your 
 	She looks to the ground and wanders off. You aren't sure if she was bored or insulted by your conversation, but she didn't seem angry at the very least.<br><br>
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
+	<</if>>
 <<elseif $choice1==3>>
 
 	You stand a bit akwardly and wave hello over at her. <br><br>
@@ -1682,7 +1682,7 @@ While she doesn't seem great at picking up on sarcasm sometimes, you found your 
 	<<if $choice2==0>>
 		[[Uh, of course! So um, what do you think you can contribute to the expedition? |Saeko Convo0][$convoStart=0, $choice2=1]]<br>
 		[[Of course! I'll grab the tent, you take the rest of the equipment. Let's go!|Saeko Convo0][$convoStart=0, $choice2=2, $companionSaeko.affec-=(1-$hsswear)]]
-	<<endif>>
+	<</if>>
 
 	<<if $choice2==1>>
 
@@ -1710,8 +1710,8 @@ While she doesn't seem great at picking up on sarcasm sometimes, you found your 
 		<<say $companionSaeko>> Did you take the weight of this bag into account when dividing the equipment? I think my portion may be too large. It might be more optimal if we moved some of the equipment around...<</say>><br>
 		Perhaps you should have just carried it yourself, you thinkn as you end up spending a while sorting through the gear to lighten Saeko's load.<br>
 		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <</nobr>>
 
 
@@ -1758,7 +1758,7 @@ Double-click this passage to edit it.
 	She stands frozen, her face pale, as she tries to process what just happened to her.<br><br>
 	<<say $companionSaeko>> This wasn't what we agreed to... I, how, why..?<</say>><br>
 	<<set $companionSaeko.affec -= _affectionPenalty>>
-<<endif>>
+<</if>>
 
 /* Reaction of other companions: */
 <<set _affectionPenalty -= 2>>
@@ -1766,28 +1766,28 @@ Double-click this passage to edit it.
 	<<if _companionName != "Maru" && $hiredCompanions.some(e => e.name === "Maru")>>
 		<<set $companionMaru.affec -= _affectionPenalty>>
 		<<say $companionMaru>> That's not nice... <</say>><br>
-	<<endif>>
+	<</if>>
 	<<if _companionName != "Lily" && $hiredCompanions.some(e => e.name === "Lily")>>
 		<<set $companionLily.affec -= _affectionPenalty>>
 		<<say $companionLily>> How could you?! <</say>><br>
-	<<endif>>
+	<</if>>
 	<<if _companionName != "Khemia" && $hiredCompanions.some(e => e.name === "Khemia")>>
 		<<set $companionKhemia.affec -= _affectionPenalty>>
 		<<say $companionKhemia>> Not cool! <</say>><br>
-	<<endif>>
+	<</if>>
 	<<if _companionName != "Cherry" && $hiredCompanions.some(e => e.name === "Cherry")>>
 		<<set $companionCherry.affec -= _affectionPenalty>>
 		<<say $companionCherry>> I thought you were different... <</say>><br>
-	<<endif>>
+	<</if>>
 	<<if _companionName != "Cloud" && $hiredCompanions.some(e => e.name === "Cloud")>>
 		<<set $companionCloud.affec -= _affectionPenalty>>
 		<<say $companionCloud>> Tsk. Untrustworthy... <</say>><br>
-	<<endif>>
+	<</if>>
 	<<if _companionName != "Saeko" && $hiredCompanions.some(e => e.name === "Saeko")>>
 		<<set $companionSaeko.affec -= _affectionPenalty>>
 		<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 
 
 :: Maru Leaving
@@ -1803,7 +1803,7 @@ Maru storms off, you consider chasing after him, but soon he is out of sight. Yo
 	<<if $hiredCompanions[$i].name == 'Maru'>>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $companionMaru.affec=-9>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [[Return|$layerReturn]]
@@ -1822,7 +1822,7 @@ Lily looks more disappointed than angry, but regardless of her feelings she coll
 	<<if $hiredCompanions[$i].name == 'Lily'>>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $companionLily.affec=-9>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [[Return|$layerReturn]]
@@ -1841,7 +1841,7 @@ He shoves you aside as he begins to make his way back to the surface by himself.
 	<<if $hiredCompanions[$i].name == 'Khemia'>>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $companionKhemia.affec=-9>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [[Return|$layerReturn]]
@@ -1860,7 +1860,7 @@ She starts wandering in a different direction. You try to call out and reason wi
 	<<if $hiredCompanions[$i].name == 'Cherry'>>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $companionCherry.affec=-9>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [[Return|$layerReturn]]
@@ -1875,7 +1875,7 @@ When you walk back to your tent for the night, you spot a note. It appears to be
 	<<if $hiredCompanions[$i].name == 'Cloud'>>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $companionCloud.affec=-9>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [[Return|$layerReturn]]
@@ -1905,7 +1905,7 @@ She gathers all her materials and sets out for the surface once again.<br>
 	<<if $hiredCompanions[$i].name == 'Saeko'>>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $companionSaeko.affec=-9>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [[Return|$layerReturn]]
@@ -1927,15 +1927,15 @@ As soon as you're done closing up your phone after you inserted the Omoikone Cir
 		<<say $companionAI>>
 		<<if $app.osex != $app.sex >> 
 			And wait a minute... You changed your sex as well, didn't you? If you're even half as fun to tease as the last one, this is going to be a blast!
-		<<endif>>
+		<</if>>
 		<<if $app.obreasts<$app.breasts || $app.openis<$app.penis >>
 			You even seem to have boosted your assets, talk about cliché, but it does look good on you. 
-		<<endif>>
+		<</if>>
 		<<if $app.libido>3 >>
 			And what's with that rapid heartbeat and flushed face already? Seems like your H is set to 5, if you know what I mean.
-		<<endif>>
+		<</if>>
 	<</say>><br>
-	<<endif>>
+	<</if>>
 	<<say $mc>>What are you talking about? This must be the strangest Relic I've ever found...<</say>><br>
 
 	<<set $companionAI.imageIcon= "Icons/Ai_clueless.png">>
@@ -2016,7 +2016,7 @@ As soon as you're done closing up your phone after you inserted the Omoikone Cir
 	<<say $companionAI>> I'm Ai, I'll give tips regarding the layer of the Abyss we are on if you talk to me, blablabla.<</say>><br>
 
 	<<say $mc>> Okay, I don't really get your attitude, but that sounds useful!<</say>><br>
-<<endif>>	
+<</if>>	
 
 @@.alert1; Although most other people won't count Ai as a party member, you can have conversations with her, so you can find her in the party member menu to ask for tips!@@ <br><br>
 
@@ -2054,7 +2054,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	<<say $mc>> Oh, duh, the Abyss. I feel so scatterbrained lately, maybe I should just go to bed early tonight.<</say>><br>
 	As you walk away, you can't shake the feeling you forgot something. Oh well, if you forgot it, it probably wasn't important anyway.<br><br>
 
-<<endif>>
+<</if>>
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 [[Surface Workshop][$aiMemWipe+=1]]
 <</nobr>>
@@ -2084,7 +2084,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	
 	<<say $mc>> Yeah, I got that by now. I really don't get you though. Jeez...<</say>><br>
 	[[End your conversation|Party overview]]
-<<endif>>
+<</if>>
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 <</nobr>>
 
@@ -2096,7 +2096,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 [[Can you give me some more information on threats in this layer?|AI ConvoL1][$convoStart=0,$choice1=1]]<br>
 [[Can you give me some more information on the relics in this layer?|AI ConvoL1][$convoStart=0,$choice1=2]]<br>
 [[Can you give me some more information on the curses in this layer?|AI ConvoL1][$convoStart=0,$choice1=3]]
-<<endif>>
+<</if>>
 
 <<if $choice1==1>>
 	<<say $mc>> Can you give me some more information on threats in this layer?<</say>><br>
@@ -2164,7 +2164,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 
 	<<set $companionAI.imageIcon= "Icons/Ai_plotting.png">>
 	<<say $companionAI>> To be honest, I was only half joking when I said you could take all of them. You need to be careful though, because while they are mild, they will also not give much corruption.<</say>><br>
-	<<say $companionAI>>Pick up too much relics and you'll be forced to go down a layer, or wave goodbye to <<if $app.breastsCor > 1 >>those nice huggable assets of yours<<elseif $app.penisCor>1>>that fun tool between your legs<<endif>>, as Shrunken Assets is the only curse that give a lot of corruption on this layer.<</say>><br>
+	<<say $companionAI>>Pick up too much relics and you'll be forced to go down a layer, or wave goodbye to <<if $app.breastsCor > 1 >>those nice huggable assets of yours<<elseif $app.penisCor>1>>that fun tool between your legs<</if>>, as Shrunken Assets is the only curse that give a lot of corruption on this layer.<</say>><br>
 
 	You gulp in apprehension.<br><br>
 
@@ -2185,6 +2185,6 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 
 	[[End your conversation|Party overview][$convoStart=1,$choice1=0]]
 
-<<endif>>
+<</if>>
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 <</nobr>>

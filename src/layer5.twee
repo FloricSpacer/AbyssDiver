@@ -16,8 +16,8 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 
 [[Walk through the fifth layer of the Abyss|Layer5 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
 	<<if $visitL5 == 0>>
-	<<print "[[Use Cherry's chaotic luck|Layer5 Cherry]]">><br><<endif>>
-<<endif>><</nobr>>
+	<<print "[[Use Cherry's chaotic luck|Layer5 Cherry]]">><br><</if>>
+<</if>><</nobr>>
 
 
 :: Layer5 Hub [layer5]
@@ -27,7 +27,7 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 <<set $layerTemp = random(0,20)>>
 <<if $layerTemp >= 19>>
 <<include "Curse Descriptions">><br><br>
-<<endif>>
+<</if>>
 
 <<if $coolCloth && !$dollevent2>>
 	<<set $cool=1>>
@@ -40,23 +40,23 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 <<elseif $dollevent2 && !$coolCloth>>
 	Dressed in only your tattered pink dress you feel very exposed to the heat on this layer. You wish you had something cooler and more protective to wear to protect you. At the same time you wonder if you could even wear something else now that you are stuck in this cursed dress. Damn that doll...<br><br>
 
-<<endif>>
+<</if>>
 <<if $forageWater == 0>>
 	<<print "You are not able to forage for daily water on this layer, due to the nature of the water source">>
-	<<endif>>
+	<</if>>
 <<if $forageFood == 1>>
 	<<print "You are currently foraging for your daily food on this layer">><br>
 	<<else>>
-	<<print "You are not currently foraging for your daily food on this layer">><br><<endif>>
+	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
 <<if !isPlaying("layer5")>>
 	<<masteraudio stop>><<audio "layer5" volume 0.2 play loop>>
-<<endif>>
+<</if>>
 What do you want to do while you're here?<br>
 <br>
 [[Use Items and Relics]]<br>
 <<if $hiredCompanions.length > 0>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
-<<endif>>
+<</if>>
 <</nobr>>
 [[Learn about the threats on this layer|Layer5 Threats]]
 [[Check for food and water you can forage for|Layer5 Forage]]
@@ -74,7 +74,7 @@ A rumbling in the ground disturbs your typical walk through the fifth layer. You
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
 
 [[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]
-<<endif>>
+<</if>>
 
 
 :: Layer5 Cherry [layer5]
@@ -98,11 +98,11 @@ How do you want to deal with the enormous worm approaching you?
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer5 Hub][$time += 1]]<br><br>
-<<endif>>
+<</if>>
 <<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
 	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
 	[[Have Khemia fight it off with Joyous Sunder|Layer5 Hub]]<br><br>
-<<endif>>
+<</if>>
 You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away.<br>
 	[[Use 10 days of water as a distraction to get away|Layer5 Hub][$items[0].count -= 10]]<br><br>
 If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
@@ -118,14 +118,14 @@ Use the following option only if you have specifically considered your inventory
 <<set $timeL5 += $tempTime>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 -= 7>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 	<<else>>
 	<<set $foodL5 += $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -133,10 +133,10 @@ Use the following option only if you have specifically considered your inventory
 			<<set $items[2].count += 1>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 		<<else>>
 		<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
@@ -164,12 +164,12 @@ If you decide to start foraging for food or water, it means that you will not re
 	<<print "[[Start foraging for Crumbleweed for food|Layer5 Forage][$forageFood = 1]]">><br><br>
 	<<else>>
 	<<print "[[Stop foraging for food|Layer5 Forage][$forageFood = 0]]">><br><br>
-<<endif>>
+<</if>>
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from an Oasis|Layer5 Flasks]]<br><br>
 <<else>>
 You need empty flasks to fill them with water from the Oasis.<br><br>
-<<endif>>
+<</if>>
 You can also wait at the Oasis if you'd like to pass the time while waiting for something. How many days would you like to wait at the oasis?<br>
 <<textbox "$temp" "0">>
 <<nobr>><<link "Wait" "Layer5 Forage">>
@@ -181,13 +181,13 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 				<<set $waterL5 += 1>>
 			<<else>>
 				<<break>>
-			<<endif>>
+			<</if>>
 		<</for>>
 	<<else>>
 		<<set $items[3].count = $items[2].count + $items[3].count>>
 		<<set $items[2].count = 0>>
 		<<set $items[0].count += (5 - $items[3].count)>>
-	<<endif>>
+	<</if>>
 	<<set $tempTime = parseInt($temp)>>
 	<<include "GeneralTimeStats">>
 <</link>><br><br><</nobr>>
@@ -203,40 +203,40 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 
 <<nobr>><<if $totalRelics.some(e => e.name === "Pocket Hoard")>>
 	<<else>><<print "[[Pick up the Pocket Hoard|Layer5 Booby][$temp = 1, $booby = 1]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Sunbeam")>>
 	<<else>><<print "[[Pick up Sunbeam|Layer5 Booby][$temp = 2, $booby = 2]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Moonwatcher")>>
 	<<else>><<print "[[Pick up the Moonwatcher|Layer5 Booby][$temp = 3, $booby = 3]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Siren's Call")>>
 	<<else>><<print "[[Pick up the Siren's Call|Layer5 Booby][$temp = 4, $booby = 1]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Zelus Band")>>
 	<<else>><<print "[[Pick up the Zelus Band|Layer5 Booby][$temp = 5, $booby = 2]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Everhevea")>>
 	<<else>><<print "[[Pick up the Everhevea|Layer5 Booby][$temp = 6, $booby = 3]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Reflex Emblem")>>
 	<<else>><<print "[[Pick up the Reflex Emblem|Layer5 Booby][$temp = 7, $booby = 1]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Twin Polaris") || setup.calcCarriedWeight() + $hiredCompanions.length * 60 < 90>>
 	<<else>><<print "[[Pick up the Twin Polaris|Layer5 Booby][$temp = 8, $booby = 2]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Superpositional Skewer")>>
 	<<else>><<print "[[Pick up the Superpositional Skewer|Layer5 Booby][$temp = 9, $booby = 3]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Empath Coil") || $items[20].count < 1 || $items[13].count < 1>>
 	<<else>><<print "[[Pick up the Empath Coil|Layer5 Booby][$temp = 10, $booby = 1, $items[20].count -= 1]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Heavenly Merrymaker")>>
 	<<else>><<print "[[Pick up the Heavenly Merrymaker|Layer5 Booby][$temp = 11, $booby = 2]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 <<nobr>><<if $totalRelics.some(e => e.name === "Vain Sculpt")>>
 	<<else>><<print "[[Pick up the Vain Sculpt|Layer5 Booby][$temp = 12, $booby = 3]]">>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 
 
 [[Continue exploring the fifth layer|Layer5 Hub]]
@@ -253,7 +253,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 
 [[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer5 Curses [image layer5]
@@ -271,11 +271,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse57]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Gender Reversal D") || $StoredCurse.name == "Gender Reversal D">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -285,11 +285,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse58]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Pleasure Respecification A") || $StoredCurse.name == "Pleasure Respecification A">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -299,11 +299,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse59]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Clothing Restriction C") || $playerCurses.some(e => e.name === "Crossdress Your Heart") ||  $StoredCurse.name == "Crossdress Your Heart" ||  $StoredCurse.name == "Clothing Restriction C">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -313,11 +313,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse60]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Massacre Manicure") ||  $StoredCurse.name == "Massacre Manicure" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -327,11 +327,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse61]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "DoS") || $StoredCurse.name == "DoS">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -341,11 +341,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse62]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "DoM") || $StoredCurse.name == "DoM">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -355,11 +355,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse63]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Hijinks Ensue") ||  $StoredCurse.name == "Hijinks Ensue" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -369,11 +369,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse64]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Flower Power") || $StoredCurse.name == "Flower Power" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -383,11 +383,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse65]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Cellulose") || $StoredCurse.name == "Cellulose">>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 	<<else>>
@@ -397,11 +397,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse66]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Chlorophyll") || $StoredCurse.name == "Chlorophyll">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -411,11 +411,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse67]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Pheromones") || $StoredCurse.name == "Pheromones">>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -425,11 +425,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse68]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Carapacian") || $StoredCurse.name == "Carapacian" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -439,11 +439,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse69]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Hemospectrum") || $StoredCurse.name == "Hemospectrum" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -453,11 +453,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse70]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Wriggly Antennae") || $StoredCurse.name == "Wriggly Antennae" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -467,11 +467,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse71]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $playerCurses.some(e => e.name === "Eggxellent") || $StoredCurse.name == "Eggxellent" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
@@ -481,11 +481,11 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 			<<set _table += "<td>You can not store a new curse while you are still affected by the curse in Managed Misfortune.</td></tr>">>
 		<<else>>
 			<<set _table += "<td>or [[Store this curse in Managed Misfortune|Layer5 Curses][$StoredCurse = $curse72]]</td></tr>">>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set _table += "</tr>">>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<set _table +=  "</table>" >>
 <</nobr>>
 <<print _table>>
@@ -496,7 +496,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Layer5 Wonders [image layer5]
@@ -510,12 +510,12 @@ Do you want to walk through the One-sided Tunnel and send your items back up to 
 	You can also utilize your Superpositional Skewer to sync with your commerce balloon, then swap it with a rock or something after you leave the Tunnel, which would allow you to instantly retrieve your items if you wish to. 
 
 	[[Use the Superpositional Skewer to save 1 commerce balloon, then enter the Tunnel|Layer5 Tunnel][$tunnelSkewer = 1]]
-<<endif>>
+<</if>>
 <<if $vaultTimer == 0>>
 Do you want to walk to the Mirage Vault to activate it for the first time?
 <<else>>
 Do you want to check on the Mirage Vault and see if it's open?
-<<endif>>
+<</if>>
 
 [[Walk to the Mirage Vault door|Layer5 Vault]]
 
@@ -532,7 +532,7 @@ Do you want to check on the Mirage Vault and see if it's open?
 	[[Choose to stay on the fifth layer|Habitation Ending]]
 	<<else>>
 	You must have a corruption value of 0 or greater to choose a habitation option.
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -559,19 +559,19 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $tempTime = (Math.max(4 - $timeRed + $status.penalty - ($oasisVisit * 2) - $abyssKnow + (Math.trunc($hexflame / 10)), 0))>>
 <<set $timeL5 += $tempTime>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 += $tempTime>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 	<<else>>
 	<<set $foodL5 += $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -579,13 +579,13 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 			<<set $items[2].count += 1>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 		<<else>>
 		<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 
@@ -596,7 +596,7 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 		<<set $waterL5 += 1>>
 	<<else>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 
@@ -618,7 +618,7 @@ After springing the trigger, a boulder comes rolling down the hallway after you!
 After springing the trigger, a barrage of arrows flies out the walls towards you!
 <<elseif $booby == 3>><<set $booby3 += 1>>
 After springing the trigger, a trapdoor opens beneath where you are standing, causing you to fall into a pit of scorpions!
-<<endif>>
+<</if>>
 If you don't have a way to specifically avoid the trap, you'll be seriously injured, increasing all travel times by 3 days until you use a medkit. However, if you have any status condition, the trap will be fatal!
 
 <<if $status.duration > 0>>
@@ -629,14 +629,14 @@ The trap would kill you due to your status condition, please go back and choose 
 <<else>><<if $ownedRelics.some(e => e.name === "Forest's Gift") && $booby == 3>>
 Fortunately for you, the scorpions in the pit are merely mundane scorpions, rather than an Abyss-twisted analogue of them. And because of your Relic the Forest's Gift, the scorpions are actually friendly towards you, rather than upset that you invaded the pit they live in. A brief conversation explaining what happened to them leads to them pointing you towards a safe exit, allowing easy and safe escape from the pit.<br>
 [[Escape with the Forest's Gift|Layer5 Booby2]]<br><br>
-<<endif>>
+<</if>>
 [[Accept the injuries and pick up the relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to evade the trap.
 [[Use a combination of relics not mentioned above you believe would be able to overpower the trap|Layer5 Booby2]]
 
-<<endif>>
-<<endif>>
+<</if>>
+<</if>>
 
 
 :: Layer5 Booby2 [layer5]
@@ -667,7 +667,7 @@ Having dealt with the booby trap, you are able to move forwards freely and obtai
 [[Pick up the Heavenly Merrymaker|Heavenly Merrymaker]]
 <<elseif $temp == 12>>
 [[Pick up the Vain Sculpt|Vain Sculpt]]
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -858,7 +858,7 @@ You have successfully taken on the $curse57.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Gender Reversal D [layer5]
@@ -871,7 +871,7 @@ You have successfully taken on the $curse58.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 
@@ -885,7 +885,7 @@ You have successfully taken on the $curse59.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Clothing Restriction C [layer5]
@@ -898,7 +898,7 @@ You have successfully taken on the $curse60.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Massacre Manicure [layer5]
@@ -911,7 +911,7 @@ You have successfully taken on the $curse61.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on DoS [layer5]
@@ -923,7 +923,7 @@ You have successfully taken on the $curse62.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on DoM [layer5]
@@ -935,7 +935,7 @@ You have successfully taken on the $curse63.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Hijinks Ensue [layer5]
@@ -948,7 +948,7 @@ You have successfully taken on the $curse64.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Flower Power [layer5]
@@ -961,7 +961,7 @@ You have successfully taken on the $curse65.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Cellulose [layer5]
@@ -974,7 +974,7 @@ You have successfully taken on the $curse66.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 
@@ -1011,7 +1011,7 @@ What would you like your new blood (or maybe hemolymph, depending on how human y
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Wriggly Antennae [layer5]
@@ -1024,7 +1024,7 @@ You have successfully taken on the $curse71.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Eggxellent [layer5]
@@ -1037,7 +1037,7 @@ You have successfully taken on the $curse72.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Layer5 Curses Random [layer5]
@@ -1046,57 +1046,57 @@ You have successfully taken on the $curse72.name curse. Hopefully you are ok wit
 	<<set $temp1 = random(0,15) + 56>>
 	<<if ($temp1 == 56) && !$playerCurses.some(e => e.name === "Libido Reinforcement D") && $StoredCurse.name != "Libido Reinforcement D">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 57) && !$playerCurses.some(e => e.name === "Gender Reversal D") && $StoredCurse.name != "Gender Reversal D">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 58) && !$playerCurses.some(e => e.name === "Pleasure Respecification A") && $StoredCurse.name != "Pleasure Respecification A">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 59) && !$playerCurses.some(e => e.name === "Clothing Restriction C") && !$playerCurses.some(e => e.name === "Crossdress Your Heart") && $StoredCurse.name != "Clothing Restriction C" && $StoredCurse.name != "Crossdress Your Heart">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 60) && !$playerCurses.some(e => e.name === "Massacre Manicure") && $StoredCurse.name != "Massacre Manicure">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 61) && !(playerCurses.some(e => e.name === "DoS")) && $StoredCurse.name != "DoS">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 62) && !$playerCurses.some(e => e.name === "DoM") && $StoredCurse.name != "DoM">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 63) && !$playerCurses.some(e => e.name === "Hijinks Ensure") && $StoredCurse.name != "Hijinks Ensure">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 64) && !$playerCurses.some(e => e.name === "Flower Power") && $StoredCurse.name != "Flower Power">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 65) && !$playerCurses.some(e => e.name === "Cellulose") && $StoredCurse.name != "Cellulose">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 66) && !$playerCurses.some(e => e.name === "Chlorophyll") && $StoredCurse.name != "Chlorophyll">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 67) && !$playerCurses.some(e => e.name === "Pheromones") && $StoredCurse.name != "Pheromones">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 68) && !$playerCurses.some(e => e.name === "Carapacian") && $StoredCurse.name != "Carapacian">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 69) && !$playerCurses.some(e => e.name === "Hemospectrum") && $StoredCurse.name != "Hemospectrum">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 70) && !$playerCurses.some(e => e.name === "Wriggly Antennae") && $StoredCurse.name != "Wriggly Antennae">>
 		<<break>>
-	<<endif>>
+	<</if>>
 	<<if ($temp1 == 71) && !$playerCurses.some(e => e.name === "Eggxellent") && $StoredCurse.name != "Eggxellent">>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 	<<if $i > 900>>
 		<<set $temp1 = -1>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 
@@ -1108,7 +1108,7 @@ The Abyss has chosen for you to be cursed with $curses[$temp1].name. You may not
 There are no curses left for you to take on this layer.
 
 <<back>>
-<<endif>>
+<</if>>
 
 
 :: Take on Chlorophyll [layer5]
@@ -1121,7 +1121,7 @@ You have successfully taken on the $curse67.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Take on Pheromones [layer5]
@@ -1134,7 +1134,7 @@ You have successfully taken on the $curse68.name curse. Hopefully you are ok wit
 	[[Return to exploring layer 5|Layer5 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L5]]
-<<endif>>
+<</if>>
 
 
 :: Layer5 Cherry Relic [layer5]
@@ -1145,7 +1145,7 @@ You have successfully taken on the $curse68.name curse. Hopefully you are ok wit
 	<<set $temp2 = random(0,11) + 48>>
 	<<if $temp1 !== $temp2>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
@@ -1175,7 +1175,7 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $ownedRelics.deleteAt(_temp)>>
 	<</link>>
 
-<<endif>>
+<</if>>
 
 
 :: Layer5 Cherry Curse [layer5]
@@ -1186,7 +1186,7 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 	<<set $temp2 = random(0,15) + 56>>
 	<<if ($temp1 !== $temp2)>>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 <<set $playerCurses.push($curses[$temp1])>>
 <<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
@@ -1212,7 +1212,7 @@ What would you like your new blood (or maybe hemolymph, depending on how human y
 
 [[Continue on to the rest of the layer|Layer5 Hub]]
 
-<<endif>>
+<</if>>
 
 <<if $curses[$temp1].name ==  "Carapacian" || $curses[$temp2].name ==  "Carapacian">>
 
@@ -1222,23 +1222,23 @@ Please enter your new exoskeleton color:
 
 <<else>>
 
-/*<<if !($curses[$temp1].name ==  "Hemospectrum" || $curses[$temp2].name ==  "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<endif>>
+/*<<if !($curses[$temp1].name ==  "Hemospectrum" || $curses[$temp2].name ==  "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<</if>>
 */
-<<endif>>
+<</if>>
 [[Continue on to the rest of the layer|Layer5 Hub]]
 <<nobr>>
 <<if $curses[$temp1].name == "Gender Reversal D" || $curses[$temp2].name == "Gender Reversal D">>
 	<<set $GenderLog.push($curse58)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "Libido Reinforcement D" || $curses[$temp2].name == "Libido Reinforcement D" >>
 	<<set $LibidoLog.push($curse57)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "DoS" || $curses[$temp2].name == "DoS">>
 	<<set $LibidoLog.push($curse62)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp1].name == "DoM" || $curses[$temp2].name == "DoM">>
 	<<set $LibidoLog.push($curse63)>>
-<<endif>>
+<</if>>
 <</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
@@ -1251,8 +1251,8 @@ Please enter your new exoskeleton color:
 			<<set _temp = $GenderLog.length>>
 			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
 				<<set $GenderLog.deleteAt(_temp-1)>>
-			<<endif>>
-		<<endif>>
+			<</if>>
+		<</if>>
 		<<include "CurseRemoval">>
 		
 		<<set $targetCurse = $curses[$temp2]>>
@@ -1261,8 +1261,8 @@ Please enter your new exoskeleton color:
 			<<set _temp = $GenderLog.length>>
 			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
 				<<set $GenderLog.deleteAt(_temp-1)>>
-			<<endif>>
-		<<endif>>
+			<</if>>
+		<</if>>
 		<<include "CurseRemoval">>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
@@ -1270,7 +1270,7 @@ Please enter your new exoskeleton color:
 		<<set $ownedRelics.deleteAt(_temp)>>
 	<</link>>
 
-<<endif>>
+<</if>>
 
 
 :: Layer5 Cherry Mix [layer5]
@@ -1303,7 +1303,7 @@ What would you like your new blood (or maybe hemolymph, depending on how human y
 
 [[Continue on to the rest of the layer|Layer5 Hub]]
 
-<<endif>>
+<</if>>
 
 <<if $curses[$temp2].name == "Carapacian">>
 
@@ -1313,23 +1313,23 @@ Please enter your new exoskeleton color:
 
 <<else>>
 
-/*<<if !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<endif>>
+/*<<if !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<</if>>
 
-<<endif>>*/
+<</if>>*/
 [[Continue on to the rest of the layer|Layer5 Hub]]
 <<nobr>>
 <<if $curses[$temp2].name == "Gender Reversal D">>
 	<<set $GenderLog.push($curse58)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "Libido Reinforcement D">>
 	<<set $LibidoLog.push($curse57)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "DoS">>
 	<<set $LibidoLog.push($curse62)>>
-<<endif>>
+<</if>>
 <<if $curses[$temp2].name == "DoM">>
 	<<set $LibidoLog.push($curse63)>>
-<<endif>>
+<</if>>
 
 <</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
@@ -1346,15 +1346,15 @@ Please enter your new exoskeleton color:
 			<<set _temp = $GenderLog.length>>
 			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
 				<<set $GenderLog.deleteAt(_temp-1)>>
-			<<endif>>
-		<<endif>>
+			<</if>>
+		<</if>>
 		<<include "CurseRemoval">>
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
 		<<set $soldRelics.push($ownedRelics[_temp])>>
 		<<set $ownedRelics.deleteAt(_temp)>>
 	<</link>>
 
-<<endif>>
+<</if>>
 
 
 :: Layer5 Tunnel [layer5]
@@ -1369,38 +1369,38 @@ After walking through the tunnel for about 5 or 6 hours (it's hard to precisely 
 And as soon as the harsh light of the fifth layer touches you, you notice your pack is suddenly much lighter! It seems that all of the items you brought with you into the Abyss have disappeared, presumably sent to the surface at a location which is suddenly intuitively available to your mind. <<if $ownedRelics.some(e => e.name === "Pocket Hoard")>>
 
 Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you can easily stick your whole arm in. In fact, there doesn't seem to be any limit to what you can fit into the rucksack, as long as it fits into the opening, but you can easily retrieve anything you put in. You have successfully activated your Pocket Hoard! Your carrying capacity is now effectively infinite, and the value of your Pocket Hoard has increased to 100 dubloons.
-<<endif>>
+<</if>>
 
 [[Return to exploring level 5|Layer5 Hub]]
-<<endif>><<nobr>>
+<</if>><<nobr>>
 <<set $tunnelUsed = 1>>
 <<set $tunnelDubloons = $dubloons>>
 <<set $dubloons = 0>>
 <<if $tunnelSkewer == 1>>
 	<<set $items[7].count -= 1>>
-<<endif>>
+<</if>>
 <<if $vaultFound == 1>>
 	<<set $vaultMedkits = Math.max(items[4].count, 0)>>
-<<endif>>
+<</if>>
 <<for $i = 4; $i < $items.length; $i++>>
 	<<set $vaultItems[$i].count += $items[$i].count>>
 	<<set $items[$i].count = 0>>
 <</for>>
 <<if $vaultFound == 1>>
 	<<set $items[4].count = $vaultMedkits>>
-<<endif>>
+<</if>>
 
 <<if $ownedRelics.some(e => e.name === "Pocket Hoard")>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<if $ownedRelics[$i].name=="Pocket Hoard" >>
 		<<set $ownedRelics[$i].value = 100>>
 		<<set $ownedRelics[$i].active = 1>>
-	<<endif>>
+	<</if>>
 <</for>>
-<<endif>>
+<</if>>
 <<if $tunnelSkewer == 1>>
 	<<set $items[7].count += 1>>
-<<endif>>
+<</if>>
 <</nobr>>
 
 
@@ -1412,11 +1412,11 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 	<<include "Layer5Time">>
 <<else>>
 	<<set $vaultWait = 0>>
-<<endif>>
+<</if>>
 <<if $vaultTimer == 0>>
 <<set $vaultTimer = $time>>
 <br><br> You touch your hand against the ancient door and the number 60 appears on it, as if there was either a very high-resolution LCD inside the glass or some magic inside it had awakened by your touch.
-<<endif>>
+<</if>>
 <</nobr>>
 <<if (60 - $time + $vaultTimer) > -6>>
 The timer on the door reads <<print (60 - $time + $vaultTimer)>>.
@@ -1444,10 +1444,10 @@ You pick up your haul and continue forward through the Abyss, morale boosted by 
 <<set $dubloons += 200>>
 <<set $vaultFound = 1>>
 <</nobr>>
-<<endif>>
+<</if>>
 <<else>>
 The timer has passed its endpoint, there is no more door and no more vault that you can find. Was it ever real? There's no way to know, but you can tell it certainly isn't here now.
-<<endif>>
+<</if>>
 
 [[Return to exploring level 5|Layer5 Hub]]
 
@@ -1460,20 +1460,20 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 		<<set $status.duration -= 1>>
 		<<else>>
 		<<set $status.penalty = 0>>
-	<<endif>>
+	<</if>>
 	<<if $items[11].count > 0 || $rope == 1>>
 		<<set $layerExitTime = (Math.max(11 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool, 0))>>
 		<<else>>
 		<<set $layerExitTime = (Math.max(24 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 
 <<for $i = 0; $i < 99; $i++>>
 
 <<set $timeL5 += 1>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += 1>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 += 1>>
 <<set $time += 1>>
 <<if $forageFood == 0>>
@@ -1484,25 +1484,25 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 		<<set $crumbleFluid += 5>>
 		<<else>>
 		<<set $crumbleFluid += 1>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $forageWater == 0>>
 	<<if $items[3].count > 0>>
 		<<set $items[3].count -= 1>>
 		<<set $items[2].count += 1>>
 	<<else>>
 		<<set $items[0].count -= 1>>
-	<<endif>>
+	<</if>>
 	<<else>>
 	<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 	<<set $layerExitTime -= 1>>
 	<<if $layerExitTime == 0>>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 	<<if $timeL5T2 > 8>>
 
@@ -1511,13 +1511,13 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 [[Deal with the Dune Devouring Borer|Layer5 Threat2 Ascend]]<br><br>
 
 		<<break>>
-	<<endif>>
+	<</if>>
 		<<if $timeL5T1 > 6>>
 		<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today. <br><br>
 
 [[Deal with the Mayfly Scuttler|Layer5 Threat1 Ascend]]<br><br>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 
@@ -1531,7 +1531,7 @@ You continue through the scorching desert for days on end, until you eventually 
 
 [[Return to the fourth layer|Layer4 Hub]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer5 Threat2 Ascend [layer5]
@@ -1545,11 +1545,11 @@ How do you want to deal with the enormous worm approaching you?
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer5 Ascend2][$time += 1]]<br><br>
-<<endif>>
+<</if>>
 <<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
 	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
 	[[Have Khemia fight it off with Joyous Sunder|Layer5 Ascend2]]<br><br>
-<<endif>>
+<</if>>
 You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away.<br>
 	[[Use 10 days of water as a distraction to get away|Layer5 Ascend2][$items[0].count -= 10]]<br><br>
 If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
@@ -1565,14 +1565,14 @@ Use the following option only if you have specifically considered your inventory
 <<set $timeL5 += $tempTime>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 -= 7>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 	<<else>>
 	<<set $foodL5 += $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1580,10 +1580,10 @@ Use the following option only if you have specifically considered your inventory
 			<<set $items[2].count += 1>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 		<<else>>
 		<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
@@ -1603,16 +1603,16 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 		<<set $status.duration -= 1>>
 		<<else>>
 		<<set $status.penalty = 0>>
-	<<endif>>
+	<</if>>
 	<<set $layerExitTime = (Math.max(13 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10))- $cool, 0))>>
-<<endif>>
+<</if>>
 
 <<for $i = 0; $i < 99; $i++>>
 
 <<set $timeL5 += 1>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += 1>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 += 1>>
 <<set $time += 1>>
 <<if $forageFood == 0>>
@@ -1623,25 +1623,25 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 		<<set $crumbleFluid += 5>>
 		<<else>>
 		<<set $crumbleFluid += 1>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<if $forageWater == 0>>
 	<<if $items[3].count > 0>>
 		<<set $items[3].count -= 1>>
 		<<set $items[2].count += 1>>
 	<<else>>
 		<<set $items[0].count -= 1>>
-	<<endif>>
+	<</if>>
 	<<else>>
 	<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 	<<set $layerExitTime -= 1>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 	<<if $layerExitTime == 0>>
 		<<break>>
-	<<endif>>
+	<</if>>
 
 	<<if $timeL5T2 > 8>>
 
@@ -1650,13 +1650,13 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 [[Deal with the Dune Devouring Borer|Layer5 Threat2 Descend]]<br><br>
 
 		<<break>>
-	<<endif>>
+	<</if>>
 		<<if $timeL5T1 > 6>>
 		<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today. <br><br>
 
 [[Deal with the Mayfly Scuttler|Layer5 Threat1 Descend]]<br><br>
 		<<break>>
-	<<endif>>
+	<</if>>
 <</for>>
 
 
@@ -1671,7 +1671,7 @@ You continue through the scorching desert for days on end, but the heat only see
 
 [[Descend to the sixth layer|Layer6 1]]
 
-<<endif>>
+<</if>>
 
 
 :: Layer5 Threat2 Descend [layer5]
@@ -1685,11 +1685,11 @@ How do you want to deal with the enormous worm approaching you?
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
 	[[Have Khemia fight it off with Sunbeam|Layer5 Exit2][$time += 1]]<br><br>
-<<endif>>
+<</if>>
 <<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
 	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
 	[[Have Khemia fight it off with Joyous Sunder|Layer5 Exit2]]<br><br>
-<<endif>>
+<</if>>
 You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away.<br>
 	[[Use 10 days of water as a distraction to get away|Layer5 Exit2][$items[0].count -= 10]]<br><br>
 If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
@@ -1705,14 +1705,14 @@ Use the following option only if you have specifically considered your inventory
 <<set $timeL5 += $tempTime>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 -= 7>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
 	<<set $items[1].count -= $tempTime>>
 	<<else>>
 	<<set $foodL5 += $tempTime>>
-<<endif>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1720,10 +1720,10 @@ Use the following option only if you have specifically considered your inventory
 			<<set $items[2].count += 1>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 		<<else>>
 		<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
@@ -1738,7 +1738,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 :: Escape Balloon L5 [layer5]
 <<nobr>><<set $currentLayer = 5>><<if !isPlaying("layer5")>>
 	<<masteraudio stop>><<audio "layer5" volume 0.2 play loop>>
-<<endif>><</nobr>>
+<</if>><</nobr>>
 As you float gently above the scorching dunes below, you notice that even up here in your balloon, you can feel the uncomfortable heat of this layer's climate. Luckily you won't need to endure it on a long hike through the sand here, instead you can enjoy a relaxing float up to the layer above.
 
 [[Ascend to next layer|Escape Balloon L4][$corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10))) ]]
@@ -1778,9 +1778,9 @@ Finally, the vision fades, leaving you standing once again where you were before
 		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
 			<<set $temp=$i>>
 			<<set $endloop=false>>
-		<<endif>>
+		<</if>>
 	<</for>>
-<<endif>>
+<</if>>
 <</nobr>>
 [[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
@@ -1791,12 +1791,12 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<<set $status.duration -= 1>>
 	<<else>>
 	<<set $status.penalty = 0>>
-<<endif>>
+<</if>>
 <<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
 <<set $timeL5 += $tempTime>>
 <<if ($items[0].count + $items[3].count) > 10>>
 	<<set $timeL5T2 += $tempTime>>
-<<endif>>
+<</if>>
 <<set $timeL5T1 += $tempTime>>
 <<set $time += $tempTime>>
 <<if $forageFood == 0>>
@@ -1807,8 +1807,8 @@ Finally, the vision fades, leaving you standing once again where you were before
 		<<set $crumbleFluid += (5 * $tempTime)>>
 		<<else>>
 		<<set $crumbleFluid += $tempTime>>
-	<<endif>>
-<<endif>>
+	<</if>>
+<</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
@@ -1816,12 +1816,12 @@ Finally, the vision fades, leaving you standing once again where you were before
 			<<set $items[2].count += 1>>
 		<<else>>
 			<<set $items[0].count -= 1>>
-		<<endif>>
+		<</if>>
 	<<else>>
 		<<set $waterL5 += 1>>
-	<<endif>>
+	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<<endif>>
+	<</if>>
 <</for>>
 <</nobr>>
