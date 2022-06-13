@@ -149,62 +149,60 @@ Would you like to increase or descrease your height due to eating flairabou meat
 [[Return to exploring the rest of the layer|Layer4 Hub]]
 
 
-:: Layer4 Relics [image layer4]
-<<if $timeL4T1 < 7>><<set $totalRelics = $ownedRelics.concat($soldRelics)>>[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-relics.png']]
+:: Layer4 Relics [layer4 cards nobr]
+<<if $timeL4T1 < 7>>
 
-<<nobr>><<if $totalRelics.some(e => e.name === "Ghost-righter Writing Down")>>
-	<<else>><<print "[[Pick up the Ghost-righter Writing Down]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Gilded Prison") || !setup.haveCuttingTool() || $torchUse == 0>>
-	<<else>><<print "[[Pick up the Gilded Prison]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Omoikane Circuit")>>
-	<<else>><<print "[[Pick up the Omoikane Circuit]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Afar Wanderer") || ($items[11].count == 0 && $rope == 0)>>
-	<<else>><<print "[[Pick up the Afar Wanderer]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Kin Shifter")>>
-	<<else>><<print "[[Pick up the Kin Shifter]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Brave Vector")>>
-	<<else>><<print "[[Pick up the Brave Vector]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Devil's Own")>>
-	<<else>><<print "[[Pick up the Devil's Own]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Verve Cell")>>
-	<<else>><<print "[[Pick up the Verve Cell]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Vessel Vivisector")>>
-	<<else>><<print "[[Pick up the Vessel Vivisector]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Sated Artist")>>
-	<<else>><<print "[[Pick up the Sated Artist]]">>
-<</if>><</nobr>>
-<<nobr>><<if $ownedRelics.some(e => e.name === "Timekeeper's Keepsake") || ($items[11].count == 0 && $rope == 0)>>
-	<<else>><<print "[[Pick up the Timekeeper's Keepsake]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Creator's Bolt")>>
-	<<else>><<print "[[Pick up the Creator's Bolt]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Perpetual Repose")>>
-	<<else>><<print "[[Pick up the Perpetual Repose]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Toral Wave")>>
-	<<else>><<print "[[Pick up the Toral Wave]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Flamel's Folly")>>
-	<<else>><<print "[[Pick up the Flamel's Folly]]">>
-<</if>><</nobr>>
+<p>
+@@.floatr;[img[setup.ImagePath+'icon.png']]@@
 
-[[Continue exploring the fourth layer|Layer4 Hub]]
+The Brave Vector Relic you can find here is a perfect example of something you might want the Relic Workshop to modify on the surface. With a few simple modifications, it could work as a kind of debris gun, firing whatever rocks and rubble you can find down here at high velocity towards enemies...or perhaps even other Relics, though you would need to be quite careful to ensure that fired Relics don't break upon impact. It can also be used more generally for any Relic invention where you'd like some component to be moving really, really fast.
+</p>
+
+<p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
+
+<div class="cards-grid">
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<set _layerRelics = ["Ghost-righter Writing Down", "Gilded Prison", "Omoikane Circuit", "Afar Wanderer", "Kin Shifter", "Brave Vector", "Devil's Own", "Verve Cell","Vessel Vivisector", "Sated Artist", "Timekeeper's Keepsake", "Creator's Bolt", "Perpetual Repose", "Toral Wave", "Flamel's Folly"]>>
+<<for _name range _layerRelics>>
+<div>
+<<set _relic = $relics.find(r => r.name === _name)>>
+[img[setup.ImagePath + _relic.pic]]
+<h2>_name</h2>
+<p class="cost">
+Cost: <<print _relic.corr>> corruption
+<<if _relic.time > 0>>
++ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
+<</if>>
+</p>
+<p>
+<<if _totalRelics.some(e => e.name === _name)>>
+Already taken
+<<elseif _name === "Gilded Prison" && !setup.haveCuttingTool() && $torchUse == 0>>
+@@.unreachable;The entrance to the cave this Relic's located in is completely covered with hard icicles. You can either slash them away with a cutting tool, or spend 1 extra day melting them with a source of heat (doesn't use up an extra torch if you used one reaching the Relic.)@@
+<<elseif _name === "Timekeeper's Keepsake" && $items[11].count == 0 && $rope == 0>>
+@@.unreachable;Located at the bottom of an icy pit, far too slippery on all sides to be climbed by hand. Requires some rope.@@
+<<else>>
+<<print "[[Pick up the " + _name + "]]">>
+<</if>>
+</p>
+<p>
+<<print _relic.desc>>
+</p>
+<p>
+<<print _relic.weight>> kg,
+<<print _relic.value>> dubloons
+</p>
+</div>
+<</for>>
+</div>
+
+<p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
 
 <<else>>
 
-A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.
+<p>A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of it's attempt to shovel you into its enormous maw.</p>
 
-[[Deal with the Drifting Swallower|Layer4 Threat1 Main]]
+<p>[[Deal with the Drifting Swallower|Layer4 Threat1 Main]]</p>
 
 <</if>>
 
