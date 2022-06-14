@@ -670,7 +670,6 @@ What type of fur would you like to gain?
 <<set $corruption += 100>>
 <<set $brokerUsed = 1>>
 <<set $tempTime = 2>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
@@ -708,7 +707,6 @@ In the morning, you wake up to a very different circumstance. Whose body do you 
 <<set $starUsed = 1>>
 <<set $swapComp = $temp>>
 <<set $tempTime = 3>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <<set $hiredCompanions[$swapComp].carry = $temp2>>
 <<CarryAdjust>>
@@ -1138,7 +1136,6 @@ You have successfully taken the $relic1.name relic. Hopefully you can make good 
 <<set $ownedRelics.push($relic11)>>
 <<set $corruption -= ($relic11.corr - $corRed)>>
 <<set $tempTime = $relic11.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1154,7 +1151,6 @@ You have successfully taken the $relic11.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic12)>>
 <<set $corruption -= ($relic12.corr - $corRed)>>
 <<set $tempTime = $relic12.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1171,7 +1167,6 @@ You can try working out with this Relic. It can both improve your muscle tone an
 <<set $ownedRelics.push($relic13)>>
 <<set $corruption -= ($relic13.corr - $corRed)>>
 <<set $tempTime = $relic13.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1186,7 +1181,6 @@ You have successfully taken the $relic13.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic14)>>
 <<set $corruption -= ($relic14.corr - $corRed)>>
 <<set $tempTime = $relic14.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1201,7 +1195,6 @@ You have successfully taken the $relic14.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic15)>>
 <<set $corruption -= ($relic15.corr - $corRed)>>
 <<set $tempTime = $relic15.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1216,7 +1209,6 @@ You have successfully taken the $relic15.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic16)>>
 <<set $corruption -= ($relic16.corr - $corRed)>>
 <<set $tempTime = $relic16.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1231,7 +1223,6 @@ You have successfully taken the $relic16.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic17)>>
 <<set $corruption -= ($relic17.corr - $corRed)>>
 <<set $tempTime = $relic17.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1248,7 +1239,6 @@ You may want to start wearing this Relic regularly, it can significantly speed u
 <<set $ownedRelics.push($relic18)>>
 <<set $corruption -= ($relic18.corr - $corRed)>>
 <<set $tempTime = $relic18.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1263,7 +1253,6 @@ You have successfully taken the $relic18.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic19)>>
 <<set $corruption -= ($relic19.corr - $corRed)>>
 <<set $tempTime = $relic19.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1278,7 +1267,6 @@ You have successfully taken the $relic19.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic20)>>
 <<set $corruption -= ($relic20.corr - $corRed)>>
 <<set $tempTime = $relic20.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1293,7 +1281,6 @@ You have successfully taken the $relic20.name relic. Hopefully you can make good
 <<set $ownedRelics.push($relic21)>>
 <<set $corruption -= ($relic21.corr - $corRed)>>
 <<set $tempTime = $relic21.time-$SibylBuff>>
-/*<<include "Layer2Time">>*/
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 <</nobr>>
 
@@ -1822,51 +1809,6 @@ Finally, the vision fades, leaving you standing once again where you were before
 <</if>>
 <</nobr>>
 [[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
-
-
-:: Layer2Time
-<<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty), 0))>>
-<<set $timeL2 += $tempTime>>
-<<if $items[1].count > 9>>
-	<<set $timeL2T1 += $tempTime>>
-<</if>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL2 += $tempTime>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= $tempTime>>
-	<<elseif $mudHunt == 0>>
-		<<if $abyssKnow == 0>>
-			<<set $LibidoLog.push($ForageFoodMajor )>>
-		<<else>>
-			<<set $lastFlan=$time+1>>
-		<</if>>
-	<</if>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL2 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-<</nobr>>
 
 
 :: L2 Gooey end [ending]
