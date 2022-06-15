@@ -118,41 +118,7 @@ You need empty flasks to fill them with water from the Underground Rivers.<br>
 
 <p>[[Continue exploring the third layer|Layer3 Hub]]</p>
 
-<div class="cards-grid">
-<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
-<<set _layerRelics = ["Sibyl Blend", "Pangea Shaker", "From Seafoam", "Orbweaver", "Soulseeker", "Tranquility Knell", "Lightning Rook", "Acrobatic Accord", "Managed Misfortune", "Breathless Exhale", "Sharing Shears", "Rose-tinted Spectacles"]>>
-<<for _name range _layerRelics>>
-<div>
-<<set _relic = $relics.find(r => r.name === _name)>>
-[img[setup.ImagePath + _relic.pic]]
-<h2>_name</h2>
-<p class="cost">
-Cost: <<print _relic.corr>> corruption
-<<if _relic.time > 0>>
-+ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
-<</if>>
-</p>
-<p>
-<<if _totalRelics.some(e => e.name === _name)>>
-Already taken
-<<elseif _name === "Orbweaver" && $items[11].count == 0 && $rope == 0>>
-@@.unreachable;Located on top of a large vertical shaft with no footholds. You cannot reach this Relic without some kind of climbing gear, like a rope.@@
-<<elseif _name === "Acrobatic Accord" && $items[15].count == 0 && $scuba == 0>>
-@@.unreachable;Located in an underwater tunnel (with murky, undrinkable water.) Requires scuba gear to retrieve.@@
-<<else>>
-<<print "[[Pick up the " + _name + "]]">>
-<</if>>
-</p>
-<p>
-<<print _relic.desc>>
-</p>
-<p>
-<<print _relic.weight>> kg,
-<<print _relic.value>> dubloons
-</p>
-</div>
-<</for>>
-</div>
+<<RelicGrid `["Sibyl Blend", "Pangea Shaker", "From Seafoam", "Orbweaver", "Soulseeker", "Tranquility Knell", "Lightning Rook", "Acrobatic Accord", "Managed Misfortune", "Breathless Exhale", "Sharing Shears", "Rose-tinted Spectacles"]`>>
 
 <p>[[Continue exploring the third layer|Layer3 Hub]]</p>
 
