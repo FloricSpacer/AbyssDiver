@@ -205,7 +205,20 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 Every Relic in this layer is found in one of the many ruins that are carved into the landscape, and in keeping with the architectural theme seen throughout this layer, they're all guarded by complex and dangerous traps. Whoever built these traps was certainly clever about them &mdash; you'll run into tripwire right where you'd normally expect a pressure plate, question why these ancient-looking ruins appear to have some kind of laser-light sensors, and sometimes see traps seemingly activate on their own with no action on your part. In any case, avoiding them altogether just by being careful isn't practical, and you'll see one <b><i>every time</i> you try to take a Relic</b> from this layer.
 </p>
 
-<p>[[Continue exploring the fifth layer|Layer5 Hub]]</p>
+<<if $status.duration > 0>>
+<p class="warning">As you are currently suffering from a status condition, triggering a booby trap now could be <b>fatal</b>.</p>
+<</if>>
+
+<p>
+<<if $status.duration > 0>>
+<<if $items[4].count > 0>>
+[[Use a medkit to cure your status condition instantly|passage()][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
+<<else>>
+You do not have a medkit to cure your status condition<br>
+<</if>>
+<</if>>
+[[Continue exploring the fifth layer|Layer5 Hub]]
+</p>
 
 <div class="cards-grid">
 <<set _totalRelics = $ownedRelics.concat($soldRelics)>>
