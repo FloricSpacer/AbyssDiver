@@ -160,41 +160,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
 
-<div class="cards-grid">
-<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
-<<set _layerRelics = ["Ghost-righter Writing Down", "Gilded Prison", "Omoikane Circuit", "Afar Wanderer", "Kin Shifter", "Brave Vector", "Devil's Own", "Verve Cell","Vessel Vivisector", "Sated Artist", "Timekeeper's Keepsake", "Creator's Bolt", "Perpetual Repose", "Toral Wave", "Flamel's Folly"]>>
-<<for _name range _layerRelics>>
-<div>
-<<set _relic = $relics.find(r => r.name === _name)>>
-[img[setup.ImagePath + _relic.pic]]
-<h2>_name</h2>
-<p class="cost">
-Cost: <<print _relic.corr>> corruption
-<<if _relic.time > 0>>
-+ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
-<</if>>
-</p>
-<p>
-<<if _totalRelics.some(e => e.name === _name)>>
-Already taken
-<<elseif _name === "Gilded Prison" && !setup.haveCuttingTool() && $torchUse == 0>>
-@@.unreachable;The entrance to the cave this Relic's located in is completely covered with hard icicles. You can either slash them away with a cutting tool, or spend 1 extra day melting them with a source of heat (doesn't use up an extra torch if you used one reaching the Relic.)@@
-<<elseif _name === "Timekeeper's Keepsake" && $items[11].count == 0 && $rope == 0>>
-@@.unreachable;Located at the bottom of an icy pit, far too slippery on all sides to be climbed by hand. Requires some rope.@@
-<<else>>
-<<print "[[Pick up the " + _name + "]]">>
-<</if>>
-</p>
-<p>
-<<print _relic.desc>>
-</p>
-<p>
-<<print _relic.weight>> kg,
-<<print _relic.value>> dubloons
-</p>
-</div>
-<</for>>
-</div>
+<<RelicGrid `["Ghost-righter Writing Down", "Gilded Prison", "Omoikane Circuit", "Afar Wanderer", "Kin Shifter", "Brave Vector", "Devil's Own", "Verve Cell","Vessel Vivisector", "Sated Artist", "Timekeeper's Keepsake", "Creator's Bolt", "Perpetual Repose", "Toral Wave", "Flamel's Folly"]`>>
 
 <p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
 

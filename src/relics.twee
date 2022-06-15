@@ -848,3 +848,43 @@ pic: "Relics/triagerain.png"
 <<set $totalRelics = []>>
 <<set $innRelics = []>>
 <<set $relicSwap = []>>
+
+
+:: RelicGrid [widget nobr]
+<<widget "RelicGrid">>
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<div class="cards-grid">
+<<for _name range _args[0]>>
+    <div>
+    <<set _relic = $relics.find(r => r.name === _name)>>
+    [img[setup.ImagePath + _relic.pic]]
+    <h2>_name</h2>
+    <p class="cost">
+    Cost: <<print _relic.corr>> corruption
+    <<if _relic.time > 0>>+ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>><</if>>
+    </p>
+    <p>
+    <<if _totalRelics.some(e => e.name === _name)>>
+        Already taken
+    <<elseif _name === "Forest's Gift" && !setup.haveCuttingTool()>>
+        @@.unreachable;Located in a cavern completely covered in hard brambles. You cannot retrieve this Relic unless you find some kind of cutting tool.@@
+    <<elseif _name === "Umbra Trident" && !setup.havePotentialLightSource()>>
+        @@.unreachable;Located in a side cavern that is completely unlit. Due to this Relic's properties, it is impossible to move it in complete darkness, and a source of light is required to retrieve it.@@
+    <<elseif _name === "Orbweaver" && $items[11].count == 0 && $rope == 0>>
+        @@.unreachable;Located on top of a large vertical shaft with no footholds. You cannot reach this Relic without some kind of climbing gear, like a rope.@@
+    <<elseif _name === "Acrobatic Accord" && $items[15].count == 0 && $scuba == 0>>
+        @@.unreachable;Located in an underwater tunnel (with murky, undrinkable water.) Requires scuba gear to retrieve.@@
+    <<elseif _name === "Gilded Prison" && !setup.haveCuttingTool() && $torchUse == 0>>
+        @@.unreachable;The entrance to the cave this Relic's located in is completely covered with hard icicles. You can either slash them away with a cutting tool, or spend 1 extra day melting them with a source of heat (doesn't use up an extra torch if you used one reaching the Relic.)@@
+    <<elseif _name === "Timekeeper's Keepsake" && $items[11].count == 0 && $rope == 0>>
+        @@.unreachable;Located at the bottom of an icy pit, far too slippery on all sides to be climbed by hand. Requires some rope.@@
+    <<else>>
+        <<print "[[Pick up the " + _name + "]]">>
+    <</if>>
+    </p>
+    <p><<print _relic.desc>></p>
+    <p><<print _relic.weight>> kg, <<print _relic.value>> dubloons</p>
+    </div>
+<</for>>
+</div>
+<</widget>>
