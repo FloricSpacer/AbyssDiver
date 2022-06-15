@@ -196,62 +196,69 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 [[Return to exploring the rest of the layer|Layer5 Hub]]
 
 
-:: Layer5 Relics [image layer5]
-<<if $timeL5T1 < 7 && $timeL5T2 < 11>>\
-<<set $totalRelics = $ownedRelics.concat($soldRelics)>>\
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-relics.png']]
+:: Layer5 Relics [layer5 cards nobr]
+<<if $timeL5T1 < 7 && $timeL5T2 < 11>>
 
-<<nobr>><<if $totalRelics.some(e => e.name === "Pocket Hoard")>>
-	<<else>><<print "[[Pick up the Pocket Hoard|Layer5 Booby][$temp = 1, $booby = 1]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Sunbeam")>>
-	<<else>><<print "[[Pick up Sunbeam|Layer5 Booby][$temp = 2, $booby = 2]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Moonwatcher")>>
-	<<else>><<print "[[Pick up the Moonwatcher|Layer5 Booby][$temp = 3, $booby = 3]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Siren's Call")>>
-	<<else>><<print "[[Pick up the Siren's Call|Layer5 Booby][$temp = 4, $booby = 1]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Zelus Band")>>
-	<<else>><<print "[[Pick up the Zelus Band|Layer5 Booby][$temp = 5, $booby = 2]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Everhevea")>>
-	<<else>><<print "[[Pick up the Everhevea|Layer5 Booby][$temp = 6, $booby = 3]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Reflex Emblem")>>
-	<<else>><<print "[[Pick up the Reflex Emblem|Layer5 Booby][$temp = 7, $booby = 1]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Twin Polaris") || setup.calcCarriedWeight() + $hiredCompanions.length * 60 < 90>>
-	<<else>><<print "[[Pick up the Twin Polaris|Layer5 Booby][$temp = 8, $booby = 2]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Superpositional Skewer")>>
-	<<else>><<print "[[Pick up the Superpositional Skewer|Layer5 Booby][$temp = 9, $booby = 3]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Empath Coil") || $items[20].count < 1 || $items[13].count < 1>>
-	<<else>><<print "[[Pick up the Empath Coil|Layer5 Booby][$temp = 10, $booby = 1, $items[20].count -= 1]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Heavenly Merrymaker")>>
-	<<else>><<print "[[Pick up the Heavenly Merrymaker|Layer5 Booby][$temp = 11, $booby = 2]]">>
-<</if>><</nobr>>
-<<nobr>><<if $totalRelics.some(e => e.name === "Vain Sculpt")>>
-	<<else>><<print "[[Pick up the Vain Sculpt|Layer5 Booby][$temp = 12, $booby = 3]]">>
-<</if>><</nobr>>
+<p>
+@@.floatr;[img[setup.ImagePath+'icon.png']]@@
 
+Every Relic in this layer is found in one of the many ruins that are carved into the landscape, and in keeping with the architectural theme seen throughout this layer, they're all guarded by complex and dangerous traps. Whoever built these traps was certainly clever about them &mdash; you'll run into tripwire right where you'd normally expect a pressure plate, question why these ancient-looking ruins appear to have some kind of laser-light sensors, and sometimes see traps seemingly activate on their own with no action on your part. In any case, avoiding them altogether just by being careful isn't practical, and you'll see one <b><i>every time</i> you try to take a Relic</b> from this layer.
+</p>
 
-[[Continue exploring the fifth layer|Layer5 Hub]]
+<p>[[Continue exploring the fifth layer|Layer5 Hub]]</p>
+
+<div class="cards-grid">
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<set _layerRelics = ["Pocket Hoard", "Sunbeam", "Moonwatcher", "Siren's Call", "Zelus Band", "Everhevea", "Reflex Emblem", "Twin Polaris", "Superpositional Skewer", "Empath Coil", "Heavenly Merrymaker", "Vain Sculpt"]>>
+<<for _i = 0; _i < _layerRelics.length; _i++>>
+<div>
+<<set _name = _layerRelics[_i]>>
+<<set _relic = $relics.find(r => r.name === _name)>>
+[img[setup.ImagePath + _relic.pic]]
+<h2>_name</h2>
+<p class="cost">
+Cost: <<print _relic.corr>> corruption
+<<if _relic.time > 0>>
++ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
+<</if>>
+</p>
+<p>
+<<if _totalRelics.some(e => e.name === _name)>>
+Already taken
+<<elseif _name === "Moonwatcher" && !setup.havePotentialLightSource()>>
+@@.unreachable;Located in a dark, sealed chamber with a light-activated lock. Requires a source of light.@@
+<<elseif _name === "Twin Polaris" && setup.calcCarriedWeight() + $hiredCompanions.length * 60 < 90>>
+@@.unreachable;Located in a sealed chamber locked by a pressure switch that must be held down with 90 kg of weight. The weight you and your companions can currently put on the switch is only <<print (setup.calcCarriedWeight() + $hiredCompanions.length * 60).toFixed(1)>> kg.@@
+<<elseif _name === "Empath Coil" && ($items[20].count < 1 || $items[13].count < 1)>>
+@@.unreachable;Located in a sealed chamber locked by a switch on the ceiling, far out of reach. Can be hit with a pistol, using 1 bullet.@@
+<<else>>
+<<print "[[Pick up the " + _name + "|Layer5 Booby][$temp = " + (_i + 1) + ", $booby = " + (_i % 3 + 1) + "]]">>
+<</if>>
+</p>
+<p>
+<<print _relic.desc>>
+</p>
+<p>
+<<print _relic.weight>> kg,
+<<print _relic.value>> dubloons
+</p>
+</div>
+<</for>>
+</div>
+
+<p>[[Continue exploring the fifth layer|Layer5 Hub]]</p>
 
 <<elseif $timeL5T1 < 7>>
 
-A rumbling in the ground disturbs your typical walk through the fifth layer. You know that it's a Dune Devouring Borer coming for you because of the water you've been carrrying, and now you need to be able to get away or defeat it.
+<p>A rumbling in the ground disturbs your typical walk through the fifth layer. You know that it's a Dune Devouring Borer coming for you because of the water you've been carrrying, and now you need to be able to get away or defeat it.</p>
 
-[[Deal with the Dune Devouring Borer|Layer5 Threat2 Main]]
+<p>[[Deal with the Dune Devouring Borer|Layer5 Threat2 Main]]</p>
 
 <<else>>
 
-When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
+<p>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.</p>
 
-[[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]
+<p>[[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]</p>
 
 <</if>>
 
