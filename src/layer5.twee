@@ -630,32 +630,70 @@ As predicted, the water is pure and you can drink it without side effects!
 
 
 :: Layer5 Booby [layer5]
-<<if ($booby == 1 && $booby1 < 3) || ($booby == 2 && $booby2 < 3) || ($booby == 3 && $booby3 < 3)>>
-You have triggered a booby trap while trying to pick up the relic!
-<<if $booby == 1>><<set $booby1 += 1>>
-After springing the trigger, a boulder comes rolling down the hallway after you!
-<<elseif $booby == 2>><<set $booby2 += 1>>
-After springing the trigger, a barrage of arrows flies out the walls towards you!
-<<elseif $booby == 3>><<set $booby3 += 1>>
-After springing the trigger, a trapdoor opens beneath where you are standing, causing you to fall into a pit of scorpions!
+While searching the ruins for the Relic, you have triggered a booby trap!
+<small>Hehe, booby.</small>
+
+[img[setup.ImagePath+'Threats/boobytraps.png']]
+
+<<nobr>>
+<<set _trapAvoided = true>>
+<<if $booby == 1>>
+
+<<set $booby1 += 1>>
+<<if $booby1 >= 3>>
+	Having dealt with this kind of trap before, you recognize the sound of a boulder being released and immediately start running. You reach a safe spot just before the boulder would crush your limbs.
+<<else>>
+	After springing the trigger, a boulder comes rolling down the hallway after you!
+	<<set _trapAvoided = false>>
 <</if>>
-If you don't have a way to specifically avoid the trap, you'll be seriously injured, increasing all travel times by 3 days until you use a medkit. However, if you have any status condition, the trap will be fatal!
 
-<<if $status.duration > 0>>
-The trap would kill you due to your status condition, please go back and choose another option or end your journey here.
+<<elseif $booby == 2>>
 
-<<back>>
-
-<<else>><<if $ownedRelics.some(e => e.name === "Forest's Gift") && $booby == 3>>
-Fortunately for you, the scorpions in the pit are merely mundane scorpions, rather than an Abyss-twisted analogue of them. And because of your Relic the Forest's Gift, the scorpions are actually friendly towards you, rather than upset that you invaded the pit they live in. A brief conversation explaining what happened to them leads to them pointing you towards a safe exit, allowing easy and safe escape from the pit.<br>
-[[Escape with the Forest's Gift|Layer5 Booby2]]<br><br>
+<<set $booby2 += 1>>
+<<if $booby2 >= 3>>
+	While the trigger was too well hidden to be spotted, you did notice the small holes in the wall that arrows would be coming from. You positioned yourself carefully and as the trap triggers all the arrows whizz by you.
+<<else>>
+	After springing the trigger, a barrage of arrows flies out the walls towards you!
+	<<set _trapAvoided = false>>
 <</if>>
-[[Accept the injuries and pick up the relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
+
+<<elseif $booby == 3>>
+
+<<set $booby3 += 1>>
+<<if $booby3 >= 3>>
+	As you feel the tiniest movement below your feet, you immediately spread your arms and find something to hold on to. Not a moment to soon, as the trapdoor where you were just standing collapses into a pit of scorpions.
+<<else>>
+	After springing the trigger, a trapdoor opens beneath where you are standing, causing you to fall into a pit of scorpions!
+	<<if $ownedRelics.some(e => e.name === "Forest's Gift")>>
+		<br><br>
+		Fortunately for you, the scorpions in the pit are merely mundane scorpions, rather than an Abyss-twisted analogue of them. And because of your Relic the Forest's Gift, the scorpions are actually friendly towards you, rather than upset that you invaded the pit they live in. A brief conversation explaining what happened to them leads to them pointing you towards a safe exit, allowing easy and safe escape from the pit.
+	<<else>>
+		<<set _trapAvoided = false>>
+	<</if>>
+<</if>>
+
+<</if>>
+<</nobr>>\
+
+<<if _trapAvoided>>
+[[Move on to retrieve the Relic|Layer5 Booby2]]
+<<else>>
+[[Accept the injuries|Layer5 Booby Damage]]
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to evade the trap.
 [[Use a combination of relics not mentioned above you believe would be able to overpower the trap|Layer5 Booby2]]
-
 <</if>>
+
+
+:: Layer5 Booby Damage [layer5]
+<<if $status.duration > 0>>
+The damage from the booby trap, combined with your untreated status condition proves to be fatal. Your journey ends here.
+
+<h1 class="gameover">Game Over</h1>
+<<else>>
+The booby trap has caused you seriously injury, increasing all travel times by 3 days until you use a medkit.
+
+[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
 <</if>>
 
 
