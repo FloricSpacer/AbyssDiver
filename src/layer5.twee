@@ -679,9 +679,6 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 	[[Move on to retrieve the Relic|Layer5 Booby2]]
 <<else>>
 	[[Accept the injuries|Layer5 Booby Damage]]
-	<<if $items[4].count > 0 && $status.duration <= 0>>\
-		[[Accept the injuries and use a medkit to cure your status condition instantly|Layer5 Booby2][$items[4].count -=1]]
-	<</if>>\
 
 	Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to evade the trap.
 	[[Use a combination of relics not mentioned above you believe would be able to overpower the trap|Layer5 Booby2]]
@@ -690,13 +687,15 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 
 :: Layer5 Booby Damage [layer5]
 <<if $status.duration > 0>>
-The damage from the booby trap, combined with your untreated status condition proves to be fatal. Your journey ends here.
+	The damage from the booby trap, combined with your untreated status condition proves to be fatal. Your journey ends here.
 
-<h1 class="gameover">Game Over</h1>
+	<h1 class="gameover">Game Over</h1>
 <<else>>
-The booby trap has caused you serious injury, increasing all travel times by 3 days until you use a medkit.
-
-[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
+	The booby trap has caused you serious injury, increasing all travel times by 3 days until you use a medkit.
+	[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
+	<<if $items[4].count > 0>>\
+		[[Use a medkit to cure your status and continue the search for the Relic|Layer5 Booby2][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]
+	<</if>>\
 <</if>>
 
 
