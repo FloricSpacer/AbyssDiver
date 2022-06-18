@@ -33,7 +33,7 @@
 	<</if>>
 
 	<<if $HeightLog.some(e=> e.name === "Minish-ish")>>
-		<<set $height_change=$app.modheight/10-$app.height>>
+		<<set $height_change=$app.height/10-$app.height>>
 		<<if $hiredCompanions.length < 1>>
 			<<set $SizeHandicap=1>>
 		<</if>>
@@ -311,6 +311,11 @@
 <<Update_MC_Speech>>
 <</widget>>
 
+:: Appearance widgets [widget nobr]
+<<widget "PenisLengthText">>
+	<<print (Math.round($app.penisCor)*(!!_args[0] ? 0.0254 : 2.54)).toFixed(1) + (!!_args[0] ? " meters" : " cm")>>\
+<</widget>>
+
 :: Age widget [widget nobr]
 <<widget "AgeCorrected">>
 <<set $app.appAge = $app.age>>
@@ -435,10 +440,18 @@
 
 :: Perceived widgets [widget nobr]
 <<widget "appGender">>
+	<<set _penisCorTemp = $app.penisCor>>
+	<<if $playerCurses.some(e => e.name === "Colossal-able")>>
+		<<set _penisCorTemp /= 70>>
+	<</if>>
+
+	<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+		<<set _penisCorTemp *= 10>>
+	<</if>>
 	<<if $app.fit>7>>
-		<<set $app.appGender = 2*($app.gender-1) -0.25*($app.penisCor-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent-1>>
+		<<set $app.appGender = 2*($app.gender-1) -0.25*(_penisCorTemp-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent-1>>
 	<<else>>
-		<<set $app.appGender = 2*($app.gender-1) -0.25*($app.penisCor-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent>>
+		<<set $app.appGender = 2*($app.gender-1) -0.25*(_penisCorTemp-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent>>
 	<</if>>
 <</widget>>
 
