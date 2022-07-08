@@ -107,6 +107,11 @@ Whenever you're ready, you can continue your expedition into the Abyss!
 <<if $tunnelUsed == 1>>
 [[Look for the items you sent to the surface from the One-sided Tunnel|Surface Tunnel Retrieval]]<br><br>
 <</if>>
+<<if $fear == "">>
+[[Approach a grizzled diver and ask for advice for your dive|Surface Diver Tips 1]]<br>
+<<else>>
+[[Approach a grizzled diver and ask for advice for your dive|Surface Diver Tips 3]]<br>
+<</if>>
 <<if $hiredCompanions.length > 0 || $items[21].count>0>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
 <</if>>
@@ -1273,3 +1278,121 @@ How many dubloons would you like to pay back?
 [[Confirm|Surface Hub][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
 
+:: Surface Diver Tips 1
+
+You spot a middle-aged man talking to a young pair of divers, who seems to be packing an extesive set of supplies into their backpacks. But as they pack, they also seem to be listening with rapt attention to each word, nodding along as he points to some of the items as they pack them. Then, he pats each of them on their shoulders, gives them a smile, then starts walking directly towards you.
+
+<<say $tipGuy>>Hey, I see you're looking to make a dive. Would you mind if I offered you some advice?<</say>>
+Seeing as it's probably best to get any info you can before you dive, it's probably best to hear what he has to say.
+
+<<say $mc>>Sure, what sort of advice do you have?<</say>>
+He chuckles a bit in response to your question and shakes his head slightly.
+
+<<say $tipGuy>>Well, to see what advice I should give, I'd need to know if there's anything you're especially afraid of encountering down there in the Abyss. I might be able to help you avoid it if there are any threats you should be especially worried about. So, what are you afraid of finding deep down in the Abyss?<</say>>
+You ponder the question for a few moments before answering.
+
+[[Darkness|Surface Diver Tips 2][$fear = "darkness"]]
+[[Spiders|Surface Diver Tips 2][$fear = "spiders"]]
+[[Wolves|Surface Diver Tips 2][$fear = "wolves"]]
+[[Snakes|Surface Diver Tips 2][$fear = "snakes"]]
+[[Insects|Surface Diver Tips 2][$fear = "insects"]]
+
+:: Surface Diver Tips 2
+
+<<if $fear == "darkness">>
+<<say $tipGuy>>Hmm, that can be an issue when you dive deep underground. Fortunately the Abyss seems to provide light on most of it's layers. But there is an area beyond the rainforest-like zone where light can be very scarce.<</say>>
+The man gestures towards the shop with a shrug.
+
+<<say $tipGuy>>You should be able to get through the dark areas pretty easily if you get a flashlight or smartphone from the shop. You could use torches, but they probably wouldn't last you long enough to get through the darkest areas.<</say>>
+<<elseif $fear == "spiders">>
+<<say $tipGuy>>Well, fortunately for you, I'm not aware of any especially dangerous spiders in the Abyss. You might encounter some down there, but they shouldn't be any worse than normal, surface-dwelling spiders.<</say>>
+The man gives you a sly grin.
+
+<<say $tipGuy>>And I'd hope that you're at least able to deal with those.<</say>>
+<<elseif $fear == "wolves">>
+<<say $tipGuy>>Well, there aren't <i>wolves</i> in the Abyss per sé, but there are some creatures that resemble them in the upper layers.<</say>>
+The man shrugs, apparently not too concerned about the danger of these beasts.
+
+<<say $tipGuy>>Fortunately, they aren't too much of a threat compared to some of the creatures deeper in the Abyss. As long as you bring any weapon you should be able to fend them off. A sword or a few bullets should deal with them. And if you somehow didn't bring a weapon, you can drop some of your extra food rations and they'll leave you alone.<</say>>
+<<elseif $fear == "snakes">>
+<<say $tipGuy>>Well, there aren't any special <i>snakes</i> in the Abyss per sé, but there apparently some enormous worms in some of the deepest parts of the Abyss that have been documented. They burrow through the sand and ravenously seek water for sustenance. They're big enough that conventional weapons won't work for fighting them, so i wouldn't reccomend that.<</say>>
+The man shrugs and takes a sip of his own water bottle he was carrying.
+
+<<say $tipGuy>>Fortunately you can get away pretty easily if you distract them. And they're pretty easily distracted if you leave some of your water behind, so they'll go afte that and you can escape. I'd reccomend bringing plenty of extra water if you plan to go that deep.<</say>>
+<<elseif $fear == "insects">>
+<<say $tipGuy>>Unfortunately there are some pretty nasty bugs in some parts of the Abyss. There are a bunch on the first few layers, like strange bees and kite dragons, but fortunately they're pretty much harmless.<</say>>
+He visibly shivers and exhales sharply before continuing.
+
+<<say $tipGuy>>But in some of the deepest documented parts of the Abyss there are swarms of insects that can delay your journey quite a bit. Luckily if you can find any shelter you can probably hide from them pretty easily, though it will take you a day of supplies to wait. I hated those guys, I'm not a fan of bugs myself.<</say>>
+He looks you over and thinks for a moment.
+
+<<say $tipGuy>>Some people are fine with trying to travel through the swarm, but I think you're best off staying inside and waiting it out.<</say>>
+<</if>>
+
+[[Ask him for any other advice he has|Surface Diver Tips 3]]
+
+:: Surface Diver Tips 3
+
+The experienced diver waits patiently for any other questions you might have before you descend into the Abyss.
+
+<<say $tipGuy>>Is there anything else you wanted to ask me about?<</say>>
+
+[[How deep does the Abyss go?|Surface Diver Tips 4][$temp = 0]]
+[[How much food and water should I bring into the Abyss?|Surface Diver Tips 4][$temp = 1]]
+[[Is it pleasant to settle in the Abyss|Surface Diver Tips 4][$temp = 2]]
+[[What matters when I choose to settle down in a habitation option?|Surface Diver Tips 4][$temp = 3]]
+
+[[No, there isn't|Surface Hub]]
+
+:: Surface Diver Tips 4
+
+<<if $temp == 0>>
+The man raises his eyebrows and grins.
+
+<<say $tipGuy>>Well, if I knew the answer to that question, I reckon I'd know more about the Abyss than anyone alive. Seeing as no one has ever reached the bottom, or at least no one has ever come back up after doing it, that's a pretty hard question to answer.<</say>>
+He then hold open his hand, with 5 fingers pointing out.
+
+<<say $tipGuy>>What I <i>can</i> say is that there are 5 known layers. They range from surface-like groves to dark caverns to lands of ice. Everyone knows the Abyss goes deeper, and some people want to reach the bottom, but no one who goes deeper ever comes back up.<</say>>
+He looks you over and gives a wide smile.
+
+<<say $tipGuy>>Maybe you could be the first to reach the sixth layer and live. Or maybe you'd prefer a more standard shallow dive. Or maybe you're one of the fools who delve too deep into the dark and never get a chance to see the light again.<</say>>
+He gives a nonchalant shrug. 
+
+<<say $tipGuy>>It doesn't matter much to me, but I'd advise you to think about what sort of journey you want to have.<</say>>
+<<elseif $temp == 1>>
+<<say $tipGuy>>That really depends on how deep you want to go and if you want to live off the land.<</say>>
+The man holds up 2 fingers in a V shape.
+
+<<say $tipGuy>>If you're a forager, then you can probably survive on the first 2 layers without too many supplies, but beyond that even Abyssal experts need to bring supplies with them.<</say>>
+The diver strokes his chin as he seems to think for a moment before continuing.
+
+<<say $tipGuy>>And I don't know how much supplies they used or if they foraged, but I know some expeditions that got all the way down to the fifth layer lasted a few months. Maybe you could cut that down with appropriate supplies and a guide though. But that's a rough guideline you could use.<</say>>
+Then he looks you straight in the eyes and speaks very seriously.
+
+<<say $tipGuy>>And if you think you have just enough supplies to get back up, you shouldn't push yourself. You should be fine if you're prepared, but I've heard of people who push their luck too hard and never get a chance to come up. They get stuck in a settlement down in the Abyss for the rest of their lives or worse. Take your choices seriously.<</say>>
+<<elseif $temp == 2>>
+The man snorts and shakes his head, as if admonishing your innocence.
+
+<<say $tipGuy>>It's not a place I'd want to live if I had a choice.<</say>>
+Then he pauses for a moment and tries to answer more seriously.
+
+<<say $tipGuy>>Well, I can say some people have found fulfilling lives in the first few layers, but it only gets worse from there. The people don't follow our laws or morals, it isn't a kind place when you get deep.<</say>>
+He takes a sip of his water bottle and sighs.
+
+<<say $tipGuy>>Usually, if someone has to settle in a deeper layer, it's because they don't have a choice. It's better than dying, but honestly, on some layers I might prefer death. But that's only me. Maybe you'll find you like what's down there? I did stick to the surface after all.<</say>>
+<<elseif $temp == 3>>
+The man gives a noncommittal shrug.
+
+<<say $tipGuy>>If you're deep in the Abyss? Not much matters unless you can use some crazy Relic to make a good life for yourself. That's a pretty tall ask though.<</say>>
+Then he thinks for a moment and glances around at some other surfaced divers you can see in the center of town. Most have small mutations, like strange skin colors or pointed ears, some seem to be actively petitioning passersby for sexual interactions, a few seem to be obviously wealthy, and a small number looks like children or teens attempting to do adult jobs, with mixed responses.
+
+<<say $tipGuy>>Up here on the surface though? The main things that matter are how human you look, how sexual your mind has become, how much money you brought back up, and if you've lost a lot of age.<</say>>
+He gestures around at the divers throughout the town as he speaks.
+
+<<say $tipGuy>>If you look too inhuman, you'll make people uncomfortable. They'll think you belong in the Abyss, rather than on the surface with the proper people. If you're too sexual, you might get stuck being a whore and you could have trouble holding down a normal job and life. If you bring back some valuable Relics though? You can probably live a nice life, maybe with some luxury even if you have other issues. But if you look like a kid? That can make things tough, since most people won't believe you're a diver, as a fair few kids try to claim to be divers to get drinks or shit like that. You'd probably have trouble living a normal adult life.<</say>>
+The diver turns back to you and stares right at you as he finishes speaking.
+
+<<say $tipGuy>>So I'd think hard about the consequences of your choices down there. They can really change the shape of the rest of your life. Don't take anything too lightly in the Abyss.<</say>>
+<</if>>
+[[Ask the man another question|Surface Diver Tips 3]]
+[[Continue your business on the surface|Surface Hub]]
