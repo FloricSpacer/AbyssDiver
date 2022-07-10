@@ -709,228 +709,216 @@ You talk for quite some time afterwards. She is actually quite attentive and int
 
 [[End your conversation|Party overview]]
 
-:: Lily Convo1
-<<nobr>>
-While normally you've gotten to know Lily as a bright light in any conversation, today she has been unusually quiet and her mood seems to be much more somber than usual.<br><br>
+:: Lily Convo1 [nobr]
+While normally you've gotten to know Lily as a bright light in any conversation, today she has been unusually quiet and her mood seems to be much more somber than usual.
 
-<<if $convoStart>>
-[[Try to cheer her up with a joke.|Lily Convo1][$convoStart=0,$choice1=1,$companionLily.affec+=(1+$hsswear)]]<br>
-[[Don't say anything and hope she starts talking herself. |Party overview][$convoStart=1,$choice1=0,$choice2=0,$companionLily.affec-=(2-$hsswear),$LilyConvo1=false]]<br>
-[[Sit her down and ask her what's wrong.|Lily Convo1][$convoStart=0,$choice1=3]]
-<</if>>
+<<ConversationChoices
+	[[Try to cheer her up with a joke.|Lily Convo1 Joke]]
+	[[Don't say anything and hope she starts talking herself. |Party overview][$companionLily.affec-=(2-$hsswear),$LilyConvo1=false]]
+	[[Sit her down and ask her what's wrong.|Lily Convo1 Sit]]
+>>
 
-<<if $choice1==1>>
-	<<say $mc>>Hey Lily, do you know what sits at the bottom of the sea and twitches?<</say>><br>
-
-	<<if $lilyJoke==false>>
-		She looks up at you, and wears a curious expression as she answers.<br><br>
+::Lily Convo1 Joke [nobr]
+<<set $companionLily.affec+=(1+$hsswear)>>\
+	<<say $mc>>Hey Lily, do you know what sits at the bottom of the sea and twitches?<</say>>
+	<<if $lilyJoke==false>>\
+		She looks up at you, and wears a curious expression as she answers.
 		
-		<<say $companionLily>> Hmm? I'm not sure.<</say>><br>
-		<<say $mc>>A nervous wreck!<</say>><br>
+		<<say $companionLily>> Hmm? I'm not sure.<</say>>
+		<<say $mc>>A nervous wreck!<</say>>
+		Lily stifles a giggle and a smile creeps across her face.
 
-		Lily stifles a giggle and a smile creeps across her face.<br><br>
+		<<say $mc>>And do you know what one hat said to the other?<</say>>
+		<<say $companionLily>> No?<</say>>
+		<<say $mc>>You wait here. I'll go on a-head!<</say>>
+		Lily can't hold back her giggles this time and her grin widens.
 
-		<<say $mc>>And do you know what one hat said to the other?<</say>><br>
-		<<say $companionLily>> No?<</say>><br>
-		<<say $mc>>You wait here. I'll go on a-head!<</say>><br>
-
-		Lily can't hold back her giggles this time and her grin widens.<br><br>
-
-		<<say $companionLily>> Oh my god, that one was even worse than the first, $mc.name. Where did you learn all these?<</say>><br>
-	<<else>>
-		She looks up at you curiously and cocks an eyebrow.<br><br>
+		<<say $companionLily>> Oh my god, that one was even worse than the first, $mc.name. Where did you learn all these?<</say>>
+	<<else>>\
+		She looks up at you curiously and cocks an eyebrow.
 		
-		<<say $companionLily>> A nervous wreck?<</say>><br>
-		<<say $mc>>Uh yeah? I guess you knew that one already...<</say>><br>
-		<<say $companionLily>> Yeah, because you told it to me already, silly! <</say>><br>
-
-		Lily giggles and a grin spreads across her face.<br><br>
-	<</if>>
-
-		<<if $choice2==0>>
-		<<if $lilyJoke==false>>
-			[[Well, if you liked them there's a whole lot more where those came from!|Lily Convo1][$convoStart=0,$choice2=1,$companionLily.affec-=(2-$hsswear)]]<br>
+		<<say $companionLily>> A nervous wreck?<</say>>
+		<<say $mc>>Uh yeah? I guess you knew that one already...<</say>>
+		<<say $companionLily>> Yeah, because you told it to me already, silly! <</say>>
+		Lily giggles and a grin spreads across her face.
+	<</if>>\
+		<<if $lilyJoke==false>>\
+			<<ConversationChoices
+				[[Well, if you liked them there's a whole lot more where those came from!|Lily Convo1 Jokes]]
+				[[I'm glad you're back to your normal upbeat self|Lily Convo1 Upbeat]]
+				[[So, uh, can I ask what's been bothering you?|Lily Convo1 Bothering]]
+			>>
+		<<else>>\
+			<<ConversationChoices
+				[[I'm glad you're back to your normal upbeat self|Lily Convo1 Upbeat]]
+				[[So, uh, can I ask what's been bothering you?|Lily Convo1 Bothering]]
+			>>
 		<</if>>
-		[[I'm glad you're back to your normal upbeat self|Lily Convo1][$convoStart=0,$choice2=2,$companionLily.affec+=(1+$hsswear)]]<br>
-		[[So, uh, can I ask what's been bothering you?|Lily Convo1][$convoStart=0,$choice2=3,$companionLily.affec+=(2+$hsswear)]]
-		<</if>>
-		<<if $choice2==1>>
 
-			<<say $mc>>Well, if you liked them there's a whole lot more where those came from!<</say>><br>
-		
-			You keep cracking jokes and the first few are well recieved, but over time her laugh becomes less and less genuine while her grin seems to look more and more like a polite smile.<br><br>
+::Lily Convo1 Jokes [nobr]
+<<set $companionLily.affec-=(2-$hsswear)>>\
+<<say $mc>>Well, if you liked them there's a whole lot more where those came from!<</say>>
+You keep cracking jokes and the first few are well recieved, but over time her laugh becomes less and less genuine while her grin seems to look more and more like a polite smile.
 
-		[[End your conversation|Party overview][$convoStart=1, $choice1=0, $choice2=0, $LilyConvo1=false, $lilyJoke=true]]
+[[End your conversation|Party overview][$LilyConvo1=false, $lilyJoke=true]]
 
-		<<elseif $choice2==2>>
+::Lily Convo1 Upbeat [nobr]
+<<set $companionLily.affec+=(1+$hsswear)>>\
+			<<say $mc>>I'm glad you're back to your normal upbeat self.<</say>>
+			Lily lowers her gaze slightly as she responds.
 
-			<<say $mc>>I'm glad you're back to your normal upbeat self.<</say>><br>
-
-			Lily lowers her gaze slightly as she responds.<br><br>
-
-			<<say $companionLily>> Yeah, I guess I have been a little out of it, haven't I? <</say>><br>
-			<<say $mc>>Yeah, I was starting to worry about you.<</say>><br>
-
-			Lily scratches the back of her head a bit.<br><br>
+			<<say $companionLily>> Yeah, I guess I have been a little out of it, haven't I? <</say>>
+			<<say $mc>>Yeah, I was starting to worry about you.<</say>>
+			Lily scratches the back of her head a bit.
 			
-			<<say $companionLily>> I'm sorry, I didn't want to worry anyone. It's just that I've been thinking about my mom quite a bit lately.<</say>><br>
-			<<say $mc>>Oh, why's that?<</say>><br>
-			<<say $companionLily>> Let's just say that it has to do with where we are. I think when I was still with her I never fully appreciated the hardships she had to face. And now I don't have the opportunity to go back and talk with her anymore, and I probably won't ever again.<</say>><br>
-			She pauses for a moment.<br><br>
-			<<say $companionLily>> Of course, in a way I've always appreciated her. She was my hero when I was little, but maybe I just never fully understood her or something. Is that weird?<</say>><br>
-			<<say $mc>>I don't think so, when you're little there's a lot of stuff you don't understand, right?<</say>><br>
-			<<say $companionLily>> I guess you're right. Anyway, enough gloomy talk. I have cleared my heart, I'm done sulking.<</say>><br>
+			<<say $companionLily>> I'm sorry, I didn't want to worry anyone. It's just that I've been thinking about my mom quite a bit lately.<</say>>
+			<<say $mc>>Oh, why's that?<</say>>
+			<<say $companionLily>> Let's just say that it has to do with where we are. I think when I was still with her I never fully appreciated the hardships she had to face. And now I don't have the opportunity to go back and talk with her anymore, and I probably won't ever again.<</say>>
+			She pauses for a moment.
+
+			<<say $companionLily>> Of course, in a way I've always appreciated her. She was my hero when I was little, but maybe I just never fully understood her or something. Is that weird?<</say>>
+			<<say $mc>>I don't think so, when you're little there's a lot of stuff you don't understand, right?<</say>>
+			<<say $companionLily>> I guess you're right. Anyway, enough gloomy talk. I have cleared my heart, I'm done sulking.<</say>>
+			She straightens her back, flashes you an endearing smile and begins increasing her pace.
 			
-			She straightens her back, flashes you an endearing smile and begins increasing her pace.<br><br>
+			<<say $mc>>Wait up! Where are you going? <</say>>
+			She gives you an entire spiel on how keeping pace is good exercise and a bad posture while walking is unhealthy. Meanwhile, you are simply glad she's returned to her typically lively demeanor.
+			@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ 
+			[[End your conversation|Party overview]]
+
+::Lily Convo1 Bothering [nobr]
+<<set $companionLily.affec+=(2+$hsswear)>>\
+
+			<<say $mc>>So, uh, can I ask what's been bothering you?<</say>>
+			Lily giggles and pats you on the head.
+
+			<<say $companionLily>>You are just too cute when you are struggling to be social.<</say>>
+			<<say $mc>> Huh, what do you mean? I was...<</say>>
+			<<say $companionLily>>Don't worry about it <<mrms>> hero. I guess I do owe you a bit of an explanation.<</say>>
+			Her face becomes more sullen and she takes on a more serious tone.
+
+			<<say $companionLily>> It's just that I've been thinking about my mom quite a bit lately.<</say>>
+			<<say $mc>>Oh, why's that?<</say>>
+			<<say $companionLily>> Let's just say that it has to do with where we are. I think when I was still with her I never fully appreciated the hardships she had to face. And now I don't have the opportunity to go back and talk with her anymore, and I probably won't ever again.<</say>>
+			She pauses for a moment.
+
+			<<say $companionLily>> Of course, in a way I've always appreciated her. She was my hero when I was little, but maybe I just never fully understood her or something. Is that weird?<</say>>
+			<<say $mc>>I don't think so, when you're little there's a lot of stuff you don't understand, right?<</say>>
+			<<say $companionLily>> I guess you're right. Anyway, enough gloomy talk. I have cleared my heart, I'm done sulking.<</say>>
+			She straightens her back, flashes you an endearing smile and begins increasing her pace.
 			
-			<<say $mc>>Wait up! Where are you going? <</say>><br>
-
-			She gives you an entire spiel on how keeping pace is good exercise and a bad posture while walking is unhealthy. Meanwhile, you are simply glad she's returned to her typically lively demeanor.<br><br>
-
-			@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ <br>
-
+			<<say $mc>>Wait up! Where are you going? <</say>>
+			She gives you an entire spiel on how keeping pace is good exercise and a bad posture while walking is unhealthy. Meanwhile, you are simply glad she's returned to her typically lively demeanor.
+			@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@
 			[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
 
-		<<elseif $choice2==3>>
+::Lily Convo1 Sit [nobr]
+	You begin walking close by to Lily and match her pace.
 
-			<<say $mc>>So, uh, can I ask what's been bothering you?<</say>><br>
+	<<say $mc>>Lily, could you stop for a second?<</say>>
+	Lily stops walking and looks at you with a confused expression.
 
-			Lily giggles and pats you on the head.<br><br>
+	<<say $companionLily>>Huh, whats wrong?<</say>>
+	<<say $mc>>I could ask you the same question. You seem out of it. You've been sulking all day, which is pretty uncharacteristic for you.<</say>>
+	Lily looks up as she seems to consider her thoughts.
 
-			<<say $companionLily>>You are just too cute when you are struggling to be social.<</say>><br>
-			<<say $mc>> Huh, what do you mean? I was...<</say>><br>
-			<<say $companionLily>>Don't worry about it <<mrms>> hero. I guess I do owe you a bit of an explanation.<</say>><br>
-			
-			Her face becomes more sullen and she takes on a more serious tone.<br><br>
+	<<say $companionLily>>I think I just have a lot on my mind right now.<</say>>
+	<<say $mc>>You know you can talk to me Lily...<</say>>
 
-			<<say $companionLily>> It's just that I've been thinking about my mom quite a bit lately.<</say>><br>
-			<<say $mc>>Oh, why's that?<</say>><br>
-			<<say $companionLily>> Let's just say that it has to do with where we are. I think when I was still with her I never fully appreciated the hardships she had to face. And now I don't have the opportunity to go back and talk with her anymore, and I probably won't ever again.<</say>><br>
-			She pauses for a moment.<br><br>
-			<<say $companionLily>> Of course, in a way I've always appreciated her. She was my hero when I was little, but maybe I just never fully understood her or something. Is that weird?<</say>><br>
-			<<say $mc>>I don't think so, when you're little there's a lot of stuff you don't understand, right?<</say>><br>
-			<<say $companionLily>> I guess you're right. Anyway, enough gloomy talk. I have cleared my heart, I'm done sulking.<</say>><br>
-			
-			She straightens her back, flashes you an endearing smile and begins increasing her pace.<br><br>
-			
-			<<say $mc>>Wait up! Where are you going? <</say>><br>
+	<<ConversationChoices
+		[[...because I need you at your best. You know I rely on you, Lily. |Lily Convo1 Rely]]
+		[[...because a smile fits a pretty lady like you much better than a frown. |Lily Convo1 Smile]]
+		[[...because you being happy makes me happy too. |Lily Convo1 Happy]]
+	>>
 
-			She gives you an entire spiel on how keeping pace is good exercise and a bad posture while walking is unhealthy. Meanwhile, you are simply glad she's returned to her typically lively demeanor.<br><br>
+::Lily Convo1 Rely [nobr]
+<<set $companionLily.affec+=(2+$hsswear)>>\
+		<<say $mc>>Because I need you at your best. You know I rely on you, Lily.<</say>>
+		Her solemn demeanor starts to melt away, and she looks at you with an obviously playful pout.
 
-			@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ <br>
+		<<say $companionLily>>Oh no, I didn't make you worry that I wouldn't be able to take care of you, did I?<</say>>
+		<<say $mc>>Well, that's not exactly what I meant when... hey!<</say>>
+		She pulls you into a big, tight hug. Despite knowing her, you are still surprised at her strength.
 
-			[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+		<<say $companionLily>>In that case, it would be irresponsible of me to keep worrying you, right?<</say>>
+		She gives you a playful wink as she continues.
 
+		<<say $companionLily>>I was just thinking about the person who took good care of me, just like I take good care of you.<</say>>
+		She says while booping your nose. She sighs and continues with a somewhat more serious tone.
 
-		<</if>>
+		<<say $companionLily>>I think that being here in the Abyss, with you, brought back some memories of my mom and those got me thinking more about her in general.<</say>>
+		She sighs deeply once again.
 
-<<elseif $choice1==3>>
-	You begin walking close by to Lily and match her pace.<br><br>
-	<<say $mc>>Lily, could you stop for a second?<</say>><br>
+		<<say $companionLily>>She taught me that no matter how tough life gets, if you face it with a smile, then it will make everything a little bit easier. And that you have to keep looking forward, not back. I guess I forgot that for a second.<</say>>
+		A somber smile creeps up her face.
 
-	Lily stops walking and looks at you with a confused expression.<br><br>
+		<<say $companionLily>>She was, and still is, my hero. And I try every day to be at least half the woman she was...<</say>>
+		<<say $mc>>She sounds like she was an awesome mom then.<</say>>
+		<<say $companionLily>>She sure was! But don't worry, I have place for two heroes in my life. No need to get jealous!<</say>>
+		She sticks her tongue out cheekily with that last remark and you can't help but laugh a little.
 
-	<<say $companionLily>>Huh, whats wrong?<</say>><br>
-	<<say $mc>>I could ask you the same question. You seem out of it. You've been sulking all day, which is pretty uncharacteristic for you.<</say>><br>
+		<<say $companionLily>>How about I make up for making you worry today by taking even better care of you from now on!<</say>>
+		She grabs some of the equipment you were carrying and stuffs it into her own pack.
 
-	Lily looks up as she seems to consider her thoughts.<br><br>
-	<<say $companionLily>>I think I just have a lot on my mind right now.<</say>><br>
-	<<say $mc>>You know you can talk to me Lily...<</say>><br>
+		<<say $mc>>Aw, thanks Lily! It's definitely appreciated!<</say>>
+		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@
+		[[End your conversation|Party overview]]
 
-	<<if $choice2==0>>
-		[[...because I need you at your best. You know I rely on you, Lily. | Lily Convo1][$convoStart=0,$choice2=1,$companionLily.affec+=(2+$hsswear)]]<br>
-		[[...because a smile fits a pretty lady like you much better than a frown. |Lily Convo1][$convoStart=0,$choice2=2,$companionLily.affec-=(1-$hsswear)]]
-		[[...because you being happy makes me happy too. |Lily Convo1][$convoStart=0,$choice2=3,$companionLily.affec+=(1+$hsswear)]]
-	<</if>>
+::Lily Convo1 Smile [nobr]
+<<set $companionLily.affec-=(1-$hsswear)>>\
+		<<say $mc>>Because a smile fits a pretty lady like you much better than a frown.<</say>>
+		Lily rolls her eyes at your response.
 
-	<<if $choice2==1>>
+		<<say $companionLily>>Oh geez, thank you for your wonderful compliment...<</say>>
+		<<say $mc>>Come on Lily, don't be like that. It was just a joke. I am actually worried about you, you know?<</say>>
+		Lily looks lowers her gaze.
 
-		<<say $mc>>Because I need you at your best. You know I rely on you, Lily.<</say>><br>
+		<<say $companionLily>>Yeah, you're right, I'm sorry. These last few days I've been thinking back to my childhood and my mom. In a way, I'm still worrying about her as well.<</say>>
+		<<say $mc>>Why is that?<</say>>
+		<<say $companionLily>> It's hard to explain. But it's a little like I'm trying very hard to be just as good of a person as my mom. However, I'm only now discovering how hard it must have been. And I don't even have a kid!<</say>>
+		A smile creeps back onto her face.
 
-		Her solemn demeanor starts to melt away, and she looks at you with an obviously playful pout.<br><br>
+		<<say $companionLily>> Unless I count you!<</say>>
+		She giggles to her own joke, while you take your turn to  roll your eyes.
 
-		<<say $companionLily>>Oh no, I didn't make you worry that I wouldn't be able to take care of you, did I?<</say>><br>
-		<<say $mc>>Well, that's not exactly what I meant when... hey!<</say>><br>
-		She pulls you into a big, tight hug. Despite knowing her, you are still surprised at her strength.<br><br>
-		<<say $companionLily>>In that case, it would be irresponsible of me to keep worrying you, right?<</say>><br>
-		She gives you a playful wink as she continues.<br><br>
-		<<say $companionLily>>I was just thinking about the person who took good care of me, just like I take good care of you.<</say>><br>
-		She says while booping your nose. She sighs and continues with a somewhat more serious tone.<br><br>
-		<<say $companionLily>>I think that being here in the Abyss, with you, brought back some memories of my mom and those got me thinking more about her in general.<</say>><br>
-		She sighs deeply once again.<br><br>
-		<<say $companionLily>>She taught me that no matter how tough life gets, if you face it with a smile, then it will make everything a little bit easier. And that you have to keep looking forward, not back. I guess I forgot that for a second.<</say>><br>
-		A somber smile creeps up her face.<br><br>
-		<<say $companionLily>>She was, and still is, my hero. And I try every day to be at least half the woman she was...<</say>><br>
-		<<say $mc>>She sounds like she was an awesome mom then.<</say>><br>
-		<<say $companionLily>>She sure was! But don't worry, I have place for two heroes in my life. No need to get jealous!<</say>><br>
-		She sticks her tongue out cheekily with that last remark and you can't help but laugh a little.<br><br>
-		<<say $companionLily>>How about I make up for making you worry today by taking even better care of you from now on!<</say>><br>
-		She grabs some of the equipment you were carrying and stuffs it into her own pack.<br><br>
-		<<say $mc>>Aw, thanks Lily! It's definitely appreciated!<</say>><br>
+		<<say $mc>>Ha. Ha. Very funny. But I'm not that helpless.<</say>>
+		<<say $companionLily>> Not as long as you have me with you.<</say>>
+		She says as she gives you a wink and grabs some of your equipment and stuff it into her pack before she starts walking again.
 
-		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ <br>
+		<<say $mc>>Hey!  Why are you... I'm perfectly capable of carrying that myself you know!<</say>>
+		<<say $companionLily>> Sure you are!<</say>>
+		Is she giggling? Well, at least her normal demeanor is back. 
 
-		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ 
+		[[End your conversation|Party overview]]
 
-	<<elseif $choice2==2>>
-		<<say $mc>>Because a smile fits a pretty lady like you much better than a frown.<</say>><br>
-
-		Lily rolls her eyes at your response.<br><br>
-		<<say $companionLily>>Oh geez, thank you for your wonderful compliment...<</say>><br>
-		<<say $mc>>Come on Lily, don't be like that. It was just a joke. I am actually worried about you, you know?<</say>><br>
-		Lily looks lowers her gaze.<br><br>
-		<<say $companionLily>>Yeah, you're right, I'm sorry. These last few days I've been thinking back to my childhood and my mom. In a way, I'm still worrying about her as well.<</say>><br>
-		<<say $mc>>Why is that?<</say>><br>
-		<<say $companionLily>> It's hard to explain. But it's a little like I'm trying very hard to be just as good of a person as my mom. However, I'm only now discovering how hard it must have been. And I don't even have a kid!<</say>><br>
-		A smile creeps back onto her face.<br><br>
-		<<say $companionLily>> Unless I count you!<</say>><br>
-		She giggles to her own joke, while you take your turn to  roll your eyes.<br><br>
-		<<say $mc>>Ha. Ha. Very funny. But I'm not that helpless.<</say>><br>
-		<<say $companionLily>> Not as long as you have me with you.<</say>><br>
-		She says as she gives you a wink and grabs some of your equipment and stuff it into her pack before she starts walking again. <br><br>
-		<<say $mc>>Hey!  Why are you... I'm perfectly capable of carrying that myself you know!<</say>><br>
-		<<say $companionLily>> Sure you are!<</say>><br>
-		Is she giggling? Well, at least her normal demeanor is back. <br><br>
-
-		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ <br>
-
-		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-
-	<<elseif $choice2==3>>
-		<<say $mc>>Because you being happy makes me happy too.<</say>><br>
-
-		Lily looks at you, seems a bit befuddled, and then suddenly starts laughing.<br><br>
+::Lily Convo1 Happy [nobr]
+<<set $companionLily.affec+=(1+$hsswear)>>\
+		<<say $mc>>Because you being happy makes me happy too.<</say>>
+		Lily looks at you, seems a bit befuddled, and then suddenly starts laughing.
 		
-		<<say $companionLily>>Well, aren't you the sweetest? Literally charming me out of my bad mood.<</say>><br>
+		<<say $companionLily>>Well, aren't you the sweetest? Literally charming me out of my bad mood.<</say>>
+		As she says that she move a bit closer.
 
-		As she says that she move a bit closer.<br><br>
+		<<say $companionLily>>And you know what?<</say>>
+		Her face is now right up to your face and she whispers in your ear.
 
-		<<say $companionLily>>And you know what?<</say>><br>
+		<<say $companionLily>>It   is     working.<</say>>
+		You feel your face redden a little bit.
 
-		Her face is now right up to your face and she whispers in your ear.<br><br>
+		<<say $mc>>Uh... Well... Happy to help!<</say>>
+		Lily giggles and takes a step back once again.
 
-		<<say $companionLily>>It   is     working.<</say>><br>
+		<<say $companionLily>>I'll try to be less pouty. It's just that I was thinking about my mom for a bit. I miss her sometimes.<</say>>
+		<<say $mc>>I get what you're saying. I miss my mom sometimes too.<</say>>
+		<<say $companionLily>>I'm sure you do!<</say>>
+		Lily has a hard time containing a giggle this time.
 
-		You feel your face redden a little bit.<br><br>
-
-		<<say $mc>>Uh... Well... Happy to help!<</say>><br>
-
-		Lily giggles and takes a step back once again.<br><br>
-
-		<<say $companionLily>>I'll try to be less pouty. It's just that I was thinking about my mom for a bit. I miss her sometimes.<</say>><br>
-		<<say $mc>>I get what you're saying. I miss my mom sometimes too.<</say>><br>
-		<<say $companionLily>>I'm sure you do!<</say>><br>
-		Lily has a hard time containing a giggle this time.<br><br>
-		<<say $mc>>Oh come on. I was trying to...<</say>><br>
-		<<say $companionLily>>Oh, don't react so seriously to every joke. Besides, you have me now, who will help you along your way.<</say>><br>
-		She takes some of the equipment you were carrying and stuffs it into her own pack, leaving you stupified for a moment before you decide to follow suit.<br><br>
-
-		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@ <br>
-
-		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<</if>>
-<</if>>
-<</nobr>>
+		<<say $mc>>Oh come on. I was trying to...<</say>>
+		<<say $companionLily>>Oh, don't react so seriously to every joke. Besides, you have me now, who will help you along your way.<</say>>
+		She takes some of the equipment you were carrying and stuffs it into her own pack, leaving you stupified for a moment before you decide to follow suit.
+		@@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@
+		[[End your conversation|Party overview]]
 
 
 :: Lily Convo2
