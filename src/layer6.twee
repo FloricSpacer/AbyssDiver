@@ -18,12 +18,20 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 
 
 :: Layer6 Hub [layer6]
-<<nobr>><<set $currentLayer = 6>><<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>><<set $visitL6 = 1>><<set $layerExit = 0>><<checkTime>><<CarryAdjust>>
+<<nobr>><<set $currentLayer = 6>><<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>><<set $layerExit = 0>><<checkTime>><<CarryAdjust>>
 
 
 As you wander the burning hellscape of the sixth layer, you have to periodically kick away tentacles attempting to grope your lower body. The trip is unpleasant and surreal, but you have to continue to reach your goals.<br><br>
-<<set $layerTemp = random(0,20)>>
-<<if $layerTemp >= 15 && $layerTemp < 19>>
+<<if $visitL6 == 0>>
+	<<set $layerTemp = 8>>
+	<<set $visitL6 = 1>>
+<<elseif $secondVisitL6 == 0>>
+	<<set $secondVisitL6 = 1>>
+	<<set $layerTemp = 18>>
+<<else>>
+	<<set $layerTemp = random(0,20)>>
+<</if>>
+<<if $layerTemp >= (18 - $hiredCompanions.length) && $layerTemp < 19 && $hiredCompanions.length > 0>>
 <<include "Companion Layer Interaction">>
 <<elseif $layerTemp >= 19>>
 <<include "Curse Descriptions">><br><br>
