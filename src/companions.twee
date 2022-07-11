@@ -187,7 +187,7 @@ oheight: 20,
 hairColor: "pink",
 skinColor: "pale",
 age: "",
-appDesc: "You,re an AI, now what? At this point you're simply a virtual avatar and rely on your physical companions to help you on your journey. ",
+appDesc: "You're an AI, now what? At this point you're simply a virtual avatar and rely on your physical companions to help you on your journey. ",
 style: "border: 2px solid rgb(1,0,0);",
 style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;"
 }>>
@@ -228,7 +228,7 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Saeko_LastT = 9999>>
 
 <<set $aiMemWipe=0>>
-
+<<set $aiSuggest=false>>
 
 :: Companion Info [noreturn companion]
 
@@ -327,6 +327,7 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 	<<elseif $currentLayer==1>>
 		[[Ask Ai for information on this layer|AI ConvoL1]]<br>
 	<<elseif $currentLayer==2>>
+		[[Ask Ai for information on this layer|AI ConvoL2]]<br>
 	<<elseif $currentLayer==3>>
 	<<elseif $currentLayer==4>>
 	<<elseif $currentLayer==5>>
@@ -1617,7 +1618,7 @@ Even though you meant it as a joke, you see no sign of her dropping her professi
 
 	<<say $mc>> Very good, what is your ambition for this field expedition?<</say>><br>
 
-		<<say $companionSaeko>>I'm very glad you asked! I actually have a new theory about the effects of miasma on the flora and fauna native to the Abyss, and I'm looking to obtain data to test my hypotheses. I hypothesize that while some organisms display the effects of an acute mutation due to miasma exposure, others show an evolution over a long period of time in the Abyss. And I think if we can identify which species have evolved in the Abyss, then we can identify their most recent common ancestor with known surface species. If we do that, we can get a better understanding of what changes long-term colonization of the Abyss had on them and even when the species diverged!<</say>><br>
+	<<say $companionSaeko>>I'm very glad you asked! I actually have a new theory about the effects of miasma on the flora and fauna native to the Abyss, and I'm looking to obtain data to test my hypotheses. I hypothesize that while some organisms display the effects of an acute mutation due to miasma exposure, others show an evolution over a long period of time in the Abyss. And I think if we can identify which species have evolved in the Abyss, then we can identify their most recent common ancestor with known surface species. If we do that, we can get a better understanding of what changes long-term colonization of the Abyss had on them and even when the species diverged!<</say>><br>
 	She blushes a bit, noticing she may be getting a bit carried away.<br><br>
 	<<say $companionSaeko>>But yeah, you might not want to hear all about it. I understand. Suffice to say that I think there is a lot we can learn and I'm quite interested in learning it.<</say>><br>
 	<<say $mc>>No, please continue! I don't know if I'll be completely able to understand, but maybe it could be useful for the trip.<</say>><br>
@@ -1885,8 +1886,7 @@ She gathers all her materials and sets out for the surface once again.<br>
 <</nobr>>
 [[Return|$layerReturn]]
 
-:: AI ConvoIn
-<<nobr>>
+:: AI ConvoIn[nobr]
 As soon as you're done closing up your phone after you inserted the Omoikone Circuit into it, the device whirs to life almost instantly.<br><br>
 
 <<if $aiMemWipe==0>>	
@@ -1998,9 +1998,8 @@ As soon as you're done closing up your phone after you inserted the Omoikone Cir
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 
 [[Surface Workshop]]
-<</nobr>>
-:: AI ConvoOut
-<<nobr>>
+
+:: AI ConvoOut [nobr]
 You start to pry out the Omoikane Circuit from your phone, causing it to immediately turn on.<br><br>
 <<if $aiMemWipe==0>>
 	<<set $companionAI.imageIcon= "Icons/Ai_angry.png">>
@@ -2032,7 +2031,6 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 <</if>>
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 [[Surface Workshop][$aiMemWipe+=1]]
-<</nobr>>
 
 :: AI ConvoL0
 <<nobr>>
@@ -2063,18 +2061,18 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 <</nobr>>
 
-:: AI ConvoL1[nobr]
+:: AI ConvoL1
+<<Update_MC_Speech>>\
 <<say $companionAI>>How can I help you today?<</say>>
 <<ConversationChoices
 	[[Can you give me some more information on threats in this layer?|AI ConvoL1 Threaths]]
 	[[Can you give me some more information on the relics in this layer?|AI ConvoL1 Relics]]
 	[[Can you give me some more information on the curses in this layer?|AI ConvoL1 Layers]]
 	[[Can you give me some more information on the wonder in this layer?|AI ConvoL1 Wonder]]
-
 >>
 
 
-:: AI ConvoL1 Threats[nobr]
+:: AI ConvoL1 Threats
 	<<say $mc>> Can you give me some more information on threats in this layer?<</say>>
 	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Well, well, we have a bit of a scaredy cat on our hands. Already concerned about the threats on the first layer. <</say>>
 	<<set $companionAI.imageIcon= "Icons/Ai_sassy_talk.png">> <<say $companionAI>> Don't worry, there's not much to be scared of here. The only problem is that some bandits are said to ambush people coming back up from the second layer if you're carrying enough valuables.<</say>>
@@ -2086,7 +2084,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 [[End your conversation|Party overview]]
 
-:: AI ConvoL1 Relics[nobr]
+:: AI ConvoL1 Relics
 	<<say $mc>> Can you give me some more information on the Relics on this layer?<</say>>
 	<<set $companionAI.imageIcon= "Icons/Ai_clueless.png">> <<say $companionAI>> To be honest the Relics in this layer seem kinda boring, I suppose the fun ones are already taken. I would honestly just sell most of these relics if you find them.<</say>>
 	<<say $mc>> Okay, thanks for your enlightened opinion. Can you give me some information on them anyway? <</say>>
@@ -2103,7 +2101,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 [[End your conversation|Party overview]]
 
-:: AI ConvoL1 Curses[nobr]
+:: AI ConvoL1 Curses
 	<<say $mc>> Can you give me some more information on the Curses in this layer?<</say>>
 	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Hmm, they're pretty mild to be honest. Maybe you can try taking all of them for some easy corruption.<</say>>
 	<<say $mc>> Can you be serious for a second, Ai?<</say>>
@@ -2121,7 +2119,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 [[End your conversation|Party overview]]
 
-:: AI ConvoL1 Curses[nobr]
+:: AI ConvoL1 Wonder
 	<<say $mc>> Can you give me some more information on the Wonder in this layer?<</say>>
 	<<say $companionAI>> The icon of mercy can be found on this layer and it will, help you get rid of a single curse and the corruption you gained. But be carefull it is one time only!<</say>>
 	<<say $mc>> So it basically a do over?<</say>>
@@ -2141,6 +2139,200 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Or maybe if you just want to try something naughty for a bit.<</say>>
 	<<say $mc>> OKAY, MOVING ON!<</say>>
 [[End your conversation|Party overview]]
+
+:: AI ConvoL2
+<<Update_MC_Speech>>\
+<<say $companionAI>>How can I help you today?<</say>>
+<<ConversationChoices
+	[[Can you give me some more information on threats in this layer?|AI ConvoL2 Threaths]]
+	[[Can you give me some more information on the relics in this layer?|AI ConvoL2 Relics]]
+	[[Can you give me some more information on the curses in this layer?|AI ConvoL2 Layers]]
+	[[Can you give me some more information on the wonder in this layer?|AI ConvoL2 Wonder]]
+>>
+
+:: AI ConvoL2 Threats
+	<<say $mc>> Can you give me some more information on threats in this layer?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Things on this layer get wild! The baying gourmet roams around in these woods. And its hungry and thirsty at the same time. Be carefull or you will get ravishing appatite!<</say>>
+	<<say $mc>> If you are done with a the double entandres, maybe you care to tell me how to avoid it?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_bummed.png">> <<say $companionAI>> You can be a real killjoy, you know that?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_lecturing.png">> <<say $companionAI>> To be honest, the beast is only a beast when you are easy prey. If you seem like a though foe for whatever reason it will run away with it's tail between its legs.<</say>>
+	<<say $mc>> Like when we are in a big group or something?<</say>>
+	<<say $companionAI>> For example, but others things might work as well. Scaring it of with some relics or turning yourself into an even bigger threat to it would likely also work.<</say>>
+	<<say $mc>> Hmm... I think I might be able to use that. Thanks AI.<</say>>
+	<<if $app.sex=='male'>>\
+		<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">> <<say $companionAI>>My pleasure, handsome.<</say>>
+	<<else>>\
+		<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">> <<say $companionAI>>My pleasure, sister.<</say>>
+	<</if>>\
+[[End your conversation|Party overview]]
+
+:: AI ConvoL2 Relics
+	<<say $mc>> Can you give me some more information on the Relics on this layer?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_lecturing.png">> <<say $companionAI>> Of course! While relics in this layer are still pretty weak, some of time can have more some use.<</say>>
+	<<say $mc>> Can you give me some examples?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_sassy_talk.png">> <<say $companionAI>> Where would you be without me?<</say>>
+	<<say $companionAI>> You act like you don't realize I picked up some crappy micro chip on the fourth layer.<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_annoyed.png">> <<say $companionAI>> How about this crappy micro chip detaches itself from you phone and you can figure out the rest?<</say>>
+	<<say $mc>> Okay, Okay. I'm sorry already. Just tell me about the relics on this layer okay? <</say>>
+	<<say $companionAI>> Very well, first of all I will strongly advise you to pick up the Heart-Stealing Stole as it hopefull will make you a bit more suffarable to me and your other companions. You seem to need it.<</say>>
+	<<say $mc>> Ouch...<</say>>
+	<<say $companionAI>> The World Stone, might also not be a bad idea for you.<</say>>
+	<<say $mc>> Why?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Because when everybody inevitably leaves you, you can atleast train your body more so you can haul back all relics by yourself.<</say>>
+	<<say $mc>> Yeah, Yeah, I get it. I will end sad and lonely blablabla, you made your point.<</say>>
+	<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B") || $app.appAge<12 >>\
+		<<say $companionAI>> And at this rate, you'll end up with wet pants as well. So maybe at the Event Horizon to that list as well.<</say>>
+		<<say $mc>> What do you mean I'll end...<</say>>
+		Suddenly it dawns on you that she is refering to the altered state of your body and how it increases the risk of you actually wetting yourself and you blush deeply.
+
+		<<say $mc>> Maybe that's not a bad idea.<</say>>
+		You mumble when looking down.
+
+		<<set $companionAI.imageIcon= "Icons/Ai_plotting.png">> <<say $companionAI>> What's that? I couldn't quite hear you.<</say>>
+		You feel your face flush even more.
+
+		<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> That will teach you to be snarky with me.<</say>>
+	<<else>>\
+		<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">> <<say $companionAI>> Well if you really want some insight in how you will end up, you might also pick up the Dream Glazer. Although, here in the Abyss it only gives some insight into what the next layer hold, which could be usefull for planning ahead.<</say>>
+		<<say $mc>> That's.. actually pretty usefull advise.<</say>>
+		<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">> <<say $companionAI>> You sound suprised?<</say>>
+		<<say $mc>> Yeah... I honestly thought you waren't done unloading on me yet.<</say>>
+		<<set $companionAI.imageIcon= "Icons/Ai_annoyed.png">> <<say $companionAI>> Tssk, as if I would be that petty.<</say>>
+		<<set $companionAI.imageIcon= "Icons/Ai_plotting.png">> <<say $companionAI>> I would never do that, unless I could embarrass with something really funny.<</say>>
+		<<say $mc>> What's that?<</say>>
+		<<say $companionAI>> Nothing! Let's continue!<</say>>
+	<</if>>\
+	<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
+[[End your conversation|Party overview]]
+
+:: AI ConvoL2 Curses
+	<<say $mc>> Can you give me some more information on the Curses in this layer?<</say>>
+	<<say $companionAI>> Well the curses here are just as wild as the rest on this layer. You can really get in touch with your furry side!<</say>>
+	<<say $mc>> My what..?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_plotting.png">> <<say $companionAI>> Don't pretend to be more innocent then you are. Remember, I have access to all you phone data...<</say>>
+	<<say $mc>> Are you messing with me again, AI?<</say>>
+	<<say $companionAI>> Maybe...Maybe not. Anyway, if you trully don't want anything to do with the animal curses on this layer you can still use them to your advantage.<</say>>
+	<<say $mc>> I'm all ears.<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Well there is a curse for that to on this layer. But I meant you can take Maximum Fluff curse here, and the hairless curse afterwards on the previous layer. Et voila! Free corruption!<</say>>
+	<<say $mc>> That's actually not a bad strategy, but it does require me to move back up again... Thanks AI, I'll keep it in mind for when it's convinient. Anything else?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_excited_excited.png">> <<say $companionAI>> Well my favorite two curses are also on this layer. Futa Fun and Sex Switcheroo <</say>>
+	<<if $app.sex==$app.osex>>\
+		You cock an eyebrow
+
+		<<say $mc>> Why are you so into this whole gender swapping thing?<</say>>
+		<<set $companionAI.imageIcon= "Icons/Ai_lecturing.png">> <<say $companionAI>> First of all, kink shame much?!<</say>>
+		<<set $companionAI.imageIcon= "Icons/Ai_drooling.png">> <<say $companionAI>> Second of all, lets say I have some experience with those 'curses' and let to some pretty steamy situation...<</say>>
+		<<say $mc>> Okay... Anyway, anything else I could use?<</say>>
+		<<say $companionAI>> hmmmmm <</say>>
+		<<say $mc>> Hello? Earth to AI? <</say>>
+		You sigh and shrug
+
+		<<say $mc>> I guess that's as much info as I'm getting.<</say>>
+	<<elseif $app.sex=='female'>>\
+	<<set $companionAI.imageIcon= "Icons/Ai_grin.png">> <<say $companionAI>> Although, it is clear that you know the Sex Switcheroo curse pretty well already.<</say>>
+	You blush
+
+	<<say $mc>> It's just a fetish!<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_plotting.png">> <<say $companionAI>> I've heard that line before, sister. No matter, the end result should be entertaining. Let's see how long it takes you to enjoy this so much that it becomes a bit more than a fetish.<</say>>
+	<<else>>\
+	<<set $companionAI.imageIcon= "Icons/Ai_grin.png">> <<say $companionAI>> Although, it seems that explaining the gender swapping curses now might be a bit to late.<</say>>
+	You avoid eye contact with AI
+
+	<<say $mc>> Yeah I tried it out, so what?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_excited_happy.png">> <<say $companionAI>> Ow nothing. More power to you! This variation is also new to me!<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_drooling.png">> <<say $companionAI>> Just don't tape of your camera while you like this. I'm sure this will also lead to some thrilling scenes<</say>>
+	<<say $mc>> OW GOD, AI! Sometimes I wonder if your chip has gotten extra corrupted from being in the Abyss for so long.<</say>>
+	<</if>>\
+	<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
+[[End your conversation|Party overview]]
+
+:: AI ConvoL2 Wonder
+	<<say $mc>> Can you give me some more information on the Wonder in this layer?<</say>>
+	<<say $companionAI>> Yep there are two here, but I guess it might be a bit too late to give you info on the empty handed broker, so that leaves us with the Fate-Crossing Star pond. Enter it and wake up as somebody else entirly! Well one of your companions that is.<</say>>
+	<<say $mc>> Euh... that sounds as intrusive as it gets. I don't think anybody will be happy about that<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_plotting2.png">> <<say $companionAI>> You bet they will be pissed, but what will they do? Leave and then leave their original body behind? I don't think you need to worry about them leaving you.<</say>>
+	<<say $mc>> You can be pretty scarry, you know... What would it even get me if change body?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_excited_excited.png">> <<say $companionAI>> First of all, you get corruption for it. Beside that there are loads of other options with it, but the most important one is the possible gender swap!<</say>>
+	You sigh
+
+	<<say $companionAI>> I get the feeling, you are more into switching my gender than that it would actually help me in some way in the Abyss. I don't know know if want to risk the ire of my companions for your pleasure or even any other reason.<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_plotting.png">> <<say $companionAI>>Well, you have my full permission to swap boddies with me!<</say>>
+	You start laughing loudly.
+
+	<<say $mc>> Haha, good one AI<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_angry.png">> <<say $companionAI>> STOP LAUGHING! IS MY BODY NOT GOOD ENOUGH OR SOMETHING?!<</say>>
+	You stiffle you laughter a tiny bit.
+
+	<<say $mc>> Ow no, AI you body is beautifull and sexy, but also very much virtual and not real<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_bummed.png">> <<say $companionAI>> ... Euh. You know what, you got me there. I forgot.<</say>>
+	She seems in thought for a moment.
+	<<set $companionAI.imageIcon= "Icons/Ai_lecturing.png">> <<say $companionAI>> On the other hand there is no data in my database on the Fate-Crossing Star that specifies the body can't be virtual. Maybe it would still be possible...<</say>>
+	You look at her for a second.
+
+	<<say $mc>> Are you serious?<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_lecturing.png">> <<say $companionAI>> Actually...Yes<</say>>
+	<<if $app.sex=='male'>>
+		<<set $companionAI.imageIcon= "Icons/Ai_drooling.png">> <<say $companionAI>> But if your rather change in a big breasted bombshell, I would more than happily see...euh support that!<</say>>
+	<<else>>
+		<<set $companionAI.imageIcon= "Icons/Ai_drooling.png">> <<say $companionAI>> But if your rather change into a strong burly man...I guess you already have my phone number already in that case...<</say>>
+	<</if>>
+	<<say $mc>> For a complex AI, you can seem rather simple at times.<</say>>
+	<<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
+	<<set $aiSuggest=true>>
+[[End your conversation|Party overview]]
+
+::AI switch end
+<<nobr>>
+<<Update_MC_Speech>>
+<<set $companionAI.imageIcon= $app.name>>
+<<set $mc.name= 'Ai'>>
+<</nobr>>
+
+As you open your eyes you feel weird. As if you feel all your memories coming back to you before you are even able to open you eyes. And when your eyes are finally open you still don't see much as if you are blindfolded. You move your arms to get rid of the blindfold but you can't seem to grab it. You can't even really feel it.
+<<set $companionAI.imageIcon= "Icons/Ai_annoyed.png">> <<say $companionAI>> What the fuck is this shit?<</say>>
+Just as you start to wonder how weird your voice sounded you hear a scream very close by . You get the sense you are moved around while at the same time you don't feel anybody moving you. It's all very disorienting.
+<<say $mc>> I'm real! I'm real! I'm actually real!<</say>>
+Suddenly you feel youself moving even more and light finally stream into your eyes, and you see... yourself??
+<<say $mc>> You actually did it! You actually did it! This is amazing, thank you so much!<</say>>
+And then it dawns on you
+
+<<set $companionAI.imageIcon= "Icons/Ai_mortified.png">> <<say $companionAI>> Ow no... Did I actually switch with you?! I didn't think it would actually work...<</say>>
+<<say $mc>> I know, me neither! But I'm so happy you tried! This is going to be awesome.<</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_shocked.png">> <<say $companionAI>> Ow my fucking... I actually lost my body? I am now reduced to a virtual avatar? What the hell am I going to do? You tricked me into this!<</say>>
+<<say $mc>> Slow down sister, I didn't trick you into anything. I just wondered if it was possible and you went ahead yourself and tried it.<</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_crying.png">> <<say $companionAI>> I don't want this anymore, AI. I want my body back. You stole my body, give it back.<</say>>
+<<say $mc>> Wow wow, don't go all panic mode on me okay? I'm not some evil AI that wants to snatch everybodies body and take over the world. I just want to have some fun. So how about we just have some fun today, and then we'll switch back afterwards? Maybe you like all the power that come with being a high-tech AI and we can do this more often.<</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_bummed.png">> <<say $companionAI>> Okay, maybe it's not so bad to be an AI for a little bit<</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_happy.png">> <<say $companionAI>> I do look pretty cute now!<</say>>
+<<say $mc>> You bet your cute little rear of yours that you do!<</say>>
+<<say $companionAI>> Yeah let's just enjoy the experience and then change back tonight! Do you need to go in the Fate-Crossing Star pond again or something?<</say>>
+<<say $mc>> I don't know, you're the one with the data on the Abyss now.<</say>>
+<<say $companionAI>> Ow right! So how do I access this data on the Abyss...<</say>>
+The moment you start thinking about the data of the Abyss, you start to remember that the Abyss has a certain origin, exits and nine layers. When you focuss your thought on the layers, you feel yourself remembering the second layer more specifcally. Remembering the second layer in turn floods your head with new memories on the threats, relics, biome, lay-out untill you remember the wonders and start focussing on those, more specifcally the Fate-Crossing Star. You go over all the information you suddenly remembered about it.
+
+<<set $companionAI.imageIcon= "Icons/Ai_shocked.png">> <<say $companionAI>>... <</say>>
+<<say $mc>> Did you access the data?<</say>>
+<<say $companionAI>>Yes... It only works once... <</say>>
+<<say $mc>> Ow that's inconvinient, I guess you'll be a virtual sister for a bit longer.<</say>>
+She giggles.
+<<say $mc>> Anyway, where do we need to go to reverse this then?<</say>>
+You frantically start going through all the data, layer by layer, all wonders, all curses, all relics but nothing with body swapping properties shows up.
+<<set $companionAI.imageIcon= "Icons/Ai_mortified.png">> <<say $companionAI>>I    can't    find    anything... <</say>>
+You start to feel very tired all of a sudden.
+<<say $mc>> Wow slow down, you are overclocking the yourself quite a bit. You're draining you battery and if you're not carefull you'll damage your own system!<</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_crying.png">> <<say $companionAI>>There has to be a way, there has to be! <</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_happy_excited.png">> <<say $companionAI>>Wait a second! When you proposed this, you must surely have known a way to reverse this, right Ai? <</say>>
+<<say $mc>> Euh not really... You didn't ask about, so I can't remember even looking for that data<</say>>
+<<set $companionAI.imageIcon= "Icons/Ai_angry.png">> <<say $companionAI>>What the fuck do you mean I didn't ask about it!? Is this a joke to you<</say>>
+Ai seems to frown as well
+
+<<say $mc>> Yeah actually it sort of was. You were the person who took the joke one step further and stepped into a magical pond, remember? I didn't plan for this to happen at all, I don't have access to all the data all the time. I'm high-tech not some omniscient god. This was not my choice or even what I wanted to happen at all!<</say>>
+You calm down and realize Ai is right and you will need her to fix this if this is even fixable at all...
+And so a new adventure starts. Although this time you are not the main character anymore but the side kick. You keep shifting through the data and find that in the deepest depth of the Abyss there may be a possible solution, but it would be quite the journey to get there. Ai does her best to advance in the Abyss as much as possible, but the Abyss keeps getting thougher to traverse with each layer. 
+At first Ai consulted you in which curses she would take on, but more and more she started to take curses on her own accord. Changing your body to that of a pink haired small girl. When you complained about it she brushed you off, telling you that she also needs to feel confortable in her.. your body. As time went on, you felt less and less sure that you would reach the end of the Abyss. Moreover, would Ai even want to change back at that point?
+Untill that time the best you can do is brief Ai as much as you can on all the ins and outs of the Abyss and her adventure reaches a conclusion you can also live with.
+
+@@.layerTitle;GAME OVER@@
 
 :: Forbidden Grimoire Select
 [img[setup.ImagePath+"Relics/forbiddengrimoire.png"]]
