@@ -25,21 +25,29 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 
 
 :: Layer3 Hub [layer3]
-<<set $currentLayer = 3>><<if $timeL3T1 < 6 && $timeL3T2 < 5>><<set $visitL3 = 1>><<set $layerExit = 0>><<checkTime>><<CarryAdjust>>Your steps echo as you walk through the seemingly endless, dimly-lit caves of the third layer. Occasionally a small sound comes from some direction, but you can't tell which. The light from the glowing fungus and plants on the walls seems off to you. As helpful as it is, it leaves you with a yearning to see the sun above the surface again soon.
+<<set $currentLayer = 3>><<if $timeL3T1 < 6 && $timeL3T2 < 5>><<set $layerExit = 0>><<checkTime>><<CarryAdjust>>Your steps echo as you walk through the seemingly endless, dimly-lit caves of the third layer. Occasionally a small sound comes from some direction, but you can't tell which. The light from the glowing fungus and plants on the walls seems off to you. As helpful as it is, it leaves you with a yearning to see the sun above the surface again soon.
 
 The miasma produces no light in this layer, and these dark, twisted caverns are slow to navigate without a light source, such as a torch or flashlight. If you have such a source of light, you may subtract 1 day from all the time costs on this page. Remember that if you're using torches, they will last for exactly one choice in this layer - including ascending or descending layers.
 
 What do you want to do while you're here?
 
 <<nobr>>
-<<set $layerTemp = random(0,20)>>
+<<if $visitL3 == 0>>
+	<<set $layerTemp = 8>>
+	<<set $visitL3 = 1>>
+<<elseif $secondVisitL3 == 0>>
+	<<set $secondVisitL3 = 1>>
+	<<set $layerTemp = 18>>
+<<else>>
+	<<set $layerTemp = random(0,20)>>
+<</if>>
 <<if $layerTemp == 1>>
 As you walk through the caverns of the third layer, you come across what initally seems to be a clear pond, a potential source of clean water! But upon further inspection, you realize that rather than water, it is a slime that is a very transluscent blue color. Luckily you noticed it in time and didn't consume any, but it serves as a reminder that strange things lurk in these tunnels. You notice a small crab suspended in the slime, apparently one that didn't recognize the difference between the slime and water until it was too late. <br><br>
 <<elseif $layerTemp == 2>>
 You notice a scurrying out of the corner of your eye on one of the walls. Preparing yourself for the worst, you ready yourself for a fight against whatever you noticed, but instead you spot a few glowing, scurrying crabs, each about 5 centimeters across, using their claws to clip some fungus and consume it. The color of the crabs seems almost like the color of the light given off by the fungus. Perhaps this is a part of the ecosystem here?<br><br>
 <<elseif $layerTemp == 3>>
 A few glowing crabs skitter in front of you and quickly dart into a hole in the wall. You notice what they're running from a moment after them as a small bundle of tentacles slides across the ground, reaching a long arm forward to grab one of the crabs. Once it has a hold of the crab, it seems to extend a number of tiny feeler tentacles that gently caress the crab over its entire body and over time work themselves into all of the crab's orifices. After a minute of infiltration, the tentacle blob turns around to where it came, crab in tow, and seems to be more leasuirely in its pace. Something inside you feels some empathy for that crab, given your own situation in the Abyss.<br><br>
-<<elseif $layerTemp >= 15 && $layerTemp < 19>>
+<<elseif $layerTemp >= (18 - $hiredCompanions.length) && $layerTemp < 19 && $hiredCompanions.length > 0>>
 <<include "Companion Layer Interaction">>
 <<elseif $layerTemp >= 19>>
 <<include "Curse Descriptions">><br><br>
