@@ -327,7 +327,7 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 <<if $dollevent2== true>>
 	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
 <</if>>
-<<if $hornCount > 0>>
+<<if $playerCurses.some(e => e.name === "Horny")>>
 	<br>You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
 	<<switch $hornVariation>>
 		<<case "rhino">>
@@ -880,11 +880,11 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 				<<textbox "$curse69.variation" "shiny black" "Use Items and Relics">>
 
-			<<elseif $StoredCurse.name== "Horny">>
+			<<elseif $StoredCurse.name== "Horny" && $hornVariation=="">>
 				<br>
 				<<include "Horny Customization">><br>
 				<br>
-				[[Confirm|Apply Stored Horny Curse]]<br>
+				[[Confirm|Apply Stored Horny Curse][$ManagedMisfortuneActive=true]]<br>
 			<<else>>
 				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
 					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
