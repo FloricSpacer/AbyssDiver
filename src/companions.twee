@@ -1302,16 +1302,15 @@ Double-click this passage to edit it.
 
 :: Cloud Convo0
 
-<<nobr>>
-<<say $companionCloud>>'Sup, name's Cloud. I'm glad I'm able to go on an expedition with someone like you.<</say>><br>
+<<say $companionCloud>>'Sup, name's Cloud. I'm glad I'm able to go on an expedition with someone like you.<</say>>
 
-<<if $convoStart>>
-[[Greet him warmly with a hug|Cloud Convo0][$convoStart=0,$choice1=1,$companionCloud.affec-=0]]<br>
-[[Greet him with a firm handshake|Cloud Convo0][$convoStart=0,$choice1=2,$companionCloud.affec-=0]]<br>
-[[Greet him with a small wave from a distance|Cloud Convo0][$convoStart=0,$choice1=3,$companionCloud.affec-=(1-$hsswear)]]
-<</if>>
+<<ConversationChoices
+	[[Greet him warmly with a hug|Cloud Convo0 Hug]]
+	[[Greet him with a firm handshake|Cloud Convo0 Handshake]]
+	[[Greet him with a small wave from a distance|Cloud Convo0 Wave]]
+>>
 
-<<if $choice1==1>>
+:: Cloud Convo0 Hug
 You give Cloud a firm hug. He seems a bit suprised but keeps his cool and reciprocates, matching your strength. <br><br>
 
 <<say $mc>>I'm $mc.name, I'm so happy to have you onboard!<</say>><br>
@@ -1320,12 +1319,13 @@ Cloud grins widely as he replies.<br><br>
 
 <<say $companionCloud>>You're pretty smooth, already buttering me up. I thought I was supposed to work for you.<</say>><br>
 
-	<<if $choice2==0>>
-	[[Yeah, but having a good relationship with everyone on an expedition like this is important, right?|Cloud Convo0][$convoStart=0,$choice2=1,$companionCloud.affec+=(1+$hsswear)]]<br>
-	[[Well, I've heard you have some powerful connections, so being a little extra nice couldn't hurt|Cloud Convo0][$convoStart=0,$choice2=2,$companionCloud.affec-=(1-$hsswear)]]
-	<</if>>
-	<<if $choice2==1>>
+<<ConversationChoices
+	[[Yeah, but having a good relationship with everyone on an expedition like this is important, right?|Cloud Convo0 Relationship]]
+	[[Well, I've heard you have some powerful connections, so being a little extra nice couldn't hurt|Cloud Convo0 Connections]]
+>>
 
+:: Cloud Convo0 Relationship
+<<set $companionCloud.affec+=(2+$hsswear)>>\
 	<<say $mc>>Yeah, but having a good relationship with everyone on an expedition like this is important, right?<</say>><br>
 
 Cloud chuckles a bit and a genuine smile flows across his lips.<br><br>
@@ -1335,9 +1335,10 @@ Cloud chuckles a bit and a genuine smile flows across his lips.<br><br>
 	His face suddenly takes on a gravely serious expression for a moment, but it almost immediately breaks into his usual wide, charismatic smile.<br><br>
 
 	<<say $mc>>I think you're right, and I'm glad we can can have each others backs!<</say>><br>
-	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+	[[End your conversation|Party overview]]
 
-	<<elseif $choice2==2>>
+:: Cloud Convo0 Connections
+<<set $companionCloud.affec-=(2-$hsswear)>>\
 	<<say $mc>>Well, I've heard you have some powerful connections, so being a little extra nice couldn't hurt.<</say>><br>
 
 	You attempt to give him a playful smile, but his expression is surprisingly blank. <br><br>
@@ -1354,22 +1355,22 @@ Cloud chuckles a bit and a genuine smile flows across his lips.<br><br>
 
 	You spend a few more minutes exchanging casual banter with Cloud before moving on to the other tasks you had to work on.<br>
 
-	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<</if>>
+	[[End your conversation|Party overview]]
 
-<<elseif $choice1==2>>
+:: Cloud Convo0 Handshake
 
 You give him a firm handshake, and he responds in kind while flashing you a wide, charming smile. <br><br>
 <<say $mc>>Welcome to the team! I'm $mc.name.<</say>><br>
 
 <<say $companionCloud>>I'm happy to be of service to a great adventurer like yourself, how can I help?<</say>><br>
 
-	<<if $choice2==0>>
-	[[I've heard you're an excellent marksman, so I'd appreciate it if you can keep me safe and keep the expedition on track!|Cloud Convo0][$convoStart=0,$choice2=1,$companionCloud.affec+=(1+$hsswear)]]<br>
-	[[I've heard you're an excelent marksman, so I was wondering if you've ever killed someone?|Cloud Convo0][$convoStart=0,$choice2=2,$companionCloud.affec-=(2-$hsswear)]]
-	<</if>>
+	<<ConversationChoices
+	[[I've heard you're an excellent marksman, so I'd appreciate it if you can keep me safe and keep the expedition on track!|Cloud Convo0 Safe]]
+	[[I've heard you're an excelent marksman, so I was wondering if you've ever killed someone?|Cloud Convo0 Killed]]
+	>>
 
-	<<if $choice2==1>>
+:: Cloud Convo0 Safe
+<<set $companionCloud.affec+=(1+$hsswear)>>\
 
 	<<say $mc>> I've heard you're an excellent marksman, so I'd appreciate it if you can keep me safe and keep the expedition on track!<</say>><br>
 
@@ -1379,9 +1380,10 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 
 	Despite the fact you had no romantic intentions at all in this conversation, Cloud still manages to make your heart race. Perhaps it's best to keep your relationship professional, but he sure is a charming guy, isn't he?<br>
 
-	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+	[[End your conversation|Party overview]]
 
-	<<elseif $choice2==2>>
+:: Cloud Convo0 Killed
+<<set $companionCloud.affec-=(2-$hsswear)>>\
 	<<say $mc>>I've heard you're an excelent marksman, so I was wondering if you've ever killed someone?<</say>><br>
 
 	His eyebrows furrow and his face immediately grows darker. <br><br>
@@ -1400,49 +1402,47 @@ You give him a firm handshake, and he responds in kind while flashing you a wide
 
 	The awkwardness is defused as he walks off, laughing at his own joke, and leaving you standing there feeling a little silly. <br>
 
-	[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-	<</if>>
-<<elseif $choice1==3>>
+	[[End your conversation|Party overview]]
 
+:: Cloud Convo0 Wave
+<<set $companionCloud.affec-=(1-$hsswear)>>\
 	You stand around a bit akwardly and wave hello over at him from a distance. <br><br>
 	<<say $mc>>So, uh... I'm $mc.name, and am honored to welcome you into this expedition.<</say>><br>
 
 	He looks at you, slightly perplexed, and scratches the back of his head. <br><br>
 	<<say $companionCloud>>So I'm guessing you've never led an expedition like this before, am I right?<</say>><br>
 
-	<<if $choice2==0>>
-		[[Oh no, is it that obvious? It's true I've never done this before, but I'll do my best to become a capable expedition leader as soon as I can!|Cloud Convo0][$convoStart=0, $choice2=1, $companionCloud.affec+=(2+$hsswear)]]<br>
-		[[*Lie* Nah, I have loads of experience, the Abyss is going to be a piece of cake, just one more place to conquer|Cloud Convo0][$convoStart=0, $choice2=2, $companionCloud.affec-=(2-$hsswear)]]<br>
-		[[*Truth* Nah, I have loads of experience. It may have been in another life, or a vision, but I have an idea of what to expect down there, in the Abyss|Cloud Convo0][$convoStart=0, $choice2=3, $companionCloud.affec+=(1+$hsswear)]]
-	<</if>>
+	<<ConversationChoices
+		[[Oh no, is it that obvious? It's true I've never done this before, but I'll do my best to become a capable expedition leader as soon as I can!|Cloud Convo0 Admit]]
+		[[*Lie* Nah, I have loads of experience, the Abyss is going to be a piece of cake, just one more place to conquer|Cloud Convo0 Lie]]
+		[[*Truth* Nah, I have loads of experience. I've lead expiditions before and call it a vision or something, but I have an idea of what to expect down there, in the Abyss|Cloud Convo0 Truth]]
+	>>
 
-	<<if $choice2==1>>
-
+:: Cloud Convo0 Admit
+<<set $companionCloud.affec+=(2+$hsswear)>>\
 		<<say $mc>> Oh no, is it that obvious? It's true I've never done this before, but I'll do my best to become a capable expedition leader as soon as I can!<</say>><br>
 		He pats your head<br><br>
 		<<say $companionCloud>>Don't worry about it, the most important thing for an expedition is to have a leader with good character and teammates who have each others' backs. And I think we're doing good in that department. We can learn anything else along the way! Especially with me by your side.<</say>><br>
 
-		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+		[[End your conversation|Party overview]]
 
-	<<elseif $choice2==2>>
+:: Cloud Convo0 Lie
+<<set $companionCloud.affec-=(2-$hsswear)>>\
 		<<say $mc>> Nah, I have loads of experience, the Abyss is going to be a piece of cake, just one more place to conquer.<</say>><br>
 
 		His apparently carefree face seems to contort into a new expression, anger. <br><br>
 		<<say $companionCloud>>Lies will get people killed. Lie to me again and I won't take kindly to it. If you don't know somethinng, just say so. This is no place to play pretend and you'll need to be able to recognize your own weakness to be able to survive in the Abyss. I'm asking you to take this seriously so no once gets hurt down there.<</say>><br>
 		He storms off, leaving you shaken and unsure what to say. That certainly could have gone better...<br>
-		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+		[[End your conversation|Party overview]]
 
-	<<elseif $choice2==3>>
-		<<say $mc>> Nah, I have loads of experience. It may have been in another life, or a vision, but I have an idea of what to expect down there, in the Abyss<</say>><br>
+:: Cloud Convo0 Truth
+<<set $companionCloud.affec+=(1+$hsswear)>>\
+		<<say $mc>> Nah, I have loads of experience. I've lead expiditions before and call it a vision or something, but I have an idea of what to expect down there, in the Abyss<</say>><br>
 
 		He gives a casual shrug in response. <br>
 		<<say $companionCloud>>Whatever you say. As long as you're capable and I can count on you I'm good. If you're a little crazy, then I don't mind too much, just make good decisions along the way. <</say>><br>
 		Although that wasn't the smoothest conversation ever, you did get a feeling that Cloud liked you.<br>
-		[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
-
-	<</if>>
-<</if>>
-<</nobr>>
+		[[End your conversation|Party overview]]
 
 
 :: Cloud Convo1
