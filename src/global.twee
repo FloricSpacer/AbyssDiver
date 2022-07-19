@@ -327,11 +327,14 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 <<if $dollevent2== true>>
 	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
 <</if>>
-<<set _hornyCount = setup.activeCurseCount("Horny")>>
-<<if _hornyCount == 1>>
-	<br>You have a noticeable demonic horn protruding from the center of your forehead.
-<<elseif _hornyCount == 2>>
-	<br>You have 2 noticeable demonic horns protruding from your head.
+<<if $playerCurses.some(e => e.name === "Horny")>>
+	<br>You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
+	<<switch $hornVariation>>
+		<<case "rhino">>
+			your nose.
+		<<default>>
+			<<if $hornCount == 1>>the center of your forehead<<else>>your head<</if>>.
+	<</switch>>
 <</if>>
 
 <br><br>$app.desc
@@ -877,6 +880,11 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 				<<textbox "$curse69.variation" "shiny black" "Use Items and Relics">>
 
+			<<elseif $StoredCurse.name== "Horny" && $hornVariation=="">>
+				<br>
+				<<include "Horny Customization">><br>
+				<br>
+				[[Confirm|Apply Stored Horny Curse][$ManagedMisfortuneActive=true]]<br>
 			<<else>>
 				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
 					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
@@ -1672,7 +1680,16 @@ How many dubloons would you like to pay back?
 	<</if>>
 
 	<<if $tempCurse.name == "Horny">>
-		You always wondered why all the depictions of incubi and succubi that you'd seen just has them standing around looking pretty or using magic, or fighting like humans with extra agility. They always have those horns on their heads, but they never seem to use them like horns are supposed to be used, for goring or ramming. Well, now that you have your own thanks to the Horny Curse, you understand. They're not meant for fighting. They're essentially extra sexual organs that are sprouting out of your head. <br><br>You're pretty happy with how yours look, but you have to admit that aside from being a bold fashion choice, these horns are simply a liability. Maybe true incubi or succubi could draw sexual energy through them or something similar, but for you, twirling your fingers around the tips of them is enough to bring you to orgasm, and the same is true if you rub the shafts enough. The thought of ramming them into anything though... well that's too painful to consider. When you smacked them into a low hanging branch it briefly left you curled into a ball from the pain. Your new distinctive appearance is almost secondary to the sensitivity of your new appendages. It's a lot to take in, but maybe you'll get more used to it over time.
+		<<switch $hornVariation>>
+			<<case "demonic">>
+				You always wondered why all the depictions of incubi and succubi that you'd seen just has them standing around looking pretty or using magic, or fighting like humans with extra agility. They always have those horns on their heads, but they never seem to use them like horns are supposed to be used, for goring or ramming. Well, now that you have your own thanks to the Horny Curse, you understand. <<Numerical $hornCount "It's" "They're">> not meant for fighting. <<Numerical $hornCount "It's" "They're">> essentially <<Numerical $hornCount "an">> extra sexual organ<<PluralS $hornCount>> that <<Numerical $hornCount "is" "are">> sprouting out of your head. <br><br>You're pretty happy with how yours look, but you have to admit that aside from being a bold fashion choice, <<Numerical $hornCount "this horn is" "these horns are">> simply a liability. Maybe true incubi or succubi could draw sexual energy through <<Numerical $hornCount "it" "them">> or something similar, but for you, twirling your fingers around the <<Numerical $hornCount "tip of it" "tips of them">> is enough to bring you to orgasm, and the same is true if you rub the shaft<<PluralS $hornCount>> enough. The thought of ramming <<Numerical $hornCount "it" "them">> into anything though... well that's too painful to consider. When you smacked <<Numerical $hornCount "it" "them">> into a low hanging branch it briefly left you curled into a ball from the pain. Your new distinctive appearance is almost secondary to the sensitivity of your new appendage<<PluralS $hornCount>>. It's a lot to take in, but maybe you'll get more used to it over time.
+			<<case "draconic">>
+				The horns on fearsome dragons always struck you as a mark of power nobility and dominance. Well, now that you have your own thanks to the Horny Curse. You look awesome, but unfortunately the addition to your head is actually feeling more like a vulnerability than a weapon. You're pretty sure that the horns on real dragons aren't so tender. Yours <<Numerical $hornCount "acts more like a handle than a weapon" "act more like handles than weapons">>. <br><br><<Numerical $hornCount "It's" "They're">> somewhat sharp, but the muscles in your neck aren't strong enough to actually wield <<Numerical $hornCount "it" "them">> effectively, and oh <<Numerical $hornCount "it's" "they're">> so tender. Anyone who had the will to just grab hold of your horn<<PluralS $hornCount>> and hold on would certainly be able to immobilize you, and guide your head wherever they pleased. The thought of people and not-people manipulating you through your dragon horn<<PluralS $hornCount>> is so humiliating.
+			<<case "unicorn">>
+				Unicorns are so elegant, so majestic, radiating power, grace, and beauty. You thought that if you had <<Numerical $hornCount "a unicorn horn" "unicorn horns">>, you'd be amazing too. The Horny curse doesn't seem to have worked out quite as you planned though. The unicorn horn<<PluralS $hornCount>> that now sprout<<Numerical $hornCount "s">> from your head <<Numerical $hornCount "is" "are">> charming and beautiful, but <<Numerical $hornCount "it's" "they've">> made you less graceful and more vulnerable. You feel a little silly. I mean honestly, why wouldn't <<Numerical $hornCount "a">> half-meter long horn<<PluralS $hornCount>> jutting out of your forehead throw you off balance and get caught on things? <br><br>You're also concerned that your unicorn horn<<PluralS $hornCount>> <<Numerical $hornCount "is" "are">> somehow corrupted. Whenever something touches <<Numerical $hornCount "it" "them">>, the sensations that run straight down the horn<<PluralS $hornCount>> and into your brain are overwhelming, and highly arousing. Even the thought of someone grabbing hold of your horn<<PluralS $hornCount>> and gently tracing their fingers through the spiraling grooves on <<Numerical $hornCount "it" "them">> is leaving you keyed up and panting. Are unicorns supposed to be hyper-sexual creatures stumbling around with poor balance? You're pretty sure they're not, but alas, that's what the abyss has made you into.
+			<<case "rhino">>
+				Rhinos are symbols of strength, fortitude, and virility. Their solid bodies and tough skin all culminate around their magnificent horns. You somehow assumed that getting <<Numerical $hornCount "a">> rhino horn<<PluralS $hornCount>> of your own would make you tougher, stronger, and more imposing. It seems you were somewhat mistaken. The rhino horn<<PluralS $hornCount>> that now jut<<Numerical $hornCount "s">> out of your forehead <<Numerical $hornCount "is" "are">> certainly imposing, but any impression of added strength that <<Numerical $hornCount "it" "they">> give<<Numerical $hornCount "s">> you is entirely superficial. Real rhino horns aren't highly sensitive. Real rhino horns can't be used to control the creature that they're coming out of, but yours <<Numerical $hornCount "is" "are">> so tender, and so arousing to the touch, that you're pretty sure somebody who grabbed <<Numerical $hornCount "it" "them">> could get you to do whatever they wanted, guiding your head around wherever they pleased. <br><br>You've heard the phrase "grab the bull by the horns" as a phrase to mean confronting a difficult problem directly, but bulls are weak compared to rhinos. "Grab the rhino by the horn<<PluralS $hornCount>>" should mean to engage in extreme folly, but if anyone ever grabbed your rhino horn, you'd wilt under the pressure of their grip constricting around <<Numerical $hornCount "its" "their">> smoothness. You blush with embarrassment. You might have what appears to be <<Numerical $hornCount "a">> rhino's horn<<PluralS $hornCount>>, but you're certainly no rhino.
+		<</switch>>
 	<</if>>
 
 	<<if $tempCurse.name == "Drawing Spades">>

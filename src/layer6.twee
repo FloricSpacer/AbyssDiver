@@ -214,7 +214,7 @@ If you decide to start foraging for food or water, it means that you will not re
 		<<set _table += "</tr>">>
 	<</if>>
 <</if>>
-<<if setup.takenCurseCount("Horny") >= 2>>
+<<if setup.takenCurseCount("Horny") >= 1>>
 	<<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
 	<<set _table += "<tr><td>[[Take on Horny]]</td>">>
@@ -756,13 +756,13 @@ You have successfully taken on the $curse76.name curse. Hopefully you are ok wit
 
 
 :: Take on Horny [layer6]
-<<set $playerCurses.push($curse77)>><<set $corruption += $curse77.corr>>
+<<include "Horny Customization">>
 
-Suddenly, you are struck with a splitting headache, in an almost literal sense as you can almost feel your skull splitting apart. Luckily, you aren't dying, but a shape is emerging from your skull, and it seems to be a demonic-looking horn. The pain subsides as you feel the horn pushing out of your head, but sensations on the horn still feel tender, as if it were an especially sensitive part of your body.
+[[Confirm|Take on Horny pt2]]
 
-Naturally, you reach up to touch your new addition and confirm that indeed it is hard, made of some bone-like material, but it is also quite sensitive. You can feel even the most tender touch when you caress the horn and perhaps it might even be pleasurable to touch in a certain way? This might be a part of your body you'll have to experiment with later, when you have some free time.
-
-You have successfully taken on the $curse77.name curse. Hopefully you are ok with accepting the permanent consequences.
+:: Take on Horny pt2 [layer6]
+<<include "Horny Taken">>
+<<include "Horny Retrieval">>
 
 [[Accept more curses from the sixth layer|Layer6 Curses]]
 <<if $escBalDepl==0>>
@@ -771,6 +771,43 @@ You have successfully taken on the $curse77.name curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L6]]
 <</if>>
 
+:: Horny Customization
+What type of horn(s) would you like to gain?
+
+<<radiobutton "$hornVariation" "demonic" checked>> Demon
+<<radiobutton "$hornVariation" "draconic">> Dragon
+<<radiobutton "$hornVariation" "unicorn">> Unicorn
+<<radiobutton "$hornVariation" "rhino">> Rhino
+
+How many horns would you like to gain?
+
+<<radiobutton "$hornCount" 1 checked>> One <<radiobutton "$hornCount" 2 >> Two
+
+Enter one or more descriptive adjectives (optional)
+
+Example adjectives:
+- Type: Demon, Adjectives: curved, sheep-like → You have curved, sheep-like demonic horns.
+- Type: Dragon, Adjectives: pointy, swept back → You have pointy, swept back dragon horns.
+
+<<textbox "$hornAdjective" "">>
+
+:: Apply Stored Horny Curse
+<<include "Horny Taken">>
+<<include "Horny Retrieval">>
+
+[[Continue|Use Items and Relics]]
+
+
+:: Horny Taken [nobr]
+<<set $playerCurses.push($curse77)>>
+<<set $corruption += $curse77.corr * $hornCount >>
+
+:: Horny Retrieval [layer6]
+Suddenly, you are struck with a splitting headache, in an almost literal sense as you can almost feel your skull splitting apart. Luckily, you aren't dying, but <<if $hornCount == 1>>a shape is<<else>>two shapes are<</if>> emerging from your skull, and <<if $hornCount == 1>>it seems<<else>>they seem<</if>> to be <<HornGrowthDesc $hornVariation $hornCount>>. The pain subsides as you feel the $hornAdjective horn<<if $hornCount > 1>>s<</if>> pushing out of your head, but sensations on the horn<<if $hornCount > 1>>s<</if>> still feel tender, as if <<if $hornCount == 1>>it<<else>>they<</if>> were an especially sensitive part of your body.
+
+Naturally, you reach up to touch your new addition<<if $hornCount > 1>>s<</if>> and confirm that indeed <<if $hornCount == 1>>it is<<else>>they are<</if>> hard, made of some bone-like material, but also quite sensitive. You can feel even the most tender touch when you caress the horn<<if $hornCount > 1>>s<</if>> and perhaps it might even be pleasurable to touch in a certain way? <<if $hornCount == 1>>This<<else>>These<</if>> might be a part of your body you'll have to experiment with later, when you have some free time.
+
+You have successfully taken on the $curse77.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 
 :: Take on Drawing Spades [layer6]
@@ -881,7 +918,7 @@ You have successfully taken on the $curse84.name curse. Hopefully you are ok wit
 	<<if ($temp1 == 75) && !$playerCurses.some(e => e.name === "Age Reduction C") && $StoredCurse.name != "Age Reduction C">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 76) && setup.takenCurseCount("Horny") < 2>>
+	<<if ($temp1 == 76) && setup.takenCurseCount("Horny") == 0>>
 		<<break>>
 	<</if>>
 	<<if ($temp1 == 77) && !playerCurses.some(e => e.name === "Drawing Spades") && $StoredCurse.name != "Drawing Spades">>
