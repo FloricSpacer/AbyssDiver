@@ -747,7 +747,7 @@ While normally you've gotten to know Lily as a bright light in any conversation,
 	<<ConversationChoices
 		[[Well, if you liked them there's a whole lot more where those came from!|Lily Convo1 Jokes]]
 		[[I'm glad you're back to your normal upbeat self|Lily Convo1 Upbeat]]
-			[[So, uh, can I ask what's been bothering you?|Lily Convo1 Bothering]]
+		[[So, uh, can I ask what's been bothering you?|Lily Convo1 Bothering]]
 	>>
 <<else>>\
 	<<ConversationChoices
@@ -810,7 +810,7 @@ She straightens her back, flashes you an endearing smile and begins increasing h
 <<say $mc>>Wait up! Where are you going? <</say>>
 She gives you an entire spiel on how keeping pace is good exercise and a bad posture while walking is unhealthy. Meanwhile, you are simply glad she's returned to her typically lively demeanor.
 @@.alert1; Lily is motivated to push a little harder for you and will now carry 5kg more without complaining or slowing down!@@
-[[End your conversation|Party overview][$convoStart=1,$choice1=0,$choice2=0]]
+[[End your conversation|Party overview]]
 
 :: Lily Convo1 Sit
 You begin walking close by to Lily and match her pace.
@@ -1265,23 +1265,36 @@ She turns around and walks off. What happened? Did you annoy her or something? Y
 She turns around and walks off. What happened? Did you annoy her or something? Somehow you get the feeling she didn't appreciate your response.
 [[End your conversation|Party overview]]
 
-
-
 :: Cherry Convo1
 You're taking a brief rest, and you see Cherry staring at you, except her eyes aren't focused on you, they're focused a thousand kilometers away. Her expression is held in a sad frown, tinged with pain.
 <<ConversationChoices
-	[[Leave her to her memories; the only way to deal with pain is to face it. It's not your place to interfere.|Cherry Convo1 Memories]] <goto passage 2>
-	[[Sit down beside her, and wait for her to say something.|Cherry Convo1 Sit]] <goto passage 3>
-	[[Make a joke|Cherry Convo1 Joke]] <goto passage 4>
+	[[Leave her to her memories; the only way to deal with pain is to face it. It's not your place to interfere.|Cherry Convo1 Memories][$alt=1]] 
+	[[Sit down beside her, and wait for her to say something.|Cherry Convo1 Sit]] 
+	[[Make a joke|Cherry Convo1 Joke]] 
 >>
 
 :: Cherry Convo1 Memories
-<<set $companionCherry.affec-=(2-$hsswear)>>\
+<<nobr>>
+<<set $companionCherry.affec-=(2-$hsswear)>>
+<<if $alt==1>>
+	You decide it's best to not interfere and just keep going<br>
+<<elseif $alt==2>>
+	<<say $mc>>Ah okay. Good you got that of your chest. Let's keep moving.<</say>><br>
+	You stand back up and start moving again.<br>
+<<elseif $alt==3>>
+	You start shuffeling backwards, make a brisk turn and start legging it.<br>
+<</if>>
+<</nobr>>
 You walk a distance away, keeping an eye on Cherry. After a few minutes she shudders, grimacing, then shakes her head, her eyes coming back into focus. She looks at you and nods, and you both continue.
 [[End your conversation|Party overview][$CherryConvo1=false]]
 
 :: Cherry Convo1 Sit
 <<set $companionCherry.affec+=(1+$hsswear)>>\
+<<say $mc>>Maybe we should stop for a bit.<</say>>
+<<say $companionCherry>>Okay.<</say>>
+You both stop and sit down.
+
+<<say $mc>>You know Cherry, you seem really out of it today. You're making me worried. What's the matter?<</say>>
 A minute passes, and then Cherry exhales.
 
 <<say $companionCherry>>I had a sister once.<</say>>
@@ -1291,14 +1304,14 @@ A few moments of pause drag out, and then she continues.
 
 <<ConversationChoices
 	[[What happened?|Cherry Convo1 Happend]] 
-	[[I know what it's like to lose people, but we're still here. All we can do is honor their memories, and live on.|Cherry Convo1 Lose]] <goto passage 6>
-	[[Okay, Let's keep moving.|Cherry Convo1 Memories]] 
+	[[I know what it's like to lose people, but we're still here. All we can do is honor their memories, and live on.|Cherry Convo1 Lose][$alt=1]]
+	[[Ah okay. Good you got that of your chest. Let's keep moving.|Cherry Convo1 Memories][$alt=2]] 
 >>
-
 
 :: Cherry Convo1 Joke
 <<set $companionCherry.affec-=(2-$hsswear)>>\
-The joke is awful. 
+<<say $mc>>You know, I heard that two artists had an art contest. It ended in a draw!<</say>>
+You chuckle a bit. Surely your succesful art themed joke will resonate with her!
 Cherry's eyes focus on you, and she smiles, briefly. However, her eyes still look haunted.
 As you both set off again, her gait isn't exactly energetic. Yet still she walks, with a trudging endurance, bearing a burden that you don't understand.
 
@@ -1307,6 +1320,7 @@ As you both set off again, her gait isn't exactly energetic. Yet still she walks
 
 :: Cherry Convo1 Happend
 <<set $companionCherry.affec+=(1+$hsswear)>>\
+<<say $mc>>What happened?<</say>>
 Cherry's face takes on more emotion than you've yet seen from her.
 
 <<say $companionCherry>>It was my fault. I should have stayed away, or done more to protect her.<</say>>
@@ -1319,28 +1333,37 @@ More tears join the first.
 
 <<ConversationChoices
 	[[It's not your fault that the world is the way it is. We all have our burdens. We can get through things together.|Cherry Convo1 Together]]
-	[[I'm sorry. Losing people is hard. Living with the grief never gets easy.|Cherry Convo1 Lose]]
-	[[Run away from the cursed woman. Or, at least walk away, this is too weird.|Cherry Convo1 Memories]] 
+	[[I'm sorry. Losing people is hard. Living with the grief never gets easy.|Cherry Convo1 Lose][$alt=2]]
+	[[Run away from the cursed woman. Or, at least walk away, this is too weird.|Cherry Convo1 Memories][$alt=3]] 
 >>
 
 :: Cherry Convo1 Lose
+<<nobr>>
 <<set $companionCherry.affec+=(1+$hsswear)>>\
+<<if $alt==1>>
+	<<say $mc>>I know what it's like to lose people, but we're still here. All we can do is honor their memories, and live on.<</say>><br>
+<<elseif $alt==2>>
+	<<say $mc>>I'm sorry. Losing people is hard. Living with the grief never gets easy.<</say>><br>
+<</if>>
+<</nobr>>
 Cherry nods, her eyes are more focused again. She still looks sad, but maybe you've helped share the burden of the pain just a bit. You both move off together, to continue exploring the abyss.
+
+@@.alert1; Cherry feels more connected to you and will take better care of you after injury reducing your status problems by one more day!@@ 
+<<set $statRed = 2>>\
 [[End your conversation|Party overview]]
 
 :: Cherry Convo1 Together
-<<set $companionCherry.affec+=(3+$hsswear)>>\
+<<set $companionCherry.affec+=(2+$hsswear)>>\
+<<say $mc>>It's not your fault that the world is the way it is. We all have our burdens. We can get through things together.<</say>>
 Cherry looks at you, really looks at you, and then gives you a hug.
 
 <<say $companionCherry>>Thank you, I… thank you.<</say>>
 Her tears are drying, and you can see resolve growing in her.
 As you both rise to resume exploring the abyss, there's a discipline and energy in her steps that wasn't there before.
 
+@@.alert1; Cherry feels more connected to you and will take better care of you after injury reducing your status problems by one more day!@@ 
+<<set $statRed = 2>>\
 [[End your conversation|Party overview]]
-
-
-\learn first aid from her to reduce status conditions by two days?
-
 
 :: Cherry Convo2
 \rerol on her chaotic luck ability?
