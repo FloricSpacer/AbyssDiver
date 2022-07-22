@@ -1521,80 +1521,45 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<if $status.duration > 0>>
-		<<set $status.duration -= 1>>
-		<<else>>
-		<<set $status.penalty = 0>>
-	<</if>>
+
 	<<if $items[11].count > 0 || $rope == 1>>
-		<<set $layerExitTime = (Math.max(11 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool, 0))>>
-		<<else>>
-		<<set $layerExitTime = (Math.max(24 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)), 0))>>
+		<<set $tempTime = 11>>
+	<<else>>
+		<<set $tempTime = 24>>
 	<</if>>
+	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime=$tempTime>>
 <</if>>
 
-<<for $i = 0; $i < 99; $i++>>
+<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
 
-<<set $timeL5 += 1>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += 1>>
-<</if>>
-<<set $timeL5T1 += 1>>
-<<set $time += 1>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= 1>>
-	<<else>>
-	<<set $foodL5 += 1>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += 5>>
-		<<else>>
-		<<set $crumbleFluid += 1>>
-	<</if>>
-<</if>>
-<<if $forageWater == 0>>
-	<<if $items[3].count > 0>>
-		<<set $items[3].count -= 1>>
-		<<set $items[2].count += 1>>
-	<<else>>
-		<<set $items[0].count -= 1>>
-	<</if>>
-	<<else>>
-	<<set $waterL5 += 1>>
-	<</if>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-	<<set $layerExitTime -= 1>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-	<</if>>
+	<<set $tempTime = 1>>
+	<<include "GeneralTimeStats">>
 
 	<<if $timeL5T2 > 8>>
+		<br>A rumbling in the ground disturbs your typical walk through the fifth layer. You know that it's a Dune Devouring Borer coming for you because of the water you've been carrrying, and now you need to be able to get away or defeat it.<br><br>
 
-<br>A rumbling in the ground disturbs your typical walk through the fifth layer. You know that it's a Dune Devouring Borer coming for you because of the water you've been carrrying, and now you need to be able to get away or defeat it.<br><br>
-
-[[Deal with the Dune Devouring Borer|Layer5 Threat2 Ascend]]<br><br>
+		[[Deal with the Dune Devouring Borer|Layer5 Threat2 Ascend]]<br><br>
 
 		<<break>>
 	<</if>>
-		<<if $timeL5T1 > 6>>
+	
+	<<if $timeL5T1 > 6>>
 		<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today. <br><br>
 
-[[Deal with the Mayfly Scuttler|Layer5 Threat1 Ascend]]<br><br>
+		[[Deal with the Mayfly Scuttler|Layer5 Threat1 Ascend]]<br><br>
 		<<break>>
 	<</if>>
+
 <</for>>
-
-
-<</nobr>><<if $layerExitTime == 0>>
-<<nobr>>
-<<set $corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10)))>>
 <</nobr>>
-You continue through the scorching desert for days on end, until you eventually reach the contrasting bitter cold of the fourth layer. But before you can do anything on the fourth layer, you need to spend many days in the agonizingly slow climb through the enormous crevasse at its bottom. After many days of climbing, you're back to the snowy wastes of the fourth layer proper.
+<<if $layerExitTime == 0>>
+	<<set $corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10)))>>\
+	You continue through the scorching desert for days on end, until you eventually reach the contrasting bitter cold of the fourth layer. But before you can do anything on the fourth layer, you need to spend many days in the agonizingly slow climb through the enormous crevasse at its bottom. After many days of climbing, you're back to the snowy wastes of the fourth layer proper.
 
-<<include "Curse Descriptions">>
+	<<include "Curse Descriptions">>
 
-[[Return to the fourth layer|Layer4 Hub]]
+	[[Return to the fourth layer|Layer4 Hub]]
 
 <</if>>
 
@@ -1625,32 +1590,8 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Ascend [layer5]
-<<nobr>>
-<<set $tempTime = 1>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<</if>>
-<<set $timeL5T1 -= 7>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL5 += 1>>
-	<</if>>
-<</for>>
-<</nobr>>
+<<set $tempTime = 1>>\
+<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
@@ -1664,77 +1605,47 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<if $status.duration > 0>>
-		<<set $status.duration -= 1>>
-		<<else>>
-		<<set $status.penalty = 0>>
-	<</if>>
-	<<set $layerExitTime = (Math.max(13 - $timeRed + $status.penalty + (Math.trunc($hexflame / 10))- $cool, 0))>>
+	<<set $tempTime = 13>>
+	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime=$tempTime>>
 <</if>>
 
-<<for $i = 0; $i < 99; $i++>>
+<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
 
-<<set $timeL5 += 1>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += 1>>
-<</if>>
-<<set $timeL5T1 += 1>>
-<<set $time += 1>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= 1>>
-	<<else>>
-	<<set $foodL5 += 1>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += 5>>
-		<<else>>
-		<<set $crumbleFluid += 1>>
-	<</if>>
-<</if>>
-<<if $forageWater == 0>>
-	<<if $items[3].count > 0>>
-		<<set $items[3].count -= 1>>
-		<<set $items[2].count += 1>>
-	<<else>>
-		<<set $items[0].count -= 1>>
-	<</if>>
-	<<else>>
-	<<set $waterL5 += 1>>
-	<</if>>
-	<<set $layerExitTime -= 1>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-	<</if>>
+	<<set $tempTime = 1>>
+	<<include "GeneralTimeStats">>
 
 	<<if $timeL5T2 > 8>>
 
-<br>A rumbling in the ground disturbs your typical walk through the fifth layer. You know that it's a Dune Devouring Borer coming for you because of the water you've been carrrying, and now you need to be able to get away or defeat it.<br><br>
+		<br>A rumbling in the ground disturbs your typical walk through the fifth layer. You know that it's a Dune Devouring Borer coming for you because of the water you've been carrrying, and now you need to be able to get away or defeat it.<br><br>
 
-[[Deal with the Dune Devouring Borer|Layer5 Threat2 Descend]]<br><br>
+		[[Deal with the Dune Devouring Borer|Layer5 Threat2 Descend]]<br><br>
 
 		<<break>>
 	<</if>>
-		<<if $timeL5T1 > 6>>
+
+	<<if $timeL5T1 > 6>>
 		<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today. <br><br>
 
-[[Deal with the Mayfly Scuttler|Layer5 Threat1 Descend]]<br><br>
+		[[Deal with the Mayfly Scuttler|Layer5 Threat1 Descend]]<br><br>
 		<<break>>
 	<</if>>
 <</for>>
 
 
-<</nobr>><<if $layerExitTime == 0>>
+<</nobr>>
+<<if $layerExitTime == 0>>
+/* 
 <<nobr>>
 <<set $timeL6T1 = 0>>
 <<set $timeL6T2 = 0>>
 <</nobr>>
-You continue through the scorching desert for days on end, but the heat only seems to get more intense. But the smell is different, you catch a whiff of more exotic, meaty scents than the fragrance of the flowers of the fifth layer. As the ground begins to change from sand to a more organic texture, you know you're approaching the sixth layer.
+*/
+	You continue through the scorching desert for days on end, but the heat only seems to get more intense. But the smell is different, you catch a whiff of more exotic, meaty scents than the fragrance of the flowers of the fifth layer. As the ground begins to change from sand to a more organic texture, you know you're approaching the sixth layer.
 
-<<include "Curse Descriptions">>
+	<<include "Curse Descriptions">>
 
-[[Descend to the sixth layer|Layer6 1]]
+	[[Descend to the sixth layer|Layer6 1]]
 
 <</if>>
 
