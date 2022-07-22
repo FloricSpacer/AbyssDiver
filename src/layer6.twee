@@ -1126,46 +1126,14 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 
 
 :: Layer6 Threat1 Main2 [layer6]
-<<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $tempTime = $tentacleFucked>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<</if>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-<</nobr>>
+<<set $tempTime = $tentacleFucked>>\
+<<include "GeneralTimeSetup">>	<<include "GeneralTimeStats">>\
 
 <<if $khemiaFucked == 0>>
-After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
-<<else>><<set $khemiaFucked = 0>>
-Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
+	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
+<<else>>
+	<<set $khemiaFucked = 0>>
+	Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
 <</if>>
 
 [[Return to exploring the sixth layer|Layer6 Hub]]
@@ -1175,77 +1143,48 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<if $status.duration > 0>>
-		<<set $status.duration -= 1>>
-		<<else>>
-		<<set $status.penalty = 0>>
-	<</if>>
-		<<set $layerExitTime = (Math.max(15 - $timeRed + $status.penalty - $cool, 0))>>
-	<</if>>
-
-<<for $i = 0; $i < 99; $i++>>
-
-<<set $timeL6 += 1>>
-<<set $hexflame += 1>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += 1>>
+	<<set $tempTime = 15>>
+	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime=$tempTime>>
 <</if>>
-<<set $timeL6T1 += 1>>
-<<set $time += 1>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= 1>>
-	<<else>>
-	<<set $foodL6 += 1>>
-<</if>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<</if>>
-	<</if>>
-	<<set $layerExitTime -= 1>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-	<</if>>
+
+<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
+
+	<<set $tempTime = 1>>
+	<<include "GeneralTimeStats">>
 
 	<<if $timeL6T2 > 7 && $dragonKill < 5>>
 
-<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+		<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
 
-[[Deal with the Fell Dragon|Layer6 Threat2 Ascend]]<br><br>
+		[[Deal with the Fell Dragon|Layer6 Threat2 Ascend]]<br><br>
 
 		<<break>>
+
 	<</if>>
 		<<if $timeL6T1 > 14>>
 		<br>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
 
-They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
+		They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
 
-[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Ascend1]]<br><br>
+		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Ascend1]]<br><br>
 		<<break>>
 	<</if>>
 <</for>>
 
 
 <</nobr>><<if $layerExitTime == 0>>
-<<nobr>>
-<<set $corruption -= (65 - $corRed)>>
-<<set $forageWater = 0>>
-<<set $timeL5T1 = 0>>
-<<set $timeL5T2 = 0>>
-<</nobr>>
-You continue through the flaming fields of tentacles for much longer than you'd like, until you eventually reach the slightly less hellish heat of the fifth layer. The scent of burning meat is replaced with fragrant spices and the tentacles are replaced with sand, you've made it out of hell.
+	<<nobr>>
+	<<set $corruption -= (65 - $corRed)>>
+	/*<<set $timeL5T1 = 0>>
+	<<set $timeL5T2 = 0>>
+	*/
+	<</nobr>>
+	You continue through the flaming fields of tentacles for much longer than you'd like, until you eventually reach the slightly less hellish heat of the fifth layer. The scent of burning meat is replaced with fragrant spices and the tentacles are replaced with sand, you've made it out of hell.
 
-<<include "Curse Descriptions">>
+	<<include "Curse Descriptions">>
 
-[[Return to the fifth layer|Layer5 Hub]]
+	[[Return to the fifth layer|Layer5 Hub]]
 <</if>>
 
 
@@ -1342,46 +1281,14 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer6 Threat1 Ascend2 [layer6]
-<<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $tempTime = $tentacleFucked>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<</if>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-<</nobr>>
+<<set $tempTime = $tentacleFucked>>\
+<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>\
 
 <<if $khemiaFucked == 0>>
-After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
-<<else>><<set $khemiaFucked = 0>>
-Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
+	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
+<<else>>
+	<<set $khemiaFucked = 0>>
+	Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
 <</if>>
 
 [[Return to exploring the sixth layer|Layer6 Ascend2]]
@@ -1391,76 +1298,43 @@ Khemia is not in a good state after the battle, even with his experience, he obv
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<if $status.duration > 0>>
-		<<set $status.duration -= 1>>
-		<<else>>
-		<<set $status.penalty = 0>>
-	<</if>>
-		<<set $layerExitTime = (Math.max(16 - $timeRed + $status.penalty - $cool, 0))>>
+	<<set $tempTime = 16>>
+	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime=$tempTime>>
 <</if>>
 
-<<for $i = 0; $i < 99; $i++>>
+<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
 
-<<set $timeL6 += 1>>
-<<set $hexflame += 1>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += 1>>
-<</if>>
-<<set $timeL6T1 += 1>>
-<<set $time += 1>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= 1>>
-	<<else>>
-	<<set $foodL6 += 1>>
-<</if>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<</if>>
-	<</if>>
-	<<set $layerExitTime -= 1>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-	<</if>>
+	<<set $tempTime = 1>>
+	<<include "GeneralTimeStats">>
 
 	<<if $timeL6T2 > 7 && $dragonKill < 5>>
 
-<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+		<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
 
-[[Deal with the Fell Dragon|Layer6 Threat2 Descend]]<br><br>
+		[[Deal with the Fell Dragon|Layer6 Threat2 Descend]]<br><br>
 
 		<<break>>
 	<</if>>
-		<<if $timeL6T1 > 14>>
+
+	<<if $timeL6T1 > 14>>
 		<br>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
 
-They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
+		They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
 
-[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Descend]]<br><br>
+		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Descend]]<br><br>
 		<<break>>
 	<</if>>
 <</for>>
 
 
 <</nobr>><<if $layerExitTime == 0>>
-<<nobr>>
-<<set $forageWater = 0>>
-<<set $forageFood = 0>>
-<<set $timeL7T2 = 0>>
-<</nobr>>
-You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
+/*<<set $timeL7T2 = 0>>\*/
+	You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
 
-<<include "Curse Descriptions">>
+	<<include "Curse Descriptions">>
 
-[[Descend down to the seventh layer|Layer7 1]]
+	[[Descend down to the seventh layer|Layer7 1]]
 <</if>>
 
 
@@ -1557,46 +1431,14 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer6 Threat1 Descend2 [layer6]
-<<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $tempTime = $tentacleFucked>>
-<<set $timeL6 += $tempTime>>
-<<set $hexflame += $tempTime>>
-<<if $dubloons > 199>>
-	<<set $timeL6T2 += $tempTime>>
-<</if>>
-<<set $timeL6T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL6 += $tempTime>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL6 += 1>>
-		<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-			<<set $hexflame += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-<</nobr>>
+<<set $tempTime = $tentacleFucked>>\
+<<include "GeneralTimeSetup">>	<<include "GeneralTimeStats">>\
 
 <<if $khemiaFucked == 0>>
-After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
-<<else>><<set $khemiaFucked = 0>>
-Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
+	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
+<<else>>
+	<<set $khemiaFucked = 0>>
+	Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
 <</if>>
 
 [[Continue your descent to the seventh layer|Layer6 Exit2]]
