@@ -82,6 +82,92 @@ What do you want to do while you're here?<br><br>
 [[Look down at the next layer|Layer8 Exit1]]
 <</if>>
 
+:: Layer8 Wonders [image layer8]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-wonders.png']]
+
+Do you want to visit Boundless Space to swap break the spatial limits of a Relic?
+[[Enter the Space|Layer8 Space]]
+
+Do you want to the Fountain of Youth to become immortal?
+[[Seek the Fountain|Layer8 Youth]]
+
+Do you want to visit Endless Time to break the temporal limits of a Relic?
+[[Find Endless Time|Layer8 Time]]
+
+<<back>>
+
+:: Layer8 Habitation [image layer8]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-habitation.png']]
+
+<<return>>
+
+<<nobr>>
+	<<if $corruption >= 0>>
+	[[Choose to stay on the eighth layer|Habitation Ending]]
+	<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<</if>>
+<</nobr>>
+
+
+:: Layer8 Forage [image layer8]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-foraging.png']]
+
+If you decide to start foraging for food or water, it means that you will not reduce your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
+
+<<nobr>>
+<<if $forageWater == 0>>
+	<<print "[[Start foraging for water in Lethe Taps|Layer8 Forage][$forageWater = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for water|Layer8 Forage][$forageWater = 0]]">><br>
+<</if>>
+<<if $forageFood == 0>>
+	<<print "[[Start foraging for food from The Bedlam's Banquet|Layer8 Forage][$forageFood = 1]]">><br>
+	<<else>>
+	<<print "[[Stop foraging for food|Layer8 Forage][$forageFood = 0]]">><br>
+<</if>>
+<<if $items[2].count > 0>>
+[[Fill your empty flasks with water from Lethe Taps|Layer8 Flasks]]<br>
+<</if>>
+<</nobr>>
+
+[[Return to exploring the rest of the layer|Layer8 Hub]]
+
+
+:: Layer8 Flasks [layer6]
+<<nobr>>
+<<for $i = 0; $i < 999; $i++>>
+	<<if $items[2].count > 0>>
+		<<set $items[3].count += 1>>
+		<<set $items[2].count -= 1>>
+		<<set $waterL6 += 1>>
+	<<else>>
+		<<break>>
+	<</if>>
+	<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+		<<set $majorIQ += 1>>
+	<<else>>
+		<<set $minorIQ += 1>>
+	<</if>>
+<</for>>
+<</nobr>>
+
+[img[setup.ImagePath+'Foraging/lethetaps.png']]
+
+<<if $hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0>>
+In an incredible collaboration with colleagues on the surface, Saeko managed to develop some incredibly innovative water filtration techniques. The water purified from Lethe Taps using this technique is much safer to drink, though still hazardous. It's probably only 1/10th as dangerous as it would normally be, though you'll still be on a quick path to <<if $app.sex == "male">>himbo<<else>>bimbo<</if>>fication if you drink too much.
+<<else>>
+There is a very easily accessible source of water on this layer, the Lethe Taps, that are freely available everywhere and taste surprisingly like the tap water from the surface. Unfortunately, it also leaves you feeling a little hazy after a drink, and that is not simply a temporary effect. Each day of water you drink from these taps decreases you IQ by about half a point, leaving your mind in a subtly creeping fog that will leave you a <<if $app.sex == "male">>himbo<<else>>bimbo<</if>> in no time at all.
+<</if>>
+[[Return to exploring your food and water options on this layer|Layer8 Forage]]
+
+
+:: Layer8 Threats [image layer8]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-threats.png']]
+
+[[Return to exploring the seventh layer|Layer8 Hub]]
+
+
 :: Layer 8 Threat 2a
 
 <<nobr>>
