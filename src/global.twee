@@ -317,7 +317,16 @@ Thanks again for playing!
 <</for>>*/
 <</nobr>>Your name is $app.name and you are a $app.sex.
 
-Your hair color is $app.hair, while your eyes are colored $app.eyeColor.
+Your hair color is $app.hair.
+<<if $app.eyeCount==0>>
+You have no eyes just empty sockets. You are effectivly blind without the use relics or companion help.
+<<elseif $app.eyeCount==1 $$ $BionicEye>>
+You have lost both of your biological eyes and in of it's sockets you have the MoonWatcher, which allows you to percieve the world even better than when you had both your normal eyes.
+<<elseif $app.eyeCount==1>>
+You only have 1 eye, which is colored $app.eyeColor. You can still see quite well, but depth perception has become quite hard. 
+<<elseif $app.eyeCount==2 $$ $BionicEye>>
+You have one natural eye left which is colored $app.eyeColor. The other eye has been replaced with the MoonWatcher, which allows you to percieve the world even better than when you had both your normal eyes.
+<</if>>
 You have $app.skinColor colored $app.skinType skin.<<if $app.skinType.includes("furred") >> $curse19.appDesc <</if>>
 You are <<BodyHeightText>> tall.
 You have $app.ears ears.
@@ -765,6 +774,21 @@ If you are over 18, please go back and enter an age above 18 to continue.
 		<</if>>
 	<</if>>
 
+	<<if $ownedRelics.some(e => e.name === "Blind Divine")>>
+		<<if $BDwear>>
+			<br>You are currently wearing the Blind Divine, 
+			<<if $eyeCount<2 && ~$BionicEye>>
+			it feels you can perceive even more than when you still had both your eyes. The limited range of the relic still makes it feel a little bit more awkward then when you had your normal vission.
+			<<else>>
+			which allows you to perceive your immediate surroundings to a level you never could.
+			<</if>>
+			<br>
+			[[Take the Blind Divine off|Use Items and Relics][$BDwear=false]]<br>
+		<<else>>
+		    <br>You have the Blind Divine, would you like to wear it?<br>
+			[[Wear the Blind Divine|Use Items and Relics][$BDwear=true]]<br>
+		<</if>>
+	<</if>>
 
 	<<if $ownedRelics.some(e => e.name === "From Seafoam")>>
 		<<if !$scent>>
