@@ -313,28 +313,35 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 <<appGender>>
 <<Update_MC_Speech>>
 <br>The following companions are a part of your expedition's party and have the associated affection values with you.<br><br>
-
-<<for _companion range $hiredCompanions>>
-	<<set $temp = _companion.name>>
-	<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
-	<br>
-	<<include `_companion.name + " Conversations"`>>
-	<br>
-<</for>>
-<<if $items[21].count > 0>>
-	<<if $currentLayer==0>>
-		[[Ask Ai for information on this layer|AI ConvoL0]]<br>
-	<<elseif $currentLayer==1>>
-		[[Ask Ai for information on this layer|AI ConvoL1]]<br>
-	<<elseif $currentLayer==2>>
-		[[Ask Ai for information on this layer|AI ConvoL2]]<br>
-	<<elseif $currentLayer==3>>
-	<<elseif $currentLayer==4>>
-	<<elseif $currentLayer==5>>
-	<<elseif $currentLayer==6>>
-	<<elseif $currentLayer==7>>
+<<if $ConvoHandicapLarge || $ConvoHandicapSmall>>
+	@@.alert2; Because of your handicaps you are unable to have an effective conversation with your partners.@@ 
+	<<for _companion range $hiredCompanions>>
+		<<set $temp = _companion.name>>
+		<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
+		<br>
+	<</for>>
+<<else>>
+	<<for _companion range $hiredCompanions>>
+		<<set $temp = _companion.name>>
+		<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
+		<br>
+		<<include `_companion.name + " Conversations"`>>
+		<br>
+	<</for>>
+	<<if $items[21].count > 0>>
+		<<if $currentLayer==0>>
+			[[Ask Ai for information on this layer|AI ConvoL0]]<br>
+		<<elseif $currentLayer==1>>
+			[[Ask Ai for information on this layer|AI ConvoL1]]<br>
+		<<elseif $currentLayer==2>>
+			[[Ask Ai for information on this layer|AI ConvoL2]]<br>
+		<<elseif $currentLayer==3>>
+		<<elseif $currentLayer==4>>
+		<<elseif $currentLayer==5>>
+		<<elseif $currentLayer==6>>
+		<<elseif $currentLayer==7>>
+		<</if>>
 	<</if>>
-
 <</if>>
 
 [[Return|$layerReturn]]
@@ -2684,8 +2691,10 @@ After reading from the book, Saeko's looks a bit sad as she turns the last page,
 :: Companion Layer Interaction
 
 <<nobr>>
-<<set $temp1 = random(0,$hiredCompanions.length - 1)>>
-<<include `$hiredCompanions[$temp1].name + " Layer " + $currentLayer`>>
+<<if ~$ConvoHandicapLarge>>
+	<<set $temp1 = random(0,$hiredCompanions.length - 1)>>
+	<<include `$hiredCompanions[$temp1].name + " Layer " + $currentLayer`>>
+<</if>>
 <</nobr>>
 
 
@@ -2742,16 +2751,16 @@ Maru jumps up and down with excitement at the sight of the small, sweet fruits. 
 
  <<say $companionLily>>And down here, absolutely everything is wet.<</say>>
  She casually flicks a drop of water out of your hair, then she steps backwards and does a cartwheel over a large root jutting into the path. Unconcerned that her hands just got covered in mud, she runs them through the vegetation on either side of the narrow path you're following, cleaning them off, mostly. You pause for a second, then ask 
+<<if ~($ConvoHandicapSmall || $ConvoHandicapLarge)>>\
+	<<say $mc>>Who maintains this path anyway?<</say>>
+	She laughs at the question for a moment before she answers. 
 
- <<say $mc>>Who maintains this path anyway?<</say>>
- She laughs at the question for a moment before she answers. 
+	<<say $companionLily>>Maintains? Nobody maintains it. There are a bunch of them down here. They're made by wandering adventurers like us, or maybe the Abyss just makes them on its own, or maybe they're just a bunch of Baying Gourmet trails.<</say>>
+	You stop in your tracks, suddenly getting nervous. She looks back at you and rolls her eyes.
 
- <<say $companionLily>>Maintains? Nobody maintains it. There are a bunch of them down here. They're made by wandering adventurers like us, or maybe the Abyss just makes them on its own, or maybe they're just a bunch of Baying Gourmet trails.<</say>>
- You stop in your tracks, suddenly getting nervous. She looks back at you and rolls her eyes.
-
- <<say $companionLily>>Oh, they're out there, but there's no point in getting all scared. We're in this together. We'll face what comes, and we shall triumph!<</say>>
- She pumps her fist in the air, and expertly slides down another root, vanishing into a rustle of leaves as the path turns. You're not sure if Lily is one of the bravest people you've ever met, or just one of the craziest. You're glad you're not alone down here though.	
-
+	<<say $companionLily>>Oh, they're out there, but there's no point in getting all scared. We're in this together. We'll face what comes, and we shall triumph!<</say>>
+	She pumps her fist in the air, and expertly slides down another root, vanishing into a rustle of leaves as the path turns. You're not sure if Lily is one of the bravest people you've ever met, or just one of the craziest. You're glad you're not alone down here though.	
+<</if>>\
 :: Khemia Layer 2
 
 <<say $companionKhemia>>When I first started coming down here, I just tried running over all these plants. Ha, I fell on my face a few times when my foot got snagged. There's a trick to it, winding your way through them, lopping off anything blocking the best path forward.<</say>>
@@ -2972,7 +2981,7 @@ You look at her in surprise. Normally Saeko is full of detailed observations and
 
 :: Maru Layer 7
 
-<<say $companionmaru>>I almost like this place, but with all this advanced technology, all they have are the same barely-edible vending machine rations. It's really not much to work with.<</say>>
+<<say $companionMaru>>I almost like this place, but with all this advanced technology, all they have are the same barely-edible vending machine rations. It's really not much to work with.<</say>>
 Maru shakes his head, looking indignant at the cullinary limitations of this city.
 
 <<say $companionMaru>>I'll tell you, robots just don't appreciate good food. Whoever built them must have given up and left out of sheer boredom from eating these same terrible rations day in and day out. There are no mushrooms, no berries, not even a rat. What kind of a city doesn't even have rats?<</say>>
@@ -3003,7 +3012,11 @@ You try to cheer him up a bit, but he just shakes his head.
 
 <<say $companionCherry>>It's frozen.<</say>>
 
-<<say $mc>>What?<</say>>
+<<if ~($ConvoHandicapSmall || $ConvoHandicapLarge)>>\
+	<<say $mc>>What?<</say>>
+<<else>>\
+	You try to make clear you don't understand what she means.
+<</if>>\
 
 <<say $companionCherry>>This place. It looks alive, but it isn't. All these robots, they move, but they're also frozen. Everything here is waiting, waiting for a day that will never come.<</say>>
 
@@ -3037,6 +3050,7 @@ Lily puffs out her chest and strikes a pose of supreme confidence then gets a mi
 
 <<say $companionLily>>Do you think that we never hear about people coming this deep because their balloons don't reach the surface, and nobody who comes this deep is able to return alive?</say>
 Despite her joking tone, you get a slight chill down your spine. This unnerving place has been giving you that impression the whole time you've been on this layer, but Lily laughs.
+
 <<say $companionLily>>Oh relax. We'll get out of here, and then they're going to tell stories about us for ages. The team that cracked the 8th seal, $app.name and Lily, the paladins of doom and their journey beyond time and space. Okay, maybe that's a bit overly dramatic, but we're making history here. Keep your chin up, and stay stylish, we've got this.</say>
 
 :: Khemia Layer 8
