@@ -679,6 +679,73 @@
 
 <</widget>>
 
+:: Handicap function [widget nobr]
+<<widget "Handicap">>
+<<set $HandicapThreat =0>>
+<<set $HandicapMovement =0>>
+<<set $HandicapCarry =0>>
+<<for _HandicapEvent range $HandicapLog>>
+
+	<<if $BDwear>>
+		<<set $HandicapThreat +=1>>
+	<</if>>
+
+	<<if _HandicapEvent.name == "Eye on the Prize" && ~$BionicEye>>
+		<<set $app.eyeCount=-1>>
+		<<if $app.eyeCount<2>>
+		<<set $HandicapThreat -=3>>
+		<<set $HandicapMovement -=1>>
+			<<if $BDwear>>
+				<<set $HandicapThreat +=1>>
+			<</if>>
+		<</if>>
+		<<if $app.eyeCount<1>>
+		<<set $HandicapThreat -=7>>
+		<<set $HandicapMovement -=5>>
+			<<if $BDwear>>
+				<<set $HandicapThreat +=4>>
+				<<set $HandicapMovement +=4>>
+			<</if>>
+		<</if>>
+	<</if>>
+
+	<<if _HandicapEvent.name == "Deafening Silence">>
+		<<set $HandicapThreat -=3>>
+		<<ConvoHandicapSmall=true>>
+		<<ConvoHandicapLarge=true>>
+		<<ConvoHandicapFood=true>>
+
+	<</if>>
+
+	<<if _HandicapEvent.name == "Taciturn Turnaround">>
+		<<ConvoHandicapLarge=true>>
+		<<ConvoHandicapFood=true>>
+
+	<</if>>
+
+	<<if _HandicapEvent.name == "Nose Goes">>
+		<<set $HandicapThreat -=1>>
+		<<ConvoHandicapFood=true>>
+	<</if>>
+
+	<<if _HandicapEvent.name == "Ampu-Q-tie">>
+
+	<</if>>
+
+	<<if _HandicapEvent.name == "Arm Army">>
+
+	<</if>>
+
+	<<if _HandicapEvent.name == "Seafolk">>
+
+	<</if>>
+
+	<<if _HandicapEvent.name == "Conjoined">>
+
+	<</if>>
+
+<</for>>
+<</widget>>
 
 :: Speech settings [widget nobr]
 <<widget "Update_MC_Speech">>
