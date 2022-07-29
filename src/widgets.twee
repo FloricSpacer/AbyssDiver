@@ -695,14 +695,11 @@
 <<set $HandicapThreat =0>>
 <<set $HandicapMovement =0>>
 <<set $HandicapCarry =0>>
+<<set $app.eyeCount =2>>
 <<for _HandicapEvent range $HandicapLog>>
 
-	<<if $BDwear>>
-		<<set $HandicapThreat +=1>>
-	<</if>>
-
 	<<if _HandicapEvent.name == "Eye on the Prize" && ~$BionicEye>>
-		<<set $app.eyeCount=-1>>
+		<<set $app.eyeCount=-$eyeRemove>>
 		<<if $app.eyeCount<2>>
 		<<set $HandicapThreat -=3>>
 		<<set $HandicapMovement -=1>>
@@ -711,11 +708,11 @@
 			<</if>>
 		<</if>>
 		<<if $app.eyeCount<1>>
-		<<set $HandicapThreat -=7>>
-		<<set $HandicapMovement -=5>>
+		<<set $HandicapThreat -=5>>
+		<<set $HandicapMovement -=4>>
 			<<if $BDwear>>
-				<<set $HandicapThreat +=4>>
-				<<set $HandicapMovement +=4>>
+				<<set $HandicapThreat +=3>>
+				<<set $HandicapMovement +=3>>
 			<</if>>
 		<</if>>
 	<</if>>
@@ -731,7 +728,6 @@
 	<<if _HandicapEvent.name == "Taciturn Turnaround">>
 		<<ConvoHandicapLarge=true>>
 		<<ConvoHandicapFood=true>>
-
 	<</if>>
 
 	<<if _HandicapEvent.name == "Nose Goes">>
@@ -756,6 +752,15 @@
 	<</if>>
 
 <</for>>
+
+<<if $BDwear>>
+	<<set $HandicapThreat +=1>>
+<</if>>
+
+<<if $BionicEye>>
+	<<set $app.eyeCount +=1>>
+<</if>>
+
 <</widget>>
 
 :: Speech settings [widget nobr]

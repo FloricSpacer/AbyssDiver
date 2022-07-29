@@ -673,11 +673,11 @@ How many eyes do you want to remove?
 [[Continue|Use Items and Relics]]
 
 :: Eye on the Prize Taken [nobr]
-<<set $playerCurses.push($curse77)>><<set $HandicapLog.push($curse101)>>
+<<set $playerCurses.push($curse101)>><<set $HandicapLog.push($curse101)>>
 <<set $corruption += $curse101.corr * $eyeRemove >>
 
 :: Eye on the Prize Retrieval [layer8]
-Suddenly, you feel a burning sensation in your eye<<if $eyeRemove > 1>>s<</if>>. It starts burning more intensly and meer deeply in your eye<<if $eyeRemove > 1>>s<</if>> as times goes on. You want claw it out yourself if this intense sensation doesn't stop quickly. And then just as sudden as the pain started, it ends. You take a moment to recover and you feel your eye<<if $eyeRemove > 1>>s<</if>>. However, in stead of feeling an eye you just feel and empty socket where your eye used to be. <<if $eyeRemove > 1>> As you feel around, you feel that your other eye has dissappeared as well. In your mind you try to open your now abscent eyes, but your world remains dark.<</if>>
+Suddenly, you feel a burning sensation in your eye<<if $eyeRemove > 1>>s<</if>>. It starts burning more intensly and meer deeply in your eye<<if $eyeRemove > 1>>s<</if>> as times goes on. You want to claw it out yourself if this intense sensation doesn't stop quickly. And then, just as sudden as the pain started, it ends. You take a moment to recover and you feel your eye<<if $eyeRemove > 1>>s<</if>>. However, in stead of feeling an eye, you just feel and empty socket where your eye used to be. <<if $eyeRemove > 1>> As you feel around, you feel that your other eye has dissappeared as well. In your mind you try to open your now abscent eyes, but your world remains dark.<</if>>
 You have successfully taken on the $curse101.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
@@ -690,7 +690,7 @@ You have successfully taken on the $curse101.name curse. Hopefully you are ok wi
 
 :: Take on Deafening Silence [layer8]
 <<set $playerCurses.push($curse102)>><<set $corruption += $curse102.corr>><<set $HandicapLog.push($curse102)>>
-
+A sharp ringing sound pierces your ears, it gets more intens as time drags on. Just when you think you couldn't handle another second everything goes silent in a way you have never experienced before. <<if ~$playerCurses.some(e => e.name === 'Taciturn Turnaround')>>You try to scream, but while you feel your throat straining there is still nothing but dead silence.<</if>>
 You have successfully taken on the $curse102.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
@@ -699,7 +699,6 @@ You have successfully taken on the $curse102.name curse. Hopefully you are ok wi
 <<else>>
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
-
 
 :: Take on Taciturn Turnaround [layer8]
 <<set $playerCurses.push($curse103)>><<set $corruption += $curse103.corr>><<set $HandicapLog.push($curse103)>>
@@ -718,11 +717,14 @@ You have successfully taken on the $curse103.name curse. Hopefully you are ok wi
 
 
 :: Take on Ampu-Q-tie [layer8]
-<<set $playerCurses.push($curse104)>><<set $corruption += $curse104.corr>><<set $HandicapLog.push($curse104)>>
 
+<<include "Ampu-Q-tie Customization">>
 
+[[Confirm|Take on Ampu-Q-tie pt2]]
 
-You have successfully taken on the $curse104.name curse. Hopefully you are ok with accepting the permanent consequences.
+:: Take on Ampu-Q-tie pt2 [layer8]
+<<include "Ampu-Q-tie Taken">>
+<<include "Ampu-Q-tie Retrieval">>
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
 <<if $escBalDepl==0>>
@@ -731,6 +733,39 @@ You have successfully taken on the $curse104.name curse. Hopefully you are ok wi
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
 
+:: Ampu-Q-tie Customization
+Which limbs do you want to amputate?
+
+<<radiobutton "$curse104.variation" 'A' checked>> An arm
+<<radiobutton "$curse104.variation" 'L' checked>> A leg
+<<radiobutton "$curse104.variation" 'AL' checked>> An arm and a leg
+<<radiobutton "$curse104.variation" 'ALL' checked>> An arm and both legs
+<<if ~$BionicArm>>\
+	<<radiobutton "$curse104.variation" 'AA' checked>> Both arms
+	<<radiobutton "$curse104.variation" 'AAL' checked>> Both arms and a leg
+	<<radiobutton "$curse104.variation" 'AALL' checked>> Amputate all my limbs!
+<</if>>\
+
+:: Apply Stored Ampu-Q-tie Curse
+<<include "Ampu-Q-tie Taken">>
+<<include "Ampu-Q-tie Retrieval">>
+
+[[Continue|Use Items and Relics]]
+
+:: Ampu-Q-tie Taken [nobr]
+<<set $playerCurses.push($curse104)>><<set $HandicapLog.push($curse104)>>
+<<set $corruption += $curse104.corr * length($curse104.variation) >>
+
+:: Ampu-Q-tie Retrieval [layer8]
+You lose your limbs, ouch. *PLACEHOLDER*
+You have successfully taken on the $curse104.name curse. Hopefully you are ok with accepting the permanent consequences.
+
+[[Accept more curses from the eight layer|Layer8 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 8|Layer8 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L8]]
+<</if>>
 
 :: Take on Nose Goes [layer8]
 <<set $playerCurses.push($curse105)>><<set $corruption += $curse105.corr>><<set $HandicapLog.push($curse105)>>
@@ -743,7 +778,6 @@ You have successfully taken on the $curse105.name curse. Hopefully you are ok wi
 <<else>>
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
-
 
 :: Take on Arm Army [layer8]
 <<set $playerCurses.push($curse106)>><<set $corruption += $curse106.corr>><<set $HandicapLog.push($curse106)>>

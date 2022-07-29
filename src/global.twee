@@ -909,6 +909,18 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<include "Horny Customization">><br>
 				<br>
 				[[Confirm|Apply Stored Horny Curse][$ManagedMisfortuneActive=true]]<br>
+			
+			<<elseif $StoredCurse.name== "Eye on the Prize" && $eyeRemove=="">>
+				<br>
+				<<include "Eye on the Prize Customization">><br>
+				<br>
+				[[Confirm|Apply Stored Eye on the Prize Curse][$ManagedMisfortuneActive=true]]<br>
+
+			<<elseif $StoredCurse.name== "Ampu-Q-tie" && $curse104.variation=="">>
+				<br>
+				<<include "Ampu-Q-tie Customization">><br>
+				<br>
+				[[Confirm|Apply Stored Ampu-Q-tie Curse][$ManagedMisfortuneActive=true]]<br>
 			<<else>>
 				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
 					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
@@ -945,6 +957,8 @@ If you are over 18, please go back and enter an age above 18 to continue.
 						<<set $AgeLog.push($StoredCurse)>>
 					<<elseif $StoredCurse.type == "Libido">>
 						<<set $LibidoLog.push($StoredCurse)>>
+					<<elseif $StoredCurse.type == "Handicap">>
+						<<set $HandicapLog.push($StoredCurse)>>
 					<</if>>
 					<<set $ManagedMisfortuneActive=true>>
 				<</link>>
@@ -1175,6 +1189,9 @@ How many dubloons would you like to pay back?
 		<<elseif $targetCurse.type == "Libido">>
 			<<set _j=$LibidoLog.lastIndexOf(e => e.name === $targetCurse.name)>>
 			<<set $LibidoLog.deleteAt(_j)>>
+		<<elseif $targetCurse.type == "Handicap">>
+			<<set _j=$HandicapLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<set $HandicapLog.deleteAt(_j)>>
 		<</if>>
 		<<set $playerCurses.deleteAt(_i)>>
 		<<set _curseDeleted=true>>
