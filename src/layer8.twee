@@ -642,8 +642,42 @@ You have successfully taken on the $curse100.name curse. Hopefully you are ok wi
 
 
 :: Take on Eye on the Prize [layer8]
-<<set $playerCurses.push($curse101)>><<set $corruption += $curse101.corr>><<set $HandicapLog.push($curse101)>>
 
+<<include "Eye on the Prize Customization">>
+
+[[Confirm|Take on Eye on the Prize pt2]]
+
+:: Take on Eye on the Prize pt2 [layer8]
+<<include "Eye on the Prize Taken">>
+<<include "Eye on the Prize Retrieval">>
+
+[[Accept more curses from the eight layer|Layer8 Curses]]
+<<if $escBalDepl==0>>
+	[[Return to exploring layer 8|Layer8 Hub]]
+<<else>>
+	[[Return to your balloon|Escape Balloon L8]]
+<</if>>
+
+:: Eye on the Prize Customization
+How many eyes do you want to remove?
+
+<<radiobutton "$eyeRemove" 1 checked>> One 
+<<if ~$BionicEye>>
+	<<radiobutton "$eyeRemove" 2 >> Two
+<</if>>
+
+:: Apply Stored Eye on the Prize Curse
+<<include "Eye on the Prize Taken">>
+<<include "Eye on the Prize Retrieval">>
+
+[[Continue|Use Items and Relics]]
+
+:: Eye on the Prize Taken [nobr]
+<<set $playerCurses.push($curse77)>><<set $HandicapLog.push($curse101)>>
+<<set $corruption += $curse101.corr * $eyeRemove >>
+
+:: Eye on the Prize Retrieval [layer8]
+Suddenly, you feel a burning sensation in your eye<<if $eyeRemove > 1>>s<</if>>. It starts burning more intensly and meer deeply in your eye<<if $eyeRemove > 1>>s<</if>> as times goes on. You want claw it out yourself if this intense sensation doesn't stop quickly. And then just as sudden as the pain started, it ends. You take a moment to recover and you feel your eye<<if $eyeRemove > 1>>s<</if>>. However, in stead of feeling an eye you just feel and empty socket where your eye used to be. <<if $eyeRemove > 1>> As you feel around, you feel that your other eye has dissappeared as well. In your mind you try to open your now abscent eyes, but your world remains dark.<</if>>
 You have successfully taken on the $curse101.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
@@ -685,6 +719,9 @@ You have successfully taken on the $curse103.name curse. Hopefully you are ok wi
 
 :: Take on Ampu-Q-tie [layer8]
 <<set $playerCurses.push($curse104)>><<set $corruption += $curse104.corr>><<set $HandicapLog.push($curse104)>>
+
+
+
 You have successfully taken on the $curse104.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
