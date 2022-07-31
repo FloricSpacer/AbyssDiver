@@ -42,6 +42,9 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 <<if $visitL8 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL8 = 1>>
+	<<set $L8T1_milestones = [1,2,10,30,70,100] >>
+	<<set $L8T1_counter = 0>>
+	<<set $L8T1_difficulty = -10>>
 <<elseif $secondVisitL8 == 0>>
 	<<set $secondVisitL8 = 1>>
 	<<set $layerTemp = 18>>
@@ -856,6 +859,124 @@ Note: Some effects of this curse are not yet implemented.
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
 <<CarryAdjust>>\
+
+:: Layer 8 Threat 1a
+<<nobr>>
+<<Handicap>>
+
+<<if $timeL8T1 > $L8T1_milestones[$L8T1_counter]>>
+	<<if $L8T1_counter==0>>
+		*PLACEHOLDER FIRST ENCOUTER*You see a distant figure slowly limping in your direction. As it comes closer to you it looks like some lifeless doll the size of yourself. It has clumsy robotic movement, but it clearly looks hostile. You simple stand there observing it as the doll comes closer. Just before it reaches you you pick up a medium sized rock and throw it into its face. The doll instantly goes down and stays down. It wasn't much of threat but it sure was off putting.<br>
+		<<set $L8T1_counter += 1>>
+	<<elseif $L8T1_counter==1>>
+		*PLACEHOLDER SECOND ENCOUTER* There are more and they look like you!<br>
+		<<set $L8T1_counter += 1>>
+	<<elseif $L8T1_counter==2>>
+		*PLACEHOLDER 10-day mark* They used an ambush! It seems they are starting to use simple tactics.<br>
+		<<set $L8T1_counter += 1>>
+		<<set $L8T1_difficulty += 10>>
+	<<elseif $L8T1_counter==3>>
+		*PLACEHOLDER 30-day mark* They used a coordinated pincer movement to drive you in a corner! They used advanced tactics!<br>
+		<<set $L8T1_counter += 1>>
+		<<set $L8T1_difficulty += 30>>
+	<<elseif $L8T1_counter==4>>
+		*PLACEHOLDER 70-day mark* You think you spotted one of them using a relic you own as well. Not that that one was suited for battle but it is worrying sign of things to come...<br>
+		<<set $L8T1_counter += 1>>
+		<<set $L8T1_difficulty += Math.min(50, $ownedRelics.length*5)>>
+	<<elseif $L8T1_counter==5>>
+		*PLACEHOLDER 100-day mark* By now the dolls are comunicating in behaving in a way that reminds you an earily lot of yourself. Sure they still have the robotic doll like movement a bit, but it really looks like doll version of yourself in both body and mind by now. It will become really hard to beat them or even evade them by now, especially considering their numbers..<br>
+		<<set $L8T1_counter += 1>>
+		<<set $L8T1_difficulty += 30>>
+	<</if>>
+<<else>>
+*PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yours swarm you. You don't know exactly what they are planning but it can't be good.<br>
+<</if>>
+
+<<set _L8T1_threshold = $L8T1_difficulty + $timeL8>>
+<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
+<<set _relicBonus = 0>>
+<<set _curseBonus = 0>>
+<<set _companionBonus = 0>>
+<<set _equipmentBonus = 0>>
+<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
+
+
+<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+	You're glad you have the flaming Sunbeam with you the help fight of these mimics.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+
+<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+	Those claw-like nails will be an asset when fighting these beings. <br>
+	<<set _curseBonus += 10>>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	Maru looks scared but he starts throwing any items he can find near him towards the mimics.<br>
+	<<set _companionBonus += 2>>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Lily")>>
+	Lily puffs her chest, lets out something of a battle cry and charges head first into the mimics and starts beating them left and right.<br>
+	<<set _companionBonus += 8>>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia assumes a fighting stance dispatching any mimics that finds itself near him.
+	<<set _companionBonus += 15>>
+	<<if _cutRed>>
+		His sword slashes through them almost quicker than you can blink.
+		<<set _companionBonus += 15>>
+		<<set _equipmentBonus -= 7>>
+	<</if>>
+	<br>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	Cherry seems frozen. You are not really sure if she is frozen from fear or just lack of self interest. At least she forms a bit of distraction for the creepy puppets.<br>
+	<<set _companionBonus += 1>>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+	Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.
+	<<set _companionBonus += 10>>
+	<<if $items[20].count>0 && $items[13].count>0>>
+		The hand holding is gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
+		<<set _companionBonus += 15>>
+		<<set _equipmentBonus -= 10>>
+	<</if>>
+	<br>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+	Saeko sticks very close to you. It is obvious she is somewhat scared but she tries to hide it as well as she can while giving you as must fighting and strategic tips as possible.<br>
+	<<set _companionBonus += 5>>
+<</if>>
+
+<<if _cutRed>>
+	You're glad you brought a sword to defend yourself.<br>
+	<<set _equipmentBonus += 7>>
+<</if>>
+
+<<if $items[20].count>0 && $items[13].count>0>>
+	Your gun will be a very important asset if you want to survive this horde.<br>
+	<<set _equipmentBonus += 10>>
+<</if>>
+
+<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
+
+<<if _temp > _L8T1_threshold2 >>
+	continue
+<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
+	barely escaped
+<<else>>
+	<<if $status.duration > 0>>
+		game over (injury prevented struggle away within 5sec of kiss)
+	<<else>>
+		injury (kissed less then 5 seconds?)
+	<</if>>
+<</if>>
+<</nobr>>
 
 :: Layer 8 Threat 2a
 
