@@ -44,7 +44,7 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 	<<set $visitL8 = 1>>
 	<<set $L8T1_milestones = [1,2,10,30,70,100] >>
 	<<set $L8T1_counter = 0>>
-	<<set $L8T1_difficulty = -10>>
+	<<set $L8T1_difficulty = -0.1>>
 <<elseif $secondVisitL8 == 0>>
 	<<set $secondVisitL8 = 1>>
 	<<set $layerTemp = 18>>
@@ -864,7 +864,7 @@ Note: Some effects of this curse are not yet implemented.
 <<nobr>>
 <<Handicap>>
 
-<<if $timeL8T1 > $L8T1_milestones[$L8T1_counter]>>
+<<if $timeL8 > $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
 		*PLACEHOLDER FIRST ENCOUTER*You see a distant figure slowly limping in your direction. As it comes closer to you it looks like some lifeless doll the size of yourself. It has clumsy robotic movement, but it clearly looks hostile. You simple stand there observing it as the doll comes closer. Just before it reaches you you pick up a medium sized rock and throw it into its face. The doll instantly goes down and stays down. It wasn't much of threat but it sure was off putting.<br>
 		<<set $L8T1_counter += 1>>
@@ -874,25 +874,25 @@ Note: Some effects of this curse are not yet implemented.
 	<<elseif $L8T1_counter==2>>
 		*PLACEHOLDER 10-day mark* They used an ambush! It seems they are starting to use simple tactics.<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 10>>
+		<<set $L8T1_difficulty += 0.2>>
 	<<elseif $L8T1_counter==3>>
 		*PLACEHOLDER 30-day mark* They used a coordinated pincer movement to drive you in a corner! They used advanced tactics!<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 30>>
+		<<set $L8T1_difficulty += 0.3>>
 	<<elseif $L8T1_counter==4>>
 		*PLACEHOLDER 70-day mark* You think you spotted one of them using a relic you own as well. Not that that one was suited for battle but it is worrying sign of things to come...<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += Math.min(50, $ownedRelics.length*5)>>
+		<<set $L8T1_difficulty += Math.min(0.5, $ownedRelics.length/10)>>
 	<<elseif $L8T1_counter==5>>
 		*PLACEHOLDER 100-day mark* By now the dolls are comunicating in behaving in a way that reminds you an earily lot of yourself. Sure they still have the robotic doll like movement a bit, but it really looks like doll version of yourself in both body and mind by now. It will become really hard to beat them or even evade them by now, especially considering their numbers..<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 30>>
+		<<set $L8T1_difficulty += 0.3>>
 	<</if>>
 <<else>>
 *PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yours swarm you. You don't know exactly what they are planning but it can't be good.<br>
 <</if>>
 
-<<set _L8T1_threshold = $L8T1_difficulty + $timeL8>>
+<<set _L8T1_threshold = ($L8T1_difficulty + $timeL8/100)*$timeL8>>
 <<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
 <<set _relicBonus = 0>>
 <<set _curseBonus = 0>>
@@ -900,11 +900,12 @@ Note: Some effects of this curse are not yet implemented.
 <<set _equipmentBonus = 0>>
 <<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
 
-
 <<if $ownedRelics.some(e => e.name === "Sunbeam")>>
 	You're glad you have the flaming Sunbeam with you the help fight of these mimics.<br>
 	<<set _relicBonus += 10>>
 <</if>>
+
+<<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
 
 <<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
 	Those claw-like nails will be an asset when fighting these beings. <br>
@@ -972,8 +973,12 @@ Note: Some effects of this curse are not yet implemented.
 <<else>>
 	<<if $status.duration > 0>>
 		game over (injury prevented struggle away within 5sec of kiss)
+
+		<h1 class="gameover">Game Over</h1>
 	<<else>>
 		injury (kissed less then 5 seconds?)
+		<<set $status.duration += 99>>
+		<<set $status.penalty += 3>>
 	<</if>>
 <</if>>
 <</nobr>>
