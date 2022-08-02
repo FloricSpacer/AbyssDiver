@@ -18,9 +18,9 @@ Getting back up out of this terrible prison and back to layer 7 will take a stag
 [[Version End]]
 
 :: Layer8 Hub [layer8]
-<<set $currentLayer = 8>><<set $temp1 = random(0,20)>><<checkTime>><<CarryAdjust>><<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 7>>[img[setup.ImagePath+'Threats/dementialaberrations.png']]
+<<set $currentLayer = 8>><<set $temp1 = random(0,20)>><<checkTime>><<CarryAdjust>><<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>[img[setup.ImagePath+'Threats/dementialaberrations.png']]
 
-Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and broken oddity of this layer is causing your<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.
+Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.
 
 [[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Hub"]]
 
@@ -105,6 +105,72 @@ Do you want to visit Endless Time to break the temporal limits of a Relic?
 
 <<back>>
 
+:: Layer8 Space [layer8]
+
+<<if $spaceUsed == 0>>
+[img[setup.ImagePath+'Wonders/boundlessspace.png']]
+
+You enter an enormous room with a single magical circle covering the entire floor. Strange magic rooms seem to fade in and out of existance as you stare at the mesmerizing patterns on the floor.
+
+You can place any Relic in the circle and <i>if it has a specific range listed in meters (including with SI prefixes attached)</i> then you can break its spatial limits. At any point after this, you can freely alter the range of that Relic to any value between 1x and 100x of its original range. For Relics with multiple ranges listed, you can alter each of them individually. This boost is permanent and cannot be undone.
+
+After using it, the runes will fade, leaving you unable to ever use Boundless Space again.
+
+Choose a Relic to spatially limit-break.
+
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<if $timeRelic != $ownedRelics[$i].name>>
+			<<print "[[$ownedRelics[$i].name|Layer8 Space][$spaceUsed = 1, $spaceRelic = $ownedRelics[$i].name]]">><br>
+		<</if>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<back>>
+<<else>>
+You find yourself in an enormous, empty room. You can recall when it was filled with mystical symbols, but now only a trace of the once immense power remains.
+
+You have broken the spatial limits of your $spaceRelic here, allowing you to alter its range from 1x to 100x of its initial range.
+
+[[Return to exploring the rest of the layer|Layer8 Hub]]
+<</if>>
+
+
+:: Layer8 Time [layer8]
+
+<<if $timeUsed == 0>>
+[img[setup.ImagePath+'Wonders/endlesstime.png']]
+
+You enter a large, circular room with a number of glowing, magical spheres and strangely placed concentric rings hovering in the center. None of the sphere ever seem to move, but every time you shift you vision and look back at them the configuration of the room has changed. Each time you blink the positions seem to be a little different.
+
+You can place any Relic in the center of the rings and <i>if it has a specific time listed in seconds, minutes, hours, days, weeks, or months</i> then you can break its temporal limits. From this point on you can freely lower the times listed in the description to any value between the default value and 1% of the default. For example, a relic that could be used "for 15 minutes every day" could be used "for 15 minutes every 15 minutes."
+
+After using it, the orbs and circles will fade, leaving you unable to ever use Endless Time again.
+
+Choose a Relic to temporally limit-break:
+
+<<nobr>>
+<<for $i = 0; $i < $ownedRelics.length; $i++>>
+	<<capture $i>>
+		<<if $spaceRelic != $ownedRelics[$i].name>>
+			<<print "[[$ownedRelics[$i].name|Layer8 Time][$timeUsed = 1, $timeRelic = $ownedRelics[$i].name]]">><br>
+		<</if>>
+	<</capture>>
+<</for>>
+<</nobr>>
+
+<<back>>
+<<else>>
+You find yourself in an enormous, empty room. You can recall when it was filled with floating spheres and circles, but now only a trace of the once immense power remains.
+
+You have broken the temporal limits of your $timeRelic here, allowing you to lower any time listed in its description between the default and 1% of the default.
+
+[[Return to exploring the rest of the layer|Layer8 Hub]]
+<</if>>
+
+
 :: Layer8 Habitation [image layer8]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-habitation.png']]
 
@@ -173,7 +239,7 @@ There is a very easily accessible source of water on this layer, the Lethe Taps,
 :: Layer8 Threats [image layer8]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-threats.png']]
 
-[[Return to exploring the seventh layer|Layer8 Hub]]
+[[Return to exploring the eighth layer|Layer8 Hub]]
 
 
 :: Layer8 Relics [layer8 cards nobr]
@@ -938,8 +1004,8 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 <<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
-	Those claw-like nails will be an asset when fighting these beings. <br>
-	<<set _curseBonus += 10>>
+	Those claw-like nails will be a minor help if you get into hand-to-hand combat with one of them. <br>
+	<<set _curseBonus += 2>>
 <</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Maru")>>
