@@ -900,12 +900,42 @@ Note: Some effects of this curse are not yet implemented.
 <<set _equipmentBonus = 0>>
 <<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
 
-<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
-	You're glad you have the flaming Sunbeam with you the help fight of these mimics.<br>
+<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
+	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningfull blows just became so much easier!<br>
 	<<set _relicBonus += 10>>
 <</if>>
 
+<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
+	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningfull blows just became so much easier!<br>
+	<<set _relicBonus += 10>>
+<</if>>
+
+<<if $slingshot>>
+	Your Brave Vector turned slingshot is proving to be valuable fire arm to neutralize mimics from a distance.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+
+<<if $joyousSword>>
+	The sword you made from the Joyous Sunder will now surely be an asset.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
+	The combination of the Toral Wave and Empath Coil will allow you to electrocute a few of these zombie like pests.
+	<<set _relicBonus += 10>>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+	The eyes of the creepy doll seem to follow the young versions of yourself, who in turn start to amble in off in random directions. Very strange...
+	<<set _relicBonus += 3>>
+<</if>>
+
 <<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
+
+<<if $app.skinType = "sticky, slimy">>
+	Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of more than 1 sticky situation!<br>
+	<<set _curseBonus += 3>>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
 	Those claw-like nails will be an asset when fighting these beings. <br>
@@ -929,6 +959,9 @@ Note: Some effects of this curse are not yet implemented.
 		His sword slashes through them almost quicker than you can blink.
 		<<set _companionBonus += 15>>
 		<<set _equipmentBonus -= 7>>
+		<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
+		<<set _companionBonus += 5>>
+		<</if>>
 	<</if>>
 	<br>
 <</if>>
