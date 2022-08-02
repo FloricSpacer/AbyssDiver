@@ -29,13 +29,13 @@ Behind every corner there seems to be a hint of something strange and wrong. The
 You can feel the deepest fears of your party manifesting into reality once again. However, this time, they are not mere visions, but physical manifestations of your fears.
 
 [[Deal with the Demential Aberrations|Layer 8 Threat 2a]]
-
+/* 
 <<elseif $timeL8T1 > 9 && $inanisTime != $time && ($temp1 * 10) <= $timeL8T1>>[img[setup.ImagePath+'Threats/inanisego.png'][$returnPassage = "Layer8 Hub"]]
 
 Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like life-sized dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.
 
 [[Deal with the Inanis Ego|Layer 8 Threat 1][$returnPassage = "Layer8 Hub"]]
-
+*/
 <<else>><<set $layerExit = 0>>You walk through an unending maze of halls and rooms. Every step you take seems to be a guess, as it can be hard to tell up from down and north from south, and that's assuming things stay in the same place when you aren't looking. Normal laws of navigation mean little here, but somehow you're still able to make some semblance of progress at the cost of a lot of time.
 <<nobr>>
 
@@ -57,10 +57,6 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 <<include "Curse Descriptions">><br><br>
 <</if>>
 
-<</nobr>>
-
-
-<<nobr>>
 <<if $forageWater == 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
@@ -80,15 +76,30 @@ What do you want to do while you're here?<br><br>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
 <</if>>
 <</nobr>>
-[[Learn about the threats on this layer|Layer8 Threats]]
-[[Check for food and water you can forage for|Layer8 Forage]]
-[[Search for relics|Layer8 Relics]]
-[[Take on curses to purge your corruption|Layer8 Curses]]
-[[Look for any wonders you can take advantage|Layer8 Wonders]]
-[[View the Layer 8 habitation option|Layer8 Habitation]]
+[[Learn about the threats on this layer|Layer8 Threats]]<br>
+<<if $L8T1_counter>0 && $items[20].count>0 && $items[13].count>0 >>
+	Now that you have encountered the Inanis Ego mimics it might be wise to consider how to use your ammo and fire arms<br><br>
 
-[[Look up towards the surface|Layer8 Ascend 1]]
-[[Look down at the next layer|Layer8 Exit1]]
+	<<radiobutton "$ammoStrat" 0 >> Refrain from using any ammo when fighting these monsters <br>
+	<<radiobutton "$ammoStrat" 1 >> Use your ammo very sparsely  <br>
+	<<radiobutton "$ammoStrat" 2 >> Use it strategically  <br>
+	<<radiobutton "$ammoStrat" 4 >> Shoot at everything that moves  <br>
+	<<if $slingshot && ~$hiredCompanions.some(e => e.name === "Cloud")>>
+		<<radiobutton "$ammoStrat" 4 >> Just used the modified Brave Vector as much as you can  <br>
+	<<elseif $slingshot>>
+		<<radiobutton "$cloudStrat" 1>> Just used the modified Brave Vector as much as you can, while you ask Cloud to use the gun sparsely.  <br>
+		<<radiobutton "$cloudStrat" 2>> Just used the modified Brave Vector as much as you can, while you ask Cloud to use the gun strategically.  <br>
+		<<radiobutton "$cloudStrat" 4>> Just used the modified Brave Vector as much as you can, while you ask Cloud to use the gun to shoot at everything that moves.  <br>
+	<</if>>
+<</if>>
+[[Check for food and water you can forage for|Layer8 Forage]]<br>
+[[Search for relics|Layer8 Relics]]<br>
+[[Take on curses to purge your corruption|Layer8 Curses]]<br>
+[[Look for any wonders you can take advantage|Layer8 Wonders]]<br>
+[[View the Layer 8 habitation option|Layer8 Habitation]]<br><br>
+
+[[Look up towards the surface|Layer8 Ascend 1]]<br>
+[[Look down at the next layer|Layer8 Exit1]]<br>
 <</if>>
 
 :: Layer8 Wonders [image layer8]
@@ -929,6 +940,7 @@ Note: Some effects of this curse are not yet implemented.
 :: Layer 8 Threat 1a
 <<nobr>>
 <<Handicap>>
+[img[setup.ImagePath+'Threats/inanisego.png']]
 
 <<if $timeL8 > $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
@@ -965,11 +977,6 @@ Note: Some effects of this curse are not yet implemented.
 <<set _companionBonus = 0>>
 <<set _equipmentBonus = 0>>
 <<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
-
-<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
-	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningfull blows just became so much easier!<br>
-	<<set _relicBonus += 10>>
-<</if>>
 
 <<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
 	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningfull blows just became so much easier!<br>
@@ -1038,12 +1045,25 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Cloud")>>
-	Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.
+	Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.<br>
 	<<set _companionBonus += 10>>
-	<<if $items[20].count>0 && $items[13].count>0>>
-		The hand holding is gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
-		<<set _companionBonus += 15>>
+	<<if $slingshot>>
+	The hand holding the modified Brave Vector moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...<br>
+		<<set _companionBonus += 20>>
+		<<set _relicBonus -= 10>>
+	<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>1 || $cloudStrat>1) >>
+		The hand holding his gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...<br>
+		<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
+		<<set _companionBonus += _ammo*5>>
 		<<set _equipmentBonus -= 10>>
+		<<set _bulletsUsed = Math.ceil($timeL8/8*_ammo) >>
+		<<if $items[20].count <= _bulletsUsed>>
+			Cloud used every single one of your last bullets...<br>
+			<<set $items[20].count = 0 >>
+		<<else>>
+			Cloud used _bulletsUsed fighting off the enemy.<br>
+			<<set $items[20].count -= _bulletsUsed>>
+		<</if>>
 	<</if>>
 	<br>
 <</if>>
@@ -1058,9 +1078,21 @@ Note: Some effects of this curse are not yet implemented.
 	<<set _equipmentBonus += 7>>
 <</if>>
 
-<<if $items[20].count>0 && $items[13].count>0>>
+<<if $items[20].count>0 && $items[13].count>0 && ~$slingshot>>
 	Your gun will be a very important asset if you want to survive this horde.<br>
-	<<set _equipmentBonus += 10>>
+	<<set _equipmentBonus += 5*$ammoStrat>>
+	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+		<<set _bulletsUsed = Math.ceil($timeL8/8*$ammoStrat*(5-$bullRed)) >>
+	<<else>>
+		<<set _bulletsUsed = Math.ceil($timeL8/8*$ammoStrat*(3-$bullRed)) >>
+	<</if>>
+	<<if $items[20].count <= _bulletsUsed>>
+		You used every single one of your last bullets...<br>
+		<<set $items[20].count = 0 >>
+	<<else>>
+		You used _bulletsUsed fighting off the enemy.<br>
+		<<set $items[20].count -= _bulletsUsed>>
+	<</if>>
 <</if>>
 
 <<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
