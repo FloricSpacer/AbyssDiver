@@ -17,18 +17,27 @@ Getting back up out of this terrible prison and back to layer 7 will take a stag
 
 [[Version End]]
 
-:: Layer8 Hub [layer8]
-<<set $currentLayer = 8>><<set $temp1 = random(0,20)>><<checkTime>><<CarryAdjust>><<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>[img[setup.ImagePath+'Threats/dementialaberrations.png']]
+:: Layer8 Hub [layer8 nobr]
+<<set $currentLayer = 8>>
+<<set $temp1 = random(0,20)>>
+<<checkTime>>
+<<CarryAdjust>>
+<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
-Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.
+	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
+	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
+	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
 
-[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Hub"]]
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Hub"]]
 
-<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>[img[setup.ImagePath+'Threats/dementialaberrations.png']]
+<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
-You can feel the deepest fears of your party manifesting into reality once again. However, this time, they are not mere visions, but physical manifestations of your fears.
+	You can feel the deepest fears of your party manifesting into reality once again. 
+	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
 
-[[Deal with the Demential Aberrations|Layer 8 Threat 2a]]
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a]]
 /* 
 <<elseif $timeL8T1 > 9 && $inanisTime != $time && ($temp1 * 10) <= $timeL8T1>>[img[setup.ImagePath+'Threats/inanisego.png'][$returnPassage = "Layer8 Hub"]]
 
@@ -36,72 +45,74 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 
 [[Deal with the Inanis Ego|Layer 8 Threat 1][$returnPassage = "Layer8 Hub"]]
 */
-<<else>><<set $layerExit = 0>>You walk through an unending maze of halls and rooms. Every step you take seems to be a guess, as it can be hard to tell up from down and north from south, and that's assuming things stay in the same place when you aren't looking. Normal laws of navigation mean little here, but somehow you're still able to make some semblance of progress at the cost of a lot of time.
-<<nobr>>
-
-<<if $visitL8 == 0>>
-	<<set $layerTemp = 8>>
-	<<set $visitL8 = 1>>
-	<<set $L8T1_milestones = [1,2,10,30,70,100] >>
-	<<set $L8T1_counter = 0>>
-	<<set $L8T1_difficulty = -0.1>>
-<<elseif $secondVisitL8 == 0>>
-	<<set $secondVisitL8 = 1>>
-	<<set $layerTemp = 18>>
 <<else>>
-	<<set $layerTemp = random(0,20)>>
-<</if>>
-<<if $layerTemp >= (18 - $hiredCompanions.length) && $layerTemp < 19 && $hiredCompanions.length > 0>>
-<<include "Companion Layer Interaction">>
-<<elseif $layerTemp >= 19>>
-<<include "Curse Descriptions">><br><br>
-<</if>>
+	<<set $layerExit = 0>>
+	You walk through an unending maze of halls and rooms. Every step you take seems to be a guess, as it can be hard to tell up from down and north from south, 
+	and that's assuming things stay in the same place when you aren't looking. Normal laws of navigation mean little here, 
+	but somehow you're still able to make some semblance of progress at the cost of a lot of time.<br>
 
-<<if $forageWater == 1>>
-	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<if $visitL8 == 0>>
+		<<set $layerTemp = 8>>
+		<<set $visitL8 = 1>>
+		<<set $L8T1_milestones = [1,2,10,30,70,100] >>
+		<<set $L8T1_counter = 0>>
+		<<set $L8T1_difficulty = -0.1>>
+	<<elseif $secondVisitL8 == 0>>
+		<<set $secondVisitL8 = 1>>
+		<<set $layerTemp = 18>>
 	<<else>>
-	<<print "You are not currently foraging for your daily water on this layer">><br>
-<</if>>
-<<if $forageFood == 1>>
-	<<print "You are currently foraging for your daily food on this layer">><br>
-	<<else>>
-	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
-<<if !isPlaying("layer7")>>
-	<<masteraudio stop>><<audio "layer7" volume 0.2 play loop>>
-<</if>>
-<br>
-What do you want to do while you're here?<br><br>
-[[Use Items and Relics]]<br>
-<<if $hiredCompanions.length > 0>>
-[[Interact with your party|Party overview]] <<CheckParty>><br>
-<</if>>
-<</nobr>>
-[[Learn about the threats on this layer|Layer8 Threats]]<br>
-<<if $L8T1_counter>0 && $items[20].count>0 && $items[13].count>0 >>
-	Now that you have encountered the Inanis Ego mimics it might be wise to consider how to use your ammo and fire arms<br><br>
-
-	<<radiobutton "$ammoStrat" 0 >> Refrain from using any ammo when fighting these monsters <br>
-	<<radiobutton "$ammoStrat" 1 >> Use your ammo very sparsely  <br>
-	<<radiobutton "$ammoStrat" 2 >> Use it strategically  <br>
-	<<radiobutton "$ammoStrat" 4 >> Shoot at everything that moves  <br>
-	<<if $slingshot && ~$hiredCompanions.some(e => e.name === "Cloud")>>
-		<<radiobutton "$ammoStrat" 4 >> Just used the modified Brave Vector as much as you can  <br>
-	<<elseif $slingshot>>
-		<<radiobutton "$cloudStrat" 1>> Just used the modified Brave Vector as much as you can, while you ask Cloud to use the gun sparsely.  <br>
-		<<radiobutton "$cloudStrat" 2>> Just used the modified Brave Vector as much as you can, while you ask Cloud to use the gun strategically.  <br>
-		<<radiobutton "$cloudStrat" 4>> Just used the modified Brave Vector as much as you can, while you ask Cloud to use the gun to shoot at everything that moves.  <br>
+		<<set $layerTemp = random(0,20)>>
 	<</if>>
-<</if>>
-[[Check for food and water you can forage for|Layer8 Forage]]<br>
-[[Search for relics|Layer8 Relics]]<br>
-[[Take on curses to purge your corruption|Layer8 Curses]]<br>
-[[Look for any wonders you can take advantage|Layer8 Wonders]]<br>
-[[View the Layer 8 habitation option|Layer8 Habitation]]<br><br>
 
-[[Look up towards the surface|Layer8 Ascend 1]]<br>
-[[Look down at the next layer|Layer8 Exit1]]<br>
-<</if>>
+	<<if $layerTemp >= (18 - $hiredCompanions.length) && $layerTemp < 19 && $hiredCompanions.length > 0>>
+		<<include "Companion Layer Interaction">>
+	<<elseif $layerTemp >= 19>>
+		<<include "Curse Descriptions">><br><br>
+	<</if>>
 
+	<<if $forageWater == 1>>
+		<<print "You are currently foraging for your daily water on this layer">><br>
+		<<else>>
+		<<print "You are not currently foraging for your daily water on this layer">><br>
+	<</if>>
+	<<if $forageFood == 1>>
+		<<print "You are currently foraging for your daily food on this layer">><br>
+		<<else>>
+		<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
+	<<if !isPlaying("layer7")>>
+		<<masteraudio stop>><<audio "layer7" volume 0.2 play loop>>
+	<</if>>
+	<br>
+	What do you want to do while you're here?<br><br>
+	[[Use Items and Relics]]<br>
+	<<if $hiredCompanions.length > 0>>
+		[[Interact with your party|Party overview]] <<CheckParty>><br>
+	<</if>>
+		[[Learn about the threats on this layer|Layer8 Threats]]<br>
+	<<if $L8T1_counter>0 && $items[20].count>0 && $items[13].count>0 >>
+		Now that you have encountered the Inanis Ego mimics it might be wise to consider how to use your ammo and fire arms<br><br>
+
+		<<radiobutton "$ammoStrat" 0 >> Refrain from using any ammo when fighting these monsters <br>
+		<<radiobutton "$ammoStrat" 1 >> Use your ammo very sparsely  <br>
+		<<radiobutton "$ammoStrat" 2 >> Use it strategically  <br>
+		<<radiobutton "$ammoStrat" 4 >> Shoot at everything that moves  <br>
+		<<if $slingshot && ~$hiredCompanions.some(e => e.name === "Cloud")>>
+			<<radiobutton "$ammoStrat" 4 >> Just use the modified Brave Vector as much as you can  <br>
+		<<elseif $slingshot>>
+			<<radiobutton "$cloudStrat" 1>> Just use the modified Brave Vector as much as you can, while you ask Cloud to use the gun sparsely.  <br>
+			<<radiobutton "$cloudStrat" 2>> Just use the modified Brave Vector as much as you can, while you ask Cloud to use the gun strategically.  <br>
+			<<radiobutton "$cloudStrat" 4>> Just use the modified Brave Vector as much as you can, while you ask Cloud to use the gun to shoot at everything that moves.  <br>
+		<</if>>
+	<</if>>
+	[[Check for food and water you can forage for|Layer8 Forage]]<br>
+	[[Search for relics|Layer8 Relics]]<br>
+	[[Take on curses to purge your corruption|Layer8 Curses]]<br>
+	[[Look for any wonders you can take advantage|Layer8 Wonders]]<br>
+	[[View the Layer 8 habitation option|Layer8 Habitation]]<br><br>
+
+	[[Look up towards the surface|Layer8 Ascend 1]]<br>
+	[[Look down at the next layer|Layer8 Exit1]]<br>
+<</if>>
 :: Layer8 Wonders [image layer8]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-wonders.png']]
 
@@ -952,7 +963,7 @@ Note: Some effects of this curse are not yet implemented.
 :: Layer 8 Threat 1a
 <<nobr>>
 <<Handicap>>
-[img[setup.ImagePath+'Threats/inanisego.png']]
+[img[setup.ImagePath+'Threats/inanisego.png']]<br>
 
 <<if $timeL8 > $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
@@ -982,8 +993,6 @@ Note: Some effects of this curse are not yet implemented.
 *PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yours swarm you. You don't know exactly what they are planning but it can't be good.<br>
 <</if>>
 
-<<set _L8T1_threshold = ($L8T1_difficulty + $timeL8/100)*$timeL8>>
-<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
 <<set _relicBonus = 0>>
 <<set _curseBonus = 0>>
 <<set _companionBonus = 0>>
@@ -997,7 +1006,7 @@ Note: Some effects of this curse are not yet implemented.
 
 <<if $slingshot>>
 	Your Brave Vector turned slingshot is proving to be valuable fire arm to neutralize mimics from a distance.<br>
-	<<set _relicBonus += 10>>
+	<<set _relicBonus += 20>>
 <</if>>
 
 <<if $joyousSword>>
@@ -1017,7 +1026,7 @@ Note: Some effects of this curse are not yet implemented.
 
 <<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
 
-<<if $app.skinType = "sticky, slimy">>
+<<if $app.skinType == "sticky, slimy">>
 	Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of more than 1 sticky situation!<br>
 	<<set _curseBonus += 3>>
 <</if>>
@@ -1042,8 +1051,7 @@ Note: Some effects of this curse are not yet implemented.
 	<<set _companionBonus += 15>>
 	<<if _cutRed>>
 		His sword slashes through them almost quicker than you can blink.
-		<<set _companionBonus += 15>>
-		<<set _equipmentBonus -= 7>>
+		<<set _companionBonus += 8>>
 		<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
 		<<set _companionBonus += 5>>
 		<</if>>
@@ -1057,25 +1065,14 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Cloud")>>
-	Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.<br>
+	Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.
 	<<set _companionBonus += 10>>
-	<<if $slingshot>>
-	The hand holding the modified Brave Vector moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...<br>
-		<<set _companionBonus += 20>>
-		<<set _relicBonus -= 10>>
-	<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>1 || $cloudStrat>1) >>
-		The hand holding his gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...<br>
-		<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
-		<<set _companionBonus += _ammo*5>>
-		<<set _equipmentBonus -= 10>>
-		<<set _bulletsUsed = Math.ceil($timeL8/8*_ammo) >>
-		<<if $items[20].count <= _bulletsUsed>>
-			Cloud used every single one of your last bullets...<br>
-			<<set $items[20].count = 0 >>
-		<<else>>
-			Cloud used _bulletsUsed fighting off the enemy.<br>
-			<<set $items[20].count -= _bulletsUsed>>
-		<</if>>
+	<<if $slingshot && $cloudStrat==0>>
+		The hand holding the modified Brave Vector moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
+		<<set _companionBonus += 5>>
+	<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || $cloudStrat>0) >>
+		The hand holding his gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
+		<<set _companionBonus += 5>>
 	<</if>>
 	<br>
 <</if>>
@@ -1090,45 +1087,72 @@ Note: Some effects of this curse are not yet implemented.
 	<<set _equipmentBonus += 7>>
 <</if>>
 
-<<if $items[20].count>0 && $items[13].count>0 && ~$slingshot>>
+<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
 	Your gun will be a very important asset if you want to survive this horde.<br>
-	<<set _equipmentBonus += 5*$ammoStrat>>
+<</if>>
+
+<br>During your $tempTime day travel you encountered the life stealing dolls every day...<br><br>
+<<for $i = 1; $i <= $tempTime; $i++>>
+	<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
+	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
+	<<set _gunBonus = 0>>
+	On day $i
+
 	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-		<<set _bulletsUsed = Math.ceil($timeL8/8*$ammoStrat*(5-$bullRed)) >>
-	<<else>>
-		<<set _bulletsUsed = Math.ceil($timeL8/8*$ammoStrat*(3-$bullRed)) >>
+		<<if $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
+			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
+			<<set _gunBonus += _ammo*5>>
+			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8*_ammo) >>
+			<<if $items[20].count <= _bulletsUsed>>
+				Cloud used every single one of your last bullets...
+				<<set $items[20].count = 0 >>
+				<<set $ammoStrat = 0>>
+				<<set $cloudStrat = 0>>
+			<<else>>
+				Cloud used _bulletsUsed bullets fighting off the enemy.
+				<<set $items[20].count -= _bulletsUsed>>
+			<</if>>
+		<</if>>
 	<</if>>
-	<<if $items[20].count <= _bulletsUsed>>
-		You used every single one of your last bullets...<br>
-		<<set $items[20].count = 0 >>
-	<<else>>
-		You used _bulletsUsed fighting off the enemy.<br>
-		<<set $items[20].count -= _bulletsUsed>>
+
+	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+		<<set _gunBonus += 5*$ammoStrat>>
+		<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
+		<<if $items[20].count <= _bulletsUsed>>
+			You used every single one of your last bullets...
+			<<set $items[20].count = 0 >>
+			<<set $ammoStrat = 0>>
+		<<else>>
+			You used _bulletsUsed bullets fighting off the enemy.
+			<<set $items[20].count -= _bulletsUsed>>
+		<</if>>
 	<</if>>
-<</if>>
 
-<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
+	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + _gunBonus + $HandicapThreat*10>>
 
-<<if _temp > _L8T1_threshold2 >>
-	continue
-<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
-	barely escaped
-<<else>>
-	<<if $status.duration > 0>>
-		game over (injury prevented struggle away within 5sec of kiss)
-
-		<h1 class="gameover">Game Over</h1>
+	<<if _temp > _L8T1_threshold2 >>
+		You managed to get rid of the Inanis Ego horde with relative ease.<br>
+	<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
+		You had some close calls, some maybe a bit to close for comfort. You wonder, were you just unlucky or should you consider leaving and only comming back when you a better prepared?<br>
 	<<else>>
-		injury (kissed less then 5 seconds?)
-		<<set $status.duration += 99>>
-		<<set $status.penalty += 3>>
+		<<if $status.duration > 0>>
+			game over (injury prevented struggle away within 5sec of kiss)<br>
+
+			<h1 class="gameover">Game Over</h1>
+		<<else>>
+			injury (kissed less then 5 seconds?)<br>
+			<<set $status.duration += 99>>
+			<<set $status.penalty += 3>>
+		<</if>>
 	<</if>>
-<</if>>
+<</for>>
 <</nobr>>
 
 :: Layer 8 Threat 2a
 
 <<nobr>>
+<<set $timeL8T2a=0>>
+<<set $timeL8T2b=0>>
 <<set $totalFears = []>>
 <<set $totalFears.push($fear)>>
 <<for _companion range $companions>>
@@ -1136,7 +1160,8 @@ Note: Some effects of this curse are not yet implemented.
 <</for>>
 <<set $temp = random(0,$totalFears.length)>>
 <<set $temp = $totalFears[$temp]>>
-<</nobr>><<if $temp == "" || $temp == "darkness">>
+<</nobr>>
+<<if $temp == "" || $temp == "darkness">>
 
 <<elseif $temp == "spiders">>
 
@@ -1153,3 +1178,5 @@ Note: Some effects of this curse are not yet implemented.
 <<elseif $temp == "rot">>
 
 <</if>>
+
+[[Layer8 Hub]]
