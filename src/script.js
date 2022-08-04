@@ -12,7 +12,7 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.app.age < 18) {
 		return "AgeLimit";
 	}
-	if (StoryVar.items[1].count <= -6 || (StoryVar.items[0].count + StoryVar.items[3].count) <= -3) {
+	if (StoryVar.items[1].count <= -6 || (StoryVar.items[0].count + StoryVar.items[3].count) <= -3 || StoryVar.$gameOver==true) {
 		return "GameOver";
 	}
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
