@@ -1090,6 +1090,9 @@ Note: Some effects of this curse are not yet implemented.
 
 <br>During your $tempTime day travel you encountered the life stealing dolls every day...<br><br>
 <<set _bulletsUsedTotal = 0>>
+<<if $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || $cloudStrat>0 )>>
+	<<set _gunFight=true>>
+<</if>>
 <<if $status.penalty > 0>>
 	<<set _injuredStart = true>>
 <<else>>
@@ -1142,27 +1145,27 @@ Note: Some effects of this curse are not yet implemented.
 		On day $i you had some close calls, some maybe a bit to close for comfort. You barely avoided getting caught. You wonder, were you just unlucky or should you consider leaving and only comming back when you are better prepared?<br>
 	<<elseif _temp <= _L8T1_threshold>>
 		<<if _injuredStart==true>>
+			<<set $gameOver = true>>
+			<<set $i=$tempTime>>
 			On day $i you fight like crazy but the lifeless dolls overwhelm you. As one of you grabs hold of your face, it closes in for a kiss. 
 			When your lips touch you feel your life flashing before your eyes and you know you have to struggle loose as fast as you can. 
 			Your previous injuries, however, have made you too weak to do so and after a full 5 seconds you feel their hands leaving your face. 
 			As you look at this other being you know something is wrong. You don't know exactly what at first. After a second you feel the burning envy for this person.
 			Your life has been hollow, forever roaming the hallways of this maze, and this person has a full life, filled with goals, setbacks and triumphs. 
 			You want that! You need that! However, you also know that for some reason this particular person can not give it to you.
-			You'll have to find somebody else in this maze and take it for yourself, even if it will take you an eternity<br>
-			<<set $i=$tempTime>>
+			You'll have to find somebody else in this maze and take it for yourself, even if it will take you an eternity.<br>
 			<h1 class="gameover">Game Over</h1>
-			<<set $gameOver = true>>
 		<<else>>
-			On day $i injury (kissed less then 5 seconds?)<br>
-			<<set $status.duration += 10>>
+			On day $i, while you did you best when battling the horde, it was a losing battle. They overwhelmed you, grabbed you and one of them started kissing you. Your life flashed before your eyes, but you struggled loose within a few seconds. It left you with a severe headache that hampers you.<br>
+			<<set $status.duration += 3>>
 			<<set $status.penalty += 1>>
 		<</if>>
 	<</if>>
 <</for>>
 <<if $gameOver == false>>
-	<<if $hiredCompanions.some(e => e.name === "Cloud") && $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
+	<<if $hiredCompanions.some(e => e.name === "Cloud") && _gunFight>>
 		During you fights over the last $tempTime days, Cloud used_bulletsUsedTotal bullets in total.
-	<<elseif $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+	<<elseif _gunFight && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
 		During you fights over the last $tempTime days, You used_bulletsUsedTotal bullets in total.
 	<</if>>
 	In the end you managed to survive the encounters with the Inanes Ego and continue your journey.<br><br>
