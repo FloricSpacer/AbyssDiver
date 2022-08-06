@@ -58,6 +58,7 @@ setup.haveTravelLightSource = function() {
 
 
 :: Stats [noreturn]
+<<CarryAdjust>>\
 You have $dubloons dubloons.
 You have $corruption corruption points.
 You have been exploring the Abyss for $time days.
@@ -315,21 +316,25 @@ Thanks again for playing!
 /*<<for $i = 0; $i < $GenderLog.length; $i++>>
 		<<print $GenderLog[$i].name>>
 <</for>>*/
-<</nobr>>Your name is $app.name and you are a $app.sex.
-
-Your hair color is $app.hair.
+Your name is $app.name and you are a $app.sex.<br><br>
+Your hair color is $app.hair.<br>
 <<if $app.eyeCount==0>>
-You have no eyes just empty sockets. You are effectivly blind without the use relics or companion help.
-<<elseif $app.eyeCount==1 $$ $BionicEye>>
-You have lost both of your biological eyes and in of it's sockets you have the MoonWatcher, which allows you to percieve the world even better than when you had both your normal eyes.
+You have no eyes just empty sockets. You are effectivly blind without the use relics or companion help.<br>
+<<elseif $app.eyeCount==1 && $BionicEye>>
+You have lost both of your biological eyes and in of it's sockets you have the MoonWatcher, 
+which allows you to percieve the world even better than when you had both your normal eyes.<br>
 <<elseif $app.eyeCount==1>>
-You only have 1 eye, which is colored $app.eyeColor. You can still see quite well, but depth perception has become quite hard. 
-<<elseif $app.eyeCount==2 $$ $BionicEye>>
-You have one natural eye left which is colored $app.eyeColor. The other eye has been replaced with the MoonWatcher, which allows you to percieve the world even better than when you had both your normal eyes.
+You only have 1 eye, which is colored $app.eyeColor. You can still see quite well, 
+but depth perception has become quite hard. <br>
+<<elseif $app.eyeCount==2 && $BionicEye>>
+You have one natural eye left which is colored $app.eyeColor. The other eye has been replaced with the MoonWatcher, 
+which allows you to percieve the world even better than when you had both your normal eyes.<br>
 <</if>>
+<</nobr>>
 You have $app.skinColor colored $app.skinType skin.<<if $app.skinType.includes("furred") >> $curse19.appDesc <</if>>
 <<if $app.armCount==1>>You only have one arm. <<if $BionicArm>>It is a pretty cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $app.armCount>2>>You have more arms now than you started with. You're not quite used to it yet so the get in the way a lot.<<if $BionicArm>>One of them is cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $app.armCount==2 &&  $BionicArm>>One of your arms has been replaced with a cool bionic arm, with anti-gravity abilities.<</if>>
 <<if $app.legCount==1>>You only have one leg. <<elseif $app.legCount==0>> You don't have any legs anymore. <<if $playerCurses.some(e => e.name === "Seafolk")>> Instead you have a beautifull finned tail. Can you be considered a <<if $app.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
+
 You are <<BodyHeightText>> tall.
 You have $app.ears ears.
 You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you appear to be <<print Math.round($app.appAge)>> years old<</if>><<if $eternalYouth == 1>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
@@ -513,7 +518,7 @@ You've got to watch out for extremely serious back pain with your S cup breasts.
 <</for>>
 <</if>>
 <br>
-Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.<br>
+Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.<br>	$app.appGender
 <</nobr>>
 <<back [[$menuReturn]]>>
 

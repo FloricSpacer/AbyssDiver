@@ -938,7 +938,7 @@
 	style1: $boxColor
 	}>>
 
-	<<if $app.appGender<5 >>
+	<<if $app.appGender<=5 >>
 		<<set $mc.imageIcon="Icons/npcM.png">>
 	<<else>>
 		<<set $mc.imageIcon="Icons/npcF.png">>
@@ -964,40 +964,51 @@
 <</widget>>
 
 :: Cloning Self for Double Trouble [widget nobr]
-<<CarryAdjust>>
 <<widget "CloneSelf">>
+<<CarryAdjust>>
 	<<set $companionTwin = {
-		name: "Your Twin",
-		carry: $carryWeight>,
-		affec: 0,
+		name: "",
+		carry: $carryWeight,
+		affec: 3,
 		swap: false,
 		image: "Surface/doubletrouble.png",
-		imageIcon: "Icons/doubletrouble.png",
+		imageIcon: "",
 		curses: [],
 		osex: "",
-		obreasts: 0,
-		openis: 0,
+		obreasts: $app.openis,
+		openis: $app.obreast,
 		ogender: 0,
-		genderVoice: 5,
-		oheight: 160,
+		genderVoice: 0,
+		oheight: $app.HeightCorrected,
 		hairColor: $app.hairColor,
 		skinColor: $app.skinColor,
 		age: $app.age,
-		appDesc: "Your sight is pretty bad without glasses and your eyebrows are relatively thin. ",
+		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: "wolves"
+		fear: $fear 
 		}>>
 	
 
 	<<if $app.osex=='male'>>
 		<<set $companionTwin.osex = 'female'>>
+		<<set $companionTwin.name =  "Your twin sister">>
 	<<else>>
 		<<set $companionTwin.osex = 'male'>>
+		<<set $companionTwin.name =  "Your twin brother">>
 	<</if>>
+
+	<<if $app.appGender<=5 >>
+		<<set $companionTwin.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companionTwin.imageIcon="Icons/npcF.png">>
+	<</if>>
+
+	<<set $companionTwin.genderVoice = -1*($mc.genderVoice-3.5)+3.5>>
+	<<set $companionTwin.ogender = -1*($mc.ogender-3.5)+3.5>>
+
 	/*<<set $mcClone = clone($mc)>>*/
-	<<set $companionmcClone.name =  "Cloned version of yourself">>
-	<<set $hiredCompanions.push($companionmcClone)>>
+	<<set $hiredCompanions.push($companionTwin)>>
 <</widget>>
 
 :: Time dependant variable updates [widget nobr]
@@ -1117,6 +1128,10 @@
 
 <<if $hiredCompanions.some(e => e.name === "Saeko")>>
 	<<set $totalCarry += $companionSaeko.carry>>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Your twin sister") ||$hiredCompanions.some(e => e.name === "Your twin brother")>>
+	<<set $totalCarry += $companionTwin.carry>>
 <</if>>
 
 <<set _carriedWeight = setup.calcCarriedWeight()>>
