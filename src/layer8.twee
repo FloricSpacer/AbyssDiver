@@ -1039,24 +1039,33 @@ Note: Some effects of this curse are not yet implemented.
 
 <<if $timeL8 > $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
-		*PLACEHOLDER FIRST ENCOUTER*You see a distant figure slowly limping in your direction. As it comes closer to you it looks like some lifeless doll the size of yourself. It has clumsy robotic movement, but it clearly looks hostile. You simple stand there observing it as the doll comes closer. Just before it reaches you you pick up a medium sized rock and throw it into its face. The doll instantly goes down and stays down. It wasn't much of threat but it sure was off putting.<br>
+		*PLACEHOLDER FIRST ENCOUTER*You see a distant figure slowly limping in your direction. As it comes closer to you it looks like some lifeless doll the size of yourself. 
+		It has clumsy robotic movement, but it clearly looks hostile. You simple stand there observing it as the doll comes closer. Just before it reaches you you pick up a medium sized rock and throw it into its face. 
+		The doll instantly goes down and stays down. It wasn't much of threat but it sure was off putting.<br>
 		<<set $L8T1_counter += 1>>
 	<<elseif $L8T1_counter==1>>
-		*PLACEHOLDER 10-day mark* They used an ambush! It seems they are starting to use simple tactics.<br>
+		*PLACEHOLDER 10-day mark* Walking around the neverending halls of the 8th layer you see a figure standing at the end of the hallway. It is waving to you. 
+		Curiousity gets the better of you and you start to approach the figure. Soon the figure comes into focus and you are somewhat shocked by what you see. 
+		It's an exact replica of who you were before all this started! You quicken your pace, you have to get to the bottom of this. <br><br>
+		<<say $mc>>Who are you and why do you look like me?<</say>><br>
+		Instead of responding your 'mirror' image just keeps waving. When you are within a few paces of the figure, you suddenly hear a lot of sound behind you. 
+		One fo the crossings you passed in now suddenly swarming with the lifelike puppets you encountered earlier. You immeadeatly realize what's going on. The dolls tricked you into an ambush and such a simple one at that.
+		You start to fight your way out of the situation you gotten yourself into, but you realize something else as well. The waving figure is not the only one that looks like you.
+		They all look like you in some way. Maybe the don't resemble you as much as the waving figure, but they all seem like different distorted versions of yourself, just with different genders, extra limbs, different sizes or completely inhuman charateristics.<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 0.2>>
+		<<set $L8T1_difficulty += 0.35>>
 	<<elseif $L8T1_counter==2>>
 		*PLACEHOLDER 30-day mark* They used a coordinated pincer movement to drive you in a corner! They used advanced tactics!<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 0.3>>
+		<<set $L8T1_difficulty += 0.5>>
 	<<elseif $L8T1_counter==3>>
 		*PLACEHOLDER 70-day mark* You think you spotted one of them using a relic you own as well. Not that that one was suited for battle but it is worrying sign of things to come...<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += Math.min(0.5, $ownedRelics.length/10)>>
+		<<set $L8T1_difficulty += Math.min(0.8, $ownedRelics.length/10)>>
 	<<elseif $L8T1_counter==4>>
 		*PLACEHOLDER 100-day mark* By now the dolls are comunicating in behaving in a way that reminds you an earily lot of yourself. Sure they still have the robotic doll like movement a bit, but it really looks like doll version of yourself in both body and mind by now. It will become really hard to beat them or even evade them by now, especially considering their numbers..<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 0.3>>
+		<<set $L8T1_difficulty += 0.5>>
 	<</if>>
 <<else>>
 *PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yours swarm you. You don't know exactly what they are planning but it can't be good.<br>
@@ -1094,6 +1103,11 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 <<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
+<<if ($app.heightCor - $app.oheight)/$app.oheight*100 > 0 >>
+	The fact that you have become bigger during your travels means you have a size advantage over much of the mimics, which really aids you in battle!<br>
+<<elseif ($app.heightCor - $app.oheight)/$app.oheight*100 <> 0 >>
+	The fact that you have shrunk during your travels means you are at a size disadvantage over much of the mimics, which really hinders you in battle!<br>
+<</if>>
 
 <<if $app.skinType == "sticky, slimy">>
 	Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of more than 1 sticky situation!<br>
@@ -1101,7 +1115,7 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 <<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
-	Those claw-like nails will be a minor help if you get into hand-to-hand combat with one of them. <br>
+	Those claw-like nails will be a of some help if you get into hand-to-hand combat with one of them. <br>
 	<<set _curseBonus += 2>>
 <</if>>
 
@@ -1139,11 +1153,22 @@ Note: Some effects of this curse are not yet implemented.
 	<<if $slingshot && $cloudStrat==0>>
 		The hand holding the modified Brave Vector moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
 		<<set _companionBonus += 5>>
-	<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || $cloudStrat>0) >>
+	<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
 		The hand holding his gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
 		<<set _companionBonus += 5>>
+		<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
+		<<set _equipmentBonus += _ammo*5>>
+		<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8*_ammo) >>
+		<<if $items[20].count <= _bulletsUsed>>
+			Cloud used every single one of your last bullets...
+			<<set $items[20].count = 0 >>
+			<<set $ammoStrat = 0>>
+			<<set $cloudStrat = 0>>
+		<<else>>
+			Cloud used _bulletsUsed bullets fighting off the enemy.
+			<<set $items[20].count -= _bulletsUsed>>
+		<</if>>
 	<</if>>
-	<br>
 <</if>>
 
 <<if $hiredCompanions.some(e => e.name === "Saeko")>>
@@ -1156,91 +1181,59 @@ Note: Some effects of this curse are not yet implemented.
 	<<set _equipmentBonus += 7>>
 <</if>>
 
+	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+		<<set _equipmentBonus += 5*$ammoStrat>>
+		<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
+		<<if $items[20].count <= _bulletsUsed>>
+			You used every single one of your last bullets...
+			<<set $items[20].count = 0 >>
+			<<set $ammoStrat = 0>>
+		<<else>>
+			You used _bulletsUsed bullets fighting off the enemy.
+			<<set $items[20].count -= _bulletsUsed>>
+		<</if>>
+	<</if>>
+
 <<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
 	Your gun will be a very important asset if you want to survive this horde.<br>
 <</if>>
 
-<br>During your $tempTime day travel you encountered the life stealing dolls every day...<br><br>
-<<set _bulletsUsedTotal = 0>>
-<<if $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || $cloudStrat>0 )>>
-	<<set _gunFight=true>>
-<</if>>
 <<if $status.penalty > 0>>
 	<<set _injuredStart = true>>
 <<else>>
 	<<set _injuredStart = false>>
 <</if>>
 
-<<for $i = 1; $i <= $tempTime; $i++>>
-	<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
-	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
-	<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
-	<<set _gunBonus = 0>>
+<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
+<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
+<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
 
-	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-		<<if $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
-			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
-			<<set _gunBonus += _ammo*5>>
-			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8*_ammo) >>
-			<<set _bulletsUsedTotal += _bulletsUsed>>
-			<<if $items[20].count <= _bulletsUsed>>
-				/*Cloud used every single one of your last bullets...*/
-				<<set $items[20].count = 0 >>
-				<<set $ammoStrat = 0>>
-				<<set $cloudStrat = 0>>
-			<<else>>
-				/*Cloud used _bulletsUsed bullets fighting off the enemy.*/
-				<<set $items[20].count -= _bulletsUsed>>
-			<</if>>
-		<</if>>
-	<</if>>
+<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + _gunBonus + $HandicapThreat*10>>
 
-	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
-		<<set _gunBonus += 5*$ammoStrat>>
-		<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
-		<<set _bulletsUsedTotal += _bulletsUsed>>
-		<<if $items[20].count <= _bulletsUsed>>
-			/*You used every single one of your last bullets...*/
-			<<set $items[20].count = 0 >>
-			<<set $ammoStrat = 0>>
-		<<else>>
-			/*You used _bulletsUsed bullets fighting off the enemy.*/
-			<<set $items[20].count -= _bulletsUsed>>
-		<</if>>
-	<</if>>
 
-	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + _gunBonus + $HandicapThreat*10>>
-
-	<<if _temp > _L8T1_threshold2 && _temp <=  _L8T1_threshold3>>
-		On day $i the horde gave you serious trouble but you managed to dispatch them without ever being in real danger.<br>
-	<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
-		On day $i you had some close calls, some maybe a bit to close for comfort. You barely avoided getting caught. You wonder, were you just unlucky or should you consider leaving and only comming back when you are better prepared?<br>
-	<<elseif _temp <= _L8T1_threshold>>
-		<<if _injuredStart==true>>
-			<<set $gameOver = true>>
-			<<set $i=$tempTime>>
-			On day $i you fight like crazy but the lifeless dolls overwhelm you. As one of you grabs hold of your face, it closes in for a kiss. 
-			When your lips touch you feel your life flashing before your eyes and you know you have to struggle loose as fast as you can. 
-			Your previous injuries, however, have made you too weak to do so and after a full 5 seconds you feel their hands leaving your face. 
-			As you look at this other being you know something is wrong. You don't know exactly what at first. After a second you feel the burning envy for this person.
-			Your life has been hollow, forever roaming the hallways of this maze, and this person has a full life, filled with goals, setbacks and triumphs. 
-			You want that! You need that! However, you also know that for some reason this particular person can not give it to you.
-			You'll have to find somebody else in this maze and take it for yourself, even if it will take you an eternity.<br>
-			<h1 class="gameover">Game Over</h1>
-		<<else>>
-			On day $i, while you did you best when battling the horde, it was a losing battle. They overwhelmed you, grabbed you and one of them started kissing you. Your life flashed before your eyes, but you struggled loose within a few seconds. It left you with a severe headache that hampers you.<br>
-			<<set $status.duration += 3>>
-			<<set $status.penalty += 1>>
-		<</if>>
+<<if _temp >  _L8T1_threshold3>>
+	Dispatching the horde proved to be childsplay in the end.
+<<elseif _temp > _L8T1_threshold2 && _temp <=  _L8T1_threshold3>>
+	The horde gave you serious trouble but you managed to dispatch them without ever being in real danger.<br>
+<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
+	You had some close calls, some maybe a bit to close for comfort. You barely avoided getting caught. You wonder, were you just unlucky or should you consider leaving and only comming back when you are better prepared?<br>
+<<elseif _temp <= _L8T1_threshold>>
+	<<if _injuredStart==true>>
+		<<set $gameOver = true>>
+		<<set $i=$tempTime>>
+		You fight like crazy but the lifeless dolls overwhelm you. As one of you grabs hold of your face, it closes in for a kiss. 
+		When your lips touch you feel your life flashing before your eyes and you know you have to struggle loose as fast as you can. 
+		Your previous injuries, however, have made you too weak to do so and after a full 5 seconds you feel their hands leaving your face. 
+		As you look at this other being you know something is wrong. You don't know exactly what at first. After a second you feel the burning envy for this person.
+		Your life has been hollow, forever roaming the hallways of this maze, and this person has a full life, filled with goals, setbacks and triumphs. 
+		You want that! You need that! However, you also know that for some reason this particular person can not give it to you.
+		You'll have to find somebody else in this maze and take it for yourself, even if it will take you an eternity.<br>
+		<h1 class="gameover">Game Over</h1>
+	<<else>>
+		While you did you best when battling the horde, it was a losing battle. They overwhelmed you, grabbed you and one of them started kissing you. Your life flashed before your eyes, but you struggled loose within a few seconds. It left you with a severe headache that hampers you.<br>
+		<<set $status.duration += 3>>
+		<<set $status.penalty += 1>>
 	<</if>>
-<</for>>
-<<if $gameOver == false>>
-	<<if $hiredCompanions.some(e => e.name === "Cloud") && _gunFight>>
-		During you fights over the last $tempTime days, Cloud used_bulletsUsedTotal bullets in total.
-	<<elseif _gunFight && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
-		During you fights over the last $tempTime days, You used_bulletsUsedTotal bullets in total.
-	<</if>>
-	In the end you managed to survive the encounters with the Inanes Ego and continue your journey.<br><br>
 <</if>>
 
 <</nobr>>
