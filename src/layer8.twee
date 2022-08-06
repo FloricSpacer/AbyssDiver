@@ -653,7 +653,7 @@ You have successfully taken the $relic96.name relic. Hopefully you can make good
 <<if setup.takenCurseCount("Double Trouble") > 0 || $StoredCurse.name == "Double Trouble" >>
 <<set _table += "<tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr>">>
 <<else>>
-	<<set _table += "<tr><td>[[Take on Double Trouoble]]</td>">>
+	<<set _table += "<tr><td>[[Take on Double Trouble]]</td>">>
 	<<set _table += "</tr>">>
 <</if>>
 <<if setup.takenCurseCount("Conjoined") > 0 || $StoredCurse.name == "Conjoined" >>
@@ -977,9 +977,9 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 :: Take on Seafolk [layer8]
-<<set $playerCurses.push($curse105)>><<set $corruption += $curse105.corr>><<set $HandicapLog.push($curse105)>>
+<<set $playerCurses.push($curse109)>><<set $corruption += $curse109.corr>><<set $HandicapLog.push($curse109)>>
 
-You have successfully taken on the $curse105.name curse. Hopefully you are ok with accepting the permanent consequences.
+You have successfully taken on the $curse109.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
 <<if $escBalDepl==0>>
@@ -990,9 +990,9 @@ You have successfully taken on the $curse105.name curse. Hopefully you are ok wi
 
 
 :: Take on Taken for Granite [layer8]
-<<set $playerCurses.push($curse106)>><<set $corruption += $curse106.corr>>
+<<set $playerCurses.push($curse110)>><<set $corruption += $curse110.corr>>
 
-You have successfully taken on the $curse106.name curse. Hopefully you are ok with accepting the permanent consequences.
+You have successfully taken on the $curse110.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more curses from the eight layer|Layer8 Curses]]
 <<if $escBalDepl==0>>
@@ -1003,24 +1003,28 @@ You have successfully taken on the $curse106.name curse. Hopefully you are ok wi
 
 
 :: Take on Double Trouble [layer8]
-<<set $playerCurses.push($curse107)>><<set $corruption += $curse107.corr>>
+<<set $playerCurses.push($curse111)>><<set $corruption += $curse111.corr>>
 
-You have successfully taken on the $curse107.name curse. Hopefully you are ok with accepting the permanent consequences.
+You have successfully taken on the $curse111.name curse. Hopefully you are ok with accepting the permanent consequences.
 
-Note: Some effects of this curse are not yet implemented.
-
-[[Accept more curses from the eight layer|Layer8 Curses]]
+<<link "Accept more curses from the eight layer" "Layer8 Curses">>
+	<<CloneSelf>>
+<</link>><br>
 <<if $escBalDepl==0>>
-	[[Return to exploring layer 8|Layer8 Hub]]
+	<<link "Return to exploring layer 8" "Layer8 Hub">>
+  		<<CloneSelf>>
+	<</link>><br>
 <<else>>
-	[[Return to your balloon|Escape Balloon L8]]
+	<<link "Return to your balloon" "Escape Balloon L8">>
+  		<<CloneSelf>>
+	<</link>><br>
 <</if>>
 <<CarryAdjust>>\
 
 :: Take on Conjoined [layer8]
-<<set $playerCurses.push($curse108)>><<set $corruption += $curse108.corr>><<set $HandicapLog.push($curse108)>>
+<<set $playerCurses.push($curse112)>><<set $corruption += $curse112.corr>><<set $HandicapLog.push($curse112)>>
 
-You have successfully taken on the $curse108.name curse. Hopefully you are ok with accepting the permanent consequences.
+You have successfully taken on the $curse112.name curse. Hopefully you are ok with accepting the permanent consequences.
 
 Note: Some effects of this curse are not yet implemented.
 
@@ -1271,3 +1275,13 @@ Note: Some effects of this curse are not yet implemented.
 <</if>>
 
 [[Layer8 Hub]]
+
+:: Escape Balloon L8 [layer8]
+<<nobr>><<set $currentLayer = 8>><<if !isPlaying("layer8")>>
+	<<masteraudio stop>><<audio "layer8" volume 0.2 play loop>>
+<</if>><</nobr>>
+You wait as your balloon rapidly ascends and you can watch the metallic buildings shrink beneath you. Swarms of robots seems to pursue their mysterious duties as if they were ants scurrying about an anthill. Luckily they don't seem to pay much attention to the air, and even the occasional flying robot pays you no notice as you ascend towards the gate to the sixth layer.
+
+[[Ascend to next layer|Escape Balloon L7][$corruption -= (100 - $corRed)]]
+[[Hover on this layer to take in a curse|Layer8 Curses]]
+[[Get off the balloon on this layer|Layer8 Hub][$escBalDepl=0]]
