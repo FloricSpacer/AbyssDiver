@@ -226,6 +226,9 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $SaekoConvo1 = false>>
 <<set $SaekoConvo2 = false>>
 <<set $Saeko_LastT = 9999>>
+<<set $TwinConvo1 = false>>
+<<set $TwinConvo2 = false>>
+<<set $Twin_LastT = 9999>>
 
 <<set $aiMemWipe=0>>
 <<set $aiSuggest=false>>
@@ -337,15 +340,25 @@ The rest of the world just sees you as this crazy twin pair who did everything t
 	@@.alert2; Because of your handicaps you are unable to have an effective conversation with your partners.@@ 
 	<<for _companion range $hiredCompanions>>
 		<<set $temp = _companion.name>>
-		<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
+		<<if $temp==$companionTwin.name>>
+			<<print "<<print _companion.name>>: <<print \"$companionTwin.affec\">>">>
+		<<else>>
+			<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
+		<</if>>
 		<br>
 	<</for>>
 <<else>>
 	<<for _companion range $hiredCompanions>>
 		<<set $temp = _companion.name>>
-		<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
-		<br>
-		<<include `_companion.name + " Conversations"`>>
+		<<if $temp==$companionTwin.name>>
+			<<print "<<print _companion.name>>: <<print \"$companionTwin.affec\">>">>
+			<br>
+			<<include "Twin Conversations">>
+		<<else>>
+			<<print "<<print _companion.name>>: <<print \"$companion\" + _companion.name + \".affec\">>">>
+			<br>
+			<<include `_companion.name + " Conversations"`>>
+		<</if>>
 		<br>
 	<</for>>
 	<<if $items[21].count > 0>>
@@ -2012,6 +2025,18 @@ Talk more about research and let her reveal some stuff about the deepest layer o
 :: Saeko Convo3
 Double-click this passage to edit it.
 
+:: Twin Conversations [nobr]
+<<if $TwinConvo1==false && $companionTwin.affec>6 && 0 >>
+[[Chat with your Twin|Twin Convo1][$TwinConvo1=true]]<br>
+<<elseif $TwinConvo2==false && $companionTwin.affec>15 && $TwinConvo1>>
+[[Chat with your Twin|Twin Convo2][$TwinConvo2=true]]<br>
+<</if>>
+
+:: Twin Convo1
+Double-click this passage to edit it.
+
+:: Twin Convo2
+Double-click this passage to edit it.
 
 :: Companion Mistreatment Reaction [nobr]
 /* Arguments:
