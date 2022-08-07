@@ -966,8 +966,9 @@
 :: Cloning Self for Double Trouble [widget nobr]
 <<widget "CloneSelf">>
 <<CarryAdjust>>
+<<if $curse111.variation2=='inverted'>>
 	<<set $companionTwin = {
-		name: "",
+		name: $curse111.variation1,
 		carry: $carryWeight,
 		affec: 3,
 		swap: false,
@@ -977,9 +978,9 @@
 		osex: "",
 		obreasts: $app.openis,
 		openis: $app.obreast,
-		ogender: 0,
+		ogender: $app.ogender,
 		genderVoice: 0,
-		oheight: $app.HeightCorrected,
+		oheight: $app.oheight,
 		hairColor: $app.hairColor,
 		skinColor: $app.skinColor,
 		age: $app.age,
@@ -992,10 +993,8 @@
 
 	<<if $app.osex=='male'>>
 		<<set $companionTwin.osex = 'female'>>
-		<<set $companionTwin.name =  "Your twin sister">>
 	<<else>>
 		<<set $companionTwin.osex = 'male'>>
-		<<set $companionTwin.name =  "Your twin brother">>
 	<</if>>
 
 	<<if $app.appGender<=5 >>
@@ -1005,10 +1004,45 @@
 	<</if>>
 
 	<<set $companionTwin.genderVoice = -1*($mc.genderVoice-3.5)+3.5>>
-	<<set $companionTwin.ogender = -1*($mc.ogender-3.5)+3.5>>
+	<<set $companionTwin.ogender = -1*($mc.ogender-3.5)+3.5>> 
 
 	/*<<set $mcClone = clone($mc)>>*/
-	<<set $hiredCompanions.push($companionTwin)>>
+<<else>>
+	<<set $companionTwin = {
+		name: $curse111.variation1,
+		carry: $carryWeight,
+		affec: 3,
+		swap: false,
+		image: "Surface/doubletrouble.png",
+		imageIcon: "",
+		curses: [],
+		osex: $app.osex,
+		obreasts: $app.obreast,
+		openis: $app.openis,
+		ogender: $app.ogender,
+		genderVoice: 0,
+		oheight: $app.oheight,
+		hairColor: $app.hairColor,
+		skinColor: $app.skinColor,
+		age: $app.age,
+		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
+		style: "border: 2px solid rgb(1,0,0);",
+		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
+		fear: $fear 
+		}>>
+
+	<<if $app.appGender<=5 >>
+		<<set $companionTwin.imageIcon="Icons/npcF.png">>
+	<<else>>
+		<<set $companionTwin.imageIcon="Icons/npcM.png">>
+	<</if>>
+
+	<<set $companionTwin.genderVoice = -1*($mc.genderVoice-3.5)+3.5>>
+	<<set $companionTwin.ogender = -1*($mc.ogender-3.5)+3.5>>
+
+<</if>>
+<<set $companionTwin.name =  $curse111.variation1>>
+<<set $hiredCompanions.push($companionTwin)>>
 <</widget>>
 
 :: Time dependant variable updates [widget nobr]
