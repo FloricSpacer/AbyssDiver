@@ -235,23 +235,38 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 !<<print $hiredCompanions[$temp].name>>
 [img[setup.ImagePath+$hiredCompanions[$temp].image]]
 
-<<include `$hiredCompanions[$temp].name + " Introduction"`>>
-<<nobr>>
-<<if $hiredCompanions[$temp].name == "Cloud">>
-<<include "Cloud Ability">>
+<<if $hiredCompanions[$temp].name!=$curse111.variation1>>
+	<<include `$hiredCompanions[$temp].name + " Introduction"`>>
+	<<nobr>>
+	<<if $hiredCompanions[$temp].name == "Cloud">>
+	<<include "Cloud Ability">>
+	<</if>>
+	<<if $hiredCompanions[$temp].curses.length > 0>>
+		$hiredCompanions[$temp].name has the following curses:<br><br>
+		<<for $i = 0; $i < $hiredCompanions[$temp].curses.length; $i++>>
+				<<print $hiredCompanions[$temp].curses[$i].name>><br>
+		<</for>><br>
+	<</if>>
+	<<if $temp == $swapComp>>
+		$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
+	<</if>>
+	<</nobr>>
+	<<back>>
+<<else>>
+	<<include "Twin Introduction">>
+	<<nobr>>
+	<<if $companionTwin.curses.length > 0>>
+		$companionTwin.name has the following curses:<br><br>
+		<<for $i = 0; $i < $companionTwin.curses.length; $i++>>
+				<<print $companionTwin.curses[$i].name>><br>
+		<</for>><br>
+	<</if>>
+	<<if $temp == $swapComp>>
+		$companionTwin.name is in your original body after your bodies were swapped by the Fate-crossing Star!<<if $curse111.variation2==same>>Not that it makes any difference... Well good for you, it means you got some free corruption out of it.<</if>><br><br>
+	<</if>>
+	<</nobr>>
+	<<back>>
 <</if>>
-<<if $hiredCompanions[$temp].curses.length > 0>>
-	$hiredCompanions[$temp].name has the following curses:<br><br>
-	<<for $i = 0; $i < $hiredCompanions[$temp].curses.length; $i++>>
-			<<print $hiredCompanions[$temp].curses[$i].name>><br>
-	<</for>><br>
-<</if>>
-<<if $temp == $swapComp>>
-	$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
-<</if>>
-<</nobr>>
-<<back>>
-
 :: Cloud Ability
 <<nobr>>
 <br><br>When you have Cloud with you, he can use his scary-good connections to get you an exclusive loaning arrangement with the shop &mdash; with some stipulations:<br>
@@ -307,6 +322,11 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 
 <q>Ready to go when you are. I hope you know what you're doing.</q>
 
+:: Twin Introduction
+Your twin, who you first met after taking the Double Trouble curse on layer 8. <<if $companionTwin.osex=='male'>>He <<else>>She <</if>> thinks you are fake that <<if $companionTwin.osex=='male'>>he <<else>>she <</if>> met after taking the Double Trouble curse <<if $companionTwin.osex=='male'>>himself. <<else>>herself. <</if>>
+
+The rest of the world just sees you as this crazy twin pair who did everything together, shared the same tastes and even went on this journey together. So it appears you have a new companion, who is basically another version of you. Well if you can't trust others, you can always trust yourself, right?
+<q>This is so weird, I'm starting to doubt wheter you are the fake or that we are both real...</q>
 
 :: Party overview [nobr]
 <<HeightCorrected>>
