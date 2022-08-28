@@ -112,7 +112,7 @@ How would you like to use Cherry's chaotic luck ability?
 
 If you decide to start foraging for food or water, it means that you will not reduce your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
-Note: If you try to forage for meat, but run out of bullets or don't have a gun, you will forage for some flanberries instead, with any side effects that may entail.
+Note: If you try to forage for meat, but run out of bullets or don't have a gun (or suitable replacement), you will forage for some flanberries instead, with any side effects that may entail.
 
 <<nobr>>
 <<if $forageWater == 0>>
@@ -121,8 +121,13 @@ Note: If you try to forage for meat, but run out of bullets or don't have a gun,
 	<<print "[[Stop foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 0]]">><br>
 <</if>>
 <<if $forageFood == 0>>
-	<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
-	<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
+	<<if $hiredCompanions.some(e => e.name === "Maru") && $L2FoodConvo == 0>>
+		<<print "[[Start foraging for flanberries for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 0]]">><br>
+		<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 1]]">><br>
+	<<else>>	
+		<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
+		<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
+	<</if>>
 	<<else>>
 	<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
 <</if>>
@@ -130,6 +135,61 @@ Note: If you try to forage for meat, but run out of bullets or don't have a gun,
 [[Fill your empty flasks with water from the layer|Layer2 Flasks]]<br>
 <</if>>
 <</nobr>>
+
+[[Return to exploring the rest of the layer|Layer2 Hub]]
+
+:: Layer 2 Forage Convo
+
+<<if $mudHunt == 1>>You and Maru stroll through the dripping rainforest of the second layer on a search for Mudgrazers. Maru had explained that he believed he could make a tasty dish with their meat, so you traveled with him to collect some. <<if $hiredCompanions.some(e => e.name === "Khemia")>>And this time Khemia is following behind you to keep you safe from any threats in the forest.<</if>>
+
+Maru crouches through some ferns and you follow as he gestures at some large indentations in the mud. 
+
+<<say $companionMaru>>They should be just over here, but we need to be quiet so no Baying Gourmet comes and steals the meat when we kill it.<</say>>
+
+<<if $hiredCompanions.some(e => e.name === "Cloud")>><<say $companionCloud>>I can take the shot. I'm experienced enough to kill it efficiently. Unless you would prefer to do it, Maru?<</say>>
+Maru shakes his head vigorously at the suggestions.
+
+<<say $companionMaru>>No thank you! I'm not a fan of the hunt and I probably couldn't hit it anyway!<</say>>
+Cloud nods and expertly line up the shot before pulling the trigger, and his shot to the head leads to an instant death. The beast was dead before it's body had even hit the ground. Cloud smiles slightly at the expression of his skills, but somehow the smile seems more solemn than joyous.
+<<else>><<say $mc>>Do you want to take the shot? Or should I do it?<</say>>
+Maru shakes his head vigorously at the suggestions.
+
+<<say $companionMaru>>No thank you! I'm not a fan of the hunt and I probably couldn't hit it anyway!<</say>>
+You nod and line up the shot before pulling the trigger, bringing the lumbering beast to the ground after a brief struggle for survival.
+<</if>>
+The other md grazers in the herd rapidly dash away with speed that is surprising for creatures of their size, illustrating why it is unwise to hunt them withhout a gun.
+
+<<say $mc>>So, Maru, you know how to butcher this thing?<</say>>
+
+<<say $companionMaru>>I think so. It won't be perfect, but it should still be tasty!<</say>>
+With that, you work together to pull the corpse back to your nearby camp so you can feast for the night. When you return to camp, Maru seems hesitant, but competently slices the meat into manageable chunks. He takes some choice cuts and brings them over the fire he started. Meanwhile he collects some other large pieces of meat, which seem to be too touch to eat, and places them in a bowl near the edge of the camp.
+
+After a few minutes of cooking, Maru brings you a Mudgrazer steak and eagerly awaits your reaction. After you take your first bite the flavor hits you instantly, it's as if you had distilled the flavor of beef, pork, and chicken and condensed it into an almost overwhelmingly meaty dish. It really is a unique flavor, yet it also feels familiar. Maru smiles at your reaction and begins his own meal.
+
+After a few minutes you're interrupted by a growling at the edge of the camp. A Baying Gourmet has arrived! You tense up and prepare for a fight, but Maru stops you.
+
+<<say $companionMaru>>Wait! I left some food over there for him. They leave us alone if we give them food, so for tonight it should be ok. He'll leave when he's full so we're safe for tonight at least.<</say>>
+
+You notice the Gourmet is happily munching the meat Maru left in the bowl by the edge of camp, paying no mind to you or anyone else. You sigh and begin once again finishing the meal Maru has prepared for you.
+<<else>>You and Maru stroll through the dripping rainforest of the second layer on a search for Flanberries. Maru had explained that they were delicious when he had eaten them before, so he reccomended getting some more of them here.
+
+<<say $mc>>So if these berries are so delicious, why don't people eat them on the surface?<</say>>
+Maru frowns and pauses to answer you.
+
+<<say $companionMaru>>There's a few reasons. The main one is that food from the Abyss rots super fast when you remove it from its native layer, so it wouldn't survive longer than a day on the surface, so people don't usually get a chance to bring it up even if they try to. Also, if you pick the unripe ones then it can have side effects... And not many people know the difference.<</say>>
+
+<<say $mc>>So how do you tell the difference between the ripe and unripe ones?<</say>>
+Maru giggles and smiles at you.
+
+<<say $companionMaru>>Well, I don't, but the side effects aren't too bad, so it's worth the risk.<</say>>
+Maru leads you to a managed glade that seems to have people there who actually own it! Maru briefly discusses something with the guards before coming back to you.
+
+<<say $companionMaru>>The berries here are owned by some big guy in the village near here, but he said it's ok if we take just enough for us since we're divers and we won't be here too long anyway. And he said that maybe you could even move here and enjoy his generosity as a permanent resident. I told him not to have any expectations about that though.<</say>>
+Maru begins to pick any of the red berries he sees, with a preference for the shiny, red ones.<<if $abyssKnow == 1>>But you notice a few times he grabs some of the unripe, unsafe berries and puts them in the bundle. Luckily, due to your knowledge you're able to take them out before anyone eats them. Who know's what would have happened if you weren't here.<</if>>
+
+Once you're done with the berry picking, you head back to camp with Maru, where he smashes many of the berries into a paste and adds a small amount of other herbs that he must have grabbed along the way. When he's done it looks like he has a nice pudding with some whole berries mixed in for texture. He offers you the dish to try it.
+
+The pudding taste surprisingly like normal pudding, or flan, even with the limited ingredients he had. It seems like a slightly nutty sweet custard, but red. It's absolutely delicious and you can see that Maru is savoring the flavor himself as he smiles and digs into his own bowl. You can't help but smile at him as you share the tasty meal with your party.<</if>>
 
 [[Return to exploring the rest of the layer|Layer2 Hub]]
 
