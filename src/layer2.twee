@@ -84,9 +84,9 @@ A small feline-looking creature approaches you and gives a little mewling sound.
 [[Look up towards the surface|Layer2 Ascend 1]]
 [[Look down at the next layer|Layer2 Exit]]<<else>>
 
-You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path.
+You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it emerges from the forest and blocks your path.
 
-[[Deal with the Baying Gourmet|Layer2 Threat1 Main]]
+[[Deal with the Baying Gourmet|Layer2 Threat1]]
 
 <</if>>
 
@@ -155,9 +155,9 @@ By default, your companions' reward for coming down here with you is the dubloon
 
 <<else>>
 
-<p>You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path.</p>
+<p>You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it emerges from the forest and blocks your path.</p>
 
-<p>[[Deal with the Baying Gourmet|Layer2 Threat1 Main]]</p>
+<p>[[Deal with the Baying Gourmet|Layer2 Threat1]]</p>
 
 <</if>>
 
@@ -1354,9 +1354,9 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
 
 	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
-	During your long hike towards the third layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
+	You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it emerges from the forest and blocks your path.<br><br>
 
-	[[Deal with the Baying Gourmet|Layer2 Threat1 Descend]]
+	[[Deal with the Baying Gourmet|Layer2 Threat1]]
 		<<break>>
 	<</if>>
 	<<set $tempTime = 1>>
@@ -1451,12 +1451,11 @@ Use the following option only if you have specifically considered your inventory
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
-
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
 	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
-		<br>During your long hike back up towards the first layer you hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it blocks your path. <br><br>
+		You hear a quiet growling in the distance. After only a few more moments, it isn't in the distance any more, and it isn't quiet. A great 4-legged beast slobbers as it emerges from the forest and blocks your path.<br><br>
 
-		[[Deal with the Baying Gourmet|Layer2 Threat1 Ascend]]<br>
+		[[Deal with the Baying Gourmet|Layer2 Threat1]]<br>
 		<<break>>
 	<</if>>
 		<<if $items[1].count > 9>>
@@ -1796,3 +1795,51 @@ You stand on the cupboard directly over the two man, a small camera relic in han
  "Gerard I finally got them" You say presenting him the camera. After working for him for many years now you are on a first-name basis with him."Oh just what i was expecting i take it you have undeniable proof ?"."Of course who do you think I am, some amateur?", "They were cunning though, it took weeks to find their headquarter".
 "Well you did well. As always, I might add. You should take a break before heading out again." He says.  "I would really like to get my hands on whatever they were try to steal in the end".You muse.
 "And I need to prepare a fitting punishment for them... Did they really think they could get away with trying to pin the blame on me for whatever they were after, fools..". You just shrug your shoulders and leave. What happens next is none of your business, as long as you get paid you are happy. In the end you started to understand why some people call curses a blessing.
+
+
+
+
+:: Layer2 Threat1 [layer2]
+<<set $timeL2T1 -= 4>>
+[img[setup.ImagePath+'Threats/bayinggourmet.png']]
+
+Before you stands a great lupine beast with thick fur and the drooling mouth of a starving animal. It appears to be strong, but you can also sense desperation, so any sort of coordinated attack with weapons should be able to drive it away or kill it. It also seems to be primarily interested in food, so you can feed it some of your food rations if you'd prefer the pacifist route. 
+
+<<nobr>>
+<<if $items[14].count > 0>>
+	A simple beast like this can be fought off by even an amateur using a human weapon, like your sword.<br>[[Fight it off with your sword|$returnPassage]]<br><br>
+<</if>>
+<<if $items[13].count > 0 && $items[20].count > 2>>
+	While the beast may seem burly, a few shots from a pistol will easily bring it down.<br>
+	[[Shoot it 3 times with your pistol|$returnPassage][$items[20].count -= 3]]<br><br>
+<</if>>
+<<if $items[1].count > 4>>
+	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and pacify it, rendering it harmless.<br>
+	[[Leave it 5 days of your food rations as you flee|$returnPassage][$items[1].count -= 5]]<br><br>
+<</if>>
+<<if $hiredCompanions.length > 3>>
+	[[Scare it off with your large group of companions|$returnPassage]]<br>
+<</if>>
+<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun and is able to dispatch the beast with a few well-placed shots.
+[[Defeat it with the Brave Vector|$returnPassage]]
+<</if>>
+
+Or, you could allow the beast to overpower and have its way with you. While it will recognize you aren't food and so won't consume you, curiosity will get the better of it and it will rape roughly, like the wild beast it is. This will leave you with a mild limp, a status condition increasing your next 4 travel times by 1 day each, unless you use a medkit to cure the status immediately.
+[[Allow it to overpower you|$returnPassage][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
+
+<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
+
+<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
+
+A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
+
+<<link "Hold the doll tight and squeeze your eyes shut" $returnPassage>>
+  <<dollTF>>
+<</link>><br>
+<</if>>
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down the beast.
+[[Use a combination of relics not mentioned above you believe would be able to overpower one of the beasts|$returnPassage]]
