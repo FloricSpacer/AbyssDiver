@@ -118,8 +118,8 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 		<<print "You are currently foraging for your daily food on this layer">><br>
 		<<else>>
 		<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
-	<<if !isPlaying("layer7")>>
-		<<masteraudio stop>><<audio "layer7" volume 0.2 play loop>>
+	<<if !isPlaying("layer8")>>
+		<<masteraudio stop>><<audio "layer8" volume 0.2 play loop>>
 	<</if>>
 	<br>
 	What do you want to do while you're here?<br><br>
@@ -1108,6 +1108,166 @@ Note: Some effects of this curse are not yet implemented.
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
 <<CarryAdjust>>\
+
+:: Layer8 Cherry Relic [layer8]
+<<nobr>>
+<<set $temp1 = random(0,11) + 84>>
+<<set $temp2 = random(0,11) + 84>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 84>>
+	<<if $temp1 !== $temp2>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[$temp2])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<</nobr>>
+
+The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer8 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
+
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+	<<link "Reroll with Devil's Own" "Layer8 Cherry Relic">>
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+		
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+
+		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
+		<<set $soldRelics.push($ownedRelics[_temp])>>
+		<<set $ownedRelics.deleteAt(_temp)>>
+	<</link>>
+
+<</if>>
+
+
+:: Layer8 Cherry Curse [layer8]
+<<nobr>>
+<<set $temp1 = random(0,11) + 96>>
+<<set $temp2 = random(0,11) + 96>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 96>>
+	<<if ($temp1 !== $temp2)>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set $playerCurses.push($curses[$temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<</nobr>>
+
+The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer8 Hub]]
+
+<<nobr>>
+<<if $curses[$temp1].name == "Libido Reinforcement F" || $curses[$temp2].name == "Libido Reinforcement F">>
+	<<set $LibidoLog.push($curse97)>>
+<</if>>
+<<if $curses[$temp1].name == "Gender Reversal F" || $curses[$temp2].name == "Gender Reversal F" >>
+	<<set $GenderLog.push($curse98)>>
+<</if>>
+<<if $curses[$temp1].name == "Asset Robustness F" || $curses[$temp2].name == "Asset Robustness F" >>
+	<<set $GenderLog.push($curse99)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact F")>><</if>>
+<</if>>
+
+
+<</nobr>>
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
+
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+	<<link "Reroll with Devil's Own" "Layer8 Cherry Curse">>
+		<<set $targetCurse = $curses[$temp1]>>
+		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
+		<<if $curses[$temp1].type == "Gender" >>
+			<<set _temp = $GenderLog.length>>
+			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
+				<<set $GenderLog.deleteAt(_temp-1)>>
+			<</if>>
+		<</if>>
+		<<include "CurseRemoval">>
+		
+		<<set $targetCurse = $curses[$temp2]>>
+		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
+		<<if $curses[$temp2].type == "Gender" >>
+			<<set _temp = $GenderLog.length>>
+			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
+				<<set $GenderLog.deleteAt(_temp-1)>>
+			<</if>>
+		<</if>>
+		<<include "CurseRemoval">>
+
+		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
+		<<set $soldRelics.push($ownedRelics[_temp])>>
+		<<set $ownedRelics.deleteAt(_temp)>>
+	<</link>>
+
+<</if>>
+
+
+:: Layer8 Cherry Mix [8]
+<<nobr>>
+<<set $temp1 = random(0,11) + 84>>
+<<set $temp2 = random(0,11) + 96>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floot(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $playerCurses.push($curses[$temp2])>>
+<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
+<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<</nobr>>
+
+With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer8 Hub]]
+
+<<nobr>>
+<<if $curses[$temp1].name == "Libido Reinforcement F" || $curses[$temp2].name == "Libido Reinforcement F">>
+	<<set $LibidoLog.push($curse97)>>
+<</if>>
+<<if $curses[$temp1].name == "Gender Reversal F" || $curses[$temp2].name == "Gender Reversal F" >>
+	<<set $GenderLog.push($curse98)>>
+<</if>>
+<<if $curses[$temp1].name == "Asset Robustness F" || $curses[$temp2].name == "Asset Robustness F" >>
+	<<set $GenderLog.push($curse99)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact F")>><</if>>
+<</if>>
+<</nobr>>
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
+
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+	<<link "Reroll with Devil's Own" "Layer8 Cherry Mix">>
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+		
+		<<set $targetCurse = $curses[$temp2]>>
+		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
+		<<if $curses[$temp2].type == "Gender" >>
+			<<set _temp = $GenderLog.length>>
+			<<if $GenderLog[_temp-1].name == "Interact A" || $GenderLog[_temp-1].name == "Interact B" || $GenderLog[_temp-1].name == "Interact C" || $GenderLog[_temp-1].name == "Interact D" || $GenderLog[_temp-1].name == "Interact E">>
+				<<set $GenderLog.deleteAt(_temp-1)>>
+			<</if>>
+		<</if>>
+		<<include "CurseRemoval">>
+		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
+		<<set $soldRelics.push($ownedRelics[_temp])>>
+		<<set $ownedRelics.deleteAt(_temp)>>
+	<</link>>
+
+<</if>>
+
+
 
 :: Layer 8 Threat 1a
 <<nobr>>
