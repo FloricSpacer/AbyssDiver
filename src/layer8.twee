@@ -1315,9 +1315,9 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 <<if $layerExitTime == 0>>
 	<<nobr>>
 	<<if $inanisTime != $time>>
-	[img[setup.ImagePath+'Threats/inanisego.png']]
+	[img[setup.ImagePath+'Threats/inanisego.png']]<br><br>
 
-Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like bizarre, life-sized porcelain dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.
+Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like bizarre, life-sized porcelain dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.<br><br>
 
 [[Deal with the Inanis Ego|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
 	<</if>>
@@ -1344,6 +1344,72 @@ If you continue your descent in spite of everything, descending past this layer'
 
 [[Turn back and continue your business on the eighth layer|Layer8 Hub]]
 [[Continue your descent to the eighth layer|Layer8 Exit2]]
+
+:: Layer8 Exit2 [layer8]
+<<nobr>>
+<<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<set $tempTime = 45>>
+	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime=$tempTime>>
+<</if>>
+
+<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
+
+	<<set $tempTime = 1>>
+	<<include "GeneralTimeStats">>
+
+
+	<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+
+	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
+	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
+	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
+
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 exit2"]]
+	<<break>>
+
+<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+
+	You can feel the deepest fears of your party manifesting into reality once again. 
+	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
+
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 exit2"]]
+	<<break>>
+	<</if>>
+
+<</for>>
+
+
+<</nobr>><<if $layerExitTime == 0>>
+	<<nobr>>
+	<<if $inanisTime != $time>>
+	[img[setup.ImagePath+'Threats/inanisego.png']]<br><br>
+
+Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like bizarre, life-sized porcelain dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.<br><br>
+
+[[Deal with the Inanis Ego|Layer 8 Threat 2a][$returnPassage = "Layer8 exit2"]]
+	<</if>>
+	
+/* 
+<<set $timeL8T1 = 0>>\
+<<set $timeL8T2 = 0>>\
+*/
+	
+At the very bottom of the layer you come across what appears to be a very deep pool of water. There doesn't seem to be any other way through besides this pool, so you'll need some kind of way to breathe underwater to continue forwards. The diving gear from Outset town or the Merfolk Curse could work, or you could use the Pneuma Wisp Relic to bypass the issue entirely. Other than that, you would need to get creative.<br><br>
+
+<<if $scuba == 1>>
+[[Descend into the pool|Layer9 1]]
+<<else>>
+Because you have no way to continue through the deep pool, you must return to exploring the layer.<br>
+[[Continue exploring Layer 8|Layer8 Hub]]<br><br>
+
+Or, if you believe you have an alternative way to keep exploring in a purely underwater environment, you can continue through the pool.<br>
+[[Descend into the pool|Layer9 1]]
+<</if>>
+<</nobr>><</if>>
 
 
 :: Layer 8 Threat 1a
