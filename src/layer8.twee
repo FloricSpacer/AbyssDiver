@@ -1274,8 +1274,73 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 [[Continue your ascent|Layer8 Ascend2]]
 [[Turn back and continue your business on the eighth layer|Layer8 Hub]]
 
+:: Layer8 Ascend2 [layer8]
+<<nobr>>
+<<if $layerExit == 0>>
+	<<set $layerExit = 1>>
+	<<set $tempTime = 40>>
+	<<include "GeneralTimeSetup">>
+	<<set $layerExitTime=$tempTime>>
+<</if>>
+
+<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
+
+	<<set $tempTime = 1>>
+	<<include "GeneralTimeStats">>
+	
+	<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+
+	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
+	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
+	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
+
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
+	<<break>>
+
+<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+
+	You can feel the deepest fears of your party manifesting into reality once again. 
+	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
+
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
+	<<break>>
+	<</if>>
+
+<</for>>
+
+
+<</nobr>>
+<<if $layerExitTime == 0>>
+	<<nobr>>
+	<<if $inanisTime != $time>>
+	[img[setup.ImagePath+'Threats/inanisego.png']]
+
+Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like bizarre, life-sized porcelain dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.
+
+[[Deal with the Inanis Ego|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
+	<</if>>
+	<<set $corruption -= (100 - $corRed)>>
+	/* 
+	<<set $timeL6T1 = 0>>
+	<<set $timeL6T2 = 0>>
+	*/
+	<</nobr>>
+	Despite the fact your journey was through hallways and staircases rather than fields of tentacles or sandy deserts the journey was somehow especially arduous. The dimension-bending appearance of this layer combined with the horrific visions and terrifying manifestions it brought upon you makes you grateful to return to the dystopian city you descended from.
+
+	As your reach the top of the layer, you find one final staircase, which twists upon itself until it reachs the pinnacle of the architecture. Once you've ascended you see yourself looking down through an enormous circular gate, which you recognize falling through when you first entered this place. Now you step down and ascend (descend?) once again to seventh layer.
+
+	Immediately as you step through, gravity seems to right itself and settle in its proper downward direction, indicating to you that you are once again in the realm of spatial consistency.
+
+	<<include "Curse Descriptions">>
+
+	[[Return to the Seventh layer|Layer7 Hub]]
+
+<</if>>
+
 :: Layer8 Exit1 [layer8]
-If you continue your descent in spite of everything, descending past this layer's mind-boggling architecture and into what lies beyond will tae 45 days.
+If you continue your descent in spite of everything, descending past this layer's mind-boggling architecture and into what lies beyond will take 45 days.
 
 [[Turn back and continue your business on the eighth layer|Layer8 Hub]]
 [[Continue your descent to the eighth layer|Layer8 Exit2]]
@@ -1535,7 +1600,7 @@ If you continue your descent in spite of everything, descending past this layer'
 
 <</if>>
 
-[[Layer8 Hub]]
+[[$returnPassage]]
 
 :: Escape Balloon L8 [layer8]
 <<nobr>><<set $currentLayer = 8>><<if !isPlaying("layer8")>>
