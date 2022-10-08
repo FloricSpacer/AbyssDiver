@@ -776,6 +776,25 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <<if $items[21].count > 0>>
 [[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
 <</if>>
+	<<if $$items[25].count > 0 && $wardWaterDrink == 0>>
+	<br>You are currently not drinking your Ward Water to reduce your jinxed flame counters. Would you like to start drinking your Ward Water?<br>
+	[[Always drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 1]]<br>
+	[[Drink Ward Water instead of foraging or using other water sources when you have 1 or more hexflame counters|Use Items and Relics][$wardWaterDrink = 2]]<br>
+	<<elseif $wardWaterDrink == 1>>
+	<br>You are currently drinking your Ward Water every day to reduce your jinxed flame counters. Would you like to stop drinking your Ward Water?<br>
+	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
+	[[Drink Ward Water instead of foraging or using other water sources when you have 1 or more hexflame counters|Use Items and Relics][$wardWaterDrink = 2]]<br>
+	<<elseif $wardWaterDrink == 2>>
+	<br>You are currently drinking your Ward Water to reduce your jinxed flame counters whenever you have 1 or more jinxed flame counters. Would you like to change when you drink your Ward Water?<br>
+	[[Always drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 1]]<br>
+	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
+	<</if>>
+
+	<<if $$items[25].count > 0 && $hexflame > 0>>
+	<br>You can drink as much Ward Waters as you want if you you want to reduce your jinxed flame counters. This might not be the most economical idea, but it can help you solve the issue immediately if you're not worried about conserving water.<br>
+	[[Drink some Ward Water to reduce your hexflame count|Ward Water Drink]]<br>
+
+	<</if>>
 
 	<<if $ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
 		<<if $hsswear>>
@@ -1047,6 +1066,28 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 [[Return|$layerReturn]]
 
+
+:: Ward Water Drink
+
+How many bottles of Ward Water would you like to drink today? You currently have $hexflame jinxed flame counters and any excess Ward Water you drink above that amount will be wasted.
+
+<<textbox "$temp" "1">>
+
+[[Continue|Ward Water Drink 2]]
+
+:: Ward Water Drink 2
+<<nobr>>
+<<set $temp = parseInt($temp)>>
+<<if !($temp > 0)>>
+	<<set $temp = 0>>
+<</if>>
+<<set $hexflame = Math.min($hexflame - $temp, 9)>>
+<</nobr>>
+You just drank $temp bottles of Ward Water.<<if $temp > 3 >> It was quite an effort to drink it all, but you managed to do it!<</if>>
+
+You now have $hexflame jinxed flame counters and $$items[25].count Ward Waters remaining.
+
+[[Continue exploring the layer|$return]]
 
 :: Adjust bullets [noreturn]
 <<set $temp = 0>>How many bullets would you like to add? (Use a negative number to subtract)
@@ -1438,6 +1479,10 @@ How many dubloons would you like to pay back?
 	<</if>>
 <</if>>
 <<for $i = 0; $i < $tempTime; $i++>>
+	<<if ($$items[25].count > 0 && $wardWaterDrink == 1) || ($$items[25].count > 0 && $wardWaterDrink == 2 && $hexflame > 9)>>
+	<<set $$items[25].count -= 1>>
+	<<set $hexflame -= 1>>
+	<<else>>
 	<<if $forageWater == 0>>
 		<<if $items[3].count > 0>>
 			<<set $items[3].count -= 1>>
@@ -1494,6 +1539,7 @@ How many dubloons would you like to pay back?
 				<<set $minorIQ += 1>>
 			<</if>>
 		<</if>>
+	<</if>>
 	<</if>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
