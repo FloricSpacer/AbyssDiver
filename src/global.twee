@@ -359,7 +359,7 @@ You have $app.skinColor colored $app.skinType skin.<<if $app.skinType.includes("
 You are <<BodyHeightText>> tall.
 You have $app.ears ears.
 You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you appear to be <<print Math.round($app.appAge)>> years old<</if>><<if $eternalYouth == 1>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
-
+<<if $DaedalusEquip==1>> You seem to have two $relic73.variation wings sprouting from you back. In reality this is the Daedalus Mechanism.<</if>>
 <<nobr>>
 <<if $dollevent2== true>>
 	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
@@ -878,6 +878,16 @@ If you are over 18, please go back and enter an age above 18 to continue.
 			[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
 	<</if>>
 
+	<<if $ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
+		<<if $DaedalusEquip == 0>>
+		<br> You hold an incredible complex and intricate mechanism that is wrapped around the chest like a sash, and interfaces electrically with the nervous system.<br>
+			[[Equip the Daedalus Mechanism|Daedalus Mechanism Select][$DaedalusEquip = 1]]<br>
+		<<else>>
+			<br>Winglike structures seem to sprout from your back, while it is in fact the Daedalus Mechanism tied around your chest.<br>
+			[[Take off the Daedalus Mechanism|Use Items and Relics][$DaedalusEquip = 0]]<br>
+		<</if>>
+	<</if>>
+
 	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 		You look at the glistening set of marbles known as the Managed Misfortune.
 		<<if $StoredCurse != "" && !$ManagedMisfortuneActive>>
@@ -1160,6 +1170,14 @@ Now that you have become better equipped, you can continue your journey.<br><br>
 
 <</if>>
 <</nobr>>
+
+:: Daedalus Mechanism Select [noreturn]
+
+As you tie the sash around your waist the mechanism on your back starts to flicker, you feel the mecha connecting with your mind and body and try to concentrate to give mechanism the apparent shape you wish.
+
+Please enter what kind of wings the Daedalus mechanism should mimic:
+
+<<textbox "$relic73.variation" "angel" "Use Items and Relics">>
 
 
 :: Balloon Inn [balloon nobr]
