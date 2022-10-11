@@ -1293,8 +1293,9 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<set $temp1 = random(0,11) + 84>>
 <<set $temp2 = random(0,11) + 84>>
 <<for $i = 0; $i < 1; $i>>
+	<<set $temp1 = random(0,11) + 84>>
 	<<set $temp2 = random(0,11) + 84>>
-	<<if ($temp1 !== $temp2)>>
+	<<if ($temp1 !== $temp2) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 86 || $temp2 == 86) )>>
 		<<break>>
 	<</if>>
 <</for>>
@@ -1365,7 +1366,12 @@ The curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 :: Layer7 Cherry Mix [layer7]
 <<nobr>>
 <<set $temp1 = random(0,11) + 72>>
-<<set $temp2 = random(0,11) + 84>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 84>>
+	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 86 )>>
+		<<break>>
+	<</if>>
+<</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floot(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>

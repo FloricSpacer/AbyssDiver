@@ -1393,8 +1393,9 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<set $temp1 = random(0,15) + 40>>
 <<set $temp2 = random(0,15) + 40>>
 <<for $i = 0; $i < 1; $i>>
+	<<set $temp1 = random(0,15) + 40>>
 	<<set $temp2 = random(0,15) + 40>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1))>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 42 || $temp2 == 42) ) )>>
 		<<break>>
 	<</if>>
 <</for>>
@@ -1433,6 +1434,12 @@ Please enter your new scale color:
 <<nobr>>
 <<set $temp1 = random(0,14) + 33>>
 <<set $temp2 = random(0,15) + 40>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,15) + 40>>
+	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 42 )>>
+		<<break>>
+	<</if>>
+<</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
