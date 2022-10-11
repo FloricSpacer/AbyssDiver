@@ -424,13 +424,13 @@ You look like a woman, but a bit on the masculine side. Many people would likely
 You look like a typical woman, with a feminine face and a figure that looks clearly female from a distance.
 <</if>>
 <<if $app.fit>8>>
-Working out with the World Stone has given you a fit body with especially well-toned arm muscles.
+Working out with the World Stone has given you a fit body with especially well-toned arm muscles. This will increase the weight you will be able to carry and might even slightly decrease your travel time.
 <<elseif $app.fit>6>>
 You have a well-toned athletic body.
 <<elseif $app.fit>4>>
-You have a unremarkable but healthy body.
+You have a unremarkable but healthy body. Nontheless you might be able to carry slightly less weight and take a little longer on travel than a well trained adventurer. 
 <<else>>
-Your body looks rather out of shape, you could definitely benefit from some exercise.
+Your body looks rather out of shape, you could definitely benefit from some exercise. As a result, you can carry considerably less and need to take more breaks while on the move than a fit expedition leader would.
 <</if>>
 <br><br>
 <<if $app.libido <= 1>>
@@ -1316,15 +1316,15 @@ How many dubloons would you like to pay back?
 <</if>>
 
 <<if $currentLayer==1>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 <<elseif $currentLayer==2>>
 	<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _cutRed)>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _cutRed)>>
 <<elseif $currentLayer==3>>
 	<<set _lightRed = setup.haveTravelLightSource() ? 1 : 0>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _lightRed)>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _lightRed)>>
 <<elseif $currentLayer==4>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 	<<if $torchUse == 1 && $heat == 1>>
 		<<set $tempTime -= 2>>
 	<<elseif $items[9].count > 0 && $torchUse == 1>>
@@ -1337,13 +1337,13 @@ How many dubloons would you like to pay back?
 		<</if>>
 	<</if>>
 <<elseif $currentLayer==5>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool)>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool)>>
 <<elseif $currentLayer==6>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime  - $timeRed + $status.penalty -$cool)>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime  - $timeRed + $status.penalty -$cool)>>
 <<elseif $currentLayer==7>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 <<elseif $currentLayer==8>>
-	<<set $tempTime = (1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - (3 * $items[12].count))>>
+	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - (3 * $items[12].count))>>
 <</if>>
 
 <<set $tempTime = Math.max(0, $tempTime)>>
@@ -1420,7 +1420,9 @@ How many dubloons would you like to pay back?
 	<<set $timeL8 += $tempTime>>
 	<<set $timeL8T2a += $tempTime>>
 	<<set $timeL8T2b += $tempTime>>
-	<<include "Layer 8 Threat 1a">>
+	<<if $L8loopLim == false>>
+		<<include "Layer 8 Threat 1a">>
+	<</if>>
 <</if>>
 
 <<if $forageFood == 0>>

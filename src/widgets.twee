@@ -802,8 +802,8 @@
 	<</if>>
 <</if>>
 
-<<set $HandicapThreat = $fit/4-1.5>>
-<<set $HandicapMovement= $fit/4-1.5>>
+<<set $HandicapThreat += $app.fit/4-1.25>>
+<<set $HandicapMovement += $app.fit/4-1.25>>
 
 <<if $app.armCount == 1 && $app.legCount >1 >>
 	<<set $HandicapThreat -=2>>
@@ -814,11 +814,11 @@
 	<<set $HandicapThreat -=3>>
 	<<set $HandicapMovement -=5>>
 	<<set $HandicapCarry -=3>>
-<<elseif $app.armCount = 0 && $app.legCount >1 >>
+<<elseif $app.armCount == 0 && $app.legCount >1 >>
 	<<set $HandicapThreat -=7>>
 	<<set $HandicapMovement -=3>>
 	<<set $HandicapCarry -=7>>
-<<elseif $app.armCount ==1 && $app.legCount ==1 >>
+<<elseif $app.armCount == 1 && $app.legCount ==1 >>
 	<<set $HandicapThreat -=7>>
 	<<set $HandicapMovement -=8>>
 	<<set $HandicapCarry -=7>>
@@ -826,7 +826,7 @@
 	<<set $HandicapThreat -=7>>
 	<<set $HandicapMovement -=9>>
 	<<set $HandicapCarry -=7>>
-<<elseif $app.armCount ==1 && $app.legCount ==0 >>
+<<elseif $app.armCount == 1 && $app.legCount ==0 >>
 	<<set $HandicapThreat -=8>>
 	<<set $HandicapMovement -=10>>
 	<<set $HandicapCarry -=9>>
@@ -1117,6 +1117,7 @@
 
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
+<<Handicap>>
 <<HeightCorrected>>
 /*<<set $totalCarry -= $carryWeight>>*/
 
@@ -1130,6 +1131,8 @@
 <<else>>
 	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5+6-$app.gender) )>>
 <</if>>
+
+<<set $carryWeight = $carryWeight*(1+ $HandicapCarry/10)>>
 
 <<if $DaedalusFly==true>>
 	<<set $carryWeight = Math.ceil($carryWeight/2)>>

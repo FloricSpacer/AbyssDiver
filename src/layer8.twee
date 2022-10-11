@@ -61,6 +61,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 
 :: Layer8 Hub [layer8 nobr]
 <<set $currentLayer = 8>>
+<<set $L8loopLim=false>>
 <<set $temp1 = random(0,20)>>
 <<checkTime>>
 <<CarryAdjust>>
@@ -1302,25 +1303,25 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 
 	<<set $tempTime = 1>>
 	<<include "GeneralTimeStats">>
-	
+	<<set $L8loopLim=true>>
 	<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>
-	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+		[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
-	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
-	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
-	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
+		Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
+		<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
+		it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
+		<<set $L8loopLim=false>>
+		[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
+		<<break>>
 
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
-	<<break>>
+	<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
+		[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
-<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
-	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
-
-	You can feel the deepest fears of your party manifesting into reality once again. 
-	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
-
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
-	<<break>>
+		You can feel the deepest fears of your party manifesting into reality once again. 
+		However, this time, they are not mere visions, but physical manifestations of your fears.<br>
+		<<set $L8loopLim=false>>
+		[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
+		<<break>>
 	<</if>>
 
 <</for>>
@@ -1329,13 +1330,14 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 <</nobr>>
 <<if $layerExitTime == 0>>
 	<<nobr>>
+	/* 
 	<<if $inanisTime != $time>>
 	[img[setup.ImagePath+'Threats/inanisego.png']]<br><br>
 
 Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like bizarre, life-sized porcelain dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.<br><br>
 
 [[Deal with the Inanis Ego|Layer 8 Threat 2a][$returnPassage = "Layer8 Ascend2"]]
-	<</if>>
+	<</if>>*/
 	<<set $corruption -= (100 - $corRed)>>
 	/* 
 	<<set $timeL6T1 = 0>>
@@ -1349,7 +1351,7 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 	Immediately as you step through, gravity seems to right itself and settle in its proper downward direction, indicating to you that you are once again in the realm of spatial consistency.
 
 	<<include "Curse Descriptions">>
-
+	<<set $L8loopLim=false>>
 	[[Return to the Seventh layer|Layer7 Hub]]
 
 <</if>>
@@ -1373,7 +1375,7 @@ If you continue your descent in spite of everything, descending past this layer'
 
 	<<set $tempTime = 1>>
 	<<include "GeneralTimeStats">>
-
+	<<set $L8loopLim=true>>
 
 	<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2b > 7 && $L8T1aCount < 2)>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
@@ -1381,7 +1383,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
 	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
 	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
-
+	<<set $L8loopLim=false>>
 	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 exit2"]]
 	<<break>>
 
@@ -1390,7 +1392,7 @@ If you continue your descent in spite of everything, descending past this layer'
 
 	You can feel the deepest fears of your party manifesting into reality once again. 
 	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
-
+	<<set $L8loopLim=false>>
 	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 exit2"]]
 	<<break>>
 	<</if>>
@@ -1400,13 +1402,13 @@ If you continue your descent in spite of everything, descending past this layer'
 
 <</nobr>><<if $layerExitTime == 0>>
 	<<nobr>>
-	<<if $inanisTime != $time>>
+	/*<<if $inanisTime != $time>>
 	[img[setup.ImagePath+'Threats/inanisego.png']]<br><br>
 
 Each doorway leads to a strange new path, and sometimes you spot strange beings that look almost like bizarre, life-sized porcelain dolls and also somehow remind you of yourself. Now, while traversing the neverending halls of this layer, you've come into contact with them andmust fight to keep them from stealing your very being.<br><br>
 
 [[Deal with the Inanis Ego|Layer 8 Threat 2a][$returnPassage = "Layer8 exit2"]]
-	<</if>>
+	<</if>>*/
 	
 /* 
 <<set $timeL8T1 = 0>>\
@@ -1414,7 +1416,7 @@ Each doorway leads to a strange new path, and sometimes you spot strange beings 
 */
 	
 At the very bottom of the layer you come across what appears to be a very deep pool of water. There doesn't seem to be any other way through besides this pool, so you'll need some kind of way to breathe underwater to continue forwards. The diving gear from Outset town or the Merfolk Curse could work, or you could use the Pneuma Wisp Relic to bypass the issue entirely. Other than that, you would need to get creative.<br><br>
-
+<<set $L8loopLim=false>>
 <<if $scuba == 1>>
 [[Descend into the pool|Layer9 1]]
 <<else>>
@@ -1432,7 +1434,7 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 <<Handicap>>
 [img[setup.ImagePath+'Threats/inanisego.png']]<br>
 
-<<if $timeL8 > $L8T1_milestones[$L8T1_counter]>>
+<<if $timeL8 >= $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
 		*PLACEHOLDER FIRST ENCOUTER*You see a distant figure slowly limping in your direction. As it comes closer to you it looks like some lifeless doll the size of yourself. 
 		It has clumsy robotic movement, but it clearly looks hostile. You simple stand there observing it as the doll comes closer. Just before it reaches you you pick up a medium sized rock and throw it into its face. 
@@ -1444,7 +1446,7 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 		It's an exact replica of who you were before all this started! You quicken your pace, you have to get to the bottom of this. <br><br>
 		<<say $mc>>Who are you and why do you look like me?<</say>><br>
 		Instead of responding your 'mirror' image just keeps waving. When you are within a few paces of the figure, you suddenly hear a lot of sound behind you. 
-		One fo the crossings you passed in now suddenly swarming with the lifelike puppets you encountered earlier. You immeadeatly realize what's going on. The dolls tricked you into an ambush and such a simple one at that.
+		One of the crossings you passed is now suddenly swarming with the lifelike puppets you encountered earlier. You immeadeatly realize what's going on. The dolls tricked you into an ambush and such a simple one at that.
 		You start to fight your way out of the situation you gotten yourself into, but you realize something else as well. The waving figure is not the only one that looks like you.
 		They all look like you in some way. Maybe the don't resemble you as much as the waving figure, but they all seem like different distorted versions of yourself, just with different genders, extra limbs, different sizes or completely inhuman charateristics.<br>
 		<<set $L8T1_counter += 1>>
@@ -1463,7 +1465,11 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 		<<set $L8T1_difficulty += 0.5>>
 	<</if>>
 <<else>>
-*PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yours swarm you. You don't know exactly what they are planning but it can't be good.<br>
+	<<if $timeL8 < 10 >>
+		*PLACEHOLDER GENERAL TEXT* About $timeL8 of these weird creepy humanoids swarm you. You don't know exactly what they are planning but it can't be good.<br>
+	<<else>>
+		*PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yourself swarm you. You don't know exactly what they are planning but it can't be good.<br>
+	<</if>>
 <</if>>
 
 <<set _relicBonus = 0>>
@@ -1488,19 +1494,19 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
-	The combination of the Toral Wave and Empath Coil will allow you to electrocute a few of these zombie like pests.<br>
+	The combination of the Toral Wave and Empath Coil will allow you to electrocute a few of these zombies like the pests they are.<br>
 	<<set _relicBonus += 10>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-	The eyes of the creepy doll seem to follow the young versions of yourself, who in turn start to amble in off in random directions. Very strange...<br>
+	The eyes of the creepy doll seem to follow a young versions of yourself, who in turn start to amble off in random directions. Very strange...<br>
 	<<set _relicBonus += 3>>
 <</if>>
 
 <<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
 <<if ($app.heightCor - $app.oheight)/$app.oheight*100 > 0 >>
 	The fact that you have become bigger during your travels means you have a size advantage over much of the mimics, which really aids you in battle!<br>
-<<elseif ($app.heightCor - $app.oheight)/$app.oheight*100 <> 0 >>
+<<elseif ($app.heightCor - $app.oheight)/$app.oheight*100 < 0 >>
 	The fact that you have shrunk during your travels means you are at a size disadvantage over much of the mimics, which really hinders you in battle!<br>
 <</if>>
 
@@ -1621,7 +1627,6 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 <<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
 
 <<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
-
 
 <<if _temp >  _L8T1_threshold3>>
 	Dispatching the horde proved to be childsplay in the end.<br>
