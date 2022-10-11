@@ -1103,8 +1103,9 @@ The relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<set $temp1 = random(0,15) + 24>>
 <<set $temp2 = random(0,15) + 24>>
 <<for $i = 0; $i < 1; $i>>
+	<<set $temp1 = random(0,15) + 24>>
 	<<set $temp2 = random(0,15) + 24>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 52 && (Math.abs($temp1 - $temp2) !== 65))&& ($temp1 + $temp2 !== 6 && (Math.abs($temp1 - $temp2) !== 1))>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 52 && (Math.abs($temp1 - $temp2) !== 65))&& ($temp1 + $temp2 !== 6 && (Math.abs($temp1 - $temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 26 || $temp2 == 26) ))>>
 		<<break>>
 	<</if>>
 <</for>>
@@ -1162,7 +1163,12 @@ Please enter your new skin/eye color:
 :: Layer3 Cherry Mix [layer3]
 <<nobr>>
 <<set $temp1 = random(0,11) + 21>>
-<<set $temp2 = random(0,15) + 24>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,15) + 24>>
+	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 26 )>>
+		<<break>>
+	<</if>>
+<</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
