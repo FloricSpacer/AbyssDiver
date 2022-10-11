@@ -366,7 +366,15 @@ Do you want to approach the Maw of Kimaris to get a copy of a relic from a highe
 
 :: Layer6 Ascend 1 [layer6]
 Returning to the fragrant desert of the previous layer will take 15 days of trekking, and cost 65 corruption.
-
+<<if $DaedalusEquip==true >>\
+	<<if $DaedalusFly==false>>\
+		You are currently commited to simply walking to the next layer
+		[[Flap your wings and prepare to fly to the next layer|Layer6 Ascend 1][$DaedalusFly=true]]
+	<<else>>\
+		You are about to fly to the next layer
+		[[Maybe it's better to walk to the next layer|Layer6 Ascend 1][$DaedalusFly=false]]
+	<</if>>\
+<</if>>\
 [[Continue your ascent|Layer6 Ascend2]]
 [[Turn back and continue your business on the sixth layer|Layer6 Hub]]
 
@@ -479,12 +487,16 @@ Use the following option only if you have specifically considered your inventory
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
 		<<set $waterL6 += 1>>
-		<<set $hexflame += 1>>
+		<<if $DaedalusFly==false>>
+			<<set $hexflame += 1>>
+		<</if>>
 	<<else>>
 		<<break>>
 	<</if>>
 	<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-		<<set $hexflame += 1>>
+		<<if $DaedalusFly==false>>
+			<<set $hexflame += 1>>
+		<</if>>
 	<</if>>
 <</for>>
 <</nobr>>
@@ -1144,6 +1156,9 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 	<<set $tempTime = 15>>
+	<<if $DaedalusFly==true>>
+		<<set $tempTime= Math.ceil($tempTime/2)>>
+	<</if>>
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
@@ -1493,7 +1508,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 [[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
 
 
-:: Layer6Time
+/*:: Layer6Time
 <<nobr>>
 <<if $status.duration > 0>>
 	<<set $status.duration -= 1>>

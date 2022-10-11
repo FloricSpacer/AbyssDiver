@@ -503,6 +503,15 @@ By default, your companions' reward for coming down here with you is the dubloon
 :: Layer2 Ascend 1 [layer2]
 Returning to the first layer will take 4 days, and cost 15 corruption.
 
+<<if $DaedalusEquip==true >>\
+	<<if $DaedalusFly==false>>\
+		You are currently commited to simply walking to the next layer
+		[[Flap your wings and prepare to fly to the next layer|Layer2 Ascend 1][$DaedalusFly=true]]
+	<<else>>\
+		You are about to fly to the next layer
+		[[Maybe it's better to walk to the next layer|Layer2 Ascend 1][$DaedalusFly=false]]
+	<</if>>\
+<</if>>\
 [[Continue your ascent|Layer2 Ascend2]]
 [[Turn back and continue your business on the second layer|Layer2 Hub]]
 
@@ -1508,6 +1517,9 @@ Use the following option only if you have specifically considered your inventory
 <<nobr>><<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 	<<set $tempTime=5>>
+	<<if $DaedalusFly==true>>
+		<<set $tempTime= Math.ceil($tempTime/2)>>
+	<</if>>
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>
 <</if>>

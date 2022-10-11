@@ -542,7 +542,15 @@ Do you want to check on the Mirage Vault and see if it's open?
 Returning to layer four and passing through the long dividing area will take a very long time without a rope. Combined with the time spent backtracking through this layer, the whole trip would take 24 days. With some rope to climb you can overcome the fault much faster, although it is still quite a long climb, and the whole trip would take 11 days.
 
 Either way, it will also cost 50 corruption.
-
+<<if $DaedalusEquip==true >>\
+	<<if $DaedalusFly==false>>\
+		You are currently commited to simply walking to the next layer
+		[[Flap your wings and prepare to fly to the next layer|Layer5 Ascend 1][$DaedalusFly=true]]
+	<<else>>\
+		You are about to fly to the next layer
+		[[Maybe it's better to walk to the next layer|Layer5 Ascend 1][$DaedalusFly=false]]
+	<</if>>\
+<</if>>\
 [[Continue your ascent|Layer5 Ascend2]]
 [[Turn back and continue your business on the fifth layer|Layer5 Hub]]
 
@@ -1501,6 +1509,9 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 		<<set $tempTime = 11>>
 	<<else>>
 		<<set $tempTime = 24>>
+	<</if>>
+	<<if $DaedalusFly==true>>
+		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>

@@ -78,7 +78,11 @@ You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing 
 <</if>>
 <</if>>
 	<</nobr>>
-Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
+<<if $DaedalusFly==true>>\
+	Your personal carrying capacity is only <<print Math.round($carryWeight)>> kg now that you are flying. If you would walk again you would be able carry double the amount of weight.
+<<else>>\
+	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
+<</if>>\
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.
 Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.
 <<nobr>>
@@ -359,7 +363,7 @@ You have $app.skinColor colored $app.skinType skin.<<if $app.skinType.includes("
 You are <<BodyHeightText>> tall.
 You have $app.ears ears.
 You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you appear to be <<print Math.round($app.appAge)>> years old<</if>><<if $eternalYouth == 1>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
-<<if $DaedalusEquip==1>> You seem to have two $relic73.variation wings sprouting from you back. In reality this is the Daedalus Mechanism.<</if>>
+<<if $DaedalusEquip==true>> You seem to have two $relic73.variation wings sprouting from you back. In reality this is the Daedalus Mechanism.<</if>>
 <<nobr>>
 <<if $dollevent2== true>>
 	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
@@ -879,12 +883,17 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	<</if>>
 
 	<<if $ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
-		<<if $DaedalusEquip == 0>>
+		<<if $DaedalusEquip == false>>
 		<br> You hold an incredible complex and intricate mechanism that is wrapped around the chest like a sash, and interfaces electrically with the nervous system.<br>
-			[[Equip the Daedalus Mechanism|Daedalus Mechanism Select][$DaedalusEquip = 1]]<br>
+			[[Equip the Daedalus Mechanism|Daedalus Mechanism Select][$DaedalusEquip = true]]<br>
 		<<else>>
 			<br>Winglike structures seem to sprout from your back, while it is in fact the Daedalus Mechanism tied around your chest.<br>
-			[[Take off the Daedalus Mechanism|Use Items and Relics][$DaedalusEquip = 0]]<br>
+			[[Take off the Daedalus Mechanism|Use Items and Relics][$DaedalusEquip = false, $DaedalusFly=false]]<br>
+			<<if $DaedalusFly==false>>
+				[[I want to fly to layers instead of walking|Use Items and Relics][$DaedalusFly=true]]<br>
+			<<else>>
+				[[I want to walk to layers instead of flying|Use Items and Relics][$DaedalusFly=false]]<br>
+			<</if>>
 		<</if>>
 	<</if>>
 
@@ -1173,7 +1182,7 @@ Now that you have become better equipped, you can continue your journey.<br><br>
 
 :: Daedalus Mechanism Select [noreturn]
 
-As you tie the sash around your waist the mechanism on your back starts to flicker, you feel the mecha connecting with your mind and body and try to concentrate to give mechanism the apparent shape you wish.
+As you tie the sash around your waist the mechanism on your back starts to flicker, you feel the mechanical contraption connecting with your mind and body and try to concentrate to give mechanism the apparent shape you wish.
 
 Please enter what kind of wings the Daedalus mechanism should mimic:
 
@@ -1388,8 +1397,10 @@ How many dubloons would you like to pay back?
 		<<set $timeL6T2 += $tempTime>>
 	<</if>>
 	<<set $timeL6T1 += $tempTime>>
-	<<set $hexflame += $tempTime>>
-
+	<<if $DaedalusFly==false>>
+		<<set $hexflame += $tempTime>>
+	<</if>>
+	
 <<elseif $currentLayer==7>>
 
 	<<set $timeL7 += $tempTime>>
