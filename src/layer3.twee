@@ -447,6 +447,15 @@ Ascending to the previous layer will take 6 days, and cost 25 corruption.
 
 In case you were wondering, there is one straight-shot passage through this layer between layers two and four that baloons funnel into on their way up through the Abyss. However, the sides of the tunnel are coated in a concentrated form of miasma that make it essentially impossible to get through without using a balloon or another way of flying.
 
+<<if $DaedalusEquip==true >>\
+	<<if $DaedalusFly==false>>\
+		You are currently commited to simply walking to the next layer
+		[[Flap your wings and prepare to fly to the next layer|Layer3 Ascend 1][$DaedalusFly=true]]
+	<<else>>\
+		You are about to fly to the next layer
+		[[Maybe it's better to walk to the next layer|Layer3 Ascend 1][$DaedalusFly=false]]
+	<</if>>\
+<</if>>\
 [[Continue your ascent|Layer3 Ascend2]]
 [[Turn back and continue your business on the third layer|Layer3 Hub]]
 
@@ -467,6 +476,9 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 	<<set $tempTime=6>>
+	<<if $DaedalusFly==true>>
+		<<set $tempTime= Math.ceil($tempTime/2)>>
+	<</if>>
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>
 <</if>>

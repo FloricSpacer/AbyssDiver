@@ -1274,6 +1274,15 @@ With Cherry's Chaotic Luck you have found the relic $relics[$temp1].name for a c
 :: Layer8 Ascend 1 [layer8]
 Ready? Getting back up out of this terrible prison and back to layer 7 will take a staggering 40 days and cost 100 corruption. Hopefully you're prepared to make the journey.
 
+<<if $DaedalusEquip==true >>\
+	<<if $DaedalusFly==false>>\
+		You are currently commited to simply walking to the next layer
+		[[Flap your wings and prepare to fly to the next layer|Layer8 Ascend 1][$DaedalusFly=true]]
+	<<else>>\
+		You are about to fly to the next layer
+		[[Maybe it's better to walk to the next layer|Layer8 Ascend 1][$DaedalusFly=false]]
+	<</if>>\
+<</if>>\
 [[Continue your ascent|Layer8 Ascend2]]
 [[Turn back and continue your business on the eighth layer|Layer8 Hub]]
 
@@ -1282,6 +1291,9 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 	<<set $tempTime = 40>>
+	<<if $DaedalusFly==true>>
+		<<set $tempTime= Math.ceil($tempTime/2)>>
+	<</if>>
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
