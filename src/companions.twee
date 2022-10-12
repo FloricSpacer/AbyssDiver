@@ -195,6 +195,8 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $companions = [$companionMaru, $companionLily, $companionKhemia, $companionCherry, $companionCloud, $companionSaeko]>>
 
 <<set $hiredCompanions = []>>
+<<set $DesertedCompanions = []>>
+<<set $DaedalusCompanions = []>>
 
 <<set $MaruConvo0 = false>>
 <<set $MaruConvo1 = false>>
@@ -2160,6 +2162,57 @@ Double-click this passage to edit it.
 		<<say $companionTwin>> Although, I get why you did it, I don't know if I would've done the same. <</say>><br>
 	<</if>>
 <</if>>
+
+:: Companions Stranded
+<<set _affectionPenalty = 2>>
+<<for $i = 0; $i < $hiredCompanions.length; $i++>>
+	<<if $hiredCompanions[$i].name == 'Maru' && !$DaedalusCompanions.some(e => e.name === "Maru")>>
+		<<set $companionMaru.affec -= (_affectionPenalty-$hsswear)>>
+		<<say $companionMaru>> Wait, are you leaving me? I'm scared... please don't leave me... <</say>><br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionMaru)>>
+	<</if>>
+	<<if $hiredCompanions[$i].name == 'Lily' && !$DaedalusCompanions.some(e => e.name === "Lily")>>
+		<<set $companionLily.affec -= (_affectionPenalty/2-$hsswear)>>
+		<<say $companionLily>> Hold on, you mean you are going ahead without me?! I...I can't say I haven't done that myself in the past.<</say>><br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionLily)>>
+	<</if>>
+	<<if $hiredCompanions[$i].name == 'Khemia' && !$DaedalusCompanions.some(e => e.name === "Khemia")>>
+		<<set $companionKhemia.affec -= (_affectionPenalty-$hsswear)>>
+		<<say $companionKhemia>> Wow nice, you can fly pretty high! Hey where are you going? I can't fly... wait! wait! WAIT! <</say>><br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionKhemia)>>
+	<</if>>
+	<<if $hiredCompanions[$i].name == 'Cherry' && !$DaedalusCompanions.some(e => e.name === "Cherry")>>
+		<<say $companionCherry>> Maybe it's for the better to leave me by myself. <</say>><br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionCherry)>>
+	<</if>>
+	<<if $hiredCompanions[$i].name == 'Cloud' && !$DaedalusCompanions.some(e => e.name === "Cloud")>>
+		<<set $companionCloud.affec -= (_affectionPenalty*2-$hsswear)>>
+		<<say $companionCloud>> Are you just letting me fend for myself here? Tssk, loyalty still seems scarce in the Abyss. <</say>><br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionCloud)>>
+	<</if>>
+	<<if $hiredCompanions[$i].name == 'Saeko' && !$DaedalusCompanions.some(e => e.name === "Saeko")>>
+		<<set $companionSaeko.affec -= (_affectionPenalty-$hsswear)>>
+		<<say $companionSaeko>> Although I could see some logic behind using those wings to go one ahead, as you are the only one without the purity gene. I still wish... <</say>><br>
+		You see some anger building behind that normaly composed face. <br><br>
+		<<say $companionSaeko>> You know what?! Fuck you for leaving me! This is sucks. <</say>><br>
+		A tear rolls down her face.<br><br>
+		<<say $companionSaeko>> I wish I could go with you.<</say>><br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionSaeko)>>
+	<</if>>
+	<<if $hiredCompanions[$i].name == $companionTwin.name && !$DaedalusCompanions.some(e => e.name === $companionTwin.name)>>
+		<<set $companionTwin.affec -= _affectionPenalty>>
+		<<say $companionTwin>> Hmmpf, I know that you want to leave me here. Don't be suprised if next time you are stranded while I go ahead. <</say>><br>
+		You get the most genuine evil twin glare you could ever get from somebody.<br>
+		<<set $hiredCompanions.deleteAt($i)>>
+		<<set $DesertedCompanions.push($companionTwin)>>
+	<</if>>
+<</for>>
 
 :: Maru Leaving
 
