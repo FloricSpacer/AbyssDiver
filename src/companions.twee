@@ -2122,6 +2122,10 @@ Double-click this passage to edit it.
 	She stands frozen, her face pale, as she tries to process what just happened to her.<br><br>
 	<<say $companionSaeko>> This wasn't what we agreed to... I, how, why..?<</say>><br>
 	<<set $companionSaeko.affec -= _affectionPenalty>>
+<<elseif _companionName == $companionTwin.name>>
+	While your twin had a big grin on her face moments ago, now the reality of the situation is starting to set in and that grin is quickly fading.<br><br>
+	<<say $companionTwin>> No! What the hell! This isn't how it was supposed to play out! Don't think I will forget this!<</say>><br>
+	<<set $companionTwin.affec -= _affectionPenalty>>
 <</if>>
 
 /* Reaction of other companions: */
@@ -2151,8 +2155,11 @@ Double-click this passage to edit it.
 		<<set $companionSaeko.affec -= _affectionPenalty>>
 		<<say $companionSaeko>> Your modus operandi has been noted... <</say>><br>
 	<</if>>
+	<<if _companionName != $companionTwin.name && $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+		<<set $companionTwin.affec -= Math.ceil(_affectionPenalty/2)>>
+		<<say $companionTwin>> Although, I get why you did it, I don't know if I would've done the same. <</say>><br>
+	<</if>>
 <</if>>
-
 
 :: Maru Leaving
 
