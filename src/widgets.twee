@@ -504,7 +504,7 @@
 			boy\
 		<</if>>\
 	<<else>>\
-		<<if $app.appAge>15.5>>\
+		<<if $app.appAge>18.5>>\
 			lady\
 		<<else>>\
 			girl\
@@ -1061,7 +1061,7 @@
 <<set $Maru_LastT=$time>>
 <<if $MaruConvo1 && $forageFood == 0>>
 	<<set $items[1].count +=1 >>
-	Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
+	@@.alert1; Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
 <</if>>
 <</if>>
 
@@ -1088,11 +1088,11 @@
 	<<if $altCloud == 1>>
 	<<set $temp = random(2,3) >>
 	<<set $items[20].count += $temp >>
-	Cloud seems to have been able to scavenge some ammunition somehow. You aren't quite sure whether he found it or made it himself, but either way you've gained $temp bullets.<br><br>
+	@@.alert1; Cloud seems to have been able to scavenge some ammunition somehow. You aren't quite sure whether he found it or made it himself, but either way you've gained $temp bullets.<br><br>
 	<<elseif $altCloud == 2>>
 	<<set $temp = random(2,5) >>
 	<<set $dubloons += $temp >>
-	Cloud somehow managed to scavenge a bit of cash, perhaps left behind by a previous diver? It's not like dubloons would be down here for any other reason. You've gained $temp dubloons.<br><br>
+	@@.alert1; Cloud somehow managed to scavenge a bit of cash, perhaps left behind by a previous diver? It's not like dubloons would be down here for any other reason. You've gained $temp dubloons.<br><br>
 	<</if>>
 <</if>>
 <</if>>
@@ -1105,11 +1105,61 @@
 <<if $fit_adjustLastT<$time-20>>
 	<<if $fit>8>>
 	<<set $fit-=1>>
-	Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
+	@@.alert1; Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
 	<<elseif $fit<5>>
 	<<set $fit+=1>>
-	The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
+	@@.alert1; The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
 	<</if>>
+<</if>>
+
+<<if $DesertedCompanions.length > 0 >>
+	<<set _rejoinD = $companionsDepartT>>
+	<<if $currentLayer< $companionsDepartL >>
+		<<for _i = $currentLayer-1; _i < $companionsDepartL; _i++>>
+			<<set _rejoinD +=  $UpTravelDays[_i]>>
+		<</for>>
+	/*<<elseif $currentLayer== $companionsDepartL>>
+		<<set _rejoinD +=  $UpTravelDays[$currentLayer-1]>>*/
+	<</if>>
+
+	<<if _rejoinD<=$time>>
+		<<if $DesertedCompanions.length > 1>>
+		@@.alert1; Your deserted party comes insight. At first they seem mostly happy they found you, but in the end you get some severe rants you have to sit trough and a decent amount of apologies you have to give before everything goes back to normal.<br>
+		<<else>>
+		@@.alert1; $DesertedCompanions[0].name comes in sight. After an initial happy reunion you get a severe talking to. It is not untill after a lot of apologizing on your end that things return to normal.<br>
+		<</if>>
+		<<for _i = $DesertedCompanions-1; _i ==0; _i-->>
+			<<set $hiredCompanions.push($DesertedCompanions[_i])>>
+			<<set $DesertedCompanions.deleteAt($i)>>
+		<</for>>
+	<</if>>
+
+	<<if $companionsDepartT<$time-7>>
+		<<for _i = 0; _i < $DesertedCompanions.length; _i++>>
+			<<if $DesertedCompanions[_i].name == 'Maru'>>
+				<<set $companionMaru.affec -= 1>>
+			<</if>>
+			<<if $DesertedCompanions[_i].name == 'Lily'>>
+				<<set $companionLily.affec -= 1>>
+			<</if>>
+			<<if $DesertedCompanions[_i].name == 'Khemia'>>
+				<<set $companionKhemia.affec -= 1>>
+			<</if>>
+			<<if $DesertedCompanions[_i].name == 'Cherry'>>
+				<<set $companionCherry.affec -= 1>>
+			<</if>>
+			<<if $DesertedCompanions[_i].name == 'Cloud'>>
+				<<set $companionCloud.affec -= 1>>
+			<</if>>
+			<<if $DesertedCompanions[_i].name == 'Saeko'>>
+				<<set $companionSaeko.affec -= 1>>
+			<</if>>
+			<<if $DesertedCompanions[_i].name == $companionTwin.name>>
+				<<set $companionTwin.affec -= 1>>
+			<</if>>
+		<</for>>
+	<</if>>
+
 <</if>>
 
 <</widget>>
