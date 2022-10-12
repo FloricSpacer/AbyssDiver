@@ -197,6 +197,7 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $hiredCompanions = []>>
 <<set $DesertedCompanions = []>>
 <<set $DaedalusCompanions = []>>
+<<set $UpTravelDays = [3,3,3,3,3,3,3,3,3]>>
 
 <<set $MaruConvo0 = false>>
 <<set $MaruConvo1 = false>>
@@ -236,6 +237,7 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $aiSuggest=false>>
 
 <<set $companionsDepartT = 0>>
+<<set $companionsDepartL = 0>>
 
 :: Companion Info [noreturn companion]
 
@@ -2163,8 +2165,10 @@ Double-click this passage to edit it.
 	<</if>>
 <</if>>
 
-:: Companions Stranded
+:: Companions Stranded [nobr]
 <<set _affectionPenalty = 2>>
+<<set $companionsDepartT = $time>>
+<<set $companionsDepartL = $currentLayer>>
 <<for $i = 0; $i < $hiredCompanions.length; $i++>>
 	<<if $hiredCompanions[$i].name == 'Maru' && !$DaedalusCompanions.some(e => e.name === "Maru")>>
 		<<set $companionMaru.affec -= (_affectionPenalty-$hsswear)>>
@@ -2180,7 +2184,7 @@ Double-click this passage to edit it.
 	<</if>>
 	<<if $hiredCompanions[$i].name == 'Khemia' && !$DaedalusCompanions.some(e => e.name === "Khemia")>>
 		<<set $companionKhemia.affec -= (_affectionPenalty-$hsswear)>>
-		<<say $companionKhemia>> Wow nice, you can fly pretty high! Hey where are you going? I can't fly... wait! wait! WAIT! <</say>><br>
+		<<say $companionKhemia>> Wow nice going <<PerceivedGender2>>, you can fly pretty high! Hey where are you going? I can't fly... wait! wait! WAIT! <</say>><br>
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $DesertedCompanions.push($companionKhemia)>>
 	<</if>>
@@ -2212,6 +2216,7 @@ Double-click this passage to edit it.
 		<<set $hiredCompanions.deleteAt($i)>>
 		<<set $DesertedCompanions.push($companionTwin)>>
 	<</if>>
+	You fly off quickly making your way upwards.<br>
 <</for>>
 
 :: Maru Leaving
