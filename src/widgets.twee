@@ -1115,9 +1115,10 @@
 <<if $DesertedCompanions.length > 0 >>
 	<<set _rejoinD = $companionsDepartT>>
 	<<if $currentLayer< $companionsDepartL >>
-		<<for _i = $currentLayer-1; _i < $companionsDepartL; _i++>>
-			<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-				<<set _rejoinD +=  Math.max(0,$UpTravelDays[_i]-2)>>
+		<<for _i = $currentLayer; _i < $companionsDepartL; _i++>>
+			<<if $DesertedCompanions.some(e => e.name === "Khemia")>>
+				<<set _temp = $UpTravelDays[_i]-2>>
+				<<set _rejoinD +=  Math.max(0,_temp)>>
 			<<else>>
 				<<set _rejoinD +=  $UpTravelDays[_i]>>
 			<</if>>
@@ -1125,14 +1126,14 @@
 	/*<<elseif $currentLayer== $companionsDepartL>>
 		<<set _rejoinD +=  $UpTravelDays[$currentLayer-1]>>*/
 	<</if>>
-
 	<<if _rejoinD<=$time>>
 		<<if $DesertedCompanions.length > 1>>
 		@@.alert1; Your deserted party comes insight. At first they seem mostly happy they found you, but in the end you get some severe rants you have to sit trough and a decent amount of apologies you have to give before everything goes back to normal.<br>
 		<<else>>
 		@@.alert1; $DesertedCompanions[0].name comes in sight. After an initial happy reunion you get a severe talking to. It is not untill after a lot of apologizing on your end that things return to normal.<br>
 		<</if>>
-		<<for _i = $DesertedCompanions.length-1; _i ==0; _i-->>
+		<<set _temp=$DesertedCompanions.length-1>>
+		<<for _i = _temp; _i >-1; _i-->>
 			<<if $DesertedCompanions[_i].name=="Khemia">>
 				<<set $timeRed+=2>>
 			<</if>>

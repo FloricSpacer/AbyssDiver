@@ -2106,7 +2106,7 @@ When you almost reach the end of your climb you see your twin standing at the to
 <<say $mc>> Why..you! You screwed me over! You... <</say>><br>
 <<say $companionTwin>> Me? Lets talk about you! Were you or were you not about to do the exact same thing to me, minus maybe the headblow? <</say>><br>
 
-You bit your tongue for a second, because you know $companionTwin.name is right.<br><br>
+You bite your tongue for a second, because you know $companionTwin.name is right.<br><br>
 <<say $companionTwin>> How about, you don't try to screw me over and I don't need to resort to knocking you out. Sounds fair? <</say>><br>
 
 You still feel frustrated by the whole ordeal but you decide to agree for now, if only to reunite the party and get the Daedalus Mechanism back.<br><br>
@@ -2185,44 +2185,37 @@ You still feel frustrated by the whole ordeal but you decide to agree for now, i
 :: Companions Stranded [nobr]
 <<set _temp1=1>>
 <<set _affectionPenalty = 2>>
-<<if $hiredCompanions[$i].name == $companionTwin.name>>
-<<set _temp1 = random(0,2)>>
+<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+	<<set _temp1 = random(0,2)>>
 <</if>>
 <<if _temp1>0 >>
-	<<set $companionsDepartT = $time>>
-	<<set $companionsDepartL = $currentLayer>>
-	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
+	<<for _i = $hiredCompanions.length-1; _i > -1; _i-->>
 		<<if $hiredCompanions[_i].name == 'Maru' && !$DaedalusCompanions.some(e => e.name === "Maru")>>
 			<<set $companionMaru.affec -= (_affectionPenalty-$hsswear)>>
 			<<say $companionMaru>> Wait, are you leaving me? I'm scared... please don't leave me... <</say>><br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionMaru)>>
-		<</if>>
-		<<if $hiredCompanions[_i].name == 'Lily' && !$DaedalusCompanions.some(e => e.name === "Lily")>>
+		<<elseif $hiredCompanions[_i].name == 'Lily' && !$DaedalusCompanions.some(e => e.name === "Lily")>>
 			<<set $companionLily.affec -= (_affectionPenalty/2-$hsswear)>>
 			<<say $companionLily>> Hold on, you mean you are going ahead without me?! I...I can't say I haven't done that myself in the past.<</say>><br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionLily)>>
-		<</if>>
-		<<if $hiredCompanions[_i].name == 'Khemia' && !$DaedalusCompanions.some(e => e.name === "Khemia")>>
+		<<elseif $hiredCompanions[_i].name == 'Khemia' && !$DaedalusCompanions.some(e => e.name === "Khemia")>>
 			<<set $companionKhemia.affec -= (_affectionPenalty-$hsswear)>>
 			<<say $companionKhemia>> Wow nice going <<PerceivedGender2>>, you can fly pretty high! Hey where are you going? I can't fly... wait! wait! WAIT! <</say>><br>
 			<<set $timeRed-=2>>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionKhemia)>>
-		<</if>>
-		<<if $hiredCompanions[_i].name == 'Cherry' && !$DaedalusCompanions.some(e => e.name === "Cherry")>>
+		<<elseif $hiredCompanions[_i].name == 'Cherry' && !$DaedalusCompanions.some(e => e.name === "Cherry")>>
 			<<say $companionCherry>> Maybe it's for the better to leave me by myself. <</say>><br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionCherry)>>
-		<</if>>
-		<<if $hiredCompanions[_i].name == 'Cloud' && !$DaedalusCompanions.some(e => e.name === "Cloud")>>
+		<<elseif $hiredCompanions[_i].name == 'Cloud' && !$DaedalusCompanions.some(e => e.name === "Cloud")>>
 			<<set $companionCloud.affec -= (_affectionPenalty*2-$hsswear)>>
 			<<say $companionCloud>> Are you just letting me fend for myself here? Tssk, loyalty still seems scarce in the Abyss. <</say>><br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionCloud)>>
-		<</if>>
-		<<if $hiredCompanions[_i].name == 'Saeko' && !$DaedalusCompanions.some(e => e.name === "Saeko")>>
+		<<elseif $hiredCompanions[_i].name == 'Saeko' && !$DaedalusCompanions.some(e => e.name === "Saeko")>>
 			<<set $companionSaeko.affec -= (_affectionPenalty-$hsswear)>>
 			<<say $companionSaeko>> Although I could see some logic behind using those wings to go one ahead, as you are the only one without the purity gene. I still wish... <</say>><br>
 			You see some anger building behind that normaly composed face. <br><br>
@@ -2231,21 +2224,20 @@ You still feel frustrated by the whole ordeal but you decide to agree for now, i
 			<<say $companionSaeko>> I wish I could go with you.<</say>><br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionSaeko)>>
-		<</if>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name && !$DaedalusCompanions.some(e => e.name === $companionTwin.name)>>
+		<<elseif $hiredCompanions[_i].name == $companionTwin.name && !$DaedalusCompanions.some(e => e.name === $companionTwin.name)>>
 			<<set $companionTwin.affec -= _affectionPenalty>>
 			You feel a rock fly right past your head. As you turn around in shock you see your twin standing there, clearly the perpetrator of the rock-incident.<br><br>
-			<<say $mc>> What the hell? That could've hit me!<br>
+			<<say $mc>> What the hell? That could've hit me!<</say>><br>
 			<<say $companionTwin>> Hmmpf consider yourself lucky, I know that you want to leave me here. Don't be suprised if next time you are stranded while I go ahead. <</say>><br>
 			You get the most genuine evil twin glare you could ever get from somebody.<br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionTwin)>>
 		<</if>>
-		You fly off quickly making your way upwards.<br>
 	<</for>>
+	You fly off quickly making your way upwards.<br>
 <<else>>
 	<<set $companionTwin.affec -= _affectionPenalty>>
-	<<set $twinFly = true>>
+	<<set $TwinFly = true>>
 	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
 		<<if $hiredCompanions[_i].name == $companionTwin.name>>
 			<<set $hiredCompanions.deleteAt(_i)>>
@@ -2266,28 +2258,28 @@ You still feel frustrated by the whole ordeal but you decide to agree for now, i
 	<<elseif $hiredCompanions.length==1 >>
 		You see $hiredCompanions[0].name standing over you with a worried look.<br><br>
 		<<say $hiredCompanions[0]>> Are you okay? <</say>><br>
-		<<say $mc>> Yeah, my head hurts a little. What happend?<<say>><br>
+		<<say $mc>> Yeah, my head hurts a little. What happend?<</say>><br>
 		<<say $hiredCompanions[0]>> I don't know I just found you laying here on the ground. I tried to call from help $companionTwin.name, but <<if $companionTwin.osex='male'>>he <<else>>she <</if>>didn't respond at all. 
-		But you only had a little bit of blood on the back of your head, and after I took care of that you already woke up again. I don't know how you did that but you have to be more carefull!<</say>><br>
+		But you only had a little bit of blood on the back of your head, and after I took care of that you already woke up again. I don't know how you did that but you have to be more carefull! <</say>><br>
 	
 		You notice the Daedalus Mechanism is no longer around your chest.<br><br>
-		<<say $mc>> Wait, $companionTwin.name is gone?<<say>><br>
-		<<say $hiredCompanions[0]>> Euh, I guess. I don't see <<if $companionTwin.osex='male'>>him <<else>>her <</if>>at least. Why? <</say>><br>
+		<<say $mc>> Wait, $companionTwin.name is gone?<</say>><br>
+		<<say $hiredCompanions[0]>> Euh, I guess. I don't see <<if $companionTwin.osex=='male'>>him <<else>>her <</if>>at least. Why? <</say>><br>
 		You understand that your twin took off with the Daedalus Mechanism and left the rest, including you, stranded. However, you can't really explain that without explaining you were about to do the same thing.<br><br>
-		<<say $mc>> Shit, well I guess <<if $companionTwin.osex='male'>>he <<else>>she <</if>> went ahead already. We might catch <<if $companionTwin.osex='male'>>him <<else>>her <</if>> later, for now we still have quite the climb ahead of us.<<say>><br>
+		<<say $mc>> Shit, well I guess <<if $companionTwin.osex=='male'>>he <<else>>she <</if>> went ahead already. We might catch <<if $companionTwin.osex=='male'>>him <<else>>her <</if>> later, for now we still have quite the climb ahead of us. <</say>><br>
 
 	<<elseif $hiredCompanions.length>1>>
 		You see most of your party standing over you with a worried look.<br><br>
 		<<say $hiredCompanions[0]>> Are you okay? <</say>><br>
-		<<say $mc>> Yeah, my head hurts a little. What happend?<<say>><br>
+		<<say $mc>> Yeah, my head hurts a little. What happend? <</say>><br>
 		<<say $hiredCompanions[0]>> I don't know I just found you laying here on the ground. I tried to call from help and everybody came quickly luckly, I mean except for $companionTwin.name I guess.
-		But you only had a little bit of blood on the back of your head, and after we took care of that you already woke up again. I don't know how you did that but you have to be more carefull!<</say>><br>
+		But you only had a little bit of blood on the back of your head, and after we took care of that you already woke up again. I don't know how you did that but you have to be more carefull! <</say>><br>
 	
 		You notice the Daedalus Mechanism is no longer around your chest.<br><br>
-		<<say $mc>> Wait, $companionTwin.name is gone?<<say>><br>
-		<<say $hiredCompanions[0]>> Euh, I guess. I don't see <<if $companionTwin.osex='male'>>him <<else>>her <</if>>at least. Why? <</say>><br>
+		<<say $mc>> Wait, $companionTwin.name is gone? <</say>><br>
+		<<say $hiredCompanions[0]>> Euh, I guess. I don't see <<if $companionTwin.osex=='male'>>him <<else>>her <</if>>at least. Why? <</say>><br>
 		You understand that your twin took off with the Daedalus Mechanism and left the rest, including you, stranded. However, you can't really explain that without explaining you were about to do the same thing.<br><br>
-		<<say $mc>> Shit, well I guess <<if $companionTwin.osex='male'>>he <<else>>she <</if>> went ahead already. We might catch <<if $companionTwin.osex='male'>>him <<else>>her <</if>> later, for now we still have quite the climb ahead of us.<<say>><br>
+		<<say $mc>> Shit, well I guess <<if $companionTwin.osex=='male'>>he <<else>>she <</if>> went ahead already. We might catch <<if $companionTwin.osex=='male'>>him <<else>>her <</if>> later, for now we still have quite the climb ahead of us. <</say>><br>
 	<</if>>
 <</if>>
 
