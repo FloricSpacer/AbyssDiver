@@ -1116,7 +1116,11 @@
 	<<set _rejoinD = $companionsDepartT>>
 	<<if $currentLayer< $companionsDepartL >>
 		<<for _i = $currentLayer-1; _i < $companionsDepartL; _i++>>
-			<<set _rejoinD +=  $UpTravelDays[_i]>>
+			<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+				<<set _rejoinD +=  Math.max(0,$UpTravelDays[_i]-2)>>
+			<<else>>
+				<<set _rejoinD +=  $UpTravelDays[_i]>>
+			<</if>>
 		<</for>>
 	/*<<elseif $currentLayer== $companionsDepartL>>
 		<<set _rejoinD +=  $UpTravelDays[$currentLayer-1]>>*/
@@ -1129,6 +1133,9 @@
 		@@.alert1; $DesertedCompanions[0].name comes in sight. After an initial happy reunion you get a severe talking to. It is not untill after a lot of apologizing on your end that things return to normal.<br>
 		<</if>>
 		<<for _i = $DesertedCompanions.length-1; _i ==0; _i-->>
+			<<if $DesertedCompanions[_i].name=="Khemia">>
+				<<set $timeRed+=2>>
+			<</if>>
 			<<set $hiredCompanions.push($DesertedCompanions[_i])>>
 			<<set $DesertedCompanions.deleteAt(_i)>>
 		<</for>>
