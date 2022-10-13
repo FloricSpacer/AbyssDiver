@@ -1445,13 +1445,14 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 <<nobr>>
 <<Handicap>>
 [img[setup.ImagePath+'Threats/inanisego.png']]<br>
-
+<<set _temp1=1>>
 <<if $timeL8 >= $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
 		*PLACEHOLDER FIRST ENCOUTER*You see a distant figure slowly limping in your direction. As it comes closer to you it looks like some lifeless doll the size of yourself. 
 		It has clumsy robotic movement, but it clearly looks hostile. You simple stand there observing it as the doll comes closer. Just before it reaches you you pick up a medium sized rock and throw it into its face. 
 		The doll instantly goes down and stays down. It wasn't much of threat but it sure was off putting.<br>
 		<<set $L8T1_counter += 1>>
+		<<set _temp1=0>>
 	<<elseif $L8T1_counter==1>>
 		*PLACEHOLDER 10-day mark* Walking around the neverending halls of the 8th layer you see a figure standing at the end of the hallway. It is waving to you. 
 		Curiousity gets the better of you and you start to approach the figure. Soon the figure comes into focus and you are somewhat shocked by what you see. 
@@ -1483,193 +1484,193 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 		*PLACEHOLDER GENERAL TEXT* About $timeL8 mock versions of yourself swarm you. You don't know exactly what they are planning but it can't be good.<br>
 	<</if>>
 <</if>>
+<<if _temp1==1>>
+	<<set _relicBonus = 0>>
+	<<set _curseBonus = 0>>
+	<<set _companionBonus = 0>>
+	<<set _equipmentBonus = 0>>
+	<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
 
-<<set _relicBonus = 0>>
-<<set _curseBonus = 0>>
-<<set _companionBonus = 0>>
-<<set _equipmentBonus = 0>>
-<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
+	<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
+		Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningfull blows just became so much easier!<br>
+		<<set _relicBonus += 10>>
+	<</if>>
 
-<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
-	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningfull blows just became so much easier!<br>
-	<<set _relicBonus += 10>>
-<</if>>
+	<<if $slingshot>>
+		Your Brave Vector turned slingshot is proving to be valuable fire arm to neutralize mimics from a distance.<br>
+		<<set _relicBonus += 20>>
+	<</if>>
 
-<<if $slingshot>>
-	Your Brave Vector turned slingshot is proving to be valuable fire arm to neutralize mimics from a distance.<br>
-	<<set _relicBonus += 20>>
-<</if>>
+	<<if $joyousSword>>
+		The sword you made from the Joyous Sunder will now surely be an asset.<br>
+		<<set _relicBonus += 10>>
+	<</if>>
 
-<<if $joyousSword>>
-	The sword you made from the Joyous Sunder will now surely be an asset.<br>
-	<<set _relicBonus += 10>>
-<</if>>
+	<<if $DaedalusEquip>>
+		Having wings on your back allows you to stay out of reach of the mimics, if only it wasn't for the enclosed space on this layer and tall mimics or ones with a longue tongue or ones with long slimey limbs or... well atleast its a bit of an advantage, lets leave it at that.<br>
+		<<set _relicBonus += 7>>
+	<</if>>
 
-<<if $DaedalusEquip>>
-	Having wings on your back allows you to stay out of reach of the mimics, if only it wasn't for the enclosed space on this layer and tall mimics or ones with a longue tongue or ones with long slimey limbs or... well atleast its a bit of an advantage, lets leave it at that.<br>
-	<<set _relicBonus += 7>>
-<</if>>
+	<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
+		The combination of the Toral Wave and Empath Coil will allow you to electrocute a few of these zombies like the pests they are.<br>
+		<<set _relicBonus += 10>>
+	<</if>>
 
-<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
-	The combination of the Toral Wave and Empath Coil will allow you to electrocute a few of these zombies like the pests they are.<br>
-	<<set _relicBonus += 10>>
-<</if>>
+	<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+		The eyes of the creepy doll seem to follow a young versions of yourself, who in turn start to amble off in random directions. Very strange...<br>
+		<<set _relicBonus += 3>>
+	<</if>>
 
-<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-	The eyes of the creepy doll seem to follow a young versions of yourself, who in turn start to amble off in random directions. Very strange...<br>
-	<<set _relicBonus += 3>>
-<</if>>
+	<<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
+	<<if ($app.heightCor - $app.oheight)/$app.oheight*100 > 0 >>
+		The fact that you have become bigger during your travels means you have a size advantage over much of the mimics, which really aids you in battle!<br>
+	<<elseif ($app.heightCor - $app.oheight)/$app.oheight*100 < 0 >>
+		The fact that you have shrunk during your travels means you are at a size disadvantage over much of the mimics, which really hinders you in battle!<br>
+	<</if>>
 
-<<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
-<<if ($app.heightCor - $app.oheight)/$app.oheight*100 > 0 >>
-	The fact that you have become bigger during your travels means you have a size advantage over much of the mimics, which really aids you in battle!<br>
-<<elseif ($app.heightCor - $app.oheight)/$app.oheight*100 < 0 >>
-	The fact that you have shrunk during your travels means you are at a size disadvantage over much of the mimics, which really hinders you in battle!<br>
-<</if>>
+	<<if $app.skinType == "sticky, slimy">>
+		Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of more than 1 sticky situation!<br>
+		<<set _curseBonus += 3>>
+	<</if>>
 
-<<if $app.skinType == "sticky, slimy">>
-	Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of more than 1 sticky situation!<br>
-	<<set _curseBonus += 3>>
-<</if>>
+	<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+		Those claw-like nails will be a of some help if you get into hand-to-hand combat with one of them. <br>
+		<<set _curseBonus += 2>>
+	<</if>>
 
-<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
-	Those claw-like nails will be a of some help if you get into hand-to-hand combat with one of them. <br>
-	<<set _curseBonus += 2>>
-<</if>>
+	<<if $hiredCompanions.some(e => e.name === "Maru")>>
+		Maru looks scared but he starts throwing any items he can find near him towards the mimics.<br>
+		<<set _companionBonus += 2>>
+	<</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
-	Maru looks scared but he starts throwing any items he can find near him towards the mimics.<br>
-	<<set _companionBonus += 2>>
-<</if>>
-
-<<if $hiredCompanions.some(e => e.name === "Lily")>>
-	Lily puffs her chest, lets out something of a battle cry and charges head first into the mimics and starts beating them left and right.<br>
-	<<set _companionBonus += 8>>
-<</if>>
-
-<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia assumes a fighting stance dispatching any mimics that finds itself near him.
-	<<set _companionBonus += 15>>
-	<<if _cutRed>>
-		His sword slashes through them almost quicker than you can blink.
+	<<if $hiredCompanions.some(e => e.name === "Lily")>>
+		Lily puffs her chest, lets out something of a battle cry and charges head first into the mimics and starts beating them left and right.<br>
 		<<set _companionBonus += 8>>
-		<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
-		<<set _companionBonus += 5>>
-		<</if>>
 	<</if>>
-	<br>
-<</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-	Cherry seems frozen. You are not really sure if she is frozen from fear or just lack of self interest. At least she forms a bit of distraction for the creepy puppets.<br>
-	<<set _companionBonus += 1>>
-<</if>>
+	<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+		Khemia assumes a fighting stance dispatching any mimics that finds itself near him.
+		<<set _companionBonus += 15>>
+		<<if _cutRed>>
+			His sword slashes through them almost quicker than you can blink.
+			<<set _companionBonus += 8>>
+			<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
+			<<set _companionBonus += 5>>
+			<</if>>
+		<</if>>
+		<br>
+	<</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-	Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.
-	<<set _companionBonus += 10>>
-	<<if $slingshot && $cloudStrat==0>>
-		The hand holding the modified Brave Vector moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
+	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+		Cherry seems frozen. You are not really sure if she is frozen from fear or just lack of self interest. At least she forms a bit of distraction for the creepy puppets.<br>
+		<<set _companionBonus += 1>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+		Cloud steels his resolve. When you glance over to Cloud you can clearly see the amount of experience he has in battle.
+		<<set _companionBonus += 10>>
+		<<if $slingshot && $cloudStrat==0>>
+			The hand holding the modified Brave Vector moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
+			<<set _companionBonus += 5>>
+		<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
+			The hand holding his gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
+			<<set _companionBonus += 5>>
+			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
+			<<set _equipmentBonus += _ammo*5>>
+			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8*_ammo) >>
+			<<if $items[20].count <= _bulletsUsed>>
+				Cloud used every single one of your last bullets...
+				<<set $items[20].count = 0 >>
+				<<set $ammoStrat = 0>>
+				<<set $cloudStrat = 0>>
+			<<else>>
+				Cloud used _bulletsUsed bullets fighting off the enemy.
+				<<set $items[20].count -= _bulletsUsed>>
+			<</if>>
+		<</if>>
+		<br>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+		Saeko sticks very close to you. It is obvious she is somewhat scared but she tries to hide it as well as she can while giving you as must fighting and strategic tips as possible.<br>
 		<<set _companionBonus += 5>>
-	<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
-		The hand holding his gun moves quickly and gracefully, only ever perfectly still the second he fires a shot. They're all headshots...
-		<<set _companionBonus += 5>>
-		<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
-		<<set _equipmentBonus += _ammo*5>>
-		<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8*_ammo) >>
-		<<if $items[20].count <= _bulletsUsed>>
-			Cloud used every single one of your last bullets...
-			<<set $items[20].count = 0 >>
-			<<set $ammoStrat = 0>>
-			<<set $cloudStrat = 0>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+		<<set _twinBonus = 7 - $HandicapThreat*1.5+_curseBonus>>
+		<<if _twinBonus > 7 >>
+			Your twin fights of copies of you with relative ease. It's a strange sight for sure to see a copy of you fight other copies, but next to your twin, the mimics look like cheap immitations.
+		<<elseif _twinBonus > 5>>
+			Much like yourself your twin is not the most experienced fighter. But the fact that your twin is able to keep a couple of them busy is already helping you a lot.
+		<<elseif _twinBonus > 0>>
+			You are not the fighting type but neither is your twin. The antics of your twin is drawing some attention away from you which is helpfull but your twin is not taking any of them really down.
 		<<else>>
-			Cloud used _bulletsUsed bullets fighting off the enemy.
-			<<set $items[20].count -= _bulletsUsed>>
+			Normally it was only you yourself who was a liability with how badly you are able to handle threats, now it's both you and your twin... Somebody has to rescue your twin and fast before it's too late...
 		<</if>>
+		<<set _companionBonus += _twinBonus>>
+		<br>
+
 	<</if>>
-	<br>
-<</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-	Saeko sticks very close to you. It is obvious she is somewhat scared but she tries to hide it as well as she can while giving you as must fighting and strategic tips as possible.<br>
-	<<set _companionBonus += 5>>
-<</if>>
-
-<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
-	<<set _twinBonus = 7 - $HandicapThreat*1.5+_curseBonus>>
-	<<if _twinBonus > 7 >>
-		Your twin fights of copies of you with relative ease. It's a strange sight for sure to see a copy of you fight other copies, but next to your twin, the mimics look like cheap immitations.
-	<<elseif _twinBonus > 5>>
-		Much like yourself your twin is not the most experienced fighter. But the fact that your twin is able to keep a couple of them busy is already helping you a lot.
-	<<elseif _twinBonus > 0>>
-		You are not the fighting type but neither is your twin. The antics of your twin is drawing some attention away from you which is helpfull but your twin is not taking any of them really down.
-	<<else>>
-		Normally it was only you yourself who was a liability with how badly you are able to handle threats, now it's both you and your twin... Somebody has to rescue your twin and fast before it's too late...
+	<<if _cutRed>>
+		You're glad you brought a sword to defend yourself.<br>
+		<<set _equipmentBonus += 7>>
 	<</if>>
-	<<set _companionBonus += _twinBonus>>
-	<br>
 
-<</if>>
-
-<<if _cutRed>>
-	You're glad you brought a sword to defend yourself.<br>
-	<<set _equipmentBonus += 7>>
-<</if>>
+		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+			<<set _equipmentBonus += 5*$ammoStrat>>
+			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
+			<<if $items[20].count <= _bulletsUsed>>
+				You used every single one of your last bullets...<br>
+				<<set $items[20].count = 0 >>
+				<<set $ammoStrat = 0>>
+			<<else>>
+				You used _bulletsUsed bullets fighting off the enemy.<br>
+				<<set $items[20].count -= _bulletsUsed>>
+			<</if>>
+		<</if>>
 
 	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
-		<<set _equipmentBonus += 5*$ammoStrat>>
-		<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
-		<<if $items[20].count <= _bulletsUsed>>
-			You used every single one of your last bullets...<br>
-			<<set $items[20].count = 0 >>
-			<<set $ammoStrat = 0>>
+		Your gun will be a very important asset if you want to survive this horde.<br>
+	<</if>>
+
+	<<if $status.penalty > 0>>
+		<<set _injuredStart = true>>
+	<<else>>
+		<<set _injuredStart = false>>
+	<</if>>
+
+	<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
+	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
+	<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
+
+	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
+
+	<<if _temp >  _L8T1_threshold3>>
+		Dispatching the horde proved to be childsplay in the end.<br>
+	<<elseif _temp > _L8T1_threshold2 && _temp <=  _L8T1_threshold3>>
+		The horde gave you serious trouble but you managed to dispatch them without ever being in real danger.<br>
+	<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
+		You had some close calls, some maybe a bit to close for comfort. You barely avoided getting caught. You wonder, were you just unlucky or should you consider leaving and only coming back when you are better prepared?<br>
+	<<elseif _temp <= _L8T1_threshold>>
+		<<if _injuredStart==true>>
+			<<set $gameOver = true>>
+			<<set $i=$tempTime>>
+			You fight like crazy but the lifeless dolls overwhelm you. As one of you grabs hold of your face, it closes in for a kiss. 
+			When your lips touch you feel your life flashing before your eyes and you know you have to struggle loose as fast as you can. 
+			Your previous injuries, however, have made you too weak to do so and after a full 5 seconds you feel their hands leaving your face. 
+			As you look at this other being you know something is wrong. You don't know exactly what at first. After a second you feel the burning envy for this person.
+			Your life has been hollow, forever roaming the hallways of this maze, and this person has a full life, filled with goals, setbacks and triumphs. 
+			You want that! You need that! However, you also know that for some reason this particular person can not give it to you.
+			You'll have to find somebody else in this maze and take it for yourself, even if it will take you an eternity.<br>
+			<h1 class="gameover">Game Over</h1>
 		<<else>>
-			You used _bulletsUsed bullets fighting off the enemy.<br>
-			<<set $items[20].count -= _bulletsUsed>>
+			While you did you best when battling the horde, it was a losing battle. They overwhelmed you, grabbed you and one of them started kissing you. Your life flashed before your eyes, but you struggled loose within a few seconds. It left you with a severe headache that hampers you.<br>
+			<<set $status.duration += 3>>
+			<<set $status.penalty += 1>>
 		<</if>>
 	<</if>>
-
-<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
-	Your gun will be a very important asset if you want to survive this horde.<br>
 <</if>>
-
-<<if $status.penalty > 0>>
-	<<set _injuredStart = true>>
-<<else>>
-	<<set _injuredStart = false>>
-<</if>>
-
-<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
-<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
-<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
-
-<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
-
-<<if _temp >  _L8T1_threshold3>>
-	Dispatching the horde proved to be childsplay in the end.<br>
-<<elseif _temp > _L8T1_threshold2 && _temp <=  _L8T1_threshold3>>
-	The horde gave you serious trouble but you managed to dispatch them without ever being in real danger.<br>
-<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
-	You had some close calls, some maybe a bit to close for comfort. You barely avoided getting caught. You wonder, were you just unlucky or should you consider leaving and only coming back when you are better prepared?<br>
-<<elseif _temp <= _L8T1_threshold>>
-	<<if _injuredStart==true>>
-		<<set $gameOver = true>>
-		<<set $i=$tempTime>>
-		You fight like crazy but the lifeless dolls overwhelm you. As one of you grabs hold of your face, it closes in for a kiss. 
-		When your lips touch you feel your life flashing before your eyes and you know you have to struggle loose as fast as you can. 
-		Your previous injuries, however, have made you too weak to do so and after a full 5 seconds you feel their hands leaving your face. 
-		As you look at this other being you know something is wrong. You don't know exactly what at first. After a second you feel the burning envy for this person.
-		Your life has been hollow, forever roaming the hallways of this maze, and this person has a full life, filled with goals, setbacks and triumphs. 
-		You want that! You need that! However, you also know that for some reason this particular person can not give it to you.
-		You'll have to find somebody else in this maze and take it for yourself, even if it will take you an eternity.<br>
-		<h1 class="gameover">Game Over</h1>
-	<<else>>
-		While you did you best when battling the horde, it was a losing battle. They overwhelmed you, grabbed you and one of them started kissing you. Your life flashed before your eyes, but you struggled loose within a few seconds. It left you with a severe headache that hampers you.<br>
-		<<set $status.duration += 3>>
-		<<set $status.penalty += 1>>
-	<</if>>
-<</if>>
-
 <</nobr>>
 
 :: Layer 8 Threat 2a
