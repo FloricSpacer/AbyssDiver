@@ -92,6 +92,7 @@ What do you want to do while you're here?<br><br>
 
 
 :: Layer1 Relics [layer1 cards nobr]
+<p><<checkTime>></p>
 <h1>Relics</h1>
 
 <p>
@@ -1101,48 +1102,10 @@ You have successfully taken on the $curse12.name curse. Hopefully you are ok wit
 <<set $corruption -= $playerCurses[$temp].corr>>
 <<set $iconUsed = 1>>
 <<set $tempTime=3>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
-/* 
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $tempTime = (Math.max(3 - $timeRed + $status.penalty, 0))>>
-<<set $timeL1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL1 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<for $i = 0; $i < $tempTime; $i++>>
-			<<set $GenderLog.push($ForageFoodMajor)>>
-		<</for>>
-	<</if>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0)>>
-			<<set $items[2].count += 1, 0)>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL1 += 1>>
-		<<if $abyssKnow == 0>>
-			<<for $i = 0; $i < $tempTime; $i++>>
-				<<set $GenderLog.push($ForageWaterMajor)>>
-			<</for>>
-		<</if>>
-	<</if>>
-<</for>>
-*/
+<<include "GeneralTimeSetup">>
+<<include "GeneralTimeStats">>
 <<set $targetCurse=$playerCurses[$temp]>>
-<</nobr>>
-The curse of $playerCurses[$temp].name has been successfully removed and your corruption has been refunded.
-<<nobr>>
+The curse of $playerCurses[$temp].name has been successfully removed and your corruption has been refunded.<br>
 <<include "CurseRemoval">>
 <</nobr>>
 [[Continue exploring the layer|Layer1 Hub]]
@@ -1168,6 +1131,9 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 
 :: Layer1 Ascend2 [layer1]
 <<nobr>>
+<<if $DaedalusFly==true>>
+	<<include "Companions Stranded">>
+<</if>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 	<<set $tempTime=1>>
@@ -1186,7 +1152,9 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
 
 <<include "Curse Descriptions">>
-
+<<if $TwinFly == true>>
+	<<include "Twin rejoin">>
+<</if>>
 [[Return to Outset Town|Surface Hub]]
 
 :: Layer1 Flasks [layer1]
