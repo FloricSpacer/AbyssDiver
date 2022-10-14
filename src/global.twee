@@ -1281,24 +1281,60 @@ How many dubloons would you like to pay back?
 [[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
 
-:: CurseRemoval
+:: CurseRemoval [nobr]
 <<set _curseDeleted=false>>
-<<for _i = 0; _i < $playerCurses.length; _i++>>
+<<for _i = 0; _curseDeleted==false; _i++>>
 	<<if  !_curseDeleted && $playerCurses[_i].name == $targetCurse.name>>
+		<<set _loopEnd=false>>
 		<<if $targetCurse.type == "Height">>
-			<<set _j=$HeightLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<for _j = $HeightLog.length-1; _loopEnd==false; _j-->>
+				<<if $HeightLog[_j].name == $targetCurse.name>>
+					<<set _loopEnd=true>> 
+					<<set _j++>>
+				<<elseif _j==0>>
+					<<set _loopEnd=true>> 
+				<</if>>
+			<</for>>
 			<<set $HeightLog.deleteAt(_j)>>
 		<<elseif $targetCurse.type == "Gender">>
-			<<set _j=$GenderLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<for _j = $GenderLog.length-1; _loopEnd==false; _j-->>
+				<<if $GenderLog[_j].name == $targetCurse.name>>
+					<<set _loopEnd=true>> 
+					<<set _j++>>
+				<<elseif _j==0 >>
+					<<set _loopEnd=true>> 
+				<</if>>
+			<</for>>
 			<<set $GenderLog.deleteAt(_j)>>
 		<<elseif $targetCurse.type == "Age">>
-			<<set _j=$AgeLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<for _j = $AgeLog.length-1; _loopEnd==false; _j-->>
+				<<if $AgeLog[_j].name == $targetCurse.name>>
+					<<set _loopEnd=true>>
+					<<set _j++>> 
+				<<elseif _j==0>>
+					<<set _loopEnd=true>> 
+				<</if>>
+			<</for>>
 			<<set $AgeLog.deleteAt(_j)>>
 		<<elseif $targetCurse.type == "Libido">>
-			<<set _j=$LibidoLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<for _j = $LibidoLog.length-1; _loopEnd==false; _j-->>
+				<<if $LibidoLog[_j].name == $targetCurse.name>>
+					<<set _loopEnd=true>> 
+					<<set _j++>>
+				<<elseif _j==0>>
+					<<set _loopEnd=true>> 
+				<</if>>
+			<</for>>
 			<<set $LibidoLog.deleteAt(_j)>>
 		<<elseif $targetCurse.type == "Handicap">>
-			<<set _j=$HandicapLog.lastIndexOf(e => e.name === $targetCurse.name)>>
+			<<for _j = $HandicapLog.length-1; _loopEnd==false; _j-->>
+				<<if $HandicapLog[_j].name == $targetCurse.name>>
+					<<set _loopEnd=true>> 
+					<<set _j++>>
+				<<elseif _j==0>>
+					<<set _loopEnd=true>> 
+				<</if>>
+			<</for>>
 			<<set $HandicapLog.deleteAt(_j)>>
 		<</if>>
 		<<set $playerCurses.deleteAt(_i)>>
