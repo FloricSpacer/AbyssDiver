@@ -121,6 +121,9 @@ You have $items[0].count days of single-use water rations.
 You have $items[1].count days of food.
 You have $items[2].count unfilled flasks.
 You have $items[3].count days of water in filled flasks.
+<<if $items[3].count>0 >>\
+@@ You can organize your flasks in the item menu!
+<</if>>\
 
 Your inventory and the count (if applicable) of each item is as follows:
 <<nobr>>
@@ -737,6 +740,11 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 :: Use Items and Relics
 <<nobr>>
+<<if $items[3].count>0 >>
+	<<set $switchFlask=false>>
+	<<set $temp0=-1>>
+	[[Organize drinking order filled flasks| Flask Order]]
+<</if>>
 <<if $items[7].count > 0>>
 	<<if $currentLayer==0>>
 		There is no need to use a commerce balloon while you are on the surface.
@@ -1551,12 +1559,7 @@ How many dubloons would you like to pay back?
 	<<set $hexflame -= 1>>
 	<<else>>
 	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
+		<<include "Drinking code">>
 	<<else>>
 		<<if $abyssKnow == 0>>
 			<<if $currentLayer==1>>
@@ -1614,6 +1617,53 @@ How many dubloons would you like to pay back?
 <</for>>
 <<set $tempTimeFixed=0>>
 <</nobr>>
+
+:: Drinking code[nobr]
+<<FlaskFirst>>
+$flaskPref
+$flaskMatrixLabel[$flaskPref]
+<<if $items[3].count > 0>>
+	<<set $items[3].count -= 1>>
+	<<set $items[2].count += 1>>
+	<<set $flaskMatrix[$flaskPref] -=1>>
+	<<if $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the first layer">>
+		Check
+		<<set $waterL1 += 1>>
+		<<set $GenderLog.push($ForageWaterMajor)>>
+	<</if>>
+<<else>>
+	<<set $items[0].count -= 1>>
+<</if>>
+
+:: Flask Order[nobr noreturn]
+<<FlaskFirst>>
+You will first drink the flasks containing:<br>
+$flaskMatrixLabel[$flaskPref]
+
+<<if $flaskMatrixOrderAvailable.length>1 >>
+	<<if $switchFlask==false>>
+		[[Select to switch|Flask Order][$switchFlask=true, $temp0 = 0, $temp1=$flaskMatrixOrder[$temp0] ]]
+	<<elseif !$temp0 ==0>>
+		[[Switch with|Flask Order][$switchFlask=false, _temp2 = 0, _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1 ]]
+	<</if>>
+	<br><br>
+	Afterwards the order in which you will drink your flasks will be:<br>
+	<<for _i=1; _i<$flaskMatrixOrderAvailable.length; _i++ >>
+		<<set _temp = $flaskMatrixOrderAvailable[_i]>>
+		$flaskMatrixLabel[_temp] 
+		<<if $switchFlask==false>>
+			<<capture _i>>
+			[[Select to switch|Flask Order][$switchFlask=true, $temp0 = $flaskMatrixOrderAvailable[_i], $temp1=$flaskMatrixOrder[$temp0] ]]<br>
+			<</capture>>
+		<<elseif !$temp0 == $flaskMatrixOrderAvailable[_i]>>
+			<<capture _i>>
+			[[Switch with|Flask Order][$switchFlask=false, _temp2 = $flaskMatrixOrderAvailable[_i], _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1 ]]<br>
+			<</capture>>
+		<</if>>
+	<</for>>
+<</if>>
+<br>
+<<return>>
 
 :: Curse Descriptions
 <<nobr>>
