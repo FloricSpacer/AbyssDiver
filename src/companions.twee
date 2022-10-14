@@ -197,7 +197,7 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $hiredCompanions = []>>
 <<set $DesertedCompanions = []>>
 <<set $DaedalusCompanions = []>>
-<<set $UpTravelDays = [3,3,3,3,3,3,3,3,3]>>
+<<set $UpTravelDays = [1,4,6,7,24,15,7,40,20]>>
 
 <<set $MaruConvo0 = false>>
 <<set $MaruConvo1 = false>>
@@ -232,6 +232,8 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $TwinConvo1 = false>>
 <<set $TwinConvo2 = false>>
 <<set $Twin_LastT = 9999>>
+<<set $TwinFly = false>>
+<<set $TwinVar1 = 0>>
 
 <<set $aiMemWipe=0>>
 <<set $aiSuggest=false>>
@@ -2095,6 +2097,21 @@ You see your twin sitting down staring into the distance, seemingly lost in thou
 :: Twin Convo2
 Double-click this passage to edit it.
 
+:: Twin rejoin
+<<set $TwinFly = false>>
+<<set $ownedRelics.push($relic73)>>
+<<set $hiredCompanions.push($companionTwin)>>
+When you almost reach the end of your climb you see your twin standing at the top with a big Cheshire grin and a pair of wings on <<if $companionTwin.osex=='male'>>his <<else>>her <</if>>back.<br><br>
+<<say $companionTwin>> Did you enjoy your walk? <</say>><br>
+<<say $mc>> Why..you! You screwed me over! You... <</say>><br>
+<<say $companionTwin>> Me? Lets talk about you! Were you or were you not about to do the exact same thing to me, minus maybe the headblow? <</say>><br>
+
+You bite your tongue for a second, because you know $companionTwin.name is right.<br><br>
+<<say $companionTwin>> How about, you don't try to screw me over and I don't need to resort to knocking you out. Sounds fair? <</say>><br>
+
+You still feel frustrated by the whole ordeal but you decide to agree for now, if only to reunite the party and get the Daedalus Mechanism back.<br><br>
+<<say $mc>> Hmpff, sure...<</say>><br>
+
 :: Companion Mistreatment Reaction [nobr]
 /* Arguments:
 	_companionName: name of the companion that was mistreated
@@ -2166,58 +2183,105 @@ Double-click this passage to edit it.
 <</if>>
 
 :: Companions Stranded [nobr]
+<<set _temp1=1>>
 <<set _affectionPenalty = 2>>
-<<set $companionsDepartT = $time>>
-<<set $companionsDepartL = $currentLayer>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<if $hiredCompanions[$i].name == 'Maru' && !$DaedalusCompanions.some(e => e.name === "Maru")>>
-		<<set $companionMaru.affec -= (_affectionPenalty-$hsswear)>>
-		<<say $companionMaru>> Wait, are you leaving me? I'm scared... please don't leave me... <</say>><br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionMaru)>>
-	<</if>>
-	<<if $hiredCompanions[$i].name == 'Lily' && !$DaedalusCompanions.some(e => e.name === "Lily")>>
-		<<set $companionLily.affec -= (_affectionPenalty/2-$hsswear)>>
-		<<say $companionLily>> Hold on, you mean you are going ahead without me?! I...I can't say I haven't done that myself in the past.<</say>><br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionLily)>>
-	<</if>>
-	<<if $hiredCompanions[$i].name == 'Khemia' && !$DaedalusCompanions.some(e => e.name === "Khemia")>>
-		<<set $companionKhemia.affec -= (_affectionPenalty-$hsswear)>>
-		<<say $companionKhemia>> Wow nice going <<PerceivedGender2>>, you can fly pretty high! Hey where are you going? I can't fly... wait! wait! WAIT! <</say>><br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionKhemia)>>
-	<</if>>
-	<<if $hiredCompanions[$i].name == 'Cherry' && !$DaedalusCompanions.some(e => e.name === "Cherry")>>
-		<<say $companionCherry>> Maybe it's for the better to leave me by myself. <</say>><br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionCherry)>>
-	<</if>>
-	<<if $hiredCompanions[$i].name == 'Cloud' && !$DaedalusCompanions.some(e => e.name === "Cloud")>>
-		<<set $companionCloud.affec -= (_affectionPenalty*2-$hsswear)>>
-		<<say $companionCloud>> Are you just letting me fend for myself here? Tssk, loyalty still seems scarce in the Abyss. <</say>><br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionCloud)>>
-	<</if>>
-	<<if $hiredCompanions[$i].name == 'Saeko' && !$DaedalusCompanions.some(e => e.name === "Saeko")>>
-		<<set $companionSaeko.affec -= (_affectionPenalty-$hsswear)>>
-		<<say $companionSaeko>> Although I could see some logic behind using those wings to go one ahead, as you are the only one without the purity gene. I still wish... <</say>><br>
-		You see some anger building behind that normaly composed face. <br><br>
-		<<say $companionSaeko>> You know what?! Fuck you for leaving me! This is sucks. <</say>><br>
-		A tear rolls down her face.<br><br>
-		<<say $companionSaeko>> I wish I could go with you.<</say>><br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionSaeko)>>
-	<</if>>
-	<<if $hiredCompanions[$i].name == $companionTwin.name && !$DaedalusCompanions.some(e => e.name === $companionTwin.name)>>
-		<<set $companionTwin.affec -= _affectionPenalty>>
-		<<say $companionTwin>> Hmmpf, I know that you want to leave me here. Don't be suprised if next time you are stranded while I go ahead. <</say>><br>
-		You get the most genuine evil twin glare you could ever get from somebody.<br>
-		<<set $hiredCompanions.deleteAt($i)>>
-		<<set $DesertedCompanions.push($companionTwin)>>
-	<</if>>
+<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+	<<set _temp1 = random(0,2)>>
+<</if>>
+<<if _temp1>0 >>
+	<<for _i = $hiredCompanions.length-1; _i > -1; _i-->>
+		<<if $hiredCompanions[_i].name == 'Maru' && !$DaedalusCompanions.some(e => e.name === "Maru")>>
+			<<set $companionMaru.affec -= (_affectionPenalty-$hsswear)>>
+			<<say $companionMaru>> Wait, are you leaving me? I'm scared... please don't leave me... <</say>><br>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionMaru)>>
+		<<elseif $hiredCompanions[_i].name == 'Lily' && !$DaedalusCompanions.some(e => e.name === "Lily")>>
+			<<set $companionLily.affec -= (_affectionPenalty/2-$hsswear)>>
+			<<say $companionLily>> Hold on, you mean you are going ahead without me?! I...I can't say I haven't done that myself in the past.<</say>><br>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionLily)>>
+		<<elseif $hiredCompanions[_i].name == 'Khemia' && !$DaedalusCompanions.some(e => e.name === "Khemia")>>
+			<<set $companionKhemia.affec -= (_affectionPenalty-$hsswear)>>
+			<<say $companionKhemia>> Wow nice going <<PerceivedGender2>>, you can fly pretty high! Hey where are you going? I can't fly... wait! wait! WAIT! <</say>><br>
+			<<set $timeRed-=2>>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionKhemia)>>
+		<<elseif $hiredCompanions[_i].name == 'Cherry' && !$DaedalusCompanions.some(e => e.name === "Cherry")>>
+			<<say $companionCherry>> Maybe it's for the better to leave me by myself. <</say>><br>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionCherry)>>
+		<<elseif $hiredCompanions[_i].name == 'Cloud' && !$DaedalusCompanions.some(e => e.name === "Cloud")>>
+			<<set $companionCloud.affec -= (_affectionPenalty*2-$hsswear)>>
+			<<say $companionCloud>> Are you just letting me fend for myself here? Tssk, loyalty still seems scarce in the Abyss. <</say>><br>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionCloud)>>
+		<<elseif $hiredCompanions[_i].name == 'Saeko' && !$DaedalusCompanions.some(e => e.name === "Saeko")>>
+			<<set $companionSaeko.affec -= (_affectionPenalty-$hsswear)>>
+			<<say $companionSaeko>> Although I could see some logic behind using those wings to go one ahead, as you are the only one without the purity gene. I still wish... <</say>><br>
+			You see some anger building behind that normaly composed face. <br><br>
+			<<say $companionSaeko>> You know what?! Fuck you for leaving me! This is sucks. <</say>><br>
+			A tear rolls down her face.<br><br>
+			<<say $companionSaeko>> I wish I could go with you.<</say>><br>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionSaeko)>>
+		<<elseif $hiredCompanions[_i].name == $companionTwin.name && !$DaedalusCompanions.some(e => e.name === $companionTwin.name)>>
+			<<set $companionTwin.affec -= _affectionPenalty>>
+			You feel a rock fly right past your head. As you turn around in shock you see your twin standing there, clearly the perpetrator of the rock-incident.<br><br>
+			<<say $mc>> What the hell? That could've hit me!<</say>><br>
+			<<say $companionTwin>> Hmmpf consider yourself lucky, I know that you want to leave me here. Don't be suprised if next time you are stranded while I go ahead. <</say>><br>
+			You get the most genuine evil twin glare you could ever get from somebody.<br>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set $DesertedCompanions.push($companionTwin)>>
+		<</if>>
+	<</for>>
 	You fly off quickly making your way upwards.<br>
-<</for>>
+<<else>>
+	<<set $companionTwin.affec -= _affectionPenalty>>
+	<<set $TwinFly = true>>
+	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
+		<<if $hiredCompanions[_i].name == $companionTwin.name>>
+			<<set $hiredCompanions.deleteAt(_i)>>
+		<</if>>
+	<</for>>
+	<<for _i = 0; _i < $ownedRelics.length; _i++>>
+		<<if $ownedRelics[_i].name == "Daedalus Mechanism">>
+			<<set $ownedRelics.deleteAt(_i)>>
+		<</if>>
+	<</for>>
+	<<set $DaedalusEquip = false>>
+	<<set $DaedalusFly = false>>
+
+	You feel something hard hitting the back of your head before all lights go out.<br>
+	<<if $hiredCompanions.length==0 >>
+		When you come by you see you are all alone and the Daedalus Mechanism is no longer around your chest.<br><br>
+		<<say $mc>> Shit, did I just got duped by my own cheap immitation? I guess its going to be a long walk after all...<</say>><br>
+	<<elseif $hiredCompanions.length==1 >>
+		You see $hiredCompanions[0].name standing over you with a worried look.<br><br>
+		<<say $hiredCompanions[0]>> Are you okay? <</say>><br>
+		<<say $mc>> Yeah, my head hurts a little. What happend?<</say>><br>
+		<<say $hiredCompanions[0]>> I don't know I just found you laying here on the ground. I tried to call from help $companionTwin.name, but <<if $companionTwin.osex='male'>>he <<else>>she <</if>>didn't respond at all. 
+		But you only had a little bit of blood on the back of your head, and after I took care of that you already woke up again. I don't know how you did that but you have to be more carefull! <</say>><br>
+	
+		You notice the Daedalus Mechanism is no longer around your chest.<br><br>
+		<<say $mc>> Wait, $companionTwin.name is gone?<</say>><br>
+		<<say $hiredCompanions[0]>> Euh, I guess. I don't see <<if $companionTwin.osex=='male'>>him <<else>>her <</if>>at least. Why? <</say>><br>
+		You understand that your twin took off with the Daedalus Mechanism and left the rest, including you, stranded. However, you can't really explain that without explaining you were about to do the same thing.<br><br>
+		<<say $mc>> Shit, well I guess <<if $companionTwin.osex=='male'>>he <<else>>she <</if>> went ahead already. We might catch <<if $companionTwin.osex=='male'>>him <<else>>her <</if>> later, for now we still have quite the climb ahead of us. <</say>><br>
+
+	<<elseif $hiredCompanions.length>1>>
+		You see most of your party standing over you with a worried look.<br><br>
+		<<say $hiredCompanions[0]>> Are you okay? <</say>><br>
+		<<say $mc>> Yeah, my head hurts a little. What happend? <</say>><br>
+		<<say $hiredCompanions[0]>> I don't know I just found you laying here on the ground. I tried to call from help and everybody came quickly luckly, I mean except for $companionTwin.name I guess.
+		But you only had a little bit of blood on the back of your head, and after we took care of that you already woke up again. I don't know how you did that but you have to be more carefull! <</say>><br>
+	
+		You notice the Daedalus Mechanism is no longer around your chest.<br><br>
+		<<say $mc>> Wait, $companionTwin.name is gone? <</say>><br>
+		<<say $hiredCompanions[0]>> Euh, I guess. I don't see <<if $companionTwin.osex=='male'>>him <<else>>her <</if>>at least. Why? <</say>><br>
+		You understand that your twin took off with the Daedalus Mechanism and left the rest, including you, stranded. However, you can't really explain that without explaining you were about to do the same thing.<br><br>
+		<<say $mc>> Shit, well I guess <<if $companionTwin.osex=='male'>>he <<else>>she <</if>> went ahead already. We might catch <<if $companionTwin.osex=='male'>>him <<else>>her <</if>> later, for now we still have quite the climb ahead of us. <</say>><br>
+	<</if>>
+<</if>>
 
 :: Maru Leaving
 

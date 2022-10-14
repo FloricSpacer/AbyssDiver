@@ -162,7 +162,7 @@ It is reccomended that you get creative with your relics and think of more effic
 
 
 :: Layer7 Relics [layer7 cards nobr]
-<<checkTime>>
+<p><<checkTime>></p>
 <<if $dubloons < 0>>
 
 <p>[img[setup.ImagePath+'Threats/taxdrone.png']]</p>
@@ -422,6 +422,8 @@ This layer seems to be a bit smaller than the last few, and its paved roads are 
 		[[Flap your wings and prepare to fly to the next layer|Layer7 Ascend 1][$DaedalusFly=true]]
 	<<else>>\
 		You are about to fly to the next layer
+		<<set $companionsDepartT = $time>>
+		<<set $companionsDepartL = $currentLayer>>
 		[[Maybe it's better to walk to the next layer|Layer7 Ascend 1][$DaedalusFly=false]]
 	<</if>>\
 <</if>>\
@@ -1485,8 +1487,10 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
+	$tempTime
 	<<include "GeneralTimeSetup">>
 	<<set $layerExitTime=$tempTime>>
+	$layerExitTime
 <</if>>
 
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
@@ -1537,7 +1541,9 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	When you reach the pinacle of the layer, you once again approach the series of barricades holding back the sea of tenatcles and flames from reaching the pristine city, but this time you are exiting back to the hellish landscape of the sixth layer.
 
 	<<include "Curse Descriptions">>
-
+	<<if $TwinFly == true>>
+		<<include "Twin rejoin">>
+	<</if>>
 	[[Return to the Sixth layer|Layer6 Hub]]
 
 <</if>>

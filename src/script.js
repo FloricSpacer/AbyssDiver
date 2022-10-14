@@ -18,22 +18,22 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
 		return "AgeEnd";
 	}
-	if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap) {
+	if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap && StoryVar.hiredCompanions.some(e => e.name === "Maru")) {
 		return "Maru Leaving";
 	}
-	if (StoryVar.companionLily.affec < -9 && !StoryVar.companionLily.swap) {
+	if (StoryVar.companionLily.affec < -9 && !StoryVar.companionLily.swap && StoryVar.hiredCompanions.some(e => e.name === "Lily")) {
 		return "Lily Leaving";
 	}
-	if (StoryVar.companionKhemia.affec < -9 && !StoryVar.companionKhemia.swap) {
+	if (StoryVar.companionKhemia.affec < -9 && !StoryVar.companionKhemia.swap && StoryVar.hiredCompanions.some(e => e.name === "Khemia")) {
 		return "Khemia Leaving";
 	}
-	if (StoryVar.companionCherry.affec < -12 && !StoryVar.companionCherry.swap) {
+	if (StoryVar.companionCherry.affec < -12 && !StoryVar.companionCherry.swap && StoryVar.hiredCompanions.some(e => e.name === "Cherry")) {
 		return "Cherry Leaving";
 	}
-	if (StoryVar.companionCloud.affec < -9 && !StoryVar.companionCloud.swap) {
+	if (StoryVar.companionCloud.affec < -9 && !StoryVar.companionCloud.swap && StoryVar.hiredCompanions.some(e => e.name === "Cloud")) {
 		return "Cloud Leaving";
 	}
-	if (StoryVar.companionSaeko.affec < -9 && !StoryVar.companionSaeko.swap) {
+	if (StoryVar.companionSaeko.affec < -9 && !StoryVar.companionSaeko.swap && StoryVar.hiredCompanions.some(e => e.name === "Saeko")) {
 		return "Saeko Leaving";
 	}
 	return destPassage;
