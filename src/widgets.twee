@@ -1333,6 +1333,38 @@
 <</for>>
 <</widget>>
 
+:: Flask Selecting first in order[widget nobr]
+<<widget "FlaskFirst">>
+<<set _j=0 >>
+<<set $flaskPref =0 >>
+<<set $flaskMatrixOrderAvailable = [] >>
+<<for _i=0; _i<$flaskMatrix.length; _i++ >>
+	<<set _temp2=-1>>
+	<<if $flaskMatrix[_i]>0 >>
+	<<set _temp3 = $flaskMatrixOrderAvailable.length+1>>
+		<<for _j=0; _j<_temp3; _j++>>
+			<<if !$flaskMatrixOrderAvailable.length==_j>>
+				<<set _temp= $flaskMatrixOrderAvailable[_j]>>
+				<<if $flaskMatrixOrder[_temp] < $flaskMatrixOrder[_i]  >>
+					<<set _temp2=_j>>
+				<</if>>
+				<<if _temp2>-1 >>
+					<<set _temp3 =_j+1>>
+					<<set $flaskMatrixOrderAvailable[_temp3]=$flaskMatrixOrderAvailable[_j]>>
+				<</if>>
+				<<set $flaskMatrixOrderAvailable[_temp2] = _i >>
+			<<else>>
+				<<set $flaskMatrixOrderAvailable[_j] = _i >>
+			<</if>>
+		<</for>>
+		<<if $flaskMatrixOrder[$flaskPref] < $flaskMatrixOrder[_i]>>
+			<<set $flaskPref=_i>>
+		<</if>>
+	<</if>>
+<</for>>
+<</widget>>
+
+
 :: Check party conversations [widget nobr]
 <<widget "CheckParty">>
 
