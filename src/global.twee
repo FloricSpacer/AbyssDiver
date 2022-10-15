@@ -1636,32 +1636,34 @@ How many dubloons would you like to pay back?
 :: Flask Order[nobr noreturn]
 <<FlaskFirst>>
 You will first drink the flasks containing:<br>
-$flaskMatrixLabel[$flaskPref]
+$flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 
 <<if $flaskMatrixOrderAvailable.length>1 >>
-	<<if $switchFlask==false>>
-		[[Select to switch|Flask Order][$switchFlask=true, $temp0 = 0, $temp1=$flaskMatrixOrder[$temp0] ]]
-	<<elseif !$temp0 ==0>>
-		[[Switch with|Flask Order][$switchFlask=false, _temp2 = 0, _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1 ]]
-	<</if>>
-	<br><br>
-	Afterwards the order in which you will drink your flasks will be:<br>
-	<<for _i=1; _i<$flaskMatrixOrderAvailable.length; _i++ >>
+	<<for _i=0; _i<$flaskMatrixOrderAvailable.length; _i++ >>
+		<<capture _i>>
 		<<set _temp = $flaskMatrixOrderAvailable[_i]>>
-		$flaskMatrixLabel[_temp] 
+		<</capture>>
+
+		<<if _i==1>>
+			<br><br>Afterwards the order in which you will drink your flasks will be:
+		<</if >>
+		<<if _i>0>>
+		<br>$flaskMatrixLabel[_temp] ($flaskMatrix[_temp] remaining)
+		<</if >>	
 		<<if $switchFlask==false>>
 			<<capture _i>>
-			[[Select to switch|Flask Order][$switchFlask=true, $temp0 = $flaskMatrixOrderAvailable[_i], $temp1=$flaskMatrixOrder[$temp0] ]]<br>
+			[[Select to switch|Flask Order][$switchFlask=true, $temp0 = $flaskMatrixOrderAvailable[_i], $temp1=$flaskMatrixOrder[$temp0] ]]
 			<</capture>>
-		<<elseif !$temp0 == $flaskMatrixOrderAvailable[_i]>>
+		<<elseif $temp0 !== $flaskMatrixOrderAvailable[_i]>>
 			<<capture _i>>
-			[[Switch with|Flask Order][$switchFlask=false, _temp2 = $flaskMatrixOrderAvailable[_i], _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1 ]]<br>
+			[[Switch with|Flask Order][$switchFlask=false, _temp2 = $flaskMatrixOrderAvailable[_i], _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1 ]]
 			<</capture>>
 		<</if>>
 	<</for>>
 <</if>>
-<br>
+<br><br>
 <<return>>
+
 
 :: Curse Descriptions
 <<nobr>>
