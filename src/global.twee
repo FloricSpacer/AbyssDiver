@@ -740,11 +740,18 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 :: Use Items and Relics
 <<nobr>>
+Manage food and water items:<br>
 <<if $items[3].count>0 >>
 	<<set $switchFlask=false>>
 	<<set $temp0=-1>>
 	[[Organize drinking order filled flasks| Flask Order]]
 <</if>>
+<<if $items[24].count>0 & $useEnergyrations==false>>
+	[[Start using your energy rations| Use Items and Relics][$useEnergyrations=true]]
+<<elseif $items[24].count>0 & $useEnergyrations==true>>
+	[[Stop using your energy rations| Use Items and Relics][$useEnergyrations=false]]
+<</if>>
+<br><br>
 <<if $items[7].count > 0>>
 	<<if $currentLayer==0>>
 		There is no need to use a commerce balloon while you are on the surface.
@@ -1359,38 +1366,53 @@ How many dubloons would you like to pay back?
 	<<set $status.penalty = 0>>
 <</if>>
 
+<<set _tempTimeModifiers = (1+$SizeHandicap)*(1-$HandicapMovement/10)>>
+
 <<if $currentLayer==1>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 <<elseif $currentLayer==2>>
 	<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _cutRed)>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _cutRed)>>
 <<elseif $currentLayer==3>>
 	<<set _lightRed = setup.haveTravelLightSource() ? 1 : 0>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _lightRed)>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _lightRed)>>
 <<elseif $currentLayer==4>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 	<<if $torchUse == 1 && $heat == 1>>
 		<<set $tempTime -= 2>>
 	<<elseif $items[9].count > 0 && $torchUse == 1>>
 		<<set $tempTime -= 2>>
 		<<set $items[9].count -= 1>>
 	<<else>>
-		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>>
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>> Now that you are cold blooded you are severly slowed down by the low temperatures on this layer.
 		<<if $app.skinType.includes("furred") >>
-			<<set $tempTime -=1>>
+			<<set $tempTime -=1>> Your fur is protecting you a little bit though
 		<</if>>
+		<br>
 	<</if>>
 <<elseif $currentLayer==5>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool)>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool)>>
 <<elseif $currentLayer==6>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime  - $timeRed + $status.penalty -$cool)>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime  - $timeRed + $status.penalty -$cool)>>
 <<elseif $currentLayer==7>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 <<elseif $currentLayer==8>>
-	<<set $tempTime = (1+$SizeHandicap)*(1-$HandicapMovement/10)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - (3 * $items[12].count))>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - (3 * $items[12].count))>>
+<</if>>
+
+<<if ($tempTime/2) <= $items.count[24] & $useEnergyrations==true>>
+	<<set _temp = Math.trunc($tempTime / 2)>>
+	<<set $items.count[24] -= _temp>>
+	<<set $items.count[1] += _temp>>
+	<<set $tempTime -= _temp>>
+<<elseif $useEnergyrations==true>>
+	<<set $tempTime -= $items.count[24]>>
+		<<set $items.count[1] += $items.count[24]>>
+		<<set $items.count[24] = 0>>
 <</if>>
 
 <<set $tempTime = Math.round(Math.max(0, $tempTime))>>
+
 
 <</nobr>>
 
