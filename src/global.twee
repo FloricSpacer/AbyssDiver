@@ -1595,7 +1595,12 @@ How many dubloons would you like to pay back?
 		<</for>>	
 	<</if>>
 <</if>>
-<<for $i = 0; $i < $tempTime+$dehydrated; $i++>>
+<<if $items[1].count < 0>>
+	<<set $starving -= $items[1].count>>
+	<<set $items[1].count = 0>>
+<</if>>
+<<set _temploop = $tempTime+$dehydrated>>
+<<for $i = 0; $i < _temploop; $i++>>
 		<<if ($items[25].count > 0 && $wardWaterDrink == 1) || ($items[25].count > 0 && $wardWaterDrink == 2 && $hexflame > 9)>>
 			<<set $items[25].count -= 1>>
 			<<set $items[0].count += 1>>
@@ -1656,7 +1661,7 @@ How many dubloons would you like to pay back?
 		<<set $hexflame -= 1>>
 	<</if>>
 	<<if $items[0].count < 0 >>
-		<<set $dehydrated +=$items[0].count>>
+		<<set $dehydrated -=$items[0].count>>
 		<<set $items[0].count = 0>>
 	<</if>>
 <</for>>
