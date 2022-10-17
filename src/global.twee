@@ -451,6 +451,15 @@ You desire sex about as much as basic necessities as food and water, perhaps sli
 <<elseif $app.libido >= 7>>
 You need sex constantly - having sex will only sate your hunger for a matter of minutes, and you will find little meaning in things that don't lead to you having more sex.
 <</if>>
+<<if $IQdrop > 25>>
+You are still able to function and hold something like a conversation with people, but most of the time you are mentally not there anymore. Congratulations, you have become a certified <<if $app.appGender<=5>>Himbo! <<else>>Bimbo! <</if>>
+<<elseif $IQdrop > 20>>
+Thinking has become so tiring that you try to do it as little as possible. It does cause you to sometimes lose track of what people are talking about, but most of the time when you just <<if $app.appGender<=5>>smile and wink <<else>>giggle or bite your lip <</if>>people think its fine anyway.
+<<elseif $IQdrop > 15>>
+You now have clear indications of mental deteroia.. detroiatici... thinking has become harder. You have notice that your speech has been affected by it more and more. At least you can still get your message across.
+<<elseif $IQdrop > 10>>
+You feel like you have slowed down mentally compared to normal. It's not that you suddenly forgot everything you learned but it just feels like your head is tired all the time. Maybe a little less thinking will allow you to recover a bit.
+<</if>>
 <br>
 <<if $app.penisCor>=1>>
 	<<if $app.penisCor == 1>>
@@ -1407,13 +1416,11 @@ How many dubloons would you like to pay back?
 	<<set $tempTime -= _temp>>
 <<elseif $useEnergyrations==true>>
 	<<set $tempTime -= $items.count[24]>>
-		<<set $items.count[1] += $items.count[24]>>
-		<<set $items.count[24] = 0>>
+	<<set $items.count[1] += $items.count[24]>>
+	<<set $items.count[24] = 0>>
 <</if>>
 
 <<set $tempTime = Math.round(Math.max(0, $tempTime))>>
-
-
 <</nobr>>
 
 :: GeneralTimeStats
@@ -1604,7 +1611,7 @@ How many dubloons would you like to pay back?
 				<</if>>
 			<<elseif $currentLayer==8>>
 				<<set $waterL8 += 1>>
-				<<set $majorIQ += 1>>
+				<<set $IQdrop += 0.5>>
 			<</if>>
 		<<else>>
 			<<if $layer==3>>
@@ -1623,10 +1630,10 @@ How many dubloons would you like to pay back?
 				<</if>>
 			<<elseif $currentLayer==8 && !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
 				<<set $waterL8 += 1>>
-				<<set $majorIQ += 1>>
+				<<set $IQdrop  += 0.5>>
 			<<elseif $currentLayer==8 && ($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
 				<<set $waterL8 += 1>>
-				<<set $minorIQ += 1>>
+				<<set $IQdrop  += 0.05>>
 			<</if>>
 		<</if>>
 	<</if>>
@@ -1658,10 +1665,10 @@ How many dubloons would you like to pay back?
 		<<set $hexflame += 1>>
 	<<elseif $flaskMatrixLabel[$flaskPref]=="Lightly contaiminated water from the eigth layer">>
 		<<set $waterL8 += 1>>
-		<<set $minorIQ += 1>>
+		<<set $IQdrop += 0.05>>
 	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the eigth layer">>
 		<<set $waterL8 += 1>>
-		<<set $majorIQ += 1>>
+		<<set $IQdrop += 0.5>>
 	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the ninth layer">>
 		<<set $waterL9 += 1>>
 		<<set $corruption -= 1>>
