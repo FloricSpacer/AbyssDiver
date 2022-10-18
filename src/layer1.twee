@@ -1286,7 +1286,12 @@ Use the following option only if you have specifically considered your inventory
 
 Nervously, you begin going trough your bag, attempting to decide which relics to surrender and which to keep, if any...
 
-<<if $surrVal < 145>>
+<<if $ownedRelics.some(e => e.name === "Moonwatcher") & $BionicEye>>
+	<<set _temp = 145-95>>
+<<else>>
+	<<set _temp = 145>>
+<</if>>
+<<if $surrVal < _temp>>
 Choose the relic you would like to hand over:
 <<nobr>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
@@ -1300,13 +1305,22 @@ Choose the relic you would like to hand over:
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$hsswear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Relic surrender][$SibylBuff=0,$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$SibylBuff=0,$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(3-$hsswear)]]">> <br> You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away <br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(3-$hsswear)]]">> <br> You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away <br>
 
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
-
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$DaedalusEquip = false, $DaedalusFly = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Blind Divine">>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$BDwear = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$HeavyHeadwear= false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
+			<<print $ownedRelics[$i].name>> You can not give away relics that have become part of your body.<br>
+		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
+			<<print $ownedRelics[$i].name>> You can not sell relics that have become part of your body.<br>
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<</if>>
@@ -1319,7 +1333,7 @@ Choose the relic you would like to hand over:
 <<else>>
   	The apparent bandit leader smiles widely. <<say $Banditleader>> Yeah, now we're talking. Off you go now, until next time.<</say>>
 	She waves you off and gives a toothy grin, showing some yellowing teeth as she picks through the loot you left her.
-	[[Make your escape|Layer1 Hub]]
+	[[Make your escape|Layer1 Hub][$surrVal=0]]
 <</if>>
 
 
