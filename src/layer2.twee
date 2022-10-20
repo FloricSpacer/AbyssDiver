@@ -781,19 +781,19 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 <<set $temp = $app.osex>>
 <<set $temp2 = $app.gender>>
 <<set $app.osex = $hiredCompanions[$swapComp].osex>>
-<<set $app.sex = $hiredCompanions[$swapComp].osex>>
-<<set $app.breasts = $hiredCompanions[$swapComp].obreasts>>
-<<set $app.penis = $hiredCompanions[$swapComp].openis>>
+<<set $app.obreasts = $hiredCompanions[$swapComp].obreasts>>
+<<set $app.openis = $hiredCompanions[$swapComp].openis>>
 <<set $app.ogender = $hiredCompanions[$swapComp].ogender>>
 <<set $app.oheight = $hiredCompanions[$swapComp].oheight>>
-<<set $app.height = $app.oheight + $app.modheight>>
 <<set $app.hairColor = $hiredCompanions[$swapComp].hairColor>>
 <<set $app.skinColor = $hiredCompanions[$swapComp].skinColor>>
 <<set $app.desc += $hiredCompanions[$swapComp].appDesc>>
+sex:$app.osex breast$app.obreasts penis$app.openis gender$app.ogender height $app.oheight<br>
 
 <<set $app.switch=true>>
+<<CarryAdjust>>
 <<Update_MC_Speech>>
-
+sex:$app.osex breast$app.obreasts penis$app.openis gender$app.ogender height $app.oheight
 <<if $hiredCompanions[$swapComp].name=="Maru">>
 	<<set $companionMaru.genderVoice = $temp2>>
 	<<if $temp=='male'>>
@@ -946,9 +946,40 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 	<<say $mc>> Great! Where is it?<</say>><br>
 	<<say $companionSaeko>> You're either an idiot or cruel, and I honestly can't tell which right now.<</say>><br>
 	She walks off with your body, still clearly very much annoyed.
+<<elseif $hiredCompanions[$swapComp].name==$companionTwin>>
+	<<set $companionTwin.genderVoice = $temp2>>
+	<<if $temp=='male'>>
+		<<set $companionTwin.imageIcon="Icons/npcM.png">>
+	<<else>>
+		<<set $companionTwin.imageIcon="Icons/npcF.png">>
+	<</if>>
+	<<set $mc.imageIcon=$hiredCompanions[$swapComp].imageIcon>>
+	<<set $companionTwin.swap = true>>
+	<<say $companionTwin>> Hmm? What something feels off. Wait a second...<</say>><br>
+	<<if $companionTwin.osex=="male">>He <<else>>She <</if>>looks at you intensenly.<br><br>
+	<<if $companionTwin.osex==$app.osex>>
+		<<say $companionTwin>> Well well well, clever <<PerceivedGender>>. You know I had the same idea, but you actually went ahead and did it.<</say>><br>
+		<<say $mc>> What do you mean?<</say>><br>
+		<<say $companionTwin>> Come on now, you should know that I'm the only one with whom this coy act doesn't fly. You switched our nearly identical bodies in the pond for the free corruption.<</say>><br>
+		<<say $mc>> Does this mean you're not mad?<</say>><br>
+		<<say $companionTwin>> Why would I? I think I might have done the same thing if you didn't beat me to it first. It makes sense, although I was a bit afraid how you would react.<</say>><br>
+		You get a pat on the back before both of you get ready to move on again.<br>
+	<<else>>
+		<<say $companionTwin>> So I guess you went ahead and switched us.<</say>><br>
+		<<say $mc>> Yeah, I'm sorry but I wanted to...<</say>><br>
+		<<say $companionTwin>> Switch sex...<</say>><br>
+		<<say $mc>> Uh yeah, I mean uh, I was going to say get the corruption from the Fate-crossing star pond.<</say>><br>
+		<<say $companionTwin>> Yeah of course. No that's fine I get it.<</say>><br>
+		<<say $mc>> So you're not mad?<</say>><br>
+		<<say $companionTwin>> No, I was also curious about it.<</say>><br>
+		You both blush a  bit<br><br>
+		<<say $mc>> I was not... I mean. Shall we just get going?<</say>><br>
+		<<say $companionTwin>> Yeah I let's.<</say>><br>
+		You both get ready to move on again.<br>
+	<</if>>
 <</if>>
 
-<<if $hiredCompanions.length>1>>
+<<if $hiredCompanions.length>1 & $companionTwin.swap !== true>>
 The rest of your companions are clearly not aproving of your action as well<br><br>
 <<if $hiredCompanions.some(e => e.name === "Maru") && $companionMaru.swap==false>>
 	<<set $companionMaru.affec -= (3-$hsswear)>>
