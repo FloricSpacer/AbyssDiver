@@ -81,7 +81,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	You can feel the deepest fears of your party manifesting into reality once again. 
 	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
 
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a]]
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2b]]
 /* 
 <<elseif $inanisTime != $time>>[img[setup.ImagePath+'Threats/inanisego.png']]
 
@@ -1676,8 +1676,64 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 :: Layer 8 Threat 2a
 
 <<nobr>>
-<<set $timeL8T2a=0>>
-<<set $timeL8T2b=0>>
+<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	<<set $timeL8T2a -= 6>>
+<<else>>
+	<<set $timeL8T2a -= 7>>
+<</if>>
+<<set $totalFears = []>>
+<<set $totalFears.push($fear)>>
+<<for _companion range $companions>>
+	<<set $totalFears.push(_companion.fear)>>
+<</for>>
+<<set $temp = random(0,$totalFears.length)>>
+<<set $temp = $totalFears[$temp]>>
+<</nobr>>
+<<if $temp == "" || $temp == "darkness">>
+There is neither day nor night on this layer of the Abyss, you're not even certain that time is actually passing based on how much physics is breaking down here. But you certainly still experience time subjectively, and everyone needs to rest sometimes.
+
+Today, as you are dozing, darkness creeps in around you. Stillness, silence, darkness. A chill runs along your skin, and you wake with a start. Darkness. Your lights do nothing to penetrate it. You think you hear a faint scraping of something out there, in the dark.
+
+Your pulse skyrockets and your skin is covered in goosebumps. 
+
+You can't see, and there's something out there.
+
+Something absolutely terrifying.
+
+You can't help but hold your breath, until you need to breathe again. The atmosphere is normal, yet suffocating.
+
+Finally, after what feels like an eternity in the darkness, the shadow passes and the strange sourceless light of this layer returns to light up the disconcerting surroundings. You shake yourself, and find you were already standing up, were you dreaming and sleep walking? Were you hallucinating?
+
+You're not sure. Still, that sound in the dark... some part of you can't completely calm down. You've got a feeling deep in your gut that there truly is something out there, something very bad, something that was looking right at you.
+<<elseif $temp == "spiders">>
+
+<<elseif $temp == "wolves">>
+
+<<elseif $temp == "snakes">>
+
+<<elseif $temp == "insects">>
+
+<<elseif $temp == "slime">>
+
+<<elseif $temp == "desperation">>
+
+<<elseif $temp == "rot">>
+
+<</if>>
+
+[[$returnPassage]]
+
+
+:: Layer 8 Threat 2b
+
+<<nobr>>
+<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	<<set $timeL8T2a -= 6>>
+	<<set $timeL8T2b -= 18>>
+<<else>>
+	<<set $timeL8T2a -= 7>>
+	<<set $timeL8T2b -= 21>>
+<</if>>
 <<set $totalFears = []>>
 <<set $totalFears.push($fear)>>
 <<for _companion range $companions>>
@@ -1705,6 +1761,8 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 <</if>>
 
 [[$returnPassage]]
+
+
 
 :: Escape Balloon L8 [layer8]
 <<nobr>><<set $currentLayer = 8>><<if !isPlaying("layer8")>>
