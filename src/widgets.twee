@@ -334,12 +334,15 @@
 :: Age widget [widget nobr]
 <<widget "AgeCorrected">>
 <<set $app.appAge = $app.age>>
+<<set _thresholdDay = 0>>
 <<for _ageEvent range $AgeLog>>
 
 	<<if _ageEvent.name == "Age Reduction A" >>
 		<<if $app.appAge <= 22>>
 			<<set $app.appAge -= 2>>
 		<<else>>
+			<<set $app.Age += _ageEvent.variation/365.24>>
+			<<set _thresholdDay = _ageEvent.variation>>
 			<<set $app.appAge = 20>>
 		<</if>>
 	<</if>>
@@ -348,6 +351,8 @@
 		<<if $app.appAge <= 23>>
 			<<set $app.appAge -= 3>>
 		<<else>>
+			<<set $app.Age += _ageEvent.variation/365.24>>
+			<<set _thresholdDay = _ageEvent.variation>>
 			<<set $app.appAge = 20>>
 		<</if>>
 	<</if>>
@@ -357,6 +362,8 @@
 		<<if $app.appAge <= 24>>
 			<<set $app.appAge -= 4>>
 		<<else>>
+			<<set $app.Age += _ageEvent.variation/365.24>>
+			<<set _thresholdDay = _ageEvent.variation>>
 			<<set $app.appAge = 20>>
 		<</if>>
 	<</if>>
@@ -370,7 +377,9 @@
 	<</if>>
 
 	<<if _ageEvent.name == "Doll Transformation">>
-		<<if $app.appAge>18>>
+		<<if $app.appAge>19>>
+			<<set $app.Age += _ageEvent.variation/365.24>>
+			<<set _thresholdDay = _ageEvent.variation>>
 			<<set $app.appAge = 17>>
 		<<else>>
 			<<set $app.appAge -= 2>>
@@ -378,6 +387,15 @@
 	<</if>>
 
 <</for>>
+<<if $eternalYouth < $time>>
+	<<set $app.Age +=($eternalYouth-_thresholdDay)/365.24>>
+	<<set $app.appAge +=($eternalYouth-_thresholdDay)/365.24>>
+<<else>>
+	<<set $app.Age +=($time-_thresholdDay)/365.24>>
+	<<set $app.appAge +=($time-_thresholdDay)/365.24>>
+<</if>>
+
+
 
 <</widget>>
 
@@ -968,6 +986,9 @@
 
 :: Doll transformation [widget nobr]
 <<widget "dollTF">>
+<<if $creepydoll.affec == 0>>
+	<<set $DollTF.variation = $time>>
+<</if>>
 <<set $AgeLog.push($DollTF)>>
 <<set $GenderLog.push($DollTF)>>
 <<set $creepydoll.affec += 1>>
