@@ -734,10 +734,25 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 :: GameOver
 <h1 class="gameover">You Are Dead</h1>\
 \
-<<if $items[1].count < -5>>
-Your food ration count has gone below -5, indicating that you have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
-<<elseif ($items[0].count + $items[3].count) <= -3>>
-Your days of water remaining count has gone below -2, indicating that you managed to survive without water for a few days, but eventually died of dehydration. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
+<<if $ownedRelics.some(e => e.name === "Phoenix Obol")>>
+	<<set _string = "Layer" + $currentLayer + " Hub">>
+	_string
+	The Abyss has proved to much for you. You feel your life force leaving your body as you close your eyes for a final time.
+
+	You startle awake again! You check your surroundings and see that you are alone and stark naked in a great white void for as far as you can observe. Just when you start to wonder what is going on, you feel a warm sensation in your clenched hand.
+	You open your hand to see you holding a single medallion, the Phoenix Obol. Only it has started glowing. At some point the glow becomes so intens you can't look at it and the warm sensation has become a burning sensation and eventually down right seering.
+	You scream out loud.
+	<<for _i = 0; _i < $ownedRelics.length; _i++>>
+		<<capture _i>>
+			<<if $ownedRelics[_i].name=="Phoenix Obol">>
+				[[Open your eyes to find yourself back in the Abyss, your hand now clutching a scorched coin that is devoid of its sigil|_string][$soldRelics.push($ownedRelics[_i]), $ownedRelics.deleteAt(_i),$starving=0,$dehydrated=0]]
+			<</if>>
+		<</capture>>
+	<</for>>
+<<elseif $starving > 5>>
+You have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
+<<elseif $dehydrated > 2>>
+You managed to survive without water for a few days, but eventually died of dehydration. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for your layer to avoid death.
 <<else>>
 The horrors of the Abyss where simply too much for you. Maybe better equipement, different companions or approach the event that ended your life in a different way could've saved you?
 <</if>><<if $corruption < 0>>
