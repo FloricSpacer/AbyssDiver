@@ -223,10 +223,12 @@ After using it, the orbs and circles will fade, leaving you unable to ever use E
 Choose a Relic to temporally limit-break:
 
 <<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $spaceRelic != $ownedRelics[$i].name>>
-			<<print "[[$ownedRelics[$i].name|Layer8 Time][$timeUsed = 1, $timeRelic = $ownedRelics[$i].name]]">><br>
+<<for _i = 0; _i < $ownedRelics.length; _i++>>
+	<<capture _i>>
+		<<if $ownedRelics[_i].name == "Aeonglass">>
+			<<print "[[$ownedRelics[_i].name|Layer8 Time][$timeUsed = 1, $soldRelics.push($ownedRelics[_i]), $ownedRelics.deleteAt(_i), $ownedRelics.push($relic70_ET), $timeRelic = $relic70_ET.name]]">><br>
+		<<elseif $spaceRelic != $ownedRelics[_i].name>>
+			<<print "[[$ownedRelics[_i].name|Layer8 Time][$timeUsed = 1, $timeRelic = $ownedRelics[_i].name]]">><br>
 		<</if>>
 	<</capture>>
 <</for>>
