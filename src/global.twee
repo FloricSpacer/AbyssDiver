@@ -787,12 +787,14 @@ Manage food and water items:<br>
 	<<set $temp0=-1>>
 	[[Organize drinking order filled flasks| Flask Order]]
 <</if>>
+
 <<if $items[24].count>0 & $useEnergyrations==false>>
 	[[Start using your energy rations| Use Items and Relics][$useEnergyrations=true]]
 <<elseif $items[24].count>0 & $useEnergyrations==true>>
 	[[Stop using your energy rations| Use Items and Relics][$useEnergyrations=false]]
 <</if>>
 <br><br>
+
 <<if $items[7].count > 0>>
 	<<if $currentLayer==0>>
 		There is no need to use a commerce balloon while you are on the surface.
@@ -803,6 +805,7 @@ Manage food and water items:<br>
 	<</if>>
 	<br>
 <</if>>
+
 <<if $items[8].count > 0>>
 	<<if $currentLayer==0>>
 		There is no need to deploy your escape balloon while you are on the surface.
@@ -824,327 +827,339 @@ Manage food and water items:<br>
 		You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to use a balloon to return to the surface.
 	<</if>>
 <</if>>
+
 <<if ($items[4].count > 0) && ($status.penalty > 0) && $dragonBurn == 0>>
-<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
-[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
-	<</if>>
+	<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
+	[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
+<</if>>
+
 <<if ($items[4].count > 1) && ($status.penalty > 0) && $dragonBurn == 1>>
-<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
-[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -= 2, $dragonBurn = 0]]<br>
-	<</if>>
+	<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
+	[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -= 2, $dragonBurn = 0]]<br>
+<</if>>
 
 <<if $items[21].count > 0>>
-[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
+	[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
 <</if>>
-	<<if $items[25].count > 0 && $wardWaterDrink == 0>>
+
+<<if $items[25].count > 0 && $wardWaterDrink == 0>>
 	<br>You are currently not drinking your Ward Water to reduce your jinxed flame counters. Would you like to start drinking your Ward Water?<br>
 	[[Always drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 1]]<br>
 	[[Drink Ward Water instead of foraging or using other water sources when you have 1 or more hexflame counters|Use Items and Relics][$wardWaterDrink = 2]]<br>
-	<<elseif $wardWaterDrink == 1>>
+<<elseif $wardWaterDrink == 1>>
 	<br>You are currently drinking your Ward Water every day to reduce your jinxed flame counters. Would you like to stop drinking your Ward Water?<br>
 	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
 	[[Drink Ward Water instead of foraging or using other water sources when you have 1 or more hexflame counters|Use Items and Relics][$wardWaterDrink = 2]]<br>
-	<<elseif $wardWaterDrink == 2>>
+<<elseif $wardWaterDrink == 2>>
 	<br>You are currently drinking your Ward Water to reduce your jinxed flame counters whenever you have 1 or more jinxed flame counters. Would you like to change when you drink your Ward Water?<br>
 	[[Always drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 1]]<br>
 	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
-	<</if>>
+<</if>>
 
-	<<if $items[25].count > 0 && $hexflame > 0>>
+<<if $items[25].count > 0 && $hexflame > 0>>
 	<br>You can drink as much Ward Waters as you want if you you want to reduce your jinxed flame counters. This might not be the most economical idea, but it can help you solve the issue immediately if you're not worried about conserving water.<br>
 	[[Drink some Ward Water to reduce your hexflame count|Ward Water Drink]]<br>
 
-	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
-		<<if $hsswear>>
+<<if $ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
+	<<if $hsswear>>
 		<br>You can take off the stole you are using to improve relations with your companions. This will remove the benefit in affection events you are gaining from the Relic.<br>
 		[[Take off the Heart-stealing Stole|Use Items and Relics][$hsswear=0]]<br>
-		<<else>>
-	<br>You can put on the majestic stole you have, it is sure to help sway the hearts of your companions to become more friendly and respect you as a leader. This increases the affection gain from any event that alters affection.<br>
-			[[Wear the Heart-stealing Stole|Use Items and Relics][$hsswear=1]]<br>
-		<</if>>
+	<<else>>
+		<br>You can put on the majestic stole you have, it is sure to help sway the hearts of your companions to become more friendly and respect you as a leader. This increases the affection gain from any event that alters affection.<br>
+		[[Wear the Heart-stealing Stole|Use Items and Relics][$hsswear=1]]<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "World Stone")>>
-		<<if $app.fit>=10>>
-			<br>You don't think you would get anymore fit than you are from working out with the World Stone. Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
-		<<elseif $LastEx < ($time-1)>>
-			<br> You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body. If you want to get stronger and more fit, using this relic is the best way to do it.<br>
-			[[Work out with the World Stone|Use Items and Relics][$app.fit+=1, $LastEx = $time]]<br>
-		<<else>>
-			<br>Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
-		<</if>>
+<<if $ownedRelics.some(e => e.name === "World Stone")>>
+	<<if $app.fit>=10>>
+		<br>You don't think you would get anymore fit than you are from working out with the World Stone. Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
+	<<elseif $LastEx < ($time-1)>>
+		<br> You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body. If you want to get stronger and more fit, using this relic is the best way to do it.<br>
+		[[Work out with the World Stone|Use Items and Relics][$app.fit+=1, $LastEx = $time]]<br>
+	<<else>>
+		<br>Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Chain of Lorelei")>>
-		<<if $colwear>>
-			<br>Currently your voice is different than the one you were used to. Right now you have a feminine voice that sounds like its coming from someone with a natural talent for singing, as if you could be the central figure in an angelic chorus or make a career in music with only minimal training.<br>
-			[[Take the Chain of Lorelei off|Use Items and Relics][$colwear=0]]<br>
-		<<else>>
-		    <br>You have a fairly normal <<GenderPronoun>> voice, but perhaps you sound different if you took advantage of one of your Relics?<br>
-			[[Wear the Chain of Lorelei|Use Items and Relics][$colwear=1]]<br>
-		<</if>>
+<<if $ownedRelics.some(e => e.name === "Chain of Lorelei")>>
+	<<if $colwear>>
+		<br>Currently your voice is different than the one you were used to. Right now you have a feminine voice that sounds like its coming from someone with a natural talent for singing, as if you could be the central figure in an angelic chorus or make a career in music with only minimal training.<br>
+		[[Take the Chain of Lorelei off|Use Items and Relics][$colwear=0]]<br>
+	<<else>>
+	    <br>You have a fairly normal <<GenderPronoun>> voice, but perhaps you sound different if you took advantage of one of your Relics?<br>
+		[[Wear the Chain of Lorelei|Use Items and Relics][$colwear=1]]<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Blind Divine")>>
-		<<if $BDwear>>
-			<br>You are currently wearing the Blind Divine, 
-			<<if $eyeCount<2 && ~$BionicEye>>
+<<if $ownedRelics.some(e => e.name === "Blind Divine")>>
+	<<if $BDwear>>
+		<br>You are currently wearing the Blind Divine, 
+		<<if $eyeCount<2 && ~$BionicEye>>
 			it feels you can perceive even more than when you still had both your eyes. The limited range of the relic still makes it feel a little bit more awkward then when you had your normal vission.
-			<<else>>
+		<<else>>
 			which allows you to perceive your immediate surroundings to a level you never could.
-			<</if>>
-			<br>
-			[[Take the Blind Divine off|Use Items and Relics][$BDwear=false]]<br>
-		<<else>>
-		    <br>You have the Blind Divine, would you like to wear it?<br>
-			[[Wear the Blind Divine|Use Items and Relics][$BDwear=true]]<br>
 		<</if>>
+		<br>
+		[[Take the Blind Divine off|Use Items and Relics][$BDwear=false]]<br>
+	<<else>>
+	    <br>You have the Blind Divine, would you like to wear it?<br>
+		[[Wear the Blind Divine|Use Items and Relics][$BDwear=true]]<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
-		<<if $HeavyHeadwear>>
-			You are currently wearing the Heavy is the Head mask.
-			<br>
-			[[Take the Heavy is the Head off|Use Items and Relics][$HeavyHeadwear=false,$IQdrop+=999]]<br>
-		<<else>>
-		    <br>You have the Heavy is the Head, would you like to wear it?<br>
-			[[Wear the Heavy is the Head|Use Items and Relics][$HeavyHeadwear=true,$IQdrop-=999]]<br>
-		<</if>>
+<<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
+	<<if $HeavyHeadwear>>
+		You are currently wearing the Heavy is the Head mask.
+		<br>
+		[[Take the Heavy is the Head off|Use Items and Relics][$HeavyHeadwear=false,$IQdrop+=999]]<br>
+	<<else>>
+	    <br>You have the Heavy is the Head, would you like to wear it?<br>
+		[[Wear the Heavy is the Head|Use Items and Relics][$HeavyHeadwear=true,$IQdrop-=999]]<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "From Seafoam")>>
-		<<if !$scent>>
-			<br>Currently you have a rather neutral scent<br>
-			[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
-			[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
-		<<elseif $scent==1 >>
-			<br>Currently you have a sweet and floral scent lingering around you<br>
-			[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=0]]<br>
-			[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
-		<<else>>
-			<br>Currently you have a strong musky scent lingering around you<br>
-			[[Scrub yourself with the sponge while imagining the sponge to be odourless|Use Items and Relics][$scent=0]]<br>
-			[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
-		<</if>>
+<<if $ownedRelics.some(e => e.name === "From Seafoam")>>
+	<<if !$scent>>
+		<br>Currently you have a rather neutral scent<br>
+		[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
+		[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
+	<<elseif $scent==1 >>
+		<br>Currently you have a sweet and floral scent lingering around you<br>
+		[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=0]]<br>
+		[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
+	<<else>>
+		<br>Currently you have a strong musky scent lingering around you<br>
+		[[Scrub yourself with the sponge while imagining the sponge to be odourless|Use Items and Relics][$scent=0]]<br>
+		[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Sibyl Blend")>>
-		<br>You have posession of the Sibyl Blend, brewing it and looking in the leaves can point you in the direction of a Relic, saving you 1 day on your next Relic travel time.<br>
-		<<if $SibylBuff == 0>>
-			[[Use the Sibyl Blend to help find the next Relic more quickly|Use Items and Relics][$SibylBuff = 1]]<br>
-		<<else>>
-			<br>The Sibyl Blend tea leaves have pointed you in a clear direction for the next Relic. You are confident that finding it will take you 1 less day than it normally would.<br>
-			[[Stop using the Sibyl Blend to help find future Relics|Use Items and Relics][$SibylBuff = 0]]<br>
-		<</if>>
+<<if $ownedRelics.some(e => e.name === "Sibyl Blend")>>
+	<br>You have posession of the Sibyl Blend, brewing it and looking in the leaves can point you in the direction of a Relic, saving you 1 day on your next Relic travel time.<br>
+	<<if $SibylBuff == 0>>
+		[[Use the Sibyl Blend to help find the next Relic more quickly|Use Items and Relics][$SibylBuff = 1]]<br>
+	<<else>>
+		<br>The Sibyl Blend tea leaves have pointed you in a clear direction for the next Relic. You are confident that finding it will take you 1 less day than it normally would.<br>
+		[[Stop using the Sibyl Blend to help find future Relics|Use Items and Relics][$SibylBuff = 0]]<br>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Kin Shifter")>>
-		<br>A glob of putty-like slime lays ready for you to copy other relics, if you desire to.<br>
-			[[Use the Kin Shifter to copy relics|Kin Shifter Use][$tempValue = 0]]<br><br>
-	<</if>>
-	<<if $ownedRelics.some(e => e.name === "Forbidden Grimoire") && $hiredCompanions.length > 0>>
-		<br>A ragged book written in a strange, ancient language sits in your bag. It holds forgotten knowledge that can improve anyone's skills, doubling any numeric benefit they provide.<br>
-			[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
-	<</if>>
+<<if $ownedRelics.some(e => e.name === "Kin Shifter")>>
+	<br>A glob of putty-like slime lays ready for you to copy other relics, if you desire to.<br>
+	[[Use the Kin Shifter to copy relics|Kin Shifter Use][$tempValue = 0]]<br><br>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
-		<<if $DaedalusEquip == false>>
+<<if $ownedRelics.some(e => e.name === "Forbidden Grimoire") && $hiredCompanions.length > 0>>
+	<br>A ragged book written in a strange, ancient language sits in your bag. It holds forgotten knowledge that can improve anyone's skills, doubling any numeric benefit they provide.<br>
+	[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
+	<<if $DaedalusEquip == false>>
 		<br> You hold an incredible complex and intricate mechanism that is wrapped around the chest like a sash, and interfaces electrically with the nervous system.<br>
-			[[Equip the Daedalus Mechanism|Daedalus Mechanism Select][$DaedalusEquip = true]]<br>
+		[[Equip the Daedalus Mechanism|Daedalus Mechanism Select][$DaedalusEquip = true]]<br>
+	<<else>>
+		<br>Winglike structures seem to sprout from your back, while it is in fact the Daedalus Mechanism tied around your chest.<br>
+		[[Take off the Daedalus Mechanism|Use Items and Relics][$DaedalusEquip = false, $DaedalusFly=false]]<br>
+		<<if $DaedalusFly==false>>
+			[[I want to fly to layers instead of walking|Use Items and Relics][$DaedalusFly=true]]<br>
 		<<else>>
-			<br>Winglike structures seem to sprout from your back, while it is in fact the Daedalus Mechanism tied around your chest.<br>
-			[[Take off the Daedalus Mechanism|Use Items and Relics][$DaedalusEquip = false, $DaedalusFly=false]]<br>
-			<<if $DaedalusFly==false>>
-				[[I want to fly to layers instead of walking|Use Items and Relics][$DaedalusFly=true]]<br>
-			<<else>>
-				[[I want to walk to layers instead of flying|Use Items and Relics][$DaedalusFly=false]]<br>
-			<</if>>
+			[[I want to walk to layers instead of flying|Use Items and Relics][$DaedalusFly=false]]<br>
 		<</if>>
 	<</if>>
+<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-		You look at the glistening set of marbles known as the Managed Misfortune.
-		<<if $StoredCurse != "" && !$ManagedMisfortuneActive>>
+<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
+	You look at the Aeonglass and ponder its endless use. You are effectivly always traveling at double speed now!
+	[[Stop travel at double speed for now|Use Items and Relics][$EndlessAeonglass=false]]
+<<elseif$ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & !$EndlessAeonglass>>
+	You look at the Aeonglass and ponder its endless use. You could effectivly always travel at double speed now!
+	[[Let's travel at double speed from now on|Use Items and Relics][$EndlessAeonglass=true]]
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
+	You look at the glistening set of marbles known as the Managed Misfortune.
+	<<if $StoredCurse != "" && !$ManagedMisfortuneActive>>
 		You have stored the curse named $StoredCurse.name in them. <br>
-			<<if $StoredCurse.name=="Perma-dye" && $curse7.variation=="">>
-				<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
-				The longer you look the more color if your hair seems to change in your reflection. After a while you can see that your hair seems as if it had always been its new color. Now, what color do you see?<br>
-				Please enter your new hair color:<br><br>
+		<<if $StoredCurse.name=="Perma-dye" && $curse7.variation=="">>
+			<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
+			The longer you look the more color if your hair seems to change in your reflection. After a while you can see that your hair seems as if it had always been its new color. Now, what color do you see?<br>
+			Please enter your new hair color:<br><br>
 				
-				<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
-			<<elseif $StoredCurse.name== "Fluffy Ears" && $curse17.variation=="">>
+			<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
+		<<elseif $StoredCurse.name== "Fluffy Ears" && $curse17.variation=="">>
 
-				What type of ears would you like to gain?<br><br>
+			What type of ears would you like to gain?<br><br>
 
-				<<radiobutton "$curse17.variation" "furry cat" checked>> Cat<br>
-				<<radiobutton "$curse17.variation" "fluffy dog" >> Dog<br>
-				<<radiobutton "$curse17.variation" "floppy cow" >> Cow<br>
-				<<radiobutton "$curse17.variation" "furry monkey" >> Monkey<br>
-				<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit<br>
-				<<radiobutton "$curse17.variation" "furry fox" >> Fox<br>
-				<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
-				<<radiobutton "$curse17.variation" "pig" >> Pig<br>
-				<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
-			<<elseif $StoredCurse.name== "Fluffy Tail" && $curse18.variation=="">>
+			<<radiobutton "$curse17.variation" "furry cat" checked>> Cat<br>
+			<<radiobutton "$curse17.variation" "fluffy dog" >> Dog<br>
+			<<radiobutton "$curse17.variation" "floppy cow" >> Cow<br>
+			<<radiobutton "$curse17.variation" "furry monkey" >> Monkey<br>
+			<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit<br>
+			<<radiobutton "$curse17.variation" "furry fox" >> Fox<br>
+			<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
+			<<radiobutton "$curse17.variation" "pig" >> Pig<br>
+			<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
+		<<elseif $StoredCurse.name== "Fluffy Tail" && $curse18.variation=="">>
 
-				What type of tail would you like to gain?<br><br>
+			What type of tail would you like to gain?<br><br>
 
-				<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat<br>
-				<<radiobutton "$curse18.variation" "wagging dog" >> Dog<br>
-				<<radiobutton "$curse18.variation" "lazy cow" >> Cow<br>
-				<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey<br>
-				<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit<br>
-				<<radiobutton "$curse18.variation" "bushy fox" >> Fox<br>
-				<<radiobutton "$curse18.variation" "long mouse" >> Mouse<br>
-				<<radiobutton "$curse18.variation" "twisted pig" >> Pig<br>
-				<<radiobutton "$curse18.variation" "swaying horse" >> Horse<br>
-			<<elseif $StoredCurse.name== "Maximum Fluff" && $curse19.variation=="">>
-				What type of fur would you like to gain?<br><br>
+			<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat<br>
+			<<radiobutton "$curse18.variation" "wagging dog" >> Dog<br>
+			<<radiobutton "$curse18.variation" "lazy cow" >> Cow<br>
+			<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey<br>
+			<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit<br>
+			<<radiobutton "$curse18.variation" "bushy fox" >> Fox<br>
+			<<radiobutton "$curse18.variation" "long mouse" >> Mouse<br>
+			<<radiobutton "$curse18.variation" "twisted pig" >> Pig<br>
+			<<radiobutton "$curse18.variation" "swaying horse" >> Horse<br>
+		<<elseif $StoredCurse.name== "Maximum Fluff" && $curse19.variation=="">>
+			What type of fur would you like to gain?<br><br>
 
-				<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
-				<<radiobutton "$curse19.variation" "dog-furred" >> Dog<br>
-				<<radiobutton "$curse19.variation" "cow-furred" >> Cow<br>
-				<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey<br>
-				<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit<br>
-				<<radiobutton "$curse19.variation" "fox-furred" >> Fox<br>
-				<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse<br>
-				<<radiobutton "$curse19.variation" "pig-furred" >> Pig<br>
-				<<radiobutton "$curse19.variation" "horse-furred" >> Horse<br>
+			<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
+			<<radiobutton "$curse19.variation" "dog-furred" >> Dog<br>
+			<<radiobutton "$curse19.variation" "cow-furred" >> Cow<br>
+			<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey<br>
+			<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit<br>
+			<<radiobutton "$curse19.variation" "fox-furred" >> Fox<br>
+			<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse<br>
+			<<radiobutton "$curse19.variation" "pig-furred" >> Pig<br>
+			<<radiobutton "$curse19.variation" "horse-furred" >> Horse<br>
 
-			<<elseif ($StoredCurse.name== "Wacky Wombs" && $curse19.variation1=="" ) || ($StoredCurse.name== "Wacky Wombs" && $playerCurses.some(e=> e.name === "Wacky Wombs" ) && $curse19.variation2=="") >>
-				What is the location of the womb you would like to add?
-				<<if $app.womb==0>> 
-					<<radiobutton "$curse35.variation1" "throat" checked>> Throat
-					<<radiobutton "$curse35.variation1" "urethra" >> Urethra
-					<<radiobutton "$curse35.variation1" "anus" >> Anus
-					<<if $vagina > 0 >>
-						<<radiobutton "$curse35.variation1" "vagina" >> Vagina
-					<</if>>
-				<<else>>
-					<<radiobutton "$curse35.variation2" "throat" checked>> Throat
-					<<radiobutton "$curse35.variation2" "urethra" >> Urethra
-					<<radiobutton "$curse35.variation2" "anus" >> Anus
-					<<if $vagina > 0 >>
-						<<radiobutton "$curse35.variation2" "vagina" >> Vagina
-					<</if>>
+		<<elseif ($StoredCurse.name== "Wacky Wombs" && $curse19.variation1=="" ) || ($StoredCurse.name== "Wacky Wombs" && $playerCurses.some(e=> e.name === "Wacky Wombs" ) && $curse19.variation2=="") >>
+			What is the location of the womb you would like to add?
+			<<if $app.womb==0>> 
+				<<radiobutton "$curse35.variation1" "throat" checked>> Throat
+				<<radiobutton "$curse35.variation1" "urethra" >> Urethra
+				<<radiobutton "$curse35.variation1" "anus" >> Anus
+				<<if $vagina > 0 >>
+					<<radiobutton "$curse35.variation1" "vagina" >> Vagina
 				<</if>>
-			
-			<<elseif $StoredCurse.name== "Rainbow Swirl" && $curse39.variation=="">>
-				<<textbox "$curse38.variation" "pink" "Use Items and Relics">>
-
-			<<elseif $StoredCurse.name== "Tipping the Scales" && $curse54.variation=="">>
-				<<textbox "$curse54.variation" "green" "Use Items and Relics">>
-			
-			<<elseif $StoredCurse.name== "Carapacian">>
-
-				Please enter your new exoskeleton color:
-
-				<<textbox "$curse69.variation" "shiny black" "Use Items and Relics">>
-
-			<<elseif $StoredCurse.name== "Horny" && $hornVariation=="">>
-				<br>
-				<<include "Horny Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Horny Curse][$ManagedMisfortuneActive=true]]<br>
-			
-			<<elseif $StoredCurse.name== "Eye on the Prize" && $eyeRemove=="">>
-				<br>
-				<<include "Eye on the Prize Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Eye on the Prize Curse][$ManagedMisfortuneActive=true]]<br>
-
-			<<elseif $StoredCurse.name== "Ampu-Q-tie" && $curse104.variation=="">>
-				<br>
-				<<include "Ampu-Q-tie Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Ampu-Q-tie Curse][$ManagedMisfortuneActive=true]]<br>
 			<<else>>
-				<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
-					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
-					You see your own reflection alternating between growing and shrinking. After a while you see the curse has settle on a height... <br><br>
-
-					<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
-					<<radiobutton "$HeightIncrease " 1 >> Increase<br>
-
+				<<radiobutton "$curse35.variation2" "throat" checked>> Throat
+				<<radiobutton "$curse35.variation2" "urethra" >> Urethra
+				<<radiobutton "$curse35.variation2" "anus" >> Anus
+				<<if $vagina > 0 >>
+					<<radiobutton "$curse35.variation2" "vagina" >> Vagina
 				<</if>>
-
-				<<if $StoredCurse.name== "Hemospectrum" && $curse70.variation== "">>
-
-					What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
-
-					<<radiobutton "$curse70.variation" "blue" checked>> Blue
-					<<radiobutton "$curse70.variation" "purple" >> Purple
-					<<radiobutton "$curse70.variation" "green" >> Green
-					<<radiobutton "$curse70.variation" "yellow" >> Yellow
-					<<radiobutton "$curse70.variation" "orange" >> Orange
-					<<radiobutton "$curse70.variation" "pink" >> Pink
-					<<radiobutton "$curse70.variation" "black" >> Black
-					<<radiobutton "$curse70.variation" "brown" >> Brown
-					<<radiobutton "$curse70.variation" "white" >> White
-				
-				<</if>>
-
-				<<link "Activate the stored curse" "Use Items and Relics">>
-					<<set $playerCurses.push($StoredCurse)>>
-					<<if $StoredCurse.type == "Height">>
-						<<set $HeightLog.push($StoredCurse)>>
-					<<elseif $StoredCurse.type == "Gender">>
-						<<set $GenderLog.push($StoredCurse)>>
-					<<elseif $StoredCurse.type == "Age">>
-						<<set $AgeLog.push($StoredCurse)>>
-					<<elseif $StoredCurse.type == "Libido">>
-						<<set $LibidoLog.push($StoredCurse)>>
-					<<elseif $StoredCurse.type == "Handicap">>
-						<<set $HandicapLog.push($StoredCurse)>>
-					<</if>>
-					<<set $ManagedMisfortuneActive=true>>
-				<</link>>
 			<</if>>
-		<<elseif $ManagedMisfortuneActive >>
-		You are affected by the Curse $StoredCurse.name stored in the marbles. <br>
-		<<link "Deactivate the stored curse" "Use Items and Relics">>
-			<<set $targetCurse = $StoredCurse>>
-			<<include "CurseRemoval">>
-			<<set $ManagedMisfortuneActive=false>>
-		<</link>>		
-		<<else>>
-		<br>You need to store a Curse in the Relic before you can use it<br>
-		<</if>>
-	<</if>>
+			
+		<<elseif $StoredCurse.name== "Rainbow Swirl" && $curse39.variation=="">>
+			<<textbox "$curse38.variation" "pink" "Use Items and Relics">>
 
-	<<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
-	<br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, relics, and curses await you further into the Abyss.<br>
-		<<set $previewReturn = $layerReturn>>
-		<<if $currentLayer == 0>>
-			[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
+		<<elseif $StoredCurse.name== "Tipping the Scales" && $curse54.variation=="">>
+			<<textbox "$curse54.variation" "green" "Use Items and Relics">>
+			
+		<<elseif $StoredCurse.name== "Carapacian">>
+
+			Please enter your new exoskeleton color:
+
+			<<textbox "$curse69.variation" "shiny black" "Use Items and Relics">>
+
+		<<elseif $StoredCurse.name== "Horny" && $hornVariation=="">>
+			<br>
+			<<include "Horny Customization">><br>
+			<br>
+			[[Confirm|Apply Stored Horny Curse][$ManagedMisfortuneActive=true]]<br>
+			
+		<<elseif $StoredCurse.name== "Eye on the Prize" && $eyeRemove=="">>
+			<br>
+			<<include "Eye on the Prize Customization">><br>
+			<br>
+			[[Confirm|Apply Stored Eye on the Prize Curse][$ManagedMisfortuneActive=true]]<br>
+
+		<<elseif $StoredCurse.name== "Ampu-Q-tie" && $curse104.variation=="">>
+			<br>
+			<<include "Ampu-Q-tie Customization">><br>
+			<br>
+			[[Confirm|Apply Stored Ampu-Q-tie Curse][$ManagedMisfortuneActive=true]]<br>
+		<<else>>
+			<<if $StoredCurse.name=="Dizzying Heights" && $HeightIncrease == 0>>
+				<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the curse swirling within<br>
+				You see your own reflection alternating between growing and shrinking. After a while you see the curse has settle on a height... <br><br>
+
+				<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+				<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+
+			<</if>>
+
+			<<if $StoredCurse.name== "Hemospectrum" && $curse70.variation== "">>
+
+				What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
+
+				<<radiobutton "$curse70.variation" "blue" checked>> Blue
+				<<radiobutton "$curse70.variation" "purple" >> Purple
+				<<radiobutton "$curse70.variation" "green" >> Green
+				<<radiobutton "$curse70.variation" "yellow" >> Yellow
+				<<radiobutton "$curse70.variation" "orange" >> Orange
+				<<radiobutton "$curse70.variation" "pink" >> Pink
+				<<radiobutton "$curse70.variation" "black" >> Black
+				<<radiobutton "$curse70.variation" "brown" >> Brown
+				<<radiobutton "$curse70.variation" "white" >> White
+			
+			<</if>>
+
+			<<link "Activate the stored curse" "Use Items and Relics">>
+				<<set $playerCurses.push($StoredCurse)>>
+				<<if $StoredCurse.type == "Height">>
+					<<set $HeightLog.push($StoredCurse)>>
+				<<elseif $StoredCurse.type == "Gender">>
+					<<set $GenderLog.push($StoredCurse)>>
+				<<elseif $StoredCurse.type == "Age">>
+					<<set $AgeLog.push($StoredCurse)>>
+				<<elseif $StoredCurse.type == "Libido">>
+					<<set $LibidoLog.push($StoredCurse)>>
+				<<elseif $StoredCurse.type == "Handicap">>
+					<<set $HandicapLog.push($StoredCurse)>>
+				<</if>>
+				<<set $ManagedMisfortuneActive=true>>
+			<</link>>
 		<</if>>
-		<<if $currentLayer == 1>>
-			[[Peek at what is waiting for you on the second layer|Layer2 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 2>>
-			[[Peek at what is waiting for you on the third layer|Layer3 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 3>>
-			[[Peek at what is waiting for you on the fourth layer|Layer4 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 4>>
-			[[Peek at what is waiting for you on the fifth layer|Layer5 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 5>>
-			[[Peek at what is waiting for you on the sixth layer|Layer6 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 6>>
-			[[Peek at what is waiting for you on the seventh layer|Layer7 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 7>>
-			[[Peek at what is waiting for you on the eight layer|Layer8 Preview]]<br>
-		<</if>>
-		<<if $currentLayer == 8>>
-			The ninth layer will be implemented in a future update!<br>
-		<</if>>
+	<<elseif $ManagedMisfortuneActive >>
+	You are affected by the Curse $StoredCurse.name stored in the marbles. <br>
+	<<link "Deactivate the stored curse" "Use Items and Relics">>
+		<<set $targetCurse = $StoredCurse>>
+		<<include "CurseRemoval">>
+		<<set $ManagedMisfortuneActive=false>>
+	<</link>>		
+	<<else>>
+	<br>You need to store a Curse in the Relic before you can use it<br>
 	<</if>>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
+<br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, relics, and curses await you further into the Abyss.<br>
+	<<set $previewReturn = $layerReturn>>
+	<<if $currentLayer == 0>>
+		[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 1>>
+		[[Peek at what is waiting for you on the second layer|Layer2 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 2>>
+		[[Peek at what is waiting for you on the third layer|Layer3 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 3>>
+		[[Peek at what is waiting for you on the fourth layer|Layer4 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 4>>
+		[[Peek at what is waiting for you on the fifth layer|Layer5 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 5>>
+		[[Peek at what is waiting for you on the sixth layer|Layer6 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 6>>
+		[[Peek at what is waiting for you on the seventh layer|Layer7 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 7>>
+		[[Peek at what is waiting for you on the eight layer|Layer8 Preview]]<br>
+	<</if>>
+	<<if $currentLayer == 8>>
+		The ninth layer will be implemented in a future update!<br>
+	<</if>>
+<</if>>
 
 <</nobr>>
 [[Perform other stat adjustments to correct for errors|Adjustments]]
@@ -1452,7 +1467,7 @@ How many dubloons would you like to pay back?
 	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - (3 * $items[12].count))>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
+<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
 	<<set $tempTime = Math.ceil($tempTime / 2)>>
 <</if>>
 
