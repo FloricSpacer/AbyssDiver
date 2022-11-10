@@ -1669,64 +1669,64 @@ How many dubloons would you like to pay back?
 <<else>>
 	<<set _temploop = $tempTime>>
 <</if>>
+
 <<for $i = 0; $i < _temploop; $i++>>
-		<<if ($items[25].count > 0 && $wardWaterDrink == 1) || ($items[25].count > 0 && $wardWaterDrink == 2 && $hexflame > 9)>>
+	<<if ($items[25].count > 0 && $wardWaterDrink == 1) || ($items[25].count > 0 && $wardWaterDrink == 2 && $hexflame > 9)>>
+		<<set $items[25].count -= 1>>
+		<<set $items[0].count += 1>>
+		<<set $hexflame -= 1>>
+		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 			<<set $items[25].count -= 1>>
 			<<set $items[0].count += 1>>
-			<<set $hexflame -= 1>>
-			<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-				<<set $items[25].count -= 1>>
-				<<set $items[0].count += 1>>
+		<</if>>
+	<</if>>
+	<<if $forageWater == 0>>
+		<<include "Drinking code">>
+	<<else>>
+		<<if $abyssKnow == 0>>
+			<<if $currentLayer==1>>
+				<<set $waterL1 += 1>>
+				<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
+			<<elseif $currentLayer==2>>
+				<<set $waterL2 += 1>>
+				<<set $bewitchBabies += 1>>
+			<<elseif $currentLayer==3>>
+				<<set $waterL3 += 1>>
+			<<elseif $currentLayer==4>>
+				<<set $waterL4 += 1>>
+				<<set $algalSize += 1>>
+			<<elseif $currentLayer==5>>	
+				<<set $waterL5 += 1>>
+			<<elseif $currentLayer==6>>
+				<<set $waterL6 += 1>>
+				<<if !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
+					<<set $hexflame += 1>>
+				<</if>>
+			<<elseif $currentLayer==8>>
+				<<set $waterL8 += 1>>
+				<<set $IQdrop += 0.5>>
 			<</if>>
 		<<else>>
-		<<if $forageWater == 0>>
-			<<include "Drinking code">>
-		<<else>>
-			<<if $abyssKnow == 0>>
-				<<if $currentLayer==1>>
-					<<set $waterL1 += 1>>
-					<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
-				<<elseif $currentLayer==2>>
-					<<set $waterL2 += 1>>
-					<<set $bewitchBabies += 1>>
-				<<elseif $currentLayer==3>>
-					<<set $waterL3 += 1>>
-				<<elseif $currentLayer==4>>
-					<<set $waterL4 += 1>>
+			<<if $layer==3>>
+				<<set $waterL3 += 1>>
+			<<elseif $layer==4>>
+				<<set $waterL4 += 1>>
+				<<if $abyssKnow == 0>>
 					<<set $algalSize += 1>>
-				<<elseif $currentLayer==5>>	
-					<<set $waterL5 += 1>>
-				<<elseif $currentLayer==6>>
-					<<set $waterL6 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
-						<<set $hexflame += 1>>
-					<</if>>
-				<<elseif $currentLayer==8>>
-					<<set $waterL8 += 1>>
-					<<set $IQdrop += 0.5>>
 				<</if>>
-			<<else>>
-				<<if $layer==3>>
-					<<set $waterL3 += 1>>
-				<<elseif $layer==4>>
-					<<set $waterL4 += 1>>
-					<<if $abyssKnow == 0>>
-						<<set $algalSize += 1>>
-					<</if>>
-				<<elseif $layer==5>>
-					<<set $waterL5 += 1>>
-				<<elseif $layer==6>>
-					<<set $waterL6 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-						<<set $hexflame += 1>>
-					<</if>>
-				<<elseif $currentLayer==8 && !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
-					<<set $waterL8 += 1>>
-					<<set $IQdrop  += 0.5>>
-				<<elseif $currentLayer==8 && ($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
-					<<set $waterL8 += 1>>
-					<<set $IQdrop  += 0.05>>
+			<<elseif $layer==5>>
+				<<set $waterL5 += 1>>
+			<<elseif $layer==6>>
+				<<set $waterL6 += 1>>
+				<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
+					<<set $hexflame += 1>>
 				<</if>>
+			<<elseif $currentLayer==8 && !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
+				<<set $waterL8 += 1>>
+				<<set $IQdrop  += 0.5>>
+			<<elseif $currentLayer==8 && ($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
+				<<set $waterL8 += 1>>
+				<<set $IQdrop  += 0.05>>
 			<</if>>
 		<</if>>
 	<</if>>
