@@ -1762,7 +1762,7 @@ How many dubloons would you like to pay back?
 		<<set $hexflame -= 1>>
 	<</if>>
 	<<if $items[0].count < 0 >>
-		<<set $dehydrated -=$items[0].count>>
+		<<set $dehydrated -= $items[0].count>>
 		<<set $items[0].count = 0>>
 	<<else>>
 		<<set $dehydrated = 0>>
@@ -1773,9 +1773,9 @@ How many dubloons would you like to pay back?
 
 :: Drinking code[nobr]
 <<FlaskFirst>>
-<<if $items[0].count >= 0>>
+<<if $items[0].count > 0>>
 	<<set $items[0].count -= 1>>
-	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+	<<if $hiredCompanions.some(e => e.name === $companionTwin.name) & $items[0].count<0>>>
 		<<set $items[0].count -= 1>>
 	<</if>>
 <<elseif $items[3].count > 0>>
@@ -1810,8 +1810,6 @@ How many dubloons would you like to pay back?
 			<<set $items[3].count -= 1>>
 			<<set $items[2].count += 1>>
 			<<set $flaskMatrix[$flaskPref] -=1>>
-		<<else>>
-			<<set $dehydrated += 1>>
 		<</if>>
 	<</if>>
 <</if>>
