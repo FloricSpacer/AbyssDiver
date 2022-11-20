@@ -1630,12 +1630,6 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 		Your gun is an important asset if you want to survive this horde.<br>
 	<</if>>
 
-	<<if $status.penalty > 0>>
-		<<set _injuredStart = true>>
-	<<else>>
-		<<set _injuredStart = false>>
-	<</if>>
-
 	<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
 	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
 	<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
@@ -1650,7 +1644,7 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 	<<elseif _temp <=  _L8T1_threshold2 && _temp > _L8T1_threshold >>
 		You had some close calls, a few felt a little too close for comfort. You barely avoided getting caught by the dolls, despite your best efforts. Were you simply unlucky this time or should you consider leaving this place before it's too late?<br>
 	<<elseif _temp <= _L8T1_threshold>>
-		<<if _injuredStart==true>>
+		<<if $status.duration > 0>>
 			<<set $gameOver = true>>
 			<<set $i=$tempTime>>
 			You fight as hard as you can, but eventually the lifeless dolls overwhelm you. As one of them grabs hold of your face, it closes in for a gentle kiss. 
@@ -1659,9 +1653,9 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 			[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-threats.png']]<br><br>
 			<h1 class="gameover">Game Over</h1>
 		<<else>>
-			While you fight your hardest when battling the horde, it's a losing battle. They overwhelm you, grab you, and one of them begins kissing you. Your life flashed before your eyes, but fortunately you struggled loose within a few seconds and managed to fight off the last of the puppets. However, the brief experience left you with a severe, pounding headache, increasing your next 3 travel times by 1 day each.<br>
-			<<set $status.duration += 3>>
-			<<set $status.penalty += 1>>
+			While you fight your hardest when battling the horde, it's a losing battle. They overwhelm you, grab you, and one of them begins kissing you. Your life flashed before your eyes, but fortunately you struggled loose within a few seconds and managed to fight off the last of the puppets. However, the brief experience left you with a severe, pounding headache, increasing your next 4 travel times by 2 day each.<br>
+			<<set $status.duration += 4>>
+			<<set $status.penalty += 2>>
 		<</if>>
 	<</if>>
 <</if>>
