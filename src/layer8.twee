@@ -308,7 +308,7 @@ There is a very easily accessible source of water on this layer, the Lethe Taps,
 
 <<nobr>>
 	<<if $L8T1_counter>0 && $items[20].count>0 && $items[13].count>0 >>
-		Now that you have encountered the Inanis Ego mimics, it may be wise to plan how to use your ammo in any fight with them.<br><br>
+		Now that you have encountered the Inanis Ego clockwork dolls, it may be wise to plan how to use your ammo in any fight with them.<br><br>
 
 		<<radiobutton "$ammoStrat" 0 >> Refrain from using any ammo when fighting <br>
 		<<radiobutton "$ammoStrat" 1 >> Use your ammo only when absolutely necessary <br>
@@ -323,6 +323,9 @@ There is a very easily accessible source of water on this layer, the Lethe Taps,
 		<</if>>
 	<</if>>
 <</nobr>>
+
+You can consider your equipment, allies, and general health to take into account the factors that may impact your success rate against the Inanis Ego threat:
+[[Think about how strong you will be against the clockwork dolls|Layer8 Inanis Check]]
 
 [[Return to exploring the eighth layer|Layer8 Hub]]
 
@@ -1138,6 +1141,15 @@ Note: Some effects of this Curse are not yet implemented.
 <</if>>
 <<CarryAdjust>>\
 
+:: Layer8 Cherry [layer8]
+[img[setup.ImagePath+'Surface/cherry.png']]
+
+How would you like to use Cherry's chaotic luck ability?
+
+[[Get 2 random Relics for half cost|Layer8 Cherry Relic]]
+[[Get 2 random Curses for +50% corruption|Layer8 Cherry Curse]]
+[[Get 1 Relic and 1 Curse|Layer8 Cherry Mix]]
+
 :: Layer8 Cherry Relic [layer8]
 <<nobr>>
 <<set $temp1 = random(0,11) + 84>>
@@ -1440,6 +1452,153 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 <</if>>
 <</nobr>><</if>>
 
+:: Layer 8 Inanis Check
+
+<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
+		Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningful blows is much easier when you have so much time to react.<br>
+		<<set _relicBonus += 10>>
+	<</if>>
+
+	<<if $slingshot>>
+		Your Brave Vector slingshot is proving to be a valuable ranged weapon against the empty dolls.<br>
+		<<set _relicBonus += 20>>
+	<</if>>
+
+	<<if $joyousSword>>
+		The sword you made from the Joyous Sunder slices through any resistance as if it were nothing more than air, giving you a great advantage in melee fights.<br>
+		<<set _relicBonus += 10>>
+	<</if>>
+
+	<<if $DaedalusEquip>>
+		Having wings on your back allows you to stay out of reach of the mimics. Except for the ones that have ranged weapons, of course, but you can certainly dodge those, right?<br>
+		<<set _relicBonus += 7>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
+		The combination of the Toral Wave and Empath Coil allows you to electrocute the mimics easily, it's very useful as long as you get a chance to use it on them.<br>
+		<<set _relicBonus += 10>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+		The eyes of the creepy doll seem to follow young versions of yourself, then those mimics wander off in random directions. Very strange coincidence... <br>
+		<<set _relicBonus += 3>>
+	<</if>>
+
+	<<set _curseBonus +=  ($app.heightCor - $app.oheight)/$app.oheight*100>>
+	<<if ($app.heightCor - $app.oheight)/$app.oheight*100 > 0 >>
+		The fact that you have become much larger during your travels means you have a size advantage over most of the mimics.<br>
+	<<elseif ($app.heightCor - $app.oheight)/$app.oheight*100 < 0 >>
+		The fact that you have shrunk significantly during your travels means you are at a size disadvantage over most of the mimics.<br>
+	<</if>>
+
+	<<if $app.skinType == "sticky, slimy">>
+		Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of sticky situations!<br>
+		<<set _curseBonus += 3>>
+	<</if>>
+
+	<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+		Your claw-like nails help you somewhat if you get into hand-to-hand combat. <br>
+		<<set _curseBonus += 2>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Maru")>>
+		Maru seems scared, but he is still willing to do what he can in a fight.<br>
+		<<set _companionBonus += 2>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Lily")>>
+		Lily puffs her chest, lets out something of a battle cry, and charges headfirst into the puppets as she beats them left and right.<br>
+		<<set _companionBonus += 8>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+		Khemia assumes a fighting stance, dispatching any mimics that finds itself near him. 
+		<<set _companionBonus += 15>>
+		<<if _cutRed>>
+			His sword slashes through them almost as fast as you can blink.
+			<<set _companionBonus += 8>>
+			<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
+			<<set _companionBonus += 5>>
+			<</if>>
+		<</if>>
+		<br>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+		Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
+		<<set _companionBonus += 1>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+		Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
+		<<set _companionBonus += 10>>
+		<<if $slingshot && $cloudStrat==0>>
+			The modified Brave Vector moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
+			<<set _companionBonus += 5>>
+		<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
+			The gun moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
+			<<set _companionBonus += 5>>
+			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
+			<<set _equipmentBonus += _ammo*5>>
+			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/(8*_ammo - $bullRed)) >>
+			<<if $items[20].count <= _bulletsUsed>>
+				Cloud has used the last of your bullets...
+				<<set $items[20].count = 0 >>
+				<<set $ammoStrat = 0>>
+				<<set $cloudStrat = 0>>
+			<<else>>
+				Cloud used _bulletsUsed bullets fighting off the enemy.
+				<<set $items[20].count -= _bulletsUsed>>
+			<</if>>
+		<</if>>
+		<br>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+		Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
+		<<set _companionBonus += 5>>
+	<</if>>
+
+	<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+		<<set _twinBonus = 7 - $HandicapThreat*1.5+_curseBonus>>
+		<<if _twinBonus > 7 >>
+			Your twin fights off the doll-like copies of you with relative ease. It's a strange sight to see a copy of you fight other copies, but next to your twin, the mimics seem like cheap immitations.
+		<<elseif _twinBonus > 5>>
+			Much like yourself, your twin is not the most experienced fighter. But the fact that <<gender>> is able to keep a few of them busy is a pretty big help.
+		<<elseif _twinBonus > 0>>
+			You're not the fighting type, so neither is your twin. The antics of your twin seems to be drawing some attention away from you, which is helpful, but <<gender>> is not taking many of them down.
+		<<else>>
+			Previously it was only you who was so inept when handling threats, but now it's both you and your twin...
+		<</if>>
+		<<set _companionBonus += _twinBonus>>
+		<br>
+
+	<</if>>
+
+	<<if _cutRed>>
+		You're glad you brought along a sword to defend yourself.<br>
+		<<set _equipmentBonus += 7>>
+	<</if>>
+
+		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+			<<set _equipmentBonus += 5*$ammoStrat>>
+			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
+			<<if $items[20].count <= _bulletsUsed>>
+				You has used the last of your bullets...<br>
+				<<set $items[20].count = 0 >>
+				<<set $ammoStrat = 0>>
+			<<else>>
+				You used _bulletsUsed bullets fighting off the enemy.<br>
+				<<set $items[20].count -= _bulletsUsed>>
+			<</if>>
+		<</if>>
+
+	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+		Your gun is an important asset if you want to survive this horde.<br>
+	<</if>>
+
+[[Continue exploring the eighth layer|Layer8 Hub]]
+
 
 :: Layer 8 Threat 1a
 <<nobr>>
@@ -1459,26 +1618,34 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 		<<set $L8T1_counter += 1>>
 		<<set _temp1=0>>
 	<<elseif $L8T1_counter==1>>
-		*PLACEHOLDER 10-day mark* Walking around the neverending halls of the 8th layer you see a figure standing at the end of the hallway. It is waving to you. 
-		Curiousity gets the better of you and you start to approach the figure. Soon the figure comes into focus and you are somewhat shocked by what you see. 
-		It's an exact replica of who you were before all this started! You quicken your pace, you have to get to the bottom of this. <br><br>
-		<<say $mc>>Who are you and why do you look like me?<</say>><br>
-		Instead of responding your 'mirror' image just keeps waving. When you are within a few paces of the figure, you suddenly hear a lot of sound behind you. 
-		One of the crossings you passed is now suddenly swarming with the lifelike puppets you encountered earlier. You immeadeatly realize what's going on. The dolls tricked you into an ambush and such a simple one at that.
-		You start to fight your way out of the situation you gotten yourself into, but you realize something else as well. The waving figure is not the only one that looks like you.
-		They all look like you in some way. Maybe the don't resemble you as much as the waving figure, but they all seem like different distorted versions of yourself, just with different genders, extra limbs, different sizes or completely inhuman charateristics.<br>
+		Walking around the neverending halls of the eighth layer, you spot a porcelain figure standing at the end of the hallway. It is waving to you, apparently friendly.<br><br>
+		
+		Curiosity gets the better of you and you approach the figure. But soon it comes into focus and you are shocked by what you see. <br><br>
+		
+		It's a nearly exact replica of who you were before all this started! <br><br>
+		
+		<<say $mc>>Who are you? And why do you look like me?<</say>><br>
+		Instead of responding your doll-like twin just keeps waving to you. Then, when you are within a few paces of the figure, you suddenly hear the ticking of clockwork and clanging of ceramic on stone.<br><br>
+		
+		One of the crossings you passed by earlier is swarming with the life-like puppets you encountered earlier. The dolls have changed their tactics, apparently they can try to ambush you now.<br><br>
+
+		You fight your way out of the situation, but you realize something else. Something that sends chills down your spine. The waving figure is not the only one that looks like you.<br><br>
+
+		They all look like you in some way. Maybe the don't quite resemble you as much as the waving figure, but they all seem like different, distorted versions of yourself, with different genders, extra limbs, different sizes, or some completely inhuman charateristics. Why are they here? What are these things?<br>
 		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += 0.35>>
 	<<elseif $L8T1_counter==2>>
-		*PLACEHOLDER 30-day mark* They used a coordinated pincer movement to drive you in a corner! They used advanced tactics!<br>
+		While walking through the halls today, a group of the attempted a simple ambush, which you easily avoided. However, they lead you directly into a second group and wrapped around the reincforce them using the elldritch geometry of this layer.<br><br>
+
+		This wasn't too much of a threat, but the fact they were able to navigate the layer and plan coordinated tactics is worrying...
 		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += 0.5>>
 	<<elseif $L8T1_counter==3>>
-		*PLACEHOLDER 70-day mark* You think you spotted one of them using a Relic you own as well. Not that that one was suited for battle but it is worrying sign of things to come...<br>
+		Some of the clockword dolls seem to have Relics of their own. Most are empty-handed or only hold makeshift weapons, but an increasing number are holding copies of items from your own esoteric collection. It seems that from now on, they will be empowered by the strength of the Relics you've picked up along the way in your journey.<br>
 		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += Math.min(0.8, $ownedRelics.length/10)>>
 	<<elseif $L8T1_counter==4>>
-		*PLACEHOLDER 100-day mark* By now the dolls are comunicating in behaving in a way that reminds you an earily lot of yourself. Sure they still have the robotic doll like movement a bit, but it really looks like doll version of yourself in both body and mind by now. It will become really hard to beat them or even evade them by now, especially considering their numbers..<br>
+		By now, the dolls are communicating and coordinating advanced tactics and trying to make the most of the Relics they have. With each passing day their numbers and powers grow. They are as smart as you and their resources are almost as powerful. How long do you think you can survive against a threat like this?<br>
 		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += 0.5>>
 	<</if>>
