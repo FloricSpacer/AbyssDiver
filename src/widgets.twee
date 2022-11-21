@@ -1364,8 +1364,17 @@
 
 :: Flask Selecting first in order[widget nobr]
 <<widget "FlaskFirst">>
+<<set $flaskMatrix[8] = $items[0].count>>
 <<set _j=0 >>
-<<set $flaskPref =0 >>
+
+<<if $flaskPref == -1>>
+	<<for _i=0; _i < $flaskMatrix.length; _i++ >>
+		<<if $flaskMatrix[_i] > 0  >>
+			<<set $flaskPref=_i>>
+		<</if>>
+	<</for>>
+<</if>>
+
 <<set $flaskMatrixOrderAvailable = [] >>
 <<for _i=0; _i<$flaskMatrix.length; _i++ >>
 	<<if $flaskMatrix[_i]>0 >>

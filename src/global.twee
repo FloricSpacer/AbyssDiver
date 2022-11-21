@@ -784,7 +784,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 :: Use Items and Relics
 <<nobr>>
 Manage food and water items:<br>
-<<if $items[3].count>0 >>
+<<if $items[3].count + $items[0].count>0 >>
 	<<set $switchFlask=false>>
 	<<set $temp0=-1>>
 	[[Organize drinking order filled flasks| Flask Order]]
@@ -1773,50 +1773,56 @@ How many dubloons would you like to pay back?
 
 :: Drinking code[nobr]
 <<FlaskFirst>>
-<<if $items[0].count > 0>>
-	<<set $items[0].count -= 1>>
-	<<if $hiredCompanions.some(e => e.name === $companionTwin.name) & $items[0].count<0>>>
+<<if $items[3].count + $items[0].count > 0>>
+	<<if $flaskMatrixLabel[$flaskPref]=="Bottled water">>
 		<<set $items[0].count -= 1>>
+	<<else>>
+		<<set $items[3].count -= 1>>
+		<<set $items[2].count += 1>>
+		<<set $flaskMatrix[$flaskPref] -=1>>
+		<<if $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the first layer">>
+			<<set $waterL1 += 1>>
+			<<set $GenderLog.push($ForageWaterMajor)>>
+		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the second layer">>
+			<<set $waterL2 += 1>>
+			<<set $bewitchBabies += 1>>
+		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the fourth layer">>
+			<<set $waterL4 += 1>>
+			<<set $algalSize += 1>>
+		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the sixth layer">>
+			<<set $waterL6 += 1>>
+			<<set $hexflame += 1>>
+		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with lightly contaiminated water from the eighth layer">>
+			<<set $waterL8 += 1>>
+			<<set $IQdrop += 0.05>>
+		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the eighth layer">>
+			<<set $waterL8 += 1>>
+			<<set $IQdrop += 0.5>>
+		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the ninth layer">>
+			<<set $waterL9 += 1>>
+			<<set $corruption -= 1>>
+		<</if>>		
 	<</if>>
-<<elseif $items[3].count > 0>>
-	<<set $items[3].count -= 1>>
-	<<set $items[2].count += 1>>
-	<<set $flaskMatrix[$flaskPref] -=1>>
-	<<if $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the first layer">>
-		<<set $waterL1 += 1>>
-		<<set $GenderLog.push($ForageWaterMajor)>>
-	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the second layer">>
-		<<set $waterL2 += 1>>
-		<<set $bewitchBabies += 1>>
-	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the fourth layer">>
-		<<set $waterL4 += 1>>
-		<<set $algalSize += 1>>
-	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the sixth layer">>
-		<<set $waterL6 += 1>>
-		<<set $hexflame += 1>>
-	<<elseif $flaskMatrixLabel[$flaskPref]=="Lightly contaiminated water from the eighth layer">>
-		<<set $waterL8 += 1>>
-		<<set $IQdrop += 0.05>>
-	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the eighth layer">>
-		<<set $waterL8 += 1>>
-		<<set $IQdrop += 0.5>>
-	<<elseif $flaskMatrixLabel[$flaskPref]=="Heavily contaiminated water from the ninth layer">>
-		<<set $waterL9 += 1>>
-		<<set $corruption -= 1>>
-	<</if>>
+
 	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 		<<FlaskFirst>>
-		<<if $items[3].count > 0>>	
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<set $flaskMatrix[$flaskPref] -=1>>
+		<<if $items[3].count + $items[0].count > 0>>
+			<<if $flaskMatrixLabel[$flaskPref]=="Bottled water">>	
+				<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+					<<set $items[0].count -= 1>>
+				<</if>>
+			<<else>>
+				<<set $items[3].count -= 1>>
+				<<set $items[2].count += 1>>
+				<<set $flaskMatrix[$flaskPref] -=1>>
+			<</if>>
 		<</if>>
 	<</if>>
 <</if>>
 
 :: Flask Order[nobr noreturn]
 <<FlaskFirst>>
-You will first drink the flasks containing:<br>
+You will first drink:<br>
 $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 
 <<if $flaskMatrixOrderAvailable.length>1 >>
@@ -1826,7 +1832,7 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 		<</capture>>
 
 		<<if _i==1>>
-			<br><br>Afterwards the order in which you will drink your flasks will be:
+			<br><br>Afterwards the order in which you will drink your drinking rations will be:
 		<</if >>
 		<<if _i>0>>
 		<br>$flaskMatrixLabel[_temp] ($flaskMatrix[_temp] remaining)
