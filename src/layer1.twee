@@ -518,50 +518,47 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 
 :: Layer1 Cherry Curse [layer1]
 <<nobr>>
-<<set $temp1 = random(0,11)>>
-<<set $temp2 = random(0,11)>>
-<<for $i = 0; $i < 1; $i>>
-	<<set $temp2 = random(0,11)>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 6 && (Math.abs($temp1 - $temp2) !== 2))>>
+<<set _temp1 = random(0,11)>>
+<<set _temp2 = random(0,11)>>
+<<for _i = 0; _i < 1; _i>>
+	<<set _temp2 = random(0,11)>>
+	<<if (_temp1 !== _temp2) && (_temp1 + _temp2 !== 6 && (Math.abs(_temp1 - _temp2) !== 2))>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
+<<set $playerCurses.push($curses[_temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[_temp1].corr * 1.5), 0))>>
+<<set $playerCurses.push($curses[_temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[_temp2].corr * 1.5), 0))>>
 
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp1].corr * 1.5), 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>> corruption respectively.
+The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name and $curses[_temp2].name for a gain of <<print Math.round(Math.max(($curses[_temp1].corr * 1.5), 0))>> and <<print Math.round(Math.max(($curses[_temp2].corr * 1.5), 0))>> corruption respectively.
 <<nobr>>
-<<if $temp1==9>>
-	<<set $temp1=$temp2>>
-	<<set $temp2=9>>
-<</if>>
 
-<<if $temp1==0>>
+<<if _temp1==0 || _temp2==0>>
 	<<set $LibidoLog.push($curse1)>>
-<<elseif $temp1==1>>
+<</if>>
+<<if _temp1==1 || _temp2==1>>
 	<<set $GenderLog.push($curse2)>>
-<<elseif $temp1==2>>
-	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>
-<<elseif $temp1==4>>
+<</if>>
+<<if _temp1==2 || _temp2==2>>
+	<<set $GenderLog.push($curse3)>>
+	<<if $app.sex=="male" && $app.breastsCor>0 >>
+		<<set $GenderLog.push("Interact A")>>
+	<</if>>
+<</if>>
+<<if _temp1==4 || _temp2==4>>
 	<<set $GenderLog.push($curse5)>>
 <</if>>
-<br>
-<<if $temp2==0>>
-	<<set $LibidoLog.push($curse1)>>
-<<elseif $temp2==1>>
-	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
-<<elseif $temp2==2>>
-	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>[[Continue on to the rest of the layer|Layer1 Hub]]
-<<elseif $temp2==4>>
-	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
-<<elseif $temp2==9>>
+<<if $curses[_temp1].name=='Perma-dye' || $curses[_temp2].name=='Perma-dye'>>
+	<br>What hair color do you prefer?<br>
+	<<textbox "$curse7.variation" "turquoise">><br>
+<</if>>
+<<if _temp1==9 || _temp2==9>>
 	<<set $dizzyCount +=1>>
 	<<if $HeightIncrease == 0>>
-		Would you like to increase or descrease your height?<br>
+		<br>Would you like to increase or descrease your height?<br>
 		<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
 		<<radiobutton "$HeightIncrease " 1 >> Increase<br>
 	<<elseif $HeightIncrease == 1>>
@@ -569,17 +566,13 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 	<<else>>
 		You feel yourself shrinking even more.<br>
 	<</if>>
-
-	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
+<</if>>
+<br>
+<<link "Continue on to the rest of the layer" "Layer1 Hub">>
+	<<if _temp1==9 || _temp2==9>>
 		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
-	<</link>>
-<<else>>
-[[Continue on to the rest of the layer|Layer1 Hub]]
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
-	<<set $LibidoLog.push($curse1)>>
-<</if>>
+	<</if>>
+<</link>>
 
 <</nobr>>
 
