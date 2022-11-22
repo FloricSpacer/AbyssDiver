@@ -509,11 +509,11 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<else>>
 		<<set $foodL3 += $tempTime>>
 		<<if $abyssKnow == 0>>
-			<<for $i = 0; $i < $tempTime; $i++>>
+			<<for _i = 0; _i < $tempTime; $i++>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
 			<</for>>
 		<<else>>
-			<<for $i = 0; $i < $tempTime; $i++>>
+			<<for _i = 0; _i < $tempTime; $i++>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
 			<</for>>
 		<</if>>
@@ -626,9 +626,9 @@ Which Curse would you like to force on your unwilling companion?
 You hear a muffled sound from your incapacitated companion as you ponder your options.
 
 <<nobr>>
-<<for $i = 0; $i < $playerCurses.length; $i++>>
-	<<capture $i>>
-		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer3 Skewed2b][$temp to $i]]">><br>
+<<for _i = 0; _i < $playerCurses.length; _i++>>
+	<<capture _i>>
+		<<print $playerCurses[_i].name>><<print " ">><<print "[[Choose|Layer3 Skewed2b][$temp to _i]]">><br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -873,7 +873,7 @@ You have successfully taken on the $curse26.name Curse. Hopefully you are ok wit
 
 <<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
 
-<<for $i = 0; $i < 999; $i++>>
+<<for _i = 0; _i < 999; _i++>>
 	<<if $items[2].count > 0>>
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
@@ -902,12 +902,12 @@ Which companion would you like to force the Curse of $playerCurses[$temp].name o
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
-	<<print $hiredCompanions[$i].name>><<print " ">>
+<<for _i = 0; _i < $hiredCompanions.length; _i++>>
+	<<capture _i>>
+	<<print $hiredCompanions[_i].name>><<print " ">>
 	
 	
-	<<print "[[Transfer|Layer3 Skewed Apply][$hiredCompanions[$i].curses.push($playerCurses[$temp]), $temp2=$i]]">><br>
+	<<print "[[Transfer|Layer3 Skewed Apply][$hiredCompanions[_i].curses.push($playerCurses[$temp]), _temp2=_i]]">><br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -922,7 +922,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<set $dubloons -= ($skewedUsed * 5)>>
 <<set $skewedUsed += 1>>
 <<set $skewedForced += 1>>
-<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _companionName = $hiredCompanions[_temp2].name>>
 <<set _affectionPenalty = 4 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
@@ -1086,45 +1086,45 @@ How would you like to use Cherry's chaotic luck ability?
 
 :: Layer3 Cherry Relic [layer3]
 <<nobr>>
-<<set $temp1 = random(0,11) + 21>>
-<<set $temp2 = random(0,11) + 21>>
-<<for $i = 0; $i < 1; $i>>
-	<<set $temp2 = random(0,11) + 21>>
-	<<if $temp1 !== $temp2>>
+<<set _temp1 = random(0,11) + 21>>
+<<set _temp2 = random(0,11) + 21>>
+<<for _i = 0; _i < 1; _i>>
+	<<set _temp2 = random(0,11) + 21>>
+	<<if _temp1 !== _temp2>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $ownedRelics.push($relics[$temp1])>>
+<<set $ownedRelics.push($relics[_temp1])>>
 
-<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $ownedRelics.push($relics[$temp2])>>
+<<set $corruption -= Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[_temp2])>>
 
-<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<<set $corruption -= Math.floor(Math.max(($relics[_temp2].corr / 2) - $corRed, 0))>>
 <</nobr>>
 
-The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+The Relics you have found with Cherry's Chaotic Luck are $relics[_temp1].name and $relics[_temp2].name for a cost of <<print Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[_temp2].corr / 2) - $corRed, 0))>> corruption respectively.
 
 [[Continue on to the rest of the layer|Layer3 Hub]]
 
 :: Layer3 Cherry Curse [layer3]
 <<nobr>>
-<<set $temp1 = random(0,15) + 24>>
-<<set $temp2 = random(0,15) + 24>>
-<<for $i = 0; $i < 1; $i>>
-	<<set $temp1 = random(0,15) + 24>>
-	<<set $temp2 = random(0,15) + 24>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 52 && (Math.abs($temp1 - $temp2) !== 65))&& ($temp1 + $temp2 !== 6 && (Math.abs($temp1 - $temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 26 || $temp2 == 26) ))>>
+<<set _temp1 = random(0,15) + 24>>
+<<set _temp2 = random(0,15) + 24>>
+<<for _i = 0; _i < 1; _i>>
+	<<set _temp1 = random(0,15) + 24>>
+	<<set _temp2 = random(0,15) + 24>>
+	<<if (_temp1 !== _temp2) && (_temp1 + _temp2 !== 52 && (Math.abs(_temp1 - _temp2) !== 65))&& (_temp1 + _temp2 !== 6 && (Math.abs(_temp1 - _temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && (_temp1 == 26 || _temp2 == 26) ))>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<set $playerCurses.push($curses[_temp1])>>
+<<set $corruption += Math.round(Math.max(($curses[_temp1].corr * 3 / 2), 0))>>
+<<set $playerCurses.push($curses[_temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[_temp2].corr * 3 / 2), 0))>>
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
-<<if $curses[$temp1].name ==  "Wacky Wombs" || $curses[$temp2].name ==  "Wacky Wombs">>
+The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name and $curses[_temp2].name for a cost of <<print Math.round(Math.max(($curses[_temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[_temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+<<if $curses[_temp1].name ==  "Wacky Wombs" || $curses[_temp2].name ==  "Wacky Wombs">>
 	<<set $GenderLog.push($curse35)>>
 	<<if $app.womb==0>> 
 		<<radiobutton "$curse35.variation1" "throat" checked>> Throat
@@ -1142,7 +1142,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 		<</if>>
 	<</if>>
 <</if>>
-<<if $curses[$temp1].name ==  "Rainbow Swirl" || $curses[$temp2].name ==  "Rainbow Swirl" >>
+<<if $curses[_temp1].name ==  "Rainbow Swirl" || $curses[_temp2].name ==  "Rainbow Swirl" >>
 
 Please enter your new skin/eye color:
 
@@ -1152,17 +1152,17 @@ Please enter your new skin/eye color:
 
 [[Continue on to the rest of the layer|Layer3 Hub]]<</if>>
 
-<<nobr>>ss
-<<if $curses[$temp1].name ==  "Submissiveness Rectification A" || $curses[$temp2].name ==  "Submissiveness Rectification A">>
+<<nobr>>
+<<if $curses[_temp1].name ==  "Submissiveness Rectification A" || $curses[_temp2].name ==  "Submissiveness Rectification A">>
 	<<set $LibidoLog.push($curse25)>>
 <</if>>
-<<if $curses[$temp1].name ==  "Gender Reversal C" || $curses[$temp2].name == "Gender Reversal C"  >>
+<<if $curses[_temp1].name ==  "Gender Reversal C" || $curses[_temp2].name == "Gender Reversal C"  >>
 	<<set $GenderLog.push($curse26)>>
 <</if>>
-<<if $curses[$temp1].name ==  "Asset Robustness C" || $curses[$temp2].name ==  "Asset Robustness C">>
+<<if $curses[_temp1].name ==  "Asset Robustness C" || $curses[_temp2].name ==  "Asset Robustness C">>
 	<<set $GenderLog.push($curse27)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact C")>><</if>>
 <</if>>
-<<if $curses[$temp1].name == "Power Dom" || $curses[$temp2].name ==  "Power Dom">>
+<<if $curses[_temp1].name == "Power Dom" || $curses[_temp2].name ==  "Power Dom">>
 	<<set $LibidoLog.push($curse29)>>
 <</if>>
 
@@ -1170,23 +1170,23 @@ Please enter your new skin/eye color:
 
 :: Layer3 Cherry Mix [layer3]
 <<nobr>>
-<<set $temp1 = random(0,11) + 21>>
-<<for $i = 0; $i < 1; $i>>
-	<<set $temp2 = random(0,15) + 24>>
-	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 26 )>>
+<<set _temp1 = random(0,11) + 21>>
+<<for _i = 0; _i < 1; _i >>
+	<<set _temp2 = random(0,15) + 24>>
+	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  _temp2 == 26 )>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $ownedRelics.push($relics[$temp1])>>
+<<set $ownedRelics.push($relics[_temp1])>>
 
-<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<set $corruption -= Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>>
+<<set $playerCurses.push($curses[_temp2])>>
+<<set $corruption += Math.round(Math.max(($curses[_temp2].corr * 3 / 2), 0))>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+With Cherry's Chaotic Luck you have found the Relic $relics[_temp1].name for a cost of <<print Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[_temp2].name for a gain of <<print Math.round(Math.max(($curses[_temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
 
-<<if $curses[$temp2].name == "Wacky Wombs">>
+<<if $curses[_temp2].name == "Wacky Wombs">>
 	<<set $GenderLog.push($curse35)>>
 	What is the location of the womb you would like to add?
 	<<if $app.womb==0>> 
@@ -1206,7 +1206,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 	<</if>>
 <</if>>
 
-<<if $curses[$temp2].name =="Rainbow Swirl">>
+<<if $curses[_temp2].name =="Rainbow Swirl">>
 
 Please enter your new skin/eye color:
 
@@ -1217,16 +1217,16 @@ Please enter your new skin/eye color:
 [[Continue on to the rest of the layer|Layer3 Hub]]<</if>>
 
 <<nobr>>
-<<if $curses[$temp2].name == "Submissiveness Rectification A">>
+<<if $curses[_temp2].name == "Submissiveness Rectification A">>
 	<<set $LibidoLog.push($curse25)>>
 <</if>>
-<<if $curses[$temp2].name == "Gender Reversal C">>
+<<if $curses[_temp2].name == "Gender Reversal C">>
 	<<set $GenderLog.push($curse26)>>
 <</if>>
-<<if $curses[$temp2].name == "Asset Robustness C">>
+<<if $curses[_temp2].name == "Asset Robustness C">>
 	<<set $GenderLog.push($curse27)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact C")>><</if>>
 <</if>>
-<<if $curses[$temp2].name == "Power Dom">>
+<<if $curses[_temp2].name == "Power Dom">>
 	<<set $LibidoLog.push($curse29)>>
 <</if>>
 
@@ -1261,11 +1261,11 @@ Please enter your new skin/eye color:
 	<<else>>
 		<<set $foodL3 += 1>>
 		<<if $abyssKnow == 0>>
-			<<for $i = 0; $i < $tempTime; $i++>>
+			<<for _i = 0; _i < $tempTime; $i++>>
 				<<set $AgeLog.push($ForageFoodMajor)>>
 			<</for>>
 		<<else>>
-			<<for $i = 0; $i < $tempTime; $i++>>
+			<<for _i = 0; _i < $tempTime; $i++>>
 				<<set $AgeLog.push($ForageFoodMinor)>>
 			<</for>>
 		<</if>>
@@ -1553,68 +1553,68 @@ You have successfully taken the $relic33.name Relic. Hopefully you can make good
 :: Layer3 Curses Random
 <<nobr>>
 <<set _pregCurse = $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,11) + 24>>
-	<<if ($temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dom") >>
+<<for _i = 0; _i < 999; _i ++>>
+	<<set _temp1 = random(0,11) + 24>>
+	<<if (_temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dom") >>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C") && $StoredCurse.name != "Gender Reversal C">>
+	<<if (_temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C") && $StoredCurse.name != "Gender Reversal C">>
 		<<break>>
 	<</if>>
 	<<if $temp == 26 && !($playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness C" || $StoredCurse.name == "Shrunken Assets")>>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B") && $StoredCurse.name != "Clothing Restriction B">>
+	<<if (_temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B") && $StoredCurse.name != "Clothing Restriction B">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 28) && !(playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B"))>>
+	<<if (_temp1 == 28) && !(playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B"))>>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000") && $StoredCurse.name != "20/20000000">>
+	<<if (_temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000") && $StoredCurse.name != "20/20000000">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief") && $StoredCurse.name != "Comic Relief">>
+	<<if (_temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief") && $StoredCurse.name != "Comic Relief">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity") && $StoredCurse.name != "Equal Opportunity">>
+	<<if (_temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity") && $StoredCurse.name != "Equal Opportunity">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control")>>
+	<<if (_temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control")>>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 33) && !_pregCurse && !$playerCurses.some(e => e.name === "Absolute Birth Control") && $StoredCurse.name != "Absolute Birth Control">>
+	<<if (_temp1 == 33) && !_pregCurse && !$playerCurses.some(e => e.name === "Absolute Birth Control") && $StoredCurse.name != "Absolute Birth Control">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 34) && !($app.womb > 1 || ($playerCurses.some(e => e.name === "Wacky Wombs") &&  $StoredCurse.name = "Wacky Wombs") ||$playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
+	<<if (_temp1 == 34) && !($app.womb > 1 || ($playerCurses.some(e => e.name === "Wacky Wombs") &&  $StoredCurse.name = "Wacky Wombs") ||$playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || || $StoredCurse.name == "Omnitool" || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
+	<<if (_temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || || $StoredCurse.name == "Omnitool" || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey") && $StoredCurse.name != "Gooey">>
+	<<if (_temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey") && $StoredCurse.name != "Gooey">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl") && $StoredCurse.name != "Rainbow Swirl">>
+	<<if (_temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl") && $StoredCurse.name != "Rainbow Swirl">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni") && $StoredCurse.name != "Double Pepperoni">>
+	<<if (_temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni") && $StoredCurse.name != "Double Pepperoni">>
 		<<break>>
 	<</if>>
-	<<if ($temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin") && $StoredCurse.name != "Literal Blushing Virgin">>
+	<<if (_temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin") && $StoredCurse.name != "Literal Blushing Virgin">>
 		<<break>>
 	<</if>>
 
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
+	<<if _i > 900>>
+		<<set _temp1 = -1>>
 		<<break>>
 	<</if>>
 <</for>>
 <</nobr>>
 
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
+<<if _temp1 >= 0>>
+The Abyss has chosen for you to be Cursed with $curses[_temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
 
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
+<<print "[[Take on " + $curses[_temp1].name + "]]">>
 <<else>>
 There are no Curses left for you to take on this layer.
 
@@ -1661,9 +1661,9 @@ Finally, the vision fades, leaving you standing once again where you were before
 <<if $ownedRelics.length==1>>
 	<<set $temp=0>>
 <<else>>
-	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
-		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
-			<<set $temp=$i>>
+	<<for _i = 0; _i < $ownedRelics.length && !$endloop; _i++>>
+		<<if $ownedRelics[_i].name=="Gleam Dazer" >>
+			<<set $temp=_i>>
 			<<set $endloop=false>>
 		<</if>>
 	<</for>>
