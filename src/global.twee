@@ -343,15 +343,14 @@ https://discord.gg/gXnq5rmjxG
 Thanks again for playing!
 
 
-:: Appearance [noreturn]
-<<nobr>>
-<<HeightCorrected>>
-<<appGender>>
-<<LibidoCorrected>>
-<<AppearanceCorrect>>
-/*<<for $i = 0; $i < $GenderLog.length; $i++>>
-		<<print $GenderLog[$i].name>>
-<</for>>*/
+:: Appearance [noreturn nobr]
+<<CarryAdjust>>
+
+pregt:$pregnantT 
+mensflag:$menCycleFlag
+menstruatioin start:$menCycleT
+due:  $due 
+
 Your name is $app.name and you are a $app.sex.<br><br>
 Your hair color is $app.hair.<br>
 <<if $app.eyeCount==0>>
@@ -365,38 +364,49 @@ but depth perception has become quite hard. <br>
 <<elseif $app.eyeCount==2 && $BionicEye>>
 You have one natural eye left which is colored $app.eyeColor. The other eye has been replaced with the MoonWatcher, 
 which allows you to percieve the world even better than when you had both your normal eyes.<br>
+<<else>>
+You have two normal eyes which are colored $app.eyeColor.<br>
 <</if>>
-<</nobr>>
-You have $app.skinColor colored $app.skinType skin.<<if $app.skinType.includes("furred") >> $curse19.appDesc <</if>>
+
+You have $app.skinColor colored $app.skinType skin.<<if $app.skinType.includes("furred") >> $curse19.appDesc <</if>><br>
 <<if $app.armCount==1>>You only have one arm. <<if $BionicArm>>It is a pretty cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $app.armCount>2>>You have more arms now than you started with. You're not quite used to it yet so the get in the way a lot.<<if $BionicArm>>One of them is cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $app.armCount==2 &&  $BionicArm>>One of your arms has been replaced with a cool bionic arm, with anti-gravity abilities.<</if>>
 <<if $app.legCount==1>>You only have one leg. <<elseif $app.legCount==0>> You don't have any legs anymore. <<if $playerCurses.some(e => e.name === "Seafolk")>> Instead you have a beautifull finned tail. Can you be considered a <<if $app.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
-
-You are <<BodyHeightText>> tall.
-You have $app.ears ears.
+<br>
+You are <<BodyHeightText>> tall.<br>
+You have $app.ears ears.<br>
 You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you appear to be <<print Math.round($app.appAge)>> years old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
-<<if $DaedalusEquip==true>> You seem to have two $relic73.variation wings sprouting from your back. In reality this is the Daedalus Mechanism.<</if>>
-<<nobr>>
-<<if $dollevent2== true>>
-	<br><br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
-<</if>>
+<br><br>
+<<if $DaedalusEquip==true>> You seem to have two $relic73.variation wings sprouting from your back. In reality this is the Daedalus Mechanism.<br><br><</if>>
+
 <<if $playerCurses.some(e => e.name === "Horny")>>
-	<br>You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
+	You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
 	<<switch $hornVariation>>
 		<<case "rhino">>
-			your nose.
+			your nose.<br><br>
 		<<default>>
-			<<if $hornCount == 1>>the center of your forehead<<else>>your head<</if>>.
+			<<if $hornCount == 1>>the center of your forehead<<else>>your head<</if>>.<br><br>
 	<</switch>>
 <</if>>
 
-<br><br>$app.desc
 <<for $i = 0; $i < $playerCurses.length; $i++>>
+	<<if $i>0>>
+		<br>
+	<</if>>
 	<<print $playerCurses[$i].appDesc>>
+	<<if $i==$playerCurses.length-1>>
+		<br>
+	<</if>>
 <</for>>
-<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
-	<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">>
-<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
-	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">>
+
+<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B") || ( $time - $pregnantT> 270 & $time - $pregnantT<=$due+30)>>
+	<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">><br>
+<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B") || ( $time - $pregnantT> 240 & $time - $pregnantT<=270) >>
+	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">><br>
+<</if>>
+
+<<if $dollevent2== true>>
+	<br>You seem to be stuck wearing a tattered pink dress that looks earily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
+<br>
 <</if>>
 
 <<set _semenCount = setup.activeCurseCount("Semen Demon")>>
@@ -410,7 +420,7 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 <<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
 <<if _limelightCount > 0>>
 	You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $playerCurses.some(e => e.name === "Semen Demon") || $playerCurses.some(e => e.name === "Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
-<</if>><br><br>
+<</if>>
 <<if $bewitchBabies > 0>>
 	Due to your consumption of the contaminated rainwater of the second layer, your fertility has greatly increased. The average amount of  babies born from any pregnancy you're involved in is increased by <<print $bewitchBabies>>.<<print " ">>
 <</if>>
@@ -422,17 +432,17 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 <</if>>
 
 <<if $app.gender <= 1>>
-You look like a typical man, with a masculine facial structure and a body profile that would obviously seem male from a distance.
+<br><br>You look like a typical man, with a masculine facial structure and a body profile that would obviously seem male from a distance.
 <<elseif $app.gender == 2>>
-You look like man, but your features are a bit softer than average. No one would mistake you for a woman, but maybe the label of "twink" could apply to you.
+<br><br>You look like man, but your features are a bit softer than average. No one would mistake you for a woman, but maybe the label of "twink" could apply to you.
 <<elseif $app.gender == 3>>
-You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very effeminate man, but others might see you as a butch woman.
+<br><br>You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very effeminate man, but others might see you as a butch woman.
 <<elseif $app.gender == 4>>
-You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very butch woman, but others might see you as an effeminate man.
+<br><br>You look pretty androgynous. If someone were just looking at you with clothes on, most people would guess you look like a very butch woman, but others might see you as an effeminate man.
 <<elseif $app.gender == 5>>
-You look like a woman, but a bit on the masculine side. Many people would likely assume you're a tomboy based on your appearance.
+<br><br>You look like a woman, but a bit on the masculine side. Many people would likely assume you're a tomboy based on your appearance.
 <<elseif $app.gender >= 6>>
-You look like a typical woman, with a feminine face and a figure that looks clearly female from a distance.
+<br><br>You look like a typical woman, with a feminine face and a figure that looks clearly female from a distance.
 <</if>>
 <<if $app.fit>8>>
 Working out with the World Stone has given you a fit body with especially well-toned arm muscles. This will increase the weight you will be able to carry and might even slightly decrease your travel time.
@@ -442,6 +452,16 @@ You have a well-toned athletic body.
 You have a unremarkable but healthy body. Nontheless you might be able to carry slightly less weight and take a little longer traveling than a well trained adventurer. 
 <<else>>
 Your body looks rather out of shape, you could definitely benefit from some exercise. As a result, you can carry considerably less and need to take more breaks while on the move than a fit expedition leader would.
+<</if>>
+
+<<if $time - $pregnantT< 180 & $time - $pregnantT>= 120 & $menFirstCycle == false>>
+	You are really starting to get a nice and round pregnancy belly. You sometimes even feel a little flutter in your belly already that is probably a little kick. 
+<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120 & $menFirstCycle == true>>
+	You have put on some weight and have quite a round and noticable belly now. You get some annoying ticklish spasms from inside your belly sometimes. 
+<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180 & $menFirstCycle == false>>
+	You belly is huge and bulging forward in a way that can only be identified as a pregnant belly. You feel your child moving and turning alot in your belly. Sometimes the intensity of the feeling from your belly surprises you.
+<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240>>
+	You have a very big and obviously pregnant belly. You feel your child try to move and turn alot in your belly but there is not much space anymore. The feeling can be quite intens.
 <</if>>
 <br><br>
 <<if $app.libido <= 1>>
@@ -462,24 +482,24 @@ You desire sex about as much as basic necessities as food and water, perhaps sli
 You need sex constantly - having sex will only sate your hunger for a matter of minutes, and you will find little meaning in things that don't lead to you having more sex.
 <</if>>
 <<if $standardsLower>0 && $standardsLower<30>>
-You notice you're not as picky about who you find atractive as you used to be, or maybe everybody is just a bit more handsome than they used to be.
+<br>You notice you're not as picky about who you find atractive as you used to be, or maybe everybody is just a bit more handsome than they used to be.
 <<elseif $standardsLower>=30 && $standardsLower<60>>
-You have had sexual fantasies about a lot more people than normal. Since when did the number of attactive people double?
+<br>You have had sexual fantasies about a lot more people than normal. Since when did the number of attactive people double?
 <<elseif $standardsLower>=60>>
-It's getting crazy how much more attractive everybody has become. Everybody basically looks like a knock-out hottie!
+<br>It's getting crazy how much more attractive everybody has become. Everybody basically looks like a knock-out hottie!
 <</if>>
 <<if $HeavyHeadwear>>
-Your mind feels so clear and fit. Just thinking about anything set of a train of thoughts that reaches its conclusion before you even realise how much things you have been considering.
+<br>Your mind feels so clear and fit. Just thinking about anything set of a train of thoughts that reaches its conclusion before you even realise how much things you have been considering.
 <<elseif $IQdrop > 25>>
-You are still able to function and hold something like a conversation with people, but most of the time you are mentally not there anymore. Congratulations, you have become a certified <<if $app.appGender<=5>>Himbo! <<else>>Bimbo! <</if>>
+<br>You are still able to function and hold something like a conversation with people, but most of the time you are mentally not there anymore. Congratulations, you have become a certified <<if $app.appGender<=5>>Himbo! <<else>>Bimbo! <</if>>
 <<elseif $IQdrop > 20>>
-Thinking has become so tiring that you try to do it as little as possible. It does cause you to sometimes lose track of what people are talking about, but most of the time when you just <<if $app.appGender<=5>>smile and wink <<else>>giggle or bite your lip <</if>>people think its fine anyway.
+<br>Thinking has become so tiring that you try to do it as little as possible. It does cause you to sometimes lose track of what people are talking about, but most of the time when you just <<if $app.appGender<=5>>smile and wink <<else>>giggle or bite your lip <</if>>people think its fine anyway.
 <<elseif $IQdrop > 15>>
-You now have clear indications of mental deteroia.. detroiatici... thinking has become harder. You have notice that your speech has been affected by it more and more. At least you can still get your message across.
+<br>You now have clear indications of mental deteroia.. detroiatici... thinking has become harder. You have notice that your speech has been affected by it more and more. At least you can still get your message across.
 <<elseif $IQdrop > 10>>
-You feel like you have slowed down mentally compared to normal. It's not that you suddenly forgot everything you learned but it just feels like your head is tired all the time. Maybe a little less thinking will allow you to recover a bit.
+<br>You feel like you have slowed down mentally compared to normal. It's not that you suddenly forgot everything you learned but it just feels like your head is tired all the time. Maybe a little less thinking will allow you to recover a bit.
 <</if>>
-<br>
+
 <<if $app.penisCor>=1>>
 	<<if $app.penisCor == 1>>
 	You have a tiny penis of <<PenisLengthText>>, which is honestly barely larger than a clitoris.
@@ -504,8 +524,8 @@ You feel like you have slowed down mentally compared to normal. It's not that yo
 	<<elseif $app.penisCor >= 100>>
 	You have a truly gargantuan penis that hangs at a size of <<PenisLengthText true>> long. Sex with normal sized people would need to be very different than it used to be.
 	<</if>>
+<br>
 <</if>>
-<br><br>
 <<if $app.vagina == 1>>
 	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
 		You have a cavernous pussy sitting between your legs, most of your lovers would be able to fit their entire body inside you without even filling you up.
@@ -514,6 +534,7 @@ You feel like you have slowed down mentally compared to normal. It's not that yo
 	<<else>>
 		You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
 	<</if>>
+<br>
 <</if>>
 <<if $app.womb > 0>>
 <br>You have an extra womb in your $app.womb1.
@@ -521,7 +542,6 @@ You feel like you have slowed down mentally compared to normal. It's not that yo
 <<if $app.womb > 1>>
 <br>You have another extra womb in your $app.womb2.
 <</if>>
-<br><br>
 
 <<BreastCorrected>>
 <<if $app.breastsCor < 1>>
@@ -567,7 +587,10 @@ You've got to watch out for very serious back pain with your R cup breasts.
 <<elseif $app.breastsCor >= 20>>
 You've got to watch out for extremely serious back pain with your S cup breasts.
 <</if>>
-
+<<if $time-$menCycleT-$menCycleVar>20 & $menCycleFlag==true>>
+They are a bit sore at the moment.
+<</if>>
+<br>
 <<if $app.tail.length > 0>>
 <<for $i = 0; $i < $app.tail.length; $i++>>
 		You have a $app.tail[$i] tail right above your butt.<br>
@@ -575,7 +598,6 @@ You've got to watch out for extremely serious back pain with your S cup breasts.
 <</if>>
 <br>
 Overall the world would probably see you now as a <<PerceivedStature>> <<Inhuman>> <<PerceivedRace>> <<PerceivedGender>>.<br>
-<</nobr>>
 <<back [[$menuReturn]]>>
 
 :: Adjust dubloons [noreturn]

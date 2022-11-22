@@ -24,7 +24,6 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 :: Layer2 Hub [layer2]
 <<set $currentLayer = 2>>
 <<set $layerExit = 0>>
-<<checkTime>>
 <<CarryAdjust>>
 <<if $timeL2T1 < 4 || $hiredCompanions.length > 3>>
 
@@ -203,7 +202,7 @@ The pudding taste surprisingly like normal pudding, or flan, even with the limit
 
 
 :: Layer2 Relics [layer2 cards nobr]
-<p><<checkTime>></p>
+<p><<CarryAdjust>></p>
 <<if $timeL2T1 < 4 || $hiredCompanions.length > 3>>
 
 <h1>Relics</h1>
@@ -816,6 +815,7 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 	<<set $companionLily.genderVoice = $temp2>>
 	<<if $temp=='male'>>
 		<<set $companionLily.imageIcon="Icons/npcM.png">>
+		<<set $menCycleT = $time - 7>>
 	<<else>>
 		<<set $companionLily.imageIcon="Icons/npcF.png">>
 	<</if>>
@@ -884,6 +884,7 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 	<<set $companionCherry.genderVoice = $temp2>>
 	<<if $temp=='male'>>
 		<<set $companionCherry.imageIcon="Icons/npcM.png">>
+		<<set $menCycleT = $time - 7>>
 	<<else>>
 		<<set $companionCherry.imageIcon="Icons/npcF.png">>
 	<</if>>
@@ -923,6 +924,7 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 	<<set $companionSaeko.genderVoice = $temp2>>
 	<<if $temp=='male'>>
 		<<set $companionSaeko.imageIcon="Icons/npcM.png">>
+		<<set $menCycleT = $time - 7>>
 	<<else>>
 		<<set $companionSaeko.imageIcon="Icons/npcF.png">>
 	<</if>>
@@ -949,6 +951,9 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 	<<set $companionTwin.genderVoice = $temp2>>
 	<<if $temp=='male'>>
 		<<set $companionTwin.imageIcon="Icons/npcM.png">>
+		<<if $curse111.variation2 == "inverted">>
+			<<set $menCycleT = $time - 7>>
+		<</if>>
 	<<else>>
 		<<set $companionTwin.imageIcon="Icons/npcF.png">>
 	<</if>>
@@ -1384,7 +1389,7 @@ You can use this Relic to see into your future and see what awaits you on the la
 [[Continue exploring the second layer|Layer2 Hub]]
 
 
-:: Layer2 Threat1 Main [image layer2]
+/* :: Layer2 Threat1 Main [image layer2]
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
 
@@ -1411,7 +1416,14 @@ Your Brave Vector slingshot can be used like a gun and is able to easily dispatc
 [[Defeat it with the Brave Vector|Layer2 Hub]]
 <</if>>
 
-[[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
+<<link "Allow it to overpower you" "Layer2 Hub">>
+	<<set $status.duration = (4 - $statRed)>>
+	<<set $status.penalty = 1>>
+	<<if $playerCurses.some(e => e.name === "Omnitool")>>
+		<<PregCheck>>
+	<</if>>
+<</link>>
+<br>
 
 <<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
 <br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
@@ -1428,7 +1440,7 @@ A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close a
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Hub]]
-
+*/
 
 :: Layer2 Flasks [layer2]
 <<nobr>>
@@ -1515,7 +1527,7 @@ Subtle changes in your surroundings continue, large rocks start to appear in you
 
 [[Enter the deep caverns|Layer3 1]]<</if>>
 
-
+/* 
 :: Layer2 Threat1 Descend [image layer2]
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
@@ -1560,7 +1572,7 @@ A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close a
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Exit2]]
-
+*/
 
 :: Layer2 Ascend2 [layer2]
 <<nobr>>
@@ -1662,7 +1674,7 @@ You continue your hike and try to keep somewhat dry from the droplets continuall
 
 <</if>>
 
-
+/* 
 :: Layer2 Threat1 Ascend [image layer2]
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
@@ -1708,7 +1720,7 @@ A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close a
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Ascend2]]
 
-
+*/
 :: Layer2 Curses Random
 <<nobr>>
 <<for $i = 0; $i < 999; $i++>>
@@ -1953,7 +1965,14 @@ Your Brave Vector slingshot can be used like a gun and is able to dispatch the b
 <</if>>
 
 Or, you could allow the beast to overpower and have its way with you. While it will recognize you aren't food and so won't consume you, curiosity will get the better of it and it will rape roughly, like the wild beast it is. This will leave you with a mild limp, a status condition increasing your next 4 travel times by 1 day each, unless you use a medkit to cure the status immediately.
-[[Allow it to overpower you|$returnPassage][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
+<<link "Allow it to overpower you" $returnPassage>>
+	<<set $status.duration = (4 - $statRed)>>
+	<<set $status.penalty = 1>>
+	<<if $playerCurses.some(e => e.name === "Omnitool")>>
+		<<PregCheck>>
+	<</if>>
+<</link>>
+/*[[Allow it to overpower you|$returnPassage][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>*/
 
 <<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
 <br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
