@@ -151,6 +151,24 @@
 <</if>>
 <<set $app.womb =0>>
 
+<<checkTime>>
+
+<<if $time - $pregnantT>= 90 & $time - $pregnantT<=$due >>
+	<<set $app.gender += 1>>
+<</if>>
+<<if $time - $pregnantT>= 90 & $time - $pregnantT<=130 >>
+	<<set $app.breasts += 0.5>>
+<<elseif $time - $pregnantT> 130 & $time - $pregnantT<=180>>
+	<<set $app.breasts += 0.5>>
+<<elseif $time - $pregnantT> 180 & $time - $pregnantT<=240>>
+	<<set $app.breasts += 0.5>>
+<<elseif $time - $pregnantT> 240 & $time - $pregnantT<=$due>>
+	<<set $app.breasts += 0.5>>
+<</if>>
+<<if $time-$menCycleT-$menCycleVar>20>>
+	<<set $app.breasts += 1>>
+<</if>>
+
 <<for _genderEvent range $GenderLog>>
 	<<BreastCorrected>>
 	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E" || _genderEvent.name == "Gender Reversal F"  >>
@@ -354,23 +372,16 @@
 
 <</if>>
 
-<<checkTime>>
+<<if $playerCurses.some(e => e.name === "Eggxellent")>>
+	<<if $pregnantT==9999>>
+		<<set $menCycleFlag = true>>
+	<</if>>
+	<<if $menCycleT_flag == false>>
+		<<set $menCycleT_flag = true>>
+		<<set $menCycleT = $time - 7>>
+	<</if>>
+<</if>>
 
-<<if $time - $pregnantT>= 90 & $time - $pregnantT<=$due >>
-	<<set $app.gender += 1>>
-<</if>>
-<<if $time - $pregnantT>= 90 & $time - $pregnantT<=130 >>
-	<<set $app.breasts += 0.5>>
-<<elseif $time - $pregnantT> 130 & $time - $pregnantT<=180>>
-	<<set $app.breasts += 0.5>>
-<<elseif $time - $pregnantT> 180 & $time - $pregnantT<=240>>
-	<<set $app.breasts += 0.5>>
-<<elseif $time - $pregnantT> 240 & $time - $pregnantT<=$due>>
-	<<set $app.breasts += 0.5>>
-<</if>>
-<<if $time-$menCycleT-$menCycleVar>20>>
-	<<set $app.breasts += 1>>
-<</if>>
 <<BreastCorrected>>
 <<PenisCorrected>>
 <<Update_MC_Speech>>
@@ -1235,16 +1246,36 @@
 	<<if $time-$menCycleT-$menCycleVar>27 >>
 		<<set $menCycleT=$time>>
 		<<set $menCycleVar = random(-4,4)>>
-		<<if $menFirstCycle == true>>
-		@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Was it something you ate? Maybe you should skip a day and wait for this to blow over.<br><br>
-		<<else>>
-		@@.alert1; You really don't feel well today, your lower stomach is cramping up you notice your breasts are a bit sore and the headache is already driving you nuts. You know your cycle has started again today, you were expecting it anyway. It will be another few days of pushing trough it.
-			<<if $EventHorizonWear== true>>
-				@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+		<<if $playerCurses.some(e => e.name === "Eggxellent")>>
+
+			<<if $app.vagina==1>>
+				<<set _eggs = $bewitchBabies*(1+$app.womb)>>
+			<<else>>
+				<<set _eggs = $bewitchBabies*($app.womb)>>
 			<</if>>
+
+			@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Half way during the day you start feeling this unresitable cramping urge to just push something out using your pelvic muscles.  
+			<<if $EggsFertilized == true>>
+				@@.alert1; In the end you push out _eggs fertilized eggs.
+			<<else>>
+				@@.alert1; In the end you push out _eggs unfertilized eggs.
+			<</if>>
+			@@.alert1; You don't really know what to do with the eggs, so you simply dispose off them. You are so spend from the whole ordeal that you can only rest, basically wasting an entire day.
 			<br><br>
+			<<set $tempTime=1>>
+			<<include "GeneralTimeStats">>
+		<<else>>
+			<<if $menFirstCycle == true>>
+			@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Was it something you ate? Maybe you should skip a day and wait for this to blow over.<br><br>
+			<<else>>
+			@@.alert1; You really don't feel well today, your lower stomach is cramping up you notice your breasts are a bit sore and the headache is already driving you nuts. You know your cycle has started again today, you were expecting it anyway. It will be another few days of pushing trough it.
+				<<if $EventHorizonWear== true>>
+					@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+				<</if>>
+				<br><br>
+			<</if>>
+			<<set $menstruating = true>>
 		<</if>>
-		<<set $menstruating = true>>
 		<<set $pregChance = 0>>
 	<<elseif $menFirstCycle == false & $time-$menCycleT>28 >>
 		@@.alert1; You were sort of expecting for your cycle to already start. No need to stress, periods can be late, right?<br><br>
@@ -1389,9 +1420,13 @@
 <<set _temp = random(0,100)>>
 
 <<if _temp <= $pregChance*100 & $pregnantT==9999 & $menCycleFlag == true >>
-	<<set $pregnantT = $time -14>>
-	<<set $menCycleFlag = false>>
-	<<set $due = $pregnantT+280+random(-7,7) >>
+	<<if  $playerCurses.some(e => e.name === "Eggxellent")>>
+		<<set $EggsFertilized = true>>
+	<<else>>
+		<<set $pregnantT = $time -14>>
+		<<set $menCycleFlag = false>>
+		<<set $due = $pregnantT+280+random(-7,7) >>
+	<</if>>
 <</if>>
 
 <</widget>>
