@@ -147,6 +147,7 @@
 	<<if $menCycleT_flag == false>>
 		<<set $menCycleT_flag = true>>
 		<<set $menCycleT = $time - 7>>
+		<<set $heatCycleT = $time -7>>
 	<</if>>
 <</if>>
 <<set $app.womb =0>>
@@ -262,7 +263,9 @@
 			<</if>>
 			<<if $menCycleT_flag == false>>
 				<<set $menCycleT_flag = true>>
+				<<set $heatCycleT_flag = true>>
 				<<set $menCycleT = $time - 7>>
+				<<set $heatCycleT = $time -7>>
 			<</if>>
 		<<else>>
 			<<set $app.penis = 6 + $app.modpenis>>
@@ -281,7 +284,9 @@
 			<</if>>
 			<<if $menCycleT_flag == false>>
 				<<set $menCycleT_flag = true>>
+				<<set $heatCycleT_flag = true>>
 				<<set $menCycleT = $time - 7>>
+				<<set $heatCycleT = $time -7>>
 			<</if>>
 			<<set $app.breasts += 3 + $app.modbreasts>>
 		<<else>>
@@ -298,7 +303,9 @@
 			<</if>>
 			<<if $menCycleT_flag == false>>
 				<<set $menCycleT_flag = true>>
+				<<set $heatCycleT_flag = true>>
 				<<set $menCycleT = $time - 7>>
+				<<set $heatCycleT = $time -7>>
 			<</if>>
 		<<else>>
 			<<set $app.womb2 = $curse35.variation2>>
@@ -339,7 +346,9 @@
 				<</if>>
 				<<if $menCycleT_flag == false>>
 					<<set $menCycleT_flag = true>>
+					<<set $heatCycleT_flag = true>>
 					<<set $menCycleT = $time - 7>>
+					<<set $heatCycleT = $time -7>>
 				<</if>>
 			<</if>>
 		<</if>>
@@ -378,7 +387,9 @@
 	<</if>>
 	<<if $menCycleT_flag == false>>
 		<<set $menCycleT_flag = true>>
+		<<set $heatCycleT_flag = true>>
 		<<set $menCycleT = $time - 7>>
+		<<set $heatCycleT = $time -7>>
 	<</if>>
 <</if>>
 
@@ -500,6 +511,32 @@
 	<</if>>
 
 <</for>>
+
+<<if $time-$menCycleT<16 & $time-$menCycleT>=13>>
+	<<set $app.libido += 1>>
+<<elseif $time-$menCycleT<25 & $time-$menCycleT>=20>>
+	<<set $app.libido -= 1>>
+<</if>>
+
+<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
+	<<if $heatCycleT_flag == false>>	
+		<<if $menCycleT_flag == true>>
+			<<set $heatCycleT = $menCycleT>>
+		<<else>>
+			<<set $heatCycleT = $time -7>>
+		<</if>>
+		<<set $heatCycleT_flag = true>>
+	<</if>>
+
+	<<if $time-$heatCycleT==14 >>
+		<<set $app.libido += 2>>
+	<</if>>
+
+<</if>>
+
+
+
+
 <</widget>>
 
 :: Pronoun widgets [widget nobr]
