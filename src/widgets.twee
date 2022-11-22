@@ -138,8 +138,16 @@
 <<set $app.breasts = $app.obreasts>>
 <<if $app.sex == "male">>
 	<<set $app.vagina = 0>>
+	<<set $menCycleFlag = false>>
 <<else>>
 	<<set $app.vagina = 1>>
+	<<if $pregnantT==9999>>
+		<<set $menCycleFlag = true>>
+	<</if>>
+	<<if $menCycleT_flag == false>>
+		<<set $menCycleT_flag = true>>
+		<<set $menCycleT = $time - 7>>
+	<</if>>
 <</if>>
 <<set $app.womb =0>>
 
@@ -231,17 +239,32 @@
 			<<set $app.penisCor = 0>>
 			<<set $app.vagina = 1>>
 			<<set $app.sex = "female">>
+			<<if $pregnantT==9999>>
+				<<set $menCycleFlag = true>>
+			<</if>>
+			<<if $menCycleT_flag == false>>
+				<<set $menCycleT_flag = true>>
+				<<set $menCycleT = $time - 7>>
+			<</if>>
 		<<else>>
 			<<set $app.penis = 6 + $app.modpenis>>
 			<<set $app.vagina = 0>>
 			<<set $app.sex = "male">>
 			<<set $app.breasts = 0>>
+			<<set $menCycleFlag = false>>
 		<</if>>
 	<</if>>
 
 	<<if _genderEvent.name == "Futa Fun">>
 		<<if $app.osex == "male">>
 			<<set $app.vagina = 1>>
+			<<if $pregnantT==9999>>
+				<<set $menCycleFlag = true>>
+			<</if>>
+			<<if $menCycleT_flag == false>>
+				<<set $menCycleT_flag = true>>
+				<<set $menCycleT = $time - 7>>
+			<</if>>
 			<<set $app.breasts += 3 + $app.modbreasts>>
 		<<else>>
 			<<set $app.penis = 3 + $app.modpenis>>
@@ -252,6 +275,13 @@
 	<<if _genderEvent.name == "Wacky Wombs">>
 		<<if $app.womb ==0>>
 			<<set $app.womb1 = $curse35.variation1>>
+			<<if $pregnantT==9999>>
+				<<set $menCycleFlag = true>>
+			<</if>>
+			<<if $menCycleT_flag == false>>
+				<<set $menCycleT_flag = true>>
+				<<set $menCycleT = $time - 7>>
+			<</if>>
 		<<else>>
 			<<set $app.womb2 = $curse35.variation2>>
 		<</if>>
@@ -286,6 +316,13 @@
 		<<else>>
 			<<if $app.vagina<1>>
 				<<set $app.vagina=1>>
+				<<if $pregnantT==9999>>
+					<<set $menCycleFlag = true>>
+				<</if>>
+				<<if $menCycleT_flag == false>>
+					<<set $menCycleT_flag = true>>
+					<<set $menCycleT = $time - 7>>
+				<</if>>
 			<</if>>
 		<</if>>
 	<</if>>
@@ -315,6 +352,24 @@
 		<<set $curse80.appDesc = "Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.">>
 	<</if>>
 
+<</if>>
+
+<<checkTime>>
+
+<<if $time - $pregnantT>= 90 & $time - $pregnantT<=$due >>
+	<<set $app.gender += 1>>
+<</if>>
+<<if $time - $pregnantT>= 90 & $time - $pregnantT<=130 >>
+	<<set $app.breasts += 0.5>>
+<<elseif $time - $pregnantT> 130 & $time - $pregnantT<=180>>
+	<<set $app.breasts += 0.5>>
+<<elseif $time - $pregnantT> 180 & $time - $pregnantT<=240>>
+	<<set $app.breasts += 0.5>>
+<<elseif $time - $pregnantT> 240 & $time - $pregnantT<=$due>>
+	<<set $app.breasts += 0.5>>
+<</if>>
+<<if $time-$menCycleT-$menCycleVar>20>>
+	<<set $app.breasts += 1>>
 <</if>>
 <<BreastCorrected>>
 <<PenisCorrected>>
@@ -503,7 +558,6 @@
 <</widget>>
 
 <<widget "PerceivedGender">>\
-	<<AgeCorrected>>
 	<<if $app.appGender<=5>>\
 		<<if $app.appAge>16>>\
 			man\
@@ -520,7 +574,6 @@
 <</widget>>
 
 <<widget "PerceivedGender2">>\
-	<<AgeCorrected>>
 	<<if $app.appGender<=5>>\
 		<<if $app.appAge>16>>\
 			dude\
@@ -537,7 +590,6 @@
 <</widget>>
 
 <<widget "PerceivedStature">>
-	<<HeightCorrected>>
 	<<if $app.heightCor <160 >>
 			little
 	<<elseif $height >180>>
@@ -870,6 +922,42 @@
 	<<set $HandicapCarry += ($app.armCount-2)>>
 <</if>>
 
+<<if $menstruating == true>>
+	<<set $HandicapThreat -=2>>
+	<<set $HandicapMovement -=3>>
+	<<set $HandicapCarry -=1>>
+<</if>>
+
+<<if $time - $pregnantT< 45 & $time - $pregnantT>= 35>>
+	<<set $HandicapMovement -=2>>
+<<elseif $time - $pregnantT< 90 & $time - $pregnantT>= 45>>
+	<<set $HandicapThreat -=2>>
+	<<set $HandicapMovement -=4>>
+	<<set $HandicapCarry -=3>>
+<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120>>
+	<<set $HandicapThreat -=1>>
+	<<set $HandicapMovement -=2>>
+	<<set $HandicapCarry -=2>>
+<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180>>
+	<<set $HandicapThreat -=2>>
+	<<set $HandicapMovement -=3>>
+	<<set $HandicapCarry -=3>>
+<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240>>
+	<<set $HandicapThreat -=4>>
+	<<set $HandicapMovement -=5>>
+	<<set $HandicapCarry -=5>>
+<</if>>
+
+<<if $HandicapThreat <-10>>
+	<<set $HandicapThreat =-10>>
+<</if>>
+<<if $HandicapMovement < -10>>
+	<<set $HandicapMovement = -10>>
+<</if>>
+<<if $HandicapCarry < 10>>
+	<<set $HandicapCarry = -10>>
+<</if>>
+
 <</widget>>
 
 :: Speech settings [widget nobr]
@@ -983,7 +1071,6 @@
 	<</if>>
 <</widget>>
 
-
 :: Doll transformation [widget nobr]
 <<widget "dollTF">>
 <<if $creepydoll.affec == 0>>
@@ -1080,7 +1167,6 @@
 
 :: Time dependant variable updates [widget nobr]
 <<widget "checkTime">>
-
 <<if $status.duration > 0>>
 	@@.alert2; You are currently injured, increasing your next $status.duration travel times by $status.penalty days each. @@<br><br>
 <</if>>
@@ -1138,6 +1224,103 @@
 	<<elseif $fit<5>>
 	<<set $fit+=1>>
 	@@.alert1; The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
+	<</if>>
+<</if>>
+
+<<if $app.appAge <= 13>>
+	<<set $menCycleT=-7>>
+<</if>>
+
+<<if $menCycleFlag == true & $app.appAge > 13>>
+	<<if $time-$menCycleT-$menCycleVar>27 >>
+		<<set $menCycleT=$time>>
+		<<set $menCycleVar = random(-4,4)>>
+		<<if $menFirstCycle == true>>
+		@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Was it something you ate? Maybe you should skip a day and wait for this to blow over.<br><br>
+		<<else>>
+		@@.alert1; You really don't feel well today, your lower stomach is cramping up you notice your breasts are a bit sore and the headache is already driving you nuts. You know your cycle has started again today, you were expecting it anyway. It will be another few days of pushing trough it.
+			<<if $EventHorizonWear== true>>
+				@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+			<</if>>
+			<br><br>
+		<</if>>
+		<<set $menstruating = true>>
+		<<set $pregChance = 0>>
+	<<elseif $menFirstCycle == false & $time-$menCycleT>28 >>
+		@@.alert1; You were sort of expecting for your cycle to already start. No need to stress, periods can be late, right?<br><br>
+	<<elseif $time-$menCycleT<5 & $time-$menCycleT>0 & $menstruating == true>>
+		<<if $menFirstCycle == true>>
+			<<if $EventHorizonWear== false>>
+				<<set $menFirstCycle = false>>
+				<<if $app.womb1 = "throat">>
+					@@.alert1; You didn't immediately realize what was happing to you when you started to cough op blood. At first you thought you might have contracted some miasma infused lung disease, but it wasn't exactly normal blood and your lungs felt fine. When the realization came it hit you like a truck. You are having your freaking first period. You really didn't realize this was going to happen, but how could you not? You got a uterus now... You feel so clueless about what to do, you could just sit down and cry. <br><br>
+				<<else>>
+					@@.alert1; You realize what is happing to you after you saw some bloodstains in your underwear. You are having your freaking first period. You really didn't realize this was going to happen, but how could you not? You got a uterus now... You feel so clueless about what to do, you could just sit down and cry.<br><br>
+				<</if>>
+			<<else>>
+					@@.alert1; You continue to feel pretty shitty. Whetever is causing this, it better subside soon because the trobbing headache is killing you. Maybe you should take it a bit easier untill this blows over. <br><br>
+			<</if>>
+		<<else>>
+			@@.alert1; You are having your period. These days are not your best days with the trobbing headache bothering you constantly, but this isn't your first rodeo. Of course you have to continue to the best of your abilities but you allow yourself to take it a bit easier when you can. <br><br>
+			<<if $EventHorizonWear== true>>
+				@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+			<</if>>
+			<br><br>
+		<</if>>
+		<<set $pregChance = 0>>
+	<<elseif $time-$menCycleT<9 & $time-$menCycleT>=5>>
+		<<set $menstruating == false>>
+		<<set $pregChance = 0>>
+	<<elseif $time-$menCycleT<13 & $time-$menCycleT>=9>>
+		<<set $menstruating == false>>
+		<<set $pregChance = ($time-$menCycleT-8)*0.06>>
+	<<elseif $time-$menCycleT<16 & $time-$menCycleT>=13>>
+		<<set $menstruating == false>>
+		<<set $pregChance = 0.3>>
+	<<elseif $time-$menCycleT<18 & $time-$menCycleT>=16>>
+		<<set $menstruating == false>>
+		<<set $pregChance = 0.3-($time-$menCycleT-15)*0.1>>
+	<<else>>	
+		<<set $menstruating == false>>
+		<<set $pregChance = 0>>	
+	<</if>>
+	<<if $playerCurses.some(e => e.name === "Absolute Birth Control")>>
+		<<set $pregChance = 0>>	
+	<</if>>
+	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>
+		<<set $pregChance = 1>>	
+	<</if>>	
+<</if>>
+
+<<if $pregnantT <= $time - 14>>
+	<<if $time - $pregnantT< 35 & $time - $pregnantT>= 28 & $menFirstCycle == false>>
+		@@.alert1; You were sort of expecting for your cycle to already start. No need to stress, periods can be late, right?<br><br>
+	<<elseif $time - $pregnantT< 45 & $time - $pregnantT>= 35 & $menFirstCycle == false>>
+		@@.alert1; Okay time for stress, your period has never been this late. This can only mean one thing...<br><br>
+	<<elseif $time - $pregnantT< 90 & $time - $pregnantT>= 45>>
+		@@.alert1; You just feel tired all the time and on top of that you have these bouts of extreme nausea. This is going to hamper your travel time and ability to deal with threats.
+		<<if $menFirstCycle == false>>
+			@@.alert1; This means it's official now, you're pregnant. What are you going to do about it?	
+		<<else>>
+			@@.alert1; The miasma must be inducing this annoying illness. Maybe taking corruption points will clear it? Or maybe it will blow over by itself.
+		<</if>>
+		<br><br>
+	<<elseif $time - $pregnantT< 120 & $time - $pregnantT>= 90 & $menFirstCycle == false>>
+		@@.alert1; At the moment it is mainly the fact that you know you are pregnant that is occupying your mind a lot. Other than that you actually feel pretty fine. You notice that your breast and butt have grown a little but nothing to shocking. Okay, maybe you're also still a bit tired, but nothing to severe.	<br><br>
+	<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120 & $menFirstCycle == false>>
+		@@.alert1; You are really starting to get a nice and round pregnancy belly. You sometimes even feel a little kick already. However, the state of your pregnancy will start to hinder you more and more during your travels. <br><br>
+	<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120 & $menFirstCycle == true>>
+		@@.alert1; You are starting to put on some serious weight. It is by far most noticable around your now round belly, which also sometimes seems to annoying tickle. Your butt, thighs and <<if $app.BreastCorrected<3 & $app.sex=="male">>pectorals<<else>>breasts<</if>> all also seem to have accumalted some fat. Unless you lose the weight again it will slow you down during your travels. <br><br>
+	<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180 & $menFirstCycle == false>>
+		@@.alert1; You are unmistakeably pregnant at the moment. You feel your child moving and turning alot in your belly. However, do anything drains your energy faster than usual. Maybe it's just the added weight or maybe it the pregnancy itself sucking so much energy out of you. Whatever it is, with a big round belly and about half your normal energy, navigating the abyss has become quite hard. <br><br>	
+	<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180 & $menFirstCycle == true>>
+		@@.alert1; You think you might have blocked the thought subconsiously for as long as you could. But it has become unmistakeable. You are pregnant at the moment and have been for quite a while. Your child moving and turning in your extremly swollen belly provided you with the shocking insight one morning. You have no idea what you are going to do about it yet. What you do know is that anything drains your energy faster than usual. Maybe it's just the added weight or maybe it the pregnancy itself sucking so much energy out of you. Whatever it is, with a big round belly and about half your normal energy, navigating the abyss has become quite hard. <br><br>	
+	<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240>>
+		@@.alert2; You are very very pregnant, to the point it has become cumbersome to do anything. Standing up, sitting down, bending over and even sleeping have become serious tasks. Walking can only be done short distances and running and fighting are completly out of the question. Your breasts also started to stain your clothes more and more as time goes on. You have a really hard time traversing the abyss like this. <br><br>
+	<<elseif $time - $pregnantT >= $due>>
+		@@.alert2; You are going into labor. Game over? Forced move to the surface? Forced retirement at location? Play on?? <br><br>
+		<<set $pregnantT=9999>>
+		<<set $menCycleT = $time+63>>
 	<</if>>
 <</if>>
 
@@ -1201,6 +1384,17 @@
 
 <</widget>>
 
+:: Pregnancy Check widget[widget nobr]
+<<widget "PregCheck">>
+<<set _temp = random(0,100)>>
+
+<<if _temp <= $pregChance*100 & $pregnantT==9999 & $menCycleFlag == true >>
+	<<set $pregnantT = $time -14>>
+	<<set $menCycleFlag = false>>
+	<<set $due = $pregnantT+280+random(-7,7) >>
+<</if>>
+
+<</widget>>
 
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
