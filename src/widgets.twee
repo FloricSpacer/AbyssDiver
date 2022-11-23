@@ -139,8 +139,10 @@
 <<if $app.sex == "male">>
 	<<set $app.vagina = 0>>
 	<<set $menCycleFlag = false>>
+	<<set $app.womb = 0 >>
 <<else>>
 	<<set $app.vagina = 1>>
+	<<set $app.womb = 1>>
 	<<if $pregnantT==9999>>
 		<<set $menCycleFlag = true>>
 	<</if>>
@@ -150,7 +152,6 @@
 		<<set $heatCycleT = $time -7>>
 	<</if>>
 <</if>>
-<<set $app.womb =0>>
 
 <<checkTime>>
 
@@ -258,6 +259,7 @@
 			<<set $app.penisCor = 0>>
 			<<set $app.vagina = 1>>
 			<<set $app.sex = "female">>
+			<<set $app.womb += 1>>
 			<<if $pregnantT==9999>>
 				<<set $menCycleFlag = true>>
 			<</if>>
@@ -271,6 +273,7 @@
 			<<set $app.penis = 6 + $app.modpenis>>
 			<<set $app.vagina = 0>>
 			<<set $app.sex = "male">>
+			<<set $availableWomb = false>>
 			<<set $app.breasts = 0>>
 			<<set $menCycleFlag = false>>
 		<</if>>
@@ -279,6 +282,7 @@
 	<<if _genderEvent.name == "Futa Fun">>
 		<<if $app.osex == "male">>
 			<<set $app.vagina = 1>>
+			<<set $app.womb += 1>>
 			<<if $pregnantT==9999>>
 				<<set $menCycleFlag = true>>
 			<</if>>
@@ -296,7 +300,7 @@
 	<</if>>
 
 	<<if _genderEvent.name == "Wacky Wombs">>
-		<<if $app.womb ==0>>
+		<<if ($app.womb == 0 && $app.sex=="male")||($app.womb == 1 && $app.sex!="male")>>
 			<<set $app.womb1 = $curse35.variation1>>
 			<<if $pregnantT==9999>>
 				<<set $menCycleFlag = true>>
@@ -341,6 +345,7 @@
 		<<else>>
 			<<if $app.vagina<1>>
 				<<set $app.vagina=1>>
+				<<set $app.womb += 1>>
 				<<if $pregnantT==9999>>
 					<<set $menCycleFlag = true>>
 				<</if>>
@@ -355,6 +360,11 @@
 	<</if>>
 		
 <</for>>
+
+<<if $app.womb == 0 && $pregnantT!=9999>> 
+	<<set $pregnantT=9999>>
+	<<set $due=9999>>
+<</if>>
 
 <<if $GenderLog.some(e => e.name === "Shrunken Assets")>>
 	<<if $app.sex == "male">>
