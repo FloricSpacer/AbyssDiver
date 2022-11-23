@@ -215,6 +215,7 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $LilyConvo1 = false>>
 <<set $LilyConvo2 = false>>
 <<set $LilyPromise = false>>
+<<set $LilyConvoLac = false>>
 <<set $Lily_LastT = 9999>>
 
 <<set $KhemiaConvo0 = false>>
@@ -230,8 +231,10 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $CloudConvo0 = false>>
 <<set $CloudConvo1 = false>>
 <<set $CloudConvo2 = false>>
+<<set $CloudConvoLac = false>>
 <<set $Cloud_LastT = 9999>>
 <<set $altCloud	   = true>>
+
 <<set $SaekoConvo0 = false>>
 <<set $SaekoConvo1 = false>>
 <<set $SaekoConvo2 = false>>
@@ -616,13 +619,15 @@ Double-click this passage to edit it.
 [[Lily seems quiet|Lily Convo1][$LilyConvo1=true]]<br>
 <<elseif $LilyConvo2==false && $companionLily.affec>15 && $LilyConvo1 && 0 >>
 [[Chat with Lily|Lily Convo2][$LilyConvo2=true]]<br>
-<<elseif $LilyConvo3==false && $companionLily.affec>20 && $app.appGender>7 && $subdom < 1 && $LilyConvo2 >>
+<<elseif $LilyConvo3==false && $companionLily.affec>20 && $app.appGender>7 && $subdom > -1 && $LilyConvo2 >>
 [[Chat with Lily|Lily Convo3][$LilyConvo3=true]]<br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
 	[[You see Lily lifting up the World Stone|Lily ConvoPr]]<br>
 <</if>>
-
+<<if ($companionLily.curses.some(e => e.name === "Lactation Rejuvination A") || $companionLily.curses.some(e => e.name === "Lactation Rejuvination B")) && !$LilyConvoLac && $companionLily.affec>16>>
+	[[You see Lily sporting wet spots on her shirt|Lily ConvoLac]]<br>
+<</if>>
 
 :: Lily Convo0
 <<say $companionLily>>Heeeey! I'm Lily, You must be $mc.name, right? Ready for our daring adventure into the belly of the beast, hero? Just stick with me and it'll all work out, don't worry!<</say>>
@@ -692,7 +697,7 @@ She frames her face between her hands as she gives you a sly smile once again.
 [[End your conversation|Party overview][$companionLily.affec+=(1+$hsswear)]]
 
 :: Lily Convo0 Handshake
-<<set $companionLily.affec-=(3-$hsswear)>>\
+<<set $companionLily.affec-=(2-$hsswear)>>\
 You reach out and give a her a firm handshake, which she recipocates in her own suprisingly firm manner, given her slender frame. 
 
 <<say $mc>>I'm glad to have you<<if $IQdrop >5>>, like,<</if>> onboard! I'm $mc.name.<</say>>
@@ -707,7 +712,7 @@ She shrugs and chuckles lightly.
 >>
 
 :: Lily Convo0 Hobbies
-<<set $companionLily.affec+=(1+$hsswear)>>\
+<<set $companionLily.affec+=(2+$hsswear)>>\
 <<say $mc>> Why not? I do <<if $IQdrop >20>>,like totally,<<else>>actually<</if>> want to get to know you better, and asking about you is<<if $IQdrop >10>>, like,<</if>>  the best way to do that!<</say>>
 Lily grins, straightens her back, and puts on a mock formal voice.
 
@@ -1043,6 +1048,129 @@ She immediately picks up the World Stone to try it out once again. You see her s
 
 [[End the conversation|Party overview][$LilyPromise=true]]
 
+:: Lily ConvoLac
+When you glance at Lily's wet blouse see catches you looking. Lily cocks an eyebrow and frowns with the other one.
+
+<<say $companionLily>>Yeah that's right, this is your doing <<mrms>><</say>>
+<<say $mc>>I..uh...I'm sorry Lily...<</say>>
+You look down in shame, not sure if you're a shamed more by causing this or her catching you looking.
+
+<<say $companionLily>>So tell me, how are you going to take responsibility for this mess?<</say>>
+<<say $mc>>I could wash the blouse for you.<</say>> $app.appGender $subdom 
+<<if $app.appAge < 8 >>\
+	<<say $companionLily>>Looking at you I suddenly got a better idea...<</say>>
+	Lily walks towards you with a wide grin.
+
+	<<say $companionLily>>Come to Mommy little <<PerceivedGender>><</say>>
+	Lily stretches her arms out to pick you up.
+
+	<<say $mc>>Lily what are you doing?!<</say>>
+	<<say $companionLily>>Well you remember what I told you about how I'm always torn with finding a family to call my own and not wanting to be tied down.<</say>>
+	<<say $companionLily>>I've really enjoyed this little make shift family we have become. This will just be the next step. The pressure on them is so annoying and you're the one who caused this, may I remind you.<</say>>
+	<<say $companionLily>>Now stop complaining, my sweet baby <<PerceivedGender>><</say>>
+	Lily starts to unbutton her wet blouse and reveals her equally drenched bra, showing off some of her cleavage already.
+
+	<<say $mc>>Wow, can we talk about this first?!<</say>>
+	<<say $companionLily>>Of course sweety. If you really don't want this, I'll get dressed again and we'll just continue as expidition partners. Or...<</say>>
+	She almost has a predatory smirk to her.
+
+	<<say $companionLily>>You just let mommy take care of you. How about it?<</say>>
+
+	<<if $subdom <= 0>>\
+		<<ConversationChoices
+			[[I think its better we stop here Lily, I don't feel comfortable with this whole situation|Lily ConvoLac NoDom]]
+			[[Okay mommy|Lily ConvoPr Mommy]]
+		>>
+	<<else>>\
+		<<ConversationChoices
+			[[I don't know Lily, I don't feel comfortable with this whole situation|Lily ConvoLac NoSub]]
+			[[Okay mommy|Lily ConvoLac Mommy]]
+		>>	
+	<</if>>
+<<elseif $app.appGender>7 && $subdom > -1>>\
+	<<say $companionLily>>Looking at you I suddenly got a better idea...<</say>>
+	Lily walks towards you with a seductive smile.
+
+	<<say $companionLily>>I know you can't say no to me, that's what I like about you.<</say>>
+	Lily stretches her arms out to pull you into a hug.
+
+	<<say $mc>>Lily what are you doing?<</say>>
+	<<say $companionLily>>Well you remember what I told you about how I'm always torn with finding a family to call my own and not wanting to be tied down.<</say>>
+	<<say $companionLily>>I've really enjoyed this little make shift family we have become. This will just be the next step. The pressure on them is so annoying and you're the one who caused this, may I remind you.<</say>>
+	<<say $companionLily>>Now stop complaining, my sweet lover<</say>>
+	Lily starts to unbutton her wet blouse and reveals her equally drenched bra, showing off some of her cleavage already.
+
+	<<say $mc>>Wow, can we talk about this first?!<</say>>
+	<<say $companionLily>>Of course honey. If you really don't want this, I'll get dressed again and we'll just continue as expidition partners. Or...<</say>>
+	Her seductive smile is dailed up to eleven.
+
+	<<say $companionLily>>You just let little old me take care of that sexy body of yours. How about it? Who's your mommy?<</say>>
+
+	<<ConversationChoices
+		[[I don't know Lily, I don't feel comfortable with this whole situation|Lily ConvoLac NoSub]]
+		[[You're my mommy?|Lily ConvoLac Mommy]]
+	>>
+<<else>>\
+	<<set $companionLily.affec-=(2-$hsswear)>>\
+	Lily sighs and lets her head fall.
+
+	<<say $companionLily>>I guess that's a start.<</say>>
+
+	[[End the conversation|Party overview][$LilyConvoLac=false]]
+<</if>>
+
+:: Lily ConvoLac NoDom
+<<set $companionLily.affec-=(3-$hsswear)>>\
+<<say $mc>>I think its better we stop here Lily, I don't feel comfortable with this whole situation.<</say>>
+Lily looks a bit stunned standing there in her wet bra.
+
+<<say $companionLily>>I...I'm sorry I didn't know what I was thinking...<</say>>
+<<say $companionLily>>I...<</say>>
+It actually happend. Lily is actually at a loss for words. Although you'd normally make light of the situation, you actually feel bad. Lily looks so embarassed, she might actually brake down for once. Instead she just walks off, holding her blouse closed.
+
+[[The conversation seems to have ended|Party overview][$LilyConvoLac=false]]
+
+:: Lily ConvoLac NoSub
+You look to the side in embarrassment.
+
+<<say $mc>>I don't know Lily, I...<</say>>
+<<say $companionLily>>Ssssshh<</say>>
+She presses a finger against your lips.
+
+<<say $companionLily>>It's okay, mommy does know.<</say>>
+And with that she pulls her bra down, revealing her perfect breasts, one of which has a single bead of milk dangling from the nipple.
+
+<<say $companionLily>>Come here sweety.<</say>>
+She pushes your head against the nipple of her breast. You put up something of a weak struggle, as you don't want to hurt her. Her strong arms don't move an inch.
+
+<<say $companionLily>>Don't fight it, just help mommy. Do it for me, okay?<</say>>
+Resigned you latch on and start sucking a little. You taste something sweet. In your curiousity you suck a little harder so that more of the sweet breastmilk invades your mouth. It actually isn't as bad as you thought and within moments you settle in a steady suckling rithm.
+
+<<say $companionLily>>Very good, I'm so proud on you.<</say>>
+Lily lets out a soft moan.
+
+<<say $companionLily>>This feels so much better already... You and me, we're going to do this more often.<</say>>
+She lets at a small giggle as she strokes your $app.hair hair softly while you're still preoccupied with drinking.
+
+[[Continue untill you had your fill|Party overview][$LilyConvoLac=true, $items[1].count +=1, $items[0].count +=1]]
+
+:: Lily ConvoLac Mommy
+<<set $companionLily.affec+=(2+$hsswear)>>\
+
+<<say $mc>>Yes mommy.<</say>>
+<<say $companionLily>>Ow, you make me so happy.<</say>>
+She lets out something between a giggle and a little shriek of joy. She continues to pull her bra down, revealing her perfect breasts, one of which has a single bead of milk dangling from the nipple.
+
+<<say $companionLily>>Come here sweety.<</say>>
+With that she pushes your head against the nipple of her breast. You start sucking a little. You taste something sweet. In your curiousity you suck a little harder so that more of the sweet breastmilk invades your mouth. It actually isn't as bad as you thought and within moments you settle in a steady suckling rithm.
+
+<<say $companionLily>>Very good, I'm so proud on you.<</say>>
+Lily lets out a soft moan.
+
+<<say $companionLily>>This feels so much better already... You and me, we're going to do this more often.<</say>>
+She lets at a small giggle as she strokes your $app.hair hair softly while you're still preoccupied with drinking.
+
+[[Continue untill you had your fill|Party overview][$LilyConvoLac=true, $items[1].count +=1, $items[0].count +=1]]
 
 :: Khemia Conversations [nobr]
 
@@ -1717,10 +1845,12 @@ Double-click this passage to edit it.
 [[Chat with Cloud|Cloud Convo1][$CloudConvo1=true]]<br>
 <<elseif $CloudConvo2==0 && $CloudAffec>15 && $CloudConvo1 && 0>>
 [[Chat with Cloud|Cloud Convo2][$CloudConvo2=true]]<br>
-<<elseif $CloudConvo3==0 && $CloudAffec>20 && $subdom < 2 && $CloudConvo2 >>
+<<elseif $CloudConvo3==0 && $CloudAffec>20 && $subdom > -2 && $CloudConvo2 >>
 [[Chat with Cloud|Cloud Convo3][$CloudConvo3=true]]<br>
 <</if>>
-
+<<if ($playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")) && !$CloudConvoLac && $companionCloud.affec>16>>
+	[[You notice Cloud is looking at your clothes, where wet spots have formed|Cloud ConvoLac]]<br>
+<</if>>
 
 :: Cloud Convo0
 <<say $companionCloud>>'Sup, name's Cloud. I'm glad I'm able to go on an expedition with someone like you.<</say>>
@@ -1933,6 +2063,81 @@ even more serious/close target practice while talking about revolution even less
 :: Cloud Convo3
 Double-click this passage to edit it.
 
+:: Cloud ConvoLac
+<<say $companionCloud>> You seem to be leaking.<</say>>
+You blush a deep red.
+
+<<say $mc>>Yeah sorry, I'm still not fully used to the fact that I'm lactating.<</say>>
+<<say $companionCloud>> I can tell. But the real questions why can't you?<</say>>
+<<say $mc>>I dunno. I mean I feel they are more sore than normal, but I didn't think it would leak already.<</say>>
+Cloud seems to think for a second.
+
+<<say $companionCloud>> Turn around and lift your arms.<</say>>
+<<if $subdom > -2>>\
+	You turn around and put up your arms.
+	<<say $mc>>Why exactly am I doing this?<</say>>
+	<<say $companionCloud>>So this is easier.<</say>>
+	Cloud lifts your clothes, as you try to cover your breasts in shock. When you look back he is standing there with this big disarming smile.
+
+	<<say $companionCloud>>Trust me, let me do my magic. You'll feel a lot better.<</say>>
+	<<ConversationChoices
+		[[I don't really like where this is going Cloud|Cloud ConvoLac No]]
+		[[Okay I trust you|Cloud ConvoLac Yes]]
+	>>
+<<else>>\
+	<<set $companionCloud.affec-=(3-$hsswear)>>\
+	You raise an eyebrow.
+
+	<<say $mc>>And why exactly would I do that for you?<</say>>
+	<<say $companionCloud>> Because I was about to do something for you. But nevermind, I hope you work it out.<</say>>
+	[[End your conversation|Party overview]]
+
+<</if>>
+
+:: Cloud ConvoLac No
+	<<set $companionCloud.affec-=(2-$hsswear)>>\
+	<<say $mc>>I don't really like where this is going Cloud<</say>>
+	Cloud shrugs.
+
+	<<say $companionCloud>> I can't really say I don't get where you're comming from but it does hurt a little that you don't trust me.<</say>>
+	[[End your conversation|Party overview]]
+
+:: Cloud ConvoLac Yes
+	<<set $companionCloud.affec+=(1+$hsswear)>>\
+	<<say $mc>>Okay, I trust you<</say>>
+	A bit hesitantly you turn around again and put your arms up. Cloud quickly finishes disrobing you, leaving you with your bare breasts out.
+
+	<<say $companionCloud>> Now this is the part where you need to relax, just close your eyes and think of wide green peacefull fields.<</say>>
+	You do as he says and close your eyes while you imagine yourself in a field outside the abyss, the sun shining on your face and the grass tickling your feet.
+	You feel clouds hands touch your breasts and slowly start massaging them. He has a very tender touch and even though your breast are sensative it is not unpleasant.
+
+	<<say $companionCloud>> Now follow my lead.<</say>>
+	As you feel his hand slowly guiding you to your knees and bending you forward on your hands as well. He softly starts tugging your teats and milk starts gushing out. You feel an immediate sense of relief from your breasts.
+	
+	<<say $mc>>Oh my, that feels good Cloud.<</say>>
+	<<say $companionCloud>> Ha! I told you, I used to do this a lot back in the day!<</say>>
+	You startle upright only to be blocked by Clouds body that is hunched over your back.
+
+	<<say $mc>>You massaged a lot of breasts?<</say>>
+	<<say $companionCloud>> Haha I'm not going to confirm or deny that but that was not what I was aiming at.<</say>>
+	<<say $mc>>Ow okay<</say>>
+	You relax a bit a imagine yourself in the green pastures again.
+
+	<<say $companionCloud>> No back in the day I had to do with what I could come by and of the nicer things was when you spotted restless cows.<</say>>
+	Cloud moves over to the side, while continuing to massage the milk out through your teats.
+	
+	<<say $companionCloud>> You slowly approach them, cuddle them a bit from the side and then you could help yourself to the freshest possible milk while helping them get rid of their swollen udders<</say>>
+	<<say $mc>>ARE YOU CALLING ME A COW??<</say>>
+	Suddenly you can only imagine youself in the same green pasture, with Cloud milking your udders. You turn beet red again.
+
+	<<say $companionCloud>> Chill, I'm not calling anybody anything. I'm just saying I know how to help<</say>>
+	You ponder what he is saying and it does feel a whole lot better already. At that moment Cloud squirts a whole lot of milk out of your nipples with a bit more force, giving you an almost orgasmic feeling of release.
+
+	<<say $mc>><<if $IQdrop>20 >>HmmmMMMooooo! <<else>>Hmmmmmm! <</if>>
+	<<say $companionCloud>> That's what I thought as well. You know where you can find me if your udders are swolen again.<</say>>
+	He stops and gives you a good slap on your but and lets out a hard laugh.
+
+	[[Get your clothes and continue|Party overview][$CloudConvoLac=true]]
 
 :: Saeko Conversations [nobr]
 <<if $SaekoConvo0==0>>
@@ -2968,9 +3173,23 @@ After reading from the book, Saeko's looks a bit sad as she turns the last page,
 
 <<nobr>>
 <<if ~$ConvoHandicapLarge>>
-	<<set $temp1 = random(0,$hiredCompanions.length - 1)>>
-	<<if $hiredCompanions[$temp1].name != $companionTwin.name>>
-		<<include `$hiredCompanions[$temp1].name + " Layer " + $currentLayer`>>
+	<<set _temp1 = random(0,$hiredCompanions.length - 1)>>
+	<<if $hiredCompanions[_temp1].name != $companionTwin.name>>
+		<<set _convoOptions = 0>>
+		<<set _string = "$" + $hiredCompanions[_temp1].name + "ConvoLac" >>
+		<<print "<<set _boolean = " + _string + ">>">>
+		<<if  _boolean>>
+			<<set _convoOptions += 1>>
+		<</if>>
+		<<set _temp2 = random(0,_convoOptions)>>
+		<<if _temp2==0>>
+			<<include `$hiredCompanions[_temp1].name + " Layer " + $currentLayer`>>
+		<</if>>
+		<<set _temp2-=1>>	
+		<<if _temp2==0>>
+			<<include `$hiredCompanions[_temp1].name + "ConvoLac Rep"`>>
+		<</if>>
+		<<set _temp2-=1>>	
 	<</if>>
 <</if>>
 <</nobr>>
@@ -3370,3 +3589,26 @@ You shake your head, unaware of her observations.
 
 <<say $companionSaeko>>Nothing! No fungal spores, no bacteria, no tiny insects, nothing. I can do my best to keep us protected, but even my best efforts aren't really enough. This place should not exist. We probably shouldn't be here. These animated doll-like things just aren't right. I saw one of them earlier that looked just like you, but it was wrong and I knew it wasn't anything like you. I'm afraid here, and you should be too.<</say>>
 <br>
+
+:: LilyConvoLac Rep
+<<say $companionLily>>Come here sweety, it's time again.<</say>>
+Without protesting you go to Lily. She sits down and bares her breast. You lay down in her lap and take her nipple in your mouth.
+
+<<say $companionLily>>Drink as much as you can so can become big and strong.<</say>>
+You suckle her sweat breastmilk while she's petting your head lovingly.
+
+<<say $companionLily>>Well maybe don't become big and strong.<</say>>
+She giggles as you continue to drink your fill. You won't be needing diner tonight.
+<<set $items[0].count +=1>><<set $items[1].count +=1>><br>
+
+:: CloudConvoLac Rep
+<<say $companionCloud>>You are leaking again<</say>>
+You look down at your clothes, but Cloud is already helping you out of them. He bends you forwards while he sits on his knees over you.
+
+<<say $companionCloud>>Just relax, I know you enjoy these sessions.<</say>>
+You can hardly argue with him as he starts massaging your breasts. It feels really nice. He starts pulling on your teats gently, which causes the milk to squirt out and the pressure to alleviate.
+
+<<say $companionCloud>>Who is a good <<PerceivedStature>> <<PerceivedGender>>?<</say>>
+<<say $mc>> <<if $IQdrop>20>>Mooooo!<<else>>Hmmmmm!<</if>><</say>>
+<<set $companionCloud.affec +=1>><br>
+
