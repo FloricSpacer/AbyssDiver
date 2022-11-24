@@ -15,6 +15,9 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.starving >= 6 || StoryVar.dehydrated >= 3 || StoryVar.gameOver) {
 		return "GameOver";
 	}
+	if (StoryVar.time >= StoryVar.due) {
+		return "Labor Scene";
+	}
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
 		return "AgeEnd";
 	}
