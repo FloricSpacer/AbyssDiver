@@ -89,5 +89,5 @@ Macro.add('say', {
 Setting.addHeader("Content Settings");
 
 Setting.addToggle("MenCycleToggleFilter", {
-	label : "Filter messages containt information on your menstrual cycle "
+	label : "Filter messages containing information on your menstrual cycle "
 }); // default value not defined, so false is used
