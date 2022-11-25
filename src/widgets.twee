@@ -1298,7 +1298,7 @@
 
 			<<set _eggs = ($bewitchBabies+1)*($app.womb)>>
 
-			@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Half way during the day you start feeling this unresitable cramping urge to just push something out using your pelvic muscles.  
+			@@.alert1; <<if !settings.MenCycleToggleFilter>>You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts.<</if>> Half way during the day you start feeling this unresitable cramping urge to just push something out using your pelvic muscles.  
 			<<if $EggsFertilized == true>>
 				@@.alert1; In the end you push out _eggs fertilized egg<<if _eggs>1>>s<</if>>.
 			<<else>>
@@ -1309,14 +1309,16 @@
 			<<set $tempTime=1>>
 			<<include "GeneralTimeStats">>
 		<<else>>
-			<<if $menFirstCycle == true>>
-			@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Was it something you ate? Maybe you should skip a day and wait for this to blow over.<br><br>
-			<<else>>
-			@@.alert1; You really don't feel well today, your lower stomach is cramping up you notice your breasts are a bit sore and the headache is already driving you nuts. You know your cycle has started again today, you were expecting it anyway. It will be another few days of pushing trough it.
-				<<if $EventHorizonWear== true>>
-					@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+			<<if !settings.MenCycleToggleFilter>>
+				<<if $menFirstCycle == true>>
+				@@.alert1; You really don't feel well today, your lower stomach is cramping up and the headache is driving you nuts. Was it something you ate? Maybe you should skip a day and wait for this to blow over.<br><br>
+				<<else>>
+				@@.alert1; You really don't feel well today, your lower stomach is cramping up you notice your breasts are a bit sore and the headache is already driving you nuts. You know your cycle has started again today, you were expecting it anyway. It will be another few days of pushing trough it.
+					<<if $EventHorizonWear== true>>
+						@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+					<</if>>
+					<br><br>
 				<</if>>
-				<br><br>
 			<</if>>
 			<<set $menstruating = true>>
 		<</if>>
@@ -1324,23 +1326,25 @@
 	<<elseif $menFirstCycle == false & $time-$menCycleT>28 >>
 		@@.alert1; You were sort of expecting for your cycle to already start. No need to stress, periods can be late, right?<br><br>
 	<<elseif $time-$menCycleT<5 & $time-$menCycleT>0 & $menstruating == true>>
-		<<if $menFirstCycle == true>>
-			<<if $EventHorizonWear== false>>
-				<<set $menFirstCycle = false>>
-				<<if $app.womb1 = "throat">>
-					@@.alert1; You didn't immediately realize what was happing to you when you started to cough op $app.blood blood. At first you thought you might have contracted some miasma infused lung disease, but it wasn't exactly normal blood and your lungs felt fine. When the realization came it hit you like a truck. You are having your freaking first period. You really didn't realize this was going to happen, but how could you not? You got a uterus now... You feel so clueless about what to do, you could just sit down and cry. <br><br>
+		<<if !settings.MenCycleToggleFilter>>
+			<<if $menFirstCycle == true>>
+				<<if $EventHorizonWear== false>>
+					<<set $menFirstCycle = false>>
+					<<if $app.womb1 = "throat">>
+						@@.alert1; You didn't immediately realize what was happing to you when you started to cough op $app.blood blood. At first you thought you might have contracted some miasma infused lung disease, but it wasn't exactly normal blood and your lungs felt fine. When the realization came it hit you like a truck. You are having your freaking first period. You really didn't realize this was going to happen, but how could you not? You got a uterus now... You feel so clueless about what to do, you could just sit down and cry. <br><br>
+					<<else>>
+						@@.alert1; You realize what is happing to you after you saw some $app.blood bloodstains in your underwear. You are having your freaking first period. You really didn't realize this was going to happen, but how could you not? You got a uterus now... You feel so clueless about what to do, you could just sit down and cry.<br><br>
+					<</if>>
 				<<else>>
-					@@.alert1; You realize what is happing to you after you saw some $app.blood bloodstains in your underwear. You are having your freaking first period. You really didn't realize this was going to happen, but how could you not? You got a uterus now... You feel so clueless about what to do, you could just sit down and cry.<br><br>
+						@@.alert1; You continue to feel pretty shitty. Whetever is causing this, it better subside soon because the trobbing headache is killing you. Maybe you should take it a bit easier untill this blows over. <br><br>
 				<</if>>
 			<<else>>
-					@@.alert1; You continue to feel pretty shitty. Whetever is causing this, it better subside soon because the trobbing headache is killing you. Maybe you should take it a bit easier untill this blows over. <br><br>
+				@@.alert1; You are having your period. These days are not your best days with the trobbing headache bothering you constantly, but this isn't your first rodeo. Of course you have to continue to the best of your abilities but you allow yourself to take it a bit easier when you can. <br><br>
+				<<if $EventHorizonWear== true>>
+					@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
+				<</if>>
+				<br><br>
 			<</if>>
-		<<else>>
-			@@.alert1; You are having your period. These days are not your best days with the trobbing headache bothering you constantly, but this isn't your first rodeo. Of course you have to continue to the best of your abilities but you allow yourself to take it a bit easier when you can. <br><br>
-			<<if $EventHorizonWear== true>>
-				@@.alert1; At the very least the Event Horizon is preventing you from having to deal with the menstrual flow. That's something at least!
-			<</if>>
-			<br><br>
 		<</if>>
 		<<set $pregChance = 0>>
 	<<elseif $time-$menCycleT<9 & $time-$menCycleT>=5>>

@@ -85,3 +85,9 @@ Macro.add('say', {
 			$(this.output).wiki(output);
 		}
 });
+
+Setting.addHeader("Content Settings");
+
+Setting.addToggle("MenCycleToggleFilter", {
+	label : "Filter messages containt information on your menstrual cycle "
+}); // default value not defined, so false is used
