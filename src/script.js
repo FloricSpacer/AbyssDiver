@@ -91,3 +91,12 @@ Setting.addHeader("Content Settings");
 Setting.addToggle("MenCycleToggleFilter", {
 	label : "Hide messages containing information about your menstrual cycle "
 }); // default value not defined, so false is used
+
+Setting.addRange("appAgeControl", {
+	label    : "Minimum age your physical body can regress to (3-18):",
+	min      : 3,
+	default  : 3,
+	max      : 18,
+	step     : 1,
+});
+
