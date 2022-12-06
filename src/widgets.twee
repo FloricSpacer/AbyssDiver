@@ -9,6 +9,13 @@
 */
 	<<GenderCorrected>>
 	<<set $genderlvl = $app.gender-1>>
+
+	<<if $genderlvl< 0 >>
+		<<set $genderlvl = 0>>
+	<<elseif $genderlvl> 5>>
+		<<set $genderlvl = 5>>
+	<</if>>
+
 	<<if $app.osex=="female">>
 		<<set $female_start=1>>
 	<<else>>
@@ -80,7 +87,16 @@
 <<widget "BreastCorrected">>
 	<<set $x = 18 -$app.appAge>>
 	<<set $app.breastsCor =$app.breasts>>
-	<<if $x>0 +1/5 *($app.gender-1)>>
+
+	<<set $genderlvl = $app.gender-1>>
+
+	<<if $genderlvl< 0 >>
+		<<set $genderlvl = 0>>
+	<<elseif $genderlvl> 5>>
+		<<set $genderlvl = 5>>
+	<</if>>
+
+	<<if $x>0 +1/5 *$genderlvl>>
 		<<set $app.breastsCor = $app.breasts - 0.1*$x*$app.breasts>>
 		<<if  $app.breastsCor<0>>
 			<<set $app.breastsCor =0>>
@@ -97,9 +113,6 @@
 			<<set $app.breastsCor +=1>>
 	<</if>>
 
-	<<if $time - $pregnantT>= 90 & $time - $pregnantT<=$due >>
-		<<set $app.gender += 1>>
-	<</if>>
 	<<if $time - $pregnantT>= 90 & $time - $pregnantT<=130 >>
 		<<set $app.breasts += 0.5>>
 	<<elseif $time - $pregnantT> 130 & $time - $pregnantT<=180>>
@@ -121,7 +134,16 @@
 <<if $app.sex != "female">>
 	<<set $x = 16 -$app.appAge>>
 	<<set $app.penisCor =$app.penis>>
-	<<if $x>0 +1/5 *($app.gender-1)>>
+
+	<<set $genderlvl = $app.gender-1>>
+
+	<<if $genderlvl< 0 >>
+		<<set $genderlvl = 0>>
+	<<elseif $genderlvl> 5>>
+		<<set $genderlvl = 5>>
+	<</if>>
+
+	<<if $x>0 +1/5 *$genderlvl>>
 		<<set $app.penisCor = $app.penis - 0.083*$x*($app.penis-1)>>
 		<<if  $app.penisCor<1>>
 			<<set $app.penisCor =1>>
@@ -171,7 +193,7 @@
 
 <<for _genderEvent range $GenderLog>>
 	<<BreastCorrected>>
-	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E" || _genderEvent.name == "Gender Reversal F"  >>
+	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E" || _genderEvent.name == "Gender Reversal F" || _genderEvent.name == "Gender Reversal G" >>
 		<<set $app.modgender += 1>>
 		<<if $app.osex == "male">>
 			<<set $app.gender += 1>>
@@ -247,6 +269,17 @@
 		<</if>>
 		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact F")>>
 			<<set $app.breasts += 16>>
+		<</if>>
+	<</if>>
+
+	<<if _genderEvent.name == "Asset Robustness G">>
+		<<set $app.modpenis += 32>>
+		<<set $app.modbreasts += 32>>
+		<<if $app.penis>0>>
+			<<set $app.penis += 32>>
+		<</if>>
+		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact F")>>
+			<<set $app.breasts += 32>>
 		<</if>>
 	<</if>>
 
@@ -404,6 +437,11 @@
 <</if>>
 
 <<checkTime>>
+
+<<if $time - $pregnantT>= 90 & $time - $pregnantT<=$due >>
+	<<set $app.gender += 1>>
+<</if>>
+
 <<BreastCorrected>>
 <<PenisCorrected>>
 <<Update_MC_Speech>>
@@ -495,7 +533,7 @@
 <<set $subdom = 0>>
 <<for _libidoEvent range $LibidoLog>>
 
-	<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E" || _libidoEvent.name == "Libido Reinforcement F"  >>
+	<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E" || _libidoEvent.name == "Libido Reinforcement F" || _libidoEvent.name == "Libido Reinforcement G"  >>
 		<<set $app.libido += 1>>
 	<</if>>
 
