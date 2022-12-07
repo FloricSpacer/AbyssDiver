@@ -18,6 +18,12 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.time >= StoryVar.due) {
 		return "Labor Scene";
 	}
+	if (StoryVar.time - StoryVar.pregTwin >= 280) {
+		StoryVar.companionLabor = StoryVar.companionTwin.name
+		StoryVar.TwinConvoPreg = false
+		StoryVar.pregTwin = 9999
+		return "Labor Scene Companion";
+	}
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
 		return "AgeEnd";
 	}
