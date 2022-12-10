@@ -605,6 +605,26 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 					<<print "$playerCurses[$j].name">>
 					<<link "Choose" "Layer3 Skewed1a">>
 						<<set _companion.curses.push($playerCurses[$j])>>
+						
+						<<if _companion == $companionTwin >>
+							<<set _tempName = "Twin">>
+						<<else>>
+							<<set _tempName = _companion.name>>
+						<</if>>
+
+						<<if $playerCurses[$j].type == "Age">>
+							<<set _string = "$AgeLog" + _tempName>>
+						<<elseif $playerCurses[$j].type == "Gender">>
+							<<set _string = "$GenderLog" + _tempName>>
+						<<elseif $playerCurses[$j].type == "Height">>
+							<<set _string = "$HeightLog" + _tempName>>
+						<<elseif $playerCurses[$j].type == "Handicap">>
+							<<set _string = "$HandicapLog" + _tempName>>
+						<<elseif $playerCurses[$j].type == "Libido">>
+							<<set _string = "$LibidoLog" + _tempName>>
+						<</if>>
+						<<print "<<set " + _string + ".push($playerCurses[$j])>>">>
+
 						<<set $targetCurse = $playerCurses[$j]>>
 						<<include "CurseRemoval">>
 						<<set $dubloons -= ($skewedUsed * 5)>>

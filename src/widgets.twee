@@ -7,8 +7,22 @@
 4) $app.osex (= "female")
 5) $app.appAge
 */
-	<<GenderCorrected>>
-	<<set $genderlvl = $app.gender-1>>
+<<GenderCorrected>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+		<<set _HeightLog = $HeightLog>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+		<<print "<<set _HeightLog  = $HeightLog"+ _tempName +" >>">>
+	<</if>>
+
+	<<set $genderlvl = _handle.gender-1>>
 
 	<<if $genderlvl< 0 >>
 		<<set $genderlvl = 0>>
@@ -16,46 +30,46 @@
 		<<set $genderlvl = 5>>
 	<</if>>
 
-	<<if $app.osex=="female">>
+	<<if _handle.osex=="female">>
 		<<set $female_start=1>>
 	<<else>>
 		<<set $female_start=0>>
 	<</if>>
 
 	<<if $HeightIncrease==1>>
-		<<set _temp1 =$HeightLog.filter(e => e.name === "Dizzying Heights").length>>
-		<<set _temp2 =$HeightLog.filter(e => e.name === "1 Day Food Forage Major Impact").length>>
-		<<set _temp3 =$HeightLog.filter(e => e.name === "1 Day Food Forage Minor Impact").length>>
+		<<set _temp1 =_HeightLog.filter(e => e.name === "Dizzying Heights").length>>
+		<<set _temp2 =_HeightLog.filter(e => e.name === "1 Day Food Forage Major Impact").length>>
+		<<set _temp3 =_HeightLog.filter(e => e.name === "1 Day Food Forage Minor Impact").length>>
 		<<set $height_change=5*_temp1+3*_temp2+0.5*_temp3>>
 	<<else>>
-		<<set _temp1 =$HeightLog.filter(e => e.name === "Dizzying Heights").length>>
-		<<set _temp2 =$HeightLog.filter(e => e.name === "1 Day Food Forage Major Impact").length>>
-		<<set _temp3 =$HeightLog.filter(e => e.name === "1 Day Food Forage Minor Impact").length>>
+		<<set _temp1 =_HeightLog.filter(e => e.name === "Dizzying Heights").length>>
+		<<set _temp2 =_HeightLog.filter(e => e.name === "1 Day Food Forage Major Impact").length>>
+		<<set _temp3 =_HeightLog.filter(e => e.name === "1 Day Food Forage Minor Impact").length>>
 		<<set $height_change=-5*_temp1-3*_temp2-0.5*_temp3>>	
 	<</if>>
 
-	<<if $HeightLog.some(e=> e.name === "Colossal-able")>>
-		<<set $height_change=$app.height*70-$app.height>>
+	<<if _HeightLog.some(e=> e.name === "Colossal-able")>>
+		<<set $height_change=_handle.height*70-_handle.height>>
 		<<set $SizeHandicap=1>>
 	<</if>>
 
-	<<if $HeightLog.some(e=> e.name === "Minish-ish")>>
-		<<set $height_change=$app.height/10-$app.height>>
+	<<if _HeightLog.some(e=> e.name === "Minish-ish")>>
+		<<set $height_change=_handle.height/10-_handle.height>>
 		<<if $hiredCompanions.length < 1>>
 			<<set $SizeHandicap=1>>
 		<</if>>
 	<</if>>
 
 
-	<<set $x =18 - $app.appAge>>
+	<<set $x =18 - _handle.appAge>>
 
 /* change in height with genderlevel changes and height increases/decreases it is modeled such that 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender
 */
 
-	<<set $height_adult = $app.oheight +$height_change -$height_change*(1-0.92375)*$female_start -0.01525*$app.oheight*$genderlvl +0.01525*$app.oheight*5*$female_start>>
+	<<set $height_adult = _handle.oheight +$height_change -$height_change*(1-0.92375)*$female_start -0.01525*_handle.oheight*$genderlvl +0.01525*_handle.oheight*5*$female_start>>
 
 	<<if $x<=0 +1/5 *$genderlvl>>
-		<<set $app.heightCor = $height_adult>>
+		<<set _handle.heightCor = $height_adult>>
 
 /* The puberty phase: it shifts for females as their ends earlier, for simplicity I assumed the start is the same regardless although this is not entirely correct. I ussed a polynomial here to simulate the 'reverse growth spurt'
 */
@@ -66,7 +80,7 @@
     	<<set $C3=-1.6698e-3  +1.3722e-4  *$genderlvl>>
     	<<set $C4= 1.7701e-4  -2.114e-5   *$genderlvl>>
     	<<set $x_rel = $x-1/5*$genderlvl>>
-    	<<set $app.heightCor = $height_adult *(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
+    	<<set _handle.heightCor = $height_adult *(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
 
 /* the second phase of linear growth or decline, its a decent approximation without making things to complicated. It ends at age 3 (originally 4, but changed it to not break the rest of the code) the calculation for the puberty growth spurt is in here to provide a starting point for the linear decline
 */
@@ -78,17 +92,15 @@
     	<<set $x_rel = 6-1/5*$genderlvl>>
     	<<set $height_pub = $height_adult*(1 +$C1*$x_rel +$C2*Math.pow($x_rel,2) +$C3*Math.pow($x_rel,3) +$C4*Math.pow($x_rel,4) )>>
 
-    	<<set $app.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
+    	<<set _handle.heightCor = $height_pub -$height_adult*(0.033 +0.0009*$genderlvl) *( $x-6 )>>
 	<</if>>
-
+<</for>>
 <</widget>>
 
-:: Change Breast [widget nobr]
-<<widget "BreastCorrected">>
-	<<set $x = 18 -$app.appAge>>
-	<<set $app.breastsCor =$app.breasts>>
-
-	<<set $genderlvl = $app.gender-1>>
+:: BreastCorrected [nobr]
+	<<set $x = 18 -_handle.appAge>>
+	<<set _handle.breastsCor =_handle.breasts>>
+	<<set $genderlvl = _handle.gender-1>>
 
 	<<if $genderlvl< 0 >>
 		<<set $genderlvl = 0>>
@@ -97,45 +109,73 @@
 	<</if>>
 
 	<<if $x>0 +1/5 *$genderlvl>>
-		<<set $app.breastsCor = $app.breasts - 0.1*$x*$app.breasts>>
-		<<if  $app.breastsCor<0>>
-			<<set $app.breastsCor =0>>
+		<<set _handle.breastsCor = _handle.breasts - 0.1*$x*_handle.breasts>>
+		<<if  _handle.breastsCor<0>>
+			<<set _handle.breastsCor =0>>
 		<</if>>
 	<</if>>
 
-	<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A") && $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
-		<<set $app.breastsCor +=2>>
-	<<elseif $playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
-		<<set $app.breastsCor +=1>>
+	<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
+		<<set _handle.lactation += 1>>
+	<</if>>
+	<<if $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+		<<set _handle.lactation += 1>>
 	<</if>>
 
-	<<if $playerCurses.some(e => e.name === "Double Pepperoni") && $app.breastsCor == 0>>
-			<<set $app.breastsCor +=1>>
+	<<if _handle.curses.some(e => e.name === "Double Pepperoni") && _handle.breastsCor == 0>>
+			<<set _handle.breastsCor +=1>>
+	<</if>>
+	<<if _i == $hiredCompanions.length>>
+		<<if $time-$menCycleT-$menCycleVar>20 && $menCycleFlag == true>>
+			<<set _handle.breastsCor += 1>> 
+		<</if>>
+		<<set _tempName = $pregnantT>>
+		<<set _due = $due>>
+
+		<<if  ($time - $pregnantT> 270 & $time - $pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
+			<<set _handle.lactation += 2>>
+		<</if>>
+
+	<<else>>
+		<<print "<<set _tempPreg = $preg" + _tempName + ">>">>
+		<<print "<<set _tempBirth = $lastBirth" + _tempName + ">>">>
+		<<set _due = 280 + _tempPreg>>
+		<<if _tempName=="Lily" && $LilyConvoLac=="true">>
+			<<set _flag=true>>
+		<<else>>
+			<<set _flag=false>>
+		<</if>>
+
+		<<if ($time - _tempBirth < 30 && _tempBirth!=9999)|| _flag>>
+			<<set _handle.lactation += 2>>
+		<</if>>
+	<</if>>
+	<<if _tempPreg!=9999>>
+		<<if $time - _tempPreg>= 90 & $time - _tempPreg<=130 >>
+			<<set _handle.breastsCor += 0.5>>
+		<<elseif $time - _tempPreg> 130 & $time - _tempPreg<=180 >>
+			<<set _handle.breastsCor += 1>>
+		<<elseif $time - _tempPreg> 180 & $time - _tempPreg<=240>>
+			<<set _handle.breastsCor += 1.5>>
+		<<elseif $time - _tempPreg> 240 & $time - _tempPreg<=_due>>
+			<<set _handle.lactation += 1>> 
+			<<set _handle.breastsCor += 1>>
+		<</if>>
 	<</if>>
 
-	<<if $time - $pregnantT>= 90 & $time - $pregnantT<=130 >>
-		<<set $app.breastsCor += 0.5>>
-	<<elseif $time - $pregnantT> 130 & $time - $pregnantT<=180>>
-		<<set $app.breastsCor += 0.5>>
-	<<elseif $time - $pregnantT> 180 & $time - $pregnantT<=240>>
-		<<set $app.breastsCor += 0.5>>
-	<<elseif $time - $pregnantT> 240 & $time - $pregnantT<=$due>>
-		<<set $app.breastsCor += 0.5>>
+	<<if _handle.lactation > 2>>
+		<<set _handle.lactation=2>>
 	<</if>>
+	
+	<<set _handle.breastCor += _handle.lactation>>	
 
-	<<if $time-$menCycleT-$menCycleVar>20 && $menCycleFlag == true>>
-		<<set $app.breastsCor += 1>> 
-	<</if>>
-<</widget>>
+:: PenisCorrected [nobr]
 
-:: Change Penis [widget nobr]
-<<widget "PenisCorrected">>
+<<if _handle.sex != "female">>
+	<<set $x = 16 -_handle.appAge>>
+	<<set _handle.penisCor =_handle.penis>>
 
-<<if $app.sex != "female">>
-	<<set $x = 16 -$app.appAge>>
-	<<set $app.penisCor =$app.penis>>
-
-	<<set $genderlvl = $app.gender-1>>
+	<<set $genderlvl = _handle.gender-1>>
 
 	<<if $genderlvl< 0 >>
 		<<set $genderlvl = 0>>
@@ -144,306 +184,343 @@
 	<</if>>
 
 	<<if $x>0 +1/5 *$genderlvl>>
-		<<set $app.penisCor = $app.penis - 0.083*$x*($app.penis-1)>>
-		<<if  $app.penisCor<1>>
-			<<set $app.penisCor =1>>
+		<<set _handle.penisCor = _handle.penis - 0.083*$x*(_handle.penis-1)>>
+		<<if  _handle.penisCor<1>>
+			<<set _handle.penisCor =1>>
 		<</if>>
 	<</if>>
 
-	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
-		<<set $app.penisCor = $app.penisCor*70>>
+	<<if _handle.curses.some(e=> e.name === "Colossal-able")>>
+		<<set _handle.penisCor = _handle.penisCor*70>>
 	<</if>>
 
-	<<if $playerCurses.some(e=> e.name === "Minish-ish")>>
-		<<set $app.penisCor=$app.penisCor/10>>
+	<<if _handle.curses.some(e=> e.name === "Minish-ish")>>
+		<<set _handle.penisCor=_handle.penisCor/10>>
 	<</if>>
 <<else>>
-	<<set $app.penisCor=0>>
+	<<set _handle.penisCor=0>>
 <</if>>
 
-<</widget>>
 
 :: Change Gender [widget nobr]
 <<widget "GenderCorrected">>
 <<AgeCorrected>>
-
-<<set $app.sex = $app.osex>>
-<<set $app.gender = $app.ogender>>
-<<set $app.modgender = 0>>
-<<set $app.modpenis = 0>>
-<<set $app.modbreasts = 0>>
-<<set $app.penis = $app.openis>>
-<<set $app.breasts = $app.obreasts>>
-<<if $app.sex == "male">>
-	<<set $app.vagina = 0>>
-	<<set $menCycleFlag = false>>
-	<<set $app.womb = 0 >>
-<<else>>
-	<<set $app.vagina = 1>>
-	<<set $app.womb = 1>>
-	<<if $pregnantT==9999>>
-		<<set $menCycleFlag = true>>
-	<</if>>
-	<<if $menCycleT_flag == false>>
-		<<set $menCycleT_flag = true>>
-		<<set $menCycleT = $time - 7>>
-		<<set $heatCycleT = $time -7>>
-	<</if>>
-<</if>>
-
-<<for _genderEvent range $GenderLog>>
-	<<BreastCorrected>>
-	<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E" || _genderEvent.name == "Gender Reversal F" || _genderEvent.name == "Gender Reversal G" >>
-		<<set $app.modgender += 1>>
-		<<if $app.osex == "male">>
-			<<set $app.gender += 1>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+		<<set _GenderLog = $GenderLog>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
 		<<else>>
-			<<set $app.gender -= 1>>
+			<<set _tempName = $hiredCompanions[_i].name>>
 		<</if>>
-	<</if>>
- 
-	<<if _genderEvent.name == "Asset Robustness A" >>
-		<<set $app.modpenis += 1>>
-		<<set $app.modbreasts += 1>>
-		<<if $app.penis>0>>
-			<<set $app.penis += 1>>
-		<</if>>
-			<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact A")>>
-			<<set $app.breasts += 1>>
-		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+		<<print "<<set _GenderLog  = $GenderLog"+ _tempName +" >>">>
 	<</if>>
 
-	<<if _genderEvent.name == "Asset Robustness B">>
-		<<set $app.modpenis += 2>>
-		<<set $app.modbreasts += 2>>
-		<<if $app.penis>0>>
-			<<set $app.penis += 2>>
-		<</if>>
-		<<if $app.breasts >0 ||  $GenderLog.some(e=> e.name==="Interact B")>>
-				<<set $app.breasts += 2>>
-		<</if>>
-	<</if>>
+	<<set _handle.sex = _handle.osex>>
+	<<set _handle.gender = _handle.ogender>>
+	<<set _handle.modgender = 0>>
+	<<set _handle.modpenis = 0>>
+	<<set _handle.modbreasts = 0>>
+	<<set _handle.penis = _handle.openis>>
+	<<set _handle.breasts = _handle.obreasts>>
+	<<set _handle.lactation = 0>>
 
-	<<if _genderEvent.name == "Asset Robustness C">>
-		<<set $app.modpenis += 4>>
-		<<set $app.modbreasts += 4>>
-
-		<<if $app.penis>0>>
-			<<set $app.penis += 4>>
-		<</if>>
-
-		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact C")>>
-			<<set $app.breasts += 4>>
-		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "Asset Robustness D">>
-		<<set $app.modpenis += 6>>
-		<<set $app.modbreasts += 6>>
-
-		<<if $app.penis>0>>
-			<<set $app.penis += 6>>
-		<</if>>
-
-		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact D")>>
-			<<set $app.breasts += 6>>
-		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "Asset Robustness E">>
-		<<set $app.modpenis += 8>>
-		<<set $app.modbreasts += 8>>
-		<<if $app.penis>0>>
-			<<set $app.penis += 8>>
-		<</if>>
-		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact E")>>
-			<<set $app.breasts += 8>>
-		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "Asset Robustness F">>
-		<<set $app.modpenis += 16>>
-		<<set $app.modbreasts += 16>>
-		<<if $app.penis>0>>
-			<<set $app.penis += 16>>
-		<</if>>
-		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact F")>>
-			<<set $app.breasts += 16>>
-		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "Asset Robustness G">>
-		<<set $app.modpenis += 32>>
-		<<set $app.modbreasts += 32>>
-		<<if $app.penis>0>>
-			<<set $app.penis += 32>>
-		<</if>>
-		<<if $app.breasts >0 || $GenderLog.some(e=> e.name==="Interact F")>>
-			<<set $app.breasts += 32>>
-		<</if>>
-	<</if>>
-
-	<<if  _genderEvent.name == "Sex Switcheroo">>
-		<<if $app.osex == "male">>
-			<<set $app.breasts += 3 + $app.modbreasts>>
-			<<set $app.penis = 0>>
-			<<set $app.penisCor = 0>>
-			<<set $app.vagina = 1>>
-			<<set $app.sex = "female">>
-			<<set $app.womb += 1>>
-			<<if $pregnantT==9999>>
-				<<set $menCycleFlag = true>>
-			<</if>>
-			<<if $menCycleT_flag == false>>
-				<<set $menCycleT_flag = true>>
-				<<set $heatCycleT_flag = true>>
-				<<set $menCycleT = $time - 7>>
-				<<set $heatCycleT = $time -7>>
-			<</if>>
-		<<else>>
-			<<set $app.penis = 6 + $app.modpenis>>
-			<<set $app.vagina = 0>>
-			<<set $app.sex = "male">>
-			<<set $availableWomb = false>>
-			<<set $app.breasts = 0>>
+	<<if _handle.sex == "male">>
+		<<set _handle.vagina = 0>>
+		<<if _i==$hiredCompanions.length>>
 			<<set $menCycleFlag = false>>
 		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "Futa Fun">>
-		<<if $app.osex == "male">>
-			<<set $app.vagina = 1>>
-			<<set $app.womb += 1>>
-			<<if $pregnantT==9999>>
-				<<set $menCycleFlag = true>>
-			<</if>>
-			<<if $menCycleT_flag == false>>
-				<<set $menCycleT_flag = true>>
-				<<set $heatCycleT_flag = true>>
-				<<set $menCycleT = $time - 7>>
-				<<set $heatCycleT = $time -7>>
-			<</if>>
-			<<set $app.breasts += 3 + $app.modbreasts>>
-		<<else>>
-			<<set $app.penis = 3 + $app.modpenis>>
-		<</if>>
-		<<set $app.sex = "futa">>
-	<</if>>
-
-	<<if _genderEvent.name == "Wacky Wombs">>
-		<<if ($app.womb == 0 && $app.sex=="male")||($app.womb == 1 && $app.sex!="male")>>
-			<<set $app.womb1 = $curse35.variation1>>
-			<<if $pregnantT==9999>>
-				<<set $menCycleFlag = true>>
-			<</if>>
-			<<if $menCycleT_flag == false>>
-				<<set $menCycleT_flag = true>>
-				<<set $heatCycleT_flag = true>>
-				<<set $menCycleT = $time - 7>>
-				<<set $heatCycleT = $time -7>>
-			<</if>>
-		<<else>>
-			<<set $app.womb2 = $curse35.variation2>>
-		<</if>>
-		<<set $app.womb += 1>>
-	<</if>>
-
-	<<if _genderEvent.name == "1 Day Water Forage Major Impact" >>
-		<<set $app.modpenis += 1>>
-		<<set $app.modbreasts += 1>>
-		<<if $app.penis>0>>
-			<<set $app.penis += 1>>
-		<</if>>
-
-		<<if $app.breasts >0 || $app.breastsCor > 0 >>
-			<<set $app.breasts += 1>>
-		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "1 Day Food Forage Major Impact" >>
-		<<set $app.modgender += 1>>
-		<<if $app.osex == "male">>
-			<<set $app.gender += 1>>
-		<<else>>
-			<<set $app.gender -= 1>>
-		<</if>>
-	<</if>>
-
-	<<if _genderEvent.name == "Doll Transformation">>
-		<<set $app.gender += 1>>
-		<<if $app.penis>0 >>
-			<<set $app.penis -=1>>
-		<<else>>
-			<<if $app.vagina<1>>
-				<<set $app.vagina=1>>
-				<<set $app.womb += 1>>
-				<<if $pregnantT==9999>>
-					<<set $menCycleFlag = true>>
-				<</if>>
-				<<if $menCycleT_flag == false>>
-					<<set $menCycleT_flag = true>>
-					<<set $heatCycleT_flag = true>>
-					<<set $menCycleT = $time - 7>>
-					<<set $heatCycleT = $time -7>>
-				<</if>>
-			<</if>>
-		<</if>>
-	<</if>>
-		
-<</for>>
-<<if $app.womb == 0 && $pregnantT != 9999>> 
-	<<set $pregnantT=9999>>
-	<<set $due=9999>>
-<</if>>
-
-<<if $GenderLog.some(e => e.name === "Shrunken Assets")>>
-	<<if $app.sex == "male">>
-		<<set $app.penis = 1>>
-		<<set $app.breasts = 0>>
-	<<elseif $app.sex == "female">>
-		<<set $app.penis = 0>>
-		<<set $app.breasts = 1>>
+		<<set _handle.womb = 0 >>
 	<<else>>
-		<<set $app.penis = 1>>
-		<<set $app.breasts = 1>>
+		<<set _handle.vagina = 1>>
+		<<set _handle.womb = 1>>
+		<<if _i==$hiredCompanions.length>>
+			<<if $pregnantT==9999>>
+				<<set $menCycleFlag = true>>
+			<</if>>
+			<<if $menCycleT_flag == false>>
+				<<set $menCycleT_flag = true>>
+				<<set $menCycleT = $time - 7>>
+				<<set $heatCycleT = $time -7>>
+			<</if>>
+		<</if>>
 	<</if>>
-<</if>>
 
-<<if $playerCurses.some(e => e.name === "Leaky")>>
+	<<for _genderEvent range _GenderLog>>
+		<<include "BreastCorrected">>
+		<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E" || _genderEvent.name == "Gender Reversal F" || _genderEvent.name == "Gender Reversal G" >>
+			<<set _handle.modgender += 1>>
+			<<if _handle.osex == "male">>
+				<<set _handle.gender += 1>>
+			<<else>>
+				<<set _handle.gender -= 1>>
+			<</if>>
+		<</if>>
+	
+		<<if _genderEvent.name == "Asset Robustness A" >>
+			<<set _handle.modpenis += 1>>
+			<<set _handle.modbreasts += 1>>
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 1>>
+			<</if>>
+				<<if _handle.breasts >0 || _GenderLog.some(e=> e.name==="Interact A")>>
+				<<set _handle.breasts += 1>>
+			<</if>>
+		<</if>>
 
-	<<if $app.vagina > 0 && $app.penis > 0>>
-		<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and your penis is always leaking precum, so it only takes a little motivation to get a real stream going down there.">>
-	<<elseif $app.vagina > 0>>
-		<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.">>
-	<<elseif $app.penis > 0>>
-		<<set $curse80.appDesc = "Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.">>
+		<<if _genderEvent.name == "Asset Robustness B">>
+			<<set _handle.modpenis += 2>>
+			<<set _handle.modbreasts += 2>>
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 2>>
+			<</if>>
+			<<if _handle.breasts >0 ||  _GenderLog.some(e=> e.name==="Interact B")>>
+					<<set _handle.breasts += 2>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Asset Robustness C">>
+			<<set _handle.modpenis += 4>>
+			<<set _handle.modbreasts += 4>>
+
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 4>>
+			<</if>>
+
+			<<if _handle.breasts >0 || _GenderLog.some(e=> e.name==="Interact C")>>
+				<<set _handle.breasts += 4>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Asset Robustness D">>
+			<<set _handle.modpenis += 6>>
+			<<set _handle.modbreasts += 6>>
+
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 6>>
+			<</if>>
+
+			<<if _handle.breasts >0 || _GenderLog.some(e=> e.name==="Interact D")>>
+				<<set _handle.breasts += 6>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Asset Robustness E">>
+			<<set _handle.modpenis += 8>>
+			<<set _handle.modbreasts += 8>>
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 8>>
+			<</if>>
+			<<if _handle.breasts >0 || _GenderLog.some(e=> e.name==="Interact E")>>
+				<<set _handle.breasts += 8>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Asset Robustness F">>
+			<<set _handle.modpenis += 16>>
+			<<set _handle.modbreasts += 16>>
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 16>>
+			<</if>>
+			<<if _handle.breasts >0 || _GenderLog.some(e=> e.name==="Interact F")>>
+				<<set _handle.breasts += 16>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Asset Robustness G">>
+			<<set _handle.modpenis += 32>>
+			<<set _handle.modbreasts += 32>>
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 32>>
+			<</if>>
+			<<if _handle.breasts >0 || _GenderLog.some(e=> e.name==="Interact F")>>
+				<<set _handle.breasts += 32>>
+			<</if>>
+		<</if>>
+
+		<<if  _genderEvent.name == "Sex Switcheroo">>
+			<<if _handle.osex == "male">>
+				<<set _handle.breasts += 3 + _handle.modbreasts>>
+				<<set _handle.penis = 0>>
+				<<set _handle.penisCor = 0>>
+				<<set _handle.vagina = 1>>
+				<<set _handle.sex = "female">>
+				<<set _handle.womb += 1>>
+				<<if _i==$hiredCompanions.length>>
+					<<if $pregnantT==9999>>
+						<<set $menCycleFlag = true>>
+					<</if>>
+					<<if $menCycleT_flag == false>>
+						<<set $menCycleT_flag = true>>
+						<<set $heatCycleT_flag = true>>
+						<<set $menCycleT = $time - 7>>
+						<<set $heatCycleT = $time -7>>
+					<</if>>
+				<</if>>
+			<<else>>
+				<<set _handle.penis = 6 + _handle.modpenis>>
+				<<set _handle.vagina = 0>>
+				<<set _handle.sex = "male">>
+				<<set _handle.womb -= 1>>
+				<<set _handle.breasts = 0>>
+				<<if _i==$hiredCompanions.length>>
+					<<set $menCycleFlag = false>>
+				<</if>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Futa Fun">>
+			<<if _handle.osex == "male">>
+				<<set _handle.vagina = 1>>
+				<<set _handle.womb += 1>>
+				<<if _i==$hiredCompanions.length>>
+					<<if $pregnantT==9999>>
+						<<set $menCycleFlag = true>>
+					<</if>>
+					<<if $menCycleT_flag == false>>
+						<<set $menCycleT_flag = true>>
+						<<set $heatCycleT_flag = true>>
+						<<set $menCycleT = $time - 7>>
+						<<set $heatCycleT = $time -7>>
+					<</if>>
+				<</if>>
+				<<set _handle.breasts += 3 + _handle.modbreasts>>
+			<<else>>
+				<<set _handle.penis = 3 + _handle.modpenis>>
+			<</if>>
+			<<set _handle.sex = "futa">>
+		<</if>>
+
+		<<if _genderEvent.name == "Wacky Wombs">>
+			<<if (_handle.womb == 0 && _handle.sex=="male")||(_handle.womb == 1 && _handle.sex!="male")>>
+				<<set _handle.womb1 = $curse35.variation1>>
+				<<if _i==$hiredCompanions.length>>
+					<<if $pregnantT==9999>>
+						<<set $menCycleFlag = true>>
+					<</if>>
+					<<if $menCycleT_flag == false>>
+						<<set $menCycleT_flag = true>>
+						<<set $heatCycleT_flag = true>>
+						<<set $menCycleT = $time - 7>>
+						<<set $heatCycleT = $time -7>>
+					<</if>>
+				<</if>>
+			<<else>>
+				<<set _handle.womb2 = $curse35.variation2>>
+			<</if>>
+			<<set _handle.womb += 1>>
+		<</if>>
+
+		<<if _genderEvent.name == "1 Day Water Forage Major Impact" >>
+			<<set _handle.modpenis += 1>>
+			<<set _handle.modbreasts += 1>>
+			<<if _handle.penis>0>>
+				<<set _handle.penis += 1>>
+			<</if>>
+
+			<<if _handle.breasts >0 || _handle.breastsCor > 0 >>
+				<<set _handle.breasts += 1>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "1 Day Food Forage Major Impact" >>
+			<<set _handle.modgender += 1>>
+			<<if _handle.osex == "male">>
+				<<set _handle.gender += 1>>
+			<<else>>
+				<<set _handle.gender -= 1>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Doll Transformation">>
+			<<set _handle.gender += 1>>
+			<<if _handle.penis>0 >>
+				<<set _handle.penis -=1>>
+			<<else>>
+				<<if _handle.vagina<1>>
+					<<set _handle.vagina=1>>
+					<<set _handle.womb += 1>>
+					<<if $pregnantT==9999>>
+						<<set $menCycleFlag = true>>
+					<</if>>
+					<<if $menCycleT_flag == false>>
+						<<set $menCycleT_flag = true>>
+						<<set $heatCycleT_flag = true>>
+						<<set $menCycleT = $time - 7>>
+						<<set $heatCycleT = $time -7>>
+					<</if>>
+				<</if>>
+			<</if>>
+		<</if>>
+			
+	<</for>>
+	<<if _handle.womb == 0 && _tempPreg != 9999>> 
+		<<print "<<set $lastBirth" + _tempName + " = 9999>>">>
+		<<if _i==$hiredCompanions.length>>
+			<<set $due=9999>>
+			<<set $pregnantT=9999>>
+		<<else>>
+			<<print "<<set $lastBirth" + _tempName + " = 9999>>">>
+		<</if>>
 	<</if>>
 
-<</if>>
+	<<if $GenderLog.some(e => e.name === "Shrunken Assets")>>
+		<<if _handle.sex == "male">>
+			<<set _handle.penis = 1>>
+			<<set _handle.breasts = 0>>
+		<<elseif _handle.sex == "female">>
+			<<set _handle.penis = 0>>
+			<<set _handle.breasts = 1>>
+		<<else>>
+			<<set _handle.penis = 1>>
+			<<set _handle.breasts = 1>>
+		<</if>>
+	<</if>>
 
-<<if $playerCurses.some(e => e.name === "Eggxellent")>>
-	<<if $pregnantT==9999>>
-		<<set $menCycleFlag = true>>
+	<<if _handle.curses.some(e => e.name === "Leaky")>>
+
+		<<if _handle.vagina > 0 && _handle.penis > 0>>
+			<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and your penis is always leaking precum, so it only takes a little motivation to get a real stream going down there.">>
+		<<elseif _handle.vagina > 0>>
+			<<set $curse80.appDesc = "Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.">>
+		<<elseif _handle.penis > 0>>
+			<<set $curse80.appDesc = "Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.">>
+		<</if>>
+
 	<</if>>
-	<<if $menCycleT_flag == false>>
-		<<set $menCycleT_flag = true>>
-		<<set $heatCycleT_flag = true>>
-		<<set $menCycleT = $time - 7>>
-		<<set $heatCycleT = $time -7>>
+
+	<<if _handle.curses.some(e => e.name === "Eggxellent")>>
+		<<if _i==$hiredCompanions.length>>
+			<<if $pregnantT==9999>>
+				<<set $menCycleFlag = true>>
+			<</if>>
+			<<if $menCycleT_flag == false>>
+				<<set $menCycleT_flag = true>>
+				<<set $heatCycleT_flag = true>>
+				<<set $menCycleT = $time - 7>>
+				<<set $heatCycleT = $time -7>>
+			<</if>>
+		<</if>>
+		<<if _handle.penisCor>0>>
+			<<set _handle.womb += 1>>
+		<</if>>
 	<</if>>
-	<<if $app.penisCor>0>>
-		<<set $app.womb += 1>>
-	<</if>>
-<</if>>
+<</for>>
 
 <<checkTime>>
 
-<<if $time - $pregnantT>= 90 & $time - $pregnantT<=$due >>
-	<<set $app.gender += 1>>
-<</if>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if $time - _tempPreg>= 90 & $time - _tempPreg<=_due >>
+		<<set _handle.gender += 1>>
+	<</if>>
 
-<<BreastCorrected>>
-<<PenisCorrected>>
+	<<include "BreastCorrected">>
+	<<include "PenisCorrected">>
+<</for>>
+
 <<LibidoCorrected>>
 <<Update_MC_Speech>>
 <</widget>>
@@ -460,71 +537,86 @@
 
 :: Age widget [widget nobr]
 <<widget "AgeCorrected">>
-<<set $app.appAge = $app.age>>
-<<set _thresholdDay = 0>>
-<<for _ageEvent range $AgeLog>>
-
-	<<if _ageEvent.name == "Age Reduction A" >>
-		<<if $app.appAge <= 22>>
-			<<set $app.appAge -= 2>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+		<<set _AgeLog = $AgeLog>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
 		<<else>>
-			<<set $app.Age += _ageEvent.variation/365.24>>
-			<<set _thresholdDay = _ageEvent.variation>>
-			<<set $app.appAge = 20>>
+			<<set _tempName = $hiredCompanions[_i].name>>
 		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+		<<print "<<set _AgeLog  = $AgeLog"+ _tempName +" >>">>
 	<</if>>
 
-	<<if _ageEvent.name == "Age Reduction B" >>
-		<<if $app.appAge <= 23>>
-			<<set $app.appAge -= 3>>
-		<<else>>
-			<<set $app.Age += _ageEvent.variation/365.24>>
-			<<set _thresholdDay = _ageEvent.variation>>
-			<<set $app.appAge = 20>>
+	<<set _handle.appAge = _handle.age>>
+	<<set _thresholdDay = 0>>
+	<<for _ageEvent range _AgeLog>>
+ 
+		<<if _ageEvent.name == "Age Reduction A" >>
+			<<if _handle.appAge <= 22>>
+				<<set _handle.appAge -= 2>>
+			<<else>>
+				<<set _handle.Age += _ageEvent.variation/365.24>>
+				<<if _i== $hiredCompanions.length>><<set _thresholdDay = _ageEvent.variation>><</if>>/*temp fix to only correct mc age */
+				<<set _handle.appAge = 20>>
+			<</if>>
 		<</if>>
-	<</if>>
 
-
-	<<if _ageEvent.name == "Age Reduction C" >>
-		<<if $app.appAge <= 24>>
-			<<set $app.appAge -= 4>>
-		<<else>>
-			<<set $app.Age += _ageEvent.variation/365.24>>
-			<<set _thresholdDay = _ageEvent.variation>>
-			<<set $app.appAge = 20>>
+		<<if _ageEvent.name == "Age Reduction B" >>
+			<<if _handle.appAge <= 23>>
+				<<set _handle.appAge -= 3>>
+			<<else>>
+				<<set _handle.Age += _ageEvent.variation/365.24>>
+				<<if _i== $hiredCompanions.length>><<set _thresholdDay = _ageEvent.variation>><</if>>/*temp fix to only correct mc age */
+				<<set _handle.appAge = 20>>
+			<</if>>
 		<</if>>
-	<</if>>
 
-	<<if _ageEvent.name == "1 Day Food Forage Minor Impact" >>
-		<<set $app.appAge -= 0.08>>
-	<</if>>
 
-	<<if _ageEvent.name == "1 Day Food Forage Major Impact" >>
-		<<set $app.appAge -= 1>>
-	<</if>>
-
-	<<if _ageEvent.name == "Doll Transformation">>
-		<<if $app.appAge>19>>
-			<<set $app.Age += _ageEvent.variation/365.24>>
-			<<set _thresholdDay = _ageEvent.variation>>
-			<<set $app.appAge = 17>>
-		<<else>>
-			<<set $app.appAge -= 2>>
+		<<if _ageEvent.name == "Age Reduction C" >>
+			<<if _handle.appAge <= 24>>
+				<<set _handle.appAge -= 4>>
+			<<else>>
+				<<set _handle.Age += _ageEvent.variation/365.24>>
+				<<if _i== $hiredCompanions.length>><<set _thresholdDay = _ageEvent.variation>><</if>>/*temp fix to only correct mc age */
+				<<set _handle.appAge = 20>>
+			<</if>>
 		<</if>>
+
+		<<if _ageEvent.name == "1 Day Food Forage Minor Impact" >>
+			<<set _handle.appAge -= 0.08>>
+		<</if>>
+
+		<<if _ageEvent.name == "1 Day Food Forage Major Impact" >>
+			<<set _handle.appAge -= 1>>
+		<</if>>
+
+		<<if _ageEvent.name == "Doll Transformation">>
+			<<if _handle.appAge>19>>
+				<<set _handle.Age += _ageEvent.variation/365.24>>
+				<<set _thresholdDay = _ageEvent.variation>>
+				<<set _handle.appAge = 17>>
+			<<else>>
+				<<set _handle.appAge -= 2>>
+			<</if>>
+		<</if>>
+
+	<</for>>
+	<<if $eternalYouth < $time>>
+		<<set _handle.Age +=($eternalYouth-_thresholdDay)/365.24>>
+		<<set _handle.appAge +=($eternalYouth-_thresholdDay)/365.24>>
+	<<else>>
+		<<set _handle.Age +=($time-_thresholdDay)/365.24>>
+		<<set _handle.appAge +=($time-_thresholdDay)/365.24>>
 	<</if>>
 
+	<<if _handle.appAge < settings.appAgeControl>>
+		<<set _handle.appAge = settings.appAgeControl>>
+	<</if>>
 <</for>>
-<<if $eternalYouth < $time>>
-	<<set $app.Age +=($eternalYouth-_thresholdDay)/365.24>>
-	<<set $app.appAge +=($eternalYouth-_thresholdDay)/365.24>>
-<<else>>
-	<<set $app.Age +=($time-_thresholdDay)/365.24>>
-	<<set $app.appAge +=($time-_thresholdDay)/365.24>>
-<</if>>
-
-<<if $app.appAge < settings.appAgeControl>>
-	<<set $app.appAge = settings.appAgeControl>>
-<</if>>
 
 <</widget>>
 
@@ -629,7 +721,20 @@
 
 :: Perceived widgets [widget nobr]
 <<widget "appGender">>
-	<<set _penisCorTemp = $app.penisCor>>
+
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+	<</if>>
+
+	<<set _penisCorTemp = _handle.penisCor>>
 	<<if $playerCurses.some(e => e.name === "Colossal-able")>>
 		<<set _penisCorTemp /= 70>>
 	<</if>>
@@ -638,11 +743,14 @@
 		<<set _penisCorTemp *= 10>>
 	<</if>>
 	<<if $app.fit>7>>
-		<<set $app.appGender = 2*($app.gender-1) -0.25*(_penisCorTemp-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent-1>>
+		<<set _handle.appGender = 2*(_handle.gender-1) -0.25*(_penisCorTemp-4) +(_handle.breastsCor-3)-1>>
 	<<else>>
-		<<set $app.appGender = 2*($app.gender-1) -0.25*(_penisCorTemp-4) +($app.breastsCor-3)+0.5*$colwear+0.25*$scent>>
+		<<set _handle.appGender = 2*(_handle.gender-1) -0.25*(_penisCorTemp-4) +(_handle.breastsCor-3)>>
 	<</if>>
-
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle.appGender += 0.5*$colwear+0.25*$scent>>
+	<</if>>
+<</for>>
 <</widget>>
 
 <<widget "mrms">>\
@@ -1544,6 +1652,7 @@
 <</widget>>
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
+<<set $app.curses = $playerCurses>>/*temporary fix to prevent having to replace all instances */
 <<Handicap>>
 <<HeightCorrected>>
 /*<<set $totalCarry -= $carryWeight>>*/
@@ -1625,7 +1734,6 @@
 <<set $app.skinColor= $app.oskinColor>>
 <<set $app.eyeColor= $app.oeyeColor>>
 <<set $app.tail= []>>
-<<set $lactating = 0>>
 
 <<set $app.desc= "">>
 <<set $app.blood="red">>
@@ -1699,19 +1807,6 @@
 	<</if>>	
 
 <</for>>
-
-<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
-	<<set $lactating += 1>>
-<</if>>
-<<if $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
-	<<set $lactating += 1>>
-<</if>>
-<<if $time - $pregnantT> 240 & $time - $pregnantT<=270>>
-		<<set $lactating += 1>>
-<</if>>
-<<if  ($time - $pregnantT> 270 & $time - $pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
-		<<set $lactating += 2>>
-<</if>>
 
 <<if $playerCurses.some(e => e.name === "Barter System") && $hiredCompanions.length < 1 >>
 	<<set $dubloons = 0>>
@@ -1799,7 +1894,7 @@
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise && $hiredCompanions.some(e=> e.name === 'Lily')>>
 	<<set _temp += 1 >>
 <</if>>
-<<if  $time - $pregLily>=240 || $time - $lastBirthLily <= 30 || ($companionLily.curses.some(e => e.name === "Lactation Rejuvination A") || $companionLily.curses.some(e => e.name === "Lactation Rejuvination B")) && !$LilyConvoLac && $companionLily.affec>16 && $hiredCompanions.some(e=> e.name === 'Lily')>>
+<<if  $companionLily.lactation>0 && !$LilyConvoLac && $companionLily.affec>16 && $hiredCompanions.some(e=> e.name === 'Lily')>>
 	<<set _temp += 1 >>
 <</if>>
 
@@ -1823,6 +1918,9 @@
 <<elseif $CherryConvo3==0 && $companionCherry.affec>20 && $app.appGender<6 && $subdom <= 0 && $CherryConvo2 && $hiredCompanions.some(e=> e.name === 'Cherry')>>
 	<<set _temp += 1 >>
 <</if>>
+<<if $app.lactation>0 && ($companionCherry.curses.some(e => e.name === "Fluffy Ears") || $companionCherry.curses.some(e => e.name === "Fluffy Tail")) && !$CherryConvoLac && $companionCherry.affec>16>>
+	<<set _temp += 1 >>
+<</if>>
 
 <<if $CloudConvo0==0 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
 	<<set _temp += 1 >>
@@ -1834,7 +1932,7 @@
 <<elseif $CloudConvo3==0 && $CloudAffec>20 && $subdom > -2 && $CloudConvo2 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
 	<<set _temp += 1 >>
 <</if>>
-<<if ($playerCurses.some(e => e.name === "Lactation Rejuvination A") || $playerCurses.some(e => e.name === "Lactation Rejuvination B")) && !$CloudConvoLac && $companionCloud.affec>16 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
+<<if $app.lactation>0 && !$CloudConvoLac && $companionCloud.affec>16 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
 	<<set _temp += 1 >>
 <</if>>
 
