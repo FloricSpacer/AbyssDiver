@@ -18,10 +18,53 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.time >= StoryVar.due) {
 		return "Labor Scene";
 	}
+	if (StoryVar.time - StoryVar.pregMaru >= 280) {
+		StoryVar.companionLabor = StoryVar.companionMaru.name
+		StoryVar.MaruConvoPreg = false
+		StoryVar.pregMaru = 9999
+		StoryVar.lastBirthMaru = StoryVar.time
+		return "Labor Scene Companion";
+	}
+	if (StoryVar.time - StoryVar.pregLily >= 280) {
+		StoryVar.companionLabor = StoryVar.companionLily.name
+		StoryVar.LilyConvoPreg = false
+		StoryVar.pregLily = 9999
+		StoryVar.lastBirthLily = StoryVar.time
+		return "Labor Scene Companion";
+	}
+	if (StoryVar.time - StoryVar.pregKhemia >= 280) {
+		StoryVar.companionLabor = StoryVar.companionKhemia.name
+		StoryVar.KhemiaConvoPreg = false
+		StoryVar.pregKhemia = 9999
+		StoryVar.lastBirthKhemia = StoryVar.time
+		return "Labor Scene Companion";
+	}
+	if (StoryVar.time - StoryVar.pregCherry >= 280) {
+		StoryVar.companionLabor = StoryVar.companionCherry.name
+		StoryVar.CherryConvoPreg = false
+		StoryVar.pregCherry = 9999
+		StoryVar.lastBirthCherry = StoryVar.time
+		return "Labor Scene Companion";
+	}
+	if (StoryVar.time - StoryVar.pregCloud >= 280) {
+		StoryVar.companionLabor = StoryVar.companionCloud.name
+		StoryVar.CloudConvoPreg = false
+		StoryVar.pregCloud = 9999
+		StoryVar.lastBirthCloud = StoryVar.time
+		return "Labor Scene Companion";
+	}
+	if (StoryVar.time - StoryVar.pregSaeko >= 280) {
+		StoryVar.companionLabor = StoryVar.companionSaeko.name
+		StoryVar.SaekoConvoPreg = false
+		StoryVar.pregSaeko = 9999
+		StoryVar.lastBirthSaeko = StoryVar.time
+		return "Labor Scene Companion";
+	}
 	if (StoryVar.time - StoryVar.pregTwin >= 280) {
 		StoryVar.companionLabor = StoryVar.companionTwin.name
 		StoryVar.TwinConvoPreg = false
 		StoryVar.pregTwin = 9999
+		StoryVar.lastBirthTwin = StoryVar.time
 		return "Labor Scene Companion";
 	}
 	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {

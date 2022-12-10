@@ -439,41 +439,130 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 <</if>>
 <<if $items[14].count > 0>>
 Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
-	[[Fight it off with a sword|Layer6 Threat1 Main2][$tentacleFucked = 10]]<br>
-	<<if $items[4].count > 4>>[[Fight it off with a sword and use a medkit to cure the status|Layer6 Hub][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
+	<<link "Fight it off with a sword" "Layer6 Threat1 Main2">>
+		<<set $tentacleFucked = 10>>
+		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<PregCheck>>
+		<</if>>
+	<</link>><br>
+	<<if $items[4].count > 4>>
+		<<link "Fight it off with a sword and use a medkit to cure the status" "Layer6 Hub">>
+			<<set $items[4].count -= 1>>
+			<<if $playerCurses.some(e => e.name === "Omnitool")>>
+				<<PregCheck>>
+			<</if>>
+		<</link>><br>
+	<</if>>	
+<</if>>
 <<if $ownedRelics.some(e => e.name === "Sunbeam")>>
 Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
-	[[Fight it off with Sunbeam|Layer6 Threat1 Main2][$tentacleFucked = 9]]<br>
-	<<if $items[4].count > 4>>[[Fight it off with Sunbeam and use a medkit to cure the status|Layer6 Hub][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
+	<<link "Fight it off with Sunbeam" "Layer6 Threat1 Main2">>
+		<<set $tentacleFucked = 9>>
+		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<PregCheck>>
+		<</if>>
+	<</link>><br>
+	<<if $items[4].count > 4>>
+		<<link "Fight it off with Sunbeam and use a medkit to cure the status" "Layer6 Hub">>
+			<<set $items[4].count -= 1>>
+			<<if $playerCurses.some(e => e.name === "Omnitool")>>
+				<<PregCheck>>
+			<</if>>
+		<</link>><br>
+	<</if>>	
+<</if>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
 	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
-	[[Have Khemia fight it off with a sword|Layer6 Threat1 Main2][$tentacleFucked = 2, $khemiaFucked = 1]]<br>
-	<<if $items[4].count > 4>>[[Have Khemia fight it off with a sword and use a medkit to cure his status|Layer6 Hub][$items[4].count -= 1]]<br><</if>><br>
+	<<link "Have Khemia fight it off with a sword" "Layer6 Threat1 Main2">>
+		<<set $tentacleFucked = 2>>
+		<<set $khemiaFucked = 1 >>
+		<<set _temp = random(0,100)>>
+		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && (($companionKhemia.osex == "female" && !$companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || ($companionKhemia.osex == "male" && $companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control") || $companionKhemia.curses.some(e => e.name === "Futa Fun") || $companionKhemia.curses.some(e => e.name === "Wacky Wombs"))>>
+			<<if (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+					<<set $pregKhemia = $time-14>>
+			<</if>>
+		<</if>>
+	<</link>><br>
+	<<if $items[4].count > 4>>
+		<<link "Have Khemia fight it off with a sword and use a medkit to cure his status" "Layer6 Hub">>
+			<<set $items[4].count -= 1>>
+			<<set _temp = random(0,100)>>
+			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && (($companionKhemia.osex == "female" && !$companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || ($companionKhemia.osex == "male" && $companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control") || $companionKhemia.curses.some(e => e.name === "Futa Fun") || $companionKhemia.curses.some(e => e.name === "Wacky Wombs"))>>
+				<<if (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+						<<set $pregKhemia = $time-14>>
+				<</if>>
+			<</if>>
+		<</link>><br>	
 	<</if>>
+<</if>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
 	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Main2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
-	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Hub][$items[4].count -= 1]]<br><</if>><br>
+	<<link "Have Khemia fight it off with Sunbeam" "Layer6 Threat1 Main2">>
+		<<set $tentacleFucked = 1>>
+		<<set $khemiaFucked = 1 >>
+		<<set _temp = random(0,100)>>
+		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && (($companionKhemia.osex == "female" && !$companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || ($companionKhemia.osex == "male" && $companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control") || $companionKhemia.curses.some(e => e.name === "Futa Fun") || $companionKhemia.curses.some(e => e.name === "Wacky Wombs"))>>
+			<<if (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+					<<set $pregKhemia = $time-14>>
+			<</if>>
+		<</if>>
+	<</link>><br>	
+	<<if $items[4].count > 4>>
+		<<link "Have Khemia fight it off with Sunbeam and use a medkit to cure his status" "Layer6 Hub">>
+			<<set $items[4].count -= 1>>
+			<<set _temp = random(0,100)>>
+			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && (($companionKhemia.osex == "female" && !$companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || ($companionKhemia.osex == "male" && $companionKhemia.curses.some(e => e.name === "Sex Switcheroo")) || !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control") || $companionKhemia.curses.some(e => e.name === "Futa Fun") || $companionKhemia.curses.some(e => e.name === "Wacky Wombs"))>>
+				<<if (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+						<<set $pregKhemia = $time-14>>
+				<</if>>
+			<</if>>
+		<</link>><br>	
+	<</if>>
 <</if>>
 <<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
 	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
 	[[Have Khemia fight it off with Joyous Sunder|Layer6 Hub]]<br><br>
 <</if>>
-If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
+If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 <<link "Allow it to overpower you" "Layer6 Threat1 Main2">>
 	<<set $tentacleFucked = 12>>
 	<<if $playerCurses.some(e => e.name === "Omnitool")>>
 		<<PregCheck>>
 	<</if>>
+	<<for _i=0; _i<$hiredCompanions.length; _i++ >>
+		<<set _temp = random(0,100)>>
+		<<if $hiredCompanions[_i].curses.some(e => e.name === "Omnitool") && (($hiredCompanions[_i].osex == "female" && !$hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || ($hiredCompanions[_i].osex == "male" && $hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control") || $hiredCompanions[_i].curses.some(e => e.name === "Futa Fun") || $hiredCompanions[_i].curses.some(e => e.name === "Wacky Wombs"))>>
+			<<if (_temp < 20 || $hiredCompanions[_i].curses.some(e => e.name === "Absolute Pregnancy")) && !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control")>>
+				<<if $hiredCompanions[_i].name == $companionTwin.name>>
+					<<set $pregTwin = $time-14>>
+				<<else>>
+					<<set _string = "$preg" + $hiredCompanions[_i].name >>
+					<<print "<<set" + _string + " = $time - 14>>">>
+				<</if>>
+			<</if>>
+		<</if>>
+	<</for>>
 <</link>><br>
+
 <<if $items[4].count > 4>>
 	<<link "Allow it to overpower you and use a medkit to cure the status" "Layer6 Hub">>
 		<<set $items[4].count -= 1>>
 		<<if $playerCurses.some(e => e.name === "Omnitool")>>
 			<<PregCheck>>
 		<</if>>
+		<<for _i=0; _i<$hiredCompanions.length; _i++ >>
+			<<set _temp = random(0,100)>>
+			<<if $hiredCompanions[_i].curses.some(e => e.name === "Omnitool") && (($hiredCompanions[_i].osex == "female" && !$hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || ($hiredCompanions[_i].osex == "male" && $hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control") || $hiredCompanions[_i].curses.some(e => e.name === "Futa Fun") || $hiredCompanions[_i].curses.some(e => e.name === "Wacky Wombs"))>>
+				<<if (_temp < 20 || $hiredCompanions[_i].curses.some(e => e.name === "Absolute Pregnancy")) && !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control")>>
+					<<if $hiredCompanions[_i].name == $companionTwin.name>>
+						<<set $pregTwin = $time-14>>
+					<<else>>
+						<<set _string = "$preg" + $hiredCompanions[_i].name >>
+						<<print "<<set" + _string + " = $time - 14>>">>
+					<</if>>
+				<</if>>
+			<</if>>
+		<</for>>
 	<</link>><br>
 <</if>><br>
 
