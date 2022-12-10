@@ -1336,10 +1336,10 @@
 		}>>
 	
 
-	<<if $app.osex=='male'>>
-		<<set $companionTwin.osex = 'female'>>
+	<<if $app.osex=="male">>
+		<<set $companionTwin.osex = "female">>
 	<<else>>
-		<<set $companionTwin.osex = 'male'>>
+		<<set $companionTwin.osex = "male">>
 	<</if>>
 
 	<<if $app.appGender<=5 >>
@@ -1746,92 +1746,105 @@
 :: Miscellaneous appearance adjustment widget [widget nobr]
 <<widget "AppearanceCorrect">>
 
-<<set $app.hair = $app.ohair>> 
-<<set $app.ears= "normal human">>
-<<set $app.bodyHair= 1>>
-<<set $app.skinType= "">>
-<<set $app.skinColor= $app.oskinColor>>
-<<set $app.eyeColor= $app.oeyeColor>>
-<<set $app.tail= []>>
-
-<<set $app.desc= "">>
-<<set $app.blood="red">>
-
-<<for _appearEvent range $playerCurses>>
-
-	<<if _appearEvent.name == "Hair Removal">>
-		<<set $app.skinType = "hairless, smooth">>
-		<<set $app.bodyhair = 0>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+		<<set _GenderLog = $GenderLog>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+		<<print "<<set _GenderLog  = $GenderLog"+ _tempName +" >>">>
 	<</if>>
+	<<set _handle.hair = _handle.ohair>> 
+	<<set _handle.ears= "normal human">>
+	<<set _handle.bodyHair= 1>>
+	<<set _handle.skinType= "">>
+	<<set _handle.skinColor= _handle.oskinColor>>
+	<<set _handle.eyeColor= _handle.oeyeColor>>
+	<<set _handle.tail= []>>
 
-	<<if _appearEvent.name == "Knife-ear">>
-		<<set $app.ears = "pointed, elfish">>
+	<<set _handle.desc= "">>
+	<<set _handle.blood="red">>
+
+	<<for _appearEvent range _handle.curses>>
+
+		<<if _appearEvent.name == "Hair Removal">>
+			<<set _handle.skinType = "hairless, smooth">>
+			<<set _handle.bodyhair = 0>>
+		<</if>>
+
+		<<if _appearEvent.name == "Knife-ear">>
+			<<set _handle.ears = "pointed, elfish">>
+		<</if>>
+
+		<<if _appearEvent.name == "Perma-dye">>
+			<<set _handle.hair = $curse7.variation>>
+		<</if>>
+
+		<<if _appearEvent.name == "Fluffy Ears">>
+			<<set _handle.ears = $curse17.variation>>
+		<</if>>
+
+		<<if _appearEvent.name == "Fluffy Tail">>
+			<<set _handle.tail.push($curse18.variation)>>
+		<</if>>
+
+		<<if _appearEvent.name == "Maximum Fluff">>
+			<<set _handle.skinType = $curse19.variation>>
+			<<set _handle.bodyhair = 1>>
+		<</if>>
+
+		<<if _appearEvent.name == "Gooey">>
+			<<set _handle.skinType = "sticky, slimy">>
+			<<set _handle.bodyhair = 0>>
+		<</if>>
+
+		<<if _appearEvent.name == "Rainbow Swirl">>
+			<<set _handle.skinColor= $curse38.variation>>
+			<<set _handle.eyeColor= $curse38.variation>>
+		<</if>>
+
+		<<if _appearEvent.name == "Tipping the Scales">>
+			<<set _handle.skinType = "reptilian scaled">>
+			<<set _handle.bodyhair = 0>>
+			<<set _handle.skinColor = $curse54.variation>>
+		<</if>>	
+		
+		<<if _appearEvent.name == "Reptail">>
+			<<set _handle.tail.push("large, spiked, scaled reptile")>>
+		<</if>>
+		
+		<<if _appearEvent.name == "Cellulose">>
+			<<set _handle.skinType = "smooth, slightly rigid, plant-like">>
+			<<set _handle.bodyhair = 0>>
+		<</if>>
+
+		<<if _appearEvent.name == "Carapacian">>
+			<<set _handle.skinType = "hard, shiny, chitin-exoskeleton">>
+			<<set _handle.skinColor = $curse69.variation >>
+			<<set _handle.bodyhair = 0>>
+		<</if>>
+
+		<<if _appearEvent.name == "Hemospectrum">>
+			<<set _handle.blood = $curse70.variation>>
+			<<set _handle.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
+		<</if>>	
+
+		<<if _appearEvent.name == "Drawing Spades">>
+			<<set _handle.tail.push("cute, spade-tipped demon")>>
+		<</if>>	
+
+	<</for>>
+
+	<<if $playerCurses.some(e => e.name === "Barter System") && $hiredCompanions.length < 1 >>
+		<<set $dubloons = 0>>
 	<</if>>
-
-	<<if _appearEvent.name == "Perma-dye">>
-		<<set $app.hair = $curse7.variation>>
-	<</if>>
-
-	<<if _appearEvent.name == "Fluffy Ears">>
-		<<set $app.ears = $curse17.variation>>
-	<</if>>
-
-	<<if _appearEvent.name == "Fluffy Tail">>
-		<<set $app.tail.push($curse18.variation)>>
-	<</if>>
-
-	<<if _appearEvent.name == "Maximum Fluff">>
-		<<set $app.skinType = $curse19.variation>>
-		<<set $app.bodyhair = 1>>
-	<</if>>
-
-	<<if _appearEvent.name == "Gooey">>
-		<<set $app.skinType = "sticky, slimy">>
-		<<set $app.bodyhair = 0>>
-	<</if>>
-
-	<<if _appearEvent.name == "Rainbow Swirl">>
-		<<set $app.skinColor= $curse38.variation>>
-		<<set $app.eyeColor= $curse38.variation>>
-	<</if>>
-
-	<<if _appearEvent.name == "Tipping the Scales">>
-		<<set $app.skinType = "reptilian scaled">>
-		<<set $app.bodyhair = 0>>
-		<<set $app.skinColor = $curse54.variation>>
-	<</if>>	
-	
-	<<if _appearEvent.name == "Reptail">>
-		<<set $app.tail.push("large, spiked, scaled reptile")>>
-	<</if>>
-	
-	<<if _appearEvent.name == "Cellulose">>
-		<<set $app.skinType = "smooth, slightly rigid, plant-like">>
-		<<set $app.bodyhair = 0>>
-	<</if>>
-
-	<<if _appearEvent.name == "Carapacian">>
-		<<set $app.skinType = "hard, shiny, chitin-exoskeleton">>
-		<<set $app.skinColor = $curse69.variation >>
-		<<set $app.bodyhair = 0>>
-	<</if>>
-
-	<<if _appearEvent.name == "Hemospectrum">>
-		<<set $app.blood = $curse70.variation>>
-		<<set $app.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
-	<</if>>	
-
-	<<if _appearEvent.name == "Drawing Spades">>
-		<<set $app.tail.push("cute, spade-tipped demon")>>
-	<</if>>	
 
 <</for>>
-
-<<if $playerCurses.some(e => e.name === "Barter System") && $hiredCompanions.length < 1 >>
-	<<set $dubloons = 0>>
-<</if>>
-
-
 <</widget>>
 
 :: Flask Selecting first in order[widget nobr]
