@@ -97,17 +97,17 @@ Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> k
 <</if>>
 
 Your companions are:<br>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-		<<capture $i>>
-		<<print "[[$hiredCompanions[$i].name|Companion Info][$temp = $i]]">><br>
+<<for _i = 0; _i < $hiredCompanions.length; _i++>>
+		<<capture _i>>
+		<<print "[[$hiredCompanions[_i].name|Companion Info][$temp = _i]]">><br>
 		<</capture>>
 <</for>>
 <</nobr>>
 
 Your Curses are:
 <<nobr>>
-<<for $i = 0; $i < $playerCurses.length; $i++>>
-		<<print $playerCurses[$i].name>><br>
+<<for _i = 0; _i < $playerCurses.length; _i++>>
+		<<print $playerCurses[_i].name>><br>
 <</for>>
 
 <<if $waterL1 > 0>>
@@ -133,12 +133,12 @@ You have $items[3].count days of water in filled flasks.
 
 Your inventory and the count (if applicable) of each item is as follows:
 <<nobr>>
-<<for $i = 0; $i < $items.length; $i++>>
-	<<capture $i>>
-	<<if $items[$i].count > 1 || $items[$i].count < 0>>
-			<<print "[[$items[$i].name|Item Info][$temp = $i]]">>		<<print " ">><<print $items[$i].count>><br>
-	<<elseif $items[$i].count == 1>>
-		<<print "[[$items[$i].name|Item Info][$temp = $i]] ">>
+<<for _i = 0; _i < _items.length; _i++>>
+	<<capture _i>>
+	<<if $items[_i].count > 1 || $items[_i].count < 0>>
+			<<print "[[$items[_i].name|Item Info][$temp = _i]]">>		<<print " ">><<print $items[_i].count>><br>
+	<<elseif $items[_i].count == 1>>
+		<<print "[[$items[_i].name|Item Info][$temp = _i]] ">>
 		<br>
 	<</if>>
 	<</capture>>
@@ -146,24 +146,24 @@ Your inventory and the count (if applicable) of each item is as follows:
 <</nobr>>
 
 <<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<print "[[$ownedRelics[$i].name|Relic Info][$temp = $i]]">><br>
+<<for _i = 0; _i < $ownedRelics.length; _i++>>
+	<<capture _i>>
+		<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]]">><br>
 	<</capture>>
 <</for>>
 <</nobr>>
 
 <<set $total_value_relics=0>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-<<set $total_value_relics = $ownedRelics[$i].value + $total_value_relics>>
+<<for _i = 0; _i < $ownedRelics.length; _i++>>
+<<set $total_value_relics = $ownedRelics[_i].value + $total_value_relics>>
 <</for>>
 The total value of all your Relics is $total_value_relics dubloons.
 
 <<nobr>>
 <<if $relicSwap.length > 0>>
-	<<for $i = 0; $i < $relicSwap.length; $i++>>
-		<<capture $i>>
-		You have swapped the abilities of the $relicSwap[$i][0].name and the $relicSwap[$i][1].name.<br>
+	<<for _i = 0; _i < $relicSwap.length; _i++>>
+		<<capture _i>>
+		You have swapped the abilities of the $relicSwap[_i][0].name and the $relicSwap[_i][1].name.<br>
 		<</capture>>
 	<</for>>
 <</if>>
@@ -383,12 +383,12 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 	<</switch>>
 <</if>>
 
-<<for $i = 0; $i < $playerCurses.length; $i++>>
-	<<if $i>0>>
+<<for _i = 0; _i < $playerCurses.length; _i++>>
+	<<if _i>0>>
 		<br>
 	<</if>>
-	<<print $playerCurses[$i].appDesc>>
-	<<if $i==$playerCurses.length-1>>
+	<<print $playerCurses[_i].appDesc>>
+	<<if _i==$playerCurses.length-1>>
 		<br>
 	<</if>>
 <</for>>
@@ -532,7 +532,6 @@ You need sex constantly - having sex will only sate your hunger for a matter of 
 <br>You have another extra womb in your $app.womb2.
 <</if>>
 
-<<BreastCorrected>>
 <<if $app.breastsCor < 1>>
 You have a flat, <<GenderPronoun>> chest.
 <<elseif $app.breastsCor < 2>>
@@ -579,9 +578,9 @@ You've got to watch out for extremely serious back pain with your S cup breasts.
 <<if $time-$menCycleT-$menCycleVar>20 & $menCycleFlag==true>>
 They are a bit sore at the moment.
 <</if>>
-<<if $lactating > 1 >>
+<<if $app.lactation > 1 >>
 	<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">><br>
-<<elseif $lactating > 0  >>
+<<elseif $app.lactation > 0  >>
 	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">><br>
 <</if>>
 <br>
