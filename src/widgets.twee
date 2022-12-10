@@ -1526,6 +1526,22 @@
 
 <</widget>>
 
+:: Pregnancy Check widget for the whole party with a monster encouter[widget nobr]
+<<widget "MonsterPregCheckParty">>
+<<for _i=0; _i<$hiredCompanions.length; _i++ >>
+	<<set _temp = random(0,100)>>
+	<<if $hiredCompanions[_i].curses.some(e => e.name === "Omnitool") && (($hiredCompanions[_i].osex == "female" && !$hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || ($hiredCompanions[_i].osex == "male" && $hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control") || $hiredCompanions[_i].curses.some(e => e.name === "Futa Fun") || $hiredCompanions[_i].curses.some(e => e.name === "Wacky Wombs"))>>
+		<<if (_temp < 20 || $hiredCompanions[_i].curses.some(e => e.name === "Absolute Pregnancy")) && !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control")>>
+			<<if $hiredCompanions[_i].name == $companionTwin.name>>
+				<<set $pregTwin = $time-14>>
+			<<else>>
+				<<set _string = "$preg" + $hiredCompanions[_i].name >>
+				<<print "<<set" + _string + " = $time - 14>>">>
+			<</if>>
+		<</if>>
+	<</if>>
+<</for>>
+<</widget>>
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
 <<Handicap>>
