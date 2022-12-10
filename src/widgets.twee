@@ -622,61 +622,81 @@
 
 :: Libido widget [widget nobr]
 <<widget "LibidoCorrected">>
-<<set $app.libido = 2>>
-<<set $subdom = 0>>
-<<for _libidoEvent range $LibidoLog>>
-
-	<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E" || _libidoEvent.name == "Libido Reinforcement F" || _libidoEvent.name == "Libido Reinforcement G"  >>
-		<<set $app.libido += 1>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+		<<set _LibidoLog = $LibidoLog>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+		<<print "<<set _LibidoLog  = $LibidoLog"+ _tempName +" >>">>
 	<</if>>
+	<<set _handle.libido = 2>>
+	<<set _handle.subdom = 0>>
+	<<for _libidoEvent range _LibidoLog>>
+
+		<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E" || _libidoEvent.name == "Libido Reinforcement F" || _libidoEvent.name == "Libido Reinforcement G"  >>
+			<<set _handle.libido += 1>>
+		<</if>>
 
 
-	<<if _libidoEvent.name == "DoM" || _libidoEvent.name == "Submissiveness Rectification A" || _libidoEvent.name == "Submissiveness Rectification B" >>
-		<<set $subdom += 1>>
-	<</if>>
+		<<if _libidoEvent.name == "DoM" || _libidoEvent.name == "Submissiveness Rectification A" || _libidoEvent.name == "Submissiveness Rectification B" >>
+			<<set _handle.subdom += 1>>
+		<</if>>
 
-	<<if _libidoEvent.name == "DoS" || _libidoEvent.name == "Power Dom">>
-		<<set $subdom -= 1>>
-	<</if>>
+		<<if _libidoEvent.name == "DoS" || _libidoEvent.name == "Power Dom">>
+			<<set _handle.subdom -= 1>>
+		<</if>>
 
-	<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
-		<<set $app.libido += 1>>
-	<</if>>
+		<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
+			<<set _handle.libido += 1>>
+		<</if>>
 
-	<<if _libidoEvent.name == "1 Day Food Forage Minor Impact" >>
-		<<set $app.libido += 0.2>>
-		<<set $standardsLower +=1>>
-	<</if>>
+		<<if _libidoEvent.name == "1 Day Food Forage Minor Impact" >>
+			<<set _handle.libido += 0.2>>
+			<<if _i==$hiredCompanions.length>>
+				<<set $standardsLower +=1>>
+			<</if>>
+		<</if>>
+	
+		<<if _i==$hiredCompanions.length>>
+			<<if $lastFlan >0 >>
+				<<if $lastFlan==$time>>
+					<<set _handle.libido += 1>>
+				<</if>>
+			<</if>>
+		<</if>>
 
-	<<if $lastFlan >0 >>
-		<<if $lastFlan==$day>>
+	<</for>>
+	
+	<<if _i==$hiredCompanions.length>>
+		<<if $time-$menCycleT<16 & $time-$menCycleT>=13>>
 			<<set $app.libido += 1>>
+		<<elseif $time-$menCycleT<25 & $time-$menCycleT>=20>>
+			<<set $app.libido -= 1>>
+		<</if>>
+
+		<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
+			<<if $heatCycleT_flag == false>>	
+				<<if $menCycleT_flag == true>>
+					<<set $heatCycleT = $menCycleT>>
+				<<else>>
+					<<set $heatCycleT = $time -7>>
+				<</if>>
+				<<set $heatCycleT_flag = true>>
+			<</if>>
+
+			<<if $time-$heatCycleT==14 >>
+				<<set $app.libido += 2>>
+			<</if>>
 		<</if>>
 	<</if>>
 
 <</for>>
-
-<<if $time-$menCycleT<16 & $time-$menCycleT>=13>>
-	<<set $app.libido += 1>>
-<<elseif $time-$menCycleT<25 & $time-$menCycleT>=20>>
-	<<set $app.libido -= 1>>
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
-	<<if $heatCycleT_flag == false>>	
-		<<if $menCycleT_flag == true>>
-			<<set $heatCycleT = $menCycleT>>
-		<<else>>
-			<<set $heatCycleT = $time -7>>
-		<</if>>
-		<<set $heatCycleT_flag = true>>
-	<</if>>
-
-	<<if $time-$heatCycleT==14 >>
-		<<set $app.libido += 2>>
-	<</if>>
-
-<</if>>
 <</widget>>
 
 :: Pronoun widgets [widget nobr]
@@ -1635,23 +1655,6 @@
 <</widget>>
 
 :: Pregnancy Check widget for the whole party with a monster encouter[widget nobr]
-<<widget "MonsterPregCheckPartyOld">>
-<<for _i=0; _i<$hiredCompanions.length; _i++ >>
-	<<set _temp = random(0,100)>>
-	<<if $hiredCompanions[_i].curses.some(e => e.name === "Omnitool") && (($hiredCompanions[_i].osex == "female" && !$hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || ($hiredCompanions[_i].osex == "male" && $hiredCompanions[_i].curses.some(e => e.name === "Sex Switcheroo")) || !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control") || $hiredCompanions[_i].curses.some(e => e.name === "Futa Fun") || $hiredCompanions[_i].curses.some(e => e.name === "Wacky Wombs"))>>
-		<<if (_temp < 20 || $hiredCompanions[_i].curses.some(e => e.name === "Absolute Pregnancy")) && !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control")>>
-			<<if $hiredCompanions[_i].name == $companionTwin.name>>
-				<<set $pregTwin = $time-14>>
-			<<else>>
-				<<set _string = "$preg" + $hiredCompanions[_i].name >>
-				<<print "<<set" + _string + " = $time - 14>>">>
-			<</if>>
-		<</if>>
-	<</if>>
-<</for>>
-<</widget>>
-
-:: Pregnancy Check widget for the whole party with a monster encouter[widget nobr]
 <<widget "MonsterPregCheckParty">>
 <<for _i=0; _i<$hiredCompanions.length; _i++ >>
 	<<set _temp = random(0,100)>>
@@ -1889,7 +1892,7 @@
 	<<set _temp += 1 >>
 <<elseif $MaruConvo2==0 && $companionMaru.affec>15 && $MaruConvo1 && $hiredCompanions.some(e=> e.name === 'Maru') && 0>>
 	<<set _temp += 1 >>
-<<elseif $MaruConvo3==0 && $companionMaru.affec>20 && $app.appGender<4 && $subdom < 1 && $MaruConvo2 && $hiredCompanions.some(e=> e.name === 'Maru')>>
+<<elseif $MaruConvo3==0 && $companionMaru.affec>20 && $app.appGender<4 && $app.subdom < 1 && $MaruConvo2 && $hiredCompanions.some(e=> e.name === 'Maru')>>
 	<<set _temp += 1 >>
 <</if>><<if $hiredCompanions.some(e=> e.name === 'Maru') && $currentLayer == 1 && $forageFood == 1 && $L1FoodConvo == 0>>
 	<<set _temp += 1>>
@@ -1904,7 +1907,7 @@
 	<<set _temp += 1 >>
 <<elseif $LilyConvo2==0 && $companionLily.affec>15 && $LilyConvo1 && $hiredCompanions.some(e=> e.name === 'Lily') && 0>>
 	<<set _temp += 1 >>
-<<elseif $LilyConvo3==0 && $companionLily.affec>20 && $app.appGender>7 && $subdom > -1 && $LilyConvo2 && $hiredCompanions.some(e=> e.name === 'Lily')>>
+<<elseif $LilyConvo3==0 && $companionLily.affec>20 && $app.appGender>7 && $app.subdom > -1 && $LilyConvo2 && $hiredCompanions.some(e=> e.name === 'Lily')>>
 	<<set _temp += 1 >>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise && $hiredCompanions.some(e=> e.name === 'Lily')>>
@@ -1921,7 +1924,7 @@
 	<<set _temp += 1 >>
 <<elseif $KhemiaConvo2==0 && $companionKhemia.affec>15 && $KhemiaConvo1 && $hiredCompanions.some(e=> e.name === 'Khemia') && 0>>
 	<<set _temp += 1 >>
-<<elseif $KhemiaConvo3==0 && $companionKhemia.affec>20 && app.appGender>9 && $subdom >= 0 && $KhemiaConvo2 && $hiredCompanions.some(e=> e.name === 'Khemia')>>
+<<elseif $KhemiaConvo3==0 && $companionKhemia.affec>20 && app.appGender>9 && $app.subdom >= 0 && $KhemiaConvo2 && $hiredCompanions.some(e=> e.name === 'Khemia')>>
 	<<set _temp += 1 >>
 <</if>>
 
@@ -1931,7 +1934,7 @@
 	<<set _temp += 1 >>
 <<elseif $CherryConvo2==0 && $companionCherry.affec>15 && $CherryConvo1 && $hiredCompanions.some(e=> e.name === 'Cherry') && 0>>
 	<<set _temp += 1 >>
-<<elseif $CherryConvo3==0 && $companionCherry.affec>20 && $app.appGender<6 && $subdom <= 0 && $CherryConvo2 && $hiredCompanions.some(e=> e.name === 'Cherry')>>
+<<elseif $CherryConvo3==0 && $companionCherry.affec>20 && $app.appGender<6 && $app.subdom <= 0 && $CherryConvo2 && $hiredCompanions.some(e=> e.name === 'Cherry')>>
 	<<set _temp += 1 >>
 <</if>>
 <<if $app.lactation>0 && ($companionCherry.curses.some(e => e.name === "Fluffy Ears") || $companionCherry.curses.some(e => e.name === "Fluffy Tail")) && !$CherryConvoLac && $companionCherry.affec>16>>
@@ -1945,7 +1948,7 @@
 	<<set _temp += 1 >>
 <<elseif $CloudConvo2==0 && $CloudAffec>15 && $CloudConvo1 && $hiredCompanions.some(e=> e.name === 'Cloud') && 0>>
 	<<set _temp += 1 >>
-<<elseif $CloudConvo3==0 && $CloudAffec>20 && $subdom > -2 && $CloudConvo2 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
+<<elseif $CloudConvo3==0 && $CloudAffec>20 && $app.subdom > -2 && $CloudConvo2 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
 	<<set _temp += 1 >>
 <</if>>
 <<if $app.lactation>0 && !$CloudConvoLac && $companionCloud.affec>16 && $hiredCompanions.some(e=> e.name === 'Cloud')>>
