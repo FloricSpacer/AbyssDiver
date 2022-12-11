@@ -895,10 +895,10 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 		<<if $hiredCompanions[_i] == $companionTwin >>
 			<<set _tempName = "Twin">>
 		<<else>>
-			<<set _tempName = _companion.name>>
+			<<set _tempName = $hiredCompanions[_i].name>>
 		<</if>>
-		
-		<<link "Transfer" "Layer4 Steady Apply">>
+		<<set _string1 = "Transfer to " + $hiredCompanions[_i].name>>
+		<<link _string1 "Layer4 Steady Apply">>
 			<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
 			<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
 			<<set $temp2=_i>>
@@ -914,8 +914,8 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 			<<elseif $playerCurses[$temp].type == "Libido">>
 				<<set _string = "$LibidoLog" + _tempName>>
 			<</if>>
-			<<if _curse.type != "">>
-				<<print "<<set " + _string + ".push(_curse)>>">>
+			<<if $playerCurses[$temp].type != "">>
+				<<print "<<set " + _string + ".push($playerCurses[$temp])>>">>
 			<</if>>
 
 		<</link>><br>
