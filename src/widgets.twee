@@ -738,6 +738,20 @@
 	<</if>>
 <</widget>>
 
+:: PerceivedGender
+	<<if _handle.appGender<=5>>\
+		<<if _handle.appAge>16>>\
+			man\
+		<<else>>\
+			boy\
+		<</if>>\
+	<<else>>\
+		<<if _handle.appAge>15.5>>\
+			woman\
+		<<else>>\
+			girl\
+		<</if>>\
+	<</if>>\
 
 :: Perceived widgets [widget nobr]
 <<widget "appGender">>
@@ -838,6 +852,28 @@
 	<</if>>
 <</widget>>
 
+:: PerceivedStature
+	<<if _handle.heightCor <160 >>\
+			little\
+	<<elseif _handle.heightCor >180>>\
+			big\
+	<</if>>\
+	<<if _handle.appAge<12>>\
+			young\
+	<<elseif _handle.appAge>40>>\
+			old\
+	<</if>>\
+
+:: PerceivedRace
+	<<if _handle.inhuman <2 >>\
+			human\
+	<<elseif _handle.inhuman <6>>\
+			humanoid\
+	<<elseif _handle.inhuman <10>>\
+			anthropomorph\
+	<<else>>\
+			monster\
+	<</if>>\
 
 :: Threat1 Criterion [widget nobr]
 <<widget "Threat1Criterion">>
@@ -935,60 +971,75 @@
 
 :: Inhuman function [widget nobr]
 <<widget "Inhuman">>
-<<set $app.inhuman =0>>
-<<if $app.ears != "normal human">>
-	<<set $app.inhuman +=1>>
-<</if>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+	<<else>>
+		<<if $hiredCompanions[_i] == $companionTwin >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+	<</if>>
+	<<set _handle.inhuman =0>>
+	<<if _handle.ears != "normal human">>
+		<<set _handle.inhuman +=1>>
+	<</if>>
 
-<<if !["pale", "tanned", "olive", "brown", "dark brown"].includes($app.skinColor) >>
-    <<set $app.inhuman +=4>>
-<</if>>
+	<<if !["pale", "tanned", "olive", "brown", "dark brown"].includes($app.skinColor) >>
+		<<set _handle.inhuman +=4>>
+	<</if>>
 
-<<if $app.eyeColor !=  "blue" && $app.eyeColor !=  "brown" && $app.eyeColor !=  "gray" && $app.eyeColor !=  "green" && $app.eyeColor !=  "hazel"  >>
-	<<set $app.inhuman +=1>>
-<</if>>
+	<<if $app.eyeColor !=  "blue" && $app.eyeColor !=  "brown" && $app.eyeColor !=  "gray" && $app.eyeColor !=  "green" && $app.eyeColor !=  "hazel"  >>
+		<<set _handle.inhuman +=1>>
+	<</if>>
 
-<<if $app.skinType.length > 0 && $app.skinType!="hairless, smooth">>
-	<<set $app.inhuman +=4>>
-<</if>>
+	<<if $app.skinType.length > 0 && $app.skinType!="hairless, smooth">>
+		<<set _handle.inhuman +=4>>
+	<</if>>
 
-<<if $app.blood !="red">>
-	<<set $app.inhuman +=2>>
-<</if>>
+	<<if $app.blood !="red">>
+		<<set _handle.inhuman +=2>>
+	<</if>>
 
-<<set _hornyCount = setup.activeCurseCount("Horny")>>
-<<if _hornyCount == 1>>
-	<<set $app.inhuman +=2>>
-<<elseif _hornyCount == 2>>
-	<<set $app.inhuman +=3>>
-<</if>>
+	<<set _hornyCount = setup.activeCurseCount("Horny")>>
+	<<if _hornyCount == 1>>
+		<<set _handle.inhuman +=2>>
+	<<elseif _hornyCount == 2>>
+		<<set _handle.inhuman +=3>>
+	<</if>>
 
-<<if $app.tail.length > 0>>
-<<for $i = 0; $i < $app.tail.length; $i++>>
+	<<if _handle.tail.length > 0>>
+	<<for _i = 0; _i < _handle.tail.length; _i++>>
+			<<set _handle.inhuman +=2>>
+	<</for>>
+	<</if>>
+
+	<<if _handle.curses.some(e => e.name === "Megadontia")>>
+		<<set $app.inhuman +=1>>
+	<</if>>
+
+	<<if _handle.curses.some(e => e.name === "Lingual Leviathan")>>
+		<<set $app.inhuman +=1>>
+	<</if>>
+
+	<<if _handle.curses.some(e => e.name === "Massacre Manicure")>>
+		<<set $app.inhuman +=1>>
+	<</if>>
+
+	<<if _handle.curses.some(e => e.name === "Flower Power")>>
+		<<set $app.inhuman +=4>>
+	<</if>>
+
+	<<if _handle.curses.some(e => e.name === "Wriggly Antennae")>>
 		<<set $app.inhuman +=2>>
+	<</if>>
+
+	<<if _handle.curses.some(e => e.name === "Seafolk")>>
+		<<set $app.inhuman +=4>>
+	<</if>>
 <</for>>
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Megadontia")>>
-	<<set $app.inhuman +=1>>
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>
-	<<set $app.inhuman +=1>>
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
-	<<set $app.inhuman +=1>>
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Flower Power")>>
-	<<set $app.inhuman +=4>>
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Wriggly Antennae")>>
-	<<set $app.inhuman +=2>>
-<</if>>
-
 <</widget>>
 
 :: Handicap function [widget nobr]
