@@ -2959,10 +2959,11 @@ Double-click this passage to edit it.
 You feel you need to get some action and as you look around what to do you cross eyes with $companionTwin.name. <<if $companionTwin.sex=='male'>>He <<else>>She <</if>> looks away slightly embarassed. Could you not be the only one, needing some love?
 
 [[Maybe, maybe not. But you're not getting it on with your twin, real or not.|Party overview]]
+<<if !(($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") && $playerCurses.some(e => e.name === "Absolute Birth Control")) || ($companionTwin.curses.some(e => e.name === "Absolute Birth Control") && $playerCurses.some(e => e.name === "Absolute Pregnancy")))>>
 <<ConversationChoices
 	[[A proposition never hurt anybody|Twin Sex]]
 >>
-
+<</if>>
 :: Twin Sex 
 <<AppearanceCorrect>>
 <<set _temp=false>>
@@ -2978,8 +2979,18 @@ You quickly try to regain some composure.
 <<say $companionTwin>> Hmm, so what EXACTLY are you proposing then?<</say>><br>
 [[How about I give you some attention with my mouth?|Twin Sex Oral Receive]]
 [[How about you give me some attention with you mouth?|Twin Sex Oral Give]]
-<<if $companionTwin.penisCor>=2 && $app.penisCor < 2>>\
+<<if $companionTwin.penisCor>=2>>\
 	[[Maybe you could do me from behind|Twin Sex Anal Receive]]
+	<<if $app.penisCor >= 2>>
+		[[Maybe I could do you from behind|Twin Sex Anal Give]]
+		<<if $companionTwin.vagina > 0>>\
+			[[Maybe just regular sex, I don't care about anything else|Twin Sex Regular Give]]
+			[[Maybe just regular sex, but I'll pull out in time okay?|Twin Sex Pull Out Give]]
+		<</if>>
+		<<if $companionTwin.breastCor > 2 >>
+			[[How about I'll put my "asset" in between your "assets"|Twin Sex Boobjob Give]]
+		<</if>>
+	<</if>>
 	<<if $app.vagina = 1>>\
 		[[Maybe just regular sex, I don't care about anything else|Twin Sex Regular Receive]]
 		[[Maybe just regular sex, but pull out in time okay?|Twin Sex Pull Out Receive]]
@@ -2987,32 +2998,31 @@ You quickly try to regain some composure.
 	<<if $app.breastsCor > 0>>\
 		[[How about you put your "asset" in between my "assets"|Twin Sex Boobjob Receive]]
 	<</if>>\
-<<elseif $companionTwin.penisCor>=2 && !$app.penisCor < 2 >>
-	[[Maybe you could do me from behind|Twin Sex Anal Receive]]
-	[[Maybe I could do you from behind|Twin Sex Anal Give]]
-	<<if $app.vagina = 1>>\
-		[[Maybe just regular sex, I don't care about anything else|Twin Sex Regular Receive]]
-		[[Maybe just regular sex, but pull out in time okay?|Twin Sex Pull Out Receive]]
-	<</if>>\
-	<<if $app.breastsCor > 0>>\
-		[[How about you put your "asset" in between my "assets"|Twin Sex Boobjob Receive]]
-	<</if>>\
-<<elseif $companionTwin.penisCor<2 && $app.penisCor < 2>>\
-	[[Maybe you spread your legs and I'll fit myself right in between|Twin Sex Scissor]]
 <<else>>\
 	[[Maybe I could do you from behind|Twin Sex Anal Give]]
-	[[Maybe just regular sex, I don't care about anything else|Twin Sex Regular Give]]
-	[[Maybe just regular sex, but I'll pull out in time okay?|Twin Sex Pull Out Give]]
-	[[How about I'll put my "asset" in between your "assets"|Twin Sex Boobjob Give]]
+	<<if $companionTwin.vagina > 0>>\
+		[[Maybe just regular sex, I don't care about anything else|Twin Sex Regular Give]]
+		[[Maybe just regular sex, but I'll pull out in time okay?|Twin Sex Pull Out Give]]
+	<</if>>
+	<<if $companionTwin.breastCor > 2 >>
+		[[How about I'll put my "asset" in between your "assets"|Twin Sex Boobjob Give]]
+	<</if>>
+	<<if $app.penisCor < 2>>
+		[[Maybe you spread your legs and I'll fit myself right in between|Twin Sex Scissor]]
+	<</if>>
 <</if>>\
 :: Twin Sex Oral Receive 
+<<set _temp = random(0,100)>>\
+<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<set _temp = 100>>\
+<</if>>\
 $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>goes down on you.
-<<if $app.penisCor< 2 && $app.vagina==1>>
+<<if $app.penisCor< 2 && $app.vagina==1>>\
 	<<if $companionTwin.sex=='male'>>He <<else>>She <</if>>wraps <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>mouth over your vagina and you feel a warm tongue entering your folds. You close your eyes as you let yourself be enveloped by the sensations that run through your body. Suddenly $companionTwin.name gives a little suckle to your pleasure button, which surprises you a little.
 	<<say $mc>>God, that feels good<</say>>
 	Your twin only anwsers by giving you a mischevious wink. Before long you are squirming mess as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>brings your to an orgasm.
-<<elseif $app.penisCor< 2>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<elseif $app.penisCor< 2>>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Hmm, it's a bit small.<</say>>
@@ -3024,8 +3034,8 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 	<<say $mc>>God, that feels good<</say>>
 	Your twin only anwsers by giving you a mischevious wink. Before long you are squirming mess as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>brings your to an orgasm.
 
-<<elseif $app.penisCor > 6>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<elseif $app.penisCor > 6>>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> You're a big boy aren't you?<</say>>
@@ -3034,19 +3044,18 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 
 	<<say $mc>>God, that feels good<</say>>
 	Your twin has a hard time surpressing gags as she works your dick. Before long you are squirming mess as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>brings your to an orgasm.
-<<elseif $app.penisCor > 9>>
+<<elseif $app.penisCor > 9>>\
 	<<say $companionTwin>> Ow wow, that's never going to fit in my mouth.<</say>>
 	<<say $mc>>uh. what can I say? Stuff happend.<</say>>
 	<<say $companionTwin>> Yeah, well I wont know how much stuff is going to happen now. I can try to work the tip a bit...<</say>>
-
 	$companionTwin.name starts licking your shaft up and down before taking in the tip in <<if $companionTwin.sex=='male'>>his <<else>>her <</if>> mouth. You close your eyes as you let yourself be enveloped by the sensations that run through your body. It feels a bit clumsy and unwieldy at times and you never get close to a point of climax.
 
 	<<say $mc>>Thanks, but shall we just stop and get dressed again?<</say>>
 	<<if $companionTwin.sex=='male'>>He <<else>>She <</if>>looks a bit downcast.
 
 	<<say $companionTwin>> Okay...<</say>>
-<<else>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<else>>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Hello there.<</say>>
@@ -3058,7 +3067,7 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 
 [[End your 'conversation'|Party overview]]
 :: Twin Sex Oral Give
-<<if  $playerCurses.some(e => e.name === "Megadontia")>>
+<<if  $playerCurses.some(e => e.name === "Megadontia")>>\
 	As you slightly open your mouth to get started, $companionTwin.name eyes your razor sharp teeth.
 
 	<<say $companionTwin>> You know what, maybe this isn't the best idea.<</say>>
@@ -3067,8 +3076,11 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 	<<say $mc>>Oh... Okay<</say>>
 
 	[[End your 'conversation'|Party overview]]
-<<else>>
+<<else>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $app.womb>0 ) || $app.womb1=="throat" || $app.womb2=="throat">>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
 		<<PregCheck>>\
 	<</if>>\
 	As you slightly open your mouth to get started, you bring your head closer to <<if $companionTwin.sex=='male'>>his member. As you slide your lips over his penis he lets out a soft moan. You start working his shaft with your mouth.<<else>>her pussy. As your tongue touches her lips she gives a slight shudder.<</if>>. 
@@ -3088,6 +3100,9 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 <</if>>
 :: Twin Sex Anal Receive 
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $app.womb>0 ) || $app.womb1=="anus" || $app.womb2=="anus">>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
 		<<PregCheck>>\
 	<</if>>\
 You both get undressed, eager to get started. $companionTwin.name turns you around <<if $app.tail.length > 0>>and gently pushes your tail to the side<</if>> before inserting himself in your backdoor. You let out a little groan from the intrusion followed by another small groan when you feel $companionTwin.name 's member slowly starting to move inside you.
@@ -3096,12 +3111,16 @@ As the pace picks up the groans turn into moans of ecstacy, which eventually cul
 [[End your 'conversation'|Party overview]]
 
 :: Twin Sex Anal Give
-<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
-	<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+<<set _temp = random(0,100)>>\
+<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<set _temp = 100>>\
 <</if>>\
 You both get undressed, eager to get started. You turn $companionTwin.name around before inserting yourself in <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>backdoor. 
 
 <<if $app.penisCor<= 4>>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
+		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<</if>>\
 	<<say $companionTwin>> Just push it all the way in. You don't need to be so gentle.<</say>>
 	<<say $mc>>Uh... It is all the way in.<</say>>
 	<<say $companionTwin>> Huh? Are you sure?<</say>>
@@ -3110,18 +3129,27 @@ You both get undressed, eager to get started. You turn $companionTwin.name aroun
 	<<say $mc>>Right...<</say>>
 	Besides from the awkward start you get in a rhythm shortly afterwards, helped by the moans you hear from $companionTwin.name.
 <<elseif $app.penisCor> 6 >>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
+		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<</if>>\
 	<<say $companionTwin>> Ow ow ow, stop slow down. How much more is there?<</say>>
 	<<say $mc>>Uh... It's almost all the way in.<</say>>
 	<<say $companionTwin>> Okay good, I don't know how much more I could handle.<</say>>
 	<<say $mc>>Okay I'll just try to start slow.<</say>>
 	Beside from the awkward start you get in a rhythm shortly afterwards, helped by the moans you hear from $companionTwin.name. After a few minutes <<if $companionTwin.sex=='male'>>he <<else>>she <</if>> clearly started to enjoy the bigger size you now have.
 <<elseif $app.penisCor> 9 >>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<2 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
+		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<</if>>\
 	<<say $companionTwin>> Ow ow ow, stop slow down. How much more is there?<</say>>
 	<<say $mc>>Uh... quite a lot to be honest<</say>>
 	<<say $companionTwin>> Okay maybe this is not going to work. How about I just use my hands?<</say>>
 	<<say $mc>>Well, if it's the only option I'm not going to say no.<</say>>
 	$companionTwin.name starts to stroke your member with <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>hands. Eventhough it might be a bit of a let down after what you initially expected, you still manage to get in it after a few moments.
 <<else>>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
+		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<</if>>\
 	<<say $companionTwin>> Ow, that's right just push it all the way in.<</say>>
 	<<say $mc>>As you whish!<</say>>
 	$companionTwin.name is already quivering before you even begin in earnest. You get in a rhythm shortly with $companionTwin.name, helped by the moans you hear from <<if $companionTwin.sex=='male'>>him <<else>>her <</if>>. 
@@ -3132,14 +3160,21 @@ Half an hour later you lie in absolute bliss in eachothers arms. This was the be
 [[End your 'conversation'|Party overview]]
 
 :: Twin Sex Regular Receive 
-<<PregCheck>>
-You both get undressed, eager to get started. $companionTwin.name pushes you down and lines his member up with your pussy. You let out a little groan from the intrusion followed by another small groan when you feel $companionTwin.name 's member slowly starting to move inside you.
+<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<set $pregChance = 1>>	
+	<</if>>	
+	<<PregCheck>>\
+<</if>>You both get undressed, eager to get started. $companionTwin.name pushes you down and lines his member up with your pussy. You let out a little groan from the intrusion followed by another small groan when you feel $companionTwin.name 's member slowly starting to move inside you.
 As the pace picks up the groans turn into moans of ecstacy. Half an hour later you lie in absolute bliss in eachothers arms. This was the best idea you had in a while.
 
 [[End your 'conversation'|Party overview]]
 
 :: Twin Sex Regular Give
-<<set _temp = random(0,100)>>
+<<set _temp = random(0,100)>>\
+<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<set _temp = 100>>\
+<</if>>\
 You both get undressed, eager to get started. You spread $companionTwin.name 's legs before inserting yourself into her pussy. 
 
 <<if $app.penisCor<= 4>>\
@@ -3196,13 +3231,19 @@ You both get undressed, eager to get started. $companionTwin.name pushes you dow
 	Just before the climax he pulls out and squirts his seed on the ground. You saw a thin trail of liquid trailing between you vagina and his penis, but that's harmless anyway.
 	Shortly after you lie in absolute bliss in eachothers arms. This was the best idea you had in a while.
 <</if>>\
-<<PregCheck>>
-
+<<if !$playerCurses.some(e => e.name === "Absolute Birth Control") || !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<set $pregChance = 1>>	
+	<</if>>
+	<<PregCheck>>
+<</if>>
 [[End your 'conversation'|Party overview]]
 
 :: Twin Sex Pull Out Give
-<<set _temp = random(0,100)>>
-
+<<set _temp = random(0,100)>>\
+<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<set _temp = 100>>\
+<</if>>\
 You both get undressed, eager to get started. You push down $companionTwin.name, spread her legs and and line your member up with her pussy. She lets out a little groan from the intrusion followed by another small groan when she feels your member slowly starting to move inside her. 
 
 <<if $playerCurses.some(e => e.name === "Increased Sensitivity") >>\
@@ -3222,13 +3263,13 @@ You both get undressed, eager to get started. You push down $companionTwin.name,
 
 [[End your 'conversation'|Party overview]]
 
-<<if (_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>
+<<if _temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy") || $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 	<<set $pregTwin = $time-14>>
 <</if>>
 :: Twin Sex Boobjob Receive 
 $companionTwin.name gives you a sultry look as she bears her breasts, goes down and takes out your dick.
 
-<<if $app.penisCor < 2>>
+<<if $app.penisCor < 2>>\
 
 	<<say $companionTwin>> Hmm, it's a bit small.<</say>>
 	<<say $mc>>Yeah well, stuff happend okay.<</say>>
@@ -3241,8 +3282,8 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 	<<say $companionTwin>> Yeah you're right, what was I thinking.<</say>>
 	[[End your 'conversation'|Party overview]]
 
-<<elseif $app.penisCor > 6>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<elseif $app.penisCor > 6>>\
+	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> You're a big boy aren't you?<</say>>
@@ -3253,8 +3294,8 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 	Before long you are squirming mess as she brings your to an orgasm, coating her cleavage in cum in the process.
 	[[End your 'conversation'|Party overview]]
 
-<<elseif $app.penisCor > 9>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<elseif $app.penisCor > 9>>\
+	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow wow, I'm gladd that's going between my breasts and not somewhere else. What a monster...<</say>>
@@ -3266,8 +3307,8 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 	Before long you are squirming mess as she brings your to an orgasm, coating her cleavage in cum in the process.
 	[[End your 'conversation'|Party overview]]
 	
-<<else>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<else>>\
+	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Hello there.<</say>>
@@ -3282,7 +3323,7 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 :: Twin Sex Boobjob Give
 You give $companionTwin.name a sultry look as you bear your breast and take out his dick.
 
-<<if $app.breastCor < 3>>
+<<if $app.breastCor < 3>>\
 	<<say $companionTwin>> Uhm, you have really cute breasts, but they're a bit small.<</say>>
 	<<say $mc>>Thanks, this place can do weird stuff to you so I'm glad I'm not stuck with big udders.<</say>>
 	You laugh over your own joke, but $companionTwin.name just gives an awkward chuckle.
@@ -3297,8 +3338,11 @@ You give $companionTwin.name a sultry look as you bear your breast and take out 
 
 	[[End your 'conversation'|Party overview]]
 
-<<elseif $app.breastCor > 6>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<elseif $app.breastCor > 6>>\
+	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $app.womb > 0>>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
 		<<PregCheck>>\
 	<</if>>\
 	<<say $companionTwin>> Oh wow, you are stacked you know that!<</say>>
@@ -3307,12 +3351,15 @@ You give $companionTwin.name a sultry look as you bear your breast and take out 
 	You start licking $companionTwin.name's shaft up and down before wrapping his member in your soft cleavage. You start moving your big soft tits up and down along his shaft, while you hear him moan a little.
 
 	<<say $companionTwin>>God, that feels good<</say>>
-	Before long he is a squirming mess as you bring him to an orgasm, coating you cleavage in cum that seeps down your body.
+	Before long he is a squirming mess as you bring him to an orgasm, coating your cleavage in cum that seeps down your body.
 
 	[[End your 'conversation'|Party overview]]
 
-<<elseif $app.breastCor > 9>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
+<<elseif $app.breastCor > 9>>\
+	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $app.womb > 0>>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
 		<<PregCheck>>\
 	<</if>>\
 	<<say $companionTwin>> Haha wow, it's not that you could hide those puppies anyway, but now that their out...<</say>>
@@ -3329,21 +3376,26 @@ You give $companionTwin.name a sultry look as you bear your breast and take out 
 	[[End your 'conversation'|Party overview]]
 	
 <<else>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $app.womb > 0>>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
+		<<PregCheck>>\
 	<</if>>\
 	<<say $companionTwin>>Nice<</say>>
 	He says while cupping a feel for a second. You start licking $companionTwin.name's shaft up and down before wrapping his member in your soft cleavage. You start moving your soft tits up and down along his shaft, while you hear him moan a little.
 
 	<<say $companionTwin>>God, that feels good<</say>>
-
-	Before long he is a squirming mess as you bring him to an orgasm, coating you cleavage in cum that seeps down your body.
+	Before long he is a squirming mess as you bring him to an orgasm, coating your cleavage in cum that seeps down your body.
 
 	[[End your 'conversation'|Party overview]]
 <</if>>
 
 :: Twin Sex Scissor 
 <<set _temp = random(0,100)>>\
+<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+	<<set _temp = 100>>\
+<</if>>\
 $companionTwin.name giggles a bit right after you proposed tribbing her.
 
 <<say $companionTwin>>What a splendid idea.<</say>>
@@ -3354,7 +3406,7 @@ You grab her at her tiny waist and bring her down with you. On the ground she ta
 
 <<say $mc>>Almost..Almost..AHHH!<</say>>
 You start to convulse as an orgasm rolls over you and as if triggered by your orgasm $companionTwin.name also moans loadly as she arches her back in shocks.
-<<if $app.penisCor > 0 >>
+<<if $app.penisCor > 0 && $companionTwin.vagina > 0 && $companionTwin.penisCor == 0>>
 	Your tiny dicklet sprays cum over both of your groins. $companionTwin.name looks down at it and touches it with a finger.
 
 	<<say $companionTwin>>Honestly, I think you should just get rid of that little thing. It saves us some clean up.<</say>>
@@ -3363,8 +3415,43 @@ You start to convulse as an orgasm rolls over you and as if triggered by your or
 	<<say $mc>>I'm sorry, I'll clean it up.<</say>>
 	<<say $companionTwin>>It's okay. You know, when you change that clitty in a real clitty we'll be perfect twins!<</say>>
 	She gives you a little kiss as she stands up and starts cleaning herself.
-	<<if (_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
+	<<if (_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy") || $companionTwin.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
 		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<</if>>\
+<<elseif $companionTwin.penisCor > 0 && $app.vagina > 0 && $app.penisCor == 0>>
+	<<if $companionTwin.sex=='male'>>His <<else>>Her <</if>>tiny dicklet sprays cum over both of your groins. You look down at it and touch it with a finger.
+
+	<<say $mc>>Honestly, I think we should just get rid of that little thing. It saves us some clean up.<</say>>
+	<<if $companionTwin.sex=='male'>>He <<else>>She <</if>>looks down a little ashamed.
+
+	<<say $companionTwin>>I'm sorry, I'll clean it up.<</say>>
+	<<say $mc>>It's okay. You know, when we change that clitty in a real clitty we'll be perfect twins!<</say>>
+	You give <<if $companionTwin.sex=='male'>>him <<else>>her <</if>>a little kiss as you stand up and starts cleaning herself.
+	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
+		<<PregCheck>>\
+	<</if>>\
+<<else>>
+	<<if $companionTwin.sex=='male'>>His <<else>>Her <</if>>tiny dicklet sprays cum over both of your groins and in response yours answers back by spraying even more cum in between you. You look down at it and touch it with a finger.
+
+	<<say $mc>>Honestly, I think maybe we should just euh...
+	<<say $companionTwin>>Just get rid of our penises? It would saves us some clean up.<</say>>
+	You both have a hard time making eye contact after that statement.
+
+	<<say $mc>>Let's both sleep on it for a night, okay?<</say>>
+	<<say $companionTwin>>Yeah, good plan.<</say>>
+	You stand up and start cleaning yourselves.
+	
+	<<if $companionTwin.womb > 0 && ((_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control"))>>\
+		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+	<</if>>\
+	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
+		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy") && $app.womb> 0>>
+			<<set $pregChance = 1>>	
+		<</if>>
+		<<PregCheck>>\
 	<</if>>\
 <</if>>
 [[End your 'conversation'|Party overview]]
