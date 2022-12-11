@@ -923,12 +923,33 @@ Which companion would you like to force the Curse of $playerCurses[$temp].name o
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
-<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-	<<capture _i>>
+<<for _i = 0; _i < $hiredCompanions.length; __i++>>
+	<<capture $i>>
 	<<print $hiredCompanions[_i].name>><<print " ">>
+	<<if $hiredCompanions[_i] == $companionTwin >>
+		<<set _tempName = "Twin">>
+	<<else>>
+		<<set _tempName = _companion.name>>
+	<</if>>
 	
-	
-	<<print "[[Transfer|Layer3 Skewed Apply][$hiredCompanions[_i].curses.push($playerCurses[$temp]), $companion"+ $hiredCompanions[_i].name +".curses.push($playerCurses[$temp]) , _temp2=_i]]">><br>
+	<<link "Transfer" "Layer3 Skewed Apply">>
+	<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
+	<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
+	<<set $temp2=_i>>
+
+	<<if $playerCurses[$temp].type == "Age">>
+		<<set _string = "$AgeLog" + _tempName>>
+	<<elseif $playerCurses[$temp].type == "Gender">>
+		<<set _string = "$GenderLog" + _tempName>>
+	<<elseif $playerCurses[$temp].type == "Height">>
+		<<set _string = "$HeightLog" + _tempName>>
+	<<elseif $playerCurses[$temp].type == "Handicap">>
+		<<set _string = "$HandicapLog" + _tempName>>
+	<<elseif $playerCurses[$temp].type == "Libido">>
+		<<set _string = "$LibidoLog" + _tempName>>
+	<</if>>
+
+	<</link>><br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -943,7 +964,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<set $dubloons -= ($skewedUsed * 5)>>
 <<set $skewedUsed += 1>>
 <<set $skewedForced += 1>>
-<<set _companionName = $hiredCompanions[_temp2].name>>
+<<set _companionName = $hiredCompanions[$temp2].name>>
 <<set _affectionPenalty = 4 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
