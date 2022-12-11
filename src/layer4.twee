@@ -820,8 +820,9 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 						<<elseif _curse.type == "Libido">>
 							<<set _string = "$LibidoLog" + _tempName>>
 						<</if>>
-						<<print "<<set " + _string + ".push(_curse)>>">>
-
+						<<if _curse.type != "">>
+							<<print "<<set " + _string + ".push(_curse)>>">>
+						<</if>>
 
 						<<set $corruption += Math.round(_curse.corr / 2 ) >>
 						/* The CYOA states that the cost counter is shared between shrines. */
@@ -912,6 +913,9 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 				<<set _string = "$HandicapLog" + _tempName>>
 			<<elseif $playerCurses[$temp].type == "Libido">>
 				<<set _string = "$LibidoLog" + _tempName>>
+			<</if>>
+			<<if _curse.type != "">>
+				<<print "<<set " + _string + ".push(_curse)>>">>
 			<</if>>
 
 		<</link>><br>
