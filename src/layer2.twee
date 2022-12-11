@@ -459,53 +459,6 @@ By default, your companions' reward for coming down here with you is the dubloon
 	You must have a corruption value of 0 or greater to choose a habitation option.
 <</if>><</nobr>>
 
-/*<<nobr>>
-	<<if $corruption >= 0 && $debt <= 0>>
-		Note: This ending is simply a possible future for you, assuming you go with the flow for the rest of your life. If you want to avoid them using the Companions, Relics, and Curses you have obtained, then you will be able to, as long as they are within the bounds of the habitation option you have selected.<br><br>
-		<<HeightCorrected>> <<BreastCorrected>> <<Lewdness>> <<Inhuman>>
-	<<if $playerCurses.some(e => e.name === "Gooey") && $app.heightCor<140>>
-		[[Choose to settle in Downcast village|L2 Gooey end]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew LInhum HAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew LInhum HAge LDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew LInhum LAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew LInhum LAge LDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew HInhum HAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew HInhum HAge LDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew HInhum LAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 LLew HInhum LAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew LInhum HAge HDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew LInhum HAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew LInhum LAge HDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman<$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew LInhum LAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew HInhum HAge HDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew HInhum HAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $app.inhuman>=$inhumanCrit && $app.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
-		[[Choose to settle in Downcast village|L2 HLew HInhum LAge HDub]]
-	<<else>>
-		[[Choose to settle in Downcast village|L2 HLew HInhum LAge LDub]]
-	<<elseif $corruption < 0>>
-		You must have a corruption value of 0 or greater to choose a habitation option.
-	<<else>>
-		You must pay off all of your debt to settle down for habitation on the surface. You have $debt dubloons of debt, which you can pay at the Administrative Building.
-	<</if>>
-<<return>>
-<</nobr>>
-*/
-
 
 :: Layer2 Ascend 1 [layer2]
 Returning to the first layer will take 4 days, and cost 15 corruption.
@@ -1490,33 +1443,6 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<</if>>
 	<<set $tempTime = 1>>
 	<<include "GeneralTimeStats">>
-/* 	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL2 += 1>>
-				<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<</if>>
-	<</if>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= 1>>
-	<<else>>
-	<<set $foodL2 += 1>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= 1>>
-	<<elseif $mudHunt == 0>>
-		<<if $abyssKnow == 0>>
-			<<set $LibidoLog.push($ForageFoodMajor )>>
-		<<else>>
-			<<set $lastFlan=$time+1>>
-		<</if>>
-	<</if>>
-<</if>>*/
 <</for>>
 
 <</nobr>><<if $layerExitTime == 0>>
@@ -1525,53 +1451,6 @@ Subtle changes in your surroundings continue, large rocks start to appear in you
 <<include "Curse Descriptions">>
 
 [[Enter the deep caverns|Layer3 1]]<</if>>
-
-/* 
-:: Layer2 Threat1 Descend [image layer2]
-<<set $timeL2T1 -= 4>>
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
-
-How do you want to deal with the beast moving in on you?
-
-
-<<nobr>>
-<<if $items[14].count > 0>>
-	A simple beast like this could be fought off by even an amateur using a human weapon, like a sword.<br>[[Fight it off with your sword|Layer2 Exit2]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 2>>
-	While the beast is large and burly, a few shots from a gun will easily bring it down.<br>
-	[[Shoot it 3 times with your pistol|Layer2 Exit2][$items[20].count -= 3]]<br><br>
-<</if>>
-<<if $items[1].count > 4>>
-	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and cause it to leave you alone.<br>
-	[[Feed it 5 days of your food rations|Layer2 Exit2][$items[1].count -= 5]]<br><br>
-<</if>>
-<<if $hiredCompanions.length > 3>>
-	[[Scare it off with your large group of companions|Layer2 Exit2]]<br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun and is able to easily dispatch the beast with only a few well-placed shots.
-[[Defeat it with the Brave Vector|Layer2 Exit2]]
-<</if>>
-
-[[Allow it to overpower you|Layer2 Hub][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
-
-<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
-
-A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
-
-<<link "Hold the doll tight and squeeze your eyes shut" "Layer2 Exit2">>
-  <<dollTF>>
-<</link>><br>
-<</if>>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Exit2]]
-*/
 
 :: Layer2 Ascend2 [layer2]
 <<nobr>>
@@ -1599,33 +1478,6 @@ Use the following option only if you have specifically considered your inventory
 		<</if>>
 		<<set $tempTime=1>>
 		<<include "GeneralTimeStats">>
-/*	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL2 += 1>>
-				<<if $abyssKnow == 0>>
-			<<set $bewitchBabies += 1>>
-		<</if>>
-	<</if>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= 1>>
-	<<else>>
-	<<set $foodL2 += 1>>
-	<<if $mudHunt == 1 && $items[20].count > 0>>
-		<<set $items[20].count -= 1>>
-	<<elseif $mudHunt == 0>>
-		<<if $abyssKnow == 0>>
-			<<set $LibidoLog.push($ForageFoodMajor )>>
-		<<else>>
-			<<set $lastFlan=$time+1>>
-		<</if>>
-	<</if>>
-<</if>>  */
 <</for>>
 
 
