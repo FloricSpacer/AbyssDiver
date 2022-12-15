@@ -13,7 +13,7 @@
 		<<set _handle = $app>>
 		<<set _HeightLog = $HeightLog>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -210,7 +210,7 @@
 		<<set _handle = $app>>
 		<<set _GenderLog = $GenderLog>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -537,12 +537,13 @@
 
 :: Age widget [widget nobr]
 <<widget "AgeCorrected">>
+
 <<for _i=0; _i<=$hiredCompanions.length; _i++>>
 	<<if _i==$hiredCompanions.length>>
 		<<set _handle = $app>>
 		<<set _AgeLog = $AgeLog>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -627,7 +628,7 @@
 		<<set _handle = $app>>
 		<<set _LibidoLog = $LibidoLog>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -760,7 +761,7 @@
 	<<if _i==$hiredCompanions.length>>
 		<<set _handle = $app>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -975,7 +976,7 @@
 	<<if _i==$hiredCompanions.length>>
 		<<set _handle = $app>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -1360,7 +1361,6 @@
 
 :: Cloning Self for Double Trouble [widget nobr]
 <<widget "CloneSelf">>
-<<CarryAdjust>>
 <<if $curse111.variation2=='inverted'>>
 	<<set $companionTwin = {
 		name: $curse111.variation1,
@@ -1377,13 +1377,49 @@
 		genderVoice: 0,
 		fit: $app.fit,
 		oheight: $app.oheight,
-		hairColor: $app.hairColor,
-		skinColor: $app.skinColor,
+		/*hairColor: $app.hairColor,
+		skinColor: $app.skinColor,*/
 		age: $app.age,
 		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: $fear 
+		fear: $fear,
+
+		sex: "",
+		ohair: $app.ohair,
+		hair: $app.ohair,
+		penis: $app.openis,
+		penisCor: $app.openis,
+		modpenis: 0,
+		vagina: 0,
+		gender: $app.ogender,
+		modgender:0,
+		switch: false,
+		breasts: $app.obreast,
+		modbreasts: 0,
+		breastsCor: $app.obreast,
+		lactation: 0,
+		ears: "normal human",
+		height: $app.oheight,
+		modheight: 0,
+		bodyHair: 1,
+		skinType: "",
+		oskinColor: $app.skinColor,
+		skinColor: $app.skinColor,
+		oeyeColor: $app.oeyeColor,
+		eyeColor: $app.oeyeColor,
+		eyeCount: 2,
+		armCount: 2,
+		legCount: 2,
+		tail: [],
+		womb: 0,
+		womb1: "",
+		womb2: "",
+		desc: "",
+		blood: "red",
+		appAge: $app.age,
+		libido: 2,
+		subdom: 0
 		}>>
 	
 
@@ -1419,14 +1455,56 @@
 		genderVoice: 0,
 		fit: $app.fit,
 		oheight: $app.oheight,
-		hairColor: $app.hairColor,
-		skinColor: $app.skinColor,
+		/*hairColor: $app.hairColor,
+		skinColor: $app.skinColor,*/
 		age: $app.age,
 		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: $fear 
+		fear: $fear,
+
+		sex: "",
+		ohair: $app.hairColor,
+		hair: $app.hairColor,
+		penis: $app.openis,
+		penisCor: $app.openis,
+		modpenis: 0,
+		vagina: 0,
+		gender: $app.ogender,
+		modgender:0,
+		switch: false,
+		breasts: $app.obreast,
+		modbreasts: 0,
+		breastsCor: $app.obreast,
+		lactation: 0,
+		ears: "normal human",
+		height: $app.oheight,
+		modheight: 0,
+		bodyHair: 1,
+		skinType: "",
+		oskinColor: $app.skinColor,
+		skinColor: $app.skinColor,
+		oeyeColor: $app.oeyeColor,
+		eyeColor: $app.oeyeColor,
+		eyeCount: 2,
+		armCount: 2,
+		legCount: 2,
+		tail: [],
+		womb: 0,
+		womb1: "",
+		womb2: "",
+		desc: "",
+		blood: "red",
+		appAge: $app.age,
+		libido: 2,
+		subdom: 0
 		}>>
+
+	<<if $app.osex=="male">>
+		<<set $companionTwin.osex = "male">>
+	<<else>>
+		<<set $companionTwin.osex = "female">>
+	<</if>>
 
 	<<if $app.appGender<=5 >>
 		<<set $companionTwin.imageIcon="Icons/npcM.png">>
