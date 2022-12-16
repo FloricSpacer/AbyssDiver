@@ -1054,197 +1054,220 @@
 
 :: Handicap function [widget nobr]
 <<widget "Handicap">>
-<<set $HandicapThreat =0>>
-<<set $HandicapMovement =0>>
-<<set $HandicapCarry =0>>
-<<set $app.eyeCount =2>>
-<<set $app.armCount =2>>
-<<set $app.legCount =2>>
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+		<<set _HandicapLog = $HandicapLog>>
+	<<else>>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+		<<print "<<set _HandicapLog  = $HandicapLog"+ _tempName +" >>">>
+	<</if>>
 
-<<for _HandicapEvent range $HandicapLog>>
+	<<set _handle.HandicapThreat =0>>
+	<<set _handle.HandicapMovement =0>>
+	<<set _handle.HandicapCarry =0>>
+	<<set _handle.eyeCount =2>>
+	<<set _handle.armCount =2>>
+	<<set _handle.legCount =2>>
 
-	<<if _HandicapEvent.name == "Eye on the Prize" >>
-		<<set $app.eyeCount=-$eyeRemove>>
-		<<if !$BionicEye>>
+	<<for _HandicapEvent range _HandicapLog>>
+
+		<<if _HandicapEvent.name == "Eye on the Prize" >>
+			<<set _handle.eyeCount=-$eyeRemove>>
+			<<if _i==$hiredCompanions.length>>
+				<<if !$BionicEye>>
+					<<if _handle.eyeCount<2>>
+					<<set _handle.HandicapThreat -=3>>
+					<<set _handle.HandicapMovement -=1>>
+						<<if $BDwear>>
+							<<set _handle.HandicapThreat +=1>>
+						<</if>>
+					<</if>>
+					<<if _handle.eyeCount<1>>
+					<<set _handle.HandicapThreat -=5>>
+					<<set _handle.HandicapMovement -=4>>
+						<<if $BDwear>>
+							<<set _handle.HandicapThreat +=3>>
+							<<set _handle.HandicapMovement +=3>>
+						<</if>>
+					<</if>>
+				<</if>>
+			<</if>>
+		<</if>>
+
+		<<if _HandicapEvent.name == "Deafening Silence">>
+			<<set _handle.HandicapThreat-=3>>
+			<<if _i==$hiredCompanions.length>>
+				<<set $ConvoHandicapSmall = true>>
+				<<set $ConvoHandicapLarge = true>>
+				<<set $ConvoHandicapFood = true>>
+			<</if>>
+		<</if>>
+
+		<<if _HandicapEvent.name == "Taciturn Turnaround" && _i==$hiredCompanions.length>>
+			<<set $ConvoHandicapLarge = true>>
+			<<set $ConvoHandicapFood = true>>
+		<</if>>
+		<<if _HandicapEvent.name == "Nose Goes">>
+			<<set _handle.HandicapThreat-=3>>
+			<<if _i==$hiredCompanions.length>>
+				<<set $ConvoHandicapFood = true>>
+			<</if>>
+		<</if>>
+
+		<<if _HandicapEvent.name == "Ampu-Q-tie">>
+			<<if $curse104.variation=='A'>>
+				<<set _handle.armCount -=1>>
+			<<elseif $curse104.variation=='L'>>
+				<<set _handle.legCount -=1>>
+			<<elseif $curse104.variation=='AA'>>
+				<<set _handle.armCount -=2>>
+			<<elseif $curse104.variation=='AL'>>
+				<<set _handle.armCount -=1>>
+				<<set _handle.legCount -=1>>
+			<<elseif $curse104.variation=='LL'>>
+				<<set _handle.legCount -=2>>
+			<<elseif $curse104.variation=='ALL'>>
+				<<set _handle.armCount -=1>>
+				<<set _handle.legCount -=2>>
+			<<elseif $curse104.variation=='AAL'>>
+				<<set _handle.armCount -=2>>
+				<<set _handle.legCount -=1>>
+			<<elseif $curse104.variation=='AALL'>>
+				<<set _handle.armCount -=2>>
+				<<set _handle.legCount -=2>>
+			<</if>>
+		<</if>>
+
+		<<if _HandicapEvent.name == "Arm Army">>
+			<<set _handle.armCount +=2>>
+		<</if>>
+
+		<<if _HandicapEvent.name == "Seafolk">>
+			<<set _handle.legCount -=2>>
+			<<set $scuba = 1>>
+		<</if>>
+
+		<<if _HandicapEvent.name == "Conjoined">>
+			<<set _handle.HandicapThreat -=6>>
+			<<set _handle.HandicapMovement -=6>>
+			<<set _handle.HandicapCarry -=2>>
+		<</if>>
+
+		
+	<</for>>
+
+	<<if _i==$hiredCompanions.length>>
+		<<if $BDwear>>
+			<<set _handle.HandicapThreat +=1>>
+		<</if>>
+
+		<<if $BionicEye>>
 			<<if $app.eyeCount<2>>
-			<<set $HandicapThreat -=3>>
-			<<set $HandicapMovement -=1>>
-				<<if $BDwear>>
-					<<set $HandicapThreat +=1>>
-				<</if>>
+				<<set $app.eyeCount +=1>>
 			<</if>>
-			<<if $app.eyeCount<1>>
-			<<set $HandicapThreat -=5>>
-			<<set $HandicapMovement -=4>>
-				<<if $BDwear>>
-					<<set $HandicapThreat +=3>>
-					<<set $HandicapMovement +=3>>
-				<</if>>
+		<</if>>
+
+		<<if $BionicArm>>
+			<<set _handle.HandicapCarry +=100>>
+			<<set _handle.HandicapThreat +=8>>
+			<<set _handle.HandicapMovement +=3>>
+			<<if _handle.armCount<2>>
+				<<set _handle.armCount +=1>>
 			<</if>>
 		<</if>>
 	<</if>>
 
-	<<if _HandicapEvent.name == "Deafening Silence">>
-		<<set $HandicapThreat-=3>>
-		<<set $ConvoHandicapSmall = true>>
-		<<set $ConvoHandicapLarge = true>>
-		<<set $ConvoHandicapFood = true>>
+	<<set _handle.HandicapThreat += _handle.fit/4-1.25>>
+	<<set _handle.HandicapMovement += _handle.fit/4-1.25>>
 
+	<<if _handle.armCount == 1 && _handle.legCount >1 >>
+		<<set _handle.HandicapThreat -=2>>
+		<<set _handle.HandicapMovement -=1>>
+		<<set _handle.HandicapCarry -=2>>
+		<<set _handle.armCount -=1>>
+	<<elseif _handle.armCount > 1 && _handle.legCount ==1 >>
+		<<set _handle.HandicapThreat -=3>>
+		<<set _handle.HandicapMovement -=5>>
+		<<set _handle.HandicapCarry -=3>>
+	<<elseif _handle.armCount == 0 && _handle.legCount >1 >>
+		<<set _handle.HandicapThreat -=7>>
+		<<set _handle.HandicapMovement -=3>>
+		<<set _handle.HandicapCarry -=7>>
+	<<elseif _handle.armCount == 1 && _handle.legCount ==1 >>
+		<<set _handle.HandicapThreat -=7>>
+		<<set _handle.HandicapMovement -=8>>
+		<<set _handle.HandicapCarry -=7>>
+	<<elseif _handle.armCount > 1 && _handle.legCount ==0 >>
+		<<set _handle.HandicapThreat -=7>>
+		<<set _handle.HandicapMovement -=9>>
+		<<set _handle.HandicapCarry -=7>>
+	<<elseif _handle.armCount == 1 && _handle.legCount ==0 >>
+		<<set _handle.HandicapThreat -=8>>
+		<<set _handle.HandicapMovement -=10>>
+		<<set _handle.HandicapCarry -=9>>
+	<<elseif _handle.armCount == 0 && _handle.legCount ==1 >>
+		<<set _handle.HandicapThreat -=9>>
+		<<set _handle.HandicapMovement -=9>>
+		<<set _handle.HandicapCarry -=10>>
+	<<elseif _handle.armCount == 0 && _handle.legCount == 0 >>
+		<<set _handle.HandicapThreat -=10>>
+		<<set _handle.HandicapMovement -=10>>
+		<<set _handle.HandicapCarry -=10>>
 	<</if>>
 
-	<<if _HandicapEvent.name == "Taciturn Turnaround">>
-		<<set $ConvoHandicapLarge = true>>
-		<<set $ConvoHandicapFood = true>>
+	<<if _handle.armCount >2 >>
+		<<set _handle.HandicapThreat -= 2*($app.armCount-2)>>
+		<<set _handle.HandicapMovement += 1*($app.armCount-2)>>
+		<<set _handle.HandicapCarry += ($app.armCount-2)>>
 	<</if>>
+			
+	<<if _i==$hiredCompanions.length>>
+		<<if $menstruating == true>>
+			<<set _handle.HandicapThreat -=2>>
+			<<set _handle.HandicapMovement -=3>>
+			<<set _handle.HandicapCarry -=1>>
+		<</if>>
 
-	<<if _HandicapEvent.name == "Nose Goes">>
-		<<set $HandicapThreat-=3>>
-		<<set $ConvoHandicapFood = true>>
-	<</if>>
-
-	<<if _HandicapEvent.name == "Ampu-Q-tie">>
-		<<if $curse104.variation=='A'>>
-			<<set $app.armCount -=1>>
-		<<elseif $curse104.variation=='L'>>
-			<<set $app.legCount -=1>>
-		<<elseif $curse104.variation=='AA'>>
-			<<set $app.armCount -=2>>
-		<<elseif $curse104.variation=='AL'>>
-			<<set $app.armCount -=1>>
-			<<set $app.legCount -=1>>
-		<<elseif $curse104.variation=='LL'>>
-			<<set $app.legCount -=2>>
-		<<elseif $curse104.variation=='ALL'>>
-			<<set $app.armCount -=1>>
-			<<set $app.legCount -=2>>
-		<<elseif $curse104.variation=='AAL'>>
-			<<set $app.armCount -=2>>
-			<<set $app.legCount -=1>>
-		<<elseif $curse104.variation=='AALL'>>
-			<<set $app.armCount -=2>>
-			<<set $app.legCount -=2>>
+		<<if $time - $pregnantT< 45 & $time - $pregnantT>= 35>>
+			<<set _handle.HandicapMovement -=2>>
+		<<elseif $time - $pregnantT< 90 & $time - $pregnantT>= 45>>
+			<<set _handle.HandicapThreat -=2>>
+			<<set _handle.HandicapMovement -=4>>
+			<<set _handle.HandicapCarry -=3>>
+		<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120>>
+			<<set _handle.HandicapThreat -=1>>
+			<<set _handle.HandicapMovement -=2>>
+			<<set _handle.HandicapCarry -=2>>
+		<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180>>
+			<<set _handle.HandicapThreat -=2>>
+			<<set _handle.HandicapMovement -=3>>
+			<<set _handle.HandicapCarry -=3>>
+		<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240>>
+			<<set _handle.HandicapThreat -=4>>
+			<<set _handle.HandicapMovement -=5>>
+			<<set _handle.HandicapCarry -=5>>
+		<</if>>
+		<<if $DaedalusEquip == true && _handle.HandicapMovement < 0>>
+			<<set _handle.HandicapMovement = 0 >>
 		<</if>>
 	<</if>>
-
-	<<if _HandicapEvent.name == "Arm Army">>
-		<<set $app.armCount +=2>>
+	<<if _handle.HandicapThreat <-10>>
+		<<set _handle.HandicapThreat =-10>>
+	<</if>>
+	<<if _handle.HandicapMovement < -10>>
+		<<set _handle.HandicapMovement = -10>>
+	<</if>>
+	<<if _handle.HandicapCarry < -10>>
+		<<set _handle.HandicapCarry = -10>>
 	<</if>>
 
-	<<if _HandicapEvent.name == "Seafolk">>
-		<<set $app.legCount -=2>>
-		<<set $scuba = 1>>
-	<</if>>
-
-	<<if _HandicapEvent.name == "Conjoined">>
-		<<set $HandicapThreat -=6>>
-		<<set $HandicapMovement -=6>>
-		<<set $HandicapCarry -=2>>
-	<</if>>
-
-	
 <</for>>
-
-<<if $BDwear>>
-	<<set $HandicapThreat +=1>>
-<</if>>
-
-<<if $BionicEye>>
-	<<if $app.eyeCount<2>>
-		<<set $app.eyeCount +=1>>
-	<</if>>
-<</if>>
-
-<<if $BionicArm>>
-	<<set $HandicapCarry +=100>>
-	<<set $HandicapThreat +=8>>
-	<<set $HandicapMovement +=3>>
-	<<if $app.armCount<2>>
-		<<set $app.armCount +=1>>
-	<</if>>
-<</if>>
-
-<<set $HandicapThreat += $app.fit/4-1.25>>
-<<set $HandicapMovement += $app.fit/4-1.25>>
-
-<<if $app.armCount == 1 && $app.legCount >1 >>
-	<<set $HandicapThreat -=2>>
-	<<set $HandicapMovement -=1>>
-	<<set $HandicapCarry -=2>>
-	<<set $app.armCount -=1>>
-<<elseif $app.armCount > 1 && $app.legCount ==1 >>
-	<<set $HandicapThreat -=3>>
-	<<set $HandicapMovement -=5>>
-	<<set $HandicapCarry -=3>>
-<<elseif $app.armCount == 0 && $app.legCount >1 >>
-	<<set $HandicapThreat -=7>>
-	<<set $HandicapMovement -=3>>
-	<<set $HandicapCarry -=7>>
-<<elseif $app.armCount == 1 && $app.legCount ==1 >>
-	<<set $HandicapThreat -=7>>
-	<<set $HandicapMovement -=8>>
-	<<set $HandicapCarry -=7>>
-<<elseif $app.armCount > 1 && $app.legCount ==0 >>
-	<<set $HandicapThreat -=7>>
-	<<set $HandicapMovement -=9>>
-	<<set $HandicapCarry -=7>>
-<<elseif $app.armCount == 1 && $app.legCount ==0 >>
-	<<set $HandicapThreat -=8>>
-	<<set $HandicapMovement -=10>>
-	<<set $HandicapCarry -=9>>
-<<elseif $app.armCount == 0 && $app.legCount ==1 >>
-	<<set $HandicapThreat -=9>>
-	<<set $HandicapMovement -=9>>
-	<<set $HandicapCarry -=10>>
-<<elseif $app.armCount == 0 && $app.legCount == 0 >>
-	<<set $HandicapThreat -=10>>
-	<<set $HandicapMovement -=10>>
-	<<set $HandicapCarry -=10>>
-<</if>>
-
-<<if $app.armCount >2 >>
-	<<set $HandicapThreat -= 2*($app.armCount-2)>>
-	<<set $HandicapMovement += 1*($app.armCount-2)>>
-	<<set $HandicapCarry += ($app.armCount-2)>>
-<</if>>
-
-<<if $menstruating == true>>
-	<<set $HandicapThreat -=2>>
-	<<set $HandicapMovement -=3>>
-	<<set $HandicapCarry -=1>>
-<</if>>
-
-<<if $time - $pregnantT< 45 & $time - $pregnantT>= 35>>
-	<<set $HandicapMovement -=2>>
-<<elseif $time - $pregnantT< 90 & $time - $pregnantT>= 45>>
-	<<set $HandicapThreat -=2>>
-	<<set $HandicapMovement -=4>>
-	<<set $HandicapCarry -=3>>
-<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120>>
-	<<set $HandicapThreat -=1>>
-	<<set $HandicapMovement -=2>>
-	<<set $HandicapCarry -=2>>
-<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180>>
-	<<set $HandicapThreat -=2>>
-	<<set $HandicapMovement -=3>>
-	<<set $HandicapCarry -=3>>
-<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240>>
-	<<set $HandicapThreat -=4>>
-	<<set $HandicapMovement -=5>>
-	<<set $HandicapCarry -=5>>
-<</if>>
-
-<<if $HandicapThreat <-10>>
-	<<set $HandicapThreat =-10>>
-<</if>>
-<<if $DaedalusEquip == true && $HandicapMovement < 0>>
-<<set $HandicapMovement = 0 >>
-<<elseif $HandicapMovement < -10>>
-	<<set $HandicapMovement = -10>>
-<</if>>
-<<if $HandicapCarry < -10>>
-	<<set $HandicapCarry = -10>>
-<</if>>
-
 <</widget>>
 
 :: Speech settings [widget nobr]
@@ -1829,7 +1852,7 @@
 	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5+6-$app.gender) )>>
 <</if>>
 
-<<set $carryWeight = $carryWeight*(1+ $HandicapCarry/10)>>
+<<set $carryWeight = $carryWeight*(1+ $app.HandicapCarry/10)>>
 
 <<if $DaedalusFly==true>>
 	<<set $carryWeight = Math.ceil($carryWeight/2)>>

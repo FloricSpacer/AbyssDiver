@@ -1521,22 +1521,22 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 
 	<<if $hiredCompanions.some(e => e.name === "Maru")>>
 		Maru seems scared, but he is still willing to do what he can in a fight.<br>
-		<<set _companionBonus += 2>>
+		<<set _companionBonus += 2 * (1+$companionMaru.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Lily")>>
 		Lily puffs her chest, lets out something of a battle cry, and charges headfirst into the puppets as she beats them left and right.<br>
-		<<set _companionBonus += 8>>
+		<<set _companionBonus += 8 * (1+$companionLily.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Khemia")>>
 		Khemia assumes a fighting stance, dispatching any mimics that finds itself near him. 
-		<<set _companionBonus += 15>>
+		<<set _companionBonus += 15 * (1+$companionKhemia.HandicapThreat/10)>>
 		<<if _cutRed>>
 			His sword slashes through them almost as fast as you can blink.
-			<<set _companionBonus += 8>>
+			<<set _companionBonus += 8 * (1+$companionKhemia.HandicapThreat/10)>>
 			<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
-			<<set _companionBonus += 5>>
+			<<set _companionBonus += 5 * (1+$companionKhemia.HandicapThreat/10)>>
 			<</if>>
 		<</if>>
 		<br>
@@ -1544,18 +1544,18 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 
 	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
 		Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
-		<<set _companionBonus += 1>>
+		<<set _companionBonus += 1 * (1+$companionCherry.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
 		Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
-		<<set _companionBonus += 10>>
+		<<set _companionBonus += 10 * (1+$companionCloud.HandicapThreat/10)>>
 		<<if $slingshot && $cloudStrat==0>>
 			The modified Brave Vector moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
-			<<set _companionBonus += 5>>
+			<<set _companionBonus += 5 * (1+$companionCloud.HandicapThreat/10)>>
 		<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
 			The gun moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
-			<<set _companionBonus += 5>>
+			<<set _companionBonus += 5 * (1+$companionCloud.HandicapThreat/10)>>
 			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
 			<<set _equipmentBonus += _ammo*5>>
 			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/(8*_ammo - $bullRed)) >>
@@ -1574,11 +1574,11 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 
 	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
 		Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
-		<<set _companionBonus += 5>>
+		<<set _companionBonus += 5  * (1+$companionSaeko.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
-		<<set _twinBonus = 7 - $HandicapThreat*1.5+_curseBonus>>
+		<<set _twinBonus = 5 * (1+$companionTwin.HandicapThreat/10)+_curseBonus>>
 		<<if _twinBonus > 7 >>
 			Your twin fights off the doll-like copies of you with relative ease. It's a strange sight to see a copy of you fight other copies, but next to your twin, the mimics seem like cheap immitations.
 		<<elseif _twinBonus > 5>>
@@ -1619,7 +1619,7 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
 	<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
 
-	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*5>>
+	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $app.HandicapThreat*5>>
 
 <br>Your relative strength bonus due to these factors against the Inanis Ego is _temp, though you would also get a bonus between 1 and 100 based on random factors such as terrain and luck. And based on your experience, if you encountered them today, they would have a strength of _L8T1_threshold, which you would need to overcome.<br>
 
@@ -1728,34 +1728,34 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Maru")>>
-		<<set _companionBonus += 2>>
+		<<set _companionBonus += 2* (1+ $companionMaru.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Lily")>>
-		<<set _companionBonus += 8>>
+		<<set _companionBonus += 8* (1+ $companionLily.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-		<<set _companionBonus += 15>>
+		<<set _companionBonus += 15* (1+ $companionKhemia.HandicapThreat/10)>>
 		<<if _cutRed>>
-			<<set _companionBonus += 8>>
+			<<set _companionBonus += 8* (1+ $companionKhemia.HandicapThreat/10)>>
 			<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
-			<<set _companionBonus += 5>>
+			<<set _companionBonus += 5* (1+ $companionKhemia.HandicapThreat/10)>>
 			<</if>>
 		<</if>>
 		<br>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-		<<set _companionBonus += 1>>
+		<<set _companionBonus += 1* (1+ $companionCherry.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-		<<set _companionBonus += 10>>
+		<<set _companionBonus += 10* (1+ $companionCloud.HandicapThreat/10)>>
 		<<if $slingshot && $cloudStrat==0>>
-			<<set _companionBonus += 5>>
+			<<set _companionBonus += 5* (1+ $companionCloud.HandicapThreat/10)>>
 		<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
-			<<set _companionBonus += 5>>
+			<<set _companionBonus += 5* (1+ $companionCloud.HandicapThreat/10)>>
 			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
 			<<set _equipmentBonus += _ammo*5>>
 			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/(8*_ammo - $bullRed)) >>
@@ -1773,11 +1773,11 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-		<<set _companionBonus += 5>>
+		<<set _companionBonus += 5 * (1+ $companionSaeko.HandicapThreat/10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
-		<<set _twinBonus = 7 - $HandicapThreat*1.5+_curseBonus>>
+		<<set _twinBonus = 5 * (1+ $companionTwin.HandicapThreat/10) +_curseBonus>>
 		<<if _twinBonus > 7 >>
 		<<elseif _twinBonus > 5>>
 		<<elseif _twinBonus > 0>>
@@ -1785,7 +1785,7 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 		<</if>>
 		<<set _companionBonus += _twinBonus>>
 		<br>
-
+$companionTwin.HandicapThreat
 	<</if>>
 
 	<<if _cutRed>>
@@ -1812,7 +1812,7 @@ Or, if you believe you have an alternative way to keep exploring in a purely und
 	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
 	<<set _L8T1_threshold3 = _L8T1_threshold*1.50>>
 
-	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $HandicapThreat*10>>
+	<<set _temp = random(0,100) + _relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $app.HandicapThreat*10>>
 
 <br>
 	<<if _temp >  _L8T1_threshold3>>
