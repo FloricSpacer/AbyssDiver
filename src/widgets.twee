@@ -7,13 +7,14 @@
 4) $app.osex (= "female")
 5) $app.appAge
 */
+
 <<GenderCorrected>>
 <<for _i=0; _i<=$hiredCompanions.length; _i++>>
 	<<if _i==$hiredCompanions.length>>
 		<<set _handle = $app>>
 		<<set _HeightLog = $HeightLog>>
 	<<else>>
-		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -170,11 +171,9 @@
 	<<set _handle.breastCor += _handle.lactation>>	
 
 :: PenisCorrected [nobr]
-
 <<if _handle.sex != "female">>
 	<<set $x = 16 -_handle.appAge>>
 	<<set _handle.penisCor =_handle.penis>>
-
 	<<set $genderlvl = _handle.gender-1>>
 
 	<<if $genderlvl< 0 >>
@@ -210,7 +209,7 @@
 		<<set _handle = $app>>
 		<<set _GenderLog = $GenderLog>>
 	<<else>>
-		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -513,6 +512,17 @@
 <<checkTime>>
 
 <<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<if _i==$hiredCompanions.length>>
+		<<set _handle = $app>>
+	<<else>>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
+			<<set _tempName = "Twin">>
+		<<else>>
+			<<set _tempName = $hiredCompanions[_i].name>>
+		<</if>>
+		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
+	<</if>>
+
 	<<if $time - _tempPreg>= 90 & $time - _tempPreg<=_due >>
 		<<set _handle.gender += 1>>
 	<</if>>
@@ -543,7 +553,7 @@
 		<<set _handle = $app>>
 		<<set _AgeLog = $AgeLog>>
 	<<else>>
-		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -628,7 +638,7 @@
 		<<set _handle = $app>>
 		<<set _LibidoLog = $LibidoLog>>
 	<<else>>
-		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -761,7 +771,7 @@
 	<<if _i==$hiredCompanions.length>>
 		<<set _handle = $app>>
 	<<else>>
-		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -976,7 +986,7 @@
 	<<if _i==$hiredCompanions.length>>
 		<<set _handle = $app>>
 	<<else>>
-		<<if ($hiredCompanions[_i] == $companionTwin) && (_i!=$hiredCompanions.length) >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
@@ -1879,7 +1889,7 @@
 		<<set _handle = $app>>
 		<<set _GenderLog = $GenderLog>>
 	<<else>>
-		<<if $hiredCompanions[_i] == $companionTwin >>
+		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _tempName = "Twin">>
 		<<else>>
 			<<set _tempName = $hiredCompanions[_i].name>>
