@@ -1016,11 +1016,11 @@ Gives one level of Gender Reversal, which causes gradual changes in your body th
 
 Grows your boobs by about 1 cup size and/or increases your penis size by about 2.5cm (1in), dependng on what's applicable. For all Asset Robustness Curses, band and sizes and girth are scaled appropriately, and your assets will grow back to their new, increased size if surgically reduced.
 
-:: Clothing Restriction a
+:: Clothing Restriction A Description
 
 Prevents you from ever wearing anything that would commonly be considered an \"accessory.\" Includes scarves, hats, piercings, pasties, jewelry, and so on. Kind of a bummer. Doesn't include items serving a specific necessary purpose, like prescription glasses. None of the Clothing restriction Curses include Relics if they are worn with the intention of making use of their effect.
 
-:: Shrunken Asset Description
+:: Shrunken Assets Description
 
 Decreases boob size/penis size to approximately minimal levels - about AA cup boobs ad a roughly 1cm (~0.5in) penis. They will resist surgical attempts at enhancement. Cannt be taken with any Asset Robustness Curses. (That's why you get so many poins for it.)
 
@@ -1042,7 +1042,7 @@ Gives you a pair of sharp, pointy, elfish ears. There are some humans on the sur
 
 :: Dizzying Heights Description
 
-Increases or decreases your current height by 5cm (2in), by your preference. This will take a very long time to get used to. All height changes in the Abyss must be in the same direction.
+Increases or decreases your current height by 5cm (2in), by your preference. This will take a very long time to get used to. All height changes in the Abyss must be in the same direction. (max. 5)
 
 :: Increased Sensitivity Description
 
@@ -1167,3 +1167,71 @@ Swells up your nipples, making them rather puffy, and noticeably increases the a
 
 Whenever you're having sex, you'll temporarily lose your memory of all your past sexual encounters, leading you to believe every time is your first. If you have one, you can also choose to regenerate your hymen to "complete the effect" if you like. It's not really an accurate indicator of virginity, so it doesn't matter either way. 
 
+
+:: CurseGrid [widget nobr]
+<<widget "CurseGrid">>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
+<</for>>
+<div class="cards-grid">
+<<for _name range _args[0]>>
+    <div>
+    <<set _curse = $curses.find(c => c.name === _name)>>
+    <<set _string = setup.ImagePath + _curse.pic>>
+    [img[ setup.ImagePath + _curse.pic ]]
+    <h2>_name</h2>
+    <p class="benefit">
+    + <<print _curse.corr>> corruption </p>
+    <<nobr>>
+    <<if _curse.name == "Shrunken Assets">> /* tree for curses with additional conditions */
+        <<if $playerCurses.some(e => e.name === "Asset Robustness A")|| $playerCurses.some(e => e.name === "Asset Robustness B")|| $playerCurses.some(e => e.name === "Asset Robustness C")|| $playerCurses.some(e => e.name === "Asset Robustness D")|| $playerCurses.some(e => e.name === "Asset Robustness E")>>
+            <<set _anyAssetRob=true>>
+        <<else>>
+            <<set _anyAssetRob=false>>
+        <</if>>
+
+        <<if $StoredCurse.name == "Asset Robustness A" || $StoredCurse.name == "Asset Robustness B"|| $StoredCurse.name == "Asset Robustness C"|| $StoredCurse.name == "Asset Robustness D"|| $StoredCurse.name == "Asset Robustness E">>
+            <<set _anyAssetRobMM=true>>
+        <<else>>
+            <<set _anyAssetRobMM=false>>
+        <</if>>
+
+        <<if _anyAssetRob || _anyAssetRobMM>>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>>
+    <<else>>
+        <<set _curseLimitation=false>>
+    <</if>>
+
+    <<if _curse.name == "Dizzying Heights">>/* tree for multiple instance curses */
+        <<set _maxCurses=5>>
+    <<else>>
+        <<set _maxCurses=1>>
+    <</if>>
+
+    <</nobr>>
+    <p>
+    <<if (_totalCurses.filter(e => e.name === _name).length >= _maxCurses && $StoredCurse.name != _curse.name) || (_totalCurses.filter(e => e.name === _name).length >= _maxCurses-1 && $StoredCurse.name== _curse.name)>>
+        @@.unreachable; Already taken 
+    <<elseif _curseLimitation==true>>  
+        @@.unreachable; This Curse can not be taken in combination with the other Curses you have already taken
+    <<else>>
+        <<print "[[Take on " + _name + "]]">>
+        <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>\
+        <br><br>
+            <<if $ManagedMisfortuneActive>>\
+                @@.unreachable; You can not store a new Curse while you are still affected by the Curse in Managed Misfortune.       
+            <<else>>\
+                <<print "[[Store " + _name +" in Managed Misfortune|Layer"+ $currentLayer +" Curses][$StoredCurse = _curse]]">>
+            <</if>>
+        <</if>>
+    <</if>>
+    </p>
+    <p><<include `_curse.name + " Description"`>></p>
+    </div>
+<</for>>
+</div>
+<</widget>>
