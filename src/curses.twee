@@ -217,7 +217,7 @@ type: ""
 name: "Submissiveness Rectification A",
 corr: 20,
 desc: "x",
-pic: "Curses/submissivenessrectificationA.png",
+pic: "Curses/subrectificationA.png",
 appDesc: "",
 type: "Libido"
 }>>
@@ -253,7 +253,7 @@ type: ""
 name: "Power Dom",
 corr: 25,
 desc: "x",
-pic: "Curses/powerdom.png",
+pic: "Curses/power dom.png",
 appDesc: "You are never able to sit back and let someone else take charge, neither in life nor in sex. ",
 type: "Libido"
 }>>
@@ -280,7 +280,7 @@ type: ""
 name: "Equal Opportunity",
 corr: 25,
 desc: "x",
-pic: "Curses/equalopportunity.png",
+pic: "Curses/equaloppurtunity.png",
 appDesc: "Gender is really not an issue for you when selecting sexual partners. ",
 type: ""
 }>>
@@ -1159,7 +1159,7 @@ Causes your entire body to be made out of sticky, slimy unicolor goo. All the bo
 
 Permanently changes your skin and eye colors to significantly different, visually distinct colors of your choice. You can choose if you want to go with unusual colors like pink or red, or just stick with the normal human range.
 
-:: Double Pepperomi Description
+:: Double Pepperoni Description
 
 Swells up your nipples, making them rather puffy, and noticeably increases the area of your areolae. Also makes them a bit more sensitive. Cute!
 
@@ -1256,12 +1256,57 @@ Whenever you're having sex, you'll temporarily lose your memory of all your past
         <<else>>
             <<set _curseLimitation=false>>
         <</if>> 
+    <<elseif _curse.name == "Submissiveness Rectification A">> 
+         <<if $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Power Dom">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
+    <<elseif _curse.name == "Submissiveness Rectification B">> 
+         <<if $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Power Dom">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
+    <<elseif _curse.name == "Power Dom">> 
+         <<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $StoredCurse.name == "Submissiveness Rectification A" || $playerCurses.some(e => e.name === "Submissiveness Rectification B") || $StoredCurse.name == "Submissiveness Rectification B">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
+    <<elseif _curse.name == "Absolute Pregnancy">> 
+         <<if $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
+    <<elseif _curse.name == "Omnitool">> 
+         <<if $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
+    <<elseif _curse.name == "Wacky Wombs">> 
+         <<if $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
+    <<elseif _curse.name == "Absolute Birth Control">> 
+         <<if $playerCurses.some(e => e.name === "Absolute Pregnancy")  || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
+            <<set _curseLimitation=true>>
+        <<else>>
+            <<set _curseLimitation=false>>
+        <</if>> 
     <<else>>
         <<set _curseLimitation=false>>
-    <</if>>
+    <</if>>  
 
+  
     <<if _curse.name == "Dizzying Heights">>/* tree for multiple instance curses */
         <<set _maxCurses=5>>
+    <<elseif _curse.name == "Wacky Wombs">> 
+        <<set _maxCurses=2>>
     <<else>>
         <<set _maxCurses=1>>
     <</if>>
