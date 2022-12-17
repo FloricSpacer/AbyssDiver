@@ -790,50 +790,54 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 Which Curse would you like to transfer to your willing companion? It can't be too bad if they agreed to take it on.
 
 <<nobr>>
-<<for _companion range $hiredCompanions>>
-	<<capture _companion>>
-		<<for $j = 0; $j < $playerCurses.length; $j++>>
-			<<if $j==0>>
-				<<print "_companion.name doesn't mind taking:">><br>
-			<</if>>
-			<<set _curse = $playerCurses[$j]>>
-			<<if setup.willingCurses[_companion.name].includes(_curse.name) && !_companion.curses.some(e=> e.name === _curse.name )>>
-				<<capture _curse>>
-					<<print "_curse.name">>
-					<<link "Choose" "Layer4 Steady1a">>
-						<<set _companion.curses.push(_curse)>>
+<<if $dubloons < ($skewedUsed * 5)>>
+	You do not have enough dubloons for an offering.
+<<else>>
+	<<for _companion range $hiredCompanions>>
+		<<capture _companion>>
+			<<for $j = 0; $j < $playerCurses.length; $j++>>
+				<<if $j==0>>
+					<<print "_companion.name doesn't mind taking:">><br>
+				<</if>>
+				<<set _curse = $playerCurses[$j]>>
+				<<if setup.willingCurses[_companion.name].includes(_curse.name) && !_companion.curses.some(e=> e.name === _curse.name )>>
+					<<capture _curse>>
+						<<print "_curse.name">>
+						<<link "Choose" "Layer4 Steady1a">>
+							<<set _companion.curses.push(_curse)>>
 
-						<<if _companion == $companionTwin >>
-							<<set _tempName = "Twin">>
-						<<else>>
-							<<set _tempName = _companion.name>>
-						<</if>>
+							<<if _companion == $companionTwin >>
+								<<set _tempName = "Twin">>
+							<<else>>
+								<<set _tempName = _companion.name>>
+							<</if>>
 
-						<<if _curse.type == "Age">>
-							<<set _string = "$AgeLog" + _tempName>>
-						<<elseif _curse.type == "Gender">>
-							<<set _string = "$GenderLog" + _tempName>>
-						<<elseif _curse.type == "Height">>
-							<<set _string = "$HeightLog" + _tempName>>
-						<<elseif _curse.type == "Handicap">>
-							<<set _string = "$HandicapLog" + _tempName>>
-						<<elseif _curse.type == "Libido">>
-							<<set _string = "$LibidoLog" + _tempName>>
-						<</if>>
-						<<if _curse.type != "">>
-							<<print "<<set " + _string + ".push(_curse)>>">>
-						<</if>>
+							<<if _curse.type == "Age">>
+								<<set _string = "$AgeLog" + _tempName>>
+							<<elseif _curse.type == "Gender">>
+								<<set _string = "$GenderLog" + _tempName>>
+							<<elseif _curse.type == "Height">>
+								<<set _string = "$HeightLog" + _tempName>>
+							<<elseif _curse.type == "Handicap">>
+								<<set _string = "$HandicapLog" + _tempName>>
+							<<elseif _curse.type == "Libido">>
+								<<set _string = "$LibidoLog" + _tempName>>
+							<</if>>
+							<<if _curse.type != "">>
+								<<print "<<set " + _string + ".push(_curse)>>">>
+							<</if>>
 
-						<<set $corruption += Math.round(_curse.corr / 2 ) >>
-						/* The CYOA states that the cost counter is shared between shrines. */
-						<<set $dubloons -= ($skewedUsed * 5)>>
-						<<set $skewedUsed += 1>>
-					<</link>><br>
-				<</capture>>
-			<</if>>
-		<</for>>
-	<</capture>>
-<</for>>
+							<<set $corruption += Math.round(_curse.corr / 2 ) >>
+							/* The CYOA states that the cost counter is shared between shrines. */
+							<<set $dubloons -= ($skewedUsed * 5)>>
+							<<set $skewedUsed += 1>>
+						<</link>><br>
+					<</capture>>
+				<</if>>
+			<</for>>
+		<</capture>>
+	<</for>>
+<</if>>
 <</nobr>>
 [[On second thought, maybe a more forceful approach is warrented|Layer4 Steady 2a]]
 [[Return to exploring layer 4|Layer4 Hub]]
@@ -846,11 +850,15 @@ Which Curse would you like to force on your unwilling companion?
 You hear a muffled sound from your incapacitated companion as you ponder your options.
 
 <<nobr>>
-<<for $i = 0; $i < $playerCurses.length; $i++>>
-	<<capture $i>>
-		<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady2b][$temp to $i]]">><br>
-	<</capture>>
-<</for>>
+<<if $dubloons < ($skewedUsed * 5)>>
+	You do not have enough dubloons for an offering.
+<<else>>
+	<<for $i = 0; $i < $playerCurses.length; $i++>>
+		<<capture $i>>
+			<<print $playerCurses[$i].name>><<print " ">><<print "[[Choose|Layer4 Steady2b][$temp to $i]]">><br>
+		<</capture>>
+	<</for>>
+<</if>>
 <</nobr>>
 
 <<return>>

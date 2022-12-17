@@ -614,49 +614,53 @@ As you pick up the dubloons from the scales, you notice that the luster of the s
 Which Curse would you like to transfer to your willing companion? It can't be too bad if they agreed to take it on.
 
 <<nobr>>
-<<for _companion range $hiredCompanions>>
-	<<capture _companion>>
-		<<for $j = 0; $j < $playerCurses.length; $j++>>
-			<<if $j==0>>
-				<<print "_companion.name doesn't mind taking:">><br>
-			<</if>>
-			<<if setup.willingCurses[_companion.name].includes($playerCurses[$j].name)>>
-				<<capture $j>>
-					<<print "$playerCurses[$j].name">>
-					<<link "Choose" "Layer3 Skewed1a">>
-						<<set _companion.curses.push($playerCurses[$j])>>
-						
-						<<if _companion == $companionTwin >>
-							<<set _tempName = "Twin">>
-						<<else>>
-							<<set _tempName = _companion.name>>
-						<</if>>
+<<if $dubloons < ($skewedUsed * 5)>>
+	You do not have enough dubloons for an offering.
+<<else>>
+	<<for _companion range $hiredCompanions>>
+		<<capture _companion>>
+			<<for $j = 0; $j < $playerCurses.length; $j++>>
+				<<if $j==0>>
+					<<print "_companion.name doesn't mind taking:">><br>
+				<</if>>
+				<<if setup.willingCurses[_companion.name].includes($playerCurses[$j].name)>>
+					<<capture $j>>
+						<<print "$playerCurses[$j].name">>
+						<<link "Choose" "Layer3 Skewed1a">>
+							<<set _companion.curses.push($playerCurses[$j])>>
+							
+							<<if _companion == $companionTwin >>
+								<<set _tempName = "Twin">>
+							<<else>>
+								<<set _tempName = _companion.name>>
+							<</if>>
 
-						<<if $playerCurses[$j].type == "Age">>
-							<<set _string = "$AgeLog" + _tempName>>
-						<<elseif $playerCurses[$j].type == "Gender">>
-							<<set _string = "$GenderLog" + _tempName>>
-						<<elseif $playerCurses[$j].type == "Height">>
-							<<set _string = "$HeightLog" + _tempName>>
-						<<elseif $playerCurses[$j].type == "Handicap">>
-							<<set _string = "$HandicapLog" + _tempName>>
-						<<elseif $playerCurses[$j].type == "Libido">>
-							<<set _string = "$LibidoLog" + _tempName>>
-						<</if>>
-						<<if _curse.type != "">>
-							<<print "<<set " + _string + ".push($playerCurses[$j])>>">>
-						<</if>>
+							<<if $playerCurses[$j].type == "Age">>
+								<<set _string = "$AgeLog" + _tempName>>
+							<<elseif $playerCurses[$j].type == "Gender">>
+								<<set _string = "$GenderLog" + _tempName>>
+							<<elseif $playerCurses[$j].type == "Height">>
+								<<set _string = "$HeightLog" + _tempName>>
+							<<elseif $playerCurses[$j].type == "Handicap">>
+								<<set _string = "$HandicapLog" + _tempName>>
+							<<elseif $playerCurses[$j].type == "Libido">>
+								<<set _string = "$LibidoLog" + _tempName>>
+							<</if>>
+							<<if _curse.type != "">>
+								<<print "<<set " + _string + ".push($playerCurses[$j])>>">>
+							<</if>>
 
-						<<set $targetCurse = $playerCurses[$j]>>
-						<<include "CurseRemoval">>
-						<<set $dubloons -= ($skewedUsed * 5)>>
-						<<set $skewedUsed += 1>>
-					<</link>><br>
-				<</capture>>
-			<</if>>
-		<</for>>
-	<</capture>>
-<</for>>
+							<<set $targetCurse = $playerCurses[$j]>>
+							<<include "CurseRemoval">>
+							<<set $dubloons -= ($skewedUsed * 5)>>
+							<<set $skewedUsed += 1>>
+						<</link>><br>
+					<</capture>>
+				<</if>>
+			<</for>>
+		<</capture>>
+	<</for>>
+<</if>>
 <</nobr>>
 [[On second thought, maybe a more forceful approach is warrented|Layer3 Skewed 2a]]
 [[Return to exploring layer 3|Layer3 Hub]]
@@ -669,11 +673,15 @@ Which Curse would you like to force on your unwilling companion?
 You hear a muffled sound from your incapacitated companion as you ponder your options.
 
 <<nobr>>
-<<for _i = 0; _i < $playerCurses.length; _i++>>
-	<<capture _i>>
-		<<print $playerCurses[_i].name>><<print " ">><<print "[[Choose|Layer3 Skewed2b][$temp to _i]]">><br>
-	<</capture>>
-<</for>>
+<<if $dubloons < ($skewedUsed * 5)>>
+	You do not have enough dubloons for an offering.
+<<else>>
+	<<for _i = 0; _i < $playerCurses.length; _i++>>
+		<<capture _i>>
+			<<print $playerCurses[_i].name>><<print " ">><<print "[[Choose|Layer3 Skewed2b][$temp to _i]]">><br>
+		<</capture>>
+	<</for>>
+<</if>>
 <</nobr>>
 
 <<return>>
