@@ -138,7 +138,8 @@ Macro.add('say', {
 Setting.addHeader("Content Settings");
 
 Setting.addToggle("MenCycleToggleFilter", {
-	label : "Hide messages containing information about your menstrual cycle "
+	label : "Hide messages containing information about your menstrual cycle ",
+	default  : 1,
 }); // default value not defined, so false is used
 
 Setting.addRange("appAgeControl", {
