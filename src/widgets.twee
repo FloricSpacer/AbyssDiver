@@ -170,7 +170,7 @@
 	<<set _handle.breastCor += _handle.lactation>>	
 
 :: PenisCorrected [nobr]
-<<if _handle.sex != "female">>
+<<if _handle.sex != "female" && _handle.sex != "doll-like" >>
 	<<set $x = 16 -_handle.appAge>>
 	<<set _handle.penisCor =_handle.penis>>
 	<<set $genderlvl = _handle.gender-1>>
@@ -333,7 +333,7 @@
 			<<if _handle.penis>0>>
 				<<set _handle.penis += 32>>
 			<</if>>
-			<<if _handle.breasts >0 || _GenderLog.some(e=> e==="Interact F")>>
+			<<if _handle.breasts >0 || _GenderLog.some(e=> e==="Interact G")>>
 				<<set _handle.breasts += 32>>
 			<</if>>
 		<</if>>
@@ -363,7 +363,7 @@
 				<<set _handle.sex = "male">>
 				<<set _handle.womb -= 1>>
 				<<set _handle.breasts = 0>>
-				<<if _i==$hiredCompanions.length>>
+				<<if _i==$hiredCompanions.length && _handle.womb == 0>>
 					<<set $menCycleFlag = false>>
 				<</if>>
 			<</if>>
@@ -389,6 +389,45 @@
 				<<set _handle.penis = 3 + _handle.modpenis>>
 			<</if>>
 			<<set _handle.sex = "futa">>
+		<</if>>
+
+		<<if _genderEvent.name == "A Little Extra">>
+			<<if _handle.penisCor == 0 || ($curse107.variation == "vagina" && _handle.sex == "futa")>>
+				<<set _handle.vagina += 1>>
+				<<set _handle.womb += 1>>
+			<<elseif _handle.vagina == 0 || ($curse107.variation == "penis" && _handle.sex == "futa")>>
+				<<set _handle.doublePenis = true>>
+			<</if>>
+		<</if>>
+
+		<<if _genderEvent.name == "Null">>
+			<<if _handle.penisCor > 0>>
+				<<set _handle.penis = 0>>
+				<<if _GenderLog.some(e=> e==="Interact A")>>
+					<<set _handle.breasts -= 1>>
+				<<elseif _GenderLog.some(e=> e==="Interact B")>>
+					<<set _handle.breasts -= 2>>
+				<<elseif _GenderLog.some(e=> e==="Interact C")>>
+					<<set _handle.breasts -= 4>>
+				<<elseif _GenderLog.some(e=> e==="Interact D")>>
+					<<set _handle.breasts -= 6>>
+				<<elseif _GenderLog.some(e=> e==="Interact E")>>
+					<<set _handle.breasts -= 8>>
+				<<elseif _GenderLog.some(e=> e==="Interact F")>>
+					<<set _handle.breasts -= 16>>
+				<<elseif _GenderLog.some(e=> e==="Interact G")>>
+					<<set _handle.breasts -= 32>>																							
+				<</if>>
+				<<set _handle.breasts += _handle.modbreasts>>
+			<</if>>
+			<<if _handle.vagina > 0>>
+				<<set _handle.vagina = 0>>
+				<<set _handle.womb -= 1 >>
+				<<if _i==$hiredCompanions.length && _handle.womb == 0>>
+					<<set $menCycleFlag = false>>
+				<</if>>
+			<</if>>
+			<<set _handle.sex = "doll-like">>
 		<</if>>
 
 		<<if _genderEvent.name == "Wacky Wombs">>
@@ -1403,6 +1442,7 @@
 		hair: $app.ohair,
 		penis: $app.openis,
 		penisCor: $app.openis,
+		doublePenis: false,
 		modpenis: 0,
 		vagina: 0,
 		gender: $app.ogender,
@@ -1484,6 +1524,7 @@
 		hair: $app.hairColor,
 		penis: $app.openis,
 		penisCor: $app.openis,
+		doublePenis: false,
 		modpenis: 0,
 		vagina: 0,
 		gender: $app.ogender,
