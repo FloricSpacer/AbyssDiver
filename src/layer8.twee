@@ -10,13 +10,13 @@
 \
 @@.layerTitle;
 <<nobr>>
-<<if $L8visit % 3 == 0>>
-[img[setup.ImagePath+'Layer Intros/l8alt2.png']]
-<<elseif $L8visit % 3 == 2>>
-[img[setup.ImagePath+'Layer Intros/bedlam.png']]
-<<else>>
-[img[setup.ImagePath+'Layer Intros/l8alt3.png']]
-<</if>>
+	<<if $L8visit % 3 == 0>>
+	[img[setup.ImagePath+'Layer Intros/l8alt2.png']]
+	<<elseif $L8visit % 3 == 2>>
+	[img[setup.ImagePath+'Layer Intros/bedlam.png']]
+	<<else>>
+	[img[setup.ImagePath+'Layer Intros/l8alt3.png']]
+	<</if>>
 <</nobr>>
 !Layer 8 - Labyrinthine Bedlam
 @@After pushing through the gate, you fall. No matter any power of flight, a mysterious force pulls you down. You keep falling for several minutes, through a white, featureless void. You slowly realize that your surroundings aren't as empty as they first appear; the monochrome features merely blend into their surroundings. An Escheresque tangle of impossible and entirely impractical architecture flits past you, filled to the brom with upside-down staircases, recursive loops, and non-euclidean shapes that are difficult to wrap your head around - all of these float in a lonely void, painted in a violent, stark white.
@@ -527,7 +527,28 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 [[Continue exploring the eighth layer|Layer8 Hub]]
 
 
-:: Layer8 Curses [image layer8]
+:: Layer8 Curses  [layer3 cards nobr]
+<p><<CarryAdjust>></p>
+
+<p><<if $escBalDepl==0>>
+	[[Return to exploring layer 8|Layer8 Hub]]
+<<else>>\
+	[[Return to your balloon|Escape Balloon L8]]
+<</if>></p>
+
+<p>[[Allow the Abyss to bestow a random Curse upon you|Layer8 Curses Random]]</p>
+
+<<CurseGrid `["Libido Reinforcement F", "Gender Reversal F", "Asset Robustness F", "Urine Reamplification B", "Eye on the Prize", "Deafening Silence", "Taciturn Turnaround", "Ampu-Q-tie", "Nose Goes", "Arm Army", "A Little Extra", "Null", "Seafolk", "Taken for Granite", "Double Trouble", "Conjoined"]`>>
+
+<p><<if $escBalDepl==0>>
+	[[Return to exploring layer 8|Layer8 Hub]]
+<<else>>\
+	[[Return to your balloon|Escape Balloon L8]]
+<</if>></p>
+
+<p>[[Allow the Abyss to bestow a random Curse upon you|Layer8 Curses Random]]</p>/*  [image layer8]
+
+
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-curses.png']]<<GenderCorrected>>
 
 <<nobr>>
@@ -750,7 +771,7 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 	[[Return to exploring layer 8|Layer8 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L8]]
-<</if>>
+<</if>>*/
 
 :: Layer8 Curses Random [layer8]
 <<nobr>>
@@ -889,9 +910,10 @@ You have successfully taken on the $curse100.name Curse. Hopefully you are ok wi
 <<include "Eye on the Prize Retrieval">>
 
 [[Accept more Curses from the eighth layer|Layer8 Curses]]
-<<if $escBalDepl==0>>
+
+<<if $escBalDepl==0>>\
 	[[Return to exploring layer 8|Layer8 Hub]]
-<<else>>
+<<else>>\
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
 
@@ -920,13 +942,6 @@ You take a moment to recover and you feel your eye<<if $eyeRemove > 1>>s<</if>>.
 
 You have successfully taken on the $curse101.name Curse. Hopefully you are ok with accepting the permanent consequences.
 
-[[Accept more Curses from the eighth layer|Layer8 Curses]]
-<<if $escBalDepl==0>>
-	[[Return to exploring layer 8|Layer8 Hub]]
-<<else>>
-	[[Return to your balloon|Escape Balloon L8]]
-<</if>>
-
 
 :: Take on Deafening Silence [layer8]
 <<set $playerCurses.push($curse102)>><<set $corruption += $curse102.corr>><<set $HandicapLog.push($curse102)>>
@@ -937,9 +952,10 @@ Just when you think you can't handle another moment, everything goes profoundly 
 You have successfully taken on the $curse102.name Curse. Hopefully you are ok with accepting the permanent consequences.
 
 [[Accept more Curses from the eighth layer|Layer8 Curses]]
-<<if $escBalDepl==0>>
+
+<<if $escBalDepl==0>>\
 	[[Return to exploring layer 8|Layer8 Hub]]
-<<else>>
+<<else>>\
 	[[Return to your balloon|Escape Balloon L8]]
 <</if>>
 
@@ -976,14 +992,18 @@ You have successfully taken on the $curse103.name Curse. Hopefully you are ok wi
 Which limbs do you want to amputate?
 
 <<radiobutton "$curse104.variation" 'A' checked>> An arm
-<<radiobutton "$curse104.variation" 'L' checked>> A leg
-<<radiobutton "$curse104.variation" 'AL' checked>> An arm and a leg
-<<radiobutton "$curse104.variation" 'LL' checked>> Both legs
-<<radiobutton "$curse104.variation" 'ALL' checked>> An arm and both legs
+<<if !$playerCurses.some(e => e.name === "Seafolk")>>\
+	<<radiobutton "$curse104.variation" 'L'>> A leg 
+	<<radiobutton "$curse104.variation" 'AL' >> An arm and a leg
+	<<radiobutton "$curse104.variation" 'LL' >> Both legs
+	<<radiobutton "$curse104.variation" 'ALL' >> An arm and both legs
+<</if>>\
 <<if ~$BionicArm>>\
-	<<radiobutton "$curse104.variation" 'AA' checked>> Both arms
-	<<radiobutton "$curse104.variation" 'AAL' checked>> Both arms and a leg
-	<<radiobutton "$curse104.variation" 'AALL' checked>> Amputate all my limbs!
+	<<radiobutton "$curse104.variation" 'AA' >> Both arms
+	<<if !$playerCurses.some(e => e.name === "Seafolk")>>\
+		<<radiobutton "$curse104.variation" 'AAL' >> Both arms and a leg
+		<<radiobutton "$curse104.variation" 'AALL' >> Amputate all my limbs!
+	<</if>>\
 <</if>>\
 
 :: Apply Stored Ampu-Q-tie Curse
@@ -994,19 +1014,12 @@ Which limbs do you want to amputate?
 
 :: Ampu-Q-tie Taken [nobr]
 <<set $playerCurses.push($curse104)>><<set $HandicapLog.push($curse104)>>
-<<set $corruption += $curse104.corr * length($curse104.variation) >>
+<<set $corruption += $curse104.corr * $curse104.variation.length >>
 
 :: Ampu-Q-tie Retrieval [layer8]
 You lose your limbs, ouch. 
 
 You have successfully taken on the $curse104.name Curse. Hopefully you are ok with accepting the permanent consequences.
-
-[[Accept more Curses from the eighth layer|Layer8 Curses]]
-<<if $escBalDepl==0>>
-	[[Return to exploring layer 8|Layer8 Hub]]
-<<else>>
-	[[Return to your balloon|Escape Balloon L8]]
-<</if>>
 
 :: Take on Nose Goes [layer8]
 <<set $playerCurses.push($curse105)>><<set $corruption += $curse105.corr>><<set $HandicapLog.push($curse105)>>
