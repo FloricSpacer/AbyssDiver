@@ -1049,9 +1049,13 @@ You have successfully taken on the $curse106.name Curse. Hopefully you are ok wi
 :: Take on A Little Extra [layer8]
 <<set $playerCurses.push($curse107)>><<set $corruption += $curse107.corr>><<set $GenderLog.push($curse107)>>
 
-You have successfully taken on the $curse107.name Curse. Hopefully you are ok with accepting the permanent consequences.
-
-Note: Some effects of this Curse are not yet implemented.
+<<if $app.sex != "futa">>
+	You have successfully taken on the $curse107.name Curse. Hopefully you are ok with accepting the permanent consequences.
+<<else>>
+	The miasma of the curse is swirling around both your genitals, you can focus it on either to dublicate them.
+	<<radiobutton "$curse107.variation" 'vagina' checked>> An extra vagina
+	<<radiobutton "$curse107.variation" 'penis'>> An extra penis 
+<</if>>
 
 [[Accept more Curses from the eighth layer|Layer8 Curses]]
 <<if $escBalDepl==0>>
@@ -1061,11 +1065,28 @@ Note: Some effects of this Curse are not yet implemented.
 <</if>>
 
 :: Take on Null [layer8]
-<<set $playerCurses.push($curse108)>><<set $corruption += $curse108.corr>><<set $GenderLog.push($curse108)>>
-
+<<nobr>>
+	<<set $playerCurses.push($curse108)>><<set $corruption += $curse108.corr>><<set $GenderLog.push($curse108)>>
+	<<if $playerCurses.some(e => e.name === "Double Pepperoni")>>
+		<<set $targetCurse = $curse39>>
+		<<include "CurseRemoval">>
+		<<set $corruption -= $targetCurse.corr>>
+		You feel the Double Pepperoni Curse leaving your body.<br>
+	<</if>>
+	<<if $playerCurses.some(e => e.name === "Softie")>>
+		<<set $targetCurse = $curse51>>
+		<<include "CurseRemoval">>
+		<<set $corruption -= $targetCurse.corr>>
+		You feel the Softie Curse leaving your body.<br>
+	<</if>>
+	<<if $playerCurses.some(e => e.name === "Hard Mode")>>
+		<<set $targetCurse = $curse52>>
+		<<include "CurseRemoval">>
+		<<set $corruption -= $targetCurse.corr>>
+		You feel the Hard Mode Curse leaving your body.<br>
+	<</if>>
+<</nobr>>
 You have successfully taken on the $curse108.name Curse. Hopefully you are ok with accepting the permanent consequences.
-
-Note: Some effects of this Curse are not yet implemented.
 
 [[Accept more Curses from the eighth layer|Layer8 Curses]]
 <<if $escBalDepl==0>>
