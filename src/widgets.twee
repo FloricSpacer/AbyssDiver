@@ -392,10 +392,10 @@
 		<</if>>
 
 		<<if _genderEvent.name == "A Little Extra">>
-			<<if _handle.penisCor == 0 || ($curse107.variation == "vagina" && _handle.sex == "futa")>>
+			<<if _handle.vagina > 0 && ($curse107.variation != "penis" && _handle.sex == "futa")>>
 				<<set _handle.vagina += 1>>
 				<<set _handle.womb += 1>>
-			<<elseif _handle.vagina == 0 || ($curse107.variation == "penis" && _handle.sex == "futa")>>
+			<<elseif _handle.penisCor > 0 && ($curse107.variation !="vagina"  && _handle.sex == "futa")>>
 				<<set _handle.doublePenis = true>>
 			<</if>>
 		<</if>>
@@ -473,9 +473,25 @@
 
 		<<if _genderEvent.name == "Doll Transformation">>
 			<<set _handle.gender += 1>>
-			<<if _handle.penis>0 >>
+			<<if _handle.doublePenis==true >>
+				<<set _handle.doublePenis = false>>
+			<<elseif _handle.penis>0 >>
 				<<set _handle.penis -=1>>
+			<<elseif _handle.vagina>0>>
+				<<set _handle.sex = "female">>
+				<<if _handle.appAge< 10 >>
+					<<set _handle.vagina -=1>>
+					<<set _handle.womb -= 1>>
+					<<if _handle.womb == 0>>
+						<<set $menCycleFlag = false>>
+					<</if>>
+					<<if _handle.vagina == 0>>
+						<<set _handle.sex = "doll-like">>
+					<</if>>
+				<</if>>
 			<<else>>
+				<<set _handle.sex = "doll-like">>
+				/*
 				<<if _handle.vagina<1>>
 					<<set _handle.vagina=1>>
 					<<set _handle.womb += 1>>
@@ -488,7 +504,9 @@
 						<<set $menCycleT = $time - 7>>
 						<<set $heatCycleT = $time -7>>
 					<</if>>
-				<</if>>
+
+				
+				<</if>> */
 			<</if>>
 		<</if>>
 			
