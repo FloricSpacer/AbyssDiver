@@ -137,9 +137,8 @@
 		<</if>>
 
 	<<else>>
-		<<print "<<set _tempPreg = $preg" + _tempName + ">>">>
 		<<print "<<set _tempBirth = $lastBirth" + _tempName + ">>">>
-		<<set _due = 280 + _tempPreg>>
+		<<set _due = 280 + _handle.pregnantT>>
 		<<if _tempName=="Lily" && $LilyConvoLac=="true">>
 			<<set _flag=true>>
 		<<else>>
@@ -150,14 +149,14 @@
 			<<set _handle.lactation += 2>>
 		<</if>>
 	<</if>>
-	<<if _tempPreg!=9999>>
-		<<if $time - _tempPreg>= 90 & $time - _tempPreg<=130 >>
+	<<if _handle.pregnantT != 9999>>
+		<<if $time - _handle.pregnantT>= 90 & $time - _tempPreg<=130 >>
 			<<set _handle.breastsCor += 0.5>>
-		<<elseif $time - _tempPreg> 130 & $time - _tempPreg<=180 >>
+		<<elseif $time - _handle.pregnantT> 130 & $time - _tempPreg<=180 >>
 			<<set _handle.breastsCor += 1>>
-		<<elseif $time - _tempPreg> 180 & $time - _tempPreg<=240>>
+		<<elseif $time - _handle.pregnantT> 180 & $time - _tempPreg<=240>>
 			<<set _handle.breastsCor += 1.5>>
-		<<elseif $time - _tempPreg> 240 & $time - _tempPreg<=_due>>
+		<<elseif $time - _handle.pregnantT> 240 & $time - _tempPreg<=_due>>
 			<<set _handle.lactation += 1>> 
 			<<set _handle.breastsCor += 1>>
 		<</if>>
