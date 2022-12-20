@@ -129,10 +129,10 @@
 		<<if $time-$menCycleT-$menCycleVar>20 && $menCycleFlag == true>>
 			<<set _handle.breastsCor += 1>> 
 		<</if>>
-		<<set _tempName = $pregnantT>>
+		<<set _tempName = $app.pregnantT>>
 		<<set _due = $due>>
 
-		<<if  ($time - $pregnantT> 270 & $time - $pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
+		<<if  ($time - $app.pregnantT> 270 & $time - $app.pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
 			<<set _handle.lactation += 2>>
 		<</if>>
 
@@ -236,7 +236,7 @@
 		<<set _handle.vagina = 1>>
 		<<set _handle.womb = 1>>
 		<<if _i==$hiredCompanions.length>>
-			<<if $pregnantT==9999>>
+			<<if $app.pregnantT==9999>>
 				<<set $menCycleFlag = true>>
 			<</if>>
 			<<if $menCycleT_flag == false>>
@@ -347,7 +347,7 @@
 				<<set _handle.sex = "female">>
 				<<set _handle.womb += 1>>
 				<<if _i==$hiredCompanions.length>>
-					<<if $pregnantT==9999>>
+					<<if $app.pregnantT==9999>>
 						<<set $menCycleFlag = true>>
 					<</if>>
 					<<if $menCycleT_flag == false>>
@@ -374,7 +374,7 @@
 				<<set _handle.vagina = 1>>
 				<<set _handle.womb += 1>>
 				<<if _i==$hiredCompanions.length>>
-					<<if $pregnantT==9999>>
+					<<if $app.pregnantT==9999>>
 						<<set $menCycleFlag = true>>
 					<</if>>
 					<<if $menCycleT_flag == false>>
@@ -434,7 +434,7 @@
 			<<if (_handle.womb == 0 && _handle.sex=="male")||(_handle.womb == 1 && _handle.sex!="male")>>
 				<<set _handle.womb1 = $curse35.variation1>>
 				<<if _i==$hiredCompanions.length>>
-					<<if $pregnantT==9999>>
+					<<if $app.pregnantT==9999>>
 						<<set $menCycleFlag = true>>
 					<</if>>
 					<<if $menCycleT_flag == false>>
@@ -495,7 +495,7 @@
 				<<if _handle.vagina<1>>
 					<<set _handle.vagina=1>>
 					<<set _handle.womb += 1>>
-					<<if $pregnantT==9999>>
+					<<if $app.pregnantT==9999>>
 						<<set $menCycleFlag = true>>
 					<</if>>
 					<<if $menCycleT_flag == false>>
@@ -515,7 +515,7 @@
 		<<print "<<set $lastBirth" + _tempName + " = 9999>>">>
 		<<if _i==$hiredCompanions.length>>
 			<<set $due=9999>>
-			<<set $pregnantT=9999>>
+			<<set $app.pregnantT=9999>>
 		<<else>>
 			<<print "<<set $lastBirth" + _tempName + " = 9999>>">>
 		<</if>>
@@ -548,7 +548,7 @@
 
 	<<if _handle.curses.some(e => e.name === "Eggxellent")>>
 		<<if _i==$hiredCompanions.length>>
-			<<if $pregnantT==9999>>
+			<<if $app.pregnantT==9999>>
 				<<set $menCycleFlag = true>>
 			<</if>>
 			<<if $menCycleT_flag == false>>
@@ -1273,21 +1273,21 @@
 			<<set _handle.HandicapThreat -=2>>
 		<</if>>
 
-		<<if $time - $pregnantT< 45 & $time - $pregnantT>= 35>>
+		<<if $time - $app.pregnantT< 45 & $time - $app.pregnantT>= 35>>
 			<<set _handle.HandicapMovement -=2>>
-		<<elseif $time - $pregnantT< 90 & $time - $pregnantT>= 45>>
+		<<elseif $time - $app.pregnantT< 90 & $time - $app.pregnantT>= 45>>
 			<<set _handle.HandicapThreat -=2>>
 			<<set _handle.HandicapMovement -=4>>
 			<<set _handle.HandicapCarry -=3>>
-		<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120>>
+		<<elseif $time - $app.pregnantT< 180 & $time - $app.pregnantT>= 120>>
 			<<set _handle.HandicapThreat -=1>>
 			<<set _handle.HandicapMovement -=2>>
 			<<set _handle.HandicapCarry -=2>>
-		<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180>>
+		<<elseif $time - $app.pregnantT< 240 & $time - $app.pregnantT>=180>>
 			<<set _handle.HandicapThreat -=2>>
 			<<set _handle.HandicapMovement -=3>>
 			<<set _handle.HandicapCarry -=3>>
-		<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240>>
+		<<elseif $time - $app.pregnantT< $due & $time - $app.pregnantT>=240>>
 			<<set _handle.HandicapThreat -=4>>
 			<<set _handle.HandicapMovement -=5>>
 			<<set _handle.HandicapCarry -=5>>
@@ -1471,6 +1471,7 @@
 		modbreasts: 0,
 		breastsCor: $app.obreast,
 		lactation: 0,
+		pregnantT: $app.pregnantT,
 		ears: "normal human",
 		height: $app.oheight,
 		modheight: 0,
@@ -1553,6 +1554,7 @@
 		modbreasts: 0,
 		breastsCor: $app.obreast,
 		lactation: 0,
+		pregnantT: $app.pregnantT,
 		ears: "normal human",
 		height: $app.oheight,
 		modheight: 0,
@@ -1743,16 +1745,16 @@
 		<<set $pregChance = 0>>	
 	<</if>>
 	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>
-		<<set $pregChance = 1>>	
+		<<set $pregChance = 10>>	
 	<</if>>	
 <</if>>
 
-<<if $pregnantT <= $time - 14>>
-	<<if $time - $pregnantT< 35 & $time - $pregnantT>= 28 & $menFirstCycle == false>>
+<<if $app.pregnantT <= $time - 14>>
+	<<if $time - $app.pregnantT< 35 & $time - $app.pregnantT>= 28 & $menFirstCycle == false>>
 		@@.alert1; You were expecting for your cycle to have started by now. But no need to stress, periods can be late, right?<br><br>
-	<<elseif $time - $pregnantT< 45 & $time - $pregnantT>= 35 & $menFirstCycle == false>>
+	<<elseif $time - $app.pregnantT< 45 & $time - $app.pregnantT>= 35 & $menFirstCycle == false>>
 		@@.alert1; Okay, time for stress, your period has never been this late. Could this mean you're pregnant?<br><br>
-	<<elseif $time - $pregnantT< 90 & $time - $pregnantT>= 45 && $random == 0>>
+	<<elseif $time - $app.pregnantT< 90 & $time - $app.pregnantT>= 45 && $random == 0>>
 		@@.alert1; You feel tired all the time, and on top of that you have bouts of extreme nausea. This is going to hamper your travel time and ability to deal with threats.
 		<<if $menFirstCycle == false>>
 			@@.alert1; This means it's official now, you're pregnant. What are you going to do about it?	
@@ -1760,17 +1762,17 @@
 			@@.alert1; The miasma must be inducing some sort of annoying illness. Maybe it will blow over eventually or perhaps you need some medical care.
 		<</if>>
 		<br><br>
-	<<elseif $time - $pregnantT< 120 & $time - $pregnantT>= 90 & $menFirstCycle == false && $random == 0>>
+	<<elseif $time - $app.pregnantT< 120 & $time - $app.pregnantT>= 90 & $menFirstCycle == false && $random == 0>>
 		@@.alert1; At the moment the fact that you are pregnant is occupying your mind quite a bit. Other than that, you actually feel pretty much fine. You notice that your breasts and butt have grown a little, but nothing too shocking. Okay, maybe you're also a bit more tired tired, but nothing to worry about.<br><br>
-	<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120 & $menFirstCycle == false && $random == 0>>
+	<<elseif $time - $app.pregnantT< 180 & $time - $app.pregnantT>= 120 & $menFirstCycle == false && $random == 0>>
 		@@.alert1; You're really starting to get a nice and round pregnancy belly. You sometimes even feel a little kick from inside you. However, the state of your pregnancy is beginning to hinder you more and more during your travels. <br><br>
-	<<elseif $time - $pregnantT< 180 & $time - $pregnantT>= 120 & $menFirstCycle == true && $random == 0>>
+	<<elseif $time - $app.pregnantT< 180 & $time - $app.pregnantT>= 120 & $menFirstCycle == true && $random == 0>>
 		@@.alert1; You're starting to put on some serious weight. It is by far most noticable around your belly, which also sometimes seems to tickle from within. Your butt, thighs and <<if $app.breastCor<3 & $app.sex=="male">>pecs<<else>>breasts<</if>> all also seem to have accumalted some fat. Unless you lose the weight again, it will slow you down during your travels. <br><br>
-	<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180 & $menFirstCycle == false && $random == 0>>
+	<<elseif $time - $app.pregnantT< 240 & $time - $app.pregnantT>=180 & $menFirstCycle == false && $random == 0>>
 		@@.alert1; You're unmistakeably pregnant at the moment. You feel your child moving and turning frequently within your belly. However, doing nearly anything drains your energy faster than usual. Perhaps it's simply the added weight or maybe the pregnancy itself is sucking the energy out of you. Whatever it is, with a large, round belly and about half of your normal energy, navigating the Abyss has become quite a bit more difficult. <br><br>	
-	<<elseif $time - $pregnantT< 240 & $time - $pregnantT>=180 & $menFirstCycle == true && $random == 0>>
+	<<elseif $time - $app.pregnantT< 240 & $time - $app.pregnantT>=180 & $menFirstCycle == true && $random == 0>>
 		@@.alert1; You may have blocked the thought subconsiously for as long as you could. But it has become unmistakeable. You're pregnant and have been for quite a while. Your child is frequently moving and turning inside your swollen belly. What you do know is that anything drains your energy faster than usual. Perhaps it's simply the added weight or maybe it the pregnancy itself sucking the energy out of you. Whatever it is, with a big, round belly and about half of your normal energy, navigating the Abyss has become quite a bit more difficult. <br><br>	
-	<<elseif $time - $pregnantT< $due & $time - $pregnantT>=240 && $random == 0>>
+	<<elseif $time - $app.pregnantT< $due & $time - $app.pregnantT>=240 && $random == 0>>
 		@@.alert2; You are very, very pregnant, to the point it has become cumbersome to do nearly anything. Standing up, sitting down, bending over, and even sleeping have become pretty serious tasks for you. Walking can only be done short distances while running and fighting are completely out of the question. The milk from your breasts has also started to stain your clothes more as time goes on. There's no way around it, you have a hard time traversing the Abyss like this. Be sure to stock up supplies! You'll be immobile for a few days after going into labor!<br><br>
 	<</if>>
 <</if>>
@@ -1851,13 +1853,13 @@
 <<widget "PregCheck">>
 <<set _temp = random(0,100)>>
 
-<<if _temp <= $pregChance*100 & $pregnantT==9999 & $menCycleFlag == true >>
+<<if _temp <= $pregChance*100 & $app.pregnantT==9999 & $menCycleFlag == true >>
 	<<if  $playerCurses.some(e => e.name === "Eggxellent")>>
 		<<set $EggsFertilized = true>>
 	<<else>>
-		<<set $pregnantT = $time -14>>
+		<<set $app.pregnantT = $time -14>>
 		<<set $menCycleFlag = false>>
-		<<set $due = $pregnantT+280+random(-7,7) >>
+		<<set $due = $app.pregnantT+280+random(-7,7) >>
 	<</if>>
 <</if>>
 
@@ -1868,12 +1870,7 @@
 <<for _i=0; _i<$hiredCompanions.length; _i++ >>
 	<<set _temp = random(0,100)>>
 	<<if $hiredCompanions[_i].curses.some(e => e.name === "Omnitool") && $hiredCompanions[_i].womb > 0 && (_temp < 20 || $hiredCompanions[_i].curses.some(e => e.name === "Absolute Pregnancy")) && !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control")>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name>>
-			<<set $pregTwin = $time-14>>
-		<<else>>
-			<<set _string = "$preg" + $hiredCompanions[_i].name >>
-			<<print "<<set" + _string + " = $time - 14>>">>
-		<</if>>
+		<<set $hiredCompanions[_i].pregnantT = $time-14>>
 	<</if>>
 <</for>>
 <</widget>>
@@ -2191,7 +2188,7 @@
 	<<elseif $TwinConvo2==false && $companionTwin.affec>15 && $TwinConvo1 && 0>>
 		<<set _temp += 1 >>
 	<</if>>
-	<<if $TwinConvoPreg==false && $time - $pregTwin > 120>>
+	<<if $TwinConvoPreg==false && $time - $companionT.pregnantT > 120>>
 		<<set _temp += 1 >>
 	<</if>>
 <</if>>
@@ -2222,3 +2219,89 @@
 <</widget>>
 
 <<widget "PluralS">><<if _args[0] > 1>>s<</if>><</widget>>
+
+:: widget for random sex scene selection with companions [widget nobr]
+<<widget "randomSexSelect">>
+<<for _i=0; _i<1; _i++>>
+	<<set _randCompanion = random(0,$hiredCompanions.length-1)>>
+	<<if ($hiredCompanions[_randCompanion].curses.some(e => e.name === "Absolute Pregnancy") && $playerCurses.some(e => e.name === "Absolute Birth Control")) || ($hiredCompanions[_randCompanion].curses.some(e => e.name === "Absolute Birth Control") && $playerCurses.some(e => e.name === "Absolute Pregnancy"))>>
+		<<set _i -=1>>
+	<</if>>
+<</for>>
+<<set _handle = $hiredCompanions[_randCompanion]>>
+<<include "SexAvailable">>
+<<set _temp = random(-3,3)+$app.subdom-_handle.subdom>>
+<<if _temp > 0>>
+
+	<<for _i=0; _i<1; _i++>>
+	<<set _j =random(0, _sexOptions.length-1) >>
+		<<if _sexOptions[_j].contains("Sub")>>
+			<<set _selection = _sexOptions[_j]>>
+		<<else>>
+			<<set _i -=1>>
+		<</if>>
+	<</for>>
+
+<<elseif _temp< 0>>
+
+	<<for _i=0; _i<1; _i++>>
+	<<set _j =random(0, _sexOptions.length-1) >>
+		<<if _sexOptions[_j].contains("Dom")>>
+			<<set _selection = _sexOptions[_j]>>
+		<<else>>
+			<<set _i -=1>>
+		<</if>>
+	<</for>>
+
+<<elseif _temp == 0>>
+
+	<<set _j =random(0, _sexOptions.length-1) >>
+	<<set _selection = _sexOptions[_j]>>
+
+<</if>>
+<</widget>>
+
+:: SexAvailable[nobr]
+<<set _sexOptions = []>>
+<<if _handle.sex != "doll-like" >>
+	<<set _sexOptions.push("Oral Dom")>>
+<</if>>
+<<if $app.sex != "doll-like" >>
+	<<set _sexOptions.push("Oral Sub")>>
+<</if>>
+<<if _handle.doublePenis == true && $app.vagina > 0 >>
+	<<set _sexOptions.push("DP Sub")>>
+<</if>>
+<<if $app.doublePenis == true && _handle.vagina > 0 >>
+	<<set _sexOptions.push("DP Dom")>>
+<</if>>
+<<if _handle.penisCor>=2>>
+	<<set _sexOptions.push("Anal Sub")>>
+	<<if $app.penisCor >= 2>>
+		<<set _sexOptions.push("Anal Dom")>>
+		<<if _handle.vagina > 0>>
+			<<set _sexOptions.push("Regular Dom")>>
+		<</if>>
+		<<if _handle.breastCor > 2 >>
+			<<set _sexOptions.push("Boobjob Sub")>>
+		<</if>>
+	<</if>>
+	<<if $app.vagina > 0>>
+		<<set _sexOptions.push("Regular Sub")>>
+	<</if>>
+	<<if $app.breastsCor > 0>>
+		<<set _sexOptions.push("Boobjob Dom")>>
+	<</if>>
+<<else>>
+	<<if $app.penisCor >= 2>>
+		<<set _sexOptions.push("Anal Dom")>>
+		<<if _handle.vagina > 0>>
+			<<set _sexOptions.push("Regular Dom")>>
+		<</if>>
+		<<if _handle.breastCor > 2 >>
+			<<set _sexOptions.push("Boobjob Sub")>>
+		<</if>>
+	<<else>>
+		<<set _sexOptions.push("Sex Scissor Sub/Dom")>>
+	<</if>>
+<</if>>
