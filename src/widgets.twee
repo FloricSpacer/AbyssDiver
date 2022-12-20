@@ -101,7 +101,6 @@
 	<<set $x = 18 -_handle.appAge>>
 	<<set _handle.breastsCor =_handle.breasts>>
 	<<set _handle.lactation = 0>>
-	_handle.name start:_handle.breasts and _handle.breastsCor .
 	<<set $genderlvl = _handle.gender-1>>
 
 	<<if $genderlvl< 0 >>
@@ -116,8 +115,7 @@
 			<<set _handle.breastsCor =0>>
 		<</if>>
 	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Lactation Rejuvination A")>>
+ 	<<if _handle.curses.some(e => e.name === "Lactation Rejuvination A")>>
 		<<set _handle.lactation += 1>>
 	<</if>>
 	<<if _handle.curses.some(e => e.name === "Lactation Rejuvination B")>>
@@ -134,7 +132,7 @@
 		<<set _due = $due>>
 
 		<<if  ($time - $app.pregnantT> 270 & $time - $app.pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
-			<<set _handle.lactation += 2>>test
+			<<set _handle.lactation += 2>>
 		<</if>>
 
 	<<else>>
@@ -147,18 +145,18 @@
 		<</if>>
 
 		<<if ($time - _tempBirth < 30 && _tempBirth!=9999)|| _flag>>
-			<<set _handle.lactation += 2>>test2
+			<<set _handle.lactation += 2>>
 		<</if>>
 	<</if>>
 	<<if _handle.pregnantT != 9999>>
 		<<if $time - _handle.pregnantT>= 90 & $time - _tempPreg<=130 >>
-			<<set _handle.breastsCor += 0.5>>t1
+			<<set _handle.breastsCor += 0.5>>
 		<<elseif $time - _handle.pregnantT> 130 & $time - _tempPreg<=180 >>
-			<<set _handle.breastsCor += 1>>t2
+			<<set _handle.breastsCor += 1>>
 		<<elseif $time - _handle.pregnantT> 180 & $time - _tempPreg<=240>>
-			<<set _handle.breastsCor += 1.5>>r3
+			<<set _handle.breastsCor += 1.5>>
 		<<elseif $time - _handle.pregnantT> 240 & $time - _tempPreg<=_due>>
-			<<set _handle.lactation += 1>> t4
+			<<set _handle.lactation += 1>> 
 			<<set _handle.breastsCor += 1>>
 		<</if>>
 	<</if>>
@@ -166,10 +164,9 @@
 	<<if _handle.lactation > 2>>
 		<<set _handle.lactation=2>>
 	<</if>>
-_handle.name:_handle.breastCor and _handle.lactation
 	
-	<<set _handle.breastCor += _handle.lactation>>	
-_handle.name final:_handle.breastCor and _handle.lactation
+	<<set _handle.breastsCor += _handle.lactation>>	
+
 :: PenisCorrected [nobr]
 <<if _handle.sex != "female" && _handle.sex != "doll-like" >>
 	<<set $x = 16 -_handle.appAge>>
@@ -1768,7 +1765,7 @@ _handle.name final:_handle.breastCor and _handle.lactation
 	<<elseif $time - $app.pregnantT< 180 & $time - $app.pregnantT>= 120 & $menFirstCycle == false && $random == 0>>
 		@@.alert1; You're really starting to get a nice and round pregnancy belly. You sometimes even feel a little kick from inside you. However, the state of your pregnancy is beginning to hinder you more and more during your travels. <br><br>
 	<<elseif $time - $app.pregnantT< 180 & $time - $app.pregnantT>= 120 & $menFirstCycle == true && $random == 0>>
-		@@.alert1; You're starting to put on some serious weight. It is by far most noticable around your belly, which also sometimes seems to tickle from within. Your butt, thighs and <<if $app.breastCor<3 & $app.sex=="male">>pecs<<else>>breasts<</if>> all also seem to have accumalted some fat. Unless you lose the weight again, it will slow you down during your travels. <br><br>
+		@@.alert1; You're starting to put on some serious weight. It is by far most noticable around your belly, which also sometimes seems to tickle from within. Your butt, thighs and <<if $app.breastsCor<3 & $app.sex=="male">>pecs<<else>>breasts<</if>> all also seem to have accumalted some fat. Unless you lose the weight again, it will slow you down during your travels. <br><br>
 	<<elseif $time - $app.pregnantT< 240 & $time - $app.pregnantT>=180 & $menFirstCycle == false && $random == 0>>
 		@@.alert1; You're unmistakeably pregnant at the moment. You feel your child moving and turning frequently within your belly. However, doing nearly anything drains your energy faster than usual. Perhaps it's simply the added weight or maybe the pregnancy itself is sucking the energy out of you. Whatever it is, with a large, round belly and about half of your normal energy, navigating the Abyss has become quite a bit more difficult. <br><br>	
 	<<elseif $time - $app.pregnantT< 240 & $time - $app.pregnantT>=180 & $menFirstCycle == true && $random == 0>>
@@ -2283,7 +2280,7 @@ _handle.name final:_handle.breastCor and _handle.lactation
 		<<if _handle.vagina > 0>>
 			<<set _sexOptions.push("Regular Dom")>>
 		<</if>>
-		<<if _handle.breastCor > 2 >>
+		<<if _handle.breastsCor > 2 >>
 			<<set _sexOptions.push("Boobjob Sub")>>
 		<</if>>
 	<</if>>
@@ -2299,7 +2296,7 @@ _handle.name final:_handle.breastCor and _handle.lactation
 		<<if _handle.vagina > 0>>
 			<<set _sexOptions.push("Regular Dom")>>
 		<</if>>
-		<<if _handle.breastCor > 2 >>
+		<<if _handle.breastsCor > 2 >>
 			<<set _sexOptions.push("Boobjob Sub")>>
 		<</if>>
 	<<else>>
