@@ -64,6 +64,7 @@ breasts: 0,
 modbreasts: 0,
 breastsCor: 0,
 lactation: 0,
+pregnantT: 9999,
 ears: "normal human",
 height: 144,
 modheight: 0,
@@ -84,7 +85,7 @@ desc: "",
 blood: "red",
 appAge: 18,
 libido: 2,
-subdom: 0
+subdom: 1
 }>>
 
 <<set $companionLily = {
@@ -126,6 +127,7 @@ breasts: 3,
 modbreasts: 0,
 breastsCor: 3,
 lactation: 0,
+pregnantT: 9999,
 ears: "normal human",
 height: 168,
 modheight: 0,
@@ -146,7 +148,7 @@ desc: "",
 blood: "red",
 appAge: 22,
 libido: 2,
-subdom: 0
+subdom: -1
 }>>
 
 <<set $companionKhemia = {
@@ -188,6 +190,7 @@ breasts: 0,
 modbreasts: 0,
 breastsCor: 0,
 lactation: 0,
+pregnantT: 9999,
 ears: "normal human",
 height: 185,
 modheight: 0,
@@ -208,7 +211,7 @@ desc: "",
 blood: "red",
 appAge: 26,
 libido: 2,
-subdom: 0
+subdom: -1
 }>>
 
 <<set $companionCherry = {
@@ -250,6 +253,7 @@ breasts: 4,
 modbreasts: 0,
 breastsCor: 4,
 lactation: 0,
+pregnantT: 9999,
 ears: "normal human",
 height: 165,
 modheight: 0,
@@ -270,7 +274,7 @@ desc: "",
 blood: "red",
 appAge: 18,
 libido: 2,
-subdom: 0
+subdom: 1
 }>>
 
 <<set $companionCloud = {
@@ -312,6 +316,7 @@ breasts: 0,
 modbreasts: 0,
 breastsCor: 0,
 lactation: 0,
+pregnantT: 9999,
 ears: "normal human",
 height: 175,
 modheight: 0,
@@ -374,6 +379,7 @@ breasts: 2,
 modbreasts: 0,
 breastsCor: 2,
 lactation: 0,
+pregnantT: 9999,
 ears: "normal human",
 height: 160,
 modheight: 0,
@@ -434,7 +440,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Maru_LastT = 9999>>
 <<set $MaruConvoPreg = false>>
 <<set $lastBirthMaru = 9999>>
-<<set $pregMaru = 9999>>
 
 <<set $AgeLogMaru = []>>
 <<set $GenderLogMaru = []>>
@@ -450,7 +455,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Lily_LastT = 9999>>
 <<set $LilyConvoPreg = false>>
 <<set $lastBirthLily = 9999>>
-<<set $pregLily = 9999>>
 
 <<set $AgeLogLily = []>>
 <<set $GenderLogLily = []>>
@@ -464,7 +468,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Khemia_LastT = 9999>>
 <<set $KhemiaConvoPreg = false>>
 <<set $lastBirthKhemia = 9999>>
-<<set $pregKhemia = 9999>>
 
 <<set $AgeLogKhemia = []>>
 <<set $GenderLogKhemia = []>>
@@ -479,7 +482,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Cherry_LastT = 9999>>
 <<set $CherryConvoPreg = false>>
 <<set $lastBirthCherry = 9999>>
-<<set $pregCherry = 9999>>
 
 <<set $AgeLogCherry = []>>
 <<set $GenderLogCherry = []>>
@@ -494,7 +496,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Cloud_LastT = 9999>>
 <<set $CloudConvoPreg = false>>
 <<set $lastBirthCloud = 9999>>
-<<set $pregCloud = 9999>>
 <<set $altCloud	   = true>>
 
 <<set $AgeLogCloud = []>>
@@ -509,7 +510,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $Saeko_LastT = 9999>>
 <<set $SaekoConvoPreg = false>>
 <<set $lastBirthSaeko = 9999>>
-<<set $pregSaeko = 9999>>
 
 <<set $AgeLogSaeko = []>>
 <<set $GenderLogSaeko = []>>
@@ -524,7 +524,6 @@ style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: bl
 <<set $TwinConvoPreg = false>>
 <<set $pregTwinMC = false>>
 <<set $lastBirthTwin = 9999>>
-<<set $pregTwin = 9999>>
 <<set $TwinVar1 = 0>>
 
 <<set $AgeLogTwin = []>>
@@ -799,16 +798,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Maru Overview [noreturn]
 [img[setup.ImagePath+$companionMaru.image]]
 <<include "Maru Introduction">>
-<<if $time - $pregMaru > 0 >>\
-	<<if $time - $pregMaru< 60 & $time - $pregMaru>= 30 >>\
+<<if $time - $companionMaru.pregnantT > 0 >>\
+	<<if $time - $companionMaru.pregnantT< 60 & $time - $companionMaru.pregnantT>= 30 >>\
 	Maru has seemed a little sick recently. Nothing too serious, but it's not like when you first came down here.
-	<<elseif $time - $pregMaru< 180 & $time - $pregMaru>= 120 && $MaruConvoPreg==false >>\
+	<<elseif $time - $companionMaru.pregnantT< 180 & $time - $companionMaru.pregnantT>= 120 && $MaruConvoPreg==false >>\
 		Maru was never that fit, but he has been falling behind a lot recently. He also seems to have put on some weight. Perhaps you should discuss his eating habits with him?
-	<<elseif $time - $pregMaru< 180 & $time - $pregMaru>= 120 && $MaruConvoPreg==true>>\
+	<<elseif $time - $companionMaru.pregnantT< 180 & $time - $companionMaru.pregnantT>= 120 && $MaruConvoPreg==true>>\
 		Maru has a small, but obvious bulge for his pregnant belly.
-	<<elseif $time - $pregMaru< 240 & $time - $pregMaru>=180 >>\
+	<<elseif $time - $companionMaru.pregnantT< 240 & $time - $companionMaru.pregnantT>=180 >>\
 		Maru's belly is huge and bulging forward in a way that obviously identifies him as pregnant. 
-	<<elseif $time - $pregMaru>=240>>\
+	<<elseif $time - $companionMaru.pregnantT>=240>>\
 		Maru has a very large and very obvious pregnant belly. He's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -819,16 +818,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Lily Overview [noreturn]
 [img[setup.ImagePath+$companionLily.image]]
 <<include "Lily Introduction">>
-<<if $time - $pregLily > 0 >>\
-	<<if $time - $pregLily< 60 & $time - $pregLily>= 30 >>\
+<<if $time - $companionLily.pregnantT > 0 >>\
+	<<if $time - $companionLily.pregnantT< 60 & $time - $companionLily.pregnantT>= 30 >>\
 	Lily hasn't been as much of her energetic self lately, she looks rather tired a lot of the time.
-	<<elseif $time - $pregLily< 180 & $time - $pregLily>= 120 && $LilyConvoPreg==false >>\
+	<<elseif $time - $companionLily.pregnantT< 180 & $time - $companionLily.pregnantT>= 120 && $LilyConvoPreg==false >>\
 		Lily has been having some kind of mood swings, going back and forth between very energetic to completely exhausted. She even seems to have put on some weight, has she stopped exercising as much as she used to? Maybe you should have a talk with her about it.
-	<<elseif $time - $pregLily< 180 & $time - $pregLily>= 120 && $LilyConvoPreg==true>>\
+	<<elseif $time - $companionLily.pregnantT< 180 & $time - $companionLily.pregnantT>= 120 && $LilyConvoPreg==true>>\
 		Lily has a small, but obvious bulge for her pregnant belly.
-	<<elseif $time - $pregLily< 240 & $time - $pregLily>=180 >>\
+	<<elseif $time - $companionLily.pregnantT< 240 & $time - $companionLily.pregnantT>=180 >>\
 		Lily's belly is huge and bulging forward in a way that obviously identifies her as pregnant. 
-	<<elseif $time - $pregLily>=240>>\
+	<<elseif $time - $companionLily.pregnantT>=240>>\
 		Lily has a very large and very obvious pregnant belly. She's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -839,16 +838,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Khemia Overview [noreturn]
 [img[setup.ImagePath+$companionKhemia.image]]
 <<include "Khemia Introduction">>
-<<if $time - $pregKhemia > 0 >>\
-	<<if $time - $pregKhemia< 60 & $time - $pregKhemia>= 30 >>\
+<<if $time - $companionKhemia.pregnantT > 0 >>\
+	<<if $time - $companionKhemia.pregnantT< 60 & $time - $companionKhemia.pregnantT>= 30 >>\
 	Khemia seems to have contracted some stomach illness, as he is frequently vomiting in the morning after you wake up. Hopefully he's able to recover soon.
-	<<elseif $time - $pregKhemia< 180 & $time - $pregKhemia>= 120 >>\
+	<<elseif $time - $companionKhemia.pregnantT< 180 & $time - $companionKhemia.pregnantT>= 120 >>\
 		Khemia has developed somewhat of pot belly. It's not too much of a problem, as he was always a quite a bit more fit than everyone else, but it seems uncharacteristic of him to secretly snack so much. 
-	<<elseif $time - $pregKhemia< 240 & $time - $pregKhemia>= 180 && $KhemiaConvoPreg==false>>\
+	<<elseif $time - $companionKhemia.pregnantT< 240 & $time - $companionKhemia.pregnantT>= 180 && $KhemiaConvoPreg==false>>\
 		This is getting ridiculous, Khemia's belly has become quite large. His chest, his ass everything seems to collect fat, but it's nothing compared to his belly. This is no longer normal and honestly worrysome, maybe you should have a talk to see what's going on with him.
-	<<elseif $time - $pregKhemia< 240 & $time - $pregKhemia>=180 && $KhemiaConvoPreg==true>>\
+	<<elseif $time - $companionKhemia.pregnantT< 240 & $time - $companionKhemia.pregnantT>=180 && $KhemiaConvoPreg==true>>\
 		Khemia belly is huge and bulging forward in a way that obviously identifies him as pregnant. 
-	<<elseif $time - $pregKhemia>=240>>\
+	<<elseif $time - $companionKhemia.pregnantT>=240>>\
 		Khemia has a very large and very obvious pregnant belly. He's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -859,16 +858,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Cherry Overview [noreturn]
 [img[setup.ImagePath+$companionCherry.image]]
 <<include "Cherry Introduction">>
-<<if $time - $pregCherry > 0 >>\
-	<<if $time - $pregCherry< 60 & $time - $pregCherry>= 30 >>\
+<<if $time - $companionCherry.pregnantT > 0 >>\
+	<<if $time - $companionCherry.pregnantT< 60 & $time - $companionCherry.pregnantT>= 30 >>\
 	Cherry seems to have contracted some stomach illness, as she is frequently vomiting in the morning after you wake up. Hopefully she's able to recover soon.
-	<<elseif $time - $pregCherry< 180 & $time - $pregCherry>= 120 && $CherryConvoPreg==false >>\
+	<<elseif $time - $companionCherry.pregnantT< 180 & $time - $companionCherry.pregnantT>= 120 && $CherryConvoPreg==false >>\
 		Cherry has been distancing herself from social contact even more than usual. She seems to avoid everyone and trails the group by a significant amount. Perhaps you should have a talk with her to see what's going on.
-	<<elseif $time - $pregCherry< 180 & $time - $pregCherry>= 120 && $CherryConvoPreg==true>>\
+	<<elseif $time - $companionCherry.pregnantT< 180 & $time - $companionCherry.pregnantT>= 120 && $CherryConvoPreg==true>>\
 		Cherry has a small, but obvious bulge for her pregnant belly.
-	<<elseif $time - $pregCherry< 240 & $time - $pregCherry>=180 >>\
+	<<elseif $time - $companionCherry.pregnantT< 240 & $time - $companionCherry.pregnantT>=180 >>\
 		Cherry's belly is huge and bulging forward in a way that obviously identifies her as pregnant. 
-	<<elseif $time - $pregCherry>=240>>\
+	<<elseif $time - $companionCherry.pregnantT>=240>>\
 		Cherry has a very large and very obvious pregnant belly. She's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -879,16 +878,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Cloud Overview [noreturn]
 [img[setup.ImagePath+$companionCloud.image]]
 <<include "Cloud Introduction">>
-<<if $time - $pregCloud > 0 >>\
-	<<if $time - $pregCloud< 60 & $time - $pregCloud>= 30 >>\
+<<if $time - $companionCloud.pregnantT > 0 >>\
+	<<if $time - $companionCloud.pregnantT< 60 & $time - $companionCloud.pregnantT>= 30 >>\
 	Cloud hasn't been pulling his weight as much he should recently. He pitches his own tent, then immediately goes to sleep most nights. It's strange he isn't helping as much as he used to.
-	<<elseif $time - $pregCloud< 180 & $time - $pregCloud>= 120 && $CloudConvoPreg==false >>\
+	<<elseif $time - $companionCloud.pregnantT< 180 & $time - $companionCloud.pregnantT>= 120 && $CloudConvoPreg==false >>\
 		Cloud seems to be avoiding chores and lounges around quite a bit more than usual. He's even become a little pudgy recently and put on some fat on his belly. Perhaps you should have a talk with him to see what's going on.
-	<<elseif $time - $pregCloud< 180 & $time - $pregCloud>= 120 && $CloudConvoPreg==true>>\
+	<<elseif $time - $companionCloud.pregnantT< 180 & $time - $companionCloud.pregnantT>= 120 && $CloudConvoPreg==true>>\
 		Cloud hhas a small, but obvious bulge for his pregnant belly.
-	<<elseif $time - $pregCloud< 240 & $time - $pregCloud>=180 >>\
+	<<elseif $time - $companionCloud.pregnantT< 240 & $time - $companionCloud.pregnantT>=180 >>\
 		Cloud's belly is huge and bulging forward in a way that obviously identifies him as pregnant. 
-	<<elseif $time - $pregCloud>=240>>\
+	<<elseif $time - $companionCloud.pregnantT>=240>>\
 		Cloud has a very large and very obvious pregnant belly. He's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -899,16 +898,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Saeko Overview [noreturn]
 [img[setup.ImagePath+$companionSaeko.image]]
 <<include "Saeko Introduction">>
-<<if $time - $pregSaeko > 0 >>\
-	<<if $time - $pregSaeko< 60 & $time - $pregSaeko>= 30 >>\
+<<if $time - $companionSaeko.pregnantT > 0 >>\
+	<<if $time - $companionSaeko.pregnantT< 60 & $time - $companionSaeko.pregnantT>= 30 >>\
 	Saeko has been sneaking off and seems sick, has she been testing something on herself?
-	<<elseif $time - $pregSaeko< 180 & $time - $pregSaeko>= 120 && $SaekoConvoPreg==false >>\
+	<<elseif $time - $companionSaeko.pregnantT< 180 & $time - $companionSaeko.pregnantT>= 120 && $SaekoConvoPreg==false >>\
 		Saeko is being evasive about something. And whatever is is doesn't seem to be good for her health, as she is frequently tired and seems bloated. Perhaps you should have a talk with her to see what's going on.
-	<<elseif $time - $pregSaeko< 180 & $time - $pregSaeko>= 120 && $SaekoConvoPreg==true>>\
+	<<elseif $time - $companionSaeko.pregnantT< 180 & $time - $companionSaeko.pregnantT>= 120 && $SaekoConvoPreg==true>>\
 		Saeko has a small, but obvious bulge for her pregnant belly.
-	<<elseif $time - $pregSaeko< 240 & $time - $pregSaeko>=180 >>\
+	<<elseif $time - $companionSaeko.pregnantT< 240 & $time - $companionSaeko.pregnantT>=180 >>\
 		Saeko's belly is huge and bulging forward in a way that obviously identifies her as pregnant. 
-	<<elseif $time - $pregSaeko>=240>>\
+	<<elseif $time - $companionSaeko.pregnantT>=240>>\
 		Saeko has a very large and very obvious pregnant belly. She's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -919,16 +918,16 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 :: Twin Overview [noreturn]
 [img[setup.ImagePath+$companionTwin.image]]
 <<include "Twin Introduction">>
-<<if $time - $pregTwin > 0 >>\
-	<<if $time - $pregTwin< 60 & $time - $pregTwin>= 30 >>\
+<<if $time - $companionTwin.pregnantT > 0 >>\
+	<<if $time - $companionTwin.pregnantT< 60 & $time - $companionTwin.pregnantT>= 30 >>\
 	Lately your twin has been sick quite frequently. Is this a side effect of being conjured by a Curse?
-	<<elseif $time - $pregTwin< 180 & $time - $pregTwin>= 120 && $TwinConvoPreg==false >>\
+	<<elseif $time - $companionTwin.pregnantT< 180 & $time - $companionTwin.pregnantT>= 120 && $TwinConvoPreg==false >>\
 		Your twin has really gotten out of shape recently. She's been lagging behind the group more and more frequently with her breaks. She also seems to have put on some weight. Perhaps you should have a talk with her to see what's going on.
-	<<elseif $time - $pregTwin< 180 & $time - $pregTwin>= 120 && $TwinConvoPreg==true>>\
+	<<elseif $time - $companionTwin.pregnantT< 180 & $time - $companionTwin.pregnantT>= 120 && $TwinConvoPreg==true>>\
 		Your has a small, but obvious bulge for her pregnant belly.
-	<<elseif $time - $pregTwin< 240 & $time - $pregTwin>=180 >>\
+	<<elseif $time - $companionTwin.pregnantT< 240 & $time - $companionTwin.pregnantT>=180 >>\
 		Your belly is huge and bulging forward in a way that obviously identifies her as pregnant. 
-	<<elseif $time - $pregTwin>=240>>\
+	<<elseif $time - $companionTwin.pregnantT>=240>>\
 		Your has a very large and very obvious pregnant belly. She's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
@@ -2932,7 +2931,7 @@ Double-click this passage to edit it.
 <<if $app.libido > 3>>
 [[Propose some adult activities to your Twin|Twin Sex Inquiry]]<br>
 <</if>>
-<<if $TwinConvoPreg==false && $time - $pregTwin > 120>>
+<<if $TwinConvoPreg==false && $time - $companionTwin.pregnantT > 120>>
 [[Talk about the reduced fitness of your Twin| Twin Pregnant]]<br>
 <</if>>
 
@@ -3076,7 +3075,7 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 	Your twin only anwsers by giving you a mischevious wink. Before long you are squirming mess as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>brings your to an orgasm.
 <<elseif $app.penisCor< 2>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Hmm, it's a bit small.<</say>>
 	<<say $mc>>Yeah well, stuff happend okay.<</say>>
@@ -3089,7 +3088,7 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 
 <<elseif $app.penisCor > 6>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> You're a big boy aren't you?<</say>>
 	<<say $mc>>Haha what can I say? Stuff happend.<</say>>
@@ -3109,7 +3108,7 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 	<<say $companionTwin>> Okay...<</say>>
 <<else>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Hello there.<</say>>
 	$companionTwin.name starts licking your shaft up and down before taking it in <<if $companionTwin.sex=='male'>>his <<else>>her <</if>> mouth. You close your eyes as you let yourself be enveloped by the sensations that run through your body. Suddenly $companionTwin.name starts sucking your dick in earnest, which surprises you a little.
@@ -3176,7 +3175,7 @@ You both get undressed, eager to get started. You turn $companionTwin.name aroun
 
 <<if $app.penisCor<= 4>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Just push it all the way in. You don't need to be so gentle.<</say>>
 	<<say $mc>>Uh... It is all the way in.<</say>>
@@ -3187,7 +3186,7 @@ You both get undressed, eager to get started. You turn $companionTwin.name aroun
 	Besides from the awkward start you get in a rhythm shortly afterwards, helped by the moans you hear from $companionTwin.name.
 <<elseif $app.penisCor> 6 >>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow ow ow, stop slow down. How much more is there?<</say>>
 	<<say $mc>>Uh... It's almost all the way in.<</say>>
@@ -3196,7 +3195,7 @@ You both get undressed, eager to get started. You turn $companionTwin.name aroun
 	Beside from the awkward start you get in a rhythm shortly afterwards, helped by the moans you hear from $companionTwin.name. After a few minutes <<if $companionTwin.sex=='male'>>he <<else>>she <</if>> clearly started to enjoy the bigger size you now have.
 <<elseif $app.penisCor> 9 >>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<2 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow ow ow, stop slow down. How much more is there?<</say>>
 	<<say $mc>>Uh... quite a lot to be honest<</say>>
@@ -3205,7 +3204,7 @@ You both get undressed, eager to get started. You turn $companionTwin.name aroun
 	$companionTwin.name starts to stroke your member with <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>hands. Eventhough it might be a bit of a let down after what you initially expected, you still manage to get in it after a few moments.
 <<else>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow, that's right just push it all the way in.<</say>>
 	<<say $mc>>As you whish!<</say>>
@@ -3236,7 +3235,7 @@ You both get undressed, eager to get started. You spread $companionTwin.name 's 
 
 <<if $app.penisCor<= 4>>\
 	<<if (_temp < 20 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Just push it all the way in. You don't need to be so gentle.<</say>>
 	<<say $mc>>Uh... It is all the way in.<</say>>
@@ -3247,7 +3246,7 @@ You both get undressed, eager to get started. You spread $companionTwin.name 's 
 	Besides from the awkward start you get in a rhythm shortly afterwards, helped by the moans you hear from $companionTwin.name.
 <<elseif $app.penisCor> 6 >>\
 	<<if (_temp < 20 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow ow ow, stop slow down. How much more is there?<</say>>
 	<<say $mc>>Uh... It's almost all the way in.<</say>>
@@ -3262,7 +3261,7 @@ You both get undressed, eager to get started. You spread $companionTwin.name 's 
 	$companionTwin.name starts to stroke your member with <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>hands. Eventhough it might be a bit of a let down after what you initially expected, you still manage to get in it after a few moments.
 <<else>>\
 	<<if (_temp < 20 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow, that's right just push it all the way in.<</say>>
 	<<say $mc>>As you whish!<</say>>
@@ -3321,7 +3320,7 @@ You both get undressed, eager to get started. You push down $companionTwin.name,
 [[End your 'conversation'|Party overview]]
 
 <<if _temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy") || $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
-	<<set $pregTwin = $time-14>>
+	<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 <</if>>
 :: Twin Sex Boobjob Receive 
 $companionTwin.name gives you a sultry look as she bears her breasts, goes down and takes out your dick.
@@ -3341,7 +3340,7 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 
 <<elseif $app.penisCor > 6>>\
 	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> You're a big boy aren't you?<</say>>
 	<<say $mc>>Haha what can I say? Stuff happend.<</say>>
@@ -3353,7 +3352,7 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 
 <<elseif $app.penisCor > 9>>\
 	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Ow wow, I'm gladd that's going between my breasts and not somewhere else. What a monster...<</say>>
 	<<say $mc>>Well what can I say? Stuff happend.<</say>>
@@ -3366,7 +3365,7 @@ $companionTwin.name gives you a sultry look as she bears her breasts, goes down 
 	
 <<else>>\
 	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<say $companionTwin>> Hello there.<</say>>
 	 $companionTwin.name starts licking your member before wrapping it with her soft cleavage. She starts moving her soft tits up and down along your shaft.
@@ -3473,7 +3472,7 @@ You start to convulse as an orgasm rolls over you and as if triggered by your or
 	<<say $companionTwin>>It's okay. You know, when you change that clitty in a real clitty we'll be perfect twins!<</say>>
 	She gives you a little kiss as she stands up and starts cleaning herself.
 	<<if (_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy") || $companionTwin.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 <<elseif $companionTwin.penisCor > 0 && $app.vagina > 0 && $app.penisCor == 0>>
 	<<if $companionTwin.sex=='male'>>His <<else>>Her <</if>>tiny dicklet sprays cum over both of your groins. You look down at it and touch it with a finger.
@@ -3502,7 +3501,7 @@ You start to convulse as an orgasm rolls over you and as if triggered by your or
 	You stand up and start cleaning yourselves.
 	
 	<<if $companionTwin.womb > 0 && ((_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control"))>>\
-		<<set $pregTwin = $time-14>><<set $pregTwinMC = true>>\
+		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
 		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy") && $app.womb> 0>>

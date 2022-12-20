@@ -130,12 +130,94 @@ Use the following option only if you have specifically considered your inventory
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
 
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Hub]]
+[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities][$returnPassage = "Layer5 Hub"]]
 
 [[Hide out in the ruins for the day|Layer5 Hub]]
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of these pests.
 [[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|Layer5 Hub]]
+
+:: Layer5 Mayfly Scuttler Sexual Activities [layer5 nobr]
+[img[setup.ImagePath+'Threats/mayflyscuttler.png']]
+<<if $hiredCompanions.length > 0>>
+	<<randomSexSelect>>
+	<<set _temp = random(0,100)>>
+	<br><br>
+	The aphrodisiacs in the air soon start to make you incredibly horny, hornier than you have ever experienced before. You feel drunk from your own raging hormones. The longer the day progresses the less you remember from it.<br>
+	<<if _selection == "Oral Dom">>
+	At some point you know _handle.name had <<if _handle.sex=="male">>his<<else>>her<</if>> lips <<if $app.penisCor > 2 && $app.vagina == 0>>wrapped around your cock. It didn't take your high strung body much time to unloaded deep in _handle.name's throat.<<elseif $app.penisCor <= 2 && $app.vagina > 0>>planted firmly on your pussy and kept licking untill you came so much, your legs felt like jello.<<else>>wrapped firmly around your cock before moving on the lick your pussy. You came multiple times, at least one of those involved _handle.name being forced to swallow your load.<</if>>
+	<<if $app.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<<elseif _selection == "Oral Sub">>
+	At some point you know you had your lips <<if _handle.penisCor > 2 && _handle.vagina == 0>>around _handle.name's cock. Pushing it as for into your throat as you could while licking the salty tip occasionally.<<elseif _handle.penisCor <= 2 && _handle.vagina > 0>>on _handle.name's pussy. Letting you lips wonder freely between <<if _handle.sex=="male">>his<<else>>her<</if>> warm folds.<<else>>around _handle.name's cock. Pushing it as for into your throat, before switching it up and giving <<if _handle.sex=="male">>his<<else>>her<</if>> pussy some much appreciated attention.<</if>>
+	<<if ($app.womb1 == "throat" || $app.womb2 == "throat") && _handle.penisCor>0 >>
+		<<PregCheck>>
+	<</if>>
+	<<elseif _selection == "DP Sub">>
+	Some bits and pieces are clearer than others, but you know that at some point both your holes were being filled by _handle.name's dubbel penis. Having both of them moving in and out you at the same time was unlike any other sexual experience.
+	<<if $app.womb > 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<PregCheck>>
+	<</if>>
+	<<if $app.womb > 1 && ($app.womb1 == "anus" || $app.womb2 == "anus") && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<PregCheck>>
+	<</if>>
+	<<elseif _selection == "DP Dom">>
+	Some bits and pieces are clearer than others, but you know that at some point both your penises were being filling both _handle.name's holes. Two penisses being stimulated at the same time was already unique, both the shared orgasm both penises had was something else.
+	<<if _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<<if (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<<elseif _selection == "Anal Sub">>
+	You remember moans at some point, your moans, as your ass was filled by _handle.name's penis. You don't know exactly how long _handle.name was pounding your behind, but you know you were a drooling mess afterwards. 
+	<<if ($app.womb1 == "anus" || $app.womb2 == "anus") && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<PregCheck>>
+	<</if>>
+	<<elseif _selection == "Anal Dom">>
+	You remember moans at some point, _handle.name's moans, as your dick was pounding away at <<if _handle.sex=="male">>his<<else>>her<</if>> ass. You don't know exactly how long you were railing _handle.name's behind, but you know <<if _handle.sex=="male">>he<<else>>she<</if>> was a drooling mess afterwards. 
+	<<if (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<<elseif _selection == "Regular Sub">>
+	At some point you were being cuddled by _handle.name, which turned into intimate hugs and kissing and before long <<if _handle.sex=="male">>he<<else>>she<</if>> was naked on top of you. You were screaming in exstacy, locking in _handle.name with your legs as <<if _handle.sex=="male">>he<<else>>she<</if>> unloaded completely inside of you.
+	<<if $app.womb > 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<PregCheck>>
+	<</if>>
+	<<elseif _selection == "Regular Dom">>
+	At some point you were cuddling _handle.name, which turned into intimate hugs and kissing and before long <<if _handle.sex=="male">>he<<else>>she<</if>> was naked on underneath of you. _handle.name was screaming in exstacy, locking you in with <<if _handle.sex=="male">>his<<else>>her<</if>> legs as you unloaded completely inside of <<if _handle.sex=="male">>him<<else>>her<</if>>.
+	<<if _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<<elseif _selection == "Boobjob Dom">>
+	You remember that at some point you accidentally brushed against _handle.name's breast, which curiously enough only ellected a naughty giggle. Moments latter <<if _handle.sex=="male">>his<<else>>her<</if>> tits were out and you were fondeling them with gusto. You couldn't contain yourself anymore and pushed <<if _handle.sex=="male">>him<<else>>her<</if>> down while whipping your dick out. Afterwards you remember _handle.name burying your dick in her cleavage and working it with similar levels of enthiasme before you came all over <<if _handle.sex=="male">>him<<else>>her<</if>>.
+	<<if _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<<elseif _selection == "Boobjob Sub">>
+	You remember that at some point _handle.name accidentally brushed against your breast, which ellected a naughty and uncontrollable giggle from your side. Moments later your tits were out and <<if _handle.sex=="male">>he<<else>>she<</if>> was fondeling them with gusto. _handle.name couldn't contain <<if _handle.sex=="male">>hisself<<else>>herself<</if>> anymore and pushed you down while whipping <<if _handle.sex=="male">>his<<else>>her<</if>> dick out. Afterwards you remember _handle.name burying <<if _handle.sex=="male">>his<<else>>her<</if>> dick in your cleavage and you working it with similar levels of enthiasme before <<if _handle.sex=="male">>he<<else>>she<</if>> came all over you.
+	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>
+		<<PregCheck>>
+	<</if>>
+	<<elseif _selection == "Sex Scissor Sub/Dom">>
+	You vividly remember the heat in your entire body. You thought it was best to just get undressed and saw _handle.name do the same. When <<if _handle.sex=="male">>he<<else>>she<</if>> touched your skin you felt the electricity between both of you. You couldn't stop hugging anymore. Soon your groins were riding against it eachother and it was clear _handle.name was enjoying this just as much as you. After, what felt like only minutes <<if _handle.sex=="male">>he<<else>>she<</if>> arched her back and came<<if _handle.penisCor>0>> coating your groin with cum<</if>>, you quickly followed and also reached a shudder orgasm<<if $app.penisCor>0>> coating both your groins with cum<</if>>.
+	<<if $app.womb > 0 && _handle.penisCor> 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set $pregChance /= 10>>
+		<<PregCheck>>
+	<</if>>
+	<<if _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set _handle.pregnantT = $time-14>>
+	<</if>>
+	<</if>>
+	It truly was an absolute blissfull experience but you're not sure how much _handle.name still remembers and if you even want <<if _handle.sex=="male">>him<<else>>her<</if>> to still remember it. You decide to just continue the journey without giving it too much thought.<br>
+<<else>>
+	You walk around dazed and confused from all the aphrodisiacs in the air. You only remember snippits of the day, but you know you spend most of the day trying to get yourself off.
+<</if>>
+
+[[Return to exploring to exploring the Abyss|$returnPassage]]
+
+
 
 :: Layer5 Threats [image layer5]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-threats.png']]
@@ -1613,7 +1695,7 @@ Use the following option only if you have specifically considered your inventory
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
 
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Ascend2]]
+[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities][$returnPassage = "Layer5 Ascend2"]]
 
 [[Hide out in the ruins for the day|Layer5 Ascend2]]
 
@@ -1702,7 +1784,7 @@ Use the following option only if you have specifically considered your inventory
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
 
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Exit2]]
+[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities][$returnPassage = "Layer5 Exit2"]]
 
 [[Hide out in the ruins for the day|Layer5 Exit2]]
 
