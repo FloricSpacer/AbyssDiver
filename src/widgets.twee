@@ -100,6 +100,8 @@
 :: BreastCorrected [nobr]
 	<<set $x = 18 -_handle.appAge>>
 	<<set _handle.breastsCor =_handle.breasts>>
+	<<set _handle.lactation = 0>>
+	_handle.name start:_handle.breasts and _handle.breastsCor .
 	<<set $genderlvl = _handle.gender-1>>
 
 	<<if $genderlvl< 0 >>
@@ -115,10 +117,10 @@
 		<</if>>
 	<</if>>
 
-	<<if $playerCurses.some(e => e.name === "Lactation Rejuvination A")>>
+	<<if _handle.curses.some(e => e.name === "Lactation Rejuvination A")>>
 		<<set _handle.lactation += 1>>
 	<</if>>
-	<<if $playerCurses.some(e => e.name === "Lactation Rejuvination B")>>
+	<<if _handle.curses.some(e => e.name === "Lactation Rejuvination B")>>
 		<<set _handle.lactation += 1>>
 	<</if>>
 
@@ -132,7 +134,7 @@
 		<<set _due = $due>>
 
 		<<if  ($time - $app.pregnantT> 270 & $time - $app.pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
-			<<set _handle.lactation += 2>>
+			<<set _handle.lactation += 2>>test
 		<</if>>
 
 	<<else>>
@@ -145,18 +147,18 @@
 		<</if>>
 
 		<<if ($time - _tempBirth < 30 && _tempBirth!=9999)|| _flag>>
-			<<set _handle.lactation += 2>>
+			<<set _handle.lactation += 2>>test2
 		<</if>>
 	<</if>>
 	<<if _handle.pregnantT != 9999>>
 		<<if $time - _handle.pregnantT>= 90 & $time - _tempPreg<=130 >>
-			<<set _handle.breastsCor += 0.5>>
+			<<set _handle.breastsCor += 0.5>>t1
 		<<elseif $time - _handle.pregnantT> 130 & $time - _tempPreg<=180 >>
-			<<set _handle.breastsCor += 1>>
+			<<set _handle.breastsCor += 1>>t2
 		<<elseif $time - _handle.pregnantT> 180 & $time - _tempPreg<=240>>
-			<<set _handle.breastsCor += 1.5>>
+			<<set _handle.breastsCor += 1.5>>r3
 		<<elseif $time - _handle.pregnantT> 240 & $time - _tempPreg<=_due>>
-			<<set _handle.lactation += 1>> 
+			<<set _handle.lactation += 1>> t4
 			<<set _handle.breastsCor += 1>>
 		<</if>>
 	<</if>>
@@ -164,9 +166,10 @@
 	<<if _handle.lactation > 2>>
 		<<set _handle.lactation=2>>
 	<</if>>
+_handle.name:_handle.breastCor and _handle.lactation
 	
 	<<set _handle.breastCor += _handle.lactation>>	
-
+_handle.name final:_handle.breastCor and _handle.lactation
 :: PenisCorrected [nobr]
 <<if _handle.sex != "female" && _handle.sex != "doll-like" >>
 	<<set $x = 16 -_handle.appAge>>
