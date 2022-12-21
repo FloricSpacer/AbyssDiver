@@ -245,7 +245,6 @@
 			<</if>>
 		<</if>>
 	<</if>>
-
 	<<for _genderEvent range _GenderLog>>
 		<<include "BreastCorrected">>
 		<<if _genderEvent.name == "Gender Reversal A" || _genderEvent.name == "Gender Reversal B" || _genderEvent.name == "Gender Reversal C" || _genderEvent.name == "Gender Reversal D" || _genderEvent.name == "Gender Reversal E" || _genderEvent.name == "Gender Reversal F" || _genderEvent.name == "Gender Reversal G" >>
@@ -1872,11 +1871,34 @@
 		<<set $hiredCompanions[_i].pregnantT = $time-14>>
 	<</if>>
 <</for>>
+<<statUpdateCompanions>>
+<</widget>>
+
+:: update stats companions[widget nobr]
+<<widget "statUpdateCompanions">>
+<<for _i=0; _i<$hiredCompanions.length; _i++ >>
+	<<if $hiredCompanions[_i].name == "Maru">>
+		<<set $companionMaru = $hiredCompanions[_i]>>
+	<<elseif $hiredCompanions[_i].name == "Lily">>
+		<<set $companionLily = $hiredCompanions[_i]>>
+	<<elseif $hiredCompanions[_i].name == "Khemia">>
+		<<set $companionKhemia = $hiredCompanions[_i]>>
+	<<elseif $hiredCompanions[_i].name == "Cloud">>
+		<<set $companionCloud = $hiredCompanions[_i]>>
+	<<elseif $hiredCompanions[_i].name == "Cherry">>
+		<<set $companionCherry = $hiredCompanions[_i]>>
+	<<elseif $hiredCompanions[_i].name == "Saeko">>
+		<<set $companionSaeko = $hiredCompanions[_i]>>
+	<<elseif $hiredCompanions[_i].name == $companionTwin.name>>
+		<<set $companionTwin = $hiredCompanions[_i]>>
+	<</if>>
+<</for>>
 <</widget>>
 
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
 <<set $app.curses = $playerCurses>>/*temporary fix to prevent having to replace all instances */
+<<statUpdateCompanions>>
 <<Handicap>>
 <<HeightCorrected>>
 /*<<set $totalCarry -= $carryWeight>>*/
