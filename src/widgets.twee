@@ -108,6 +108,7 @@
 	<<elseif $genderlvl> 5>>
 		<<set $genderlvl = 5>>
 	<</if>>
+	_handle.name: _handle.pregnantT
 
 	<<if $x>0 +1/5 *$genderlvl>>
 		<<set _handle.breastsCor = _handle.breasts - 0.1*$x*_handle.breasts>>
@@ -125,6 +126,7 @@
 	<<if _handle.curses.some(e => e.name === "Double Pepperoni") && _handle.breastsCor == 0>>
 			<<set _handle.breastsCor +=1>>
 	<</if>>
+
 	<<if _i == $hiredCompanions.length>>
 		<<if $time-$menCycleT-$menCycleVar>20 && $menCycleFlag == true>>
 			<<set _handle.breastsCor += 1>> 
@@ -2233,7 +2235,7 @@
 
 	<<for _i=0; _i<1; _i++>>
 	<<set _j =random(0, _sexOptions.length-1) >>
-		<<if _sexOptions[_j].contains("Sub")>>
+		<<if _sexOptions[_j].contains("Sub") && !_sexOptions[_j].contains("Pull Out")>>
 			<<set _selection = _sexOptions[_j]>>
 		<<else>>
 			<<set _i -=1>>
@@ -2243,8 +2245,8 @@
 <<elseif _temp< 0>>
 
 	<<for _i=0; _i<1; _i++>>
-	<<set _j =random(0, _sexOptions.length-1) >>
-		<<if _sexOptions[_j].contains("Dom")>>
+	<<set _j =random(0, _sexOptions.length-1)>>
+		<<if _sexOptions[_j].contains("Dom") && !_sexOptions[_j].contains("Pull Out")>>
 			<<set _selection = _sexOptions[_j]>>
 		<<else>>
 			<<set _i -=1>>
@@ -2253,8 +2255,14 @@
 
 <<elseif _temp == 0>>
 
-	<<set _j =random(0, _sexOptions.length-1) >>
-	<<set _selection = _sexOptions[_j]>>
+	<<for _i=0; _i<1; _i++>>
+	<<set _j = random(0, _sexOptions.length-1)>>
+		<<if !_sexOptions[_j].contains("Pull Out")>>
+			<<set _selection = _sexOptions[_j]>>
+		<<else>>
+			<<set _i -=1>>
+		<</if>>
+	<</for>>
 
 <</if>>
 <</widget>>
@@ -2279,6 +2287,8 @@
 		<<set _sexOptions.push("Anal Dom")>>
 		<<if _handle.vagina > 0>>
 			<<set _sexOptions.push("Regular Dom")>>
+			<<set _sexOptions.push("Regular Alt Sub")>>
+			<<set _sexOptions.push("Pull Out Dom")>>
 		<</if>>
 		<<if _handle.breastsCor > 2 >>
 			<<set _sexOptions.push("Boobjob Sub")>>
@@ -2286,6 +2296,8 @@
 	<</if>>
 	<<if $app.vagina > 0>>
 		<<set _sexOptions.push("Regular Sub")>>
+		<<set _sexOptions.push("Regular Alt Dom")>>
+		<<set _sexOptions.push("Pull Out Sub")>>
 	<</if>>
 	<<if $app.breastsCor > 2>>
 		<<set _sexOptions.push("Boobjob Sub")>>
@@ -2295,6 +2307,8 @@
 		<<set _sexOptions.push("Anal Dom")>>
 		<<if _handle.vagina > 0>>
 			<<set _sexOptions.push("Regular Dom")>>
+			<<set _sexOptions.push("Regular Alt Sub")>>
+			<<set _sexOptions.push("Pull Out Dom")>>
 		<</if>>
 		<<if _handle.breastsCor > 2 >>
 			<<set _sexOptions.push("Boobjob Dom")>>
