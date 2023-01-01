@@ -1689,14 +1689,29 @@ How many dubloons would you like to pay back?
 	<<set $tempTime = Math.ceil($tempTime / 2)>>
 <</if>>
 
-<<if ($tempTime/2) <= $items[24].count & $useEnergyrations==true>>
+
+<<if $playerCurses.some(e => e.name === "Minish-ish") || $hiredCompanions.name.some(e => e.name === $companionTwin.name)>>
+	<<set _EnergyRatCor = 1>>
+	<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+		<<set _EnergyRatCor /= 4>>
+	<</if>>
+	<<if $hiredCompanions.name.some(e => e.name === $companionTwin.name)>>
+		<<if $companionTwin.curses.some(e => e.name === "Minish-ish")>>
+			<<set _EnergyRatCor += 1/4>>
+		<<else>>
+			<<set _EnergyRatCor += 1>>
+		<</if>>
+	<</if>>
+<</if>>
+
+<<if ($tempTime/2) <= $items[24].count/_EnergyRatCor & $useEnergyrations==true>>
 	<<set _temp = Math.trunc($tempTime / 2)>>
-	<<set $items[24].count -= _temp>>
-	<<set $items[1].count += _temp>>
+	<<set $items[24].count -= _temp * _EnergyRatCor>>
+	<<set $items[1].count += _temp * _EnergyRatCor>>
 	<<set $tempTime -= _temp>>
 <<elseif $useEnergyrations==true>>
-	<<set $tempTime -= $items[24].count>>
-	<<set $items[1].count += $items[24].count>>
+	<<set $tempTime -= $items[24].count / _EnergyRatCor>>
+	<<set $items[1].count += $items[24].count  * _EnergyRatCor>>
 	<<set $items[24].count = 0>>
 <</if>>
 
@@ -1794,9 +1809,17 @@ How many dubloons would you like to pay back?
 		<<set $forageFood = 1>>
 	<</if>>
 	<<if $forageFood == 0>>
-		<<set $items[1].count -= 1>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+			<<set $items[1].count -= 1/4>>
+		<<else>>
 			<<set $items[1].count -= 1>>
+		<</if>>
+		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+			<<if $companionTwin.curses.some(e => e.name === "Minish-ish")>>
+				<<set $items[1].count -= 1/4>>
+			<<else>>
+				<<set $items[1].count -= 1>>
+			<</if>>
 		<</if>>
 	<<else>>
 		<<if $abyssKnow == 0>>
