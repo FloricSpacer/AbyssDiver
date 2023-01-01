@@ -1720,6 +1720,15 @@ How many dubloons would you like to pay back?
 
 :: GeneralTimeStats
 <<nobr>>
+<<set _minishCor = 1>>
+<<set _minishCorTwin = 1>>
+<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+	<<set _minishCor /= 4>>
+<</if>>
+<<if $companionTwin.curses.some(e => e.name === "Minish-ish")>>
+	<<set _minishCorTwin /= 4>>
+<</if>>
+
 <<set $time += $tempTime>>
 <<if $currentLayer==1>>
 
@@ -1809,17 +1818,9 @@ How many dubloons would you like to pay back?
 		<<set $forageFood = 1>>
 	<</if>>
 	<<if $forageFood == 0>>
-		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
-			<<set $items[1].count -= 1/4>>
-		<<else>>
-			<<set $items[1].count -= 1>>
-		<</if>>
+		<<set $items[1].count -= 1 * _minishCor>>
 		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-			<<if $companionTwin.curses.some(e => e.name === "Minish-ish")>>
-				<<set $items[1].count -= 1/4>>
-			<<else>>
-				<<set $items[1].count -= 1>>
-			<</if>>
+			<<set $items[1].count -= 1 * _minishCorTwin>>
 		<</if>>
 	<<else>>
 		<<if $abyssKnow == 0>>
@@ -1850,7 +1851,10 @@ How many dubloons would you like to pay back?
 					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
 					<<set $HeightLog.push($ForageFoodMajor)>>
 				<<else>>
-					<<set $items[1].count -= 1>>
+					<<set $items[1].count -= 1 * _minishCor>>
+					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+						<<set $items[1].count -= 1 * _minishCorTwin>>
+					<</if>>
 				<</if>>
 			<<elseif $currentLayer==5>>
 				<<set $foodL5 += 1>>
@@ -1862,10 +1866,16 @@ How many dubloons would you like to pay back?
 					<<set $foodL6 += 1>>
 					<<set $items[20].count -= Math.max(3 - $bullRed, 1)>>
 				<<else>>
-					<<set $items[1].count -= 1>>
+					<<set $items[1].count -= 1 * _minishCor>>
+					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+						<<set $items[1].count -= 1 * _minishCorTwin>>
+					<</if>>
 				<</if>>
 			<<elseif $currentLayer==7>>
-				<<set $items[1].count -= 1>>
+				<<set $items[1].count -= 1 * _minishCor>>
+				<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+					<<set $items[1].count -= 1 * _minishCorTwin>>
+				<</if>>
 			<<elseif $currentLayer==8>>
 				<<set $foodL8 += 1>>
 				<<set $LibidoLog.push($ForageFoodMinor)>>
@@ -1895,7 +1905,10 @@ How many dubloons would you like to pay back?
 					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
 					<<set $HeightLog.push($ForageFoodMinor)>>
 				<<else>>
-					<<set $items[1].count -= 1>>
+					<<set $items[1].count -= 1 * _minishCor>>
+					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+						<<set $items[1].count -= 1 * _minishCorTwin>>
+					<</if>>
 				<</if>>
 			<<elseif $currentLayer==5>>
 				<<set $foodL5 += 1>>
@@ -1907,10 +1920,16 @@ How many dubloons would you like to pay back?
 					<<set $foodL6 += 1>>
 					<<set $items[20].count -= Math.max(3 - $bullRed, 1)>>
 				<<else>>
-					<<set $items[1].count -= 1>>
+					<<set $items[1].count -= 1 * _minishCor>>
+					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+						<<set $items[1].count -= 1 * _minishCorTwin>>
+					<</if>>
 				<</if>>
 			<<elseif $currentLayer==7>>
-				<<set $items[1].count -= 1>>
+				<<set $items[1].count -= 1 * _minishCor>>
+				<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+					<<set $items[1].count -= 1 * _minishCorTwin>>
+				<</if>>
 			<<elseif $currentLayer==8>>
 				<<set $foodL8 += 1>>
 				<<set $LibidoLog.push($ForageFoodMinor)>>
@@ -1920,7 +1939,7 @@ How many dubloons would you like to pay back?
 <</for>>	
 
 <<if $items[1].count < 0>>
-	<<set $starving -= $items[1].count>>
+	<<set $starving -= $items[1].count * _minishCor>>
 	<<set $items[1].count = 0>>
 <<else>>
 	<<set $starving = 0 >>
@@ -1937,13 +1956,14 @@ How many dubloons would you like to pay back?
 		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
 		<<set $forageWater = 1>>
 	<</if>>
+
 	<<if ($items[25].count > 0 && $wardWaterDrink == 1) || ($items[25].count > 0 && $wardWaterDrink == 2 && $hexflame > 9)>>
-		<<set $items[25].count -= 1>>
-		<<set $items[0].count += 1>>
+		<<set $items[25].count -= 1 * _minishCor>>
+		<<set $items[0].count += 1 * _minishCor>>
 		<<set $hexflame -= 1>>
 		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-			<<set $items[25].count -= 1>>
-			<<set $items[0].count += 1>>
+			<<set $items[25].count -= 1 * _minishCorTwin>>
+			<<set $items[0].count += 1 * _minishCorTwin>>
 		<</if>>
 	<</if>>
 	<<if $forageWater == 0>>
@@ -2013,11 +2033,13 @@ How many dubloons would you like to pay back?
 <<FlaskFirst>>
 <<if $items[3].count + $items[0].count > 0>>
 	<<if $flaskMatrixLabel[$flaskPref]=="Bottled water">>
-		<<set $items[0].count -= 1>>
+		<<set $items[0].count -= 1 * _minishCor>>
 	<<else>>
-		<<set $items[3].count -= 1>>
-		<<set $items[2].count += 1>>
-		<<set $flaskMatrix[$flaskPref] -=1>>
+		<<set $items[3].count -= 1  * _minishCor>>
+		<<set $items[2].count += 1  * _minishCor>>
+		<<set $flaskMatrix[$flaskPref] -= 1  * _minishCor>>
+
+
 		<<if $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the first layer">>
 			<<set $waterL1 += 1>>
 			<<set $GenderLog.push($ForageWaterMajor)>>
@@ -2046,18 +2068,19 @@ How many dubloons would you like to pay back?
 		<<FlaskFirst>>
 		<<if $items[3].count + $items[0].count > 0>>
 			<<if $flaskMatrixLabel[$flaskPref]=="Bottled water">>	
-				<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-					<<set $items[0].count -= 1>>
-				<</if>>
+				<<set $items[0].count -= 1 * _minishCorTwin>>
 			<<else>>
-				<<set $items[3].count -= 1>>
-				<<set $items[2].count += 1>>
-				<<set $flaskMatrix[$flaskPref] -=1>>
+				<<set $items[3].count -= 1 * _minishCorTwin>>
+				<<set $items[2].count += 1 * _minishCorTwin>>
+				<<set $flaskMatrix[$flaskPref] -=1 * _minishCorTwin>>
 			<</if>>
 		<</if>>
 	<</if>>
 <<else>>
-	<<set $items[0].count -= 1>>
+	<<set $items[0].count -= 1  * _minishCor>>
+	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+		<<set $items[0].count -= 1  * _minishCorTwin>>
+	<</if>>
 <</if>>
 
 :: Flask Order[nobr noreturn]
