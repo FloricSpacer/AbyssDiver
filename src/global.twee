@@ -720,6 +720,8 @@ Choose the Relic you would like to sell:
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+		<<elseif $ownedRelics[$i].name=="Solace Lace">>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$slwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
@@ -1108,6 +1110,16 @@ Manage food and water items:<br>
 	<<else>>
 		<br>You can put on the majestic stole you have, it is sure to help sway the hearts of your companions to become more friendly and respect you as a leader. This increases the affection gain from any event that alters affection.<br>
 		[[Wear the Heart-stealing Stole|Use Items and Relics][$hsswear=1]]<br>
+	<</if>>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Solace Lace")>>
+	<<if $slwear>>
+		<br>You can take off the small white bow. This will remove the protection from extreme enviroments you are gaining from the Relic.<br>
+		[[Take off the Heart-stealing Stole|Use Items and Relics][$slwear=0]]<br>
+	<<else>>
+		<br>You can put on the small white bow you have. It will shield you from any extreme enviromental temperatures, protect you from illness and above all make you hair look more feminine and cute!<br>
+		[[Wear the Solace Lace|Use Items and Relics][$slwear=1]]<br>
 	<</if>>
 <</if>>
 
@@ -1688,6 +1700,20 @@ How many dubloons would you like to pay back?
 	<<set $dark=false>>
 <</if>>
 
+<<if $slwear>>
+	<<set $heat=1>>
+	<<set $cool=1>>
+<<elseif $warmCloth && !$dollevent2>>
+	<<set $heat=1>>
+	<<set $cool=0>>
+<<elseif $coolCloth && !$dollevent2>>
+	<<set $heat=0>>
+	<<set $cool=1>>
+<<else>>
+	<<set $heat=0>>
+	<<set $cool=0>>
+<</if>>
+
 <<if $currentLayer==1>>
 	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 <<elseif $currentLayer==2>>
@@ -1701,11 +1727,14 @@ How many dubloons would you like to pay back?
 	<</if>>
 <<elseif $currentLayer==4>>
 	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
-	<<if $torchUse == 1 && $heat == 1>>
+	<<if $heat == 1>>
 		<<set $tempTime -= 2>>
-	<<elseif $items[9].count > 0 && $torchUse == 1>>
+	<<elseif $torchUse == 1>>
 		<<set $tempTime -= 2>>
 		<<set $items[9].count -= 1>>
+			<<if $items[9].count < 0 >>
+				<<set $items[9].count = 0>>
+			<</if>>
 	<<elseif $playerCurses.filter(e => e.name === "Cold Blooded").length>0 >>
 		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>> Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.
 		<<if $app.skinType.includes("furred") >>
