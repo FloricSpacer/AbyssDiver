@@ -1788,6 +1788,16 @@ How many dubloons would you like to pay back?
 
 :: GeneralTimeStats
 <<nobr>>
+
+<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+	<<set _random = Math.random(1,Math.pow(2,Math.ceil($tempTime/7)))>>
+	<<if >>
+		
+	<</if>>
+<<elseif $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+	<<set _random = Math.random(1,Math.pow(5,Math.ceil($tempTime/7)))>>
+<</if>>
+
 <<set _minishCor = 1>>
 <<set _minishCorTwin = 1>>
 <<if $playerCurses.some(e => e.name === "Minish-ish")>>
@@ -2180,6 +2190,22 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 <br><br>
 <<return>>
 
+
+:: CampCode
+You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that. 
+
+How many days would you like to rest here?
+<<set _string = "Layer" + $currentLayer + " Hub" >>
+<<textbox "_temp" "0">>
+<<nobr>><<link "Set up camp and wait" _string>>
+	<<set _tempTimeWait = parseInt(_temp)>>
+
+	<<for _tempTimeWait; _tempTimeWait >0; _tempTimeWait-->>
+		<<set $tempTime = 1>>
+		<<include "GeneralTimeStats">>
+	<</for>>
+
+<</link>><</nobr>>
 
 :: Curse Descriptions
 <<nobr>>
