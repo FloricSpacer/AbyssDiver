@@ -1258,66 +1258,13 @@ Note: Some effects of this Curse are not yet implemented.
 <<CarryAdjust>>
 <</nobr>>
 
-:: Layer7 Curses Random [layer7]
-<<nobr>>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,11) + 84>>
-	<<if ($temp1 == 84) && !$playerCurses.some(e => e.name === "Libido Reinforcement E") && $StoredCurse.name != "Libido Reinforcement E">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 85) && !$playerCurses.some(e => e.name === "Gender Reversal E") && $StoredCurse.name != "Gender Reversal E">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 86) && !$playerCurses.some(e => e.name === "Asset Robustness E") && !$playerCurses.some(e => e.name === "Shrunken Assets") && $StoredCurse.name != "Asset Robustness E" && $StoredCurse.name != "Shrunken Assets">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 87) && !$playerCurses.some(e => e.name === "Urine Reamplification A") && $StoredCurse.name != "Urine Reamplification A">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 88) && !$playerCurses.some(e => e.name === "Barter System") && $StoredCurse.name != "Barter System">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 89) && !(playerCurses.some(e => e.name === "Shared Space")) && $StoredCurse.name != "Shared Space">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 90) && !$playerCurses.some(e => e.name === "Weakling") && $StoredCurse.name != "Weakling">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 91) && setup.takenCurseCount("Random Orgasms") < 5>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 92) && !$playerCurses.some(e => e.name === "Beastly") && $StoredCurse.name != "Beastly">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 93) && !$playerCurses.some(e => e.name === "Creature of the Night") && $StoredCurse.name != "Creature of the Night">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 94) && !$playerCurses.some(e => e.name === "Minish-ish") && $StoredCurse.name != "Minish-ish" && !$playerCurses.some(e => e.name === "Colossal-able") && $StoredCurse.name != "Colossal-able">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 95) && !$playerCurses.some(e => e.name === "Colossal-able") && $StoredCurse.name != "Colossal-able" && !$playerCurses.some(e => e.name === "Minish-ish") && $StoredCurse.name != "Minish-ish">>
-		<<break>>
-	<</if>>
-
-
-
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
-		<<break>>
-	<</if>>
+:: Layer7 Curses Random [nobr]
+<<set _tempCurses = ["Libido Reinforcement E", "Gender Reversal E", "Asset Robustness E", "Urine Reamplification A", "Barter System", "Shared Space", "Weakling", "Random Orgasms", "Beastly", "Creature of the Night", "Minish-ish", "Colossal-able"]>>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>
-
+<<include "Curse Randomizer">>
 
 :: Escape Balloon L7 [layer7]
 <<nobr>><<set $currentLayer = 7>><<if !isPlaying("layer7")>>

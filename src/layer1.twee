@@ -1216,68 +1216,13 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <</if>>
 [[Return to exploring your food and water options on this layer|Layer1 Forage]]
 
-
-:: Layer1 Curses Random
-<<nobr>>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,11)>>
-	<<if ($temp1 == 0) && !$playerCurses.some(e => e.name === "Libido Reinforcement A") && !$StoredCurse.some( c => c.name === "Libido Reinforcement A")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 1) && !$playerCurses.some(e => e.name === "Gender Reversal A") && !$StoredCurse.some( c => c.name === "Gender Reversal A")>>
-		<<break>>
-	<</if>>
-	<<if $temp == 2 && !($playerCurses.some(e => e.name === "Asset Robustness A") || $playerCurses.some(e => e.name === "Shrunken Assets")) && !$StoredCurse.some( c => c.name === "Asset Robustness A" ||  c => c.name === "Shrunken Assets")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 3) && !$playerCurses.some(e => e.name === "Clothing Restriction A") && !$StoredCurse.some( c => c.name === "Clothing Restriction A")>>
-		<<break>>
-	<</if>>
-	<<set _playerCurseRobust = ($playerCurses.some(e => e.name === "Shrunken Assets") || $playerCurses.some(e => e.name === "Asset Robustness A")|| $playerCurses.some(e => e.name === "Asset Robustness B")|| $playerCurses.some(e => e.name === "Asset Robustness C")|| $playerCurses.some(e => e.name === "Asset Robustness D")|| $playerCurses.some(e => e.name === "Asset Robustness E"))>>
-	<<set _StoredCurseRobust = ($StoredCurse.some( c => c.name === "Shrunken Assets") || $StoredCurse.some( c => c.name === "Asset Robustness A")|| $StoredCurse.some( c => c.name ==="Asset Robustness B")|| $StoredCurse.some( c => c.name ==="Asset Robustness C")|| $StoredCurse.some( c => c.name ==="Asset Robustness D") || $StoredCurse.some( c => c.name ===  "Asset Robustness E"))>>
-	<<if ($temp1 == 4) && !_playerCurseRobust && !_StoredCurseRobust>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 5) && !$playerCurses.some(e => e.name === "Hair Removal") && !$StoredCurse.some( c => c.name === "Hair Removal")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 6) && !$playerCurses.some(e => e.name === "Perma-dye") && !$StoredCurse.some( c => c.name === "Perma-dye")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 7) && !$playerCurses.some(e => e.name === "Freckle Speckle") && !$StoredCurse.some( c => c.name === "Freckle Speckle")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 8) && !$playerCurses.some(e => e.name === "Knife-ear") && !$StoredCurse.some( c => c.name === "Knife-ear")>>
-		<<break>>
-	<</if>>
-	<<set _temp2 =$HeightLog.filter(e => e.name === "Dizzying Heights").length>>
-	<<if ($temp1 == 9) && _temp2 < 5 || ($StoredCurse.some( c => c.name === "Dizzying Heights") && _temp2 < 4 && !$ManagedMisfortuneActive.some( c => c.name === "Dizzying Heights"))>>
-		<<break>>
-	<</if>>
-		<<if ($temp1 == 10) && !$playerCurses.some(e => e.name === "Increased Sensitivity") && !$StoredCurse.some( c => c.name === "Increased Sensitivity")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 11) && !$playerCurses.some(e => e.name === "Refractory Refactorization") && !$StoredCurse.some( c => c.name === "Refractory Refactorization")>>
-		<<break>>
-	<</if>>
-
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
-		<<break>>
-	<</if>>
+:: Layer1 Curses Random [nobr]
+<<set _tempCurses = ["Libido Reinforcement A", "Gender Reversal A", "Asset Robustness A", "Clothing Restriction A", "Shrunken Assets", "Hair Removal", "Perma-dye", "Freckle Speckle", "Knife-ear", "Dizzying Heights", "Increased Sensitivity","Refractory Refactorization"]>>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>
-
+<<include "Curse Randomizer">>
 
 :: Layer1 Threat1 Ascend [layer1]
 <<set $timeL2T1 -= 4>>

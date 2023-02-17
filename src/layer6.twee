@@ -1001,66 +1001,13 @@ You have successfully taken on the $curse84.name Curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L6]]
 <</if>>
 
-
-:: Layer6 Curses Random [layer6]
-<<nobr>>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,11) + 72>>
-	<<if ($temp1 == 72) && !$playerCurses.some(e => e.name === "Submissiveness Rectification B") && !$playerCurses.some(e => e.name === "Power Dom") && $StoredCurse.name != "Submissiveness Rectification B" && $StoredCurse.name != "Power Dom">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 73) && !$playerCurses.some(e => e.name === "Lactation rejuvination B") && $StoredCurse.name != "Lactation rejuvination B">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 74) && !$playerCurses.some(e => e.name === "Pleasure Respecification B") && $StoredCurse.name != "Pleasure Respecification B">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 75) && !$playerCurses.some(e => e.name === "Age Reduction C") && $StoredCurse.name != "Age Reduction C">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 76) && setup.takenCurseCount("Horny") == 0>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 77) && !playerCurses.some(e => e.name === "Drawing Spades") && $StoredCurse.name != "Drawing Spades">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 78) && !$playerCurses.some(e => e.name === "Tattoo Tally") && $StoredCurse.name != "Tattoo Tally">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 79) && !$playerCurses.some(e => e.name === "Leaky") && $StoredCurse.name != "Leaky">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 80) && !$playerCurses.some(e => e.name === "Wandering Hands") && $StoredCurse.name != "Wandering Hands">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 81) && setup.takenCurseCount("Semen Demon") < 4>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 82) && setup.takenCurseCount("Quota") < 4>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 83) && setup.takenCurseCount("In the Limelight") < 4>>
-		<<break>>
-	<</if>>
-
-
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
-		<<break>>
-	<</if>>
+:: Layer6 Curses Random [nobr]
+<<set _tempCurses = ["Submissiveness Rectification B", "Lactation Rejuvination B", "Pleasure Respecification B", "Age Reduction C", "Horny", "Drawing Spades", "Tattoo Tally", "Leaky", "Wandering Hands", "Semen Demon", "Quota", "In the Limelight"]>>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>
-
+<<include "Curse Randomizer">>
 
 :: Layer6 Cherry Relic [layer6]
 <<nobr>>

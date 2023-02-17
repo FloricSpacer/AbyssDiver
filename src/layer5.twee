@@ -1192,77 +1192,13 @@ You have successfully taken on the $curse72.name Curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L5]]
 <</if>>
 
-
-:: Layer5 Curses Random [layer5]
-<<nobr>>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,15) + 56>>
-	<<if ($temp1 == 56) && !$playerCurses.some(e => e.name === "Libido Reinforcement D") && $StoredCurse.name != "Libido Reinforcement D">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 57) && !$playerCurses.some(e => e.name === "Gender Reversal D") && $StoredCurse.name != "Gender Reversal D">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 58) && !$playerCurses.some(e => e.name === "Pleasure Respecification A") && $StoredCurse.name != "Pleasure Respecification A">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 59) && !$playerCurses.some(e => e.name === "Clothing Restriction C") && !$playerCurses.some(e => e.name === "Crossdress Your Heart") && $StoredCurse.name != "Clothing Restriction C" && $StoredCurse.name != "Crossdress Your Heart">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 60) && !$playerCurses.some(e => e.name === "Massacre Manicure") && $StoredCurse.name != "Massacre Manicure">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 61) && !(playerCurses.some(e => e.name === "DoS")) && $StoredCurse.name != "DoS">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 62) && !$playerCurses.some(e => e.name === "DoM") && $StoredCurse.name != "DoM">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 63) && !$playerCurses.some(e => e.name === "Hijinks Ensure") && $StoredCurse.name != "Hijinks Ensure">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 64) && !$playerCurses.some(e => e.name === "Flower Power") && $StoredCurse.name != "Flower Power">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 65) && !$playerCurses.some(e => e.name === "Cellulose") && $StoredCurse.name != "Cellulose">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 66) && !$playerCurses.some(e => e.name === "Chlorophyll") && $StoredCurse.name != "Chlorophyll">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 67) && !$playerCurses.some(e => e.name === "Pheromones") && $StoredCurse.name != "Pheromones">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 68) && !$playerCurses.some(e => e.name === "Carapacian") && $StoredCurse.name != "Carapacian">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 69) && !$playerCurses.some(e => e.name === "Hemospectrum") && $StoredCurse.name != "Hemospectrum">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 70) && !$playerCurses.some(e => e.name === "Wriggly Antennae") && $StoredCurse.name != "Wriggly Antennae">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 71) && !$playerCurses.some(e => e.name === "Eggxellent") && $StoredCurse.name != "Eggxellent">>
-		<<break>>
-	<</if>>
-
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
-		<<break>>
-	<</if>>
+:: Layer5 Curses Random [nobr]
+<<set _tempCurses = ["Libido Reinforcement D", "Gender Reversal D", "Pleasure Respecification A", "Clothing Restriction C", "Massacre Manicure", "DoS", "DoM", "Hijinks Ensue", "Flower Power", "Cellulose", "Chlorophyll", "Pheromones", "Carapacian", "Hemospectrum", "Wriggly Antennae", "Eggxellent"]>>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>
-
+<<include "Curse Randomizer">>
 
 :: Take on Chlorophyll [layer5]
 <<set $playerCurses.push($curse67)>><<set $corruption += $curse67.corr>>

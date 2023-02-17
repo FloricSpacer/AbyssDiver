@@ -1594,82 +1594,13 @@ Use the following option only if you have specifically considered your inventory
 [[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Ascend2]]
 
 */
-:: Layer2 Curses Random
+:: Layer2 Curses Random [nobr]
 <<set _tempCurses = ["Libido Reinforcement B","Gender Reversal B","Asset Robustness B","Age Reduction A","Fluffy Ears","Fluffy Tail","Maximum Fluff","Heat/Rut","Lightweight","Sex Switcheroo","Futa Fun","Blushing Virgin"]>>
-<<include "Curse Randomizer">>
-
-/* 
-:: Layer2 Curses Random legacy
-<<nobr>>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,11) + 12>>
-
-	<<if ($temp1 == 11) && !$playerCurses.some(e => e.name === "Libido Reinforcement B") && $StoredCurse.name != "Libido Reinforcement B">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 12) && !$playerCurses.some(e => e.name === "Gender Reversal B") && $StoredCurse.name != "Gender Reversal B">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp == 13)&& !($playerCurses.some(e => e.name === "Asset Robustness B") || $playerCurses.some(e => e.name === "Shrunken Assets")) && $StoredCurse.name != "Asset Robustness B" && $StoredCurse.name != "Shrunken Assets">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 14) && !$playerCurses.some(e => e.name === "Age Reduction A") && $StoredCurse.name != "Age Reduction A">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 15) && !$playerCurses.some(e => e.name === "Fluffy Ears") && $StoredCurse.name != "Fluffy Ears">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 16) && !$playerCurses.some(e => e.name === "Fluffy Tail") && $StoredCurse.name != "Fluffy Tail">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 17) && !$playerCurses.some(e => e.name === "Maximum Fluff") && $StoredCurse.name != "Maximum Fluff">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 18) && !$playerCurses.some(e => e.name === "Heat/Rut") && $StoredCurse.name != "Heat/Rut">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 19) && !$playerCurses.some(e => e.name === "Lightweight") && $StoredCurse.name != "Lightweight">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 21) && !($playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun")) && $StoredCurse.name != "Sex Switcheroo" && $StoredCurse.name != "Futa Fun">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 21) && !($playerCurses.some(e => e.name === "Sex Switcheroo") || $playerCurses.some(e => e.name === "Futa Fun")) && $StoredCurse.name != "Sex Switcheroo" && $StoredCurse.name != "Futa Fun">>
-		<<break>>
-	<</if>>
-
-	<<if ($temp1 == 23) && !$playerCurses.some(e => e.name === "Blushing Virgin") && $StoredCurse.name != "Blushing Virgin">>
-		<<break>>
-	<</if>>
-
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
-		<<break>>
-	<</if>>
-
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>*/
-
+<<include "Curse Randomizer">>
 
 :: Escape Balloon L2 [layer2]
 <<nobr>><<set $currentLayer = 2>><<if !isPlaying("layer2")>>
