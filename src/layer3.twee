@@ -1651,77 +1651,13 @@ You have successfully taken the $relic33.name Relic. Hopefully you can make good
 [[Continue exploring the third layer|Layer3 Hub]]
 
 
-:: Layer3 Curses Random
-<<nobr>>
-<<set _pregCurse = $playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Wacky Wombs") || $playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Wacky Wombs" || $StoredCurse.name == "Omnitool">>
-<<for _i = 0; _i < 999; _i ++>>
-	<<set _temp1 = random(0,11) + 24>>
-	<<if (_temp1 == 24) && !($playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Power Dom") || $StoredCurse.name == "Submissiveness Rectification A" || $StoredCurse.name == "Power Dom") >>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 25) && !$playerCurses.some(e => e.name === "Gender Reversal C") && $StoredCurse.name != "Gender Reversal C">>
-		<<break>>
-	<</if>>
-	<<if $temp == 26 && !($playerCurses.some(e => e.name === "Asset Robustness C") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name == "Asset Robustness C" || $StoredCurse.name == "Shrunken Assets")>>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 27) && !$playerCurses.some(e => e.name === "Clothing Restriction B") && $StoredCurse.name != "Clothing Restriction B">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 28) && !(playerCurses.some(e => e.name === "Power Dom") || $playerCurses.some(e => e.name === "Submissiveness Rectification A") || $playerCurses.some(e => e.name === "Submissiveness Rectification B"))>>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 29) && !$playerCurses.some(e => e.name === "20/20000000") && $StoredCurse.name != "20/20000000">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 30) && !$playerCurses.some(e => e.name === "Comic Relief") && $StoredCurse.name != "Comic Relief">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 31) && !$playerCurses.some(e => e.name === "Equal Opportunity") && $StoredCurse.name != "Equal Opportunity">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 32) && !($playerCurses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Pregnancy" || $StoredCurse.name == "Absolute Birth Control")>>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 33) && !_pregCurse && !$playerCurses.some(e => e.name === "Absolute Birth Control") && $StoredCurse.name != "Absolute Birth Control">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 34) && !($app.womb > 1 || ($playerCurses.some(e => e.name === "Wacky Wombs") &&  $StoredCurse.name == "Wacky Wombs") ||$playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 35) && !($playerCurses.some(e => e.name === "Omnitool") || $StoredCurse.name == "Omnitool" || $playerCurses.some(e => e.name === "Absolute Birth Control") || $StoredCurse.name == "Absolute Birth Control")>>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 36) && !$playerCurses.some(e => e.name === "Gooey") && $StoredCurse.name != "Gooey">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 37) && !$playerCurses.some(e => e.name === "Rainbow Swirl") && $StoredCurse.name != "Rainbow Swirl">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 38) && !$playerCurses.some(e => e.name === "Double Pepperoni") && $StoredCurse.name != "Double Pepperoni">>
-		<<break>>
-	<</if>>
-	<<if (_temp1 == 39) && !$playerCurses.some(e => e.name === "Literal Blushing Virgin") && $StoredCurse.name != "Literal Blushing Virgin">>
-		<<break>>
-	<</if>>
-
-	<<if _i > 900>>
-		<<set _temp1 = -1>>
-		<<break>>
-	<</if>>
+:: Layer3 Curses Random [nobr]
+<<set _tempCurses = ["Submissiveness Rectification A", "Gender Reversal C", "Asset Robustness C", "Clothing Restriction B", "Power Dom", "20/20000000", "Comic Relief", "Equal Opportunity", "Absolute Pregnancy", "Absolute Birth Control", "Wacky Wombs", "Omnitool", "Gooey", "Rainbow Swirl", "Double Pepperoni", "Literal Blushing Virgin"]>>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if _temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[_temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[_temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>
-
+<<include "Curse Randomizer">>
 
 :: Escape Balloon L3 [layer3]
 <<nobr>><<set $currentLayer = 3>><<if !isPlaying("layer3")>>

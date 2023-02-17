@@ -1551,77 +1551,13 @@ Please enter your new scale color:
 <</if>>
 <</nobr>>
 
-:: Layer4 Curses Random
-<<nobr>>
-<<set _clothCurse = $playerCurses.some(e => e.name === "Clothing Restriction B") || $playerCurses.some(e => e.name === "Clothing Restriction C") || $playerCurses.some(e => e.name === "Crossdress Your Heart") || $StoredCurse.name == "Clothing Restriction B" || $StoredCurse.name == "Clothing Restriction C" || $StoredCurse.name == "Crossdress Your Heart">>
-<<for $i = 0; $i < 999; $i++>>
-	<<set $temp1 = random(0,15) + 40>>
-	<<if ($temp1 == 40) && !$playerCurses.some(e => e.name === "Libido Reinforcement C") && $StoredCurse.name != "Libido Reinforcement C">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 41) && !$playerCurses.some(e => e.name === "Lactation Rejuvination A") && $StoredCurse.name != "Lactation Rejuvination A">>
-		<<break>>
-	<</if>>
-	<<if $temp == 42 && !($playerCurses.some(e => e.name === "Asset Robustness D") || $playerCurses.some(e => e.name === "Shrunken Assets") || $StoredCurse.name != "Asset Robustness D" || $StoredCurse.name != "Shrunken Assets")>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 43) && !$playerCurses.some(e => e.name === "Age Reduction B") && $StoredCurse.name != "Age Reduction B">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 44) && !playerCurses.some(e => e.name === "Sleep Tight") && $StoredCurse.name != "Sleep Tight">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 45) && !$playerCurses.some(e => e.name === "Sweet Dreams") && $StoredCurse.name != "Sweet Dreams">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 46) && !$playerCurses.some(e => e.name === "Hypno Happytime") && $StoredCurse.name != "Hypno Happytime">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 47) && !($playerCurses.some(e => e.name === "Crossdress Your Heart") || $playerCurses.some(e => e.name === "Futa Fun") || $StoredCurse.name == "Crossdress Your Heart" || $StoredCurse.name == "Futa Fun" || _clothCurse )>>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 48) && !$playerCurses.some(e => e.name === "Lie Detector") && $StoredCurse.name != "Lie Detector">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 49) && !$playerCurses.some(e => e.name === "Megadontia") && $StoredCurse.name != "Megadontia">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 50) && $playerCurses.some(e => e.name === "Softie") && $StoredCurse.name != "Softie">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 51) && !$playerCurses.some(e => e.name === "Hard Mode") && $StoredCurse.name != "Hard Mode">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 52) && !$playerCurses.some(e => e.name === "Lingual Leviathan") && $StoredCurse.name != "Lingual Leviathan">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 53) && !$playerCurses.some(e => e.name === "Tipping the Scales") && $StoredCurse.name != "Tipping the Scales">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 54) && !$playerCurses.some(e => e.name === "Reptail") && $StoredCurse.name != "Reptail">>
-		<<break>>
-	<</if>>
-	<<if ($temp1 == 55) && !$playerCurses.some(e => e.name === "Cold Blooded") && $StoredCurse.name != "Cold Blooded">>
-		<<break>>
-	<</if>>
-
-	<<if $i > 900>>
-		<<set $temp1 = -1>>
-		<<break>>
-	<</if>>
+:: Layer4 Curses Random [nobr]
+<<set _tempCurses = ["Libido Reinforcement C", "Lactation Rejuvination A", "Asset Robustness D", "Age Reduction B", "Sleep Tight", "Sweet Dreams", "Hypno Happytime", "Crossdress Your Heart", "Lie Detector", "Megadontia", "Softie", "Hard Mode", "Lingual Leviathan", "Tipping the Scales", "Reptail", "Cold Blooded"]>>
+<<set _totalCurses = $playerCurses>>
+<<for _i=0; _i< $hiredCompanions.length; _i++>>
+    <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
-<</nobr>>
-
-<<if $temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with $curses[$temp1].name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + $curses[$temp1].name + "]]">>
-<<else>>
-There are no Curses left for you to take on this layer.
-
-<<back>>
-<</if>>
-
+<<include "Curse Randomizer">>
 
 :: Escape Balloon L4 [layer4]
 <<nobr>><<set $currentLayer = 4>><<if !isPlaying("layer4")>>
