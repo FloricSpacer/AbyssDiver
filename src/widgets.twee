@@ -2402,6 +2402,20 @@
 <<if !$ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
 	<<set $EndlessAeonglass=false>>
 <</if>>
+
+<<set $ManagedMisfortuneMax = $ownedRelics.filter(e => e.name === "Managed Misfortune").length*2>>
+<<if $ManagedMisfortuneMax < $StoredCurse.length >>
+<<for _i=$StoredCurse.length-1; _i>=$ManagedMisfortuneMax; _i-->>
+	<<if $ManagedMisfortuneActive.some(e => e.name ===$StoredCurse[_i].name)>>
+		<<set $targetCurse = $StoredCurse[_i]>>
+		<<include "CurseRemoval">>
+		<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
+		<<set $ManagedMisfortuneActive.deleteAt(_j)>>
+	<</if>>
+	<<set $StoredCurse.deleteAt(_i)>>
+<</for>>
+<</if>>
+
 <</widget>>
 
 :: Affection widget [widget nobr]
