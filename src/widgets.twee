@@ -1915,6 +1915,7 @@
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
 <<set $app.curses = $playerCurses>>/*temporary fix to prevent having to replace all instances */
+<<Equipment>>
 <<statUpdateCompanions>>
 <<Handicap>>
 <<HeightCorrected>>
@@ -2355,6 +2356,53 @@
 		<<set _sexOptions.push("Sex Scissor Sub/Dom")>>
 	<</if>>
 <</if>>
+
+:: Equiped items and Relics widget [widget nobr]
+<<widget "Equipment">>
+
+<<if !$ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
+	<<set $hsswear=0>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Solace Lace")>>
+	<<set $slwear=0>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Event Horizon")>>
+	<<set $EventHorizonWear=false>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Chain of Lorelei")>>
+	<<set $colwear=0>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Blind Divine")>>
+	<<set $BDwear=false>>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
+	<<if $HeavyHeadwear && $IQdrop<900>>
+		<<set $IQdrop+=999>>
+	<</if>>
+<<else>>
+	<<set $HeavyHeadwear=false>>
+	<<if $IQdrop>900>>
+		<<set $IQdrop-=999>>
+	<</if>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Sibyl Blend")>>
+	<<set $SibylBuff = 0>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
+	<<set $DaedalusEquip = false>> <<set $DaedalusFly=false>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
+	<<set $EndlessAeonglass=false>>
+<</if>>
+<</widget>>
 
 :: Affection widget [widget nobr]
 <<widget "AffectionChange">>
