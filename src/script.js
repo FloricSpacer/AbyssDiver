@@ -137,6 +137,21 @@ Macro.add('say', {
 
 Setting.addHeader("Content Settings");
 
+Setting.addToggle("MaleSceneToggleFilter", {
+	label : "Enable random sex scences involving male characters",
+	default  : 1,
+});
+
+Setting.addToggle("FemaleSceneToggleFilter", {
+	label : "Enable random sex scences involving female characters",
+	default  : 1,
+});
+
+Setting.addToggle("OtherSceneToggleFilter", {
+	label : "Enable random sex scences involving futa characters or characters without genitals",
+	default  : 1,
+});
+
 Setting.addToggle("MenCycleToggleFilter", {
 	label : "Hide messages containing information about your menstrual cycle ",
 	default  : 1,
