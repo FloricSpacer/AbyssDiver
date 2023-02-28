@@ -1882,42 +1882,49 @@
 <<for _i=0; _i<$hiredCompanions.length; _i++ >>
 	<<if $hiredCompanions[_i].name == "Maru">>
 		<<set $hiredCompanions[_i].affec = $companionMaru.affec>>
+		<<set $hiredCompanions[_i].sex = $companionMaru.sex>>
 		<<if $companionMaru.pregnantT == 9999>>
 			<<set $companionMaru.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
 		<<set $companionMaru.curses = $hiredCompanions[_i].curses>>
 	<<elseif $hiredCompanions[_i].name == "Lily">>
 		<<set $hiredCompanions[_i].affec = $companionLily.affec>>
+		<<set $hiredCompanions[_i].sex = $companionLily.sex>>
 		<<if $companionLily.pregnantT == 9999>>
 			<<set $companionLily.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
 		<<set $companionLily.curses = $hiredCompanions[_i].curses>>
 	<<elseif $hiredCompanions[_i].name == "Khemia">>
 		<<set $hiredCompanions[_i].affec = $companionKhemia.affec>>
+		<<set $hiredCompanions[_i].sex = $companionKhemia.sex>>
 		<<if $companionKhemia.pregnantT == 9999>>
 			<<set $companionKhemia.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
 		<<set $companionKhemia.curses = $hiredCompanions[_i].curses>>
 	<<elseif $hiredCompanions[_i].name == "Cloud">>
 		<<set $hiredCompanions[_i].affec = $companionCloud.affec>>
+		<<set $hiredCompanions[_i].sex = $companionCloud.sex>>
 		<<if $companionCloud.pregnantT == 9999>>
 			<<set $companionCloud.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
 		<<set $companionCloud.curses = $hiredCompanions[_i].curses>>
 	<<elseif $hiredCompanions[_i].name == "Cherry">>
 		<<set $hiredCompanions[_i].affec = $companionCherry.affec>>
+		<<set $hiredCompanions[_i].sex = $companionCherry.sex>>
 		<<if $companionCherry.pregnantT == 9999>>
 			<<set $companionCherry.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
 		<<set $companionCherry.curses = $hiredCompanions[_i].curses>>
 	<<elseif $hiredCompanions[_i].name == "Saeko">>
 		<<set $hiredCompanions[_i].affec = $companionSaeko.affec>>
+		<<set $hiredCompanions[_i].sex = $companionSaeko.sex>>
 		<<if $companionSaeko.pregnantT == 9999>>
 			<<set $companionSaeko.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
 		<<set $companionSaeko.curses = $hiredCompanions[_i].curses>>
 	<<elseif $hiredCompanions[_i].name == $companionTwin.name>>
 		<<set $hiredCompanions[_i].affec = $companionTwin.affec>>
+		<<set $hiredCompanions[_i].sex = $companionTwin.sex>>
 		<<if $companionTwin.pregnantT == 9999>>
 			<<set $companionTwin.pregnantT = $hiredCompanions[_i].pregnantT>>
 		<</if>>
@@ -2288,7 +2295,7 @@
 :: widget for random sex scene selection with companions [widget nobr]
 <<widget "randomSexSelect">>
 <<set _elligbleCompanions=[]>>
-<<set _tempflag=true>>
+<<set _tempflag=false>>
 <<if $playerCurses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control")  >>
 	<<set _tempflag=true>>
 <</if>>
@@ -2319,13 +2326,11 @@
 <</if>>
 <<if _elligbleCompanions.length> 0>>
 	<<set _temp = random(0, _elligbleCompanions.length-1)>>
-	<<for _i=0; _i<$hiredCompanions.length; _i++>>
-		<<if _elligbleCompanions[_temp].name==$companionTwin.name>>
-			<<set _handle = $companionTwin>>
-		<<else>>
-			<<print "<<set _handle = $companion" + _companion.name + " >>">>
-		<</if>>
-	<</for>>
+	<<if _elligbleCompanions[_temp].name==$companionTwin.name>>
+		<<set _handle = $companionTwin>>
+	<<else>>
+		<<print "<<set _handle = $companion" + _elligbleCompanions[_temp].name + " >>">>
+	<</if>>
 
 	/* 
 	<<for _i=0; _i<1; _i++>>
