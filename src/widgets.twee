@@ -2274,22 +2274,33 @@
 :: widget for random sex scene selection with companions [widget nobr]
 <<widget "randomSexSelect">>
 <<set _elligbleCompanions=[]>>
+<<set _tempflag=true>>
+<<if $playerCurses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control")  >>
+	<<set _tempflag=true>>
+<</if>>
+
 <<if settings.MaleSceneToggleFilter || $playerCurses.some(e => e.name === "Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "male")>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<set _elligbleCompanions.push(_temp[_i])>>
+		<<if !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+			<<set _elligbleCompanions.push(_temp[_i])>>
+		<</if>>
 	<</for>>
 <</if>>
 <<if settings.FemaleSceneToggleFilter || $playerCurses.some(e => e.name === "Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "female")>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<set _elligbleCompanions.push(_temp[_i])>>
+		<<if !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+			<<set _elligbleCompanions.push(_temp[_i])>>
+		<</if>>	
 	<</for>>
 <</if>>
 <<if settings.OtherSceneToggleFilter || $playerCurses.some(e => e.name === "Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "futa" || e.sex === "doll-like" )>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<set _elligbleCompanions.push(_temp[_i])>>
+		<<if !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+			<<set _elligbleCompanions.push(_temp[_i])>>
+		<</if>>
 	<</for>>
 <</if>>
 <<if _elligbleCompanions.length> 0>>
