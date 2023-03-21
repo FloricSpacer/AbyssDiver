@@ -404,7 +404,13 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 
 <<if $dollevent2== true>>
 	<br>You seem to be stuck wearing a tattered pink dress that looks eerily similar to the one your doll is wearing. Annoyingly, this prevents you from wearing other clothes, even in harsh environments.
+	<<if $dolleventWet>0>>
+		On top of that you are now also stuck in some sort of disposable type diaper underneath your dress. You can't get it off now matter what as it fits snugly around your waste and the tapes are fake. 
+	<</if>>
 <br>
+<</if>>
+<<if $WettingSolution==2>>
+	Instead of your normal underwear, you are now wearing the protective absorbent underwear you got from Maru. Although, calling it protective underwear seems like an understatement. Maru made the whole thing so bulky that it feels you're walking around in a cloth diaper.
 <</if>>
 
 <<set _semenCount = setup.activeCurseCount("Semen Demon")>>
@@ -1797,12 +1803,17 @@ How many dubloons would you like to pay back?
 <<nobr>>
 
 <<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-	<<set _random = Math.random(1,Math.pow(2,Math.ceil($tempTime/7)))>>
-	<<if >>
-		
+	<<set _random = Math.random(1,Math.pow(3,Math.ceil($tempTime)))>>
+	<<set _threshold = (Math.pow(3,Math.ceil($tempTime))-Math.pow(2,Math.ceil($tempTime)))>>
+	<<if $WettingSolution==0 && _random<=_threshold>>
+		<<include "Wetting Events">>
 	<</if>>
 <<elseif $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-	<<set _random = Math.random(1,Math.pow(5,Math.ceil($tempTime/7)))>>
+	<<set _random = Math.random(1,Math.pow(15,Math.ceil($tempTime)))>>
+	<<set _threshold = (Math.pow(15,Math.ceil($tempTime))-Math.pow(14,Math.ceil($tempTime)))>>
+	<<if $WettingSolution==0 && _random<=_threshold>>
+		<<include "Wetting Events">>	
+	<</if>>
 <</if>>
 
 <<set _minishCor = 1>>
