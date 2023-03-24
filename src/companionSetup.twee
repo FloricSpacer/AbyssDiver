@@ -970,4 +970,66 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 	</div>
 <</widget>>
 
+:: Companion Layer Interaction
+<<nobr>>
+<<if ~$ConvoHandicapLarge>>
+	<<if $hiredCompanions.length > 0>>
+		<<set _temp1 = random(0,$hiredCompanions.length - 1)>>
+		<<if $hiredCompanions[_temp1].name != $companionTwin.name>>
+			<<set _convoOptions = ["layer"]>>
+
+			<<set _string = "$" + $hiredCompanions[_temp1].name + "ConvoLac" >>
+			<<print "<<set _boolean = " + _string + ">>">>
+			<<if  _boolean>>
+				<<set _convoOptions.push("lac")>>
+			<</if>>
+			<<if $WettingSolution==1 && ($hiredCompanions[_temp1].name != "Lily" || $hiredCompanions[_temp1].name != "Khemia")>>
+				<<set _convoOptions.push("wet")>>
+			<<elseif $WettingSolution==1>>
+				<<set _convoOptions.push("wetDoll")>>
+			<<elseif $WettingSolution==2 && ($hiredCompanions[_temp1].name == "Maru" || $hiredCompanions[_temp1].name == "Lily" || $hiredCompanions[_temp1].name == "Khemia")>>
+				<<set _convoOptions.push("wet")>>
+			<<elseif $WettingSolution==3 && $hiredCompanions[_temp1].name == "Saeko">>
+				<<set _convoOptions.push("wet")>>
+			<</if>>
+
+			<<set _temp2 = random(0,length(_convoOptions)-1)>>
+			<<if "layer"==_convoOptions[_temp2]>>
+				<<include `$hiredCompanions[_temp1].name + " Layer " + $currentLayer`>>
+			<<elseif "lac"==_convoOptions[_temp2]>>
+				<<include `$hiredCompanions[_temp1].name + "ConvoLac Rep"`>>
+			<<elseif "wet"==_convoOptions[_temp2]>>
+				<<if $hiredCompanions[_temp1].name == "Saeko">>
+					<<set _temp3 = = random(1,4)>>
+					<<include `$hiredCompanions[_temp1].name + " Schedule " + _temp3`>>
+				<<elseif $hiredCompanions[_temp1].name == "Khemia">>
+					<<if $khmeiaWettingFlag>>
+						<<include `$hiredCompanions[_temp1].name + " Diapered 2"`>>
+					<<else>>
+						<<include `$hiredCompanions[_temp1].name + " Diapered 1"`>>
+					<</if>>
+				<<else>>
+					<<include `$hiredCompanions[_temp1].name + "Diapered"`>>
+				<</if>>
+			<<elseif "wetDoll"==_convoOptions[_temp2]>>
+				<<if $dolleventWet > 6>>
+					<<include "Doll Diapered 3">>
+				<<elseif $dolleventWet > 3>>
+					<<include "Doll Diapered 2">>
+				<<else>>
+					<<include "Doll Diapered 1">>
+				<</if>>
+			<</if>>
+		<</if>>
+	<<elseif $WettingSolution==1>>
+		<<if $dolleventWet > 6>>
+			<<include "Doll Diapered 3">>
+		<<elseif $dolleventWet > 3>>
+			<<include "Doll Diapered 2">>
+		<<else>>
+			<<include "Doll Diapered 1">>
+		<</if>>
+	<</if>>
+<</if>>
+<</nobr>>
 
