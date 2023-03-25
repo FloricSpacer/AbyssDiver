@@ -983,8 +983,13 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 			<<if  _boolean>>
 				<<set _convoOptions.push("lac")>>
 			<</if>>
-			<<if $WettingSolution==1 && ($hiredCompanions[_temp1].name != "Lily" || $hiredCompanions[_temp1].name != "Khemia")>>
-				<<set _convoOptions.push("wet")>>
+			<<if $WettingSolution==1 && ($hiredCompanions[_temp1].name == "Lily" || $hiredCompanions[_temp1].name == "Khemia")>>
+				<<set _temp3 = random(0,1)>>
+				<<if _temp3 == 0>>
+					<<set _convoOptions.push("wet")>>
+				<<else>>
+					<<set _convoOptions.push("wetDoll")>>
+				<</if>>
 			<<elseif $WettingSolution==1>>
 				<<set _convoOptions.push("wetDoll")>>
 			<<elseif $WettingSolution==2 && ($hiredCompanions[_temp1].name == "Maru" || $hiredCompanions[_temp1].name == "Lily" || $hiredCompanions[_temp1].name == "Khemia")>>
@@ -993,7 +998,7 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 				<<set _convoOptions.push("wet")>>
 			<</if>>
 
-			<<set _temp2 = random(0,length(_convoOptions)-1)>>
+			<<set _temp2 = random(0,_convoOptions.length-1)>>
 			<<if "layer"==_convoOptions[_temp2]>>
 				<<include `$hiredCompanions[_temp1].name + " Layer " + $currentLayer`>>
 			<<elseif "lac"==_convoOptions[_temp2]>>
@@ -1009,7 +1014,7 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 						<<include `$hiredCompanions[_temp1].name + " Diapered 1"`>>
 					<</if>>
 				<<else>>
-					<<include `$hiredCompanions[_temp1].name + "Diapered"`>>
+					<<include `$hiredCompanions[_temp1].name + " Diapered"`>>
 				<</if>>
 			<<elseif "wetDoll"==_convoOptions[_temp2]>>
 				<<if $dolleventWet > 6>>
@@ -1022,9 +1027,9 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 			<</if>>
 		<</if>>
 	<<elseif $WettingSolution==1>>
-		<<if $dolleventWet > 6>>
+		<<if $dolleventWet > 4>>
 			<<include "Doll Diapered 3">>
-		<<elseif $dolleventWet > 3>>
+		<<elseif $dolleventWet > 2>>
 			<<include "Doll Diapered 2">>
 		<<else>>
 			<<include "Doll Diapered 1">>
