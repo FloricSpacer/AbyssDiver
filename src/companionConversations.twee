@@ -12,6 +12,9 @@
 <</if>><<if $currentLayer == 2 && $forageFood == 1 && $L2FoodConvo == 0>>
 [[Chat with Maru as you forage for food|Layer2 Forage Convo][$L2FoodConvo = 1]]
 <</if>>
+<<if $Wetting && $WettingSolution == 0>>
+[[Inquire Maru what he was working when you were waiting for everthing to dry.|Maru Wetting]]
+<</if>>
 
 :: Maru Convo0
 <<say $companionMaru>>Hi I'm Maru<</say>>
@@ -213,6 +216,7 @@ With a sense of pride Maru grabs something form his stuff. It seems like a pair 
 <<else>>\
 	<<say $companionMaru>>No not really, uh, I mean yeah sort of.<</say>>
 	Maru shuffels around a bit awkwardly.
+
 	<<say $companionMaru>>It's like protective underwear. I made it with cloth scraps so it should be super absorbent. It will prevent anymore accidents like before.<</say>>
 	<<say $mc>>Thanks I guess. Where did you get this idea?<</say>>
 <</if>>
@@ -2195,7 +2199,9 @@ Cloud seems to consider this for a moment, then he comes up with an idea.
 <<elseif $SaekoConvo3==0 && $companionSaeko.affec>30 && $SaekoConvo2 >>
 [[Chat with Saeko|Saeko Convo3][$SaekoConvo3=true]]<br>
 <</if>>
-
+<<if $Wetting && $WettingSolution == 0>>
+[[Inquire Saeko why she was annoyed when you were waiting for everthing to dry.|Saeko Wetting]]
+<</if>>
 
 :: Saeko Convo0
 <<say $companionSaeko>>Oh, hello. I'm Saeko. You're the expedition leader, correct?<</say>>
@@ -2350,20 +2356,20 @@ You turn red.
 <<say $mc>> The day, we had to wait an extra day to dry all my equipment...<</say>>
 <<say $companionSaeko>> Because you peed on them?<</say>>
 <<say $mc>>Yes...<</say>>
-<<say $companionSaeko>> And we had to deviate from the schedule and spend extra resources, because you can't do what most 5 year old can?<</say>>
+<<say $companionSaeko>> And we had to deviate from the schedule and spend extra resources, because you can't do what most 5 year old's can?<</say>>
 <<say $mc>>Jeez, I get it. You were agitated.<</say>>
 <<say $companionSaeko>> Yes, I don't like these sudden surprises. But I think I already came up with a solution.<</say>>
-<<say $mc>>Ow and what's that?<</say>>
+<<say $mc>>Ow, and what's that?<</say>>
 <<say $companionSaeko>> Some times when small children have persistant bed wetting issues a strict schedule helps.<</say>>
 <<say $mc>> But I'm not a small child<</say>>
 <<if $app.appAge<12>>
-Saeko cocks here eyebrow again.
+	Saeko cocks here eyebrow again.
 
-<<say $companionSaeko>> You could've fooled me.<</say>>
-<<say $mc>>Ouch.<</say>>
+	<<say $companionSaeko>> You could've fooled me.<</say>>
+	<<say $mc>>Ouch.<</say>>
 <<else>>
-<<say $companionSaeko>> I'm aware. Can you please let me finish.<</say>>
-<<say $mc>>Yeah, sorry.<</say>>
+	<<say $companionSaeko>> I'm aware. Can you please let me finish.<</say>>
+	<<say $mc>>Yeah, sorry.<</say>>
 <</if>>
 <<say $companionSaeko>> Anyway, it's the principle that matters here. If we put you on a tight scedule, when you pee, when and how much you drink, especially late at night, your blatter should be empty before you go to bed. Thus, preventing anymore unforseen delays.<</say>>
 <<say $mc>>Ah okay, so I assume you have a scedule like that at hand.<</say>>
@@ -2410,6 +2416,7 @@ Saeko gives you a glare and storms off
 :: Saeko Wetting Accepted
 <<say $mc>>Okay, sure. If you think we can prevent anymore accidents like that.<</say>>
 Saeko's face lights up.
+
 <<say $companionSaeko>>Great! Well I wake you up at 6:45 and you get 250ml of fluids. You're at risk of getting dehydrated if we start later because of the long period without fluids we had during the night before. After that...<</say>>
 Saeko walks you through an entire schedule describing every moment you can drink, pee and when you'll sleep. It looks like you'll be seeing a lot more of her from now on.
 
@@ -3976,7 +3983,7 @@ But unfortunately, this is no longer your story, it's hers.
 
 [[End your conversation|Party overview]]
 
-:: Wetting Events
+:: Wetting Events [nobr]
 <<if $dollevent2==true>>
 	As you slowly wake up to travel to your destination, you hear a crinkle. At first your not really sure what it is or where it comes from and you snuggle some more with your dolly. But you also note the bulky feeling in between your legs. When your hands shoot down you a greeted with the soft, bulky and plastic feeling of what appears to be a diaper taped around your waste. If that isn't shocking enough it quite bloated and damp.<br><br>
 	<<say $mc>>What the hell? Why am I wearing a diaper? And why is it wet?<</say>><br>
@@ -4015,7 +4022,8 @@ But unfortunately, this is no longer your story, it's hers.
 		In the morning Maru saw your wet sheets and started blushing <<if $companionMaru.sex=="male">>himself, when he<<else>>herself, when she<</if>> looked at you. Ever since <<if $companionMaru.sex=="male">>he<<else>>she<</if>> has been quite busy the entire day with something. Maybe you could talk to <<if $companionMaru.sex=="male">>him<<else>>her<</if>> about what <<if $companionMaru.sex=="male">>he<<else>>she<</if>> is getting so worked up about.
 	<</if>>
 	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-		When you told Saeko about the delay, it seems she was a bit annoyed. Ever since then <<if $companionMaru.sex=="male">>he has been on his<<else>>she has been on her<</if>> phone and scribbling down a lot. Maybe you should talk to <<if $companionMaru.sex=="male">>him<<else>>her<</if>>.
+		When you told Saeko about the delay, it seems <<if $companionSaeko.sex=="male">>he<<else>>she<</if>> was a bit annoyed. Ever since then <<if $companionSaeko.sex=="male">>he has been on his<<else>>she has been on her<</if>> phone and scribbling down a lot. Maybe you should talk to <<if $companionSaeko.sex=="male">>him<<else>>her<</if>>.
+		<<set $companionSaeko.affec-=1-$hsswear>>
 	<</if>>
 
 	<<if $items[3].count > 0 || $items[0].count > 0>>
@@ -4627,6 +4635,6 @@ You slump your shoulder and accept that you'll be thristy untill the next schedu
 <<say $mc>>150ml over the last 2 hours<</say>>
 Saeko smiles.
 
-<<say $companionSaeko>>You see? You can be a good <<if $app.sex="male">>boy.<<else>>girl.<</if>><</say>><br>
+<<say $companionSaeko>>You see? You can be a good <<if $app.sex=="male">>boy.<<else>>girl.<</if>><</say>><br>
 
 
