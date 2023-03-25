@@ -3,7 +3,7 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.brokerUsed == 1 && StoryVar.corruption < 0) {
 		return "BrokerEnd";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && StoryVar.app.appAge < 8 && StoryVar.dollevent2==false){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && StoryVar.app.appAge < 10 && StoryVar.dollevent2==false){
 		return "DollWarning";
 	}
 	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && StoryVar.app.appAge < 4 && StoryVar.dollevent2==true){
