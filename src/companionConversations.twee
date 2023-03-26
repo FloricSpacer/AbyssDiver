@@ -12,8 +12,11 @@
 <</if>><<if $currentLayer == 2 && $forageFood == 1 && $L2FoodConvo == 0>>
 [[Chat with Maru as you forage for food|Layer2 Forage Convo][$L2FoodConvo = 1]]
 <</if>>
+<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionMaru.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionMaru.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Maru")>>
+	[[Maybe Maru can help you with your appetite for sexual fluids|Maru Semen Demon]]<br>
+<</if>>
 <<if $Wetting && $WettingSolution == 0>>
-[[Inquire Maru what he was working when you were waiting for everthing to dry.|Maru Wetting]]
+[[Inquire Maru what he was working when you were waiting for everthing to dry.|Maru Wetting]]<br>
 <</if>>
 
 :: Maru Convo0
@@ -194,6 +197,49 @@ Maru tells you in detail how he prepared the dish. It's actually pretty simple, 
 
 :: Maru Convo3
 Double-click this passage to edit it.
+
+:: Maru Semen Demon
+<<say $mc>>Maru, I really need your help with something...<</say>>
+<<say $companionMaru>>Whatever it is I'll be glad to help!<</say>>
+<<say $mc>>Ever since I attracted the Semen Demon curse I need specific fluids or else I starve.<</say>>
+Maru turns quite red.
+
+<<if $companionMaru.penisCor > 0 && $companionMaru.vagina >0  >>/
+	<<say $mc>>Any kind of sexual fluid you could provide will do, but I need it daily.<</say>>
+<<elseif $companionMaru.penisCor > 0 >>
+	<<say $mc>>More specifically, I need your semen and I need it daily.<</say>>
+<<else>>
+	<<say $mc>>More specifically, I need your vaginal fluids and I need it daily.<</say>>
+<</if>>
+<<say $companionMaru>>I don't know this is sort of sudden.<</say>>
+He blushes deeply.
+
+<<say $mc>>Please Maru you have to help me out here.<</say>>
+
+<<if $companionMaru.subdom>0 || ($companionMaru.affec>10 &&  $app.appGender<4)>>
+	Maru seems looks in your eyes and claps his hands to his face.
+
+	<<say $companionMaru>>OMG you're making me blush so much... Okay yes...<</say>>
+	He looks away while saying that. You start unbuttoning his clothes for your first meal.
+	<<set _handle = $companionMaru>>
+	<<include "SemonDemonGeneral">>
+
+<<elseif $companionMaru.affec>10 || ($companionMaru.affec>0 && $app.appGender<4)>>
+	<<say $companionMaru>>To be honest I don't feel to comfortable doing it, but you need my help! I have to do everything I can even if I don't like it<</say>>
+	Maru looks at you with a confident determination you seldom see of him.
+	<<set _handle = $companionMaru>>
+	<<include "SemonDemonGeneral">>
+
+<<else>>
+	He looks down and whispers something.
+
+	<<say $companionMaru>>Please don't make me do this. I really don't want to<</say>>
+	<<say $mc>>I..nevermind... I'll look for a different solution.<</say>>
+
+<</if>>
+[[End your conversation|Party overview]]
+
+
 
 :: Maru Wetting
 /*Still needs editing xxx */
@@ -2711,7 +2757,7 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 	[[End your 'conversation'|Party overview]]
 <<else>>\
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $app.womb>0 ) || $app.womb1=="throat" || $app.womb2=="throat">>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -2737,7 +2783,7 @@ $companionTwin.name gives you a sultry look as <<if $companionTwin.sex=='male'>>
 
 :: Twin Sex Anal Receive 
 	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $app.womb>0 ) || $app.womb1=="anus" || $app.womb2=="anus">>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -2798,7 +2844,7 @@ Half an hour later you lie in absolute bliss in eachothers arms. This was the be
 
 :: Twin Sex Regular Receive 
 <<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
-	<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+	<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 		<<set $pregChance = 1>>	
 	<</if>>	
 	<<PregCheck>>\
@@ -2869,7 +2915,7 @@ You both get undressed, eager to get started. $companionTwin.name pushes you dow
 	Shortly after you lie in absolute bliss in eachothers arms. This was the best idea you had in a while.
 <</if>>\
 <<if !$playerCurses.some(e => e.name === "Absolute Birth Control") || !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
-	<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+	<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 		<<set $pregChance = 1>>	
 	<</if>>
 	<<PregCheck>>
@@ -2977,7 +3023,7 @@ You give $companionTwin.name a sultry look as you bear your breast and take out 
 
 <<elseif $app.breastsCor > 6>>\
 	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $app.womb > 0>>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -2994,7 +3040,7 @@ You give $companionTwin.name a sultry look as you bear your breast and take out 
 
 <<elseif $app.breastsCor > 9>>\
 	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $app.womb > 0>>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -3014,7 +3060,7 @@ You give $companionTwin.name a sultry look as you bear your breast and take out 
 	
 <<else>>
 	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $app.womb > 0>>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -3065,7 +3111,7 @@ You start to convulse as an orgasm rolls over you and as if triggered by your or
 	<<say $mc>>It's okay. You know, when we change that clitty in a real clitty we'll be perfect twins!<</say>>
 	You give <<if $companionTwin.sex=='male'>>him <<else>>her <</if>>a little kiss as you stand up and starts cleaning herself.
 	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy")>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -3085,7 +3131,7 @@ You start to convulse as an orgasm rolls over you and as if triggered by your or
 		<<set $companionTwin.pregnantT = $time-14>><<set $pregTwinMC = true>>\
 	<</if>>\
 	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
-		<<if $companionTwin.some(e => e.name === "Absolute Pregnancy") && $app.womb> 0>>
+		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy") && $app.womb> 0>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -4062,6 +4108,40 @@ But unfortunately, this is no longer your story, it's hers.
 <<set $companionAI.imageIcon= "Icons/Ai_neutral_happy.png">>
 
 [[End your conversation|Party overview]]
+
+
+/* needs editing xxx */
+:: SemonDemonGeneral
+<<if  $playerCurses.some(e => e.name === "Megadontia")>>\
+	As you slightly open your mouth to get started, _handle.name eyes your razor sharp teeth.
+
+	<<say _handle>> You know what, maybe this isn't the best idea.<</say>>
+	<<say $mc>>But you just said that...<</say>>
+	<<say _handle>>I know, but at that point I wasn't aware I'd be risking my genitals every day with those fangs.<</say>>
+	<<say $mc>>Oh... Okay<</say>>
+
+	[[End your 'conversation'|Party overview]]
+<<else>>\
+	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $app.womb>0 ) || $app.womb1=="throat" || $app.womb2=="throat">>\
+		<<if _handle.some(e => e.name === "Absolute Pregnancy")>>
+			<<set $pregChance = 1>>	
+		<</if>>
+		<<PregCheck>>\
+	<</if>>
+	As you slightly open your mouth to get started, you bring your head closer to <<if _handle.sex=='male'>>his member. As you slide your lips over his penis he lets out a soft moan. You start working his shaft with your mouth.<<else>>her pussy. As your tongue touches her lips she gives a slight shudder.<</if>>. 
+	<<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>\
+		The more and more you get your tongue involved the more you hear _handle.name moan from pleasure. 
+
+		<<say _handle>> Good god, that tongue of you is out of this world<</say>>
+		You move your head up and give _handle.name a big grin.
+
+		<<say $mc>> Just shut up and enjoy.<</say>>
+		You move your head down again and let your tongue do its magic again.
+	<</if>>\
+	The moans start to get more frequent and you double your efforts. Shortly after, _handle.name starts to convulse and <<if _handle.penisCor>0>>hot seed immediately starts filling your mouth. <<else>>_handle.name arches her back with trembling shocks and pushes your head tightly against her pussy. Filling your mouth with a load of vaginal fluid.<</if>>
+	You eagerly swallow your mouthfull. You feel a little bit more satisfied as the slimy substance reaches your stomach.
+	<<set $SemenDemonVec.push(_handle)>>
+<</if>>
 
 :: Wetting Events [nobr]
 <<if $dollevent2==true>>
