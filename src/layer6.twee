@@ -987,9 +987,13 @@ You have successfully taken on the $curse81.name Curse. Hopefully you are ok wit
 
 
 :: Take on Semen Demon [layer6]
-<<set $playerCurses.push($curse82)>><<set $corruption += $curse82.corr>><<set $LibidoLog.push($curse82)>>
+<<include "Semen Demon Customization">>
 
-You have successfully taken on the $curse82.name Curse. Hopefully you are ok with accepting the permanent consequences.
+[[Confirm|Take on Semen Demon pt2]]
+
+:: Take on Semen Demon pt2 [layer6]
+<<include "Semen Demon Taken">>
+<<include "Semen Demon Retrieval">>
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
 <<if $escBalDepl==0>>
@@ -998,6 +1002,40 @@ You have successfully taken on the $curse82.name Curse. Hopefully you are ok wit
 	[[Return to your balloon|Escape Balloon L6]]
 <</if>>
 
+:: Semen Demon Customization
+What would be your prefered meal type.
+
+<<radiobutton "$curse82.variation" "sexual fluids" checked>> Any sexual fluids
+<<radiobutton "$hornVariation" "semen">> Just semen
+<<radiobutton "$hornVariation" "vaginal fluids">> Just vaginal fluids
+
+How many levels of the curse would you like to gain?
+@@.alert2; Not having the correct equipment to supply yourself or taking more than one level will mean you have to find additional sources or you will die!@@<br><br>
+
+<<radiobutton "$temp1" 1 checked>> One
+<<radiobutton "$temp1" 2 >> Two
+<<radiobutton "$temp1" 3 >> Three
+<<radiobutton "$temp1" 4 >> Four
+
+:: Apply Stored Semen Demon Curse
+<<include "Semen Demon Taken">>
+<<include "Semen Demon Retrieval">>
+
+[[Continue|Use Items and Relics]]
+
+
+:: Semen Demon Taken [nobr]
+<<set $playerCurses.push($curse82)>>
+<<set $LibidoLog.push($curse82)>>
+<<set $corruption += $curse82.corr * $temp1 >>
+<<if $curse82.variation != "sexual fluids">>
+	<<set $corruption +=15>>
+<</if>>
+
+:: Semen Demon Retrieval [layer6]
+You start to feel thirsty and then hungry. After a while you feel comple famished. You know what you need to still this hunger, you need $curse82.variation!
+
+You have successfully taken on the $curse82.name Curse. Hopefully you are ok with accepting the permanent consequences.
 
 :: Take on Quota [layer6]
 <<set $playerCurses.push($curse83)>><<set $corruption += $curse83.corr>><<set $LibidoLog.push($curse83)>>
