@@ -809,18 +809,20 @@
 
 :: Semen Demon Widget [widget nobr]
 <<widget "SemenDemonCalc">>
-<<set _semenCount = setup.activeCurseCount("Semen Demon")>>
 
 <<set _contributions =0>>
 <<for _i=0; _i<$SemenDemonVec.length; _i++ >>
-	<<if $hiredCompanions.some(e => e.name === SemenDemonVec[_i].name)>>
+	<<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
 		<<set _contributions +=1>>
 	<</if>>
 <</for>>
 <<if ($app.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($app.vagina > 0 && $curse82.variation!="semen") >>
 		<<set _contributions +=1>>
 <</if>>
-<<set $SemenDemonBalance += (_contributions*-_semenCount)*_args[0]>>
+<<set $SemenDemonBalance += (_contributions-$curse82.variation1)*_args[0]>>/* */
+<<if $SemenDemonBalance <-14 >>
+<<set $gameOver=true>>
+<</if>>
 <</widget>>
 
 :: Pronoun widgets [widget nobr]
