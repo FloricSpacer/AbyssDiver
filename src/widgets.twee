@@ -811,14 +811,20 @@
 <<widget "SemenDemonCalc">>
 
 <<set _contributions =0>>
+
+<<if ($app.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($app.vagina > 0 && $curse82.variation!="semen") >>
+		<<set _contributions += Math.floor(1+$crumbleFluid/100)>>
+		<<if $playerCurses.some(e => e.name === "Leaky")>>
+			<<set _contributions *= 2>>
+		<</if>>
+<</if>>
+
 <<for _i=0; _i<$SemenDemonVec.length; _i++ >>
 	<<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
 		<<set _contributions +=1>>
 	<</if>>
 <</for>>
-<<if ($app.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($app.vagina > 0 && $curse82.variation!="semen") >>
-		<<set _contributions +=1>>
-<</if>>
+
 <<set $SemenDemonBalance += (_contributions-$curse82.variation1)*_args[0]>>/* */
 <<if $SemenDemonBalance <-14 >>
 	<<set $gameOver=true>>
