@@ -415,16 +415,19 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 
 
 <<if $crumbleFluid > 0>>
-	Due to the consumption of crumbleweed from the fifth layer, your production of sexual fluids has increased by <<print $crumbleFluid>>%<<if $playerCurses.some(e => e.name === "Leaky")>>, this has doubled due to your 'Leaky' curse<</if>>. <<if $crumbleFluid > 50>>Try not to get too dehydrated if you're especially sexually active.<</if>><<print " ">>
+	Due to the consumption of crumbleweed from the fifth layer, your production of sexual fluids has increased by <<print $crumbleFluid>>%<<if $playerCurses.some(e => e.name === "Leaky")>>, and your overall production has even doubled due to your 'Leaky' curse<</if>>. <<if $crumbleFluid > 50>>Try not to get too dehydrated if you're especially sexually active.<</if>><<print " ">>
+<<elseif $playerCurses.some(e => e.name === "Leaky")>>
+	Your overall production of sexual fluids has doubled due to your 'Leaky' curse.
 <</if>>
 <<if $playerCurses.some(e => e.name === "Semen Demon")>>
 	You must drink <<print ($curse82.variation1 * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($curse82.variation1 * 2)>> loads per day. 
 	<<if ($app.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($app.vagina > 0 && $curse82.variation!="semen") >>
-		<<set _temp = Math.floor(1+$crumbleFluid/100)>>
 		<<if $playerCurses.some(e => e.name === "Leaky")>>
-			<<set _temp *= 2>>
+			<<set _temp = Math.floor((1+$crumbleFluid/100)*2)>>
+		<<else>>
+			<<set _temp = Math.floor(1+$crumbleFluid/100)>>
 		<</if>>
-		You can supply yourself with _temp loads a days.
+		You can supply yourself with <<print _temp*2>> loads a days.
 	<</if>>
 	<<if $SemenDemonVec.length > 0>>
 		<<if $SemenDemonVec.length == 1>>
@@ -437,7 +440,7 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 		<</if>>
 		<<if $SemenDemonVec.length == 1>> is<<else>> are<</if>> is providing you with <<print ($SemenDemonVec.length*2)>> loads a day.
 	<</if>>
-<</if>>$SemenDemonBalance $tempTime
+<</if>>
 <<print " ">>
 <<set _quotaCount = setup.activeCurseCount("Quota")>>
 <<if _quotaCount > 0>>

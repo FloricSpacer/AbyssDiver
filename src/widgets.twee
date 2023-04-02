@@ -809,13 +809,13 @@
 
 :: Semen Demon Widget [widget nobr]
 <<widget "SemenDemonCalc">>
-
 <<set _contributions =0>>
 
 <<if ($app.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($app.vagina > 0 && $curse82.variation!="semen") >>
-		<<set _contributions += Math.floor(1+$crumbleFluid/100)>>
 		<<if $playerCurses.some(e => e.name === "Leaky")>>
-			<<set _contributions *= 2>>
+			<<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
+		<<else>>
+			<<set _contributions += Math.floor(1+$crumbleFluid/100)>>
 		<</if>>
 <</if>>
 
@@ -1019,7 +1019,7 @@
 
 :: Lewdness function [widget nobr]
 <<widget "Lewdness">>
-	<<set _semenCount = setup.activeCurseCount("Semen Demon")>>
+	<<set _semenCount = $curse82.variation1>>
 	<<set _quotaCount = setup.activeCurseCount("Quota")>>
 	<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
 	<<set $lewdness = ($app.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize + $standardsLower + $foodL6>>
