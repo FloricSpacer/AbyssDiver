@@ -1385,6 +1385,35 @@
 <</for>>
 <</widget>>
 
+:: Miscellaneous stat updates [nobr widget]
+<<widget "Update_Misc_Stat">>
+<<set $sellAdd=0>>
+<<set $timeRed=0>>
+<<set $statRed=0>>
+<<set $bullRed=0>>
+<<set $corRed=0>>
+
+<<if $hiredCompanions.some(e => e.name === "Lily")>>
+	<<set $sellAdd += 10>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+	<<set $timeRed += 2>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<set $statRed += 1>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+	<<set $bullRed += 2>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+	<<set $corRed += 5>><<set $abyssKnow = 1>>
+<</if>>
+<<if $Aegiswear>>
+	<<set $statRed +=1>>
+<</if>>
+<</widget>>
+
+
 :: Speech settings [widget nobr]
 <<widget "Update_MC_Speech">>
 <<appGender>>
@@ -1889,9 +1918,9 @@
 		<</if>>
 		<<set _temp=$DesertedCompanions.length-1>>
 		<<for _i = _temp; _i >-1; _i-->>
-			<<if $DesertedCompanions[_i].name=="Khemia">>
+			/*<<if $DesertedCompanions[_i].name=="Khemia">>
 				<<set $timeRed+=2>>
-			<</if>>
+			<</if>>*/
 			<<set $hiredCompanions.push($DesertedCompanions[_i])>>
 			<<set $DesertedCompanions.deleteAt(_i)>>
 		<</for>>
@@ -2017,6 +2046,8 @@
 <<statUpdateCompanions>>
 <<Handicap>>
 <<HeightCorrected>>
+<<Update_Misc_Stat>>
+
 /*<<set $totalCarry -= $carryWeight>>*/
 
 <<if $playerCurses.some(e => e.name === "Weakling")>>
