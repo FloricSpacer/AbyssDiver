@@ -1221,7 +1221,7 @@ Manage food and water items:<br>
 		<br>
 	<<else>>
 	    <br>You have the Aegis Coffin, would you like to sleep in it to substitute your skeleton with a orichalcum skeleton?<br>
-		[[Sleep in the Aegis Coffin|Use Items and Relics][$AegisWear=true]]<br>
+		[[Sleep in the Aegis Coffin|Use Items and Relics][$AegisWear=true, setup.skeletonRemains.weight= 9.3*heightCor/170, setup.skeletonRemains.count=1]]<br>
 	<</if>>
 <</if>>
 
@@ -1235,6 +1235,45 @@ Manage food and water items:<br>
 		[[Keep to Lightning Rook close so you can hold it at a moments notice.|Use Items and Relics][$LightningWear=true]]<br>
 	<</if>>
 <</if>>
+
+<<if $ownedRelics.some(e => e.name === "Lambent Specter")>>
+	<<if $hiredCompanions.some(e => e.name === "Golem")>>
+		You have a golem following you. <br>
+		<br>
+		<<link "Dispell the Golem by exstinguishing its flame" "Use Items and Relics">>
+		<<for _i = 0; _i < $hiredCompanions.length; _i++>>
+			<<if $hiredCompanions[_i].name == 'Golem'>>
+				<<set $hiredCompanions.deleteAt(_i)>>
+			<</if>>
+		<</for>>
+		<</link>>
+	<<else>>
+	    <br>You can create a golem using the Lambant Specter<br><br>
+
+		With what do you want to use to create your golem?<br>
+		<<if $currentLayer == 4>>
+			<<radiobutton "$companionGolem.type" "snow" checked>> You can build a snowman here and see if that works.<br>
+		<<elseif $currentLayer == 8>>
+			<<radiobutton "$companionGolem.type" "doll" checked>> There are some lifeless doll like figures sometimes in the hallways, these would be excellent.<br>
+		<<elseif $currentLayer == 9>>
+			<<radiobutton "$companionGolem.type" "water" checked>> Maybe you can try with the surrounding water?<br>
+		<<else>>
+			<<radiobutton "$companionGolem.type" "clay" checked>> With dirt, clay and rocks that are laying around.<br>
+		<</if>>
+		<<if setup.skeletonRemains.count > 0 >>
+			<<radiobutton "$companionGolem.type" "skeleton">> With the skeleton remains you still possess.<br>
+		<</if>>
+<br>
+		What is the gender of the person you are thinking of when summoning a spirit?<br>
+		<<radiobutton "$companionGolem.osex" "male" checked>> Male<br>
+		<<radiobutton "$companionGolem.osex" "female" >> Female<br>
+<br>
+		<<link "Create a Golem by summoning a spirit and instructing it to possess your creation" "Use Items and Relics">>
+			<<createGolem>>
+		<</link>>	
+	<</if>>
+<</if>>
+<br><br>
 */
 
 <<if $ownedRelics.some(e => e.name === "From Seafoam")>>

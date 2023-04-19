@@ -434,6 +434,12 @@ style: "border: 2px solid rgb(1,0,0);",
 style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;"
 }>>
 
+<<set $companionGolem = {
+name: "Golem",
+osex: "",
+type: ""
+}>>
+
 <<set $companions = [$companionMaru, $companionLily, $companionKhemia, $companionCherry, $companionCloud, $companionSaeko]>>
 
 <<set $hiredCompanions = []>>
@@ -739,7 +745,7 @@ The rest of the world just sees you as a pair of twins who did everything togeth
 
 :: CompanionDescription
 <<nobr>>
-<<set _handle=_companion>>_companion.name is a _companion.sex <<include "PerceivedRace">>.
+<<set _handle=_companion>><<if _companion.name=="Golem">>The golem, which is inhabitated by your summoned specter,<<else>> _companion.name<</if>> is a _companion.sex <<include "PerceivedRace">>.
 <<if _companion.sex=="male">>He<<else>>She<</if>> is <<set _meters = (_companion.heightCor > 100)>><<print (Math.round(_companion.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>> tall 
 and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge)>>, but <<if _companion.sex=="male">>he<<else>>she<</if>> appears to be <<print Math.round(_companion.appAge)>> years old<<else>>.<</if>>
 
@@ -943,14 +949,20 @@ and  _companion.age years old<<if _companion.age != Math.round(_companion.appAge
 	<<elseif $time - $companionTwin.pregnantT< 180 & $time - $companionTwin.pregnantT>= 120 && $TwinConvoPreg==false >>\
 		Your twin has really gotten out of shape recently. She's been lagging behind the group more and more frequently with her breaks. She also seems to have put on some weight. Perhaps you should have a talk with her to see what's going on.
 	<<elseif $time - $companionTwin.pregnantT< 180 & $time - $companionTwin.pregnantT>= 120 && $TwinConvoPreg==true>>\
-		Your has a small, but obvious bulge for her pregnant belly.
+		Your twin has a small, but obvious bulge for her pregnant belly.
 	<<elseif $time - $companionTwin.pregnantT< 240 & $time - $companionTwin.pregnantT>=180 >>\
-		Your belly is huge and bulging forward in a way that obviously identifies her as pregnant. 
+		Your twin's belly is huge and bulging forward in a way that obviously identifies her as pregnant. 
 	<<elseif $time - $companionTwin.pregnantT>=240>>\
-		Your has a very large and very obvious pregnant belly. She's probably due soon, though it's hard to know exactly when.
+		Your twin has a very large and very obvious pregnant belly. She's probably due soon, though it's hard to know exactly when.
 	<</if>>
 <</if>>
 <<set _companion = $companionTwin>>\
+<<include "CompanionDescription">>
+[[$menuReturn]]
+
+:: Golem Overview [noreturn]
+[img[setup.ImagePath+$companionGolem.image]]
+<<set _companion = $companionGolem>>\
 <<include "CompanionDescription">>
 [[$menuReturn]]
 
