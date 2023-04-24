@@ -1932,7 +1932,12 @@ How many dubloons would you like to pay back?
 <<elseif $currentLayer==7>>
 	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
 <<elseif $currentLayer==8>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - (3 * $items[12].count))>>
+	<<if $items[12].count>0 ||  $items[17].count>0 || $items[21].count>0>>
+		<<set _compass=1>> Having something that helps you descern north from south and right from left in this maze is helping you navigate more efficiently. /*xxx */
+	<<else>>
+		<<set _compass=0>>
+	<</if>>
+	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - 3 * _compass)>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
