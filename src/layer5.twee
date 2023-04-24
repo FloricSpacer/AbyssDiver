@@ -743,44 +743,60 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 <small>Hehe, booby.</small>
 
 <<nobr>>
-<<set _trapAvoided = true>>
-<<if $booby == 1>>
-[img[setup.ImagePath+'Threats/bouldertrap.png']]<br>
-<<set $booby1 += 1>>
-<<if $booby1 >= 3>>
-	Having dealt with this kind of trap before, you recognize the sound of a boulder being released and immediately start running. You reach a safe spot just before the boulder would crush your limbs.
-<<else>>
-	After springing the trigger, a boulder comes rolling down the hallway after you!
-	<<set _trapAvoided = false>>
+<<if $ownedRelics.some(r => r.name === "Rose-tinted Spectacles" || r.name === "Lightning Rook" )>>
+	The power of your relic allows you to react timely to the trap and thus avoiding it completely.
+	<<set _temp = true>>
 <</if>>
-
-<<elseif $booby == 2>>
-[img[setup.ImagePath+'Threats/arrowtrap.jpg']]<br>
-<<set $booby2 += 1>>
-<<if $booby2 >= 3>>
-	While the trigger was too well hidden to be spotted, you did notice the small holes in the wall that arrows would be coming from. You positioned yourself carefully, so all the arrows whizz by you harmlessly when you do trigger the trap.
-<<else>>
-	After springing the trigger, a barrage of arrows flies out the walls towards you!
-	<<set _trapAvoided = false>>
-<</if>>
-
-<<elseif $booby == 3>>
-[img[setup.ImagePath+'Threats/scorpiontrap.jpg']]<br>
-<<set $booby3 += 1>>
-<<if $booby3 >= 3>>
-	As you feel the tiniest movement below your feet, you immediately spread your arms and find something to hold on to. Not a moment too soon, as the trapdoor where you were just standing collapses into a pit of skittering scorpions. Fortunately, you are able to move on safely.
-<<else>>
-	After springing the trigger, a trapdoor opens beneath where you are standing, causing you to fall into a pit of skittering scorpions!
-	<<if $ownedRelics.some(e => e.name === "Forest's Gift")>>
-		<br><br>
-		Fortunately for you, the scorpions in the pit are merely mundane scorpions, rather than an Abyss-twisted analogue of them. And because of your Relic the Forest's Gift, the scorpions are actually friendly towards you, rather than upset that you invaded the pit they live in. A brief conversation explaining what happened leads to them pointing you towards a safe exit, allowing safe and easy escape from the pit.
+<<elseif $booby == 1>>
+	[img[setup.ImagePath+'Threats/bouldertrap.png']]<br>
+	<<set $booby1 += 1>>
+	<<if $booby1 >= 3>>
+		Having dealt with this kind of trap before, you recognize the sound of a boulder being released and immediately start running. You reach a safe spot just before the boulder would crush your limbs.
+		<<set _trapAvoided = true>>
+	<<elseif _temp>>
+		The power of your relic allows you to react timely to the boulder and thus avoiding it completely by finding a safe place well in time./*xxx */
+		<<set _trapAvoided = true>>
 	<<else>>
+		After springing the trigger, a boulder comes rolling down the hallway after you!
 		<<set _trapAvoided = false>>
 	<</if>>
-<</if>>
+
+	<<elseif $booby == 2>>
+	[img[setup.ImagePath+'Threats/arrowtrap.jpg']]<br>
+	<<set $booby2 += 1>>
+	<<if $booby2 >= 3>>
+		While the trigger was too well hidden to be spotted, you did notice the small holes in the wall that arrows would be coming from. You positioned yourself carefully, so all the arrows whizz by you harmlessly when you do trigger the trap.
+		<<set _trapAvoided = true>>
+	<<elseif _temp>>
+		The power of your relic allows you to react timely to arrows being shot in your direction and thus allowing you to dodge them with ease./*xxx */
+		<<set _trapAvoided = true>>
+	<<else>>
+		After springing the trigger, a barrage of arrows flies out the walls towards you!
+		<<set _trapAvoided = false>>
+	<</if>>
+
+	<<elseif $booby == 3>>
+	[img[setup.ImagePath+'Threats/scorpiontrap.jpg']]<br>
+	<<set $booby3 += 1>>
+	<<if $booby3 >= 3>>
+		As you feel the tiniest movement below your feet, you immediately spread your arms and find something to hold on to. Not a moment too soon, as the trapdoor where you were just standing collapses into a pit of skittering scorpions. Fortunately, you are able to move on safely.
+		<<set _trapAvoided = true>>
+	<<elseif _temp>>
+		The power of your relic allows you to react timely to the pitfalls, allowing you to jump out of the way before you tumble down in them./*xxx */
+		<<set _trapAvoided = true>>
+	<<else>>
+		After springing the trigger, a trapdoor opens beneath where you are standing, causing you to fall into a pit of skittering scorpions!
+		<<if $ownedRelics.some(e => e.name === "Forest's Gift")>>
+			<br><br>
+			Fortunately for you, the scorpions in the pit are merely mundane scorpions, rather than an Abyss-twisted analogue of them. And because of your Relic the Forest's Gift, the scorpions are actually friendly towards you, rather than upset that you invaded the pit they live in. A brief conversation explaining what happened leads to them pointing you towards a safe exit, allowing safe and easy escape from the pit.
+			<<set _trapAvoided = true>>
+		<<else>>
+			<<set _trapAvoided = false>>
+		<</if>>
+	<</if>>
 
 <</if>>
-<</nobr>>\
+<</nobr>>
 
 <<if _trapAvoided>>
 	[[Move on to retrieve the Relic|Layer5 Booby2]]
