@@ -1868,18 +1868,27 @@ How many dubloons would you like to pay back?
 	<</if>>
 <</for>>
 
-:: GeneralTimeSetup
+:: GeneralTimeSetup[nobr]
 <<nobr>>
 
 <<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
+	<<set $status.duration -= 1>> 
+<<else>>
 	<<set $status.penalty = 0>>
+<</if>>
+
+<<if $SizeHandicap>0>>
+	Your inconvenient size is increasing your travel time.<br>/*xxx */
+<</if>>
+<<if $app.HandicapMovement < 1 >>
+	Your physical short commings are increasing your travel time.<br>/*xxx */
+<<elseif $app.HandicapMovement > 1 >>
+	Your excelent physical form is decreasing your travel time.<br>/*xxx */
 <</if>>
 
 <<set _tempTimeModifiers = (1+$SizeHandicap)*(1-$app.HandicapMovement/10)>>
 <<if $playerCurses.some(e => e.name === "Chlorophyll") && $dark==true>>
-	<<set $tempTime +=1>> Now that you rely on light for your metabolism, the darkness you are experiencing now is making you sluggish. 
+	<<set $tempTime +=1>> Now that you rely on light for your metabolism, the darkness you are experiencing now is making you sluggish. <br>
 	<<set $dark=false>>
 <</if>>
 
@@ -1906,7 +1915,7 @@ How many dubloons would you like to pay back?
 	<<set _lightRed = setup.haveTravelLightSource() ? 1 : 0>>
 	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _lightRed)>>
 	<<if $playerCurses.some(e => e.name === "Chlorophyll")>>
-		<<set $tempTime +=1>> Now that you rely on light for your metabolism, the darkness in this layer is making you sluggish. 
+		<<set $tempTime +=1>> Now that you rely on light for your metabolism, the darkness in this layer is making you sluggish. <br>
 	<</if>>
 <<elseif $currentLayer==4>>
 	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
@@ -1919,9 +1928,9 @@ How many dubloons would you like to pay back?
 				<<set $items[9].count = 0>>
 			<</if>>
 	<<elseif $playerCurses.filter(e => e.name === "Cold Blooded").length>0 >>
-		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>> Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.
+		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>> Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.<br>
 		<<if $app.skinType.includes("furred") >>
-			<<set $tempTime -=1>> However, your fur is somewhat protective and mitigates the effects of the cold.
+			<<set $tempTime -=1>> However, your fur is somewhat protective and mitigates the effects of the cold.<br>
 		<</if>>
 		<br>
 	<</if>>
@@ -1941,7 +1950,7 @@ How many dubloons would you like to pay back?
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
-	<<set _tempTimeOrig = $tempTime>>
+	<<set _tempTimeOrig = $tempTime>>  Your enhanched Aeonglass basically allows you to cut your travel time in half.<br> /*xxx */
 	<<set $tempTime = Math.ceil($tempTime / 2)>>
 <</if>>
 
