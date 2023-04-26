@@ -1262,37 +1262,36 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
-How are you going to deal with the bandits surrounding you?
-
+How are you going to deal with the bandits encircling you?
 
 <<if $items[14].count> 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	What you lack in numbers you make up for in fighting quality, at least Khemia does. You see him already reaching for his sword. You would only need to give him a signal. You feel certain that the bandits would flee with no issues upon seeing Khemia with his sword.
-	[[Let Khemia and his sword deal with these jokers|Layer1 Hub]]<br>
+	Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.
+	[[Let Khemia and his sword deal with these jokers|Layer1 Hub]]
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 2>>
-	If these bandits thought you would traverse the dangers of the abyss unprepared, they are very much mistaken. If they see that you have a real weapon, they should leave you alone.
-	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br>
+	These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.
+	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]
 <</if>>
 <<if $slingshot == 1>>
-	Use the power of the Brave Vector and scare away the bandits. If they hear a few pebbles crashing into the ground, they won't want to get any closer.
+	Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.
 	[[Scare them off with the Brave Vector|Layer1 Hub]]
 <</if>>
 <<if $BionicArm>>
-	You could use the Glory's Grasp gravitic control to levitate the leader. You could also choke her in mid-air to intimidate her or hurl her into her cronies. The bandits will scatter when they see what you're capable of.
-	[[Use Glory's Grasp abilities to Force yourself through|Layer1 Hub]]
+	With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.
+	[[Wield Glory's Grasp to command the situation|Layer1 Hub]]
 <</if>>
-Perhaps giving them what they want is the safer route. You can always collect more Relics anyway, right?
-[[Hand over some of the Relics you've collected|Relic surrender][$surrVal to 0 ]]
+Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?
+[[Hand over some of the Relics you've collected|Relic Surrender][$surrVal to 0 ]]
 
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.
 [[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub]]
 
 
-:: Relic surrender [layer1]
+:: Relic Surrender [layer1]
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
-Nervously, you begin going trough your bag, attempting to decide which Relics to surrender and which to keep, if any...
+Nervously, you begin going trough your bag, attempting to decide which Relics to surrender and which to keep.
 
 <<if $ownedRelics.some(e => e.name === "Moonwatcher") & $BionicEye>>
 	<<set _temp = 145-95>>
@@ -1300,12 +1299,12 @@ Nervously, you begin going trough your bag, attempting to decide which Relics to
 	<<set _temp = 145>>
 <</if>>
 <<if $surrVal < _temp>>
-Choose the Relic you would like to hand over:
+Choose the Relic you would like to hand over to the bandits:
 <<nobr>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
 		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-			You will never hand over your Dolly.. euh Creepy Doll you mean<br>
+			You would never hand over your Dolly... Uh, the Creepy Doll, you mean.<br>
 		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$colwear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 
@@ -1315,8 +1314,8 @@ Choose the Relic you would like to hand over:
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$SibylBuff=0,$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(3-$hsswear)]]">> <br> You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away <br>
-
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(3-$hsswear)]]">> 
+			<br> You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away <br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
 		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
@@ -1326,9 +1325,9 @@ Choose the Relic you would like to hand over:
 		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$HeavyHeadwear= false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
-			<<print $ownedRelics[$i].name>> You can not give away Relics that have become part of your body.<br>
+			<<print $ownedRelics[$i].name>> You can't give away Relics that have become part of your body.<br>
 		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
-			<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
+			<<print $ownedRelics[$i].name>> You can't give away Relics that have become part of your body.<br>
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<</if>>
@@ -1336,11 +1335,14 @@ Choose the Relic you would like to hand over:
 <</for>>
 <</nobr>>
 
-	The bandits seem unsatisfied. One places a hand on the handle of a rusted blade, as if to remind you what's at stake here. One of them pushes you to hurry.<br>
-	<<say $Banditleader>> Come on! Don't be greedy now, if you know what's good for you then you'll hand over a bit more and we'll all be happy, right?<</say>>
+	The bandits seem unsatisfied. One of them caresses the hilt of a rusted blade, a silent threat hanging in the air. Another impatiently shoves you, urging you to hasten.
+<<say $Banditleader>> Come on! Don't be greedy now. Hand over a bit more, and we'll all walk away happy, right?<</say>>
 <<else>>
-  	The apparent bandit leader smiles widely. <<say $Banditleader>> Yeah, now we're talking. Off you go now, until next time.<</say>>
-	She waves you off and gives a toothy grin, showing some yellowing teeth as she picks through the loot you left her.
+  	The apparent bandit leader's smile broadens.
+
+	<<say $Banditleader>> Yeah, that's more like it. Off you go now, and maybe we'll see you again sometime.<</say>>
+	She dismisses you with a wave, her toothy grin revealing yellowed teeth as she eagerly sifts through the spoils you relinquished.
+	
 	[[Make your escape|Layer1 Hub][$surrVal=0]]
 <</if>>
 
