@@ -126,7 +126,7 @@ What do you want to do while you're here?<br>
 
 A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.
 
-[[Deal with the Drifting Swallower|Layer4 Threat1 Main]]
+[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage]]
 
 <</if>>
 
@@ -197,7 +197,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <p>A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.</p>
 
-<p>[[Deal with the Drifting Swallower|Layer4 Threat1 Main]]</p>
+<p>[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage]]</p>
 
 <</if>>
 
@@ -1300,7 +1300,7 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 	<<if $timeL4T1 > 6>>
 		<br>During your long trip down towards the fifth layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.
 
-		[[Deal with the Drifting Swallower|Layer4 Threat1 Descend]]<br>
+		[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage]]<br>
 		<<break>>
 	<</if>>
 /*
@@ -1380,7 +1380,7 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 		<br>
 	During your long hike back up towards the third layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.
 
-	[[Deal with the Drifting Swallower|Layer4 Threat1 Ascend]]<br>
+	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage]]<br>
 		<<break>>
 	<</if>>
 
@@ -1727,3 +1727,80 @@ Threats:
 <<include 'CampCode'>>
 
 [[Return to exploring the layer without waiting|Layer4 Hub]]
+
+:: Layer4 Threat1 [layer4]
+<<set $timeL4T1 -= 7>>
+[img[setup.ImagePath+'Threats/driftingswallower.png']]
+
+The beast moves gracefully, its tail and powerful appendages weaving through the air like tendrils of a living nightmare. Its presence is a chilling reminder of the dangers lurking in this seemingly serene layer of the Abyss.
+
+The Drifting Swallower, sensing your movements, turns its attention towards you. Its appendages propel it forward with surprising speed, closing the distance between you in a matter of seconds. Your heart races as you fumble for your weapon, knowing that a mere five bullets could bring this creature to its end.
+
+As the beast swoops down upon you, you observe its immense size and imagine the feeling of its slick, cold flesh skimming against your skin send shivers down your spine. Your body, unprepared for the sudden assault, trembles with a mix of fear and adrenaline.
+
+How do you want to deal with the creature descending upon you?
+
+
+<<nobr>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured in the process, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
+	[[Have Khemia fight it off with a sword|$returnPassage][$status.duration = (6 - $statRed), $status.penalty = 1]]<br><br>
+<</if>>
+<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.name === "Khemia")>>
+	With a powerful Relic sword in hand, Khemia can defeat the Drifting Swallower without any major issues after an intense battle.<br>
+	[[Allow Khemia to defeat it with his Relic blade|$returnPassage]]<br><br>
+<</if>>
+<<if $items[13].count > 0 && $items[20].count > 4>>
+	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to its evasive movements.<br>
+	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (5 - $bullRed)]]<br><br>
+<</if>>
+	<<if $slingshot == 1>>
+	Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
+	[[Defeat it with the Brave Vector|$returnPassage]]<br><br>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Tranquility Knell")>>
+	The Drifting Swallower detects its prey by sensing vibrations, but the Tranquility Knell silences noise in the air and other media, nearly eliminating vibrations and leaving the creature virtually blind. This effect should provide you with a 30-minute window where the Swallower is unable to find you, allowing you to escape unnoticed until you are out of range.<br>
+	[[Escape with the Tranquility Knell|$returnPassage]]<br><br>
+<</if>>
+If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
+[[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration = 99, $status.penalty = 1]]
+
+<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+	<br>As the creature descends, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
+
+	<<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>
+
+	A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embrace it and welcome its presence into your heart.<br><br>
+
+	<<link "Hug the doll tightly and close your eyes" $returnPassage>>
+	<<dollTF>>
+	<</link>><br>
+<</if>>
+
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down the creature.
+[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Hub]]
+
+
+:: Layer4 Swallower Ravage [layer4]
+
+[img[setup.ImagePath+'Threats/driftingswallower.png']]
+
+As the Drifting Swallower closes in, you make no effort to evade it or reach for your weapon. Instead, you stand still, offering yourself willingly to the creature. The beast hesitates for a brief moment, as if surprised by your lack of resistance, before its slick, cold flesh makes contact with your body, sending shivers down your spine.
+
+You are engulfed by the creature, its cavernous maw swallowing you whole. The moist, warm air inside the beast's mouth envelops you as the strong, musky scent of its saliva fills your nostrils. Its massive tongue wraps around you, its slick surface covered in tiny, writhing taste buds that explore every inch of your skin, leaving a trail of sticky saliva in their wake.
+
+The sensation of being enclosed within the creature's mouth, the rhythmic pulsing of its throat as it swallows, and the gentle suction of its breath around you is both terrifying and undeniably exhilarating. With a final, powerful contraction, the tight, wet passage leads you to the beast's stomach.
+
+As you slide into the Drifting Swallower's stomach, you land on a soft, cushion-like surface. The stomach walls are surprisingly warm, pulsating gently against your body with each of the creature's breaths. The air inside is humid and thick, carrying with it the pungent aroma of the beast's previous meals. Your senses are overwhelmed, the heady mixture of fear, excitement, and curiosity pushing you to the brink of sensory overload.
+
+The stomach walls contract around you, moving in a slow, undulating rhythm that causes the gastric juices to lap at your most sensitive areas. The sensation is simultaneously ticklish and burning, as the potent digestive fluids seep through your clothing and make contact with your skin. The delicate balance of pleasure and pain intensifies with each passing moment, as the gastric juices tenderly lap and nibble at your body.
+
+Through the darkness, you can hear the distant, muffled sounds of the creature's movements, a constant reminder that you're at the mercy of this massive beast. Your world has been reduced to the tight confines of its stomach, a space where you're both vulnerable and strangely secure.
+
+As the hours pass, you find yourself slipping in and out of consciousness, the mixture of fear and sensory overload lulling you into a hazy, dreamlike state. You're acutely aware of every sensation, from the gentle, rhythmic pulsing of the stomach walls against your skin to the ever-present burning and tickling of the gastric juices that continue their relentless assault.
+
+Three days later, the Drifting Swallower expels you from its body, leaving you battered and covered in light burns.
+
+[[Continue your journey through the Abyss|$returnPassage]]
