@@ -96,9 +96,9 @@ What do you want to do while you're here?
 As you round a corner, the unsettling silence is shattered by a wet, slithering sound that echoes through the chamber. Before you can fully process the noise, you find yourself face to face with a lesser tentacle beast. A writhing mass of slimy appendages, the creature seems to pulsate with an unnatural hunger, its tendrils undulating as if eager to explore every inch of you.
 
 [[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Hub"]]<<else>>
-As you wander through the semi-darkness by only the dimmest natural light, you bump into something wet. When you look down, you realize it's actually a transparent slime you didn't notice due to the dark! It seems like you've been caught by a slackslime.
+As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.
 
-[[Deal with the slackslime|Layer3 Threat2 Main]]<</if>>
+[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Hub"]]<</if>>
 
 
 :: Layer3 Threats [image layer3]
@@ -154,9 +154,9 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 
 <<else>>
 
-<p>As you wander through the semi-darkness by only the dimmest natural light, you bump into something wet. When you look down, you realize it's actually a transparent slime you didn't notice due to the dark! It seems like you've been caught by a slackslime.</p>
+<p>As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.</p>
 
-<p>[[Deal with the slackslime|Layer3 Threat2 Main]]</p>
+<p>[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Hub"]]</p>
 
 <</if>>
 
@@ -563,9 +563,9 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<</if>>
 
 	<<if $timeL3T2 > 4>>
-		<br>As you wander through the semi-darkness by only the dimmest natural light, you bump into something wet. When you look down, you realize it's actually a transparent slime you didn't notice due to the dark! It seems like you've been caught by a slackslime.<br><br>
+		<br>As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.<br><br>
 
-		[[Deal with the slackslime|Layer3 Threat2 Ascend]]<br>
+		[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Ascend2"]]<br>
 		<<break>>
 	<</if>>
 
@@ -1424,9 +1424,9 @@ Please enter your new skin/eye color:
 	<</if>>
 	
 	<<if $timeL3T2 > 4>>
-		<br>As you wander through the semi-darkness by only the dimmest natural light, you bump into something wet. When you look down, you realize it's actually a transparent slime you didn't notice due to the dark! It seems like you've been caught by a slackslime.<br><br>
+		<br>As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.<br><br>
 
-		[[Deal with the slackslime|Layer3 Threat2 Descend]]<br><br>
+		[[Deal with the slackslime|Layer3 Threat2[$returnPassage="Layer3 Exit2"]]]<br><br>
 		<<break>>
 	<</if>>
 
@@ -1854,7 +1854,7 @@ A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embr
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
 [[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|$returnPassage]]
 
-:: Layer3 Tentacle Ravage
+:: Layer3 Tentacle Ravage [layer3]
 
 [img[setup.ImagePath+'Threats/lessertentaclebeast.png']]
 
@@ -1872,4 +1872,38 @@ The encounter seems to stretch on for an eternity, leaving you trembling and spe
 
 But even as you gather yourself and prepare to press onward, you can't help but wonder if the memory of the lesser tentacle beast's touch will haunt you long after you've left the dark depths of the Abyss behind.
 	
+[[Continue your journey through the Abyss|$returnPassage]]
+
+:: Layer3 Threat2 [layer3]
+<<nobr>>
+<<set $tempTime = 2>>
+<<set $timeL3T2 -= 5>>
+<<if $playerCurses.some(e => e.name === "Gooey")>>
+	<<set $tempTime = 1>>
+<</if>>
+<<set $items[0].count -= $tempTime>>
+<<set $items[1].count -= $tempTime>>
+<<set $time += $tempTime>>
+<<set $timeL3 += $tempTime>>
+<</nobr>>
+[img[setup.ImagePath+'Threats/slackslime.png']]
+<<if $playerCurses.some(e => e.name === "Gooey")>>
+As the paralysis takes hold, you are left at the mercy of the Slackslime, your body immobile and completely vulnerable. The creature is initially cautious, examining your gooey form with a mix of curiosity and suspicion. As it realizes the similarity between your $slimeColor body and its own, a sense of camaraderie seems to form between you and the organism.
+
+Despite this newfound bond, the Slackslime still feels the need to feed on the protein from your sexual fluids. Its tendrils glide over your exposed flesh, tracing the contours of your body with eerie precision. The stimulation sends unexpected jolts of pleasure through your immobilized form, blurring the line between fear and desire.
+
+As the creature feeds, it is careful not to let you perish. It feeds you the food and water from your backpack, sustaining you just enough to keep you alive. The strange tenderness of the act only heightens the surreal intimacy of your encounter.
+
+The Slackslime, sensing a connection with you due to your Gooey Curse, decides to release you one day earlier than it would have otherwise. As the first day draws to a close, the creature begins to retreat, its tendrils withdrawing from your body with a bittersweet reluctance. The creature releases you, leaving you alone in the dim, echoing cavern. As the paralytic agent slowly wears off, your muscles regain their strength, and you are once again able to move.
+<<else>>
+As the paralysis takes hold, you are left at the mercy of the Slackslime, your body immobile and completely vulnerable. Despite the fear that clenches at your chest, an unbidden curiosity begins to stir within you. You feel the cool, slick touch of the organism as it begins its exploration, sending shivers down your spine. Its tendrils glide over your exposed flesh, tracing the contours of your body with eerie precision.
+
+The creature's touch is both invasive and tantalizing as it probes your most sensitive and intimate areas. The stimulation sends unexpected jolts of pleasure through your immobilized form, blurring the line between fear and desire. As the Slackslime feeds on the protein from your sexual fluids, it seems to thrive on the very essence of your arousal.
+
+Hours stretch into days, and the strange intimacy between you and the organism deepens. You find your thoughts consumed by the peculiar creature, your senses acutely attuned to its every touch, every quiver of its slimy tendrils. Despite your inability to move or resist, the Slackslime is careful not to let you perish. It feeds you the food and water from your backpack, sustaining you just enough to keep you alive. The strange tenderness of the act only heightens the surreal intimacy of your encounter.
+
+As the second day draws to a close, the Slackslime seems to sense that its time with you is nearing its end. It begins to retreat, its tendrils withdrawing from your body with a bittersweet reluctance. The creature releases you, leaving you alone in the dim, echoing cavern. As the paralytic agent slowly wears off, your muscles regain their strength, and you are once again able to move.
+
+You rise, your body trembling from the lingering effects of the paralysis and the intense encounter you've just experienced.
+<</if>>
 [[Continue your journey through the Abyss|$returnPassage]]
