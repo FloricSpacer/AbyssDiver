@@ -629,7 +629,19 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 				<<if $j==0>>
 					<<print "_companion.name doesn't mind taking:">><br>
 				<</if>>
-				<<if setup.willingCurses[_companion.name].includes($playerCurses[$j].name)>>
+
+				<<if _companion.name == $companionTwin.name>>
+					<<set _tempname = "Twin">>
+					<<set _flag =  false>>
+				<<elseif _companion.name == "Golem">>
+					<<set _tempname = _companion.name >>
+					<<set _flag =  true>>
+				<<else>>
+					<<set _tempname = _companion.name >>
+					<<set _flag =  setup.willingCurses[_tempname ].includes(_curse.name)>>
+				<</if>>
+
+				<<if _flag>>
 					<<capture $j>>
 						<<print "$playerCurses[$j].name">>
 						<<link "Choose" "Layer3 Skewed1a">>
@@ -996,27 +1008,31 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 		<<set _tempName = $hiredCompanions[_i].name>>
 	<</if>>
 	<<set _string1 = "Transfer to " + $hiredCompanions[_i].name>>
-	<<link _string1 "Layer3 Skewed Apply">>
-	<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
-	<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
-	<<set $temp2=_i>>
+	<<if $hiredCompanions[_i].name == $companionGolem.name >>
+		You can transfer any curse to your Golem willingly./*xxx */
+	<<else>>
+		<<link _string1 "Layer3 Skewed Apply">>
+		<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
+		<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
+		<<set $temp2=_i>>
 
-	<<if $playerCurses[$temp].type == "Age">>
-		<<set _string = "$AgeLog" + _tempName>>
-	<<elseif $playerCurses[$temp].type == "Gender">>
-		<<set _string = "$GenderLog" + _tempName>>
-	<<elseif $playerCurses[$temp].type == "Height">>
-		<<set _string = "$HeightLog" + _tempName>>
-	<<elseif $playerCurses[$temp].type == "Handicap">>
-		<<set _string = "$HandicapLog" + _tempName>>
-	<<elseif $playerCurses[$temp].type == "Libido">>
-		<<set _string = "$LibidoLog" + _tempName>>
+		<<if $playerCurses[$temp].type == "Age">>
+			<<set _string = "$AgeLog" + _tempName>>
+		<<elseif $playerCurses[$temp].type == "Gender">>
+			<<set _string = "$GenderLog" + _tempName>>
+		<<elseif $playerCurses[$temp].type == "Height">>
+			<<set _string = "$HeightLog" + _tempName>>
+		<<elseif $playerCurses[$temp].type == "Handicap">>
+			<<set _string = "$HandicapLog" + _tempName>>
+		<<elseif $playerCurses[$temp].type == "Libido">>
+			<<set _string = "$LibidoLog" + _tempName>>
+		<</if>>
+		<<if $playerCurses[$temp].type != "">>
+			<<print "<<set " + _string + ".push($playerCurses[$temp])>>">>
+		<</if>>
+		<<statUpdateCompanions>>
+		<</link>><br>
 	<</if>>
-	<<if $playerCurses[$temp].type != "">>
-		<<print "<<set " + _string + ".push($playerCurses[$temp])>>">>
-	<</if>>
-	<<statUpdateCompanions>>
-	<</link>><br>
 	<</capture>>
 <</for>>
 <</nobr>>

@@ -908,17 +908,21 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 					<<print "_companion.name doesn't mind taking:">><br>
 				<</if>>
 				<<set _curse = $playerCurses[$j]>>
-				<<if setup.willingCurses[_companion.name].includes(_curse.name) && !_companion.curses.some(e=> e.name === _curse.name )>>
+				<<if _companion.name == $companionTwin.name>>
+					<<set _tempname = "Twin">>
+					<<set _flag =  true>>
+				<<elseif _companion.name == "Golem">>
+					<<set _tempname = _companion.name >>
+					<<set _flag =  true>>
+				<<else>>
+					<<set _tempname = _companion.name >>
+					<<set _flag =  setup.willingCurses[_tempname ].includes(_curse.name)>>
+				<</if>>
+				<<if _flag && !_companion.curses.some(e=> e.name === _curse.name )>>
 					<<capture _curse>>
 						<<print "_curse.name">>
 						<<link "Choose" "Layer4 Steady1a">>
 							<<set _companion.curses.push(_curse)>>
-
-							<<if _companion.name == $companionTwin.name >>
-								<<set _tempName = "Twin">>
-							<<else>>
-								<<set _tempName = _companion.name>>
-							<</if>>
 
 							<<if _curse.type == "Age">>
 								<<set _string = "$AgeLog" + _tempName>>
@@ -1015,27 +1019,31 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 			<<set _tempName = $hiredCompanions[_i].name>>
 		<</if>>
 		<<set _string1 = "Transfer to " + $hiredCompanions[_i].name>>
-		<<link _string1 "Layer4 Steady Apply">>
-			<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
-			<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
-			<<set $temp2=_i>>
+		<<if $hiredCompanions[_i].name == $companionGolem.name>>
+				You can copy any curse to your Golem willingly./*xxx */
+		<<else>>
+			<<link _string1 "Layer4 Steady Apply">>
+				<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
+				<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
+				<<set $temp2=_i>>
 
-			<<if $playerCurses[$temp].type == "Age">>
-				<<set _string = "$AgeLog" + _tempName>>
-			<<elseif $playerCurses[$temp].type == "Gender">>
-				<<set _string = "$GenderLog" + _tempName>>
-			<<elseif $playerCurses[$temp].type == "Height">>
-				<<set _string = "$HeightLog" + _tempName>>
-			<<elseif $playerCurses[$temp].type == "Handicap">>
-				<<set _string = "$HandicapLog" + _tempName>>
-			<<elseif $playerCurses[$temp].type == "Libido">>
-				<<set _string = "$LibidoLog" + _tempName>>
-			<</if>>
-			<<if $playerCurses[$temp].type != "">>
-				<<print "<<set " + _string + ".push($playerCurses[$temp])>>">>
-			<</if>>
-			<<statUpdateCompanions>>
-		<</link>><br>
+				<<if $playerCurses[$temp].type == "Age">>
+					<<set _string = "$AgeLog" + _tempName>>
+				<<elseif $playerCurses[$temp].type == "Gender">>
+					<<set _string = "$GenderLog" + _tempName>>
+				<<elseif $playerCurses[$temp].type == "Height">>
+					<<set _string = "$HeightLog" + _tempName>>
+				<<elseif $playerCurses[$temp].type == "Handicap">>
+					<<set _string = "$HandicapLog" + _tempName>>
+				<<elseif $playerCurses[$temp].type == "Libido">>
+					<<set _string = "$LibidoLog" + _tempName>>
+				<</if>>
+				<<if $playerCurses[$temp].type != "">>
+					<<print "<<set " + _string + ".push($playerCurses[$temp])>>">>
+				<</if>>
+				<<statUpdateCompanions>>
+			<</link>><br>
+		<</if>>
 	<</if>>
 	<</capture>>
 <</for>>
@@ -1054,9 +1062,9 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<set _affectionPenalty = 3 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
-[[Stand in front of the shrine to force another Curse|Layer4 Steady 2a][$convoStart=1,$choice1=0,$choice2=0]]
-[[On second thought, maybe a more diplomatic approach would be advisable|Layer4 Steady1a][$convoStart=1,$choice1=0,$choice2=0]]
-[[Continue with your journey|Layer4 Hub][$convoStart=1,$choice1=0,$choice2=0]]
+[[Stand in front of the shrine to force another Curse|Layer4 Steady 2a]]
+[[On second thought, maybe a more diplomatic approach would be advisable|Layer4 Steady1a]]
+[[Continue with your journey|Layer4 Hub]]
 
 :: Pick up the Ghost-righter Writing Down [layer4]
 <<nobr>>
