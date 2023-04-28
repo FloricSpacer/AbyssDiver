@@ -1421,6 +1421,7 @@ Manage food and water items:<br>
 <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 	You look at the glistening set of marbles known as the Managed Misfortune.
 	<<for _i=0; _i<=$StoredCurse.length && _i<$ManagedMisfortuneMax; _i++>>
+		<<capture _i>>
 		<<if _i==$StoredCurse.length >>
 			<br>You need to store a Curse in the Relic's marble before you can use it<br>
 		<<elseif !$ManagedMisfortuneActive.some(c => c.name === $StoredCurse[_i].name)>>
@@ -1444,7 +1445,7 @@ Manage food and water items:<br>
 				<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
 				<<radiobutton "$curse17.variation" "pig" >> Pig<br>
 				<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
-			<<elseif $StoredCurse.name== "Fluffy Tail" && $curse18.variation=="">>
+			<<elseif $StoredCurse[_i].name== "Fluffy Tail" && $curse18.variation=="">>
 
 				What type of tail would you like to gain?<br><br>
 
@@ -1564,16 +1565,19 @@ Manage food and water items:<br>
 					<</if>>
 					<<set $ManagedMisfortuneActive.push($StoredCurse[_i])>>
 				<</link>>
+				<br>
 			<</if>>
 		<<else>>
-			You are affected by the Curse $StoredCurse[_i].name stored in the marbles. <br>
+			You are affected by the Curse $StoredCurse[_i].name stored in the marbles.
 			<<link "Deactivate the stored Curse" "Use Items and Relics">>
 				<<set $targetCurse = $StoredCurse[_i]>>
 				<<include "CurseRemoval">>
 				<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
 				<<set $ManagedMisfortuneActive.deleteAt(_j)>>
-			<</link>>		
+			<</link>>	
+			<br>	
 		<</if>>
+		<</capture>>
 	<</for>>
 <</if>>
 
