@@ -1066,9 +1066,9 @@ Manage food and water items:<br>
 <</if>>
 
 <<if $items[24].count>0 & $useEnergyrations==false>>
-	[[Start using your energy rations| Use Items and Relics][$useEnergyrations=true]]
+	<br><br>[[Start using your energy rations| Use Items and Relics][$useEnergyrations=true]]
 <<elseif $items[24].count>0 & $useEnergyrations==true>>
-	[[Stop using your energy rations| Use Items and Relics][$useEnergyrations=false]]
+	<br><br>[[Stop using your energy rations| Use Items and Relics][$useEnergyrations=false]]
 <</if>>
 <br><br>
 
@@ -1964,9 +1964,8 @@ How many dubloons would you like to pay back?
 	<<set $tempTime = Math.ceil($tempTime / 2)>>
 <</if>>
 
-
+<<set _EnergyRatCor = 1>>
 <<if $playerCurses.some(e => e.name === "Minish-ish") || $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-	<<set _EnergyRatCor = 1>>
 	<<if $playerCurses.some(e => e.name === "Minish-ish")>>
 		<<set _EnergyRatCor /= 4>>
 	<</if>>
@@ -1979,7 +1978,7 @@ How many dubloons would you like to pay back?
 	<</if>>
 <</if>>
 
-<<if ($tempTime/2) <= $items[24].count/_EnergyRatCor & $useEnergyrations==true>>
+<<if ($tempTime/2) <= $items[24].count/_EnergyRatCor && $useEnergyrations==true>>
 	<<set _temp = Math.trunc($tempTime / 2)>>
 	<<set $items[24].count -= _temp * _EnergyRatCor>>
 	<<set $items[1].count += _temp * _EnergyRatCor>>
