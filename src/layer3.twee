@@ -90,7 +90,7 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 
 [[Look up towards the surface|Layer3 Ascend 1]]
 [[Look down at the next layer|Layer3 Exit1]]<<elseif $timeL3T2 < 5>>
-As you round a corner, the unsettling silence is shattered by a wet, slithering sound that echoes through the chamber. Before you can fully process the noise, you find yourself face to face with a lesser tentacle beast. A writhing mass of slimy appendages, the creature seems to pulsate with an unnatural hunger, its tendrils undulating as if eager to explore every inch of you.
+<<include "Layer3 Tentacle Encounter">>
 
 [[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Hub"]]<<else>>
 <<include "Layer3 Slackslime Encounter">>
@@ -145,7 +145,7 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 
 <<elseif $timeL3T2 < 5>>
 
-<p>As you round a corner, the unsettling silence is shattered by a wet, slithering sound that echoes through the chamber. Before you can fully process the noise, you find yourself face to face with a lesser tentacle beast. A writhing mass of slimy appendages, the creature seems to pulsate with an unnatural hunger, its tendrils undulating as if eager to explore every inch of you.</p>
+<p><<include "Layer3 Tentacle Encounter">></p>
 
 <p>[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Hub"]]</p>
 
@@ -552,7 +552,7 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 
 	<<if $timeL3T1 > 5>>
 
-		<br>As you round a corner, the unsettling silence is shattered by a wet, slithering sound that echoes through the chamber. Before you can fully process the noise, you find yourself face to face with a lesser tentacle beast. A writhing mass of slimy appendages, the creature seems to pulsate with an unnatural hunger, its tendrils undulating as if eager to explore every inch of you.<br><br>
+		<br><<include "Layer3 Tentacle Encounter">><br><br>
 
 		[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Ascend2"]]<br>
 
@@ -1437,7 +1437,7 @@ Please enter your new skin/eye color:
 
 	<<if $timeL3T1 > 5>>
 
-		<br>Out of nowhere, you notice a slimy tendril reaching towards you from the darkness in front of you. As it rapidly closes in on you, the fact that the only thing the tentacle is attached to is a mass of more tentacles becomes apparent, and it becomes clear what you're dealing with. It appears that you've caught the attention of a lesser tentacle beast.<br><br>
+		<br><<include "Layer3 Tentacle Encounter">><br><br>
 
 		[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Exit2"]]<br><br>
 
@@ -1816,9 +1816,10 @@ Threats:
 [[Return to exploring the layer without waiting|Layer3 Hub]]
 
 :: Layer3 Threat1 [layer3]
-<<set $timeL3T1 -= 6>>
+<<set $timeL3T1 -= 6>><<set $variation = random(0,1)>>
 [img[setup.ImagePath+'Threats/lessertentaclebeast.png']]
 
+<<if $variation == 0>>\
 The beast's slick, dark tentacles glisten in the dim light, their tips adorned with suction cups that seem to twitch with anticipation. Its amorphous body is both mesmerizing and repulsive, and you find yourself momentarily paralyzed by the sight of it.
 
 As the creature draws closer, you can almost feel the cool, damp embrace of its probing tendrils. The air around you grows heavy with the scent of damp earth and something more animalistic, a musk that sends shivers down your spine.
@@ -1827,6 +1828,14 @@ Suddenly, you snap back to reality, and a primal instinct to survive takes over.
 
 As the tentacle beast inches closer, you can almost taste the cool, slimy texture of its tendrils against your skin. The thought of it ravaging you, leaving you and your companions weak and helpless, spurs you into action. 
 
+<<elseif $variation == 1>>\
+The sight of the shapeless creature is both fascinating and repulsive, and you find yourself momentarily frozen by the nightmarish scene. As the beast gets closer, you can almost feel the cold, wet touch of its exploring tendrils on your skin. The air around you thickens, filled with the scent of damp earth and a primal musk that sends shivers down your spine and stirs something deep within you.
+
+Your instincts for self-preservation kick in, and you shake off the entrancing effect of the beast's hypnotic movements. You realize that guns won't be effective against this strange, ever-changing foe. Considering your options, you think about drawing your sword, but the idea of engaging in close combat with the creature is terrifying. You know that a single mistake could leave you injured and vulnerable, at the mercy of this alien being.
+
+As the lesser tentacle beast continues to approach, the thought of its cool, slimy tendrils wrapping around your body, stroking and probing your most sensitive areas, fills your mind. The conflicting feelings of fear and desire that surge through you force you to make a critical decision – one that will determine not only your fate but also that of your companions.
+
+<</if>>\
 How do you want to deal with the tentacle beast moving in on you?
 
 
@@ -1879,6 +1888,7 @@ Use the following option only if you have specifically considered your inventory
 
 [img[setup.ImagePath+'Threats/lessertentaclebeast.png']]
 
+<<if $variation == 0>>\
 Your heart races as the lesser tentacle beast slithers closer, the slick sound of its tendrils echoing throughout the cave. Despite your desire to resist, a dark curiosity takes hold, and you find yourself unable to turn away from the creature's insatiable hunger. With a deep, steadying breath, you make the decision to submit to the lesser tentacle beast.
 
 As you lower your weapon, the creature seems to sense your acquiescence, its tendrils surging forward with renewed vigor. The first touch of its cold, slimy appendages sends a shiver down your spine, and you can't help but gasp at the sensation. The tentacles wind themselves around your limbs, their suction cups gently tugging at your skin as they explore your body with relentless curiosity.
@@ -1892,7 +1902,22 @@ The lesser tentacle beast seems to feed on your reactions, its movements growing
 The encounter seems to stretch on for an eternity, leaving you trembling and spent, your body marked by the beast's attention. When it finally releases you, the lingering effects of its touch make it difficult to stand, let alone continue your journey. You know that the consequences of your decision will be felt for days to come, as you and your companions struggle to recover from the intense, humiliating experience.
 
 But even as you gather yourself and prepare to press onward, you can't help but wonder if the memory of the lesser tentacle beast's touch will haunt you long after you've left the dark depths of the Abyss behind.
-	
+<<elseif $variation == 1>>
+As the lesser tentacle beast draws nearer, your heart races and a strange curiosity fills your mind, making it impossible to tear your gaze away from the creature's relentless hunger. In a moment of surrender, you make the decision to submit to the lesser tentacle beast.
+
+As you let your weapon slip from your grasp, the creature seems to sense your submission, and its tendrils shoot forward with increased forcefulness. The initial touch of its cold, slippery appendages sends shivers down your spine, and you can't help but gasp at the sensation. The tentacles coil around your limbs more tightly, their suction cups tugging firmly at your skin as they explore your body with insistent curiosity.
+
+The beast's tendrils work their way beneath your clothes, their damp, cool touch evoking both revulsion and arousal within you. The intrusive limbs draw intricate patterns on your skin, seeking out every tender spot and exposed crevice with a touch that borders on forceful.
+
+Despite the repulsive nature of the creature, your body responds to the continuous, intimate strokes with a building heat deep inside. As the tentacles glide and press against your most private areas with a more aggressive intensity, you can't help but let out a moan, the mixture of fear, fascination, and unwilling pleasure too intense to resist.
+
+The lesser tentacle beast seems to feed on your reactions, its movements becoming bolder and more insistent. Its tendrils delve deeper, exploring and filling you in ways you never thought possible, sometimes pushing the limits of pleasure and discomfort. Your world narrows to the relentless invasion of your body, your mind consumed by the overpowering sensations and the realization that you have willingly submitted to this creature of the Abyss.
+
+The encounter seems to last an eternity, leaving you shaking and drained, your body bearing the marks of the beast's more aggressive attentions. When it finally releases you, the lingering effects of its touch make it difficult to stand or continue your journey. You know that the consequences of your decision will be felt for days to come, as you and your companions struggle to recover from the intense, humiliating experience.
+
+But even as you gather yourself and prepare to move forward, you can't help but wonder if the memory of the lesser tentacle beast's touch will continue to haunt you long after you've left the dark depths of the Abyss behind.
+<</if>>
+
 [[Continue your journey through the Abyss|$returnPassage]]
 
 :: Layer3 Threat2 [layer3]
@@ -1939,4 +1964,15 @@ You rise, your body trembling from the lingering effects of the paralysis and th
 	As you continue to navigate the winding caverns, the eerie glow of the bioluminescent flora provides just enough light to guide your way. Your heart beats steadily in your chest, the adrenaline of exploring the unknown driving you deeper into the heart of the Abyss. The air is cool and damp, sending shivers down your spine as you make your way through the twisted tunnels.
 
 	Suddenly, the ground beneath your feet gives way, and you find yourself waist-deep in a pool of viscous, gelatinous liquid. You can feel the cold, slimy substance seeping through the fabric of your clothes, adhering to your skin. Panic rises within you as you recognize the substance to be Slackslime, and its paralyzing gas rapidly fills the air. Your lungs seize, your body grows rigid, and your limbs become heavy and unresponsive.
+<</if>>\
+
+:: Layer3 Tentacle Encounter
+<<set $variation = random(0,1)>>\
+<<if $variation == 0>>\
+	Out of nowhere, you notice a slimy tendril reaching towards you from the darkness in front of you. As it rapidly closes in on you, the fact that the only thing the tentacle is attached to is a mass of more tentacles becomes apparent, and it becomes clear what you're dealing with. It appears that you've caught the attention of a lesser tentacle beast.
+
+<<elseif $variation == 1>>\
+	Your heart races as you navigate the winding, narrow passages, your senses on high alert from the moving shadows cast by the dim illumination. The silence is suddenly interrupted by a wet, squishing noise that echoes through the chamber, making your skin crawl and the hairs on the back of your neck stand up.
+
+	With a mix of fear and curiosity, you turn the corner and come face to face with a lesser tentacle beast. Its countless tendrils move and pulse as if driven by an insatiable hunger. The slimy, dark appendages twist and sway in the dim light, their tips decorated with trembling suction cups that seem to crave your touch.
 <</if>>\
