@@ -93,7 +93,7 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 As you round a corner, the unsettling silence is shattered by a wet, slithering sound that echoes through the chamber. Before you can fully process the noise, you find yourself face to face with a lesser tentacle beast. A writhing mass of slimy appendages, the creature seems to pulsate with an unnatural hunger, its tendrils undulating as if eager to explore every inch of you.
 
 [[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Hub"]]<<else>>
-As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.
+<<include "Layer3 Slackslime Encounter">>
 
 [[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Hub"]]<</if>>
 
@@ -151,7 +151,7 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 
 <<else>>
 
-<p>As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.</p>
+<p><<include "Layer3 Slackslime Encounter">></p>
 
 <p>[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Hub"]]</p>
 
@@ -560,7 +560,7 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<</if>>
 
 	<<if $timeL3T2 > 4>>
-		<br>As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.<br><br>
+		<br><<include "Layer3 Slackslime Encounter">><br><br>
 
 		[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Ascend2"]]<br>
 		<<break>>
@@ -1445,7 +1445,7 @@ Please enter your new skin/eye color:
 	<</if>>
 	
 	<<if $timeL3T2 > 4>>
-		<br>As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.<br><br>
+		<br><<include "Layer3 Slackslime Encounter">><br><br>
 
 		[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Exit2"]]<br><br>
 		<<break>>
@@ -1906,6 +1906,7 @@ But even as you gather yourself and prepare to press onward, you can't help but 
 <<set $items[1].count -= $tempTime>>
 <<set $time += $tempTime>>
 <<set $timeL3 += $tempTime>>
+<<set $variation = random(0,1)>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/slackslime.png']]
 <<if $playerCurses.some(e => e.name === "Gooey")>>
@@ -1928,3 +1929,14 @@ As the second day draws to a close, the Slackslime seems to sense that its time 
 You rise, your body trembling from the lingering effects of the paralysis and the intense encounter you've just experienced.
 <</if>>
 [[Continue your journey through the Abyss|$returnPassage]]
+
+:: Layer3 Slackslime Encounter
+<<set $variation = random(0,1)>>\
+<<if $variation == 0>>\
+	As you press onward through the dimly-lit cavern, the bioluminescent glow of the moss and mushrooms casting an otherworldly light, you suddenly feel your foot sink into something soft and slippery. Your heart races with a mixture of surprise and dread as the unmistakable sensation of Slackslime envelops your skin. Before you can react, the organism releases its paralytic gas, permeating the air around you and seeping into your pores. Within moments, your limbs grow heavy and your body collapses, utterly powerless against the slime's paralysis.
+
+<<elseif $variation == 1>>\
+	As you continue to navigate the winding caverns, the eerie glow of the bioluminescent flora provides just enough light to guide your way. Your heart beats steadily in your chest, the adrenaline of exploring the unknown driving you deeper into the heart of the Abyss. The air is cool and damp, sending shivers down your spine as you make your way through the twisted tunnels.
+
+	Suddenly, the ground beneath your feet gives way, and you find yourself waist-deep in a pool of viscous, gelatinous liquid. You can feel the cold, slimy substance seeping through the fabric of your clothes, adhering to your skin. Panic rises within you as you recognize the substance to be Slackslime, and its paralyzing gas rapidly fills the air. Your lungs seize, your body grows rigid, and your limbs become heavy and unresponsive.
+<</if>>\
