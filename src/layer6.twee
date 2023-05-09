@@ -89,9 +89,8 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 [[Look down at the next layer|Layer6 Exit1]]
 
 <<elseif $timeL6T2 > 7 && $dragonKill < 5>>
-A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
-
-[[Deal with the Fell Dragon|Layer6 Threat2 Main]]
+<<include "Layer6 Dragon Encounter">><br><br>
+[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Hub"]]
 <<else>>
 <<include "Layer6 Tentacle Encounter">><br><br>
 
@@ -148,6 +147,12 @@ If you decide to start foraging for food or water, it means that you will not co
 <<RelicGrid `["Ring of the Devourer", "Pulse Bloom", "Out of Mind", "Still Film", "Forbidden Grimoire", "Luminous Phantasmagoria", "Relativity Eye", "Return to Sender", "Yliaster Materia", "Aeonglass", "Apparatus Diaboli", "Heavy is the Head"]`>>
 
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
+
+<<elseif $timeL6T2 > 7 && $dragonKill < 5>>
+
+<p><<include "Layer6 Dragon Encounter">><p>
+
+<p>[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Hub"]]<p>
 
 <<else>>
 
@@ -1287,9 +1292,9 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 	<<if $timeL6T2 > 7 && $dragonKill < 5>>
 
-		<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+		<br><<include "Layer6 Dragon Encounter">><br><br>
 
-		[[Deal with the Fell Dragon|Layer6 Threat2 Ascend]]<br><br>
+		[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Ascend2"]]<br><br>
 
 		<<break>>
 
@@ -1461,9 +1466,9 @@ Use the following option only if you have specifically considered your inventory
 
 	<<if $timeL6T2 > 7 && $dragonKill < 5>>
 
-		<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+		<br><<include "Layer6 Dragon Encounter">><br><br>
 
-		[[Deal with the Fell Dragon|Layer6 Threat2 Descend]]<br><br>
+		[[Deal with the Fell Dragon|Layer6 Threat2 Descend][$returnPassage = "Layer6 Exit2"]]<br><br>
 
 		<<break>>
 	<</if>>
@@ -1863,4 +1868,45 @@ Use the following option only if you have specifically considered your inventory
 	You and your party members rush to Khemia's side, helping him to his feet. His injuries are painful but not life-threatening, a testament to his skill and determination. Together, you continue your journey through the Abyss, the memory of the greater tentacle beast's lustful hunger and Khemia's heroic stand forever etched in your minds.
 <</if>>\
 
-[[Return to exploring the sixth layer|Layer6 Hub]]
+[[Return to exploring the sixth layer|$returnPassage]]
+
+
+:: Layer6 Dragon Encounter [layer6 nobr]
+
+As you wade through the navel-high tentacles, your senses are assaulted by the heat and the suffocating smell of smoke. The once-solid path is replaced by a squirming, undulating carpet of tendrils, some alight with exotic-colored flames that gently caress your skin. Amidst the infernal landscape, you suddenly catch sight of a large, imposing figure: the fell dragon.
+
+
+:: Layer6 Threat2 [layer6]
+<<set $timeL6T2 -= 8>>
+[img[setup.ImagePath+'Threats/felldragon.png']]
+
+The dragon's immense presence is nearly tangible, and the air seems to crackle with tension. You stand transfixed as the fell dragon unfurls its wings, casting sinister shadows upon the scorched earth. Its eyes lock onto yours, and you feel the weight of its ancient, malevolent intelligence bearing down on you. The dragon's breath hisses as it exhales, and you taste the acrid tang of sulfur and ozone, sharp against your tongue.
+
+With a heart-pounding realization, you remember the hoard of dubloons you carry. The fell dragon senses your wealth, and its eyes narrow with greed. You know that the creature will not rest until it has claimed your gold for its own, and you must make a choice: appease its wrath with a hefty offering, fight the monstrous beast, or flee and risk the searing pain of its flames.
+
+As the dragon's maw opens, revealing a churning, swirling vortex of multicolored fire, you steel yourself for the decision that could determine your fate in this unforgiving layer of the Abyss.
+
+<<nobr>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
+The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration = 99, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<</if>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration = 3, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
+While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
+	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration = 3, $status.penalty = 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<</if>>
+You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
+	[[Offer 100 dubloons to appease the dragon|$returnPassage][$dubloons -= 100]]<br><br>
+If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
+	[[Try to run and accept the consequences|$returnPassage][$status.duration = 99, $status.penalty = 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
+[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons|$returnPassage][$dragonKill += 1, $dubloons += 50]]
