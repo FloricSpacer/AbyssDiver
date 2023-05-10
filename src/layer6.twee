@@ -89,15 +89,12 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 [[Look down at the next layer|Layer6 Exit1]]
 
 <<elseif $timeL6T2 > 7 && $dragonKill < 5>>
-A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
-
-[[Deal with the Fell Dragon|Layer6 Threat2 Main]]
+<<include "Layer6 Dragon Encounter">><br><br>
+[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Hub"]]
 <<else>>
-Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
+<<include "Layer6 Tentacle Encounter">><br><br>
 
-They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
-
-[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Main1]]
+[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Hub"]]
 <</if>><</nobr>>
 
 
@@ -151,13 +148,17 @@ If you decide to start foraging for food or water, it means that you will not co
 
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
 
+<<elseif $timeL6T2 > 7 && $dragonKill < 5>>
+
+<p><<include "Layer6 Dragon Encounter">><p>
+
+<p>[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Hub"]]<p>
+
 <<else>>
 
-<p>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?</p>
+<p><<include "Layer6 Tentacle Encounter">></p>
 
-<p>They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!</p>
-
-<p>[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Main1]]</p>
+<p>[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Hub"]]</p>
 <</if>>
 
 
@@ -1291,19 +1292,17 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 	<<if $timeL6T2 > 7 && $dragonKill < 5>>
 
-		<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+		<br><<include "Layer6 Dragon Encounter">><br><br>
 
-		[[Deal with the Fell Dragon|Layer6 Threat2 Ascend]]<br><br>
+		[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Ascend2"]]<br><br>
 
 		<<break>>
 
 	<</if>>
 		<<if $timeL6T1 > 14>>
-		<br>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
+		<br><<include "Layer6 Tentacle Encounter">><br><br>
 
-		They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
-
-		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Ascend1]]<br><br>
+		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Ascend2"]]<br><br>
 		<<break>>
 	<</if>>
 <</for>>
@@ -1467,19 +1466,17 @@ Use the following option only if you have specifically considered your inventory
 
 	<<if $timeL6T2 > 7 && $dragonKill < 5>>
 
-		<br>A thunderous roar disturbs you as your tread across the slimy, tentacled-ground of the sixth layer. At first you don't see the source of the sound, but after a moment you look up and see an enormous Fell Dragon approaching with great speed. It lets out a stream of fire as a warning before roaring again and landing in front of you with it's head held high and a subtle stream of liquid fire dribbling from the corner of its mouth. It is demanding tribute for you carrying your wealth in these lands, and now is your chance to pay it.<br><br>
+		<br><<include "Layer6 Dragon Encounter">><br><br>
 
-		[[Deal with the Fell Dragon|Layer6 Threat2 Descend]]<br><br>
+		[[Deal with the Fell Dragon|Layer6 Threat2 Descend][$returnPassage = "Layer6 Exit2"]]<br><br>
 
 		<<break>>
 	<</if>>
 
 	<<if $timeL6T1 > 14>>
-		<br>Your walk across the sixth layer continues as normal, and you bat away some harassing tentacles, but something was different about these?<br><br>
+		<br><<include "Layer6 Tentacle Encounter">><br><br>
 
-		They push against you more persistantly than normal, but as you resist thr ground itself buckles and shifts. Barely managing to leap away in time, it seems that you've stumbled across a fully grown Greater Tentacle Beast!<br><br>
-
-		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 Descend]]<br><br>
+		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Exit2"]]<br><br>
 		<<break>>
 	<</if>>
 <</for>>
@@ -1692,3 +1689,242 @@ Threats:
 <<include 'CampCode'>>
 
 [[Return to exploring the layer without waiting|Layer6 Hub]]
+
+
+:: Layer6 Tentacle Encounter [layer6 nobr]
+
+As you wade through the navel-high thicket of tentacles, the heat and humidity intensifying with each step, the scent of savory smoke fills your nostrils. A bead of sweat drips down your forehead and you wipe it away, your senses heightened in this infernal environment. The vibrant, exotic flames dance tantalizingly close, tickling your skin with their hypnotic hues.<br><br>
+
+Suddenly, the ground beneath you shudders, and a sense of impending doom washes over you. The wriggling carpet of tentacles you've been traversing parts to reveal a colossal creature, the greater tentacle beast. Its gargantuan mass of sinewy tendrils undulates and writhes, pulsating with a lustful hunger that sends a shiver down your back.
+
+:: Layer6 Threat1 1 [layer6]
+<<set $timeL6T1 -= 15>>
+[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
+
+The greater tentacle beast doesn't immediately surround you, but rather, it seems to study you from a distance, its countless tendrils weaving and swaying with an eerie grace. The slick surface of the tendrils glisten in the flickering light, their vibrant colors even more vivid than before. Your pulse quickens, adrenaline flooding your veins as you struggle to comprehend the enormity of the creature before you.
+
+As the beast's tendrils slowly begin to reach towards you, you realize that this is your opportunity to strike. You know that guns and amateur swordplay are of little use against the greater tentacle beast, but your resolve hardens. With a primal scream, you gather your strength and prepare to fight the beast, desperate to avoid its lustful grip.
+
+<<nobr>>
+<<if $items[13].count > 0 && $items[20].count > 18>>
+	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
+	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (19 - $bullRed)]]<br><br>
+<</if>>
+<<if $slingshot == 1>>
+Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
+[[Defeat it with the Brave Vector|$returnPassage]]<br><br>
+<</if>>
+<<if $items[14].count > 0>>
+Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
+	<<link "Fight it off with a sword" "Layer6 Threat1 2">>
+		<<set $tentacleFucked = 10>>
+		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<PregCheck>>
+		<</if>>
+	<</link>><br>
+	<<if $items[4].count > 4>>
+		<<link "Fight it off with a sword and use a medkit to cure the status" $returnPassage>>
+			<<set $items[4].count -= 1>>
+			<<if $playerCurses.some(e => e.name === "Omnitool")>>
+				<<PregCheck>>
+			<</if>>
+		<</link>><br>
+	<</if>>	
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
+	<<link "Fight it off with Sunbeam" "Layer6 Threat1 2">>
+		<<set $tentacleFucked = 9>>
+		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<PregCheck>>
+		<</if>>
+	<</link>><br>
+	<<if $items[4].count > 4>>
+		<<link "Fight it off with Sunbeam and use a medkit to cure the status" $returnPassage>>
+			<<set $items[4].count -= 1>>
+			<<if $playerCurses.some(e => e.name === "Omnitool")>>
+				<<PregCheck>>
+			<</if>>
+		<</link>><br>
+	<</if>>	
+<</if>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
+	<<link "Have Khemia fight it off with a sword" "Layer6 Threat1 2">>
+		<<set $tentacleFucked = 2>>
+		<<set $khemiaFucked = 1 >>
+		<<set _temp = random(0,100)>>
+		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+				<<set $pregKhemia = $time-14>>
+		<</if>>
+	<</link>><br>
+	<<if $items[4].count > 4>>
+		<<link "Have Khemia fight it off with a sword and use a medkit to cure his status" $returnPassage>>
+			<<set $items[4].count -= 1>>
+			<<set _temp = random(0,100)>>
+			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+				<<set $pregKhemia = $time-14>>
+			<</if>>
+		<</link>><br>	
+	<</if>>
+<</if>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
+	<<link "Have Khemia fight it off with Sunbeam" "Layer6 Threat1 2">>
+		<<set $tentacleFucked = 1>>
+		<<set $khemiaFucked = 1 >>
+		<<set _temp = random(0,100)>>
+		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+			<<set $pregKhemia = $time-14>>
+		<</if>>
+	<</link>><br>	
+	<<if $items[4].count > 4>>
+		<<link "Have Khemia fight it off with Sunbeam and use a medkit to cure his status" $returnPassage>>
+			<<set $items[4].count -= 1>>
+			<<set _temp = random(0,100)>>
+			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+				<<set $pregKhemia = $time-14>>
+			<</if>>
+		<</link>><br>	
+	<</if>>
+<</if>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
+	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
+	[[Have Khemia fight it off with Joyous Sunder|$returnPassage]]<br><br>
+<</if>>
+If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
+<<link "Allow it to overpower you" "Layer6 Threat1 2">>
+	<<set $tentacleFucked = 12>>
+	<<if $playerCurses.some(e => e.name === "Omnitool")>>
+		<<PregCheck>>
+	<</if>>
+	<<MonsterPregCheckParty>>
+	<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
+		<<set $SemenDemonBalance+=20>>
+	<</if>>
+<</link>><br>
+
+<<if $items[4].count > 4>>
+	<<link "Allow it to overpower you and use a medkit to cure the status" $returnPassage>>
+		<<set $items[4].count -= 1>>
+		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<PregCheck>>
+		<</if>>
+		<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
+			<<set $SemenDemonBalance+=20>>
+		<</if>>
+	<<MonsterPregCheckParty>>
+	<</link>><br>
+<</if>><br>
+
+<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<br><br>As the titanic tentacle beast closes in on you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
+
+<<say $creepydoll>>Oh, this one is really scary! But don't be scared, I won't let him hurt you. Keep your eyes closed for a long time and Just hold me tight, then I promise all the bad things will disappear. <</say>><br>
+
+An incredibly intense, yet still pleasant, warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
+
+<<link "Hold the doll tight and shut your eyes for a long time" $returnPassage>>
+  <<dollTF>>
+  <<dollTF>>
+<</link>><br><br>
+<</if>>
+
+<</nobr>>
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down the enormous tentacle beast.
+[[Use a combination of Relics not mentioned above you believe would be able to defeat the beast|$returnPassage]]
+
+:: Layer6 Threat1 2 [layer6]
+[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
+<<set $tempTime = $tentacleFucked>>\
+<<include "GeneralTimeStats">>\
+
+<<if $khemiaFucked == 0 && $app.vagina == 1 && $app.breastsCor > 0>>\
+	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they delicately caress your $app.breastsLabel cup breasts, teasing your nipples, and exploring the soft flesh of your inner thighs.
+
+	As the numbing liquid seeps into your flesh, your resistance begins to crumble. Your body, betraying your will, succumbs to the overwhelming sensations flooding your senses. The tendrils, now firmly in control, probe deeper, invading the most private depths of your womanhood with a skillful precision that leaves you gasping for air. Some tendrils continue to play with your breasts, kneading them and tugging gently on your nipples, while others slither their way into your most intimate crevices.
+
+	The relentless invasion of the tendrils sends wave after wave of pleasure coursing through your body, a dizzying blend of ecstasy and agony that threatens to shatter your sanity. The beast's tendrils fill your every orifice, pulsating and writhing with an insatiable hunger that you cannot deny. The heat of the surrounding flames only serves to intensify the experience, their exotic colors casting a sensual glow on your entwined bodies, highlighting the tantalizing curve of your hips and the shape of your $app.breastsLabel cup breasts.
+
+	As you lose yourself in the depths of pleasure, a part of you knows that you've surrendered to the greater tentacle beast. The thought of being left immobile for $tentacleFucked days in this hellish environment is a distant concern, dwarfed by the relentless torrent of ecstasy that threatens to drown you. But in this moment, with your body and mind utterly consumed by the beast's advances, there is no room for fear or regret.
+
+	As the greater tentacle beast's relentless assault on your senses continues, the line between pleasure and pain begins to blur. Your body trembles with each new wave of ecstasy, your muscles straining against the slick tendrils that hold you captive. The scent of the savory smoke and the heat of the exotic flames have become a distant backdrop, overshadowed by the all-consuming sensations that the beast elicits within you.
+
+	Gradually, the intensity of the experience begins to ebb. The tendrils, which had been pulsating and writhing with such fervor, start to slow their movements, becoming more languid and deliberate. The numbing liquid that had dulled your pain receptors starts to dissipate, and the once-overwhelming sensations are replaced by a gentle, soothing caress. The tendrils withdraw from your intimate areas, leaving a tingling warmth in their wake.
+
+	You can feel the greater tentacle beast's grip on your body loosening, its tendrils untangling and retreating one by one. As each tendril releases you, a cool sensation washes over your exposed skin, a stark contrast to the sweltering heat that surrounds you. The exotic flames seem to dim, their hypnotic hues fading to a mere flicker as you are gradually released from the beast's embrace.
+
+	As the last of the tendrils slips away, you collapse to the ground, your body a trembling, sweat-slicked mass of spent nerves and exhausted muscles. You draw in deep, ragged breaths, your lungs aching for the oxygen they had been so cruelly denied. The once-overpowering scent of smoke now serves as a grounding reminder of your surroundings, a faint anchor to reality amidst the chaos of your recent ordeal.
+
+	Despite the lingering exhaustion, a sense of relief and freedom washes over you as you realize that the greater tentacle beast has released you. The taste of survival is bittersweet, a complex mixture of gratitude, fear, and the lingering remnants of pleasure that still cling to your nerve endings. You know that the coming $tentacleFucked days will be a challenge, your body weakened and vulnerable, but you are determined to press onward.
+<<elseif $khemiaFucked == 0>>\
+	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they caress your most intimate areas.
+
+	As the numbing liquid seeps into your flesh, your resistance begins to crumble. Your body, betraying your will, succumbs to the overwhelming sensations flooding your senses. The tendrils, now firmly in control, probe deeper, invading your most private depths with a skillful precision that leaves you gasping for air.
+
+	The relentless invasion of the tendrils sends wave after wave of pleasure coursing through your body, a dizzying blend of ecstasy and agony that threatens to shatter your sanity. The beast's tendrils fill your every orifice, pulsating and writhing with an insatiable hunger that you cannot deny. The heat of the surrounding flames only serves to intensify the experience, their exotic colors casting a sensual glow on your entwined bodies.
+
+	As you lose yourself in the depths of pleasure, a part of you knows that you've surrendered to the greater tentacle beast. The thought of being left immobile for $tentacleFucked days in this hellish environment is a distant concern, dwarfed by the relentless torrent of ecstasy that threatens to drown you. But in this moment, with your body and mind utterly consumed by the beast's advances, there is no room for fear or regret.
+
+	As the greater tentacle beast's relentless assault on your senses continues, the line between pleasure and pain begins to blur. Your body trembles with each new wave of ecstasy, your muscles straining against the slick tendrils that hold you captive. The scent of the savory smoke and the heat of the exotic flames have become a distant backdrop, overshadowed by the all-consuming sensations that the beast elicits within you.
+
+	Gradually, the intensity of the experience begins to ebb. The tendrils, which had been pulsating and writhing with such fervor, start to slow their movements, becoming more languid and deliberate. The numbing liquid that had dulled your pain receptors starts to dissipate, and the once-overwhelming sensations are replaced by a gentle, soothing caress.
+
+	You can feel the greater tentacle beast's grip on your body loosening, its tendrils untangling and retreating one by one. As each tendril releases you, a cool sensation washes over your exposed skin, a stark contrast to the sweltering heat that surrounds you. The exotic flames seem to dim, their hypnotic hues fading to a mere flicker as you are gradually released from the beast's embrace.
+
+	As the last of the tendrils slips away, you collapse to the ground, your body a trembling, sweat-slicked mass of spent nerves and exhausted muscles. You draw in deep, ragged breaths, your lungs aching for the oxygen they had been so cruelly denied. The once-overpowering scent of smoke now serves as a grounding reminder of your surroundings, a faint anchor to reality amidst the chaos of your recent ordeal.
+
+	Despite the lingering exhaustion, a sense of relief and freedom washes over you as you realize that the greater tentacle beast has released you. The taste of survival is bittersweet, a complex mixture of gratitude, fear, and the lingering remnants of pleasure that still cling to your nerve endings. You know that the coming $tentacleFucked days will be a challenge, your body weakened and vulnerable, but you are determined to press onward.
+<<else>>\
+	<<set $khemiaFucked = 0>>\
+	In a flash, the greater tentacle beast lunges toward your party. Khemia leaps into action, his sword slicing through the air with precision and power. The beast's tendrils reach out hungrily, but Khemia's swift movements keep them at bay. He weaves and dodges, his blade severing tendrils with each graceful swing.
+
+	Despite Khemia's skill and strength, the sheer number of tendrils proves to be a challenge. A rogue tendril manages to slip past his defenses, coiling around his leg and yanking him off balance. Khemia grits his teeth in pain as the tendril tightens its grip, leaving deep, dark bruises on his tanned skin.
+
+	With a determined roar, Khemia slashes at the offending tendril, severing it from the beast's massive form. The creature recoils, releasing Khemia and retreating into the depths of the Abyss. The severed tendrils around him twitch and wither, their fleshy colors fading to a dull, lifeless gray.
+
+	You and your party members rush to Khemia's side, helping him to his feet. His injuries are painful but not life-threatening, a testament to his skill and determination. Together, you continue your journey through the Abyss, the memory of the greater tentacle beast's lustful hunger and Khemia's heroic stand forever etched in your minds.
+<</if>>\
+
+[[Return to exploring the sixth layer|$returnPassage]]
+
+
+:: Layer6 Dragon Encounter [layer6 nobr]
+
+As you wade through the navel-high tentacles, your senses are assaulted by the heat and the suffocating smell of smoke. The once-solid path is replaced by a squirming, undulating carpet of tendrils, some alight with exotic-colored flames that gently caress your skin. Amidst the infernal landscape, you suddenly catch sight of a large, imposing figure: the fell dragon.
+
+
+:: Layer6 Threat2 [layer6]
+<<set $timeL6T2 -= 8>>
+[img[setup.ImagePath+'Threats/felldragon.png']]
+
+The dragon's immense presence is nearly tangible, and the air seems to crackle with tension. You stand transfixed as the fell dragon unfurls its wings, casting sinister shadows upon the scorched earth. Its eyes lock onto yours, and you feel the weight of its ancient, malevolent intelligence bearing down on you. The dragon's breath hisses as it exhales, and you taste the acrid tang of sulfur and ozone, sharp against your tongue.
+
+With a heart-pounding realization, you remember the hoard of dubloons you carry. The fell dragon senses your wealth, and its eyes narrow with greed. You know that the creature will not rest until it has claimed your gold for its own, and you must make a choice: appease its wrath with a hefty offering, fight the monstrous beast, or flee and risk the searing pain of its flames.
+
+As the dragon's maw opens, revealing a churning, swirling vortex of multicolored fire, you steel yourself for the decision that could determine your fate in this unforgiving layer of the Abyss.
+
+<<nobr>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
+The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration = 99, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<</if>>
+<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
+	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration = 3, $status.penalty = 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
+While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
+	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration = 3, $status.penalty = 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+<</if>>
+You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
+	[[Offer 100 dubloons to appease the dragon|$returnPassage][$dubloons -= 100]]<br><br>
+If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
+	[[Try to run and accept the consequences|$returnPassage][$status.duration = 99, $status.penalty = 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
+<</nobr>>
+
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
+[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons|$returnPassage][$dragonKill += 1, $dubloons += 50]]
