@@ -393,22 +393,36 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 	<</switch>>
 <</if>>
 
-<<for _i = 0; _i < $playerCurses.length; _i++>>
-	<<if _i>0>>
-		<br>
-	<</if>>
-	<<print $playerCurses[_i].appDesc>>
-	<<if _i==$playerCurses.length-1>>
-		<br>
-	<</if>>
-<</for>>
+<<if $app.gender <= 1>>
+You appear as a typical man, with a distinctively masculine facial structure and a body profile that clearly reads as male from a distance.<br><br>
+<<elseif $app.gender == 2>>
+You appear as a man, but your features are somewhat softer than average. While no one would mistake you for a woman, the term "twink" might come to mind for some observers.<br><br>
+<<elseif $app.gender == 3>>
+You have a notably androgynous appearance. With clothes on, most people might perceive you as an effeminate man, while others could see you as a more masculine woman.<br><br>
+<<elseif $app.gender == 4>>
+You have a strikingly androgynous appearance. With clothes on, most people might perceive you as a masculine woman, while others could see you as a more feminine man.<br><br>
+<<elseif $app.gender == 5>>
+You appear as a woman with slightly masculine features. Many people might assume you have a tomboyish style based on your appearance.<br><br>
+<<elseif $app.gender >= 6>>
+You appear as a typical woman, with a feminine facial structure and a body profile that is unmistakably female from a distance.<br><br>
+<</if>>
+
+<<if $playerCurses.length > 0>>
+	<<for _i = 0; _i < $playerCurses.length; _i++>>
+		<<print $playerCurses[_i].appDesc>>
+		<<if _i==$playerCurses.length-1>>
+			<br>
+		<</if>>
+	<</for>>
+	<br>
+<</if>>
 
 <<if $dollevent2== true>>
-	<br>You find yourself wearing a tattered pink dress that bears a striking resemblance to the one worn by your doll. Frustratingly, this situation prevents you from changing into other clothes, even in extreme conditions.
+	You find yourself wearing a tattered pink dress that bears a striking resemblance to the one worn by your doll. Frustratingly, this situation prevents you from changing into other clothes, even in extreme conditions.
 	<<if $dolleventWet>0>>
 		To make matters worse, you are also stuck wearing a disposable-type diaper beneath your dress. No matter how hard you try, it remains securely fastened around your waist, with the tapes seemingly nonfunctional.
 	<</if>>
-	<br>
+	<br><br>
 <</if>>
 <<if $WettingSolution==2>>
 	Instead of your typical underwear, you now don Maru's protective absorbent underwear. However, calling it merely "protective" seems like a gross understatement. Maru designed it to be so bulky that it feels as if you're walking around in a cloth diaper.
@@ -440,8 +454,8 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 		<</if>>
 		<<if $SemenDemonVec.length == 1>> is<<else>> are<</if>> is providing you with <<print ($SemenDemonVec.length*2)>> loads a day.
 	<</if>>
+	<<print " ">>
 <</if>>
-<<print " ">>
 <<set _quotaCount = setup.activeCurseCount("Quota")>>
 <<if _quotaCount > 0>>
 	You need to directly bring other people to orgasm <<if $playerCurses.some(e => e.name === "Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<</if>><<print " ">>
@@ -457,41 +471,27 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 	Your <<if $app.sex == "male">>testicles are<<elseif $app.sex == "female">>clitoris is<<else>>testicles and clitoris are<</if>> approximately <<print (10 * $algalSize)>>% lager than usual due to drinking contaminated melted snow from the fourth layer.<<print " ">>
 <</if>>
 
-
-<<if $app.gender <= 1>>
-<br><br>You appear as a typical man, with a distinctively masculine facial structure and a body profile that clearly reads as male from a distance.
-<<elseif $app.gender == 2>>
-<br><br>You appear as a man, but your features are somewhat softer than average. While no one would mistake you for a woman, the term "twink" might come to mind for some observers.
-<<elseif $app.gender == 3>>
-<br><br>You have a notably androgynous appearance. With clothes on, most people might perceive you as an effeminate man, while others could see you as a more masculine woman.
-<<elseif $app.gender == 4>>
-<br><br>You have a strikingly androgynous appearance. With clothes on, most people might perceive you as a masculine woman, while others could see you as a more feminine man.
-<<elseif $app.gender == 5>>
-<br><br>You appear as a woman with slightly masculine features. Many people might assume you have a tomboyish style based on your appearance.
-<<elseif $app.gender >= 6>>
-<br><br>You appear as a typical woman, with a feminine facial structure and a body profile that is unmistakably female from a distance.
-<</if>>
 <<if $app.fit > 8>>
-Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. This will allow you to carry more weight and may even marginally decrease your travel time.
+Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. This will allow you to carry more weight and may even marginally decrease your travel time.<br><br>
 <<elseif $app.fit > 6>>
-You possess a well-toned, athletic body. Thus, you might be able to carry slightly more weight and require a bit more time to travel than a regular adventurer.
+You possess a well-toned, athletic body. Thus, you might be able to carry slightly more weight and require a bit more time to travel than a regular adventurer.<br><br>
 <<elseif $app.fit > 4>>
-You have an unremarkable yet healthy body. 
+You have an unremarkable yet healthy body. <br><br>
 <<else>>
-Your body appears rather out of shape, and you could certainly benefit from some exercise. Consequently, you can carry significantly less and must take more frequent breaks while traveling compared to a fit expedition leader.
+Your body appears rather out of shape, and you could certainly benefit from some exercise. Consequently, you can carry significantly less and must take more frequent breaks while traveling compared to a fit expedition leader.<br><br>
 <</if>>
-<<if $AegisWear>>Although imperceptible to an outside observer, your natural skeleton has been seamlessly replaced with a lightweight and resilient orichalcum framework.<</if>>
+<<if $AegisWear>>Although imperceptible to an outside observer, your natural skeleton has been seamlessly replaced with a lightweight and resilient orichalcum framework.<br><br><</if>>
 
 <<if $time - $app.pregnantT < 180 & $time - $app.pregnantT >= 120 & $menFirstCycle == false>>
-	Your pregnancy is now visibly noticeable, with your belly round and growing. You occasionally feel a gentle flutter within, a reminder of the life blossoming inside you.
+	Your pregnancy is now visibly noticeable, with your belly round and growing. You occasionally feel a gentle flutter within, a reminder of the life blossoming inside you.<br><br>
 <<elseif $time - $app.pregnantT < 180 & $time - $app.pregnantT >= 120 & $menFirstCycle == true>>
-	You've gained some weight, and your belly has become rounder. Every so often, you experience ticklish spasms from within, possibly a sign of your baby's movements.
+	You've gained some weight, and your belly has become rounder. Every so often, you experience ticklish spasms from within, possibly a sign of your baby's movements.<br><br>
 <<elseif $time - $app.pregnantT < 240 & $time - $app.pregnantT >= 180 & $menFirstCycle == false>>
-	Your belly is now large and unmistakably that of a pregnant person. Your child's movements within your womb are frequent, and at times, the intensity of the sensations surprises you.
+	Your belly is now large and unmistakably that of a pregnant person. Your child's movements within your womb are frequent, and at times, the intensity of the sensations surprises you.<br><br>
 <<elseif $time - $app.pregnantT < $due & $time - $app.pregnantT >= 240>>
-	Your belly is sizable and clearly pregnant. Your child often tries to move and kick within your womb, but space is becoming limited. The sensations can be quite intense, but you sense that your pregnancy is nearing its end.
+	Your belly is sizable and clearly pregnant. Your child often tries to move and kick within your womb, but space is becoming limited. The sensations can be quite intense, but you sense that your pregnancy is nearing its end.<br><br>
 <</if>>
-<br><br>
+
 <<if $app.libido <= 1>>
 You have a very low libido, without much interest at all in sex.
 <<elseif $app.libido < 2>>
@@ -636,11 +636,11 @@ They are a bit sore at the moment.
 <</for>>
 <</if>>
 <br>
-<<set _handle=$app>>Overall the world would probably see you now as a <<include "PerceivedStature">> <<include "PerceivedRace">> <<include "PerceivedGender">>.<br>
+<<set _handle=$app>>Overall the world would probably see you now as a <<include "PerceivedStature">> <<include "PerceivedRace">> <<include "PerceivedGender">>.<br><br>
 <<back [[$menuReturn]]>>
 
 :: Layer Notes [noreturn nobr]
-Notes on layers I visited:
+Notes on layers I visited:<br>
 <<if $visitL1>>
 <br>[[Layer 1 - Arcadia's Garden|Layer1 notes]]
 <</if>>
@@ -668,7 +668,7 @@ Notes on layers I visited:
 <<if $visitL8>>
 <br>[[Layer 9 - Reaches of Oceanus|Layer9 notes]]
 <</if>>
-<br>
+<br><br>
 <<back>>
 
 :: Adjust dubloons [noreturn]
