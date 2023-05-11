@@ -134,53 +134,56 @@ Your Curses are:
 
 
 :: Inventory [noreturn]
-You have $items[0].count days of single-use water rations.
-You have $items[1].count days of food.
-You have $items[2].count unfilled flasks.
-You have $items[3].count days of water in filled flasks.
-<<if $items[3].count>0 >>\
-@@ You can organize your flasks in the item menu!
-<</if>>\
-
-Your inventory and the count (if applicable) of each item is as follows:
 <<nobr>>
+You have $items[0].count days of single-use water rations.<br>
+You have $items[1].count days of food.<br>
+You have $items[2].count unfilled flasks.<br>
+You have $items[3].count days of water in filled flasks.<br>
+<<if $items[3].count>0 >>
+[[Organize your drinking water|Flask Order]]<br>
+<</if>>
+<br>
+Items:<br>
+
 <<for _i = 0; _i < $items.length; _i++>>
 	<<capture _i>>
 	<<if $items[_i].count > 1 || $items[_i].count < 0>>
-			<<print "[[$items[_i].name|Item Info][$temp = _i]]">>		<<print " ">><<print $items[_i].count>><br>
+			<<print "[[$items[_i].name|Item Info][$temp = _i]]">><<print " ">><<print $items[_i].count>><br>
 	<<elseif $items[_i].count == 1>>
 		<<print "[[$items[_i].name|Item Info][$temp = _i]] ">>
 		<br>
 	<</if>>
 	<</capture>>
 <</for>>
-<</nobr>>
-
-<<nobr>>
-<<for _i = 0; _i < $ownedRelics.length; _i++>>
-	<<capture _i>>
-		<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]]">><br>
-	<</capture>>
-<</for>>
-<</nobr>>
+<br>
+<<if $ownedRelics.length > 0>>
+	Relics:<br> 
+	<<for _i = 0; _i < $ownedRelics.length; _i++>>
+		<<capture _i>>
+			<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]]">><br>
+		<</capture>>
+	<</for>>
+<</if>>
+<br>
 
 <<set $total_value_relics=0>>
 <<for _i = 0; _i < $ownedRelics.length; _i++>>
-<<set $total_value_relics = $ownedRelics[_i].value + $total_value_relics>>
+	<<set $total_value_relics = $ownedRelics[_i].value + $total_value_relics>>
 <</for>>
-The total value of all your Relics is $total_value_relics dubloons.
+The total value of all your Relics is $total_value_relics dubloons.<br><br>
 
-<<nobr>>
+
 <<if $relicSwap.length > 0>>
 	<<for _i = 0; _i < $relicSwap.length; _i++>>
 		<<capture _i>>
 		You have swapped the abilities of the $relicSwap[_i][0].name and the $relicSwap[_i][1].name.<br>
 		<</capture>>
 	<</for>>
+	<br>
 <</if>>
-<</nobr>>
-<<back [[$menuReturn]]>>
 
+<<back [[$menuReturn]]>>
+<</nobr>>
 
 :: Habitation Ending [ending]
 You've reached the end of your journey due to a successful habitation ending. Was it worth it? Did you find what you were looking for?
@@ -890,7 +893,7 @@ You feel a sudden, sharp pain in your lower abdomen as your muscles begin to con
 Your breathing becomes rapid and shallow as you try to keep up with the contractions. You hear your own gasps and moans as you push through the pain. You feel pressure in your lower region, as if your body is trying to force something out.
 <<say $mc>>Aaaahhhhh<</say>> 
 <<if $hiredCompanions.length<1>>\
-	You realize you're going into labor and begin a frantic search for a place to deliver deliver the baby. It's a struggle to stay calm as your muscles begin to convulse.
+	You realize you're going into labor and begin a frantic search for a place to deliver the baby. It's a struggle to stay calm as your muscles begin to convulse.
 
 	You walk for a while but you stop frrquently to deal with the contractions. Eventually, you find a somewhat suitable location. You do your best to make a makeshift bed with your supplies, but at times like these you find yourself missing the sterile hospitals of the surface.
 
@@ -1069,7 +1072,8 @@ Manage food and water items:<br>
 <<if $items[3].count + $items[0].count>0 >>
 	<<set $switchFlask=false>>
 	<<set $temp0=-1>>
-	[[Organize drinking order filled flasks| Flask Order]]
+	You can choose the order in which you drink the water you have with you:
+	[[Organize your drinking water|Flask Order]]
 <</if>>
 
 <<if $items[24].count>0 & $useEnergyrations==false>>
@@ -2403,6 +2407,8 @@ How many dubloons would you like to pay back?
 
 :: Flask Order[nobr noreturn]
 <<FlaskFirst>>
+Here you can organize your drinking water to choose what you will drink first.<br><br>
+
 You will first drink:<br>
 $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 
