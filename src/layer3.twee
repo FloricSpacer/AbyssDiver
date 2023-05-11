@@ -633,11 +633,11 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 <<else>>
 	<<for _companion range $hiredCompanions>>
 		<<capture _companion>>
-			<<for $j = 0; $j < $playerCurses.length; $j++>>
-				<<if $j==0>>
+			<<for _j = 0; _j < $playerCurses.length; _j++>>
+				<<if _j==0>>
 					<<print "_companion.name doesn't mind taking:">><br>
 				<</if>>
-
+				<<set _curse = $playerCurses[_j]>>
 				<<if _companion.name == $companionTwin.name>>
 					<<set _tempname = "Twin">>
 					<<set _flag =  false>>
@@ -652,7 +652,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 
 				<<if _flag>>
 					<<capture $j>>
-						<<print "$playerCurses[$j].name">>
+						<<print "$playerCurses[_j].name">>
 						<<link "Choose" "Layer3 Skewed1a">>
 							<<set _companion.curses.push($playerCurses[$j])>>
 							
@@ -662,22 +662,22 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 								<<set _tempName = _companion.name>>
 							<</if>>
 
-							<<if $playerCurses[$j].type == "Age">>
+							<<if $playerCurses[_j].type == "Age">>
 								<<set _string = "$AgeLog" + _tempName>>
-							<<elseif $playerCurses[$j].type == "Gender">>
+							<<elseif $playerCurses[_j].type == "Gender">>
 								<<set _string = "$GenderLog" + _tempName>>
-							<<elseif $playerCurses[$j].type == "Height">>
+							<<elseif $playerCurses[_j].type == "Height">>
 								<<set _string = "$HeightLog" + _tempName>>
-							<<elseif $playerCurses[$j].type == "Handicap">>
+							<<elseif $playerCurses[_j].type == "Handicap">>
 								<<set _string = "$HandicapLog" + _tempName>>
-							<<elseif $playerCurses[$j].type == "Libido">>
+							<<elseif $playerCurses[_j].type == "Libido">>
 								<<set _string = "$LibidoLog" + _tempName>>
 							<</if>>
-							<<if $playerCurses[$j].type != "">>
-								<<print "<<set " + _string + ".push($playerCurses[$j])>>">>
+							<<if $playerCurses[_j].type != "">>
+								<<print "<<set " + _string + ".push($playerCurses[_j])>>">>
 							<</if>>
 
-							<<set $targetCurse = $playerCurses[$j]>>
+							<<set $targetCurse = $playerCurses[_j]>>
 							<<include "CurseRemoval">>
 							<<set $dubloons -= ($skewedUsed * 5)>>
 							<<set $skewedUsed += 1>>
