@@ -1751,6 +1751,10 @@ How will you deal with the monstrous worm approaching you?
 	[[Have Khemia fight it off with Joyous Sunder|$returnPassage]]<br><br>
 <</if>>
 Sacrificing 10 days' worth of water will distract the Borer long enough for you to escape. You'll relinquish your water supply based on your drinking water priority order, as it's the most easily accessible in this perilous situation.<br>
+	<<link "Choose which water type to use as distraction" "Layer5 Borer Drop Overview">>
+		<<set $waterDropNb = 10>>
+	<</link>>
+ | 
 	/*[[Use 10 days of water as a distraction to get away|Layer5 Hub][$items[0].count -= 10]]<br><br>*/
 	<<link "Use 10 days of water as a distraction to get away" "Layer5 Borer Water">>
 		<<for _k=0; _k<10; _k++>>
@@ -1763,6 +1767,91 @@ Succumbing to the Dune Devouring Borer's onslaught will lead to a gruesome fate 
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
 [[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|$returnPassage]]
+
+:: Layer5 Borer Drop Overview
+<<FlaskFirst>>
+You need to sacrifice $waterDropNb more days of water to successfully distract the Borer
+
+In your inventory you have:
+
+/* Code somewhat copied and pasted from the ::Flask Order passage, I don't know how $flaskMatrixOrderAvailable works so there may be some misuses*/
+<<for _i=0; _i<$flaskMatrixOrderAvailable.length; _i++ >>
+	<<capture _i>>
+		<<set _temp = $flaskMatrixOrderAvailable[_i]>>
+	<</capture>>
+	
+	<br><<nobr>>$flaskMatrix[_temp] $flaskMatrixLabel[_temp] remaining 
+		
+	<<capture _temp>>
+		<<link "Drop""Layer5 Borer Drop Count">>
+			<<set $flaskBorerID = _temp>>
+		<</link>>
+	<</capture>>
+	
+	<<if $flaskMatrix[_temp]>= $waterDropNb >> 
+		 | 
+		<<link "Drop <<print $waterDropNb>> water" "Layer5 Borer Water">>
+			<<if $items[3].count > 0 || $items[0].count > 0>>
+				<<if $flaskMatrixLabel[_temp]=="Bottled water" || $items[3].count <= 0>>	
+					<<set $items[0].count -= $waterDropNb >>
+				<<else>>
+					<<set $items[3].count -= $waterDropNb  >>
+					<<set $items[2].count += $waterDropNb  >>
+					<<set $flaskMatrix[_temp] -= $waterDropNb  >>
+				<</if>>
+			<<else>>
+				<<set $items[0].count -= $waterDropNb >>
+			<</if>>
+		<</link>>
+	<</if>>
+	<</nobr>>
+<</for>>
+
+:: Layer5 Borer Drop Count
+You have $flaskMatrix[$flaskBorerID] days worth of $flaskMatrixLabel[$flaskBorerID], select the amount you want to drop:
+(You need $waterDropNb more to distract the Borer)
+
+<<set _enoughWaterTest = "Layer5 Borer Drop Overview">>
+
+<<textbox "_temp" "0">>
+
+<<nobr>>
+<<link "Drop water" >>
+	<<if _temp > $flaskMatrix[$flaskBorerID]>>
+		<<set _temp = $flaskMatrix[$flaskBorerID]>>
+	<</if>>
+
+	<<if _temp >= $waterDropNb>>
+		<<set _enoughWaterTest = "Layer5 Borer Water" >>
+		<<if $items[3].count > 0 || $items[0].count > 0>>
+			<<if $flaskMatrixLabel[$flaskBorerID]=="Bottled water" || $items[3].count <= 0>>	
+				<<set $items[0].count -= $waterDropNb >>
+			<<else>>
+				<<set $items[3].count -= $waterDropNb  >>
+				<<set $items[2].count += $waterDropNb  >>
+				<<set $flaskMatrix[$flaskBorerID] -= $waterDropNb  >>
+			<</if>>
+		<<else>>
+			<<set $items[0].count -= $waterDropNb >>
+		<</if>>
+	<<elseif _temp >= 0 >>
+		<<set $waterDropNb -= _temp>>
+		<<if $items[3].count > 0 || $items[0].count > 0>>
+			<<if $flaskMatrixLabel[$flaskBorerID]=="Bottled water" || $items[3].count <= 0>>	
+				<<set $items[0].count -= _temp >>
+			<<else>>
+				<<set $items[3].count -= _temp  >>
+				<<set $items[2].count += _temp  >>
+				<<set $flaskMatrix[$flaskBorerID] -= _temp  >>
+			<</if>>
+		<<else>>
+			<<set $items[0].count -= _temp >>
+		<</if>>
+	<</if>>
+	<<goto _enoughWaterTest >>
+<</link>>
+<</nobr>>
+
 
 :: Layer5 Borer Water
 <<nobr>>
