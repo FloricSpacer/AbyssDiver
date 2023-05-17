@@ -1096,9 +1096,9 @@ Manage food and water items:<br>
 <</if>>
 
 <<if $items[24].count>0 & $useEnergyrations==false>>
-	<br><br>[[Start using your energy rations| Use Items and Relics][$useEnergyrations=true]]
+	<br><br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations=true]]
 <<elseif $items[24].count>0 & $useEnergyrations==true>>
-	<br><br>[[Stop using your energy rations| Use Items and Relics][$useEnergyrations=false]]
+	<br><br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations=false]]
 <</if>>
 <br><br>
 
@@ -1111,6 +1111,16 @@ Manage food and water items:<br>
 		[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]
 	<</if>>
 	<br>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye == false && $playerCurses.some(e => e.name === "Eye on the Prize")>>
+		<br>You are missing an eye, so it should be possible to install the Moonwatcher into the empty socket. However, due to your lack of surgical expertise and equipment, this will result in minor injuries increasing your next 2 travel times by 1 day each.<br>
+		[[Replace your missing eye with the Moonwatcher|Use Items and Relics][$light = 1, $BionicEye=true, $status.duration += 2, $status.penalty += 1]]<br>
+<</if>>
+
+<<if $ownedRelics.some(e => e.name === "Glory's Grasp") && $BionicArm == false && $playerCurses.some(e => e.name === "Ampu-Q-tie") && ($curse104.variation == "A" || $curse104.variation == "AL" || $curse104.variation == "ALL" $curse104.variation == "AALL" || $curse104.variation == "AA")>>
+		<br>You are missing an arm, so you have a perfect opportunity to install your Glory's Grasp into the place where your arm would be. However, due to your lack of surgical expertise and equipment, this will result in minor injuries increasing your next 2 travel times by 1 day each.<br>
+		[[Replace your missing arm with the Glory's Grasp|Use Items and Relics][$BionicArm=true, $status.duration += 2, $status.penalty += 1]]<br>
 <</if>>
 
 <<if $items[8].count > 0>>
