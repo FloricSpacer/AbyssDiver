@@ -1773,7 +1773,6 @@ Use the following option only if you have specifically considered your inventory
 You need to sacrifice $waterDropNb more days of water to successfully distract the Borer
 
 In your inventory you have:
-
 <<nobr>>/* Code somewhat copied and pasted from the ::Flask Order passage, I don't know how $flaskMatrixOrderAvailable works so there may be some misuses*/
 <<for _i=0; _i<$flaskMatrixOrderAvailable.length; _i++ >>
 	<<capture _i>>
@@ -1790,19 +1789,21 @@ In your inventory you have:
 	
 	<<if $flaskMatrix[_temp]>= $waterDropNb >> 
 		 | 
-		<<link "Drop <<print $waterDropNb>> water" "Layer5 Borer Water">>
-			<<if $items[3].count > 0 || $items[0].count > 0>>
-				<<if $flaskMatrixLabel[_temp]=="Bottled water" || $items[3].count <= 0>>	
-					<<set $items[0].count -= $waterDropNb >>
+		<<capture _temp>>
+			<<link "Drop <<print $waterDropNb>> water" "Layer5 Borer Water">>
+				<<if $items[3].count > 0 || $items[0].count > 0>>
+					<<if $flaskMatrixLabel[_temp]=="Bottled water" || $items[3].count <= 0>>	
+						<<set $items[0].count -= $waterDropNb >>
+					<<else>>
+						<<set $items[3].count -= $waterDropNb  >>
+						<<set $items[2].count += $waterDropNb  >>
+						<<set $flaskMatrix[_temp] -= $waterDropNb  >>
+					<</if>>
 				<<else>>
-					<<set $items[3].count -= $waterDropNb  >>
-					<<set $items[2].count += $waterDropNb  >>
-					<<set $flaskMatrix[_temp] -= $waterDropNb  >>
+					<<set $items[0].count -= $waterDropNb >>
 				<</if>>
-			<<else>>
-				<<set $items[0].count -= $waterDropNb >>
-			<</if>>
-		<</link>>
+			<</link>>
+		<</capture>>
 	<</if>>
 <</for>>
 <</nobr>>
@@ -1811,11 +1812,10 @@ In your inventory you have:
 You have $flaskMatrix[$flaskBorerID] days worth of $flaskMatrixLabel[$flaskBorerID], select the amount you want to drop:
 (You need $waterDropNb more to distract the Borer)
 
-<<set _enoughWaterTest = "Layer5 Borer Drop Overview">>
-
 <<textbox "_temp" "0">>
 
 <<nobr>>
+<<set _enoughWaterTest = "Layer5 Borer Drop Overview">>
 <<link "Drop water" >>
 	<<if _temp > $flaskMatrix[$flaskBorerID]>>
 		<<set _temp = $flaskMatrix[$flaskBorerID]>>
