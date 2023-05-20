@@ -1800,28 +1800,23 @@ You have touched the void and tasted just a hint of the Truth, and you will neve
     <</if>>
 
 :: Curse Randomizer [nobr]
-<<for _i = 0; _i < 999; _i++>>
-	<<set _temp1 = random(0,_tempCurses.length-1) >>
-    <<set _curse = $curses.find(c => c.name === _tempCurses[_temp1])>>
-	<<include "Curse Limits">>
-	<<if (_totalCurses.filter(e => e.name === _curse.name).length + $StoredCurse.filter(e => e.name === _curse.name).length) < _maxCurses && _curseLimitation==false>>
-		<<break>>
-	<</if>>
-
-	<<if _i > 900>>
-		<<set _temp1 = -1>>
-		<<break>>
-	<</if>>
+<<set _validNames = []>>
+<<for _name range _tempCurses>>
+    <<set _curse = $curses.find(c => c.name === _name)>>
+    <<include "Curse Limits">>
+    <<if !_curseLimitation && (_totalCurses.filter(e => e.name === _name).length + $StoredCurse.filter(e => e.name === _name).length) < _maxCurses>>
+        <<set _validNames.push(_name)>>
+    <</if>>
 <</for>>
 
-
-<<if _temp1 >= 0>>
-The Abyss has chosen for you to be Cursed with _curse.name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.
-
-<<print "[[Take on " + _curse.name + "]]">>
+<<if _validNames.length > 0>>
+<<set _name = either(_validNames)>>
+The Abyss has chosen for you to be Cursed with _name. You may not have chosen this, but fate has placed the burden upon you. Accept your Curse and the change in life that comes with it.<br>
+<br>
+<<print "[[Take on " + _name + "]]">>
 <<else>>
-There are no Curses left for you to take on this layer.
-
+There are no Curses left for you to take on this layer.<br>
+<br>
 <<back>>
 <</if>>
 
