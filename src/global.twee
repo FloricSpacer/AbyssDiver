@@ -1862,63 +1862,20 @@ How many dubloons would you like to pay back?
 <<back>>
 
 :: CurseRemoval [nobr]
-<<set _curseDeleted=false>>
-<<for _i = 0; _curseDeleted==false; _i++>>
-	<<if  !_curseDeleted && $playerCurses[_i].name == $targetCurse.name>>
-		<<set _loopEnd=false>>
-		<<if $targetCurse.type == "Height">>
-			<<for _j = $HeightLog.length-1; _loopEnd==false; _j-->>
-				<<if $HeightLog[_j].name == $targetCurse.name>>
-					<<set _loopEnd=true>> 
-					<<set _j++>>
-				<<elseif _j==0>>
-					<<set _loopEnd=true>> 
-				<</if>>
+<<for _i = 0; _i < $playerCurses.length; ++_i>>
+	<<if $playerCurses[_i].name == $targetCurse.name>>
+		<<set _logName = $targetCurse.type + "Log">>
+		<<set _log = State.variables[_logName]>>
+		<<if _log>>
+			<<for _j = _log.length - 1; _j >= 0; --_j>>
+				<<if _log[_j].name == $targetCurse.name>><<break>><</if>>
 			<</for>>
-			<<set $HeightLog.deleteAt(_j)>>
-		<<elseif $targetCurse.type == "Gender">>
-			<<for _j = $GenderLog.length-1; _loopEnd==false; _j-->>
-				<<if $GenderLog[_j].name == $targetCurse.name>>
-					<<set _loopEnd=true>> 
-					<<set _j++>>
-				<<elseif _j==0 >>
-					<<set _loopEnd=true>> 
-				<</if>>
-			<</for>>
-			<<set $GenderLog.deleteAt(_j)>>
-		<<elseif $targetCurse.type == "Age">>
-			<<for _j = $AgeLog.length-1; _loopEnd==false; _j-->>
-				<<if $AgeLog[_j].name == $targetCurse.name>>
-					<<set _loopEnd=true>>
-					<<set _j++>> 
-				<<elseif _j==0>>
-					<<set _loopEnd=true>> 
-				<</if>>
-			<</for>>
-			<<set $AgeLog.deleteAt(_j)>>
-		<<elseif $targetCurse.type == "Libido">>
-			<<for _j = $LibidoLog.length-1; _loopEnd==false; _j-->>
-				<<if $LibidoLog[_j].name == $targetCurse.name>>
-					<<set _loopEnd=true>> 
-					<<set _j++>>
-				<<elseif _j==0>>
-					<<set _loopEnd=true>> 
-				<</if>>
-			<</for>>
-			<<set $LibidoLog.deleteAt(_j)>>
-		<<elseif $targetCurse.type == "Handicap">>
-			<<for _j = $HandicapLog.length-1; _loopEnd==false; _j-->>
-				<<if $HandicapLog[_j].name == $targetCurse.name>>
-					<<set _loopEnd=true>> 
-					<<set _j++>>
-				<<elseif _j==0>>
-					<<set _loopEnd=true>> 
-				<</if>>
-			<</for>>
-			<<set $HandicapLog.deleteAt(_j)>>
+			<<if _j >= 0>>
+				<<set State.variables[_logName].deleteAt(_j)>>
+			<</if>>
 		<</if>>
 		<<set $playerCurses.deleteAt(_i)>>
-		<<set _curseDeleted=true>>
+		<<break>>
 	<</if>>
 <</for>>
 
