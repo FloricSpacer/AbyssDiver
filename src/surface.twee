@@ -641,46 +641,76 @@ Cashing out, really? Where is your sense of adventure?
 <</nobr>>
 
 :: Surface Sell 1 [surface]
+<<Inhuman>>\
+<<if $visitL1 == 0>>
+	Stepping into the shop, you're immediately greeted by a spectacle of Relics, in varying stages of packaging, ready to be shipped off to unknown buyers across the globe.
 
-Here you can permanently sell any of your collected Relics for a nice haul of dubloons. You can use this to fund further expeditions<<if $debt > 0>>, pay off your debt,<</if>> or just get a nice payday at the end of your expedition.
+	The proprietor, a man busy sealing a vintage vacuum cleaner into a metal crate labelled "Fire Hazard; DO NOT DISTURB," glances your way, sizing you up in a brief moment. His nonchalant demeanor indicates he doesn't find you particularly interesting or a potential buyer. 
 
-Choose the Relic you would like to sell:
-<<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-			You can't seem to part ways with the Creepy Doll<br>
-		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$colwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$hsswear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Solace Lace">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$slwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$SibylBuff=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
-		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
-		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Blind Divine">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$BDwear = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$HeavyHeadwear= false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
-			<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
-		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
-			<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
-		<<else>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
-		<</if>>
-	<</capture>>
-<</for>>
-<</nobr>>
+	<<say $relicBuyer>>If the Abyss happens to lure you in, do visit again. I'd be delighted to buy any Relics you're willing to part with - for a fair price, naturally.<</say>>
+	He points to a peculiar handheld meter perched on the counter. As he moves it near a Relic, it begins to tick, a mechanism he uses to calculate a "fair" price, given that divers have nowhere else to sell unless they complete their dive.
+<<else>>\
+	<<if $app.inhuman < 2>>
+		As you step into the shop, you witness an array of Relics being prepped for shipment to curious buyers across the globe. The merchant, noticing your entrance, stops his work to offer you a warm welcome.
 
-[[Continue your business on the surface|Surface Hub]]
+		<<say $relicBuyer>>Hello, diver. Would you like to offload a few of those Relics? Do bring them over, and I'll gauge their worth using this device.<</say>>
+		He indicates a peculiar handheld meter resting on the counter. When brought near a Relic, it ticks, helping him determine its "fair" price, well aware that divers can't sell elsewhere unless they've finished their dive.
+	<<elseif $app.inhuman < 6>>
+		As you step into the shop, you witness an array of Relics being prepped for shipment to curious buyers across the globe. The merchant's eyes flicker with anticipation as he momentarily pauses his work to assess you.
 
+		<<say $relicBuyer>>Greetings, <<sirmaam>>. Fancy unburdening yourself of some Relics? Bring them over, and I'll appraise their value. It may be worth your while to leave a few here to acquire valuable supplies for your dive.<</say>>
+		The merchant excitedly points to an unusual handheld meter on the counter. It ticks when brought near a Relic, a clever system to calculate a "fair" price, recognizing that divers can't sell elsewhere unless they've finished their dive.
+	<<elseif $app.inhuman < 10>>
+		As you step into the shop, you witness an array of Relics being prepped for shipment to curious buyers across the globe. The merchant, eyes gleaming with unmasked greed, pauses his work to scrutinize you. 
+
+		<<say $relicBuyer>>Greetings, <<sirmaam>>. Care to unload a few of those Relics? Please bring them over, and I'll appraise their value. It may be worth your while to leave a few here to acquire valuable supplies for your dive.<</say>>
+		With visible eagerness, he gestures to a peculiar handheld meter stationed on the counter. It emits a ticking noise when it nears a Relic, serving as a strategic tool to work out a "fair" price, recognizing that divers can't sell elsewhere unless they've finished their dive.
+	<<else>>
+		As you step into the shop, you witness an array of Relics being prepped for shipment to curious buyers across the globe. The merchant pauses his work to evaluate you, eyes shimmering with restrained greed tempered by his unease at your inhuman appearance. While he expects profitable transactions from you, his discomfort is hard to hide.
+
+		<<say $relicBuyer>>Hello... <<sirmaam>>. Would you like me to... acquire a few of those Relics? Please bring them here, and I'll appraise their value.<</say>>
+		He shows you a unique handheld meter placed on the counter. It ticks when it senses a Relic's presence, a mechanism he uses to determine a "fair" price, bearing in mind that divers have nowhere else to sell unless they complete their dive.
+	<</if>>
+	Here you can permanently sell any of your collected Relics for a nice haul of dubloons. You can use this to fund further expeditions<<if $debt > 0>>, pay off your debt,<</if>> or just get a nice payday at the end of your expedition.
+
+	Choose the Relic you would like to sell:
+	<<nobr>>
+	<<for $i = 0; $i < $ownedRelics.length; $i++>>
+		<<capture $i>>
+			<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
+				You can't seem to part ways with the Creepy Doll<br>
+			<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$colwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$hsswear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Solace Lace">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$slwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$SibylBuff=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
+			<<elseif $ownedRelics[$i].name=="Everhevea">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
+			<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Blind Divine">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$BDwear = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$HeavyHeadwear= false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
+				<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
+			<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
+				<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
+			<<else>>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<</if>>
+		<</capture>>
+	<</for>>
+	<</nobr>>
+
+	[[Continue your business on the surface|Surface Hub]]
+
+<</if>>
 
 :: Surface Sell 2 [surface]
 
