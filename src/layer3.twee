@@ -195,21 +195,21 @@ Would you like to use the Gossamery Scales to gain corruption based on your dubl
 <<else>>
 You have already used the scales on your journey. You may not use them again.
 <</if>>
-<<if ($hiredCompanions.length > 0) && ($skewedForced < 4)>>
-	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<link "Yes, travel to the Skewed Shrine to transfer a Curse" "Layer3 Skewed1a">>
-		<<set $tempTime = 3>>
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
-	<</link>><br><br>
-	Would you like to use the Skewed Shrine to force a Curse on one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<link "Yes, travel to the Skewed Shrine to force a Curse" "Layer3 Skewed 2a">>
-		<<set $tempTime = 3>>
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
-	<</link>><br><br>
-	<<elseif $skewedForced > 4>>
-	None of your companions trust you at this shrine. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
-	<<else>>
+<<if !$hiredCompanions.length>>
 	You must have companions if you would like to use the Skewed Shrine.<br><br>
+<<elseif $skewedForced < 4>>
+	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
+	<<link "Yes, use the Skewed Shrine to transfer a Curse" "Layer3 Skewed1a">>
+		<<set $tempTime = 3>>
+		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+	<</link>><br><br>
+	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
+	<<link "Yes, use the Skewed Shrine to force a Curse" "Layer3 Skewed 2a">>
+		<<set $tempTime = 3>>
+		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+	<</link>><br><br>
+<<else>>
+	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
 <</if>>
 <</nobr>>
 [[Continue exploring the third layer|Layer3 Hub]]
@@ -392,61 +392,43 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 	You do not have enough dubloons for an offering.
 <<else>>
 	<<for _companion range $hiredCompanions>>
-		<<capture _companion>>
-			<<for _j = 0; _j < $playerCurses.length; _j++>>
-				<<if _j==0>>
-					<<print "_companion.name doesn't mind taking:">><br>
-				<</if>>
-				<<set _curse = $playerCurses[_j]>>
-				<<if _companion.name == $companionTwin.name>>
-					<<set _tempname = "Twin">>
-					<<set _flag =  false>>
-				<<elseif _companion.name == "Golem">>
-					<<set _tempname = _companion.name >>
-					<<set _flag =  false>>
-					You can't transfer a Curse to your Golem.<br>
-				<<else>>
-					<<set _tempname = _companion.name >>
-					<<set _flag =  setup.willingCurses[_tempname ].includes(_curse.name)>>
-				<</if>>
+		<<for _index, _curse range $playerCurses>>
+			<<set _flag = false>>
+			<<set _tempName = _companion.name>>
 
-				<<if _flag>>
-					<<capture _j>>
-						<<print "$playerCurses[_j].name">>
-						<<link "Choose" "Layer3 Skewed1a">>
-							<<set _companion.curses.push($playerCurses[_j])>>
-							
-							<<if _companion == $companionTwin >>
-								<<set _tempName = "Twin">>
-							<<else>>
-								<<set _tempName = _companion.name>>
-							<</if>>
+			<<switch _tempName>>
+				<<case $companionTwin.name>>
+					<<if _index < 1>>Your twin already shares all of your Curses.<br><</if>>
+				<<case "Golem">>
+					<<if _index < 1>>You can't transfer Curses to your Golem.<br><</if>>
+				<<default>>
+					<<if _index < 1>>_companion.name doesn't mind taking:<br><</if>>
+					<<set _flag = setup.willingCurses[_tempName].includes(_curse.name)>>
+					<<if _flag>>
+						/* Check whether companion already has this curse (e.g. from the layer 4 shrine). */
+						<<set _flag = !_companion.curses.some(companionCurse => companionCurse.name == _curse.name)>>
+					<</if>>
+			<</switch>>
 
-							<<if $playerCurses[_j].type == "Age">>
-								<<set _string = "$AgeLog" + _tempName>>
-							<<elseif $playerCurses[_j].type == "Gender">>
-								<<set _string = "$GenderLog" + _tempName>>
-							<<elseif $playerCurses[_j].type == "Height">>
-								<<set _string = "$HeightLog" + _tempName>>
-							<<elseif $playerCurses[_j].type == "Handicap">>
-								<<set _string = "$HandicapLog" + _tempName>>
-							<<elseif $playerCurses[_j].type == "Libido">>
-								<<set _string = "$LibidoLog" + _tempName>>
-							<</if>>
-							<<if $playerCurses[_j].type != "">>
-								<<print "<<set " + _string + ".push($playerCurses[_j])>>">>
-							<</if>>
+			<<if _flag>>
+				<<capture _companion, _curse, _tempName>>
+					&nbsp; _curse.name
+					<<link "Choose" "Layer3 Skewed1a">>
+						<<set _companion.curses.push(_curse)>>
 
-							<<set $targetCurse = $playerCurses[_j]>>
-							<<include "CurseRemoval">>
-							<<set $dubloons -= ($skewedUsed * 5)>>
-							<<set $skewedUsed += 1>>
-							<<statUpdateCompanions>>
-						<</link>><br>
-					<</capture>>
-				<</if>>
-			<</for>>
-		<</capture>>
+						<<set _logName = _curse.type + "Log" + _tempName>>
+						<<set _log = State.variables[_logName]>>
+						<<if _log>><<set _log.push(_curse)>><</if>>
+
+						<<set $targetCurse = _curse>>
+						<<include "CurseRemoval">>
+						<<set $dubloons -= ($skewedUsed * 5)>>
+						<<set $skewedUsed += 1>>
+						<<statUpdateCompanions>>
+					<</link>><br>
+				<</capture>>
+			<</if>>
+		<</for>>
 	<</for>>
 <</if>>
 <</nobr>>
@@ -464,15 +446,15 @@ The knot of doubt that forms in the pit of your stomach is easily ignored as you
 
 With the Skewed Shrine's power at your fingertips, you must now decide: do you impose your Curse upon your unwilling companion, prioritizing your own well-being at their expense, or do you release them and face the Abyss on your own terms? The decision seems straightforward to you, a necessary evil to achieve success.
 
-Which Curse would you like to force on your unwilling companion?
+Which Curse would you like to force upon your unwilling companion?
 
 <<nobr>>
 <<if $dubloons < ($skewedUsed * 5)>>
 	You do not have enough dubloons for an offering.
 <<else>>
-	<<for _i = 0; _i < $playerCurses.length; _i++>>
-		<<capture _i>>
-			<<print "[[$playerCurses[_i].name|Layer3 Skewed2b][$temp to _i]]">><br>
+	<<for _curse range $playerCurses>>
+		<<capture _curse>>
+			[[_curse.name|Layer3 Skewed2b][$temp to _curse]]<br>
 		<</capture>>
 	<</for>>
 <</if>>
@@ -900,46 +882,47 @@ As predicted, the water is pure and you can drink it without side effects!
 :: Layer3 Skewed2b [layer3]
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
-Which companion would you like to force the Curse of $playerCurses[$temp].name on?
+Which companion would you like to force the Curse of $temp.name upon?
 
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
-<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-	<<capture _i>>
-	<<print $hiredCompanions[_i].name>><<print " ">>
-	<<if $hiredCompanions[_i].name == $companionTwin.name >>
-		<<set _tempName = "Twin">>
-	<<else>>
-		<<set _tempName = $hiredCompanions[_i].name>>
-	<</if>>
-	<<set _string1 = "Transfer to " + $hiredCompanions[_i].name>>
-	<<if $hiredCompanions[_i].name == $companionGolem.name >>
-		You can't transfer a Curse to your Golem.<br>
-	<<else>>
-		<<link _string1 "Layer3 Skewed Apply">>
-		<<set $hiredCompanions[_i].curses.push($playerCurses[$temp])>>
-		<<print "<<set $companion"+ _tempName +".curses.push($playerCurses[$temp])>>">>
-		<<set $temp2=_i>>
+<<set _curse = $temp>>
+<<for _companion range $hiredCompanions>>
+	<<set _flag = false>>
+	<<set _tempName = _companion.name>>
 
-		<<if $playerCurses[$temp].type == "Age">>
-			<<set _string = "$AgeLog" + _tempName>>
-		<<elseif $playerCurses[$temp].type == "Gender">>
-			<<set _string = "$GenderLog" + _tempName>>
-		<<elseif $playerCurses[$temp].type == "Height">>
-			<<set _string = "$HeightLog" + _tempName>>
-		<<elseif $playerCurses[$temp].type == "Handicap">>
-			<<set _string = "$HandicapLog" + _tempName>>
-		<<elseif $playerCurses[$temp].type == "Libido">>
-			<<set _string = "$LibidoLog" + _tempName>>
-		<</if>>
-		<<if $playerCurses[$temp].type != "">>
-			<<print "<<set " + _string + ".push($playerCurses[$temp])>>">>
-		<</if>>
-		<<statUpdateCompanions>>
-		<</link>><br>
+	<<switch _tempName>>
+		<<case $companionTwin.name>>
+			Your twin already shares all of your Curses.<br>
+		<<case "Golem">>
+			You can't transfer Curses to your Golem.<br>
+		<<default>>
+			/* Check whether companion already has this curse (e.g. from the layer 4 shrine). */
+			<<set _flag = !_companion.curses.some(companionCurse => companionCurse.name == _curse.name)>>
+			<<if !_flag>>_companion.name already has this Curse!<br><</if>>
+	<</switch>>
+
+	<<if _flag>>
+		<<capture _companion, _tempName>>
+			<<set _choiceText = "Transfer to " + _tempName>>
+			<<link _choiceText "Layer3 Skewed Apply">>
+				<<set _companion.curses.push(_curse)>>
+
+				<<set _logName = _curse.type + "Log" + _tempName>>
+				<<set _log = State.variables[_logName]>>
+				<<if _log>><<set _log.push(_curse)>><</if>>
+
+				<<set $targetCurse = _curse>>
+				<<include "CurseRemoval">>
+				<<set $dubloons -= ($skewedUsed * 5)>>
+				<<set $skewedUsed += 1>>
+				<<statUpdateCompanions>>
+
+				<<set $temp2 = _companion>>
+			<</link>><br>
+		<</capture>>
 	<</if>>
-	<</capture>>
 <</for>>
 <</nobr>>
 
@@ -948,12 +931,8 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
 <<nobr>>
-<<set $targetCurse = $playerCurses[$temp]>>
-<<include "CurseRemoval" >>
-<<set $dubloons -= ($skewedUsed * 5)>>
-<<set $skewedUsed += 1>>
 <<set $skewedForced += 1>>
-<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _companionName = $temp2.name>>
 <<set _affectionPenalty = 4 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
