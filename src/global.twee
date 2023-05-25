@@ -1,7 +1,9 @@
 :: StoryMenu
-[[Stats]]
 [[Appearance]]
 [[Inventory]]
+<<if $playerCurses.length> 0>>\
+[[Curses]]
+<</if>>\
 <<if $hiredCompanions.length> 0>>\
 [[Party|Party Sidebar]]
 <</if>>\
@@ -93,11 +95,23 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 Your Curses are:<br>
 
 <<for _i = 0; _i < $playerCurses.length; _i++>>
-		<<print $playerCurses[_i].name>><br>
+	<<capture _i>>
+		<<print "[[$playerCurses[_i].name|Curse Info][$temp = _i]]">><br>
+	<</capture>>
 <</for>>
 <</nobr>>
 <<back [[$menuReturn]]>>
 
+:: Curse Info
+
+!<<print $playerCurses[$temp].name>>
+[img[setup.ImagePath+$playerCurses[$temp].pic]]
+
+<<include `$playerCurses[$temp].name + " Description"`>>
+
+//Corruption value: $playerCurses[$temp].corr//
+
+<<back>>
 
 :: Inventory [noreturn]
 <<nobr>><<CarryAdjust>>
