@@ -78,56 +78,31 @@ setup.haveRope = function() {
 		r => r.name === "Orbweaver");
 }
 
-:: Stats [noreturn]
-<<CarryAdjust>>	<<AppearanceCorrect>>\
-You have $dubloons dubloons.
-You have $corruption corruption points.
-You have been exploring the Abyss for $time days.
+:: Curses [noreturn]
+<<AppearanceCorrect>>\
 <<nobr>>
-<<if $time > 0>>
-	[[View time spent in each layer|Time Stats]]<br>
-<</if>>
+
 <<if $endSpectre > 0>>
-The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.<br>
-<</if>>
-<</nobr>><<nobr>><<if $debt > 0>>
-	@@.alert1;You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.@@<br><</if>>
-<<if $hexflame > 9>>
-<br>@@.alert1;You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br>
-<</if>>
-	<</nobr>>
-<<nobr>>
-<<if $swapComp > -1>>
-	<<print "You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.">><br>
+The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.<br><br<
 <</if>>
 
-<<if $hiredCompanions.length > 0>>
-	Your companions are:<br>
-	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-			<<capture _i>>
-			<<print "[[$hiredCompanions[_i].name|Companion Info][$temp = _i]]">><br>
-			<</capture>>
-	<</for>>
+<<if $hexflame > 9>>
+@@.alert1;You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br><br>
 <</if>>
-<</nobr>>
-Your Curses are:
-<<nobr>>
+
+Your Curses are:<br>
+
 <<for _i = 0; _i < $playerCurses.length; _i++>>
 		<<print $playerCurses[_i].name>><br>
 <</for>>
-
-<<if $waterL1 > 0>>
-	<<print "You have foraged for water on the first layer $waterL1 times.">><br>
-<</if>>
-<<if $foodL1 > 0>>
-	<<print "You have foraged for food on the first layer $foodL1 times.">><br>
-<</if>>
 <</nobr>>
 <<back [[$menuReturn]]>>
 
 
 :: Inventory [noreturn]
-<<nobr>>
+<<nobr>><<CarryAdjust>>
+<<if $debt > 0>>
+	@@.alert1;You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.@@<br><br><</if>>
 You have $items[0].count days of single-use water rations.<br>
 You have $items[1].count days of food.<br>
 You have $items[2].count unfilled flasks.<br>
@@ -259,6 +234,10 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 [[Layer7 Hub]]
 [[Layer8 Hub]]
 [[Layer9 Hub]]
+
+<<if $time > 0>>
+	[[View time spent in each layer|Time Stats]]<br>
+<</if>>
 
 <<back>>
 
@@ -404,6 +383,9 @@ You have $app.ears ears.<br>
 You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you appear to be <<print Math.round($app.appAge)>> years old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
 <br><br>
 <<if $DaedalusEquip==true>> You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br><br><</if>>
+<<if $swapComp > -1>>
+	You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.<br><br>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Horny")>>
 	You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
