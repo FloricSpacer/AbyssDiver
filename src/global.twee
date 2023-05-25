@@ -1093,30 +1093,35 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 :: Use Items and Relics
 <<nobr>>
-Manage food and water items:<br>
 <<if $items[3].count + $items[0].count>0 >>
 	<<set $switchFlask=false>>
 	<<set $temp0=-1>>
 	You can choose the order in which you drink the water you have with you:<br>
-	[[Organize your drinking water|Flask Order]]
+	[[Organize your drinking water|Flask Order]]<br>
+<</if>>
+
+<<if $abyssKnow == 1>>
+	<br>You currently have abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
+	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]<br>
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0)>>
+	<br>You currently have abyssal knowledge by the encyclopedia, smartphone or Saeko, but you are not using it. You can choose to enable it if you would like less side effects from foraging:<br>
+	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]<br>
 <</if>>
 
 <<if $items[24].count>0 & $useEnergyrations==false>>
-	<br><br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations=true]]
+	<br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations=true]]<br>
 <<elseif $items[24].count>0 & $useEnergyrations==true>>
-	<br><br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations=false]]
+	<br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations=false]]<br>
 <</if>>
-<br><br>
 
 <<if $items[7].count > 0>>
 	<<if $currentLayer==0>>
-		There is no need to use a commerce balloon while you are on the surface.
+		<br>There is no need to use a commerce balloon while you are on the surface.<br>
 	<<elseif $currentLayer>7>>
-		You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to make contact with the surface.
+		<br>You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to make contact with the surface.<br>
 	<<else>>
-		[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]
+		<br>[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]<br>
 	<</if>>
-	<br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye == false && $playerCurses.some(e => e.name === "Eye on the Prize")>>
@@ -1131,23 +1136,23 @@ Manage food and water items:<br>
 
 <<if $items[8].count > 0>>
 	<<if $currentLayer==0>>
-		There is no need to deploy your escape balloon while you are on the surface.
+		<br>There is no need to deploy your escape balloon while you are on the surface.<br>
 	<<elseif $currentLayer==1>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==2>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==3>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==4>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==5>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==6>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==7>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L7][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L7][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer>7>>
-		You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to use a balloon to return to the surface.
+		<br>You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to use a balloon to return to the surface.<br>
 	<</if>>
 <</if>>
 
@@ -1162,7 +1167,7 @@ Manage food and water items:<br>
 <</if>>
 
 <<if $items[21].count > 0>>
-	[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
+	<br>[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
 <</if>>
 
 <<if $items[25].count > 0 && $wardWaterDrink == 0>>
