@@ -1335,7 +1335,6 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
 	<<link "Reroll with Devil's Own" "Layer7 Cherry Curse">>
-		<<set $targetCurse = $curses[$temp1]>>
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
 		<<if $curses[$temp1].type == "Gender" >>
 			<<set _temp = $GenderLog.length>>
@@ -1343,9 +1342,8 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 				<<set $GenderLog.deleteAt(_temp-1)>>
 			<</if>>
 		<</if>>
-		<<include "CurseRemoval">>
+		<<RemoveCurse $curses[$temp1]>>
 		
-		<<set $targetCurse = $curses[$temp2]>>
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
 		<<if $curses[$temp2].type == "Gender" >>
 			<<set _temp = $GenderLog.length>>
@@ -1353,7 +1351,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 				<<set $GenderLog.deleteAt(_temp-1)>>
 			<</if>>
 		<</if>>
-		<<include "CurseRemoval">>
+		<<RemoveCurse $curses[$temp2]>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
 		<<set $soldRelics.push($ownedRelics[_temp])>>
@@ -1413,7 +1411,6 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
-		<<set $targetCurse = $curses[$temp2]>>
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
 		<<if $curses[$temp2].type == "Gender" >>
 			<<set _temp = $GenderLog.length>>
@@ -1421,7 +1418,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 				<<set $GenderLog.deleteAt(_temp-1)>>
 			<</if>>
 		<</if>>
-		<<include "CurseRemoval">>
+		<<RemoveCurse $curses[$temp2]>>
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
 		<<set $soldRelics.push($ownedRelics[_temp])>>
 		<<set $ownedRelics.deleteAt(_temp)>>
