@@ -1624,8 +1624,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 		<<else>>
 			You are affected by the Curse $StoredCurse[_i].name stored in the marbles.
 			<<link "Deactivate the stored Curse" "Use Items and Relics">>
-				<<set $targetCurse = $StoredCurse[_i]>>
-				<<include "CurseRemoval">>
+				<<RemoveCurse $StoredCurse[_i]>>
 				<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
 				<<set $ManagedMisfortuneActive.deleteAt(_j)>>
 			<</link>>	
@@ -1871,14 +1870,18 @@ How many dubloons would you like to pay back?
 [[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
 
-:: CurseRemoval [nobr]
+:: Curse removal widget [widget nobr]
+<<widget "RemoveCurse">>
+<<capture _i, _j, _logName, _logVar, _targetCurse>>
+
+<<set _targetCurse = _args[0]>>
 <<for _i = 0; _i < $playerCurses.length; ++_i>>
-	<<if $playerCurses[_i].name == $targetCurse.name>>
-		<<set _logName = $targetCurse.type + "Log">>
-		<<set _log = State.variables[_logName]>>
-		<<if _log>>
-			<<for _j = _log.length - 1; _j >= 0; --_j>>
-				<<if _log[_j].name == $targetCurse.name>><<break>><</if>>
+	<<if $playerCurses[_i].name == _targetCurse.name>>
+		<<set _logName = _targetCurse.type + "Log">>
+		<<set _logVar = State.variables[_logName]>>
+		<<if _logVar>>
+			<<for _j = _logVar.length - 1; _j >= 0; --_j>>
+				<<if _logVar[_j].name == _targetCurse.name>><<break>><</if>>
 			<</for>>
 			<<if _j >= 0>>
 				<<set State.variables[_logName].deleteAt(_j)>>
@@ -1888,6 +1891,9 @@ How many dubloons would you like to pay back?
 		<<break>>
 	<</if>>
 <</for>>
+
+<</capture>>
+<</widget>>
 
 :: GeneralTimeSetup[nobr]
 <<nobr>>

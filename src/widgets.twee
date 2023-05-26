@@ -3162,33 +3162,33 @@
 <<widget "Equipment">>
 
 <<if !$ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
-	<<set $hsswear=0>>
+	<<set $hsswear = 0>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Solace Lace")>>
-	<<set $slwear=0>>
+	<<set $slwear = 0>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Event Horizon")>>
-	<<set $EventHorizonWear=false>>
+	<<set $EventHorizonWear = false>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Chain of Lorelei")>>
-	<<set $colwear=0>>
+	<<set $colwear = 0>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Blind Divine")>>
-	<<set $BDwear=false>>
+	<<set $BDwear = false>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
-	<<if $HeavyHeadwear && $IQdrop<900>>
-		<<set $IQdrop+=999>>
+	<<if $HeavyHeadwear && $IQdrop < 900>>
+		<<set $IQdrop += 999>>
 	<</if>>
 <<else>>
-	<<set $HeavyHeadwear=false>>
-	<<if $IQdrop>900>>
-		<<set $IQdrop-=999>>
+	<<set $HeavyHeadwear = false>>
+	<<if $IQdrop > 900>>
+		<<set $IQdrop -= 999>>
 	<</if>>
 <</if>>
 
@@ -3197,43 +3197,44 @@
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
-	<<set $DaedalusEquip = false>> <<set $DaedalusFly=false>>
+	<<set $DaedalusEquip = false>>
+	<<set $DaedalusFly = false>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
-	<<set $EndlessAeonglass=false>>
+	<<set $EndlessAeonglass = false>>
 <</if>>
 
-<<set $ManagedMisfortuneMax = $ownedRelics.filter(e => e.name === "Managed Misfortune").length*2>>
-<<if $ManagedMisfortuneMax < $StoredCurse.length >>
-<<for _i=$StoredCurse.length-1; _i>=$ManagedMisfortuneMax; _i-->>
-	<<if $ManagedMisfortuneActive.some(e => e.name ===$StoredCurse[_i].name)>>
-		<<set $targetCurse = $StoredCurse[_i]>>
-		<<include "CurseRemoval">>
-		<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
-		<<set $ManagedMisfortuneActive.deleteAt(_j)>>
+<<set $ManagedMisfortuneMax = 2 * $ownedRelics.filter(e => e.name === "Managed Misfortune").length>>
+<<for $StoredCurse.length > $ManagedMisfortuneMax>>
+	<<set _curse = $StoredCurse.pop()>>
+	<<set _activeIndex = $ManagedMisfortuneActive.findIndex(e => e.name === _curse.name)>>
+	<<if _activeIndex !== -1>>
+		<<RemoveCurse _curse>>
+		<<set $ManagedMisfortuneActive.deleteAt(_activeIndex)>>
 	<</if>>
-	<<set $StoredCurse.deleteAt(_i)>>
 <</for>>
-<</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Lightning Rook")>>
-	<<set $LightningWear=false>>
+	<<set $LightningWear = false>>
 <</if>>
 
-<<if !$ownedRelics.some(e => e.name === "Lambent Specter") && $hiredCompanions.some(e => e.name === "Golem")>>
-	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-		<<if $hiredCompanions[_i].name == 'Golem'>>
-			<<set $hiredCompanions.deleteAt(_i)>>
-		<</if>>
+<<if !$ownedRelics.some(e => e.name === "Lambent Specter")>>
+	<<set _i = $hiredCompanions.findIndex(e => e.name === "Golem")>>
+	<<for _i !== -1>>
+		<<set $hiredCompanions.deleteAt(_i)>>
+		<<set _i = $hiredCompanions.findIndex(e => e.name === "Golem")>>
 	<</for>>
 <</if>>
 
-<<if ( $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0 || $hiredCompanions.some(c => c.name === "Saeko") ) && !$abyssKnowCheatoff>>
+<<if $abyssKnowCheatoff>>
+	<<set $abyssKnow = 0>>
+<<elseif $items[5].count > 0 || $items[17].count > 0 || $items[21].count > 0 || $hiredCompanions.some(c => c.name === "Saeko")>>
 	<<set $abyssKnow = 1>>
 <<else>>
 	<<set $abyssKnow = 0>>
 <</if>>
+
 <</widget>>
 
 :: Affection widget [widget nobr]
