@@ -1,7 +1,9 @@
 :: StoryMenu
-[[Stats]]
 [[Appearance]]
 [[Inventory]]
+<<if $playerCurses.length> 0>>\
+[[Curses]]
+<</if>>\
 <<if $hiredCompanions.length> 0>>\
 [[Party|Party Sidebar]]
 <</if>>\
@@ -78,57 +80,44 @@ setup.haveRope = function() {
 		r => r.name === "Orbweaver");
 }
 
-:: Stats [noreturn]
-<<CarryAdjust>>	<<AppearanceCorrect>>\
-You have $dubloons dubloons.
-You have $corruption corruption points.
-You have been exploring the Abyss for $time days.
+:: Curses [noreturn]
+<<AppearanceCorrect>>\
 <<nobr>>
-<<if $time > 0>>
-	[[View time spent in each layer|Time Stats]]<br>
-<</if>>
+
 <<if $endSpectre > 0>>
-The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.<br>
+The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>> days.<br><br<
 <</if>>
-<</nobr>><<nobr>><<if $debt > 0>>
-	@@.alert1;You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.@@<br><</if>>
+
 <<if $hexflame > 9>>
-<br>@@.alert1;You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br>
-<</if>>
-	<</nobr>>
-<<nobr>>
-<<if $swapComp > -1>>
-	<<print "You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.">><br>
+@@.alert1;You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br><br>
 <</if>>
 
-<<if $hiredCompanions.length > 0>>
-	Your companions are:<br>
-	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-			<<capture _i>>
-			<<print "[[$hiredCompanions[_i].name|Companion Info][$temp = _i]]">><br>
-			<</capture>>
-	<</for>>
-<</if>>
-<</nobr>>
-Your Curses are:
-<<nobr>>
+Your Curses are:<br>
+
 <<for _i = 0; _i < $playerCurses.length; _i++>>
-		<<print $playerCurses[_i].name>><br>
+	<<capture _i>>
+		<<print "[[$playerCurses[_i].name|Curse Info][$temp = _i]]">><br>
+	<</capture>>
 <</for>>
-
-<<if $waterL1 > 0>>
-	<<print "You have foraged for water on the first layer $waterL1 times.">><br>
-<</if>>
-<<if $foodL1 > 0>>
-	<<print "You have foraged for food on the first layer $foodL1 times.">><br>
-<</if>>
 <</nobr>>
 <<back [[$menuReturn]]>>
 
+:: Curse Info
+
+!<<print $playerCurses[$temp].name>>
+[img[setup.ImagePath+$playerCurses[$temp].pic]]
+
+<<include `$playerCurses[$temp].name + " Description"`>>
+
+//Corruption value: $playerCurses[$temp].corr//
+
+<<back>>
 
 :: Inventory [noreturn]
-<<nobr>>
-<<CarryAdjust>>
+<<nobr>><<CarryAdjust>>
+<<if $debt > 0>>
+	@@.alert1;You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.@@<br><br>
+<</if>>
 You have $items[0].count days of single-use water rations.<br>
 You have $items[1].count days of food.<br>
 You have $items[2].count unfilled flasks.<br>
@@ -176,11 +165,11 @@ The total value of all your Relics is $total_value_relics dubloons.<br><br>
 	<br>
 <</if>>
 
-<<if $DaedalusFly==true>><br>
-	Your personal carrying capacity is only <<print Math.round($carryWeight)>> kg now that you are flying. If you would walk again you would be able carry double the amount of weight.
-<<else>><br>
-	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
-<</if>><br>
+<<if $DaedalusFly==true>>
+	Your personal carrying capacity is only <<print Math.round($carryWeight)>> kg now that you are flying. If you would walk again you would be able carry double the amount of weight.<br>
+<<else>>
+	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.<br>
+<</if>>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
 Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br>
 [[Empty some flasks, and drop some items/relics you're carrying|Drop Items Menu]]<br><br>
@@ -262,6 +251,11 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 [[Layer8 Hub]]
 [[Layer9 Hub]]
 
+<<if $time > 0>>
+	[[View time spent in each layer|Time Stats]]<br>
+<</if>>
+
+[[Pick up the Pulse Bloom]]
 <<back>>
 
 
@@ -380,7 +374,7 @@ Thanks again for playing!
 
 :: Appearance [noreturn nobr]
 <<CarryAdjust>><<AppearanceCorrect>><<Inhuman>>
-Your name is $app.name and you are a $app.sex <<include "PerceivedRace">>.<br><br>
+Your name is $app.name and you are a $app.sex <<PerceivedRace $app>>.<br><br>
 Your hair color is $app.hair.<br>
 <<if $app.eyeCount==0>>
 You have no eyes, only empty sockets. You are effectively blind without the use of Relics and you need your companions to guide you.<br>
@@ -406,6 +400,9 @@ You have $app.ears ears.<br>
 You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you appear to be <<print Math.round($app.appAge)>> years old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
 <br><br>
 <<if $DaedalusEquip==true>> You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br><br><</if>>
+<<if $swapComp > -1>>
+	You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.<br><br>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Horny")>>
 	You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
@@ -660,7 +657,7 @@ They are a bit sore at the moment.
 <</for>>
 <</if>>
 <br>
-<<set _handle=$app>>Overall the world would probably see you now as a <<include "PerceivedStature">> <<include "PerceivedRace">> <<include "PerceivedGender">>.<br><br>
+Overall the world would probably see you now as a <<PerceivedStature $app>> <<PerceivedRace $app>> <<PerceivedGender $app>>.<br><br>
 <<back [[$menuReturn]]>>
 
 :: Layer Notes [noreturn nobr]
@@ -725,8 +722,9 @@ This will also consume food/water/etc. as necessary based on your current layer.
 
 :: Adjust time2 [noreturn]
 <<nobr>>
-<<set $tempTime = parseInt($temp)>>
-<<include "GeneralTimeStats">>
+<<set _tempTime = parseInt($temp)>>
+/*<<include "GeneralTimeStats">>*/
+<<set $time += _tempTime>>
 <</nobr>>
 
 You have adjusted the day counter by $temp days.
@@ -826,9 +824,11 @@ Thanks to Ilse91 for helping with a huge variety of code and adding some new fea
 
 Thanks to Emmeken for helping with the move to Tweego and Github, numerous formatting fixes and improvements, transcribing the item descriptions for me, and huge amounts of help generally with code improvements.
 
-Thanks to CaptainCaption for generously allowing the use of AI's images from his game re:Dreamer, you can try out and support his excellent transformation VN game at https://www.patreon.com/dreamteamstudio 
+Thanks to CaptainCaption for generously allowing the use of Ai's images from her game re:Dreamer, you can try out and support her excellent transformation VN game at https://www.patreon.com/dreamteamstudio 
 
 Thanks to Nerevar for writing drafts of the Curse descriptions that appear when transitioning layers or occasionally in a layer hub.
+Thanks to RimShaun for writing the water drop code and some other misc suggestions.
+Thanks to Spiky Moth for helping to clean up some code, such the shrines and Curse removal.
 Thanks to dogflail for writing drafts for some of the Curse appearance screen decriptions.
 Thanks to abiciendimittent for transcribing the Relic and Curse descriptions (will be added to the game when they are completed)
 Thanks to Stadler for finding many bugs and reporting them to me.
@@ -1095,30 +1095,35 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 :: Use Items and Relics
 <<nobr>>
-Manage food and water items:<br>
 <<if $items[3].count + $items[0].count>0 >>
 	<<set $switchFlask=false>>
 	<<set $temp0=-1>>
 	You can choose the order in which you drink the water you have with you:<br>
-	[[Organize your drinking water|Flask Order]]
+	[[Organize your drinking water|Flask Order]]<br>
+<</if>>
+
+<<if $abyssKnow == 1>>
+	<br>You currently have abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
+	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]<br>
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0)>>
+	<br>You currently have abyssal knowledge by the encyclopedia, smartphone or Saeko, but you are not using it. You can choose to enable it if you would like less side effects from foraging:<br>
+	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]<br>
 <</if>>
 
 <<if $items[24].count>0 & $useEnergyrations==false>>
-	<br><br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations=true]]
+	<br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations=true]]<br>
 <<elseif $items[24].count>0 & $useEnergyrations==true>>
-	<br><br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations=false]]
+	<br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations=false]]<br>
 <</if>>
-<br><br>
 
 <<if $items[7].count > 0>>
 	<<if $currentLayer==0>>
-		There is no need to use a commerce balloon while you are on the surface.
+		<br>There is no need to use a commerce balloon while you are on the surface.<br>
 	<<elseif $currentLayer>7>>
-		You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to make contact with the surface.
+		<br>You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to make contact with the surface.<br>
 	<<else>>
-		[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]
+		<br>[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]<br>
 	<</if>>
-	<br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye == false && $playerCurses.some(e => e.name === "Eye on the Prize")>>
@@ -1133,23 +1138,23 @@ Manage food and water items:<br>
 
 <<if $items[8].count > 0>>
 	<<if $currentLayer==0>>
-		There is no need to deploy your escape balloon while you are on the surface.
+		<br>There is no need to deploy your escape balloon while you are on the surface.<br>
 	<<elseif $currentLayer==1>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==2>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==3>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==4>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==5>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==6>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer==7>>
-		[[Use an escape balloon to escape towards the surface|Escape Balloon L7][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L7][$items[8].count -=1, $escBalDepl=1]]<br>
 	<<elseif $currentLayer>7>>
-		You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to use a balloon to return to the surface.
+		<br>You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to use a balloon to return to the surface.<br>
 	<</if>>
 <</if>>
 
@@ -1164,7 +1169,7 @@ Manage food and water items:<br>
 <</if>>
 
 <<if $items[21].count > 0>>
-	[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
+	<br>[[Discard all your used torches|Use Items and Relics][$items[21].count =0]]<br>
 <</if>>
 
 <<if $items[25].count > 0 && $wardWaterDrink == 0>>
@@ -1287,6 +1292,29 @@ Manage food and water items:<br>
 	<</if>>
 <</if>>
 
+<<if $ownedRelics.some(e => e.name === "Pulse Bloom")>>/*xxx */
+	<<if $hiredCompanions.length > 0 && $PulseBloomUse=="">>
+		<<for _i=0; _i<$hiredCompanions.length; _i++>>
+			<<capture _i>>
+			<<set _string1 = "Force the use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
+			<<set _string2 = "Ask to use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
+			<<if $hiredCompanions[_i].name == $companionTwin.name>>
+				[[_string1| Pulse Bloom Forced][$PulseBloomUse = "Twin"]]<br>
+				[[_string2| Pulse Bloom Asked][$PulseBloomUse = "Twin"]]<br>
+			<<elseif $hiredCompanions[_i].name!="Golem">>
+				[[_string1| Pulse Bloom Forced][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
+				[[_string2| Pulse Bloom Asked][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
+			<</if>>
+			<</capture>>
+			<br>
+		<</for>>
+	<<elseif $PulseBloomUse==true >>
+		You are already under the effect of the Pulse Blooms powers.
+	<<else>>
+		You have nobody to use it on.
+	<</if>>
+<</if>>
+
 <<if $ownedRelics.some(e => e.name === "Lambent Specter")>>
 	<<if $hiredCompanions.some(e => e.name === "Golem")>>
 		A golem, animated by a soul harnessed through the Lambent Specter's power, loyally follows you. <br>
@@ -1389,17 +1417,17 @@ Manage food and water items:<br>
 
 <<if $ownedRelics.some(e => e.name === "From Seafoam")>>
 	<<if !$scent>>
-		<br>Currently you have a rather neutral scent<br>
-		[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
-		[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
+		<br>Currently you have a neutral scent<br>
+		[[Scrub yourself with the sponge while imagining a sweet, floral scent|Use Items and Relics][$scent=1]]<br>
+		[[Scrub yourself with the sponge while imagining a spicy, musky scent|Use Items and Relics][$scent=-1]]<br>
 	<<elseif $scent==1 >>
-		<br>Currently you have a sweet and floral scent lingering around you<br>
-		[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=0]]<br>
-		[[Scrub yourself with the sponge while imagining a spicy musky scent|Use Items and Relics][$scent=-1]]<br>
+		<br>You have a sweet and floral scent lingering about you<br>
+		[[Scrub yourself with the sponge while imagining the sponge to be odorless|Use Items and Relics][$scent=0]]<br>
+		[[Scrub yourself with the sponge while imagining a spicy, musky scent|Use Items and Relics][$scent=-1]]<br>
 	<<else>>
-		<br>Currently you have a strong musky scent lingering around you<br>
-		[[Scrub yourself with the sponge while imagining the sponge to be odourless|Use Items and Relics][$scent=0]]<br>
-		[[Scrub yourself with the sponge while imagining a sweet floral scent|Use Items and Relics][$scent=1]]<br>
+		<br>You have a strong, musky scent lingering about you<br>
+		[[Scrub yourself with the sponge while imagining the sponge to be odorless|Use Items and Relics][$scent=0]]<br>
+		[[Scrub yourself with the sponge while imagining a sweet, floral scent|Use Items and Relics][$scent=1]]<br>
 	<</if>>
 <</if>>
 
@@ -1598,8 +1626,7 @@ Manage food and water items:<br>
 		<<else>>
 			You are affected by the Curse $StoredCurse[_i].name stored in the marbles.
 			<<link "Deactivate the stored Curse" "Use Items and Relics">>
-				<<set $targetCurse = $StoredCurse[_i]>>
-				<<include "CurseRemoval">>
+				<<RemoveCurse $StoredCurse[_i]>>
 				<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
 				<<set $ManagedMisfortuneActive.deleteAt(_j)>>
 			<</link>>	
@@ -1845,14 +1872,18 @@ How many dubloons would you like to pay back?
 [[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
 
-:: CurseRemoval [nobr]
+:: Curse removal widget [widget nobr]
+<<widget "RemoveCurse">>
+<<capture _i, _j, _logName, _logVar, _targetCurse>>
+
+<<set _targetCurse = _args[0]>>
 <<for _i = 0; _i < $playerCurses.length; ++_i>>
-	<<if $playerCurses[_i].name == $targetCurse.name>>
-		<<set _logName = $targetCurse.type + "Log">>
-		<<set _log = State.variables[_logName]>>
-		<<if _log>>
-			<<for _j = _log.length - 1; _j >= 0; --_j>>
-				<<if _log[_j].name == $targetCurse.name>><<break>><</if>>
+	<<if $playerCurses[_i].name == _targetCurse.name>>
+		<<set _logName = _targetCurse.type + "Log">>
+		<<set _logVar = State.variables[_logName]>>
+		<<if _logVar>>
+			<<for _j = _logVar.length - 1; _j >= 0; --_j>>
+				<<if _logVar[_j].name == _targetCurse.name>><<break>><</if>>
 			<</for>>
 			<<if _j >= 0>>
 				<<set State.variables[_logName].deleteAt(_j)>>
@@ -1862,6 +1893,9 @@ How many dubloons would you like to pay back?
 		<<break>>
 	<</if>>
 <</for>>
+
+<</capture>>
+<</widget>>
 
 :: GeneralTimeSetup[nobr]
 <<nobr>>
