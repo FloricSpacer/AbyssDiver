@@ -128,6 +128,7 @@ Your Curses are:
 
 :: Inventory [noreturn]
 <<nobr>>
+<<CarryAdjust>>
 You have $items[0].count days of single-use water rations.<br>
 You have $items[1].count days of food.<br>
 You have $items[2].count unfilled flasks.<br>
@@ -181,7 +182,8 @@ The total value of all your Relics is $total_value_relics dubloons.<br><br>
 	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
 <</if>><br>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
-Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br><br>
+Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br>
+[[Empty some flasks, and drop some items/relics you're carrying|Drop Items Menu]]<br><br>
 
 <<back [[$menuReturn]]>>
 <</nobr>>
@@ -2934,3 +2936,130 @@ Which gender will the soul you summon to inhabit the golem possess?<br>
 <<link "Summon a spirit to inhabit your crafted golem and bring it to life" "Use Items and Relics">>
 	<<createGolem>>
 <</link>>	
+
+:: Drop Items Menu[noreturn]
+<<nobr>>
+<<CarryAdjust>>
+<<set $flaskID= -1>>
+
+<<if $DaedalusFly==true>><br>
+	Your personal carrying capacity is only <<print Math.round($carryWeight)>> kg now that you are flying. If you would walk again you would be able carry double the amount of weight.
+<<else>><br>
+	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
+<</if>><br>
+Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
+Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br>
+
+/*<<if >>
+<</if>> message for item redundancy*/
+
+<br>
+Items:<br>
+
+<<for _k = 0; _k < $items.length; _k++>> /*FlaskFirst changes the value of _i so I used _k */
+	<<capture _k>>
+		<<if _k == 3 >> /*filled flask code */
+			<<if $items[_k].count>= 1>>
+				<<FlaskFirst>> 
+				<<for _j=0; _j<$flaskMatrixOrderAvailable.length; _j++ >>
+					<<capture _j>>
+					<<set _temp = $flaskMatrixOrderAvailable[_j]>>
+					<</capture>>
+					
+					<<if $flaskMatrix[_temp]>1 && $flaskMatrixLabel[_temp]!="Bottled water">>
+						<<capture _temp>>
+						<<print "$flaskMatrix[_temp] x $flaskMatrixLabel[_temp] ">><<print $items[_k].weight*$flaskMatrix[_j]>><<print" kg | [[Empty|Drop Item Count][$temp = _k, $flaskID = _temp]]">> <br>
+						<</capture>>
+					<<elseif $flaskMatrix[_temp]==1 && $flaskMatrixLabel[_temp]!="Bottled water">>
+						<<capture _temp>>
+						<<print "$flaskMatrixLabel[_temp] $items[_k].weight kg | ">>
+						<<link "Empty" "Drop Items Menu">>
+							<<set $items[3].count -= 1>> 
+							<<set $items[2].count += 1>> 
+							<<set $flaskMatrix[_temp] -= 1>> 
+						<</link>>
+						<<print "(net emptying gain = ">><<print $items[_k].weight-$items[2].weight>><<print " kg)">><br>
+						<</capture>>
+					<</if>>
+				<</for>>
+			<</if>>
+		<<elseif $items[_k].count > 1 || $items[_k].count < 0>>
+			<<print "$items[_k].count x [[$items[_k].name|Item Info][$temp = _k]] ">><<print $items[_k].weight*$items[_k].count>><<print" kg | [[Drop|Drop Item Count][$temp = _k]]">> <br>
+		<<elseif $items[_k].count == 1>>
+			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1]]">> <br> /*need to handle exceptions : warm/coldclothes and slingshot*/
+		<</if>>
+	<</capture>>
+<</for>>
+<br>
+<<if $ownedRelics.length > 0>>
+	Relics:<br> 
+	<<for _i = 0; _i < $ownedRelics.length; _i++>>
+		<<capture _i>>
+			<<if $ownedRelics[_i].name=="Creepy Doll" && $creepydoll.affec > 5>>
+				You can't seem to part ways with the Creepy Doll<br>
+			<<elseif $ownedRelics[_i].name=="Chain of Lorelei">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$colwear=0, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="Heart-stealing Stole">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$hsswear=0, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="Solace Lace">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$slwear=0, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="Sibyl Blend">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$SibylBuff=0, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="World Stone" && $LilyPromise>>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly. <br>
+			<<elseif $ownedRelics[_i].name=="Everhevea">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $items[2].count-=2]]">> /*to change to avoid dropping nonspecific type of water */
+			<<elseif $ownedRelics[_i].name=="Daedalus Mechanism">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$DaedalusEquip = false, $DaedalusFly = false, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="Blind Divine">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$BDwear = false, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="Heavy is the Head">>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$HeavyHeadwear= false, $ownedRelics.deleteAt(_i)]]">><br>
+			<<elseif $ownedRelics[_i].name=="Moonwatcher" & $BionicEye >>
+				<<print $ownedRelics[_i].name>> You can not drop Relics that have become part of your body.<br>
+			<<elseif $ownedRelics[_i].name=="Glory's Grasp" & $BionicArm >>
+				<<print $ownedRelics[_i].name>> You can not drop Relics that have become part of your body.<br>
+			<<else>>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i)]]">><br>
+			<</if>>
+		<</capture>>
+	<</for>>
+<</if>>
+<br>
+<<return>>
+<</nobr>>
+
+:: Drop Item Count[nobr]
+<<set _itemID = $temp>>
+<<if $flaskID == -1>>
+	<<print "You have $items[_itemID].count $items[_itemID].name, each weighing $items[_itemID].weight kg, for a total of ">><<print $items[_itemID].count*$items[_itemID].weight>><<print " kg">><br>
+	Select the amount you want to drop:<br><br>
+
+	<<textbox "_temp" "0">>
+
+	<<link " Drop" "Drop Items Menu">>
+		<<set _temp = parseInt(_temp)>>
+		<<if _temp >=0 && _temp <= $items[_itemID].count>>
+			<<set $items[_itemID].count -= _temp>>
+		<<elseif _temp >= $items[_itemID].count>>
+			<<set $items[_itemID].count = 0>>
+		<</if>>
+	<</link>>
+<<else>>
+	<<print "You have $flaskMatrix[$flaskID] days worth of $flaskMatrixLabel[$flaskID], each weighing $items[_itemID].weight kg, for a total of ">><<print $items[_itemID].weight*$flaskMatrix[$flaskID]>><<print " kg">><br>
+	<<print "Since an empty flask weighs $items[2].weight kg, emptying one flask will save ">><<print $items[_itemID].weight-$items[2].weight>><<print " kg">><br>
+	Select the amount you want to empty:<br><br>
+	<<textbox "_temp" "0">>
+	<<link " Empty" "Drop Items Menu">>
+		<<set _temp = parseInt(_temp)>>
+		<<if _temp >=0 && _temp <= $flaskMatrix[$flaskID]>>
+			<<set $items[3].count -= _temp  >>
+			<<set $items[2].count += _temp  >>
+			<<set $flaskMatrix[$flaskID] -= _temp  >>
+		<<elseif _temp >= $flaskMatrix[$flaskID]>>
+			<<set $items[3].count -= $flaskMatrix[$flaskID]  >>
+			<<set $items[2].count += $flaskMatrix[$flaskID]  >>
+			<<set $flaskMatrix[$flaskID] = 0  >>
+		<</if>>
+	<</link>>
+<</if>>
