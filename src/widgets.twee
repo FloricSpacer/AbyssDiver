@@ -874,21 +874,6 @@
 	<</if>>
 <</widget>>
 
-:: PerceivedGender [nobr]
-	<<if _handle.appGender<=5>>\
-		<<if _handle.appAge>16>>\
-			man\
-		<<else>>\
-			boy\
-		<</if>>\
-	<<else>>\
-		<<if _handle.appAge>15.5>>\
-			woman\
-		<<else>>\
-			girl\
-		<</if>>\
-	<</if>>\
-
 :: Perceived widgets [widget nobr]
 <<widget "appGender">>
 
@@ -943,76 +928,61 @@
 <</widget>>
 
 <<widget "PerceivedGender">>
-	<<if $app.appGender<=5>>
-		<<if $app.appAge>16>>
-			man
-		<<else>>
-			boy
-		<</if>>
-	<<else>>
-		<<if $app.appAge>15.5>>
-			woman
-		<<else>>
-			girl
-		<</if>>
-	<</if>>
+	<<if _args[0].appGender <= 5>>\
+		<<if _args[0].appAge > 16>>\
+			man\
+		<<else>>\
+			boy\
+		<</if>>\
+	<<else>>\
+		<<if _args[0].appAge > 15.5>>\
+			woman\
+		<<else>>\
+			girl\
+		<</if>>\
+	<</if>>\
 <</widget>>
 
 <<widget "PerceivedGender2">>
-	<<if $app.appGender<=5>>
-		<<if $app.appAge>16>>
-			dude
-		<<else>>
-			boy
-		<</if>>
-	<<else>>
-		<<if $app.appAge>18.5>>
-			lady
-		<<else>>
-			girl
-		<</if>>
-	<</if>>
+	<<if _args[0].appGender <= 5>>\
+		<<if _args[0].appAge > 16>>\
+			dude\
+		<<else>>\
+			boy\
+		<</if>>\
+	<<else>>\
+		<<if _args[0].appAge > 18.5>>\
+			lady\
+		<<else>>\
+			girl\
+		<</if>>\
+	<</if>>\
 <</widget>>
 
 <<widget "PerceivedStature">>
-	<<if $app.heightCor <160 >>
-			little
-	<<elseif $height >180>>
-			big
+	<<if _args[0].heightCor < 160>>\
+		little\
+	<<elseif _args[0].heightCor > 180>>\
+		big\
 	<</if>>
-	<<if $app.appAge<12>>
-			young
-	<<elseif $app.appAge>40>>
-			old
-	<</if>>
+	<<if _args[0].appAge < 12>>\
+		young\
+	<<elseif _args[0].appAge > 40>>\
+		old\
+	<</if>>\
 <</widget>>
 
 <<widget "PerceivedRace">>
-	<<if $app.inhuman <2 >>
-			human
-	<<elseif $app.inhuman <6>>
-			humanoid
-	<<elseif $app.inhuman <10>>
-			anthropomorph
-	<<else>>
-			monster
-	<</if>>
+	<<if _args[0].inhuman < 2>>\
+		human\
+	<<elseif _args[0].inhuman < 6>>\
+		humanoid\
+	<<elseif _args[0].inhuman < 10>>\
+		anthropomorph\
+	<<else>>\
+		monster\
+	<</if>>\
 <</widget>>
-
-:: PerceivedStature [nobr]
-	<<if _handle.heightCor <160 >>
-			little<<elseif _handle.heightCor >180>>
-			big<</if>>
-	<<if _handle.appAge<12>>
-		young<<elseif _handle.appAge>40>>
-		old<</if>>
-
-:: PerceivedRace [nobr]
-	<<if _handle.inhuman <2 >>
-			human<<elseif _handle.inhuman <6>>
-			humanoid<<elseif _handle.inhuman <10>>
-			anthropomorph<<else>>
-			monster<</if>>
 
 :: Threat1 Criterion [widget nobr]
 <<widget "Threat1Criterion">>
@@ -1547,15 +1517,23 @@
 	<</if>>
 		<<set $mc = {
 	name: $app.name,
-	imageIcon: "icon.png",
 	genderVoice: $app.gender,
+	imageIcon: "",
 	style: "border: 2px solid rgb(1,0,0);",
 	style1: $boxColor
 	}>>
-	<<if $app.appGender<=5 >>
-		<<set $mc.imageIcon="Player Icons/playerM.png">>
-	<<else>>
-		<<set $mc.imageIcon="Player Icons/playerF.png">>
+	<<if $PulseBloomUse=="" && $app.switch==false>>
+		<<if $app.appGender<=5 >>
+			<<set $mc.imageIcon="Player Icons/playerM.png">>
+		<<else>>
+			<<set $mc.imageIcon="Player Icons/playerF.png">>
+		<</if>>
+	<<elseif $PulseBloomUse!="">>
+		<<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
+		<<set $mc.imageIcon = _companion.imageIcon>>
+	<<elseif $app.switch==true>>
+		<<print "<<set _companion  = $companion"+ $companionSwitched +" >>">>
+		<<set $mc.imageIcon = _companion.imageIcon>>
 	<</if>>
 
 	<<if $app.gender<1 >>
@@ -2285,6 +2263,22 @@
 
 <</if>>
 
+<<if $PulseBloomUse!="" && $time-2 > $PulseBloomDate >>
+	<<set $app.osex = $PulseBloomStorage.osex>>
+	<<set $app.obreasts = $PulseBloomStorage.obreasts>>
+	<<set $app.openis = $PulseBloomStorage.openis>>
+	<<set $app.ogender = $PulseBloomStorage.ogender>>
+	<<set $app.oheight = $PulseBloomStorage.oheight>>
+	<<set $app.age = $PulseBloomStorage.age>>
+	<<set $app.ohair = $PulseBloomStorage.ohair>>
+	<<set $app.oskinColor = $PulseBloomStorage.oskinColor>>
+	<<set $app.oeyeColor = $PulseBloomStorage.oeyeColor>>
+	<<set $app.desc = "">>
+	<<set $app.fit -= $PulseBloomStorage.fit>>
+	<<set $PulseBloomDate = 9999>>
+	<<set $PulseBloomUse="">>
+	<<Update_MC_Speech>>
+<</if>>
 <</widget>>
 
 :: Pregnancy Check widget[widget nobr]
@@ -3138,33 +3132,33 @@
 <<widget "Equipment">>
 
 <<if !$ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
-	<<set $hsswear=0>>
+	<<set $hsswear = 0>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Solace Lace")>>
-	<<set $slwear=0>>
+	<<set $slwear = 0>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Event Horizon")>>
-	<<set $EventHorizonWear=false>>
+	<<set $EventHorizonWear = false>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Chain of Lorelei")>>
-	<<set $colwear=0>>
+	<<set $colwear = 0>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Blind Divine")>>
-	<<set $BDwear=false>>
+	<<set $BDwear = false>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
-	<<if $HeavyHeadwear && $IQdrop<900>>
-		<<set $IQdrop+=999>>
+	<<if $HeavyHeadwear && $IQdrop < 900>>
+		<<set $IQdrop += 999>>
 	<</if>>
 <<else>>
-	<<set $HeavyHeadwear=false>>
-	<<if $IQdrop>900>>
-		<<set $IQdrop-=999>>
+	<<set $HeavyHeadwear = false>>
+	<<if $IQdrop > 900>>
+		<<set $IQdrop -= 999>>
 	<</if>>
 <</if>>
 
@@ -3173,43 +3167,44 @@
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
-	<<set $DaedalusEquip = false>> <<set $DaedalusFly=false>>
+	<<set $DaedalusEquip = false>>
+	<<set $DaedalusFly = false>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
-	<<set $EndlessAeonglass=false>>
+	<<set $EndlessAeonglass = false>>
 <</if>>
 
-<<set $ManagedMisfortuneMax = $ownedRelics.filter(e => e.name === "Managed Misfortune").length*2>>
-<<if $ManagedMisfortuneMax < $StoredCurse.length >>
-<<for _i=$StoredCurse.length-1; _i>=$ManagedMisfortuneMax; _i-->>
-	<<if $ManagedMisfortuneActive.some(e => e.name ===$StoredCurse[_i].name)>>
-		<<set $targetCurse = $StoredCurse[_i]>>
-		<<include "CurseRemoval">>
-		<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
-		<<set $ManagedMisfortuneActive.deleteAt(_j)>>
+<<set $ManagedMisfortuneMax = 2 * $ownedRelics.filter(e => e.name === "Managed Misfortune").length>>
+<<for $StoredCurse.length > $ManagedMisfortuneMax>>
+	<<set _curse = $StoredCurse.pop()>>
+	<<set _activeIndex = $ManagedMisfortuneActive.findIndex(e => e.name === _curse.name)>>
+	<<if _activeIndex !== -1>>
+		<<RemoveCurse _curse>>
+		<<set $ManagedMisfortuneActive.deleteAt(_activeIndex)>>
 	<</if>>
-	<<set $StoredCurse.deleteAt(_i)>>
 <</for>>
-<</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Lightning Rook")>>
-	<<set $LightningWear=false>>
+	<<set $LightningWear = false>>
 <</if>>
 
-<<if !$ownedRelics.some(e => e.name === "Lambent Specter") && $hiredCompanions.some(e => e.name === "Golem")>>
-	<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-		<<if $hiredCompanions[_i].name == 'Golem'>>
-			<<set $hiredCompanions.deleteAt(_i)>>
-		<</if>>
+<<if !$ownedRelics.some(e => e.name === "Lambent Specter")>>
+	<<set _i = $hiredCompanions.findIndex(e => e.name === "Golem")>>
+	<<for _i !== -1>>
+		<<set $hiredCompanions.deleteAt(_i)>>
+		<<set _i = $hiredCompanions.findIndex(e => e.name === "Golem")>>
 	<</for>>
 <</if>>
 
-<<if ( $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0 || $hiredCompanions.some(c => c.name === "Saeko") ) && !$abyssKnowCheatoff>>
+<<if $abyssKnowCheatoff>>
+	<<set $abyssKnow = 0>>
+<<elseif $items[5].count > 0 || $items[17].count > 0 || $items[21].count > 0 || $hiredCompanions.some(c => c.name === "Saeko")>>
 	<<set $abyssKnow = 1>>
 <<else>>
 	<<set $abyssKnow = 0>>
 <</if>>
+
 <</widget>>
 
 :: Affection widget [widget nobr]
