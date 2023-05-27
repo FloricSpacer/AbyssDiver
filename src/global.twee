@@ -3016,11 +3016,15 @@ Items:<br>
 						<</capture>>
 					<</if>>
 				<</for>>
-			<</if>>
+			<</if>> 
 		<<elseif $items[_k].count > 1 || $items[_k].count < 0>>
 			<<print "$items[_k].count x [[$items[_k].name|Item Info][$temp = _k]] ">><<print $items[_k].weight*$items[_k].count>><<print" kg | [[Drop|Drop Item Count][$temp = _k]]">> <br>
+		<<elseif $items[_k].name == "Self-Warming Clothes">>
+			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1, $warmCloth = 0]]">> <br>
+		<<elseif $items[_k].name == "Self-Cooling Clothes">>
+			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1, $coolCloth = 0]]">> <br>
 		<<elseif $items[_k].count == 1>>
-			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1]]">> <br> /*need to handle exceptions : warm/coldclothes and slingshot*/
+			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1]]">> <br> /*need to handle exceptions : slingshot (if it starts existing)*/
 		<</if>>
 	<</capture>>
 <</for>>
