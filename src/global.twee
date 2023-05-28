@@ -172,7 +172,6 @@ The total value of all your Relics is $total_value_relics dubloons.<br><br>
 <</if>>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
 Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br>
-[[Empty some flasks, and drop some items/relics you're carrying|Drop Items Menu]]<br><br>
 
 <<back [[$menuReturn]]>>
 <</nobr>>
@@ -1104,6 +1103,8 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	You can choose the order in which you drink the water you have with you:<br>
 	[[Organize your drinking water|Flask Order]]<br>
 <</if>>
+
+<br>[[Empty some flasks or drop some items/Relics you're carrying|Drop Items Menu]]<br>
 
 <<if $abyssKnow == 1>>
 	<br>You currently have abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
@@ -3005,26 +3006,26 @@ Items:<br>
 					
 					<<if $flaskMatrix[_temp]>1 && $flaskMatrixLabel[_temp]!="Bottled water">>
 						<<capture _temp>>
-						<<print "$flaskMatrix[_temp] x $flaskMatrixLabel[_temp] ">><<print $items[_k].weight*$flaskMatrix[_j]>><<print" kg | [[Empty|Drop Item Count][$temp = _k, $flaskID = _temp]]">> <br>
+						<<print "$flaskMatrix[_temp] x $flaskMatrixLabel[_temp] ">><<print Math.round($items[_k].weight*$flaskMatrix[_j] * 100)/100>><<print" kg | [[Empty|Drop Item Count][$temp = _k, $flaskID = _temp]]">> <br>
 						<</capture>>
 					<<elseif $flaskMatrix[_temp]==1 && $flaskMatrixLabel[_temp]!="Bottled water">>
 						<<capture _temp>>
-						<<print "$flaskMatrixLabel[_temp] $items[_k].weight kg | ">>
+						<<print "$flaskMatrixLabel[_temp] Math.round($items[_k].weight).toFixed(1) kg | ">>
 						<<link "Empty" "Drop Items Menu">>
 							<<set $items[3].count -= 1>> 
 							<<set $items[2].count += 1>> 
 							<<set $flaskMatrix[_temp] -= 1>> 
 						<</link>>
-						<<print "(net emptying gain = ">><<print $items[_k].weight-$items[2].weight>><<print " kg)">><br>
+						<<print "(net emptying gain = ">><<print Math.round(($items[_k].weight-$items[2].weight) * 100)/100>><<print " kg)">><br>
 						<</capture>>
 					<</if>>
 				<</for>>
 			<</if>> 
 		<<elseif $items[_k].count > 1 || $items[_k].count < 0>>
-			<<print "$items[_k].count x [[$items[_k].name|Item Info][$temp = _k]] ">><<print $items[_k].weight*$items[_k].count>><<print" kg | [[Drop|Drop Item Count][$temp = _k]]">> <br>
-		<<elseif $items[_k].name == "Self-Warming Clothes">>
+			<<print "$items[_k].count x [[$items[_k].name|Item Info][$temp = _k]] ">><<print Math.round($items[_k].weight*$items[_k].count * 100)/100>><<print" kg | [[Drop|Drop Item Count][$temp = _k]]">> <br>
+		<<elseif $items[_k].name == "Self-Warming Clothes" && $items[_k].count > 0>>
 			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1, $warmCloth = 0]]">> <br>
-		<<elseif $items[_k].name == "Self-Cooling Clothes">>
+		<<elseif $items[_k].name == "Self-Cooling Clothes" && $items[_k].count > 0>>
 			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1, $coolCloth = 0]]">> <br>
 		<<elseif $items[_k].count == 1>>
 			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1]]">> <br> /*need to handle exceptions : slingshot (if it starts existing)*/
@@ -3073,7 +3074,7 @@ Items:<br>
 :: Drop Item Count[nobr noreturn]
 <<set _itemID = $temp>>
 <<if $flaskID == -1>>
-	<<print "You have $items[_itemID].count $items[_itemID].name, each weighing $items[_itemID].weight kg, for a total of ">><<print $items[_itemID].count*$items[_itemID].weight>><<print " kg">><br>
+	<<print "You have $items[_itemID].count $items[_itemID].name, each weighing $items[_itemID].weight kg, for a total of ">><<print Math.round($items[_itemID].count*$items[_itemID].weight*100)/100>><<print " kg">><br>
 	Select the amount you want to drop:<br><br>
 
 	<<textbox "_temp" "0">>
