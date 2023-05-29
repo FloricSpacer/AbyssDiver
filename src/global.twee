@@ -790,7 +790,11 @@ Choose the Relic you would like to sell:
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly. <br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+			<<if $items[2].count >= 2>>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+			<<else>>
+				You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory) <br>
+			<</if>>
 		<<else>>
 			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<</if>>
@@ -3062,7 +3066,11 @@ Items:<br>
 			<<elseif $ownedRelics[_i].name=="World Stone" && $LilyPromise>>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly. <br>
 			<<elseif $ownedRelics[_i].name=="Everhevea">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $items[2].count-=2]]">> /*to change to avoid dropping nonspecific type of water */
+				<<if $items[2].count >= 2>>
+					<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $items[2].count-=2]]">><br>
+				<<else>>
+					You need to empty the Everheavea before dropping it (have at least two empty flasks in your inventory) <br>
+				<</if>>
 			<<elseif $ownedRelics[_i].name=="Daedalus Mechanism">>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$DaedalusEquip = false, $DaedalusFly = false, $ownedRelics.deleteAt(_i)]]">><br>
 			<<elseif $ownedRelics[_i].name=="Blind Divine">>
