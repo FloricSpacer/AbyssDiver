@@ -1138,7 +1138,11 @@ Choose the Relic you would like to hand over to the bandits:
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(3-$hsswear)]]">> 
 			<br> You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away <br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+			<<if $items[2].count >= 2>>
+				<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+			<<else>>
+				You need to empty the Everheavea to hand it over (have at least two empty flasks in your inventory) <br>
+			<</if>>
 		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
 			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$DaedalusEquip = false, $DaedalusFly = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Blind Divine">>
