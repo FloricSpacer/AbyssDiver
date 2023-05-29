@@ -1012,33 +1012,44 @@
 	<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
 	<<set $lewdness = ($app.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize + $standardsLower + $foodL6>>
 
-	<<if $app.breastsCor>5>>
-		<<set $lewdness +=1>>
-	<<elseif $app.breastsCor>7>>
-		<<set $lewdness +=2>>
-	<<elseif $app.breastsCor>9>>
-		<<set $lewdness +=3>>
-	<</if>>
+	<<if !$LuminousWear>>
+		<<if $app.breastsCor>5>>
+			<<set $lewdness +=1>>
+		<<elseif $app.breastsCor>7>>
+			<<set $lewdness +=2>>
+		<<elseif $app.breastsCor>9>>
+			<<set $lewdness +=3>>
+		<</if>>
 
-	<<if $app.penis>6>>
-		<<set $lewdness +=1>>
-	<<elseif $app.penis>10>>
-		<<set $lewdness +=2>>
-	<</if>>
+		<<if $app.penis>6>>
+			<<set $lewdness +=1>>
+		<<elseif $app.penis>10>>
+			<<set $lewdness +=2>>
+		<</if>>
 
-	<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
-		<<set $lewdness +=1>>
-	<</if>>
+		<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
+			<<set $lewdness +=1>>
+		<</if>>
 
-	<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
-		<<set $lewdness +=2>>
+		<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+			<<set $lewdness +=2>>
+		<</if>>
+
+		<<if $playerCurses.some(e => e.name === "Leaky")>>
+			<<set $lewdness +=2>>
+		<</if>>
+
+		<<if $playerCurses.some(e => e.name === "Hard Mode")>>
+			<<set $lewdness +=1>>
+		<</if>>
+
+		<<if $playerCurses.some(e => e.name === "Softie")>>
+			<<set $lewdness -=1>>
+		<</if>>
+
 	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
-		<<set $lewdness +=1>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Hard Mode")>>
 		<<set $lewdness +=1>>
 	<</if>>
 
@@ -1048,14 +1059,6 @@
 
 	<<if $playerCurses.some(e => e.name === "Wandering Hands")>>
 		<<set $lewdness +=2>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Leaky")>>
-		<<set $lewdness +=2>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Softie")>>
-		<<set $lewdness -=1>>
 	<</if>>
 
 	<<if $playerCurses.some(e => e.name === "Blushing Virgin")>>
@@ -1147,6 +1150,10 @@
 
 	<<if _handle.curses.some(e => e.name === "Seafolk")>>
 		<<set _handle.inhuman +=4>>
+	<</if>>
+
+	<<if _i==$hiredCompanions.length && $LuminousWear>>
+		<<set _handle.inhuman /=4>>
 	<</if>>
 <</for>>
 <</widget>>
@@ -1261,7 +1268,6 @@
 			<<set _handle.HandicapMovement -=6>>
 			<<set _handle.HandicapCarry -=2>>
 		<</if>>
-
 		
 	<</for>>
 	<<if _handle.name=="Khemia">>
@@ -3193,6 +3199,10 @@
 
 <<if !$ownedRelics.some(e => e.name === "Lightning Rook")>>
 	<<set $LightningWear = false>>
+<</if>>
+
+<<if !$ownedRelics.some(e => e.name === "Luminous Phantasmagoria")>>
+	<<set $LuminousWear = false>>
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Lambent Specter")>>
