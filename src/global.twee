@@ -1297,37 +1297,25 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	<</if>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Pulse Bloom")>>/*xxx */
+<<if $ownedRelics.some(e => e.name === "Pulse Bloom")>>
 	<<if $hiredCompanions.length > 0 && $PulseBloomUse=="">>
-		<<for _i=0; _i<$hiredCompanions.length; _i++>>
-			<<capture _i>>
-			<<set _string1 = "Force the use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
-			<<set _string2 = "Ask to use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
-			<<if $hiredCompanions[_i].name == $companionTwin.name>>
-				[[_string1| Pulse Bloom Forced][$PulseBloomUse = "Twin"]]<br>
-				[[_string2| Pulse Bloom Asked][$PulseBloomUse = "Twin"]]<br>
-			<<elseif $hiredCompanions[_i].name!="Golem">>
-				[[_string1| Pulse Bloom Forced][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
-				[[_string2| Pulse Bloom Asked][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
-			<</if>>
-			<</capture>>
-			<br>
-		<</for>>
+		<br>You can use the Pulse Bloom to copy the appearance of one of your companions.<br>
+		[[Use the Pulse Bloom|Pulse Bloom use]]<br>
 	<<elseif $PulseBloomUse==true >>
-		You are already under the effect of the Pulse Blooms powers.
+		<br>You are already under the effect of the Pulse Bloom.<br>
 	<<else>>
-		You have nobody to use it on.
+		<br>You have nobody to use the Pulse Bloom on.<br>
 	<</if>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Luminous Phantasmagoria")>>
 	<<if $LuminousWear>>
-		<br>The Luminous Phantasmagoria is floating above your head, you don't understand how it keeps hovering over your head but it works./*xxx */
+		<br>The Luminous Phantasmagoria is floating above your head, making you appear more normal and innocent to anyone who observes you.
 		<br>
-		[[Put the Luminous Phantasmagoria away again|Use Items and Relics][$LuminousWear=false]]<br>
+		[[Put the Luminous Phantasmagoria away|Use Items and Relics][$LuminousWear=false]]<br>
 	<<else>>
-	    <br>By wearing the Luminous Phantasmagoria people should see you in a more favorable light.<br>
-		[[Hold the Luminous Phantasmagoria over your head to wear it|Use Items and Relics][$LuminousWear=true]]<br>
+	    <br>By wearing the Luminous Phantasmagoria people would view you as more normal and innocent.<br>
+		[[Hold the Luminous Phantasmagoria over your head and wear it|Use Items and Relics][$LuminousWear=true]]<br>
 	<</if>>
 <</if>>
 
@@ -3121,3 +3109,33 @@ Items:<br>
 		<</if>>
 	<</link>>
 <</if>>
+
+:: Pulse Bloom Use
+
+Resting comfortably in your palm is the Pulse Bloom, an unassuming yet potent crimson flower, a paradox of frail beauty and robust strength. The deep hue of the petals appears even more profound against the backdrop of your $app.skinColor hands, an almost defiant splash of life amidst the adversity of your journey. The petals, rough yet velvety to the touch, curl inward slightly, their texture reminiscent of thick, ancient parchment that has somehow withstood the wear of time.
+
+You look over at your companion, sleeping soundly at your camp. You've shared countless moments, hardships and triumphs, laughter and tears. The Pulse Bloom could mimic their form, their voice, their very essence. All it would take is a small amount of blood, a minor inconvenience, a slight pain for the potential gain.
+
+<<nobr>>
+<<if $hiredCompanions.length > 0 && $PulseBloomUse=="">>
+	<<for _i=0; _i<$hiredCompanions.length; _i++>>
+		<<capture _i>>
+		<<set _string1 = "Force the use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
+		<<set _string2 = "Ask to use the Pulse Bloom on " + $hiredCompanions[_i].name>>
+		<<if $hiredCompanions[_i].name == $companionTwin.name>>
+			[[_string1| Pulse Bloom Forced][$PulseBloomUse = "Twin"]]<br>
+			[[_string2| Pulse Bloom Asked][$PulseBloomUse = "Twin"]]<br>
+		<<elseif $hiredCompanions[_i].name!="Golem">>
+			[[_string1| Pulse Bloom Forced][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
+			[[_string2| Pulse Bloom Asked][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
+		<</if>>
+		<</capture>>
+	<</for>>
+<<elseif $PulseBloomUse==true >>
+	You are already under the effect of the Pulse Blooms powers.
+<<else>>
+	You have nobody to use it on.
+<</if>>
+<</nobr>>
+
+<<back>>
