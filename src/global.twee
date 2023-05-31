@@ -1479,165 +1479,118 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
-	You look at the glistening set of marbles known as the Managed Misfortune.
-	<<for _i=0; _i<=$StoredCurse.length && _i<$ManagedMisfortuneMax; _i++>>
-		<<capture _i>>
-		<<if _i==$StoredCurse.length >>
-			<br>You need to store a Curse in the Relic's marble before you can use it<br>
-		<<elseif !$ManagedMisfortuneActive.some(c => c.name === $StoredCurse[_i].name)>>
-			<br>You have stored the Curse named $StoredCurse[_i].name in this marble. 
-			<<if $StoredCurse[_i].name=="Perma-dye" && $curse7.variation=="">>
-				<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within<br>
-				The longer you look the more color if your hair seems to change in your reflection. After a while you can see that your hair seems as if it had always been its new color. Now, what color do you see?<br>
-				Please enter your new hair color:<br><br>
-					
-				<<textbox "$curse7.variation" "turquoise" "Use Items and Relics">>
-			<<elseif $StoredCurse[_i].name== "Fluffy Ears" && $curse17.variation=="">>
-
-				What type of ears would you like to gain?<br><br>
-
-				<<radiobutton "$curse17.variation" "furry cat" checked>> Cat<br>
-				<<radiobutton "$curse17.variation" "fluffy dog" >> Dog<br>
-				<<radiobutton "$curse17.variation" "floppy cow" >> Cow<br>
-				<<radiobutton "$curse17.variation" "furry monkey" >> Monkey<br>
-				<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit<br>
-				<<radiobutton "$curse17.variation" "furry fox" >> Fox<br>
-				<<radiobutton "$curse17.variation" "furry mouse" >> Mouse<br>
-				<<radiobutton "$curse17.variation" "pig" >> Pig<br>
-				<<radiobutton "$curse17.variation" "furry horse" >> Horse<br>
-			<<elseif $StoredCurse[_i].name== "Fluffy Tail" && $curse18.variation=="">>
-
-				What type of tail would you like to gain?<br><br>
-
-				<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat<br>
-				<<radiobutton "$curse18.variation" "wagging dog" >> Dog<br>
-				<<radiobutton "$curse18.variation" "lazy cow" >> Cow<br>
-				<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey<br>
-				<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit<br>
-				<<radiobutton "$curse18.variation" "bushy fox" >> Fox<br>
-				<<radiobutton "$curse18.variation" "long mouse" >> Mouse<br>
-				<<radiobutton "$curse18.variation" "twisted pig" >> Pig<br>
-				<<radiobutton "$curse18.variation" "swaying horse" >> Horse<br>
-			<<elseif $StoredCurse[_i].name== "Maximum Fluff" && $curse19.variation=="">>
-				What type of fur would you like to gain?<br><br>
-
-				<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
-				<<radiobutton "$curse19.variation" "dog-furred" >> Dog<br>
-				<<radiobutton "$curse19.variation" "cow-furred" >> Cow<br>
-				<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey<br>
-				<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit<br>
-				<<radiobutton "$curse19.variation" "fox-furred" >> Fox<br>
-				<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse<br>
-				<<radiobutton "$curse19.variation" "pig-furred" >> Pig<br>
-				<<radiobutton "$curse19.variation" "horse-furred" >> Horse<br>
-
-			<<elseif ($StoredCurse[_i].name== "Wacky Wombs" && $curse19.variation1=="" ) || ($StoredCurse[_i].name== "Wacky Wombs" && $playerCurses.some(e=> e.name === "Wacky Wombs" ) && $curse19.variation2=="") >>
-				What is the location of the womb you would like to add?
-				<<if $curse35.variation1=="">> 
-					<<radiobutton "$curse35.variation1" "throat" checked>> Throat
-					<<radiobutton "$curse35.variation1" "urethra" >> Urethra
-					<<radiobutton "$curse35.variation1" "anus" >> Anus
-					<<if $vagina > 0 >>
-						<<radiobutton "$curse35.variation1" "vagina" >> Vagina
+	<br>You look at the glistening set of marbles known as the Managed Misfortune.<br>
+	<<if !$StoredCurse.length>>
+		You need to store a Curse in one of the Relic's marbles before you can use it.<br>
+	<<else>>
+		<<for _curse range $StoredCurse>>
+			<<capture _curse>>
+				<<if !$ManagedMisfortuneActive.some(c => c.name === _curse.name)>>
+					You have stored Curse _curse.name in this marble.<br>
+					<<if _curse.name == "Perma-dye" && !$curse7.variation>>
+						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within. The longer you look the more the color of your hair seems to change in your reflection. After a while your hair seems as if it had always been its new color. Now, what color do you see?<br>
+						Please enter your new hair color: <<textbox "$curse7.variation" "turquoise" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Fluffy Ears" && !$curse17.variation>>
+						What type of ears would you like to gain?<br>
+						<<radiobutton "$curse17.variation" "furry cat" checked>> Cat<br>
+						<<radiobutton "$curse17.variation" "fluffy dog">> Dog<br>
+						<<radiobutton "$curse17.variation" "floppy cow">> Cow<br>
+						<<radiobutton "$curse17.variation" "furry monkey">> Monkey<br>
+						<<radiobutton "$curse17.variation" "furry rabbit">> Rabbit<br>
+						<<radiobutton "$curse17.variation" "furry fox">> Fox<br>
+						<<radiobutton "$curse17.variation" "furry mouse">> Mouse<br>
+						<<radiobutton "$curse17.variation" "pig">> Pig<br>
+						<<radiobutton "$curse17.variation" "furry horse">> Horse<br>
+					<<elseif _curse.name == "Fluffy Tail" && !$curse18.variation>>
+						What type of tail would you like to gain?<br>
+						<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat<br>
+						<<radiobutton "$curse18.variation" "wagging dog">> Dog<br>
+						<<radiobutton "$curse18.variation" "lazy cow">> Cow<br>
+						<<radiobutton "$curse18.variation" "prehensile monkey">> Monkey<br>
+						<<radiobutton "$curse18.variation" "fluffy rabbit">> Rabbit<br>
+						<<radiobutton "$curse18.variation" "bushy fox">> Fox<br>
+						<<radiobutton "$curse18.variation" "long mouse">> Mouse<br>
+						<<radiobutton "$curse18.variation" "twisted pig">> Pig<br>
+						<<radiobutton "$curse18.variation" "swaying horse">> Horse<br>
+					<<elseif _curse.name == "Maximum Fluff" && !$curse19.variation>>
+						What type of fur would you like to gain?<br>
+						<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
+						<<radiobutton "$curse19.variation" "dog-furred">> Dog<br>
+						<<radiobutton "$curse19.variation" "cow-furred">> Cow<br>
+						<<radiobutton "$curse19.variation" "monkey-furred">> Monkey<br>
+						<<radiobutton "$curse19.variation" "rabbit-furred">> Rabbit<br>
+						<<radiobutton "$curse19.variation" "fox-furred">> Fox<br>
+						<<radiobutton "$curse19.variation" "mouse-furred">> Mouse<br>
+						<<radiobutton "$curse19.variation" "pig-furred">> Pig<br>
+						<<radiobutton "$curse19.variation" "horse-furred">> Horse<br>
+					<<elseif _curse.name == "Wacky Wombs" && (!$curse35.variation1 || $playerCurses.some(e => e.name == "Wacky Wombs") && !$curse35.variation2)>>
+						What is the location of the womb you would like to add?<br>
+						<<if !$curse35.variation1>>
+							<<radiobutton "$curse35.variation1" "throat" checked>> Throat<br>
+							<<radiobutton "$curse35.variation1" "urethra">> Urethra<br>
+							<<radiobutton "$curse35.variation1" "anus">> Anus<br>
+							<<if $vagina > 0>>
+								<<radiobutton "$curse35.variation1" "vagina">> Vagina<br>
+							<</if>>
+						<<else>>
+							<<radiobutton "$curse35.variation2" "throat" checked>> Throat<br>
+							<<radiobutton "$curse35.variation2" "urethra">> Urethra<br>
+							<<radiobutton "$curse35.variation2" "anus">> Anus<br>
+							<<if $vagina > 0>>
+								<<radiobutton "$curse35.variation2" "vagina">> Vagina<br>
+							<</if>>
+						<</if>>
+					<<elseif _curse.name == "Rainbow Swirl" && !$curse39.variation>>
+						Please enter your new skin/eye color: <<textbox "$curse39.variation" "pink" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Tipping the Scales" && !$curse54.variation>>
+						Please enter your new scale color and press enter: <<textbox "$curse54.variation" "green" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Carapacian" && !$curse69.variation>>
+						Please enter your new exoskeleton color: <<textbox "$curse69.variation" "shiny black" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Horny" && !$hornVariation>>
+						<<include "Horny Customization">><br>
+					<<elseif _curse.name == "Semen Demon" && !$curse82.variation>>
+						<<include "Semen Demon Customization">><br>
+					<<elseif _curse.name == "Eye on the Prize" && !$eyeRemove>>
+						<<include "Eye on the Prize Customization">><br>
+					<<elseif _curse.name == "Ampu-Q-tie" && !$curse104.variation>>
+						<<include "Ampu-Q-tie Customization">><br>
+					<<elseif _curse.name == "Dizzying Heights" && !$HeightIncrease>>
+						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within.<br>
+						You see your own reflection alternating between growing and shrinking. After a while you see the Curse has settle on a height...<br>
+						<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
+						<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+					<<elseif _curse.name == "Hemospectrum" && !$curse70.variation>>
+						What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?<br>
+						<<radiobutton "$curse70.variation" "blue" checked>> Blue<br>
+						<<radiobutton "$curse70.variation" "purple">> Purple<br>
+						<<radiobutton "$curse70.variation" "green">> Green<br>
+						<<radiobutton "$curse70.variation" "yellow">> Yellow<br>
+						<<radiobutton "$curse70.variation" "orange">> Orange<br>
+						<<radiobutton "$curse70.variation" "pink">> Pink<br>
+						<<radiobutton "$curse70.variation" "black">> Black<br>
+						<<radiobutton "$curse70.variation" "brown">> Brown<br>
+						<<radiobutton "$curse70.variation" "white">> White<br>
 					<</if>>
+					<<set _text = "Activate stored " + _curse.name + " Curse">>
+					<<link _text "Use Items and Relics">>
+						<<set $playerCurses.push(_curse)>>
+						<<set _logName = _curse.type + "Log">>
+						<<set _logVar = State.variables[_logName]>>
+						<<if _logVar>><<set _logVar.push(_curse)>><</if>>
+						<<set $ManagedMisfortuneActive.push(_curse)>>
+					<</link>><br>
 				<<else>>
-					<<radiobutton "$curse35.variation2" "throat" checked>> Throat
-					<<radiobutton "$curse35.variation2" "urethra" >> Urethra
-					<<radiobutton "$curse35.variation2" "anus" >> Anus
-					<<if $vagina > 0 >>
-						<<radiobutton "$curse35.variation2" "vagina" >> Vagina
-					<</if>>
+					You are affected by Curse _curse.name stored in the marbles.<br>
+					<<set _text = "Deactivate stored " + _curse.name + " Curse">>
+					<<link _text "Use Items and Relics">>
+						<<RemoveCurse _curse>>
+						<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name === _curse.name)>>
+						<<set $ManagedMisfortuneActive.deleteAt(_j)>>
+					<</link>><br>
 				<</if>>
-				
-			<<elseif $StoredCurse[_i].name== "Rainbow Swirl" && $curse39.variation=="">>
-				<<textbox "$curse38.variation" "pink" "Use Items and Relics">>
-
-			<<elseif $StoredCurse[_i].name== "Tipping the Scales" && $curse54.variation=="">>
-				<<textbox "$curse54.variation" "green" "Use Items and Relics">>
-				
-			<<elseif $StoredCurse[_i].name== "Carapacian">>
-
-				Please enter your new exoskeleton color:
-
-				<<textbox "$curse69.variation" "shiny black" "Use Items and Relics">>
-
-			<<elseif $StoredCurse[_i].name== "Horny" && $hornVariation=="">>
-				<br>
-				<<include "Horny Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Horny Curse][$ManagedMisfortuneActive[_i]=true]]<br>
-
-			<<elseif $StoredCurse[_i].name== "Semen Demon" && $curse82.variation=="">>
-				<br>
-				<<include "Semen Demon Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Semen Demon Curse][$ManagedMisfortuneActive[_i]=true]]<br>
-				
-			<<elseif $StoredCurse[_i].name== "Eye on the Prize" && $eyeRemove=="">>
-				<br>
-				<<include "Eye on the Prize Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Eye on the Prize Curse][$ManagedMisfortuneActive[_i]=true]]<br>
-
-			<<elseif $StoredCurse[_i].name== "Ampu-Q-tie" && $curse104.variation=="">>
-				<br>
-				<<include "Ampu-Q-tie Customization">><br>
-				<br>
-				[[Confirm|Apply Stored Ampu-Q-tie Curse][$ManagedMisfortuneActive[_i]=true]]<br>
-			<<else>>
-				<<if $StoredCurse[_i].name=="Dizzying Heights" && $HeightIncrease == 0>>
-					<br>As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within<br>
-					You see your own reflection alternating between growing and shrinking. After a while you see the Curse has settle on a height... <br><br>
-
-					<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
-					<<radiobutton "$HeightIncrease " 1 >> Increase<br>
-
-				<</if>>
-
-				<<if $StoredCurse[_i].name== "Hemospectrum" && $curse70.variation== "">>
-
-					What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
-
-					<<radiobutton "$curse70.variation" "blue" checked>> Blue
-					<<radiobutton "$curse70.variation" "purple" >> Purple
-					<<radiobutton "$curse70.variation" "green" >> Green
-					<<radiobutton "$curse70.variation" "yellow" >> Yellow
-					<<radiobutton "$curse70.variation" "orange" >> Orange
-					<<radiobutton "$curse70.variation" "pink" >> Pink
-					<<radiobutton "$curse70.variation" "black" >> Black
-					<<radiobutton "$curse70.variation" "brown" >> Brown
-					<<radiobutton "$curse70.variation" "white" >> White
-				
-				<</if>>
-
-				<<link "Activate the stored Curse" "Use Items and Relics">>
-					<<set $playerCurses.push($StoredCurse[_i])>>
-					<<if $StoredCurse[_i].type == "Height">>
-						<<set $HeightLog.push($StoredCurse[_i])>>
-					<<elseif $StoredCurse[_i].type == "Gender">>
-						<<set $GenderLog.push($StoredCurse[_i])>>
-					<<elseif $StoredCurse[_i].type == "Age">>
-						<<set $AgeLog.push($StoredCurse[_i])>>
-					<<elseif $StoredCurse[_i].type == "Libido">>
-						<<set $LibidoLog.push($StoredCurse[_i])>>
-					<<elseif $StoredCurse[_i].type == "Handicap">>
-						<<set $HandicapLog.push($StoredCurse[_i])>>
-					<</if>>
-					<<set $ManagedMisfortuneActive.push($StoredCurse[_i])>>
-				<</link>>
-				<br>
-			<</if>>
-		<<else>>
-			You are affected by the Curse $StoredCurse[_i].name stored in the marbles.
-			<<link "Deactivate the stored Curse" "Use Items and Relics">>
-				<<RemoveCurse $StoredCurse[_i]>>
-				<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name===$StoredCurse[_i].name)>>
-				<<set $ManagedMisfortuneActive.deleteAt(_j)>>
-			<</link>>	
-			<br>	
-		<</if>>
-		<</capture>>
-	<</for>>
+			<</capture>>
+		<</for>>
+	<</if>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
