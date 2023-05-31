@@ -3,10 +3,10 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.brokerUsed == 1 && StoryVar.corruption < 0) {
 		return "BrokerEnd";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && StoryVar.app.appAge < 10 && StoryVar.dollevent2==false){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 10 && StoryVar.dollevent2==false){
 		return "DollWarning";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && StoryVar.app.appAge < 4 && StoryVar.dollevent2==true){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 4 && StoryVar.dollevent2==true){
 		return "DollEnd";
 	}
 	if (StoryVar.app.age < 18) {
@@ -67,7 +67,7 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.lastBirthTwin = StoryVar.time
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
+	if (isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
 		return "AgeEnd";
 	}
 	if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap && StoryVar.hiredCompanions.some(e => e.name === "Maru")) {
