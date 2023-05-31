@@ -171,7 +171,7 @@ The total value of all your Relics is $total_value_relics dubloons.<br><br>
 	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.<br>
 <</if>>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
-Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br>
+Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br><br>
 
 <<back [[$menuReturn]]>>
 <</nobr>>
@@ -404,7 +404,11 @@ You are $app.age years old<<if $app.age != Math.round($app.appAge)>>, but you ap
 	You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.<br><br>
 <</if>>
 
+<<if $app.subdom > 0>>
 Submissiveness score: $app.subdom<br><br>
+<<else>>
+Dominance score: <<print -1 * $app.subdom>><br><br>
+<</if>>
 
 <<if $playerCurses.some(e => e.name === "Horny")>>
 	You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
@@ -430,15 +434,116 @@ You appear as a woman with slightly masculine features. Many people might assume
 You appear as a typical woman, with a feminine facial structure and a body profile that is unmistakably female from a distance.<br><br>
 <</if>>
 
-<<if $playerCurses.length > 0>>
-	<<for _i = 0; _i < $playerCurses.length; _i++>>
-		<<print $playerCurses[_i].appDesc>>
-		<<if _i==$playerCurses.length-1>>
-			<br>
-		<</if>>
-	<</for>>
-	<br>
+
+
+<<if $app.penisCor>=1>>
+	<<if $app.penisCor == 1>>
+	You have a tiny penis of <<PenisLengthText>>, which is honestly barely larger than a clitoris.
+	<<elseif $app.penisCor <= 2.5>>
+	You have a very small penis of <<PenisLengthText>>. You need some very tight pants to show something that even remotely resembles a bulge in your crotch.
+	<<elseif $app.penisCor <= 3.5>>
+	You have a small penis of <<PenisLengthText>>. You are a bit self conscious about it, but it works perfectly well.
+	<<elseif $app.penisCor <= 4.5>>
+	You have a below average penis of <<PenisLengthText>>. Yeah, you know it's not that big, but you try not to get too hung up on it.
+	<<elseif $app.penisCor <= 5.5>>
+	You have a pretty average penis of <<PenisLengthText>>. Nothing to be ashamed of, but nothing to write home about either.
+	<<elseif $app.penisCor <= 6.5>>
+	You have a totally average penis of <<PenisLengthText>>, very typical for a man in your demographics.
+	<<elseif $app.penisCor <= 7.5>>
+	You have a slightly above average penis of <<PenisLengthText>>, not anything out of the ordinary, but some people may particularly enjoy it.
+	<<elseif $app.penisCor <= 8.5>>
+	You have a large penis of <<PenisLengthText>>, people who like larger sizes are likely to be impressed.
+	<<elseif $app.penisCor <= 9.5>>
+	You have a very large penis of <<PenisLengthText>>, size queens dream of meeting someone like you, but tighter orifices can be a bit of an issue occasionally.
+	<<elseif $app.penisCor > 9.5 && $app.penisCor < 100>>
+	You have an enormous penis of <<PenisLengthText>>. Are you even going to able to have sex with this monster schlong?
+	<<elseif $app.penisCor >= 100>>
+	You have a truly gargantuan penis that hangs at a size of <<PenisLengthText true>> long. Sex with normal sized people would need to be very different than it used to be.
+	<</if>>
+	<<if $app.doublePenis==true>>
+	In fact you have two of them!
+	<</if>>
+<br>
 <</if>>
+<<if $app.vagina == 1>>
+	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
+		You have a cavernous pussy sitting between your legs, most of your lovers would be able to fit their entire body inside you without even filling you up.
+	<<elseif $playerCurses.some(e=> e.name === "Minish-ish")>>
+		You have a miniscule pussy to match your size, making it very difficult to have sex with normal-sized people.
+	<<else>>
+		You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
+	<</if>>
+<br>
+<</if>>
+<<if $app.vagina == 0 && $app.penisCor == 0>>
+You have a smooth and featureless doll-like groin.
+<br>
+<</if>>
+<<if ($app.womb > 0 && $app.sex=="male")||($app.womb > 1 && $app.sex!="male")>>
+<br>You have an extra womb in your $app.womb1.
+<</if>>
+<<if ($app.womb > 1 && $app.sex=="male")||($app.womb > 2 && $app.sex!="male")>>
+<br>You have another extra womb in your $app.womb2.
+<</if>>
+
+<<if $app.breastsCor < 1>>
+You possess a flat, <<GenderPronoun>> chest, sleek and unassuming.
+<<elseif $app.breastsCor < 2>>
+Your AA cup chest is subtle and delicate, making you stand out from the crowd in your own unique way.
+<<elseif $app.breastsCor < 3>>
+Adorning your chest are charming A cup breasts, petite yet alluring.
+<<elseif $app.breastsCor < 4>>
+Your B cup breasts are soft and supple, a perfect balance between size and grace.
+<<elseif $app.breastsCor < 5>>
+Blessed with perfectly round C cup breasts, you exude a natural elegance.
+<<elseif $app.breastsCor < 6>>
+Your D cup breasts are generously sized, offering a delightful handful to admire.
+<<elseif $app.breastsCor < 7>>
+With larger than most E cup breasts, you command attention and admiration.
+<<elseif $app.breastsCor < 8>>
+Your F cup breasts are becoming quite substantial, but you carry them with poise and confidence.
+<<elseif $app.breastsCor < 9>>
+Your G cup breasts are voluptuous, requiring extra care to avoid potential back pain.
+<<elseif $app.breastsCor < 10>>
+Your H cup breasts are stunningly ample, making it important to be mindful of potential back pain.
+<<elseif $app.breastsCor < 11>>
+Your I cup breasts are exceptionally full, so it's wise to watch out for serious back pain.
+<<elseif $app.breastsCor < 12>>
+With your J cup breasts, it's essential to be cautious of serious back pain due to their impressive size.
+<<elseif $app.breastsCor < 13>>
+Your K cup breasts are truly striking, but be aware of the risk for serious back pain.
+<<elseif $app.breastsCor < 14>>
+Boasting L cup breasts, you should remain vigilant for potential serious back pain.
+<<elseif $app.breastsCor < 15>>
+Your M cup breasts are both captivating and challenging, making it important to watch for serious back pain.
+<<elseif $app.breastsCor < 16>>
+With your N cup breasts, it's crucial to be cautious of very serious back pain.
+<<elseif $app.breastsCor < 17>>
+Your O cup breasts are astounding, but it's important to watch out for very serious back pain.
+<<elseif $app.breastsCor < 18>>
+Possessing P cup breasts, you should be mindful of the risk for very serious back pain.
+<<elseif $app.breastsCor < 19>>
+With your Q cup breasts, it's essential to watch out for very serious back pain.
+<<elseif $app.breastsCor < 20>>
+Your R cup breasts are truly magnificent, but be cautious of the potential for very serious back pain.
+<<elseif $app.breastsCor >= 20>>
+Boasting an incredible S cup size, you must always be vigilant for the risk of extremely serious back pain.
+<</if>>
+<<if $time-$menCycleT-$menCycleVar>20 & $menCycleFlag==true>>
+They are a bit sore at the moment.
+<</if>>
+<<if $app.lactation > 1 >>
+	<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">><br>
+<<elseif $app.lactation > 0  >>
+	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">><br>
+<</if>>
+<br>
+<<if $app.tail.length > 0>>
+<<for $i = 0; $i < $app.tail.length; $i++>>
+		You have a $app.tail[$i] tail right above your butt.<br>
+<</for>>
+<</if>>
+<br>
 
 <<if $dollevent2== true>>
 	You find yourself wearing a tattered pink dress that bears a striking resemblance to the one worn by your doll. Frustratingly, this situation prevents you from changing into other clothes, even in extreme conditions.
@@ -551,114 +656,16 @@ You need sex constantly - having sex will only sate your hunger for a matter of 
 <br>You feel like you have slowed down mentally compared to normal. It's not that you suddenly forgot everything you learned but it just feels like your head is tired all the time. Maybe a little less thinking will allow you to recover a bit.
 <</if>>
 
-<<if $app.penisCor>=1>>
-	<<if $app.penisCor == 1>>
-	You have a tiny penis of <<PenisLengthText>>, which is honestly barely larger than a clitoris.
-	<<elseif $app.penisCor <= 2.5>>
-	You have a very small penis of <<PenisLengthText>>. You need some very tight pants to show something that even remotely resembles a bulge in your crotch.
-	<<elseif $app.penisCor <= 3.5>>
-	You have a small penis of <<PenisLengthText>>. You are a bit self conscious about it, but it works perfectly well.
-	<<elseif $app.penisCor <= 4.5>>
-	You have a below average penis of <<PenisLengthText>>. Yeah, you know it's not that big, but you try not to get too hung up on it.
-	<<elseif $app.penisCor <= 5.5>>
-	You have a pretty average penis of <<PenisLengthText>>. Nothing to be ashamed of, but nothing to write home about either.
-	<<elseif $app.penisCor <= 6.5>>
-	You have a totally average penis of <<PenisLengthText>>, very typical for a man in your demographics.
-	<<elseif $app.penisCor <= 7.5>>
-	You have a slightly above average penis of <<PenisLengthText>>, not anything out of the ordinary, but some people may particularly enjoy it.
-	<<elseif $app.penisCor <= 8.5>>
-	You have a large penis of <<PenisLengthText>>, people who like larger sizes are likely to be impressed.
-	<<elseif $app.penisCor <= 9.5>>
-	You have a very large penis of <<PenisLengthText>>, size queens dream of meeting someone like you, but tighter orifices can be a bit of an issue occasionally.
-	<<elseif $app.penisCor > 9.5 && $app.penisCor < 100>>
-	You have an enormous penis of <<PenisLengthText>>. Are you even going to able to have sex with this monster schlong?
-	<<elseif $app.penisCor >= 100>>
-	You have a truly gargantuan penis that hangs at a size of <<PenisLengthText true>> long. Sex with normal sized people would need to be very different than it used to be.
-	<</if>>
-	<<if $app.doublePenis==true>>
-	In fact you have two of them!
-	<</if>>
-<br>
-<</if>>
-<<if $app.vagina == 1>>
-	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
-		You have a cavernous pussy sitting between your legs, most of your lovers would be able to fit their entire body inside you without even filling you up.
-	<<elseif $playerCurses.some(e=> e.name === "Minish-ish")>>
-		You have a miniscule pussy to match your size, making it very difficult to have sex with normal-sized people.
-	<<else>>
-		You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
-	<</if>>
-<br>
-<</if>>
-<<if $app.vagina == 0 && $app.penisCor == 0>>
-You have a smooth and featureless doll-like groin.
-<br>
-<</if>>
-<<if ($app.womb > 0 && $app.sex=="male")||($app.womb > 1 && $app.sex!="male")>>
-<br>You have an extra womb in your $app.womb1.
-<</if>>
-<<if ($app.womb > 1 && $app.sex=="male")||($app.womb > 2 && $app.sex!="male")>>
-<br>You have another extra womb in your $app.womb2.
+<<if $playerCurses.length > 0>>
+	<<for _i = 0; _i < $playerCurses.length; _i++>>
+		<<print $playerCurses[_i].appDesc>>
+		<<if _i==$playerCurses.length-1>>
+			<br>
+		<</if>>
+	<</for>>
+	<br>
 <</if>>
 
-<<if $app.breastsCor < 1>>
-You possess a flat, <<GenderPronoun>> chest, sleek and unassuming.
-<<elseif $app.breastsCor < 2>>
-Your AA cup chest is subtle and delicate, making you stand out from the crowd in your own unique way.
-<<elseif $app.breastsCor < 3>>
-Adorning your chest are charming A cup breasts, petite yet alluring.
-<<elseif $app.breastsCor < 4>>
-Your B cup breasts are soft and supple, a perfect balance between size and grace.
-<<elseif $app.breastsCor < 5>>
-Blessed with perfectly round C cup breasts, you exude a natural elegance.
-<<elseif $app.breastsCor < 6>>
-Your D cup breasts are generously sized, offering a delightful handful to admire.
-<<elseif $app.breastsCor < 7>>
-With larger than most E cup breasts, you command attention and admiration.
-<<elseif $app.breastsCor < 8>>
-Your F cup breasts are becoming quite substantial, but you carry them with poise and confidence.
-<<elseif $app.breastsCor < 9>>
-Your G cup breasts are voluptuous, requiring extra care to avoid potential back pain.
-<<elseif $app.breastsCor < 10>>
-Your H cup breasts are stunningly ample, making it important to be mindful of potential back pain.
-<<elseif $app.breastsCor < 11>>
-Your I cup breasts are exceptionally full, so it's wise to watch out for serious back pain.
-<<elseif $app.breastsCor < 12>>
-With your J cup breasts, it's essential to be cautious of serious back pain due to their impressive size.
-<<elseif $app.breastsCor < 13>>
-Your K cup breasts are truly striking, but be aware of the risk for serious back pain.
-<<elseif $app.breastsCor < 14>>
-Boasting L cup breasts, you should remain vigilant for potential serious back pain.
-<<elseif $app.breastsCor < 15>>
-Your M cup breasts are both captivating and challenging, making it important to watch for serious back pain.
-<<elseif $app.breastsCor < 16>>
-With your N cup breasts, it's crucial to be cautious of very serious back pain.
-<<elseif $app.breastsCor < 17>>
-Your O cup breasts are astounding, but it's important to watch out for very serious back pain.
-<<elseif $app.breastsCor < 18>>
-Possessing P cup breasts, you should be mindful of the risk for very serious back pain.
-<<elseif $app.breastsCor < 19>>
-With your Q cup breasts, it's essential to watch out for very serious back pain.
-<<elseif $app.breastsCor < 20>>
-Your R cup breasts are truly magnificent, but be cautious of the potential for very serious back pain.
-<<elseif $app.breastsCor >= 20>>
-Boasting an incredible S cup size, you must always be vigilant for the risk of extremely serious back pain.
-<</if>>
-<<if $time-$menCycleT-$menCycleVar>20 & $menCycleFlag==true>>
-They are a bit sore at the moment.
-<</if>>
-<<if $app.lactation > 1 >>
-	<<print "You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly. ">><br>
-<<elseif $app.lactation > 0  >>
-	<<print "You are lactating at all times, but thankfully it's just enough to be a bit annoying. ">><br>
-<</if>>
-<br>
-<<if $app.tail.length > 0>>
-<<for $i = 0; $i < $app.tail.length; $i++>>
-		You have a $app.tail[$i] tail right above your butt.<br>
-<</for>>
-<</if>>
-<br>
 Overall the world would probably see you now as a <<PerceivedStature $app>> <<PerceivedRace $app>> <<PerceivedGender $app>>.<br><br>
 <<back [[$menuReturn]]>>
 
@@ -1490,7 +1497,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 				<<if !$ManagedMisfortuneActive.some(c => c.name === _curse.name)>>
 					You have stored Curse _curse.name in this marble.<br>
 					<<if _curse.name == "Perma-dye" && !$curse7.variation>>
-						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within. The longer you look the more the color of your hair seems to change in your reflection. After a while your hair seems as if it had always been its new color. Now, what color do you see?<br>
+						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within. The longer you look, the more the color of your hair seems to change in your reflection. After a few moments, your hair seems as if it had always been its new color. Now, what color do you see?<br>
 						Please enter your new hair color: <<textbox "$curse7.variation" "turquoise" "Use Items and Relics">><br>
 					<<elseif _curse.name == "Fluffy Ears" && !$curse17.variation>>
 						What type of ears would you like to gain?<br>
