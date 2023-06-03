@@ -93,6 +93,27 @@ Config.navigation.override = function (destPassage) {
 
 Config.history.maxStates = 20;
 
+$(document).on(':passagestart', () => {
+	// Get a reference to the active story variables store.
+	const vars = variables();
+	// Get name of twin so we don't have to look it up each time.
+	const twinName = vars.companionTwin.name;
+	// Restore object identity between $companions array and $companionName variables.
+	const companions = vars.companions;
+	for (const [i, companion] of companions.entries()) {
+		const name = companion.name != twinName ? companion.name : "Twin";
+		companions[i] = vars[`companion${name}`];
+	}
+	// Restore object identity between $hiredCompanions array and $companionName variables.
+	const hiredCompanions = vars.hiredCompanions;
+	for (const [i, hiredCompanion] of hiredCompanions.entries()) {
+		const name = hiredCompanion.name != twinName ? hiredCompanion.name : "Twin";
+		hiredCompanions[i] = vars[`companion${name}`];
+	}
+	// Restore object identity between $app.curses and $playerCurses.
+	vars.app.curses = vars.playerCurses;	
+});
+
 predisplay["Menu Return"] = function (taskName) {
 	if (! tags().contains("noreturn")) {
 		State.variables.menuReturn = passage();
