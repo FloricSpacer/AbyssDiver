@@ -651,8 +651,6 @@
 		<<set _tempName = _handle.name != $companionTwin.name ? _handle.name : "Twin">>
 		<<set _AgeLog = State.variables["AgeLog" + (_handle.name != $companionTwin.name ? _handle.name : "Twin")]>>
 		<<include "CorrectAge">>
-		/* Update the companion variables to match the $hiredCompanions elements. */
-		<<set State.variables["companion" + _tempName] = _handle>>
 	<</for>>
 	<<set _handle = $app>>
 	<<set _AgeLog = $AgeLog>>
@@ -1839,7 +1837,7 @@
 		<<set $companionGolem.image= "Icons/maleDollGolem.png">>
 		<<set $companionGolem.imageIcon= $companionGolem.image>>
 		<<set $companionGolem.appDesc= "You are a life-like doll golem">>
-		<<set $companionGolem.ohair= $app.hairColor>>
+		<<set $companionGolem.ohair= $app.ohair>>
 		<<set $companionGolem.hair= $companionGolem.ohair>>
 		<<set $companionGolem.ears= "perfect human replica">>
 		<<set $companionGolem.skinType= "smooth, synthetic">>
@@ -1971,7 +1969,7 @@
 		<<set $companionGolem.image= "Icons/femaleDollGolem.png">>
 		<<set $companionGolem.imageIcon= $companionGolem.image>>
 		<<set $companionGolem.appDesc= "You are a life-like doll golem">>
-		<<set $companionGolem.ohair= $app.hairColor>>
+		<<set $companionGolem.ohair= $app.ohair>>
 		<<set $companionGolem.hair= $companionGolem.ohair>>
 		<<set $companionGolem.ears= "perfect human replica">>
 		<<set $companionGolem.skinType= "smooth, synthetic">>
@@ -2456,7 +2454,6 @@
 
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
-<<set $app.curses = $playerCurses>>/*temporary fix to prevent having to replace all instances */
 <<Equipment>>
 <<statUpdateCompanions>>
 <<Handicap>>
@@ -3144,6 +3141,23 @@
 		<<set _sexOptions.push("Sex Scissor Sub/Dom")>>
 	<</if>>
 <</if>>
+
+:: Collect Relic widget [widget nobr]
+<<widget "CollectRelic">>
+<<capture _relic>>
+	<<set _relic = _args[0]>>
+	<<set $ownedRelics.push(_relic)>>
+	<<if _relic.time - $SibylBuff > 0>>
+		<<set $tempTime = _relic.time - $SibylBuff>>
+		<<include "GeneralTimeSetup">>
+		<<include "GeneralTimeStats">>
+	<</if>>
+	<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+	<<if _relic.pic>>
+		[img[setup.ImagePath + _relic.pic]]<br>
+	<</if>>
+<</capture>>
+<</widget>>
 
 :: Equiped items and Relics widget [widget nobr]
 <<widget "Equipment">>
