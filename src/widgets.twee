@@ -3145,6 +3145,23 @@
 	<</if>>
 <</if>>
 
+:: Collect Relic widget [widget nobr]
+<<widget "CollectRelic">>
+<<capture _relic>>
+	<<set _relic = _args[0]>>
+	<<set $ownedRelics.push(_relic)>>
+	<<if _relic.time - $SibylBuff > 0>>
+		<<set $tempTime = _relic.time - $SibylBuff>>
+		<<include "GeneralTimeSetup">>
+		<<include "GeneralTimeStats">>
+	<</if>>
+	<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+	<<if _relic.pic>>
+		[img[setup.ImagePath + _relic.pic]]<br>
+	<</if>>
+<</capture>>
+<</widget>>
+
 :: Equiped items and Relics widget [widget nobr]
 <<widget "Equipment">>
 
