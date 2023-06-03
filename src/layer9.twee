@@ -2,6 +2,9 @@
 <<nobr>>
 <<masteraudio stop>><<audio "layer9" volume 0.2 play loop>>
 <<set $currentLayer = 9>>
+<<set $L9visit += 1>>
+<<set $timeL9T1 += 1>>
+
 <</nobr>>\
 \
 @@.layerTitle;
@@ -22,6 +25,78 @@ Hopefully you'll be able to get used to it.
 
 
 [[Version End]]
+
+[[Walk through the sixth layer of the Abyss|Layer6 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $visitL6 == 0>>
+	<br><<print "[[Use Cherry's chaotic luck|Layer6 Cherry]]">><</if>>
+<</if>><</nobr>>
+
+
+:: Layer9 Hub [layer6]
+<<nobr>><<set $currentLayer = 9>><<if $timeL9T1 < 1>><<set $layerExit = 0>><<CarryAdjust>>
+<<if $visitL9 == 0>>
+	<<set $layerTemp = 8>>
+	<<set $visitL9 = 1>>
+<<elseif $secondVisitL9 == 0>>
+	<<set $secondVisitL9 = 1>>
+	<<set $layerTemp = 18>>
+<<else>>
+	<<set $layerTemp = random(0,20)>>
+<</if>>
+<<if $layerTemp == 1>>
+	xxx PLACEHOLDER LAYER DECRIPTION/EVENT1
+<<elseif $layerTemp == 2>>
+	xxx PLACEHOLDER LAYER DECRIPTION/EVENT2
+<<elseif $layerTemp == 3>>
+	xxx PLACEHOLDER LAYER DECRIPTION/EVENT3
+<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+	<<include "Hijinks Ensue Scenes">>
+<<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
+	<<include "Companion Layer Interaction">>
+<<elseif $layerTemp >= 19>>
+	<<include "Curse Descriptions">><br><br>
+<<else>>
+	xxx PLACEHOLDER GENERAL LAYER DECRIPTION
+<</if>>
+
+<<if $forageWater == 1>>
+	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily water on this layer">><br>
+<</if>>
+<<if $forageFood == 1>>
+	<<print "You are currently foraging for your daily food on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
+<<if !isPlaying("layer9")>>
+	<<masteraudio stop>><<audio "layer9" volume 0.2 play loop>>
+<</if>>
+<br>What do you want to do while you're here?<br>
+<br>
+[[Use Items and Relics]]<br>
+<<if $hiredCompanions.length > 0>>
+[[Interact with your party|Party overview]] <<CheckParty>><br>
+<</if>>
+<br>
+[[Learn about the threats on this layer|Layer9 Threats]]<br>
+[[Check for food and water you can forage for|Layer9 Forage]]<br>
+[[Search for Relics|Layer9 Relics]]<br>
+[[Take on Curses to purge your corruption|Layer9 Curses]]<br>
+[[Look for any wonders you can take advantage of|Layer9 Wonders]]<br>
+[[Set up camp and rest here|Layer9 Camp]]<br>
+[[View the Layer 9 habitation option|Layer9 Habitation]]<br>
+<br>
+[[Look up towards the surface|Layer9 Ascend 1]]<br>
+[[Look down at the next layer|Layer9 Exit1]]
+
+<<else>>
+	<<set $returnPassage = "Layer9 Hub">>
+	<<set $timeL9T1 -= 1>>
+	<<include "Layer9 Elder Encounter">><br><br>
+<</if>><</nobr>>
+
+
+
 
 :: Layer9 Flasks [layer6]
 <<nobr>>
@@ -69,6 +144,49 @@ Hopefully you'll be able to get used to it.
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
 <<include "Curse Randomizer">>
+
+:: Layer9 Elder Encounter
+/*xxx */
+<<set _temp = random(0,3)>>
+<<if $timeL9 == 0>>
+You suddenly feel a voice revurbarate trough the water
+
+<<say $elder>>Well, well, well, how rare... a visitor<</say>>
+You turn around to see who is adressing you, but you see nothing but murky water in every direction.
+
+<<say $elder>>Don't fret little visitor, we'll see eachother soon enough<</say>>
+<<elseif $timeL9 <=25 >>
+	<<if _temp==0>>
+		<<say $elder>>What a curious oddity you are. Do you, yourself still know why you came down here?<</say>>
+	<<elseif _temp==1>>
+		<<say $elder>>I wonder what color your blood has become... and how it tastes<</say>>
+	<<elseif _temp==2>>
+		<<say $elder>>Will your mind fold quickly if I push you a little, eventhough you're so close to your final goal?<</say>>
+	<<else>>
+		<<say $elder>>I can't wait to see you struggle to survive! It makes me want to see it sooner than later.<</say>>
+	<</if>>
+<<elseif $timeL9 <=50 && !$ElderSerious>>
+	<<if _temp==0>>
+		<<say $elder>>Let's play, I want to see what you are made off. Literally...<</say>>
+	<<elseif _temp==1>>
+		<<say $elder>>Let's see if I can make you succumb to me if I try a little.<</say>>
+	<<elseif _temp==2>>
+		<<say $elder>>Seeing a mortal struggle to cling to life will be exciting. Now cling to it as hard as you can!<</say>>
+	<<else>>
+		<<say $elder>> You made it this far, maybe you could actually an exhilarating. For a while at least...  <</say>>
+	<</if>>
+<<else>>
+	<<if _temp==0>>
+		<<say $elder>>I have grown bored of these games. I will end this now.<</say>>
+	<<elseif _temp==1>>
+		<<say $elder>>It's time for me to furfill you destiny and let you join me.<</say>>
+	<<elseif _temp==2>>
+		<<say $elder>>You're struggle was amusing, it ends here.<</say>>
+	<<else>>
+		<<say $elder>>Become part of me, resistance is futile at this point.<</say>>
+	<</if>>
+<</if>>
+
 
 :: Layer9 notes [image layer9 noreturn]
 
