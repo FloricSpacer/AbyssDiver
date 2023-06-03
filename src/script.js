@@ -106,6 +106,7 @@ $(document).on(':passagestart', () => {
 	const companionArrays = [
 		'companions',
 		'hiredCompanions',
+		'DesertedCompanions',
 	].map(varName => vars[varName]);
 
 	// Restore object identity between elements of companion arrays and $companionName variables.
@@ -131,7 +132,7 @@ $(document).on(':passagestart', () => {
 		'curses',
 		'playerCurses',
 		'StoredCurse',
-		'ManagedMisfortuneActive'
+		'ManagedMisfortuneActive',
 	].map(varName => vars[varName]);
 	const companionCurseArrays = vars.companions.map(companion => companion.curses);
 	const curseArrays = miscCurseArrays.concat(companionCurseArrays);
@@ -169,7 +170,7 @@ $(document).on(':passagestart', () => {
 		'relics',
 		'ownedRelics',
 		'innRelics',
-		'soldRelics'
+		'soldRelics',
 	].map(varName => vars[varName]);
 	const relicSwapRelicArrays = vars.relicSwap;
 	const relicArrays = miscRelicArrays.concat(relicSwapRelicArrays);
