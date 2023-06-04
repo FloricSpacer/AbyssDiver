@@ -732,7 +732,7 @@ This will also consume food/water/etc. as necessary based on your current layer.
 :: Adjust time2 [noreturn]
 <<nobr>>
 <<set _tempTime = parseInt($temp)>>
-/*<<include "GeneralTimeStats">>*/
+/*<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>*/
 <<set $time += _tempTime>>
 <</nobr>>
 
@@ -1007,7 +1007,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 	You have pushed yourself quite a bit, which hampers your recovery. So it takes 7 days until you feel fit enough to begin your journey once again. And your weakened condition will increase your next 3 travel times by 1 day each.
 	<<set $status.duration += 3>>\
 	<<set $status.penalty += 1>>\
-	<<set $tempTime=7>><<include "GeneralTimeStats">>\
+	<<set $tempTime=7>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<elseif $hiredCompanions.length==1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. $hiredCompanions[0].name helps you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -1018,7 +1018,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<set $tempTime=4>><<include "GeneralTimeStats">>\
+	<<set $tempTime=4>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<elseif $hiredCompanions.length>1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. Your companions help you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -1029,7 +1029,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<set $tempTime=4>><<include "GeneralTimeStats">>\
+	<<set $tempTime=4>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <</if>>\
 
 [[You cast your eyes once more on the path ahead, it's time to get moving once again|_string]]
@@ -1086,7 +1086,7 @@ Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her rec
 In the end, you don't truly resume your travels in earnest until after 7 days.
 <<set $tempTime=7>>
 <</if>>
-<<include "GeneralTimeStats">>\
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 
 [[You cast your eyes once more on the central location of this layer, ready to get moving again|_string]]
 
@@ -1867,72 +1867,19 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 :: GeneralTimeSetup [nobr]
-
-/* If travel time wasn't eliminated entirely, apply multiplicative modifiers (travel speed). */
-<<if $tempTime > 0>>
-	<<set _travelSpeed = 1>>
-	/* Halve travel speed if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
-	<<if $SizeHandicap>>
-		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
-		<<set _travelSpeed /= 2>>
-	<</if>>
-	/* Increase/decrease travel speed by 10% for every level of physical fitness. */
-	<<if $app.HandicapMovement < 0>>
-		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
-	<<elseif $app.HandicapMovement > 0>>
-		Your exceptional physical condition is reducing your travel time.<br>
-	<</if>>
-	<<set _travelSpeed *= 1 + $app.HandicapMovement / 10>>
-	/* Double travel speed if player has the Aeonglass with Endless Time relic active. */
-	<<if $EndlessAeonglass>>
-		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
-		<<set _travelSpeed *= 2>>
-	<</if>>
-	/* Compute the actual travel time depending on whether the player is using energy rations. */
-	<<if $useEnergyrations>>
-		/* Calculate the number of energy rations consumed per day. */
-		<<set _consumptionPerDay = 1>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
-		<</if>>
-		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
-			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
-		<</if>>
-		/* Double travel speed while you have energy rations. */
-		<<set _travelSpeed *= 2>>
-		/* Compute the actual travel time. */
-		<<if Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed) <= $items[24].count>>
-			/* Enough energy rations to last the whole journey. */
-			<<set $items[24].count -= Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed)>>
-			<<set $items[1].count += Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed)>>
-			<<set $tempTime = Math.ceil($tempTime / _travelSpeed)>>
-		<<else>>
-			/* Not enough energy rations to last the whole journey. */
-			<<set _travelRemaining = $tempTime - _travelSpeed * $items[24].count / _consumptionPerDay>>
-			/* The remaining distance is traveled at half the speed. */
-			<<set _travelSpeed /= 2>>
-			<<set $tempTime = Math.ceil($items[24].count / _consumptionPerDay + _travelRemaining / _travelSpeed)>>
-			<<set $items[1].count += $items[24].count>>
-			<<set $items[24].count = 0>>
-		<</if>>
-		<<if $items[24].count <= 0>>
-			<<set $useEnergyrations = false>>
-		<</if>>
-	<<else>>
-		<<set $tempTime = Math.ceil($tempTime / _travelSpeed)>>
-	<</if>>
-<</if>>
-
 /* Ensure the $heat and $cool variables are set correctly. */
 <<set $heat = $slwear || ($warmCloth && !$dollevent2) ? 1 : 0>>
 <<set $cool = $slwear || ($coolCloth && !$dollevent2) ? 1 : 0>>
 
+/* Start by computing the overall additive modifier. */
+<<set _additiveModifier = 0>>
+
 /* Apply time reduction from having Khemia with you. */
-<<set $tempTime -= $timeRed>>
+<<set _additiveModifier -= $timeRed>>
 
 /* Apply status penalty, if any. */
 <<if $status.duration > 0>>
-	<<set $tempTime += $status.penalty>>
+	<<set _additiveModifier += $status.penalty>>
 	/* Decrement status duration and remove status penalty if duration is now 0. */
 	<<set $status.duration -= 1>>
 	<<if $status.duration < 1>>
@@ -1942,7 +1889,7 @@ How many dubloons would you like to pay back?
 
 /* Add jinxed flame count penalty unless we're on layer 6. */
 <<if $currentLayer != 6>>
-	<<set $tempTime += Math.trunc($hexflame / 10)>>
+	<<set _additiveModifier += Math.trunc($hexflame / 10)>>
 <</if>>
 
 /* Apply other layer-specific effects. */
@@ -1950,24 +1897,24 @@ How many dubloons would you like to pay back?
 	<<case 2>>
 		/* Reduce travel time if player has a cutting tool. */
 		<<if setup.haveCuttingTool()>>
-			<<set $tempTime -= 1>>
+			<<set _additiveModifier -= 1>>
 		<</if>>
 	<<case 3>>
 		/* Reduce travel time if player has a light source. */
 		<<if setup.haveTravelLightSource()>>
-			<<set $tempTime -= 1>>
+			<<set _additiveModifier -= 1>>
 		<</if>>
 		/* Apply Chlorophyll curse penalty, if any. */
 		<<if $playerCurses.some(e => e.name === "Chlorophyll")>>
 			Now that you rely on light for your metabolism, the darkness in this layer is making you sluggish.<br>
-			<<set $tempTime += 1>>
+			<<set _additiveModifier += 1>>
 		<</if>>
 	<<case 4>>
 		/* Reduce travel time if player has a heat source. */
 		<<if $heat>>
-			<<set $tempTime -= 2>>
+			<<set _additiveModifier -= 2>>
 		<<elseif $torchUse == 1 && $items[9].count > 0>>
-			<<set $tempTime -= 2>>
+			<<set _additiveModifier -= 2>>
 			/* Decrement number of torches and stop using torches if the count is now 0. */
 			<<set $items[9].count -= 1>>
 			<<if $items[9].count < 1>>
@@ -1976,31 +1923,94 @@ How many dubloons would you like to pay back?
 		<<elseif $playerCurses.some(e => e.name === "Cold Blooded")>>
 			/* Apply Cold Blooded curse penalty. */
 			Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.<br>
-			<<set $tempTime += 2>>
+			<<set _additiveModifier += 2>>
 			/* Reduce penalty if player has fur. */
 			<<if $app.skinType.includes("furred")>>
 				However, your fur is somewhat protective and mitigates the effects of the cold.<br>
-				<<set $tempTime -= 1>>
+				<<set _additiveModifier -= 1>>
 			<</if>>
 		<</if>>
 	<<case 5 6>>
 		/* Reduce travel time if player has a way to keep from overheating. */
 		<<if $cool>>
-			<<set $tempTime -= 1>>
+			<<set _additiveModifier -= 1>>
 		<</if>>
 	<<case 8>>
 		/* Reduce travel time if player has some form of compass. */
 		<<if $items[12].count || $items[17].count || $items[21].count>>
 			The comforting presence of a device that discerns north from south in this bewildering maze bolsters your confidence and allows you to navigate more efficiently.<br>
-			<<set $tempTime -= 3>>
+			<<set _additiveModifier -= 3>>
 		<</if>>
 		/* Reduce travel time if player has the Star Compass relic. */
-		<<set $tempTime -= 5>>
+		<<set _additiveModifier -= 5>>
 <</switch>>
 
-/* Prevent travel time from becoming negative. */
-<<if $tempTime < 0>>
-	<<set $tempTime = 0>>
+/* If the additive modifier is a time reduction, apply it to the base time. */
+<<if _additiveModifier < 0>>
+	<<set $tempTime += _additiveModifier>>
+<</if>>
+
+/* If travel time wasn't eliminated entirely, apply multiplicative modifiers. */
+<<if $tempTime > 0>>
+	<<set _multiplicativeModifier = 1>>
+	/* Double travel time if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
+	<<if $SizeHandicap>>
+		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
+		<<set _multiplicativeModifier *= 2>>
+	<</if>>
+	/* Increase/decrease time by 10% for every level of physical fitness. */
+	<<if $app.HandicapMovement < 0>>
+		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
+		<<set _multiplicativeModifier *= 1 - $app.HandicapMovement / 10>>
+	<<elseif $app.HandicapMovement > 0>>
+		Your exceptional physical condition is reducing your travel time.<br>
+		<<set _multiplicativeModifier /= 1 + $app.HandicapMovement / 10>>
+	<</if>>
+	/* Halve travel time if player has the Aeonglass with Endless Time relic active. */
+	<<if $EndlessAeonglass>>
+		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
+		<<set _multiplicativeModifier /= 2>>
+	<</if>>
+	/* Apply the multiplicative modifiers. */
+	<<set $tempTime *= _multiplicativeModifier>>
+	/* Adjust the travel time if the player is using energy rations. */
+	<<if $useEnergyrations>>
+		/* Calculate the number of energy rations consumed per day. */
+		<<set _consumptionPerDay = 1>>
+		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
+		<</if>>
+		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
+		<</if>>
+		/* Using energy rations halves the travel time, so we need at most half the time worth. */
+		<<set _daysOfEnergyRations = Math.min($tempTime / 2, $items[24].count / _consumptionPerDay)>>
+		/* Every day with an energy ration counts for twice as much. */
+		<<set $tempTime -= _daysOfEnergyRations>>
+		/* Round up the number of days of energy rations to a whole number, as GeneralTimeStats iterates per day. */
+		<<set _daysOfEnergyRations = Math.ceil(_daysOfEnergyRations)>>
+		/* If we used up all the energy rations we had, stop using them. */
+		<<if Math.ceil(_consumptionPerDay * _daysOfEnergyRations) >= $items[24].count>>
+			<<set $useEnergyrations = false>>
+		<</if>>
+	<</if>>
+<</if>>
+
+/* If the additive modifier is a time penalty, apply it to the modified time. */
+<<if _additiveModifier > 0>>
+	<<set $tempTime += _additiveModifier>>
+<</if>>
+
+/* Don't allow travel time to become negative. */
+<<if $tempTime < 0>><<set $tempTime = 0>><</if>>
+
+/* Round travel time to a whole number of days. */
+<<set $tempTime = Math.round($tempTime)>>
+
+<<if _daysOfEnergyRations && _daysOfEnergyRations > $tempTime>>
+	/* Ensure all days of energy rations end up used. */
+	<<set $items[24].count -= _consumptionPerDay * (_daysOfEnergyRations - $tempTime)>>
+	<<set _daysOfEnergyRations = $tempTime>>
 <</if>>
 
 :: GeneralTimeStats [nobr]
@@ -2105,7 +2115,11 @@ How many dubloons would you like to pay back?
 		<<set $forageFood = 1>>
 	<</if>>
 	<<for ++$starving; $starving > 0; --$starving>>
-		<<if !$forageFood>>
+		<<if _daysOfEnergyRations>>
+			/* If we used energy rations to speed up travel, use those first (regardless of foraging settings). */
+			<<set $items[24].count -= _consumptionPerDay>>
+			<<set _daysOfEnergyRations -= 1>>
+		<<elseif !$forageFood>>
 			<<if $items[1].count >= _consumptionPerDay>>
 				<<set $items[1].count -= _consumptionPerDay>>
 			<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
@@ -2265,10 +2279,6 @@ How many dubloons would you like to pay back?
 	<</for>>
 <</for>>
 
-/* Ensure that we aren't left with a fractional number of rations. */
-<<set $items[1].count = Math.floor($items[1].count)>>
-<<set $items[24].count = Math.floor($items[24].count)>>
-
 <<for _i = 0; _i < $tempTime; ++_i>>
 	<<if !$forageWater && $dehydrated > 1 && $currentLayer != 3 && $currentLayer != 5 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
@@ -2344,6 +2354,19 @@ How many dubloons would you like to pay back?
 	<</if>>
 <</for>>
 
+/* Increase the elapsed time. */
+<<set $time += $tempTime>>
+
+<</capture>>
+
+:: GeneralTimeFinal [nobr]
+/* Ensure that _daysOfEnergyRations is now 0. */
+<<set _daysOfEnergyRations = 0>>
+
+/* Ensure that we aren't left with a fractional number of rations. */
+<<set $items[1].count = Math.floor($items[1].count)>>
+<<set $items[24].count = Math.floor($items[24].count)>>
+
 /* Ensure that we aren't left with a fractional amount of water. */
 <<set $items[0].count = Math.floor($items[0].count)>>
 <<set $items[2].count = Math.ceil($items[2].count)>> /* Empty flasks */
@@ -2352,11 +2375,6 @@ How many dubloons would you like to pay back?
 <<for _i = 0; _i < $flaskMatrix.length; ++_i>>
 	<<set $flaskMatrix[_i] = Math.floor($flaskMatrix[_i])>>
 <</for>>
-
-/* Increase the elapsed time. */
-<<set $time += $tempTime>>
-
-<</capture>>
 
 :: Drinking code [nobr]
 <<FlaskFirst>>
@@ -2461,6 +2479,7 @@ How many days would you like to rest here?
 		<<set $tempTime = 1>>
 		<<include "GeneralTimeStats">>
 	<</for>>
+	<<include "GeneralTimeFinal">>
 
 <</link>><</nobr>>
 
