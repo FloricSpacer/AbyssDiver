@@ -1867,6 +1867,62 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 :: GeneralTimeSetup [nobr]
+
+/* If travel time wasn't eliminated entirely, apply multiplicative modifiers (travel speed). */
+<<if $tempTime > 0>>
+	<<set _travelSpeed = 1>>
+	/* Halve travel speed if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
+	<<if $SizeHandicap>>
+		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
+		<<set _travelSpeed /= 2>>
+	<</if>>
+	/* Increase/decrease travel speed by 10% for every level of physical fitness. */
+	<<if $app.HandicapMovement < 0>>
+		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
+	<<elseif $app.HandicapMovement > 0>>
+		Your exceptional physical condition is reducing your travel time.<br>
+	<</if>>
+	<<set _travelSpeed *= 1 + $app.HandicapMovement / 10>>
+	/* Double travel speed if player has the Aeonglass with Endless Time relic active. */
+	<<if $EndlessAeonglass>>
+		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
+		<<set _travelSpeed *= 2>>
+	<</if>>
+	/* Compute the actual travel time depending on whether the player is using energy rations. */
+	<<if $useEnergyrations>>
+		/* Calculate the number of energy rations consumed per day. */
+		<<set _consumptionPerDay = 1>>
+		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
+		<</if>>
+		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
+		<</if>>
+		/* Double travel speed while you have energy rations. */
+		<<set _travelSpeed *= 2>>
+		/* Compute the actual travel time. */
+		<<if Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed) <= $items[24].count>>
+			/* Enough energy rations to last the whole journey. */
+			<<set $items[24].count -= Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed)>>
+			<<set $items[1].count += Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed)>>
+			<<set $tempTime = Math.ceil($tempTime / _travelSpeed)>>
+		<<else>>
+			/* Not enough energy rations to last the whole journey. */
+			<<set _travelRemaining = $tempTime - _travelSpeed * $items[24].count / _consumptionPerDay>>
+			/* The remaining distance is traveled at half the speed. */
+			<<set _travelSpeed /= 2>>
+			<<set $tempTime = Math.ceil($items[24].count / _consumptionPerDay + _travelRemaining / _travelSpeed)>>
+			<<set $items[1].count += $items[24].count>>
+			<<set $items[24].count = 0>>
+		<</if>>
+		<<if $items[24].count <= 0>>
+			<<set $useEnergyrations = false>>
+		<</if>>
+	<<else>>
+		<<set $tempTime = Math.ceil($tempTime / _travelSpeed)>>
+	<</if>>
+<</if>>
+
 /* Ensure the $heat and $cool variables are set correctly. */
 <<set $heat = $slwear || ($warmCloth && !$dollevent2) ? 1 : 0>>
 <<set $cool = $slwear || ($coolCloth && !$dollevent2) ? 1 : 0>>
@@ -1945,61 +2001,6 @@ How many dubloons would you like to pay back?
 /* Prevent travel time from becoming negative. */
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
-<</if>>
-
-/* If travel time wasn't eliminated entirely, apply multiplicative modifiers (travel speed). */
-<<if $tempTime > 0>>
-	<<set _travelSpeed = 1>>
-	/* Halve travel speed if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
-	<<if $SizeHandicap>>
-		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
-		<<set _travelSpeed /= 2>>
-	<</if>>
-	/* Increase/decrease travel speed by 10% for every level of physical fitness. */
-	<<if $app.HandicapMovement < 0>>
-		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
-	<<elseif $app.HandicapMovement > 0>>
-		Your exceptional physical condition is reducing your travel time.<br>
-	<</if>>
-	<<set _travelSpeed *= 1 + $app.HandicapMovement / 10>>
-	/* Double travel speed if player has the Aeonglass with Endless Time relic active. */
-	<<if $EndlessAeonglass>>
-		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
-		<<set _travelSpeed *= 2>>
-	<</if>>
-	/* Compute the actual travel time depending on whether the player is using energy rations. */
-	<<if $useEnergyrations>>
-		/* Calculate the number of energy rations consumed per day. */
-		<<set _consumptionPerDay = 1>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
-		<</if>>
-		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
-			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
-		<</if>>
-		/* Double travel speed while you have energy rations. */
-		<<set _travelSpeed *= 2>>
-		/* Compute the actual travel time. */
-		<<if Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed) <= $items[24].count>>
-			/* Enough energy rations to last the whole journey. */
-			<<set $items[24].count -= Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed)>>
-			<<set $items[1].count += Math.ceil(_consumptionPerDay * $tempTime / _travelSpeed)>>
-			<<set $tempTime = Math.ceil($tempTime / _travelSpeed)>>
-		<<else>>
-			/* Not enough energy rations to last the whole journey. */
-			<<set _travelRemaining = $tempTime - _travelSpeed * $items[24].count / _consumptionPerDay>>
-			/* The remaining distance is traveled at half the speed. */
-			<<set _travelSpeed /= 2>>
-			<<set $tempTime = Math.ceil($items[24].count / _consumptionPerDay + _travelRemaining / _travelSpeed)>>
-			<<set $items[1].count += $items[24].count>>
-			<<set $items[24].count = 0>>
-		<</if>>
-		<<if $items[24].count <= 0>>
-			<<set $useEnergyrations = false>>
-		<</if>>
-	<<else>>
-		<<set $tempTime = Math.ceil($tempTime / _travelSpeed)>>
-	<</if>>
 <</if>>
 
 :: GeneralTimeStats [nobr]
