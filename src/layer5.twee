@@ -352,13 +352,15 @@ You do not have a medkit to cure your status condition.<br>
 <div>
 <<set _name = _layerRelics[_i]>>
 <<set _relic = $relics.find(r => r.name === _name)>>
+<<set _corr = Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+<<set _time = Math.max(_relic.time - $SibylBuff, 0)>>
 [img[setup.ImagePath + _relic.pic]]
-<h2>_name</h2>
+<h2>_name <<if setup.functionalRelics.contains(_name)>> ☸<</if>></h2>
 <p class="cost">
-Cost: <<print _relic.corr>> corruption
-<<if _relic.time > 0>>
-+ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
-<</if>>
+	<<if _corr || _time>>Cost:<<else>>Free!<</if>>
+	<<if _corr > 0>>_corr corruption<</if>>
+	<<if _corr > 0 && _time > 0>> + <</if>>
+	<<if _time > 0>>_time day<<if _time > 1>>s<</if>><</if>>
 </p>
 <p>
 <<if _totalRelics.some(e => e.name === _name)>>
