@@ -1922,7 +1922,15 @@ How many dubloons would you like to pay back?
 <</capture>>
 <</widget>>
 
-:: GeneralTimeSetup [nobr]
+:: AdjustedTravelTime widget [widget nobr]
+<<widget "AdjustedTravelTime">>
+/*
+	_args[0]: string     = the variable to write to, as a string (e.g. "$tempTime")
+	_args[1]: var|number = the raw, unadjusted travel time
+	_args[2]: [bool]     = whether to avoid adjustments beyond the travel time (optional, defaults to false)
+*/
+<<set _inputTime = _args[1]>>
+
 /* Ensure the $heat and $cool variables are set correctly. */
 <<set $heat = $slwear || ($warmCloth && !$dollevent2) ? 1 : 0>>
 <<set $cool = $slwear || ($coolCloth && !$dollevent2) ? 1 : 0>>
@@ -2003,11 +2011,11 @@ How many dubloons would you like to pay back?
 
 /* If the additive modifier is a time reduction, apply it to the base time. */
 <<if _additiveModifier < 0>>
-	<<set $tempTime += _additiveModifier>>
+	<<set _inputTime += _additiveModifier>>
 <</if>>
 
 /* If travel time wasn't eliminated entirely, apply multiplicative modifiers. */
-<<if $tempTime > 0>>
+<<if _inputTime > 0>>
 	<<set _multiplicativeModifier = 1>>
 	/* Double travel time if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
 	<<if $SizeHandicap>>
@@ -2028,7 +2036,7 @@ How many dubloons would you like to pay back?
 		<<set _multiplicativeModifier /= 2>>
 	<</if>>
 	/* Apply the multiplicative modifiers. */
-	<<set $tempTime *= _multiplicativeModifier>>
+	<<set _inputTime *= _multiplicativeModifier>>
 	/* Adjust the travel time if the player is using energy rations. */
 	<<if $useEnergyrations>>
 		/* Calculate the number of energy rations consumed per day. */
@@ -2040,34 +2048,43 @@ How many dubloons would you like to pay back?
 			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
 		<</if>>
 		/* Using energy rations halves the travel time, so we need at most half the time worth. */
-		<<set _daysOfEnergyRations = Math.min($tempTime / 2, $items[24].count / _consumptionPerDay)>>
+		<<set _daysOfEnergyRations = Math.min(_inputTime / 2, $items[24].count / _consumptionPerDay)>>
 		/* Every day with an energy ration counts for twice as much. */
-		<<set $tempTime -= _daysOfEnergyRations>>
-		/* Round up the number of days of energy rations to a whole number, as GeneralTimeStats iterates per day. */
-		<<set _daysOfEnergyRations = Math.ceil(_daysOfEnergyRations)>>
-		/* If we used up all the energy rations we had, stop using them. */
-		<<if Math.ceil(_consumptionPerDay * _daysOfEnergyRations) >= $items[24].count>>
-			<<set $useEnergyrations = false>>
+		<<set _inputTime -= _daysOfEnergyRations>>
+		<<if !_args[2]>>
+			/* Round up the number of days of energy rations to a whole number, as GeneralTimeStats iterates per day. */
+			<<set _daysOfEnergyRations = Math.ceil(_daysOfEnergyRations)>>
+			/* If we used up all the energy rations we had, stop using them. */
+			<<if Math.ceil(_consumptionPerDay * _daysOfEnergyRations) >= $items[24].count>>
+				<<set $useEnergyrations = false>>
+			<</if>>
 		<</if>>
 	<</if>>
 <</if>>
 
 /* If the additive modifier is a time penalty, apply it to the modified time. */
 <<if _additiveModifier > 0>>
-	<<set $tempTime += _additiveModifier>>
+	<<set _inputTime += _additiveModifier>>
 <</if>>
 
 /* Don't allow travel time to become negative. */
-<<if $tempTime < 0>><<set $tempTime = 0>><</if>>
+<<if _inputTime < 0>><<set _inputTime = 0>><</if>>
 
 /* Round travel time to a whole number of days. */
-<<set $tempTime = Math.round($tempTime)>>
+<<set _inputTime = Math.round(_inputTime)>>
 
-<<if _daysOfEnergyRations && _daysOfEnergyRations > $tempTime>>
-	/* Ensure all days of energy rations end up used. */
-	<<set $items[24].count -= _consumptionPerDay * (_daysOfEnergyRations - $tempTime)>>
-	<<set _daysOfEnergyRations = $tempTime>>
+<<if !_args[2]>>
+	<<if _daysOfEnergyRations && _daysOfEnergyRations > _inputTime>>
+		/* Ensure all days of energy rations end up used. */
+		<<set $items[24].count -= _consumptionPerDay * (_daysOfEnergyRations - _inputTime)>>
+		<<set _daysOfEnergyRations = _inputTime>>
+	<</if>>
 <</if>>
+
+/* Write to the output variable. */
+<<print "<<set " + _args[0] + " = " + _inputTime + ">>">>
+
+<</widget>>
 
 :: GeneralTimeStats [nobr]
 <<capture _i>>
