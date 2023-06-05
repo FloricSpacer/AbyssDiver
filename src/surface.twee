@@ -120,7 +120,7 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
 <<if $hiredCompanions.length == 0>>
 <b>[[Check out the companions available to hire|Surface Companions]]</b><br><br>
 <</if>>
-<<if $hiredCompanions.length > 0 || $items[21].count>0>>
+<<if $hiredCompanions.length > 0 || setup.haveSmartphoneAI>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
 <</if>>
 <<if $fear == "">>
@@ -522,11 +522,11 @@ How many warding braces would you like to buy?
 
 :: Buy Smartphone [item]
 <<set $temp = 1>>
-[img[setup.ImagePath+$items[17].image]]
+[img[setup.ImagePath + setup.smartphoneRegular.image]]
 
 You have bought a smartphone.
 
-[[Confirm|previous()][$items[17].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[17].cost)]]
+[[Confirm|previous()][setup.haveSmartphoneRegular = true, $dubloons -= setup.smartphoneRegular.cost]]
 <<back>>
 
 :: Buy Inn Room Pass [item]
@@ -680,35 +680,36 @@ Cashing out, really? Where is your sense of adventure?
 			<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
 				You can't seem to part ways with the Creepy Doll<br>
 			<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$colwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$colwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$hsswear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$hsswear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="Solace Lace">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$slwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$slwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$SibylBuff=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$SibylBuff=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
+				You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
 			<<elseif $ownedRelics[$i].name=="Everhevea">>
 				<<if $items[2].count >= 2>>
-					<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
+					<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">><br>
 				<<else>>
 					You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory) <br>
 				<</if>>
 			<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="Blind Divine">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$BDwear = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$BDwear = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$HeavyHeadwear= false, $dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$HeavyHeadwear= false, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<<elseif $ownedRelics[$i].name=="Brave Vector">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $slingshot = 0]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $slingshot = 0]]">><br>
 			<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
 				<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
 			<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
 				<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
 			<<else>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 			<</if>>
 		<</capture>>
 	<</for>>
@@ -745,10 +746,10 @@ You step into the Relic Workshop of Outset Town. The air is thick with the smell
 	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will require using all of the Rømer stones to craft.<br>
 		<<if $warmCloth == 0>>
-		[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][$soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[22].count = 1,$warmCloth=1]]<br>
+		[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][setup.sellRelic($i), $items[22].count = 1,$warmCloth=1]]<br>
 		<</if>>
 		<<if $coolCloth == 0>>
-		[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][$soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[23].count = 1, $coolCloth=1]]<br>
+		[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][setup.sellRelic($i), $items[23].count = 1, $coolCloth=1]]<br>
 		<</if>>
 	<</if>>
 	<<if $ownedRelics[$i].name == "Creepy Doll" && $dollevent==false>>
@@ -771,15 +772,15 @@ You step into the Relic Workshop of Outset Town. The air is thick with the smell
 		<br>The allure of Glory's Grasp replacing your organic arm with a bionic one is not lost on you. The notion carries with it a certain charm and intrigue. Here, in the Relic Workshop, they can ensure a secure and proficient installation.<br>
 		[[Proceed with the installation of Glory's Grasp as your bionic arm|Surface Workshop][$BionicArm=true]]<br>
 	<</if>>
-	<<if $ownedRelics[$i].name == "Omoikane Circuit" && $items[17].count > 0>>
+	<<if $ownedRelics[$i].name == "Omoikane Circuit" && setup.haveSmartphoneRegular>>
 		<br>The Omoikane Circuit, you've heard, is a Relic specifically designed for integration with your phone. Why not seize this opportunity to upgrade your device right here in the safety of the Relic Workshop?<br>
-		[[It's time to revolutionize your phone!|AI ConvoIn][$items[17].count = 0, $items[21].count = 1, $ownedRelics.deleteAt($i), $soldRelics.push($ownedRelics[$i]) ]]<br>
+		[[It's time to revolutionize your phone!|AI ConvoIn][setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.sellRelic($i) ]]<br>
 	<</if>>
 	<</capture>>
 <</for>>
-<<if $items[21].count > 0>>
+<<if setup.haveSmartphoneAI>>
 	<br>Is listening to that snarky AI worth the spec upgrade to the Omoikone Smartphone?<br>
-	[[Hell no, time for a downgrade|AI ConvoOut][$items[17].count  = 1, $items[21].count  = 0, $ownedRelics.push($relic36) ]]<br>
+	[[Hell no, time for a downgrade|AI ConvoOut][setup.haveSmartphoneRegular = true, setup.haveSmartphoneAI = false, setup.unsellRelic("Omoikane Circuit")]]<br>
 <</if>>
 <</nobr>>
 
@@ -1203,7 +1204,7 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 	You can pick up any of the Relics you've previously stored in your inn room:<br>
 	<<for $i = 0; $i < $innRelics.length; $i++>>
 		<<capture $i>>
-			<<print $innRelics[$i].name + " [[Retrieve|passage()][$soldRelics.deleteWith(r => r.name === $innRelics[$i].name), $ownedRelics.push($innRelics[$i]), $innRelics.deleteAt($i)]]">><br>
+			<<print $innRelics[$i].name + " [[Retrieve|passage()][setup.unsellRelic($innRelics[$i]), $innRelics.deleteAt($i)]]">><br>
 		<</capture>>
 	<</for>>
 	<br>
@@ -1217,19 +1218,19 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 			<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
 				You can't seem to part ways with the Creepy Doll<br>
 			<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$colwear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $colwear = 0]]">><br>
 			<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$hsswear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $hsswear = 0]]">><br>
 			<<elseif $ownedRelics[$i].name=="Solace Lace">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$slwear=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $slwear = 0]]">><br>
 			<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$SibylBuff=0, $soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $SibylBuff = 0]]">><br>
 			<<elseif $ownedRelics[$i].name=="Everhevea">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $items[2].count -= 2]]">><br>
 			<<elseif $ownedRelics[$i].name=="Brave Vector">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $slingshot = 0]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $slingshot = 0]]">><br>
 			<<else>>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$soldRelics.push($ownedRelics[$i]), $innRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i)]]">><br>
 			<</if>>
 		<</capture>>
 	<</for>>
