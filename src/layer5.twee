@@ -432,7 +432,8 @@ Already taken
 Do you want to walk through the One-sided Tunnel and send your items back up to the surface?
 
 [[Walk through the tunnel|Layer5 Tunnel]]
-<<if $totalRelics.some(e => e.name === "Superpositional Skewer") && $items[7].count > 0>>
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<if _totalRelics.some(e => e.name === "Superpositional Skewer") && $items[7].count > 0>>
 
 	You can also utilize your Superpositional Skewer to sync with your commerce balloon, then swap it with a rock or something after you leave the Tunnel, which would allow you to instantly retrieve your items if you wish to. 
 
@@ -1210,8 +1211,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1303,8 +1303,7 @@ Please enter your new exoskeleton color:
 		<<RemoveCurse $curses[$temp2]>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1386,8 +1385,7 @@ Please enter your new exoskeleton color:
 		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1756,7 +1754,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <</if>>
 <</nobr>>
-[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
 
 :: Layer5 notes [image layer5 noreturn]
 

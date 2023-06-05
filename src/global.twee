@@ -34,6 +34,66 @@ setup.calcCarriedWeight = function() {
 	);
 }
 
+:: Sell or unsell relic [script]
+setup.sellRelic = relicOrNameOrIndex => {
+	const vars = variables();
+	let relic, name, index;
+	switch (typeof relicOrNameOrIndex) {
+		case 'string':
+			name = relicOrNameOrIndex;
+			index = vars.ownedRelics.findIndex(relic => relic.name == name);
+			if (index >= 0) {
+				relic = vars.ownedRelics[index];
+			} else {
+				console.error(`Relic '${name}' not found in $ownedRelics!`);
+			}
+			break;
+		case 'number':
+			index = relicOrNameOrIndex;
+			if (0 <= index && index < vars.ownedRelics.length) {
+				relic = vars.ownedRelics[index];
+				name = relic.name;
+			} else {
+				console.error(`${index} is not a valid index in $ownedRelics!`);
+			}
+			break;
+		default:
+			relic = relicOrNameOrIndex;
+			if (relic) {
+				name = relic.name;
+				index = vars.ownedRelics.findIndex(relic => relic.name == name);
+				if (index < 0) console.error(`Relic '${name}' not found in $ownedRelics!`);
+			} else {
+				console.error('Passed relic was undefined!');
+			}
+	}
+	if (0 <= index && index < vars.ownedRelics.length) vars.ownedRelics.splice(index, 1);
+	if (relic) vars.soldRelics.push(relic);
+};
+setup.unsellRelic = relicOrName => {
+	const vars = variables();
+	let relic, name, index;
+	if (typeof relicOrName == 'string') {
+		name = relicOrName;
+		index = vars.soldRelics.findLastIndex(relic => relic.name == name);
+		if (index >= 0) {
+			relic = vars.soldRelics[index];
+		} else {
+			relic = vars.relics.findLast(relic => relic.name == name);
+		}
+		if (!relic) console.error(`Relic '${name}' does not exist!`);
+	} else {
+		relic = relicOrName;
+		if (relic) {
+			name = relic.name;
+			index = vars.soldRelics.findLastIndex(relic => relic.name == name);
+		} else {
+			console.error('Passed relic was undefined!');
+		}
+	}
+	if (index >= 0) vars.soldRelics.splice(index, 1);
+	if (relic) vars.ownedRelics.push(relic);
+};
 
 :: Check Availability of Cutting Tool [script]
 setup.haveCuttingTool = function() {
@@ -49,10 +109,26 @@ setup.haveScubaGear = function() {
 	);
 }
 
+:: Smartphone helpers [script]
+Object.defineProperty(setup, 'smartphoneRegular', {
+	get: () => variables().items[17],
+});
+Object.defineProperty(setup, 'haveSmartphoneRegular', {
+	get: () => variables().items[17].count > 0,
+	set: have => { variables().items[17].count = have ? 1 : 0; },
+});
+Object.defineProperty(setup, 'haveSmartphoneAI', {
+	get: () => variables().items[21].count > 0,
+	set: have => { variables().items[21].count = have ? 1 : 0; },
+});
+Object.defineProperty(setup, 'haveSmartphone', {
+	get: () => setup.haveSmartphoneRegular || setup.haveSmartphoneAI,
+});
+
 :: Check Availability of Light Source [script]
 // Light sources that are not going to run out during an expedition.
 setup.haveUnlimitedLightSource = function() {
-	return variables().light != 0 || variables().items[10].count > 0 || variables().items[17].count > 0 || variables().items[21].count > 0 || variables().ownedRelics.some(
+	return variables().light != 0 || variables().items[10].count > 0 || setup.haveSmartphone || variables().ownedRelics.some(
 		r => r.name === "Sunbeam" || r.name === "Glare Vantage"|| variables().BDwear
 	);
 }
@@ -71,7 +147,7 @@ setup.haveTravelLightSource = function() {
 
 :: Check Availability of notepad [script]
 setup.haveNotepad = function() {
-	return variables().notepad != 0 || variables().items[17].count > 0 ||  variables().items[21].count > 0 || variables().items[26].count > 0;
+	return variables().notepad != 0 || setup.haveSmartphone || variables().items[26].count > 0;
 }
 
 :: Check Availability of rope [script]
@@ -224,7 +300,7 @@ Click this if you have found something that can be used for swimming underwater,
 
 <<if $abyssKnow == 1>>Click this if you'd like to disable the use of your abyssal knowledge from the encyclopedia, smartphone or Saeko (This will result in more side effects from foraging):
 	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]
-<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || setup.haveSmartphone)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]
 <</if>>
 If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
@@ -789,23 +865,24 @@ Choose the Relic you would like to sell:
 		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
 			You can't seem to part ways with the Creepy Doll<br>
 		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Solace Lace">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$slwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$slwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly. <br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
+			You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly.<br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
 			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">>
 			<<else>>
 				You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory) <br>
 			<</if>>
 		<<else>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -901,7 +978,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<for _i = 0; _i < $ownedRelics.length; _i++>>
 		<<capture _i>>
 			<<if $ownedRelics[_i].name=="Phoenix Obol">>
-				[[Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil|_string][$soldRelics.push($ownedRelics[_i]), $ownedRelics.deleteAt(_i),$starving=0,$dehydrated=0,$SemenDemonBalance=0,$gameOver=false]]
+				[[Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil|_string][setup.sellRelic(_i),$starving=0,$dehydrated=0,$SemenDemonBalance=0,$gameOver=false]]
 			<</if>>
 		<</capture>>
 	<</for>>
@@ -1123,7 +1200,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <<if $abyssKnow == 1>>
 	<br>You currently have abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
 	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]<br>
-<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0)>>
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || setup.haveSmartphone)>>
 	<br>You currently have abyssal knowledge by the encyclopedia, smartphone or Saeko, but you are not using it. You can choose to enable it if you would like less side effects from foraging:<br>
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]<br>
 <</if>>
@@ -1455,9 +1532,9 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	<</if>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Kin Shifter")>>
+<<if $ownedRelics.some(e => e.name === "Kin Shifter") && $ownedRelics.length > 1>>
 	<br>A glob of putty-like slime lays ready for you to copy other Relics, if you desire to.<br>
-	[[Use the Kin Shifter to copy Relics|Kin Shifter Use][$tempValue = 0]]<br><br>
+	[[Use the Kin Shifter to copy Relics|Kin Shifter Use]]<br><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Forbidden Grimoire") && $hiredCompanions.length > 0>>
@@ -1693,52 +1770,31 @@ B: (20)->(30)->(40) = total 90, over 70, done.
 C: (120) done, only possible configuration for duplicating a Relic worth this much.
 
 <<nobr>>
-The current total value of Relics you have copied is $tempValue dubloons.<br><br>
+<<if !$relic38.copiedValue>><<set $relic38.copiedValue = 0>><</if>>
+The current total value of Relics you have copied is $relic38.copiedValue dubloons.<br><br>
 
-<<if $tempValue == 0>>
-<<if $ownedRelics.length==1>>
-	<<set $temp=0>>
-<<else>>
-	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
-		<<if $ownedRelics[$i].name=="Kin Shifter" >>
-			<<set $temp=$i>>
-			<<set $endloop=false>>
+<<if $relic38.copiedValue < 70>>
+	Please choose the Relic you would like to copy:<br>
+	<<for _relic range $ownedRelics>>
+		<<if _relic.name != "Kin Shifter" && (!$relic38.copiedValue || _relic.value <= 70)>>
+			<<capture _relic>>
+				<<if _relic.name == "Managed Misfortune">>
+					_relic.name for _relic.value dubloons [[Copy|Kin Shifter Use][$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value, $ManagedMisfortuneMax += 2]]<br>
+				<<else>>
+					_relic.name for _relic.value dubloons [[Copy|Kin Shifter Use][$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value]]<br>
+				<</if>>
+			<</capture>>
 		<</if>>
 	<</for>>
-	<<set $soldRelics.push($ownedRelics[$temp])>>
-	<<set $ownedRelics.deleteAt($temp)>>
-<</if>>
-
-Please choose the Relic you would like to copy:<br>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-			<<if $ownedRelics[$i].name == "Managed Misfortune">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value, $ManagedMisfortuneMax=4]]">><br>
-			<<else>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value]]">><br>
-			<</if>>
-	<</capture>>
-<</for>>
-
-<<elseif $tempValue <= 69>>
-Please choose the Relic you would like to copy:<br>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].value <= 70>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value]]">><br>
-		<</if>>
-	<</capture>>
-<</for>>
-
 <<else>>
-As you touched the final Relic to the Kin Shifter, the last of the goo was used up and your Relic was copied. The cute eyes faded as the slime transmuted into the new Relic you chose. <br><br>
+	<<set setup.sellRelic("Kin Shifter")>>
+	As you touched the final Relic to the Kin Shifter, the last of the goo was used up and your Relic was copied. The cute eyes faded as the slime transmuted into the new Relic you chose.<br><br>
 
-Now that you have become better equipped, you can continue your journey.<br><br>
-
-[[Return to exploring|$layerReturn]]
-
+	Now that you have become better equipped, you can continue your journey.<br>
 <</if>>
 <</nobr>>
+
+[[Return to exploring|$layerReturn]]
 
 :: Daedalus Mechanism Select [noreturn]
 
@@ -1937,7 +1993,7 @@ How many dubloons would you like to pay back?
 		<</if>>
 	<<case 8>>
 		/* Reduce travel time if player has some form of compass. */
-		<<if $items[12].count || $items[17].count || $items[21].count>>
+		<<if $items[12].count || setup.haveSmartphone>>
 			The comforting presence of a device that discerns north from south in this bewildering maze bolsters your confidence and allows you to navigate more efficiently.<br>
 			<<set _additiveModifier -= 3>>
 		<</if>>
@@ -2310,7 +2366,7 @@ How many dubloons would you like to pay back?
 					<<include "Drinking code">>
 				<<case 6>>
 					<<set $waterL6 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count || $items[21].count))>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
@@ -2333,14 +2389,14 @@ How many dubloons would you like to pay back?
 					<<include "Drinking code">>
 				<<case 6>>
 					<<set $waterL6 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count || $items[21].count))>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
 					<<include "Drinking code">>
 				<<case 8>>
 					<<set $waterL8 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count || $items[21].count))>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $IQdrop += 0.5>>
 					<<else>>
 						<<set $IQdrop += 0.05>>
@@ -3061,7 +3117,8 @@ Items:<br>
 			<<elseif $ownedRelics[_i].name=="Sibyl Blend">>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$SibylBuff=0, $ownedRelics.deleteAt(_i)]]">><br>
 			<<elseif $ownedRelics[_i].name=="World Stone" && $LilyPromise>>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly. <br>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec -= (5 - $hsswear)]]">>
+				You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly.<br>
 			<<elseif $ownedRelics[_i].name=="Everhevea">>
 				<<if $items[2].count >= 2>>
 					<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $items[2].count-=2]]">><br>
