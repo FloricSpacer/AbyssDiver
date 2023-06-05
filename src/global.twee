@@ -1925,9 +1925,10 @@ How many dubloons would you like to pay back?
 :: AdjustedTravelTime widget [widget nobr]
 <<widget "AdjustedTravelTime">>
 /*
-	_args[0]: string     = the variable to write to, as a string (e.g. "$tempTime")
-	_args[1]: var|number = the raw, unadjusted travel time
-	_args[2]: [bool]     = whether to avoid adjustments beyond the travel time (optional, defaults to false)
+	_args[0]: string       = the variable to write to, as a string (e.g. "$tempTime")
+	_args[1]: var|number   = the raw, unadjusted travel time
+	_args[2]: [bool]       = whether to avoid adjustments beyond the travel time (optional, defaults to false)
+	_args[3]: [var|number] = initial additive modifier (optional, can be negative)
 */
 <<set _inputTime = _args[1]>>
 
@@ -1936,7 +1937,7 @@ How many dubloons would you like to pay back?
 <<set $cool = $slwear || ($coolCloth && !$dollevent2) ? 1 : 0>>
 
 /* Start by computing the overall additive modifier. */
-<<set _additiveModifier = 0>>
+<<set _additiveModifier = _args[3] || 0>>
 
 /* Apply time reduction from having Khemia with you. */
 <<set _additiveModifier -= $timeRed>>
