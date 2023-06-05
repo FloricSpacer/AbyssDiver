@@ -200,13 +200,11 @@ You have already used the scales on your journey. You may not use them again.
 <<elseif $skewedForced < 4>>
 	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Skewed Shrine to transfer a Curse" "Layer3 Skewed1a">>
-		<<set $tempTime = 3>>
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 	<</link>><br><br>
 	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Skewed Shrine to force a Curse" "Layer3 Skewed 2a">>
-		<<set $tempTime = 3>>
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 	<</link>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
@@ -269,7 +267,7 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" $tempTime>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -344,8 +342,7 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 <<set $temp = Math.round($corruption / 5)>>
 <<set $dubloons += $temp>>
 <<set $scalesUsed = 1>>
-<<set $tempTime = 2>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
@@ -361,8 +358,7 @@ Once you pick them up, the luster of the scales fades, indicating that they will
 <<set $temp = Math.round($dubloons / 5)>>
 <<set $corruption += $temp>>
 <<set $scalesUsed = 1>>
-<<set $tempTime = 2>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
@@ -855,7 +851,7 @@ On the other hand, the idea of each encounter feeling like your first time holds
 <<set $tempTime = (Math.max(4 -$abyssKnow - $riverVisit, 0))>>
 <<set $riverVisit = 1>>
 
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" $tempTime>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 
 <<for _i = 0; _i < 999; _i++>>
 	<<if $items[2].count > 0>>
@@ -1277,8 +1273,7 @@ Please enter your new skin/eye color:
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime = 6>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" 6>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
