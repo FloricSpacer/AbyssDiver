@@ -7,7 +7,7 @@
 @@.layerTitle;
 [img[setup.ImagePath+'Layer Intros/l7intro.png']]
 !Layer 7 - Sealed City of Agartha
-@@There is no gradual, graceful change in terrain dividing the sixth and seventh layers. The tentacles come to a sudden stop at a long series of metallic barricades, providin passage for travelers but apparently no surface for the tentacles to grow on. Grateful to leave behind the burning tendrils, you step through and are greeted with a sea of light, an enormous, city, buildings and roads expanding into the distance, yet also stacked haphazardly on top of each other in layers of chrome and neon, paved with metal. A microcosm of the Abyss itself, perhaps?
+@@There is no gradual, graceful change in terrain dividing the sixth and seventh layers. The tentacles come to a sudden stop at a long series of metallic barricades, providing passage for travelers but apparently no surface for the tentacles to grow on. Grateful to leave behind the burning tendrils, you step through and are greeted with a sea of light, an enormous, city, buildings and roads expanding into the distance, yet also stacked haphazardly on top of each other in layers of chrome and neon, paved with metal. A microcosm of the Abyss itself, perhaps?
 
 Yet for a city so large, it remains eerily quiet, the only sound being the quiet hum of robots patrolling the streets. There's no sign of any humans, or indeed any organic life at all. The city sleeps as robots silently perform their tasks, and it would be best to tread lightly, lest you wake it up.
 
@@ -57,7 +57,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <</if>>
 <</nobr>>
-[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
 
 :: Layer7 notes [image layer7 noreturn]
 
@@ -332,7 +332,7 @@ If you're not dissuaded and choose to continue onward, it will take you 8 days t
 <<nobr>>
 <<set $timeL7T2 -= 6>>
 <<set $tempTime = 1>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 <<if $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 3>><<set $layer7Hypno += 1>>
@@ -482,11 +482,7 @@ You have successfully taken the $relic81.name Relic. Hopefully you can make good
 
 
 :: Pick up the Solace Lace [layer7]
-<<nobr>>
 <<CollectRelic $relic82>>
-<<set $heat = 1>>
-<<set $cool = 1>>
-<</nobr>>
 
 You have successfully taken the $relic82.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -643,31 +639,32 @@ Choose the Relic you would like to sell:
 		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
 			You can't seem to part ways with the Creepy Doll<br>
 		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$colwear=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$colwear=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$hsswear=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$hsswear=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$SibylBuff=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$SibylBuff=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone at the end of your journey, recycling it now will surely disappoint her quite a lot. <br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
+			You promised Lily she could use the World Stone at the end of your journey, recycling it now will surely disappoint her quite a lot. <br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
 			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i), $items[2].count -= 2]]">>
 			<<else>>
 				You need to empty the Everheavea to recycle it (have at least two empty flasks in your inventory) <br>
 			<</if>>
 		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Blind Divine">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$BDwear = false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$BDwear = false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$HeavyHeadwear= false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$HeavyHeadwear= false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
 			<<print $ownedRelics[$i].name>> You can't sell Relics that have become part of your body.<br>
 		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
 			<<print $ownedRelics[$i].name>> You can't sell Relics that have become part of your body.<br>		
 		<<else>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -1215,8 +1212,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1288,8 +1284,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 		<<RemoveCurse $curses[$temp2]>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1354,8 +1349,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1384,8 +1378,7 @@ You retrieve your Relics and find that you have successfully switched the abilit
 
 [[Continue your business on the seventh layer|Layer7 Hub]]<br><br>
 
-<<set $tempTime = 2>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <<set $dubloons -= 4>>
 
 <<set $temp = $relicSwap.length>>
@@ -1416,7 +1409,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" $tempTime>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -1467,7 +1460,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 		<<set $layerExitTime -= 1>><<break>>
 	<</if>>
 <</for>>
-
+<<include "GeneralTimeFinal">>
 
 <</nobr>>
 <<if $layerExitTime == 0 && !($dubloons < 0) && !($timeL7T2 > 5)>>
@@ -1496,7 +1489,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 <<nobr>>
 <<set $timeL7T2 -= 6>>
 <<set $tempTime = 1>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 
@@ -1560,8 +1553,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime = 8>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" 8>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -1613,7 +1605,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<</if>>
 
 <</for>>
-
+<<include "GeneralTimeFinal">>
 
 <</nobr>><<if $layerExitTime == 0 && !($dubloons < 0) && !($timeL7T2 > 5)>>
 
@@ -1621,7 +1613,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 <<set $timeL8T2a = 0>>\
 <<set $timeL8T2b = 0>>\
 
-	After days of travel, you reach the bottom of the city. What awaits you is an enormous, circular gate, embedded into the ground at the lowest point of the city, almost like an elaborat emanhole cover.
+	After days of travel, you reach the bottom of the city. What awaits you is an enormous, circular gate, embedded into the ground at the lowest point of the city, almost like an elaborate manhole cover.
 
 	The rest of the layer slopes up all around it, every direction funneling down into it. There is no other way downward except through the other side of this gate. Will you push it open, and continue to push yourself ever downward?
 
@@ -1632,8 +1624,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 :: Layer7 Threat2 Descend [layer7]
 <<nobr>>
 <<set $timeL7T2 -= 6>>
-<<set $tempTime = 1>>
-<<include "GeneralTimeSetup">>	<<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 1>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 
@@ -1710,7 +1701,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
 <</if>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/heavylifting.png']]
 
@@ -1737,7 +1728,7 @@ You have worked $temp1 days and moved $temp2 loads of "construction material" to
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
 <</if>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/landexcavation.png']]
 
@@ -1764,7 +1755,7 @@ You have worked $temp1 days and excavated $temp2 2x2x2 cubic meters of earth to 
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
 <</if>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/citypainter.png']]
 
@@ -1791,7 +1782,7 @@ You have worked $temp1 days and painted $temp2 square km of building surface to 
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
 <</if>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/energygenerator.png']]
 
@@ -1818,7 +1809,7 @@ You have worked $temp1 days and generated <<print ($temp2 / 4)>> kWh of energy t
 <<if $tempTime < 0>>
 	<<set $tempTime = 0>>
 <</if>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/energygenerator.png']]
 
@@ -1836,7 +1827,7 @@ You have worked $temp1 days and brought robots to artificial orgasm $temp2 times
 <<nobr>>
 <<set $timeL7T2 -= 6>>
 <<set $tempTime = 1>>
-<<include "GeneralTimeStats">>
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 

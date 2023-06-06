@@ -34,6 +34,66 @@ setup.calcCarriedWeight = function() {
 	);
 }
 
+:: Sell or unsell relic [script]
+setup.sellRelic = relicOrNameOrIndex => {
+	const vars = variables();
+	let relic, name, index;
+	switch (typeof relicOrNameOrIndex) {
+		case 'string':
+			name = relicOrNameOrIndex;
+			index = vars.ownedRelics.findIndex(relic => relic.name == name);
+			if (index >= 0) {
+				relic = vars.ownedRelics[index];
+			} else {
+				console.error(`Relic '${name}' not found in $ownedRelics!`);
+			}
+			break;
+		case 'number':
+			index = relicOrNameOrIndex;
+			if (0 <= index && index < vars.ownedRelics.length) {
+				relic = vars.ownedRelics[index];
+				name = relic.name;
+			} else {
+				console.error(`${index} is not a valid index in $ownedRelics!`);
+			}
+			break;
+		default:
+			relic = relicOrNameOrIndex;
+			if (relic) {
+				name = relic.name;
+				index = vars.ownedRelics.findIndex(relic => relic.name == name);
+				if (index < 0) console.error(`Relic '${name}' not found in $ownedRelics!`);
+			} else {
+				console.error('Passed relic was undefined!');
+			}
+	}
+	if (0 <= index && index < vars.ownedRelics.length) vars.ownedRelics.splice(index, 1);
+	if (relic) vars.soldRelics.push(relic);
+};
+setup.unsellRelic = relicOrName => {
+	const vars = variables();
+	let relic, name, index;
+	if (typeof relicOrName == 'string') {
+		name = relicOrName;
+		index = vars.soldRelics.findLastIndex(relic => relic.name == name);
+		if (index >= 0) {
+			relic = vars.soldRelics[index];
+		} else {
+			relic = vars.relics.findLast(relic => relic.name == name);
+		}
+		if (!relic) console.error(`Relic '${name}' does not exist!`);
+	} else {
+		relic = relicOrName;
+		if (relic) {
+			name = relic.name;
+			index = vars.soldRelics.findLastIndex(relic => relic.name == name);
+		} else {
+			console.error('Passed relic was undefined!');
+		}
+	}
+	if (index >= 0) vars.soldRelics.splice(index, 1);
+	if (relic) vars.ownedRelics.push(relic);
+};
 
 :: Check Availability of Cutting Tool [script]
 setup.haveCuttingTool = function() {
@@ -49,10 +109,26 @@ setup.haveScubaGear = function() {
 	);
 }
 
+:: Smartphone helpers [script]
+Object.defineProperty(setup, 'smartphoneRegular', {
+	get: () => variables().items[17],
+});
+Object.defineProperty(setup, 'haveSmartphoneRegular', {
+	get: () => variables().items[17].count > 0,
+	set: have => { variables().items[17].count = have ? 1 : 0; },
+});
+Object.defineProperty(setup, 'haveSmartphoneAI', {
+	get: () => variables().items[21].count > 0,
+	set: have => { variables().items[21].count = have ? 1 : 0; },
+});
+Object.defineProperty(setup, 'haveSmartphone', {
+	get: () => setup.haveSmartphoneRegular || setup.haveSmartphoneAI,
+});
+
 :: Check Availability of Light Source [script]
 // Light sources that are not going to run out during an expedition.
 setup.haveUnlimitedLightSource = function() {
-	return variables().light != 0 || variables().items[10].count > 0 || variables().items[17].count > 0 || variables().items[21].count > 0 || variables().ownedRelics.some(
+	return variables().light != 0 || variables().items[10].count > 0 || setup.haveSmartphone || variables().ownedRelics.some(
 		r => r.name === "Sunbeam" || r.name === "Glare Vantage"|| variables().BDwear
 	);
 }
@@ -71,7 +147,7 @@ setup.haveTravelLightSource = function() {
 
 :: Check Availability of notepad [script]
 setup.haveNotepad = function() {
-	return variables().notepad != 0 || variables().items[17].count > 0 ||  variables().items[21].count > 0 || variables().items[26].count > 0;
+	return variables().notepad != 0 || setup.haveSmartphone || variables().items[26].count > 0;
 }
 
 :: Check Availability of rope [script]
@@ -89,7 +165,7 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 <</if>>
 
 <<if $hexflame > 9>>
-@@.alert1;You currently have <<print ($hexflame - 9)>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br><br>
+@@.alert1;You currently have <<print $hexflame - 9>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br><br>
 <</if>>
 
 Your Curses are:<br>
@@ -224,7 +300,7 @@ Click this if you have found something that can be used for swimming underwater,
 
 <<if $abyssKnow == 1>>Click this if you'd like to disable the use of your abyssal knowledge from the encyclopedia, smartphone or Saeko (This will result in more side effects from foraging):
 	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]
-<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || setup.haveSmartphone)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]
 <</if>>
 If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
@@ -732,7 +808,7 @@ This will also consume food/water/etc. as necessary based on your current layer.
 :: Adjust time2 [noreturn]
 <<nobr>>
 <<set _tempTime = parseInt($temp)>>
-/*<<include "GeneralTimeStats">>*/
+/*<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>*/
 <<set $time += _tempTime>>
 <</nobr>>
 
@@ -789,23 +865,24 @@ Choose the Relic you would like to sell:
 		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
 			You can't seem to part ways with the Creepy Doll<br>
 		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Solace Lace">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$slwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$slwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly. <br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
+			You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly.<br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
 			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">>
 			<<else>>
 				You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory) <br>
 			<</if>>
 		<<else>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -901,7 +978,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<for _i = 0; _i < $ownedRelics.length; _i++>>
 		<<capture _i>>
 			<<if $ownedRelics[_i].name=="Phoenix Obol">>
-				[[Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil|_string][$soldRelics.push($ownedRelics[_i]), $ownedRelics.deleteAt(_i),$starving=0,$dehydrated=0,$SemenDemonBalance=0,$gameOver=false]]
+				[[Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil|_string][setup.sellRelic(_i),$starving=0,$dehydrated=0,$SemenDemonBalance=0,$gameOver=false]]
 			<</if>>
 		<</capture>>
 	<</for>>
@@ -1007,7 +1084,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 	You have pushed yourself quite a bit, which hampers your recovery. So it takes 7 days until you feel fit enough to begin your journey once again. And your weakened condition will increase your next 3 travel times by 1 day each.
 	<<set $status.duration += 3>>\
 	<<set $status.penalty += 1>>\
-	<<set $tempTime=7>><<include "GeneralTimeStats">>\
+	<<set $tempTime=7>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<elseif $hiredCompanions.length==1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. $hiredCompanions[0].name helps you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -1018,7 +1095,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<set $tempTime=4>><<include "GeneralTimeStats">>\
+	<<set $tempTime=4>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<elseif $hiredCompanions.length>1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. Your companions help you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -1029,7 +1106,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<set $tempTime=4>><<include "GeneralTimeStats">>\
+	<<set $tempTime=4>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <</if>>\
 
 [[You cast your eyes once more on the path ahead, it's time to get moving once again|_string]]
@@ -1086,7 +1163,7 @@ Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her rec
 In the end, you don't truly resume your travels in earnest until after 7 days.
 <<set $tempTime=7>>
 <</if>>
-<<include "GeneralTimeStats">>\
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 
 [[You cast your eyes once more on the central location of this layer, ready to get moving again|_string]]
 
@@ -1123,15 +1200,17 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <<if $abyssKnow == 1>>
 	<br>You currently have abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
 	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]<br>
-<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || $items[17].count>0 || $items[21].count > 0)>>
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || setup.haveSmartphone)>>
 	<br>You currently have abyssal knowledge by the encyclopedia, smartphone or Saeko, but you are not using it. You can choose to enable it if you would like less side effects from foraging:<br>
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]<br>
 <</if>>
 
-<<if $items[24].count>0 & $useEnergyrations==false>>
-	<br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations=true]]<br>
-<<elseif $items[24].count>0 & $useEnergyrations==true>>
-	<br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations=false]]<br>
+<<if $items[24].count > 0>>
+	<<if !$useEnergyrations>>
+		<br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations = true]]<br>
+	<<else>>
+		<br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations = false]]<br>
+	<</if>>
 <</if>>
 
 <<if $items[7].count > 0>>
@@ -1200,7 +1279,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
 <</if>>
 
-<<if $items[25].count > 0 && $hexflame > 0>>
+<<if $items[25].count > 0 && $hexflame > 9>>
 	<br>You can drink as much Ward Waters as you want if you you want to reduce your jinxed flame counters. This might not be the most economical idea, but it can help you solve the issue immediately if you're not worried about conserving water.<br>
 	[[Drink some Ward Water to reduce your hexflame count|Ward Water Drink]]<br>
 
@@ -1302,7 +1381,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 		[[Put the Lightning Rook away|Use Items and Relics][$LightningWear=false]]<br>
 	<<else>>
 	    <br>By grasping the Lightning Rook, time slows to a crawl, making battles significantly easier, especially when you're armed with a firearm. You can bring it close so that you're always ready to use its power.<br>
-		[[Keep to Lightning Rook close and ready to use at a moment's notice|Use Items and Relics][$LightningWear=true]]<br>
+		[[Keep the Lightning Rook close and ready to use at a moment's notice|Use Items and Relics][$LightningWear=true]]<br>
 	<</if>>
 <</if>>
 
@@ -1453,9 +1532,9 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	<</if>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Kin Shifter")>>
+<<if $ownedRelics.some(e => e.name === "Kin Shifter") && $ownedRelics.length > 1>>
 	<br>A glob of putty-like slime lays ready for you to copy other Relics, if you desire to.<br>
-	[[Use the Kin Shifter to copy Relics|Kin Shifter Use][$tempValue = 0]]<br><br>
+	[[Use the Kin Shifter to copy Relics|Kin Shifter Use]]<br><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Forbidden Grimoire") && $hiredCompanions.length > 0>>
@@ -1478,12 +1557,14 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	<</if>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
-	You look at the temporally limit-broken Aeonglass and ponder its endless use. It is currently active, so you are effectively always traveling at double speed now!
-	[[Stop travel at double speed for now|Use Items and Relics][$EndlessAeonglass=false]]
-<<elseif$ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & !$EndlessAeonglass>>
-	You look at the temporally limit-broken Aeonglass and ponder its endless use. It is currently inactive. You could activate it and effectively always travel at double speed to cut your travel times in half.
-	[[Let's travel at double speed from now on|Use Items and Relics][$EndlessAeonglass=true]]
+<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
+	<<if $EndlessAeonglass>>
+		You look at the temporally limit-broken Aeonglass and ponder its endless use. It is currently active, so you are effectively always traveling at double speed now!
+		[[Stop traveling at double speed for now|Use Items and Relics][$EndlessAeonglass = false]]
+	<<else>>
+		You look at the temporally limit-broken Aeonglass and ponder its endless use. It is currently inactive. You could activate it and effectively always travel at double speed to cut your travel times in half.
+		[[Let's travel at double speed from now on|Use Items and Relics][$EndlessAeonglass = true]]
+	<</if>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
@@ -1641,7 +1722,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 :: Ward Water Drink
 
-How many bottles of Ward Water would you like to drink today? You currently have $hexflame jinxed flame counters and any excess Ward Water you drink above that amount will be wasted.
+How many bottles of Ward Water would you like to drink today? You currently have <<print $hexflame - 9>> jinxed flame counters and any excess Ward Water you drink above that amount will be wasted.
 
 <<textbox "$temp" "1">>
 
@@ -1653,11 +1734,11 @@ How many bottles of Ward Water would you like to drink today? You currently have
 <<if !($temp > 0)>>
 	<<set $temp = 0>>
 <</if>>
-<<set $hexflame = Math.min($hexflame - $temp, 9)>>
+<<set $hexflame = Math.max($hexflame - $temp, 9)>>
 <</nobr>>
 You just drank $temp bottles of Ward Water.<<if $temp > 3 >> It was quite an effort to drink it all, but you managed to do it!<</if>>
 
-You now have $hexflame jinxed flame counters and $items[25].count Ward Waters remaining.
+You now have <<print $hexflame - 9>> jinxed flame counters and $items[25].count Ward Waters remaining.
 
 [[Continue exploring the layer|$layerReturn]]
 
@@ -1689,52 +1770,31 @@ B: (20)->(30)->(40) = total 90, over 70, done.
 C: (120) done, only possible configuration for duplicating a Relic worth this much.
 
 <<nobr>>
-The current total value of Relics you have copied is $tempValue dubloons.<br><br>
+<<if !$relic38.copiedValue>><<set $relic38.copiedValue = 0>><</if>>
+The current total value of Relics you have copied is $relic38.copiedValue dubloons.<br><br>
 
-<<if $tempValue == 0>>
-<<if $ownedRelics.length==1>>
-	<<set $temp=0>>
-<<else>>
-	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
-		<<if $ownedRelics[$i].name=="Kin Shifter" >>
-			<<set $temp=$i>>
-			<<set $endloop=false>>
+<<if $relic38.copiedValue < 70>>
+	Please choose the Relic you would like to copy:<br>
+	<<for _relic range $ownedRelics>>
+		<<if _relic.name != "Kin Shifter" && (!$relic38.copiedValue || _relic.value <= 70)>>
+			<<capture _relic>>
+				<<if _relic.name == "Managed Misfortune">>
+					_relic.name for _relic.value dubloons [[Copy|Kin Shifter Use][$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value, $ManagedMisfortuneMax += 2]]<br>
+				<<else>>
+					_relic.name for _relic.value dubloons [[Copy|Kin Shifter Use][$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value]]<br>
+				<</if>>
+			<</capture>>
 		<</if>>
 	<</for>>
-	<<set $soldRelics.push($ownedRelics[$temp])>>
-	<<set $ownedRelics.deleteAt($temp)>>
-<</if>>
-
-Please choose the Relic you would like to copy:<br>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-			<<if $ownedRelics[$i].name == "Managed Misfortune">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value, $ManagedMisfortuneMax=4]]">><br>
-			<<else>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value]]">><br>
-			<</if>>
-	<</capture>>
-<</for>>
-
-<<elseif $tempValue <= 69>>
-Please choose the Relic you would like to copy:<br>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].value <= 70>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value)>><<print " dubloons ">><<print "[[Copy|Kin Shifter Use][$ownedRelics.push($ownedRelics[$i]), $tempValue += $ownedRelics[$i].value]]">><br>
-		<</if>>
-	<</capture>>
-<</for>>
-
 <<else>>
-As you touched the final Relic to the Kin Shifter, the last of the goo was used up and your Relic was copied. The cute eyes faded as the slime transmuted into the new Relic you chose. <br><br>
+	<<set setup.sellRelic("Kin Shifter")>>
+	As you touched the final Relic to the Kin Shifter, the last of the goo was used up and your Relic was copied. The cute eyes faded as the slime transmuted into the new Relic you chose.<br><br>
 
-Now that you have become better equipped, you can continue your journey.<br><br>
-
-[[Return to exploring|$layerReturn]]
-
+	Now that you have become better equipped, you can continue your journey.<br>
 <</if>>
 <</nobr>>
+
+[[Return to exploring|$layerReturn]]
 
 :: Daedalus Mechanism Select [noreturn]
 
@@ -1862,507 +1922,573 @@ How many dubloons would you like to pay back?
 <</capture>>
 <</widget>>
 
-:: GeneralTimeSetup[nobr]
-<<nobr>>
+:: AdjustedTravelTime widget [widget nobr]
+<<widget "AdjustedTravelTime">>
+/*
+	_args[0]: string     = the variable to write to, as a string (e.g. "$tempTime")
+	_args[1]: var|number = the raw, unadjusted travel time
+	_args[2]: [bool]     = whether to avoid adjustments beyond the travel time (optional, defaults to false)
+*/
+<<set _inputTime = _args[1]>>
 
+/* Ensure the $heat and $cool variables are set correctly. */
+<<set $heat = $slwear || ($warmCloth && !$dollevent2) ? 1 : 0>>
+<<set $cool = $slwear || ($coolCloth && !$dollevent2) ? 1 : 0>>
+
+/* Start by computing the overall additive modifier. */
+<<set _additiveModifier = 0>>
+
+/* Apply time reduction from having Khemia with you. */
+<<set _additiveModifier -= $timeRed>>
+
+/* Apply status penalty, if any. */
 <<if $status.duration > 0>>
-	<<set $status.duration -= 1>> 
-<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-
-<<if $SizeHandicap>0>>
-	/*The burden of your inconvenient size hampers your progress, increasing your travel time..<br>*/
-<</if>>
-<<if $app.HandicapMovement < -1 >>
-	/*Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>*/
-<<elseif $app.HandicapMovement > 1 >>
-	/*Your exceptional physical condition is reducing your travel time.<br>*/
-<</if>>
-
-<<set _tempTimeModifiers = (1+$SizeHandicap)*(1-$app.HandicapMovement/10)>>
-<<if $playerCurses.some(e => e.name === "Chlorophyll") && $dark==true>>
-	<<set $tempTime +=1>>Now that your metabolism relies on light, the oppressive darkness engulfing you saps your energy, leaving you sluggish and slow.<br>
-	<<set $dark=false>>
-<</if>>
-
-<<if $slwear>>
-	<<set $heat=1>>
-	<<set $cool=1>>
-<<elseif $warmCloth && !$dollevent2>>
-	<<set $heat=1>>
-	<<set $cool=0>>
-<<elseif $coolCloth && !$dollevent2>>
-	<<set $heat=0>>
-	<<set $cool=1>>
-<<else>>
-	<<set $heat=0>>
-	<<set $cool=0>>
-<</if>>
-
-<<if $currentLayer==1>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
-<<elseif $currentLayer==2>>
-	<<set _cutRed = setup.haveCuttingTool() ? 1 : 0>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _cutRed)>>
-<<elseif $currentLayer==3>>
-	<<set _lightRed = setup.haveTravelLightSource() ? 1 : 0>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - _lightRed)>>
-	<<if $playerCurses.some(e => e.name === "Chlorophyll")>>
-		<<set $tempTime +=1>> Now that you rely on light for your metabolism, the darkness in this layer is making you sluggish. <br>
+	<<set _additiveModifier += $status.penalty>>
+	/* Decrement status duration and remove status penalty if duration is now 0. */
+	<<set $status.duration -= 1>>
+	<<if $status.duration < 1>>
+		<<set $status.penalty = 0>>
 	<</if>>
-<<elseif $currentLayer==4>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
-	<<if $heat == 1>>
-		<<set $tempTime -= 2>>
-	<<elseif $torchUse == 1>>
-		<<set $tempTime -= 2>>
-		<<set $items[9].count -= 1>>
-			<<if $items[9].count < 0 >>
-				<<set $items[9].count = 0>>
+<</if>>
+
+/* Add jinxed flame count penalty unless we're on layer 6. */
+<<if $currentLayer != 6>>
+	<<set _additiveModifier += Math.trunc($hexflame / 10)>>
+<</if>>
+
+/* Apply other layer-specific effects. */
+<<switch $currentLayer>>
+	<<case 2>>
+		/* Reduce travel time if player has a cutting tool. */
+		<<if setup.haveCuttingTool()>>
+			<<set _additiveModifier -= 1>>
+		<</if>>
+	<<case 3>>
+		/* Reduce travel time if player has a light source. */
+		<<if setup.haveTravelLightSource()>>
+			<<set _additiveModifier -= 1>>
+		<</if>>
+		/* Apply Chlorophyll curse penalty, if any. */
+		<<if $playerCurses.some(e => e.name === "Chlorophyll")>>
+			Now that you rely on light for your metabolism, the darkness in this layer is making you sluggish.<br>
+			<<set _additiveModifier += 1>>
+		<</if>>
+	<<case 4>>
+		/* Reduce travel time if player has a heat source. */
+		<<if $heat>>
+			<<set _additiveModifier -= 2>>
+		<<elseif $torchUse == 1 && $items[9].count > 0>>
+			<<set _additiveModifier -= 2>>
+			/* Decrement number of torches and stop using torches if the count is now 0. */
+			<<set $items[9].count -= 1>>
+			<<if $items[9].count < 1>>
+				<<set $torchUse = 0>>
 			<</if>>
-	<<elseif $playerCurses.filter(e => e.name === "Cold Blooded").length>0 >>
-		<<set $tempTime += $playerCurses.filter(e => e.name === "Cold Blooded").length>> Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.<br>
-		<<if $app.skinType.includes("furred") >>
-			<<set $tempTime -=1>> However, your fur is somewhat protective and mitigates the effects of the cold.<br>
+		<<elseif $playerCurses.some(e => e.name === "Cold Blooded")>>
+			/* Apply Cold Blooded curse penalty. */
+			Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.<br>
+			<<set _additiveModifier += 2>>
+			/* Reduce penalty if player has fur. */
+			<<if $app.skinType.includes("furred")>>
+				However, your fur is somewhat protective and mitigates the effects of the cold.<br>
+				<<set _additiveModifier -= 1>>
+			<</if>>
 		<</if>>
-		<br>
-	<</if>>
-<<elseif $currentLayer==5>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool)>>
-<<elseif $currentLayer==6>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime  - $timeRed + $status.penalty -$cool)>>
-<<elseif $currentLayer==7>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)))>>
-<<elseif $currentLayer==8>>
-	<<if $items[12].count>0 ||  $items[17].count>0 || $items[21].count>0>>
-		<<set _compass=1>>The comforting presence of a device that discerns north from south in this bewildering maze bolsters your confidence and allows you to navigate more efficiently.<br>
-	<<else>>
-		<<set _compass=0>>
-	<</if>>
-	<<set $tempTime = _tempTimeModifiers*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - (5 * $ownedRelics.some(e => e.name === "Star Compass")) - 3 * _compass)>>
+	<<case 5 6>>
+		/* Reduce travel time if player has a way to keep from overheating. */
+		<<if $cool>>
+			<<set _additiveModifier -= 1>>
+		<</if>>
+	<<case 8>>
+		/* Reduce travel time if player has some form of compass. */
+		<<if $items[12].count || setup.haveSmartphone>>
+			The comforting presence of a device that discerns north from south in this bewildering maze bolsters your confidence and allows you to navigate more efficiently.<br>
+			<<set _additiveModifier -= 3>>
+		<</if>>
+		/* Reduce travel time if player has the Star Compass relic. */
+		<<set _additiveModifier -= 5>>
+<</switch>>
+
+/* If the additive modifier is a time reduction, apply it to the base time. */
+<<if _additiveModifier < 0>>
+	<<set _inputTime += _additiveModifier>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
-	<<set _tempTimeOrig = $tempTime>>The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
-	<<set $tempTime = Math.ceil($tempTime / 2)>>
+/* If travel time wasn't eliminated entirely, apply multiplicative modifiers. */
+<<if _inputTime > 0>>
+	<<set _multiplicativeModifier = 1>>
+	/* Double travel time if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
+	<<if $SizeHandicap>>
+		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
+		<<set _multiplicativeModifier *= 2>>
+	<</if>>
+	/* Increase/decrease time by 10% for every level of physical fitness. */
+	<<if $app.HandicapMovement < 0>>
+		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
+		<<set _multiplicativeModifier *= 1 - $app.HandicapMovement / 10>>
+	<<elseif $app.HandicapMovement > 0>>
+		Your exceptional physical condition is reducing your travel time.<br>
+		<<set _multiplicativeModifier /= 1 + $app.HandicapMovement / 10>>
+	<</if>>
+	/* Halve travel time if player has the Aeonglass with Endless Time relic active. */
+	<<if $EndlessAeonglass>>
+		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
+		<<set _multiplicativeModifier /= 2>>
+	<</if>>
+	/* Apply the multiplicative modifiers. */
+	<<set _inputTime *= _multiplicativeModifier>>
+	/* Adjust the travel time if the player is using energy rations. */
+	<<if $useEnergyrations>>
+		/* Calculate the number of energy rations consumed per day. */
+		<<set _consumptionPerDay = 1>>
+		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
+		<</if>>
+		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
+		<</if>>
+		/* Using energy rations halves the travel time, so we need at most half the time worth. */
+		<<set _daysOfEnergyRations = Math.min(_inputTime / 2, $items[24].count / _consumptionPerDay)>>
+		/* Every day with an energy ration counts for twice as much. */
+		<<set _inputTime -= _daysOfEnergyRations>>
+		<<if !_args[2]>>
+			/* Round up the number of days of energy rations to a whole number, as GeneralTimeStats iterates per day. */
+			<<set _daysOfEnergyRations = Math.ceil(_daysOfEnergyRations)>>
+			/* If we used up all the energy rations we had, stop using them. */
+			<<if Math.ceil(_consumptionPerDay * _daysOfEnergyRations) >= $items[24].count>>
+				<<set $useEnergyrations = false>>
+			<</if>>
+		<</if>>
+	<</if>>
 <</if>>
 
-<<set _EnergyRatCor = 1>>
-<<if $playerCurses.some(e => e.name === "Minish-ish") || $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-	<<if $playerCurses.some(e => e.name === "Minish-ish")>>
-		<<set _EnergyRatCor /= 4>>
+/* If the additive modifier is a time penalty, apply it to the modified time. */
+<<if _additiveModifier > 0>>
+	<<set _inputTime += _additiveModifier>>
+<</if>>
+
+/* Don't allow travel time to become negative. */
+<<if _inputTime < 0>><<set _inputTime = 0>><</if>>
+
+/* Round travel time to a whole number of days. */
+<<set _inputTime = Math.round(_inputTime)>>
+
+<<if !_args[2]>>
+	<<if _daysOfEnergyRations && _daysOfEnergyRations > _inputTime>>
+		/* Ensure all days of energy rations end up used. */
+		<<set $items[24].count -= _consumptionPerDay * (_daysOfEnergyRations - _inputTime)>>
+		<<set _daysOfEnergyRations = _inputTime>>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-		<<if $companionTwin.curses.some(e => e.name === "Minish-ish")>>
-			<<set _EnergyRatCor += 1/4>>
+<</if>>
+
+/* Write to the output variable. */
+<<print "<<set " + _args[0] + " = " + _inputTime + ">>">>
+
+<</widget>>
+
+:: GeneralTimeStats [nobr]
+<<capture _i>>
+
+/* Check for wetting events. */
+<<if $WettingSolution == 0>>
+	<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+		<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+			<<set _random = random(1, Math.pow(3, $tempTime))>>
+			<<set _threshold = Math.pow(3, $tempTime) - Math.pow(2, $tempTime)>>
 		<<else>>
-			<<set _EnergyRatCor += 1>>
+			<<set _random = random(1, Math.pow(15, $tempTime))>>
+			<<set _threshold = Math.pow(15, $tempTime) - Math.pow(14, $tempTime)>>
+		<</if>>
+		<<if _random <= _threshold>>
+			<<include "Wetting Events">>
 		<</if>>
 	<</if>>
 <</if>>
 
-<<if ($tempTime/2) <= $items[24].count/_EnergyRatCor && $useEnergyrations==true>>
-	<<set _temp = Math.trunc($tempTime / 2)>>
-	<<set $items[24].count -= _temp * _EnergyRatCor>>
-	<<set $items[1].count += _temp * _EnergyRatCor>>
-	<<set $tempTime -= _temp>>
-	<<set $useEnergyrations = false>>
-<<elseif $useEnergyrations==true>>
-	<<set $tempTime -= $items[24].count / _EnergyRatCor>>
-	<<set $items[1].count += $items[24].count  * _EnergyRatCor>>
-	<<set $items[24].count = 0>>
-<</if>>
-
-<<set $tempTime = Math.round(Math.max(0, $tempTime))>>
-<</nobr>>
-
-:: GeneralTimeStats
-<<nobr>>
-
-<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-	<<set _random = random(1,Math.pow(3,Math.ceil($tempTime)))>>
-	<<set _threshold = (Math.pow(3,Math.ceil($tempTime))-Math.pow(2,Math.ceil($tempTime)))>>
-	<<if $WettingSolution==0 && _random<=_threshold>>
-		<<include "Wetting Events">>
-	<</if>>
-<<elseif $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-	<<set _random = random(1,Math.pow(15,Math.ceil($tempTime)))>>
-	<<set _test = Math.pow(15,Math.ceil($tempTime))>>
-	<<set _threshold = (Math.pow(15,Math.ceil($tempTime))-Math.pow(14,Math.ceil($tempTime)))>>
-	<<if $WettingSolution==0 && _random<=_threshold>>
-		<<include "Wetting Events">>	
-	<</if>>
-<</if>>
+/* Check for Semen Demon events. */
 <<if $playerCurses.some(e => e.name === "Semen Demon")>>
 	<<SemenDemonCalc $tempTime>>
 <</if>>
 
-<<set _minishCor = 1>>
-<<set _minishCorTwin = 1>>
-<<if $playerCurses.some(e => e.name === "Minish-ish")>>
-	<<set _minishCor /= 4>>
-<</if>>
-<<if $companionTwin.curses.some(e => e.name === "Minish-ish")>>
-	<<set _minishCorTwin /= 4>>
-<</if>>
-
-<<set $time += $tempTime>>
-<<if $currentLayer==1>>
-
-	<<set $timeL1 += $tempTime>>
-
-<<elseif $currentLayer==2>>
-
-	<<set $timeL2 += $tempTime>>
-	<<if $items[1].count > 9>>
-		<<set $timeL2T1 += $tempTime>>
-	<</if>>
-
-<<elseif $currentLayer==3>>
-
-	<<set $timeL3 += $tempTime>>
-	<<if $items[9].count > 0 && $torchUse == 1>>
-		<<set $items[9].count -= 1>>
-	<<elseif $items[9].count == 0 && $torchUse == 1>>
-		<<set $torchUse = 0>>
-	<</if>>
-	<<set $timeL3T1 += $tempTime>>
-	<<if !setup.haveTravelLightSource()>>
-		<<set $timeL3T2 += $tempTime>>
-	<</if>>
-	
-<<elseif $currentLayer==4>>
-
-	<<set $timeL4 += $tempTime>>
-	<<set $timeL4T1 += $tempTime>>
-
-<<elseif $currentLayer==5>>
-
-	<<set $timeL5 += $tempTime>>
-	<<if ($items[0].count + $items[3].count) > 10>>
-		<<set $timeL5T2 += $tempTime>>
-	<</if>>
-	<<set $timeL5T1 += $tempTime>>
-
-<<elseif $currentLayer==6>>
-
-	<<set $timeL6 += $tempTime>>
-	<<if $dubloons > 199>>
-		<<set $timeL6T2 += $tempTime>>
-	<</if>>
-	<<set $timeL6T1 += $tempTime>>
-	<<if $DaedalusFly==false>>
-		<<set $hexflame += $tempTime>>
-	<</if>>
-	
-<<elseif $currentLayer==7>>
-
-	<<set $timeL7 += $tempTime>>
-	<<if $dubloons < 500>>
-		<<set $timeL7T2 += $tempTime>>
-	<</if>>
-	<<for $i = 0; $i < $tempTime; $i++>>
-		<<if $dubloons >= 300>>
-			<<set $dubloons -= 1>>
-			<<elseif $dubloons >= 100>>
-			<<set $dubloons -= 2>>
-			<<else>>
-			<<set $dubloons -= 3>>
+<<switch $currentLayer>>
+	<<case 1>>
+		<<set $timeL1 += $tempTime>>
+	<<case 2>>
+		<<set $timeL2 += $tempTime>>
+		/* Check if player has 10+ food rations. */
+		<<if $items[1].count >= 10>>
+			<<set $timeL2T1 += $tempTime>>
 		<</if>>
-	<</for>>
+	<<case 3>>
+		<<set $timeL3 += $tempTime>>
+		<<set $timeL3T1 += $tempTime>>
+		/* Check if player has a light source. */
+		<<if !setup.haveTravelLightSource()>>
+			<<set $timeL3T2 += $tempTime>>
+		<</if>>
+	<<case 4>>
+		<<set $timeL4 += $tempTime>>
+		<<set $timeL4T1 += $tempTime>>
+	<<case 5>>
+		<<set $timeL5 += $tempTime>>
+		/* Check if player has 10+ water or filled flasks. */
+		<<if ($items[0].count + $items[3].count) >= 10>>
+			<<set $timeL5T2 += $tempTime>>
+		<</if>>
+		<<set $timeL5T1 += $tempTime>>
+	<<case 6>>
+		<<set $timeL6 += $tempTime>>
+		/* Check if player has 200+ dubloons. */
+		<<if $dubloons >= 200>>
+			<<set $timeL6T2 += $tempTime>>
+		<</if>>
+		<<set $timeL6T1 += $tempTime>>
+		/* Add a jinxed flame counter for every day unless the player is flying. */
+		<<if !$DaedalusFly>>
+			<<set $hexflame += $tempTime>>
+		<</if>>
+	<<case 7>>
+		<<set $timeL7 += $tempTime>>
+		/* Check if the player has fewer than 500 dubloons. */
+		<<if $dubloons < 500>>
+			<<set $timeL7T2 += $tempTime>>
+		<</if>>
+		/* Subtract dubloons for every day spent on this layer. */
+		<<for _i = 0; _i < $tempTime; ++_i>>
+			<<if $dubloons >= 300>>
+				<<set $dubloons -= 1>>
+			<<elseif $dubloons >= 100>>
+				<<set $dubloons -= 2>>
+			<<else>>
+				<<set $dubloons -= 3>>
+			<</if>>
+		<</for>>
+	<<case 8>>
+		<<set $timeL8 += $tempTime>>
+		<<set $timeL8T2a += $tempTime>>
+		<<set $timeL8T2b += $tempTime>>
+		/* Trigger an Inanis Ego event (once per trip). */
+		<<if !$L8loopLim>>
+			<<include "Layer 8 Threat 1a">>
+		<</if>>
+<</switch>>
 
-<<elseif $currentLayer==8>>
-
-	<<set $timeL8 += $tempTime>>
-	<<set $timeL8T2a += $tempTime>>
-	<<set $timeL8T2b += $tempTime>>
-	<<if $L8loopLim == false>>
-		<<include "Layer 8 Threat 1a">>
-	<</if>>
+/* Calculate the amount of food and drink that needs to be consumed per day. */
+<<set _consumptionPerDay = 1>>
+<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+	<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions are nourished by the abyss). */
+<</if>>
+<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time") & $EndlessAeonglass>>
-	<<set $tempTime = _tempTimeOrig >>
-<</if>>
-
-<<if $items[1].count + $items[24].count> 0>>
-	<<set _temploop = $tempTime+$starving>>
-<<else>>
-	<<set _temploop = $tempTime>>
-<</if>>
-
-<<for $i = 0; $i < (_temploop); $i++>>
-	<<if $starving>4 & $forageFood == 0 & $items[1].count < 1>>
+<<for _i = 0; _i < $tempTime; ++_i>>
+	<<if !$forageFood && $starving > 4 && $currentLayer != 7 && $items[1].count + $items[24].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by starvation, you are currently foraging for food on this layer, no matter the consequences.<br>
 		<<set $forageFood = 1>>
 	<</if>>
-	<<if $forageFood == 0>>
-		<<set $items[1].count -= 1 * _minishCor>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-			<<set $items[1].count -= 1 * _minishCorTwin>>
-		<</if>>
-	<<else>>
-		<<if $abyssKnow == 0>>
-			<<if $currentLayer==1>>
-				<<set $foodL1 += 1>>
-				<<set $GenderLog.push($ForageFoodMajor)>>/* layer specific */
-			<<elseif $currentLayer==2>>
-				<<set $foodL2 += 1>>
-				<<if $mudHunt == 1>>
-					<<if $slingshot == 1>>
-					<<elseif ($items[13].count > 0 && $items[20].count) > 0>>
-						<<set $items[20].count -= 1>>
+	<<for ++$starving; $starving > 0; --$starving>>
+		<<if _daysOfEnergyRations>>
+			/* If we used energy rations to speed up travel, use those first (regardless of foraging settings). */
+			<<set $items[24].count -= _consumptionPerDay>>
+			<<set _daysOfEnergyRations -= 1>>
+		<<elseif !$forageFood>>
+			<<if $items[1].count >= _consumptionPerDay>>
+				<<set $items[1].count -= _consumptionPerDay>>
+			<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+				<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+				<<set $items[1].count = 0>>
+			<<else>>
+				<<break>>
+			<</if>>
+		<<elseif !$abyssKnow>>
+			<<switch $currentLayer>>
+				<<case 1>>
+					<<set $foodL1 += 1>>
+					<<set $GenderLog.push($ForageFoodMajor)>>
+				<<case 2>>
+					<<set $foodL2 += 1>>
+					<<if $mudHunt>>
+						<<if $slingshot>>
+							/* Slingshot doesn't use bullets. */
+						<<elseif $items[13].count && $items[20].count >= 1>>
+							<<set $items[20].count -= 1>>
+						<<else>>
+							<<set $LibidoLog.push($ForageFoodMajor)>>
+						<</if>>
 					<<else>>
 						<<set $LibidoLog.push($ForageFoodMajor)>>
 					<</if>>
-				<<else>>
-					<<set $LibidoLog.push($ForageFoodMajor)>>
-				<</if>>
-			<<elseif $currentLayer==3>>
-				<<set $foodL3 += 1>>
-				<<set $AgeLog.push($ForageFoodMajor)>>
-			<<elseif $currentLayer==4>>
-				<<if $slingshot == 1>>
-					<<set $foodL4 += 1>>
-					<<set $HeightLog.push($ForageFoodMajor)>>
-				<<elseif $items[13].count > 0 && $items[20].count > 0>>
-					<<set $foodL4 += 1>>
-					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
-					<<set $HeightLog.push($ForageFoodMajor)>>
-				<<else>>
-					<<set $items[1].count -= 1 * _minishCor>>
-					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-						<<set $items[1].count -= 1 * _minishCorTwin>>
-					<</if>>
-				<</if>>
-			<<elseif $currentLayer==5>>
-				<<set $foodL5 += 1>>
-				<<set $crumbleFluid += 5>>
-			<<elseif $currentLayer==6>>
-				<<if $slingshot == 1>>
-					<<set $foodL6 += 1>>
-				<<elseif $items[13].count > 0 && $items[20].count > 0>>
-					<<set $foodL6 += 1>>
-					<<set $items[20].count -= Math.max(3 - $bullRed, 1)>>
-				<<else>>
-					<<set $items[1].count -= 1 * _minishCor>>
-					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-						<<set $items[1].count -= 1 * _minishCorTwin>>
-					<</if>>
-				<</if>>
-			<<elseif $currentLayer==7>>
-				<<set $items[1].count -= 1 * _minishCor>>
-				<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-					<<set $items[1].count -= 1 * _minishCorTwin>>
-				<</if>>
-			<<elseif $currentLayer==8>>
-				<<set $foodL8 += 1>>
-				<<set $LibidoLog.push($ForageFoodMinor)>>
-			<</if>>
-		<<else>>
-			<<if $currentLayer==2>>
-				<<set $foodL2 += 1>>
-				<<if $mudHunt == 1>>
-					<<if $slingshot == 1>>
-					<<elseif ($items[13].count > 0 && $items[20].count) > 0>>
-						<<set $items[20].count -= 1>>
+				<<case 3>>
+					<<set $foodL3 += 1>>
+					<<set $AgeLog.push($ForageFoodMajor)>>
+				<<case 4>>
+					<<if $slingshot>>
+						<<set $foodL4 += 1>>
+						<<set $HeightLog.push($ForageFoodMajor)>>
+					<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
+						<<set $foodL4 += 1>>
+						<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
+						<<set $HeightLog.push($ForageFoodMajor)>>
 					<<else>>
-						<<set $lastFlan=$time+1>>
+						/* Cannot forage for food. */
+						<<if $items[1].count >= _consumptionPerDay>>
+							<<set $items[1].count -= _consumptionPerDay>>
+						<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+							<<set $items[1].count = 0>>
+						<<else>>
+							<<break>>
+						<</if>>
 					<</if>>
-				<<else>>
-					<<set $lastFlan=$time+1>>
-				<</if>>
-			<<elseif $currentLayer==3>>
-				<<set $foodL3 += 1>>
-				<<set $AgeLog.push($ForageFoodMinor)>>
-			<<elseif $currentLayer==4>>
-				<<if $slingshot == 1>>
-					<<set $foodL4 += 1>>
-					<<set $HeightLog.push($ForageFoodMinor)>>
-				<<elseif $items[13].count > 0 && $items[20].count > 0>>
-					<<set $foodL4 += 1>>
-					<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
-					<<set $HeightLog.push($ForageFoodMinor)>>
-				<<else>>
-					<<set $items[1].count -= 1 * _minishCor>>
-					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-						<<set $items[1].count -= 1 * _minishCorTwin>>
+				<<case 5>>
+					<<set $foodL5 += 1>>
+					<<set $crumbleFluid += 5>>
+				<<case 6>>
+					<<if $slingshot>>
+						<<set $foodL6 += 1>>
+					<<elseif $items[13].count && $items[20].count >= Math.max(3 - $bullRed, 1)>>
+						<<set $foodL6 += 1>>
+						<<set $items[20].count -= Math.max(3 - $bullRed, 1)>>
+					<<else>>
+						/* Cannot forage for food. */
+						<<if $items[1].count >= _consumptionPerDay>>
+							<<set $items[1].count -= _consumptionPerDay>>
+						<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+							<<set $items[1].count = 0>>
+						<<else>>
+							<<break>>
+						<</if>>
 					<</if>>
-				<</if>>
-			<<elseif $currentLayer==5>>
-				<<set $foodL5 += 1>>
-				<<set $crumbleFluid += 1>>
-			<<elseif $currentLayer==6>>
-				<<if $slingshot == 1>>
-					<<set $foodL6 += 1>>
-				<<elseif $items[13].count > 0 && $items[20].count > 0>>
-					<<set $foodL6 += 1>>
-					<<set $items[20].count -= Math.max(3 - $bullRed, 1)>>
-				<<else>>
-					<<set $items[1].count -= 1 * _minishCor>>
-					<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-						<<set $items[1].count -= 1 * _minishCorTwin>>
+				<<case 7>>
+					/* Cannot forage for food. */
+					<<if $items[1].count >= _consumptionPerDay>>
+						<<set $items[1].count -= _consumptionPerDay>>
+					<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+						<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+						<<set $items[1].count = 0>>
+					<<else>>
+						<<break>>
 					<</if>>
-				<</if>>
-			<<elseif $currentLayer==7>>
-				<<set $items[1].count -= 1 * _minishCor>>
-				<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-					<<set $items[1].count -= 1 * _minishCorTwin>>
-				<</if>>
-			<<elseif $currentLayer==8>>
-				<<set $foodL8 += 1>>
-				<<set $LibidoLog.push($ForageFoodMinor)>>
-			<</if>>
+				<<case 8>>
+					<<set $foodL8 += 1>>
+					<<set $LibidoLog.push($ForageFoodMinor)>>
+			<</switch>>
+		<<else>>
+			<<switch $currentLayer>>
+				<<case 1>>
+					<<set $foodL1 += 1>>
+				<<case 2>>
+					<<set $foodL2 += 1>>
+					<<if $mudHunt>>
+						<<if $slingshot>>
+							/* Slingshot doesn't use bullets. */
+						<<elseif $items[13].count && $items[20].count >= 1>>
+							<<set $items[20].count -= 1>>
+						<<else>>
+							<<set $lastFlan = $time + _i>>
+						<</if>>
+					<<else>>
+						<<set $lastFlan = $time + _i>>
+					<</if>>
+				<<case 3>>
+					<<set $foodL3 += 1>>
+					<<set $AgeLog.push($ForageFoodMinor)>>
+				<<case 4>>
+					<<if $slingshot>>
+						<<set $foodL4 += 1>>
+						<<set $HeightLog.push($ForageFoodMinor)>>
+					<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
+						<<set $foodL4 += 1>>
+						<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
+						<<set $HeightLog.push($ForageFoodMinor)>>
+					<<else>>
+						/* Cannot forage for food. */
+						<<if $items[1].count >= _consumptionPerDay>>
+							<<set $items[1].count -= _consumptionPerDay>>
+						<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+							<<set $items[1].count = 0>>
+						<<else>>
+							<<break>>
+						<</if>>
+					<</if>>
+				<<case 5>>
+					<<set $foodL5 += 1>>
+					<<set $crumbleFluid += 1>>
+				<<case 6>>
+					<<if $slingshot == 1>>
+						<<set $foodL6 += 1>>
+					<<elseif $items[13].count && $items[20].count >= Math.max(3 - $bullRed, 1)>>
+						<<set $foodL6 += 1>>
+						<<set $items[20].count -= Math.max(3 - $bullRed, 1)>>
+					<<else>>
+						/* Cannot forage for food. */
+						<<if $items[1].count >= _consumptionPerDay>>
+							<<set $items[1].count -= _consumptionPerDay>>
+						<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+							<<set $items[1].count = 0>>
+						<<else>>
+							<<break>>
+						<</if>>
+					<</if>>
+				<<case 7>>
+					/* Cannot forage for food. */
+					<<if $items[1].count >= _consumptionPerDay>>
+						<<set $items[1].count -= _consumptionPerDay>>
+					<<elseif $items[1].count + $items[24].count >= _consumptionPerDay>>
+						<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
+						<<set $items[1].count = 0>>
+					<<else>>
+						<<break>>
+					<</if>>
+				<<case 8>>
+					<<set $foodL8 += 1>>
+					<<set $LibidoLog.push($ForageFoodMinor)>>
+			<</switch>>
 		<</if>>
-	<</if>>
-<</for>>	
+	<</for>>
+<</for>>
 
-<<if $items[1].count < 0>>
-	<<set $starving -= $items[1].count * _minishCor>>
-	<<set $items[1].count = 0>>
-<<else>>
-	<<set $starving = 0 >>
-<</if>>
-
-<<if $items[0].count + $items[3].count + $items[25].count> 0>>
-	<<set _temploop = $tempTime+$dehydrated>>
-<<else>>
-	<<set _temploop = $tempTime>>
-<</if>>
-
-<<for $i = 0; $i < _temploop; $i++>>
-	<<if $dehydrated>1 & $forageWater == 0 && $currentLayer != 3 && $currentLayer != 5>>
+<<for _i = 0; _i < $tempTime; ++_i>>
+	<<if !$forageWater && $dehydrated > 1 && $currentLayer != 3 && $currentLayer != 5 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
 		<<set $forageWater = 1>>
 	<</if>>
-
-	<<if ($items[25].count > 0 && $wardWaterDrink == 1) || ($items[25].count > 0 && $wardWaterDrink == 2 && $hexflame > 9)>>
-		<<set $items[25].count -= 1 * _minishCor>>
-		<<set $items[0].count += 1 * _minishCor>>
-		<<set $hexflame -= 1>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-			<<set $items[25].count -= 1 * _minishCorTwin>>
-			<<set $items[0].count += 1 * _minishCorTwin>>
-		<</if>>
-	<</if>>
-	<<if $forageWater == 0>>
-		<<include "Drinking code">>
-	<<else>>
-		<<if $abyssKnow == 0>>
-			<<if $currentLayer==1>>
-				<<set $waterL1 += 1>>
-				<<set $GenderLog.push($ForageWaterMajor)>>/* layer specific */
-			<<elseif $currentLayer==2>>
-				<<set $waterL2 += 1>>
-				<<set $bewitchBabies += 1>>
-			<<elseif $currentLayer==3>>
-				<<include "Drinking code">>
-			<<elseif $currentLayer==4>>
-				<<set $waterL4 += 1>>
-				<<set $algalSize += 1>>
-			<<elseif $currentLayer==5>>	
-				<<include "Drinking code">>
-			<<elseif $currentLayer==6>>
-				<<set $waterL6 += 1>>
-				<<if !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
-					<<set $hexflame += 1>>
-				<</if>>
-			<<elseif $currentLayer==7>>	
-				<<include "Drinking code">>
-			<<elseif $currentLayer==8>>
-				<<set $waterL8 += 1>>
-				<<set $IQdrop += 0.5>>
+	<<for ++$dehydrated; $dehydrated > 0; --$dehydrated>>
+		/* First check if we're drinking ward water. */
+		<<if $items[25].count >= _consumptionPerDay && ($wardWaterDrink == 1 || ($wardWaterDrink == 2 && $hexflame > 9))>>
+			<<set $items[25].count -= _consumptionPerDay>>
+			<<if $hexflame > 9>>
+				<<set $hexflame -= 1>>
 			<</if>>
-		<<else>>
-			<<if $layer==3>>
-				<<include "Drinking code">>
-			<<elseif $layer==4>>
-				<<set $waterL4 += 1>>
-				<<if $abyssKnow == 0>>
+		<<elseif !$forageWater>>
+			<<include "Drinking code">>
+		<<elseif !$abyssKnow>>
+			<<switch $currentLayer>>
+				<<case 1>>
+					<<set $waterL1 += 1>>
+					<<set $GenderLog.push($ForageWaterMajor)>>
+				<<case 2>>
+					<<set $waterL2 += 1>>
+					<<set $bewitchBabies += 1>>
+				<<case 3>>
+					<<include "Drinking code">>
+				<<case 4>>
+					<<set $waterL4 += 1>>
 					<<set $algalSize += 1>>
-				<</if>>
-			<<elseif $layer==5>>
-				<<include "Drinking code">>
-			<<elseif $layer==6>>
-				<<set $waterL6 += 1>>
-				<<if !($hiredCompanions.some(e => e.name === "Saeko") && $items[17].count > 0)>>
-					<<set $hexflame += 1>>
-				<</if>>
-			<<elseif $currentLayer==7>>	
-				<<include "Drinking code">>
-			<<elseif $currentLayer==8 && !($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
-				<<set $waterL8 += 1>>
-				<<set $IQdrop  += 0.5>>
-			<<elseif $currentLayer==8 && ($hiredCompanions.some(e => e.name === "Saeko") && ($items[17].count > 0 | $items[21].count > 0))>>
-				<<set $waterL8 += 1>>
-				<<set $IQdrop  += 0.05>>
-			<</if>>
+				<<case 5>>
+					<<include "Drinking code">>
+				<<case 6>>
+					<<set $waterL6 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
+						<<set $hexflame += 1>>
+					<</if>>
+				<<case 7>>
+					<<include "Drinking code">>
+				<<case 8>>
+					<<set $waterL8 += 1>>
+					<<set $IQdrop += 0.5>>
+			<</switch>>
+		<<else>>
+			<<switch $currentLayer>>
+				<<case 1>>
+					<<set $waterL1 += 1>>
+				<<case 2>>
+					<<set $waterL2 += 1>>
+				<<case 3>>
+					<<include "Drinking code">>
+				<<case 4>>
+					<<set $waterL4 += 1>>
+				<<case 5>>
+					<<include "Drinking code">>
+				<<case 6>>
+					<<set $waterL6 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
+						<<set $hexflame += 1>>
+					<</if>>
+				<<case 7>>
+					<<include "Drinking code">>
+				<<case 8>>
+					<<set $waterL8 += 1>>
+					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
+						<<set $IQdrop += 0.5>>
+					<<else>>
+						<<set $IQdrop += 0.05>>
+					<</if>>
+			<</switch>>
 		<</if>>
-	<</if>>
-	<<if !($currentLayer == 6) && $hexflame > 9>>
+	<</for>>
+	/* Decrease the jinxed flame counter if not on layer 6. */
+	<<if $currentLayer != 6 && $hexflame > 9>>
 		<<set $hexflame -= 1>>
-	<</if>>
-
-	<<if $items[0].count < 0 >>
-		<<set $dehydrated -= $items[0].count>>
-		<<set $items[0].count = 0>>
-	<<else>>
-		<<set $dehydrated = 0>>
 	<</if>>
 <</for>>
-<<set $tempTimeFixed=0>>
-<</nobr>>
 
-:: Drinking code[nobr]
+/* Increase the elapsed time. */
+<<set $time += $tempTime>>
+
+<</capture>>
+
+:: GeneralTimeFinal [nobr]
+/* Ensure that _daysOfEnergyRations is now 0. */
+<<set _daysOfEnergyRations = 0>>
+
+/* Ensure that we aren't left with a fractional number of rations. */
+<<set $items[1].count = Math.floor($items[1].count)>>
+<<set $items[24].count = Math.floor($items[24].count)>>
+
+/* Ensure that we aren't left with a fractional amount of water. */
+<<set $items[0].count = Math.floor($items[0].count)>>
+<<set $items[2].count = Math.ceil($items[2].count)>> /* Empty flasks */
+<<set $items[3].count = Math.floor($items[3].count)>>
+<<set $items[25].count = Math.floor($items[25].count)>>
+<<for _i = 0; _i < $flaskMatrix.length; ++_i>>
+	<<set $flaskMatrix[_i] = Math.floor($flaskMatrix[_i])>>
+<</for>>
+
+:: Drinking code [nobr]
 <<FlaskFirst>>
-<<if $items[3].count > 0 || $items[0].count > 0>>
-	<<if $flaskMatrixLabel[$flaskPref]=="Bottled water" || $items[3].count <= 0>>	
-		<<set $items[0].count -= 1 * _minishCor>>
+<<if $items[3].count >= _consumptionPerDay || $items[0].count >= _consumptionPerDay>>
+	<<if $items[3].count < _consumptionPerDay || $flaskMatrixLabel[$flaskPref] == "Bottled water">>	
+		<<set $items[0].count -= _consumptionPerDay>>
 	<<else>>
-		<<set $items[3].count -= 1  * _minishCor>>
-		<<set $items[2].count += 1  * _minishCor>>
-		<<set $flaskMatrix[$flaskPref] -= 1  * _minishCor>>
+		<<set $items[3].count -= _consumptionPerDay>>
+		<<set $items[2].count += _consumptionPerDay>>
+		<<set $flaskMatrix[$flaskPref] -= _consumptionPerDay>>
 
-
-		<<if $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the first layer">>
+		<<if $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the first layer">>
 			<<set $waterL1 += 1>>
 			<<set $GenderLog.push($ForageWaterMajor)>>
-		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the second layer">>
+		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the second layer">>
 			<<set $waterL2 += 1>>
 			<<set $bewitchBabies += 1>>
-		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the fourth layer">>
+		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the fourth layer">>
 			<<set $waterL4 += 1>>
 			<<set $algalSize += 1>>
-		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the sixth layer">>
+		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the sixth layer">>
 			<<set $waterL6 += 1>>
 			<<set $hexflame += 1>>
-		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with lightly contaiminated water from the eighth layer">>
+		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with lightly contaiminated water from the eighth layer">>
 			<<set $waterL8 += 1>>
 			<<set $IQdrop += 0.05>>
-		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the eighth layer">>
+		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the eighth layer">>
 			<<set $waterL8 += 1>>
 			<<set $IQdrop += 0.5>>
-		<<elseif $flaskMatrixLabel[$flaskPref]=="Flask with heavily contaiminated water from the ninth layer">>
+		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the ninth layer">>
 			<<set $waterL9 += 1>>
 			<<set $corruption -= 1>>
-		<</if>>		
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
-		<<FlaskFirst>>
-		<<if $items[3].count > 0 || $items[0].count > 0>>
-			<<if $flaskMatrixLabel[$flaskPref]=="Bottled water" || $items[3].count <= 0>>	
-				<<set $items[0].count -= 1 * _minishCorTwin>>
-			<<else>>
-				<<set $items[3].count -= 1 * _minishCorTwin>>
-				<<set $items[2].count += 1 * _minishCorTwin>>
-				<<set $flaskMatrix[$flaskPref] -=1 * _minishCorTwin>>
-			<</if>>
 		<</if>>
 	<</if>>
+<<elseif $items[25].count >= _consumptionPerDay>>
+	<<set $items[25].count -= _consumptionPerDay>>
+	<<if $hexflame > 9>>
+		<<set $hexflame -= 1>>
+	<</if>>
 <<else>>
-	<<set $items[0].count -= 1 >>
+	<<break>>
 <</if>>
 
 :: Water drop code[nobr]
@@ -2426,6 +2552,7 @@ How many days would you like to rest here?
 		<<set $tempTime = 1>>
 		<<include "GeneralTimeStats">>
 	<</for>>
+	<<include "GeneralTimeFinal">>
 
 <</link>><</nobr>>
 
@@ -2744,7 +2871,7 @@ How many days would you like to rest here?
 	<</if>>
 
 	<<if $tempCurse.name == "Wandering Hands">>
-		Your naughty, naughty fingers seem to be on auto-pilot whenever you're not forcing them to do something else, and autopilot is apparently fondling you and touching yourself in lewd ways. How many times a day do you find your hands doing something naughty? The answer is: constantly. The Wandering Hands Curse is unrelenting, always trying to edge you into sex addiction. It doesn't matter what you're trying to do, start a fire, draw a map, discuss a plan with others, before you know if you've got at least one hand rubbing between your legs.
+		Your naughty, naughty fingers seem to be on auto-pilot whenever you're not forcing them to do something else, and autopilot is apparently fondling you and touching yourself in lewd ways. How many times a day do you find your hands doing something naughty? The answer is: constantly. The Wandering Hands Curse is unrelenting, always trying to edge you into sex addiction. It doesn't matter what you're trying to do, start a fire, draw a map, discuss a plan with others, before you know it you've got at least one hand rubbing between your legs.
 	<</if>>
 
 	<<if $tempCurse.name == "Urine Reamplification A">>
@@ -2872,7 +2999,6 @@ How many days would you like to rest here?
 	<</if>>*/
 	<</if>>
 <</if>>
-<<statUpdateCompanions>>
 <br>
 
 :: Hijinks Oral Dom [nobr]
@@ -3008,7 +3134,8 @@ Items:<br>
 			<<elseif $ownedRelics[_i].name=="Sibyl Blend">>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$SibylBuff=0, $ownedRelics.deleteAt(_i)]]">><br>
 			<<elseif $ownedRelics[_i].name=="World Stone" && $LilyPromise>>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec-=(5-$hsswear)]]">> <br>You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly. <br>
+				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec -= (5 - $hsswear)]]">>
+				You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly.<br>
 			<<elseif $ownedRelics[_i].name=="Everhevea">>
 				<<if $items[2].count >= 2>>
 					<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $items[2].count-=2]]">><br>

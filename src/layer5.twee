@@ -54,7 +54,7 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 
 
 <<if $slwear>>
-	Eventhough you flower petals on the sand being scorced by the burning sun, it doesn't feel like anything more than a pleasantly warm summer day to you. The Solace Lace will make your time on this layer much more comfortable.
+	Even though you flower petals on the sand being scorced by the burning sun, it doesn't feel like anything more than a pleasantly warm summer day to you. The Solace Lace will make your time on this layer much more comfortable.
 <<elseif $coolCloth && !$dollevent2>>
 	You put on the self-cooling clothes. The romer stones that you incorporated in it feel like small air-conditioning units. And while the clothes are light, they still cover you well and soon you feel them cool your entire body. You feel as if you could run a mile in these clothes and still not overheat, even in this scorching landscape. It looks like you'll be able to cover more distance wearing this than you would normally be able to. This reduces all travel costs by 1 day on this layer.<br><br>
 
@@ -150,7 +150,7 @@ Use the following option only if you have specifically considered your inventory
 
 :: Layer5 Threat1 Main [layer5]
 <<set $tempTime = 1>>\
-<<include "GeneralTimeStats">>\
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -166,7 +166,6 @@ Use the following option only if you have specifically considered your inventory
 :: Layer5 Mayfly Scuttler Sexual Activities [layer5 nobr]
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]<br><br>
 <<if $hiredCompanions.length > 0>>
-	<<statUpdateCompanions>>
 	<<randomSexSelect>>
 	<<set _temp = random(0,100)>>
 	As the aphrodisiacs permeate the air, a primal urge seizes you, igniting an intense heat deep within. Overwhelmed by a desire more powerful than anything you've ever experienced, your senses are heightened and your body craves satisfaction. Intoxicated by this tidal wave of passion, your thoughts blur, and your memories of the day meld together into a tapestry of sensual encounters.<br><br>
@@ -256,7 +255,6 @@ Use the following option only if you have specifically considered your inventory
 <<else>>
 	Overwhelmed and disoriented by the aphrodisiac-laden air, you stumble about, struggling to piece together the day's events. Though your memory is hazy, one thing is clear: you spent a significant portion of the day consumed by an insatiable lust, attempting to satisfy your carnal cravings.<br>
 <</if>>
-<<statUpdateCompanions>>
 <br><br>
 [[Return to exploring the Abyss|$returnPassage]]
 
@@ -303,7 +301,7 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 		<<set $items[0].count += (5 - $items[3].count)>>
 	<</if>>
 	<<set $tempTime = parseInt($temp)>>
-	<<include "GeneralTimeStats">>
+	<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</link>><br><br><</nobr>>
 <</nobr>>
 
@@ -354,13 +352,15 @@ You do not have a medkit to cure your status condition.<br>
 <div>
 <<set _name = _layerRelics[_i]>>
 <<set _relic = $relics.find(r => r.name === _name)>>
+<<set _corr = Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+<<set _time = Math.max(_relic.time - $SibylBuff, 0)>>
 [img[setup.ImagePath + _relic.pic]]
-<h2>_name</h2>
+<h2>_name <<if setup.functionalRelics.contains(_name)>> ☸<</if>></h2>
 <p class="cost">
-Cost: <<print _relic.corr>> corruption
-<<if _relic.time > 0>>
-+ <<print _relic.time>> day<<if _relic.time > 1>>s<</if>>
-<</if>>
+	<<if _corr || _time>>Cost:<<else>>Free!<</if>>
+	<<if _corr > 0>>_corr corruption<</if>>
+	<<if _corr > 0 && _time > 0>> + <</if>>
+	<<if _time > 0>>_time day<<if _time > 1>>s<</if>><</if>>
 </p>
 <p>
 <<if _totalRelics.some(e => e.name === _name)>>
@@ -432,7 +432,8 @@ Already taken
 Do you want to walk through the One-sided Tunnel and send your items back up to the surface?
 
 [[Walk through the tunnel|Layer5 Tunnel]]
-<<if $totalRelics.some(e => e.name === "Superpositional Skewer") && $items[7].count > 0>>
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<if _totalRelics.some(e => e.name === "Superpositional Skewer") && $items[7].count > 0>>
 
 	You can also utilize your Superpositional Skewer to sync with your commerce balloon, then swap it with a rock or something after you leave the Tunnel, which would allow you to instantly retrieve your items if you wish to. 
 
@@ -497,8 +498,7 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 	<<set $status.penalty = 0>>
 <</if>>
 <<set $tempTime = (Math.max(4 - ($oasisVisit * 2) - $abyssKnow, 0))>>
-<<include "GeneralTimeSetup">>
-<<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" $tempTime>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 
 <<for $i = 0; $i < 999; $i++>>
 	<<if $items[2].count > 0>>
@@ -916,7 +916,7 @@ This may impact how your sexual encounters and conversations with your companion
 
 The relentless howl of the Abyssal wind is a symphony, setting the scene of the vast, sandy desert that stretches as far as your eye can see. Petals of cerulean, vermilion, and shimmering gold twirl in the tempest, swept away from their native flora to engage in a mesmerizing, riotous dance. Their unique, sweet aroma fills your nostrils, an intoxicating blend that speaks of wild untamed life, thriving in a landscape that should otherwise be barren. The desert's odd charm grows on you, even as the erratic gusts whip against your attire, struggling to steal it away.
 
-In your mind's eye, you envision the future, living with the Curse, its potential impacts on your life. Your expedition into the Abyss, once a task of pure exploration and knowledge, now teeters precariously on the edge of unpredictable comedy and sensual adventures. 'Hijinks Ensure,' as the curse was so aptly named, will most certainly be a game-changer.
+In your mind's eye, you envision the future, living with the Curse, its potential impacts on your life. Your expedition into the Abyss, once a task of pure exploration and knowledge, now teeters precariously on the edge of unpredictable comedy and sensual adventures. 'Hijinks Ensue,' as the Curse was so aptly named, will most certainly be a game-changer.
 
 As you trek onward, lost in thoughts of what's to come, the Curse manifests for the first time. In an instant, the previously docile wind begins to cackle with a force that surprises you. It whistles and whoops, akin to a mischievous spirit having found a new plaything, tearing at your clothes with renewed vigor. Despite your efforts to keep your attire in check, a particularly strong gust manages to rip your shirt open, revealing your chest to the vibrant, flower-laden desert.
 
@@ -1211,8 +1211,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1304,8 +1303,7 @@ Please enter your new exoskeleton color:
 		<<RemoveCurse $curses[$temp2]>>
 
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1387,8 +1385,7 @@ Please enter your new exoskeleton color:
 		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set $soldRelics.push($ownedRelics[_temp])>>
-		<<set $ownedRelics.deleteAt(_temp)>>
+		<<set setup.sellRelic(_temp)>>
 	<</link>>
 
 <</if>>
@@ -1396,8 +1393,7 @@ Please enter your new exoskeleton color:
 
 :: Layer5 Tunnel [layer5]
 <<nobr>>
-<<set $tempTime = 2>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/one-sidedtunnel.png']]
 
@@ -1450,8 +1446,7 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 <<if $timeL5T1 < 8 && $timeL5T2 < 11>>[img[setup.ImagePath+'Wonders/miragevault.png']]
 <<nobr>>
 <<if $vaultWait == 0>>
-	<<set $tempTime = 3>>
-	<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+	<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <<else>>
 	<<set $vaultWait = 0>>
 <</if>>
@@ -1468,7 +1463,7 @@ You can wait here for a while if you'd like to check when the door is open. If y
 <<nobr>><<link "Wait" "Layer5 Vault">>
 	<<set $tempTime = parseInt($temp)>>
 	<<set $vaultWait = 1>>
-	<<include "GeneralTimeStats">>
+	<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</link>><br><br><</nobr>>
 
 <<if (60 - $time + $vaultTimer) > 0>>
@@ -1522,7 +1517,7 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" $tempTime>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -1551,6 +1546,7 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 	<</if>>
 
 <</for>>
+<<include "GeneralTimeFinal">>
 <</nobr>>
 <<if $layerExitTime == 0 && !($timeL5T2 > 8) && !($timeL5T1 > 7)>>
 	<<set $timeL4T1 = 0>>\
@@ -1601,7 +1597,7 @@ Use the following option only if you have specifically considered your inventory
 
 :: Layer5 Threat1 Ascend [layer5]
 <<set $tempTime = 1>>\
-<<include "GeneralTimeStats">>\
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -1618,8 +1614,7 @@ Use the following option only if you have specifically considered your inventory
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime = 13>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" 13>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -1648,6 +1643,7 @@ Use the following option only if you have specifically considered your inventory
 		<<set $layerExitTime -= 1>><<break>>
 	<</if>>
 <</for>>
+<<include "GeneralTimeFinal">>
 
 <<if $layerExitTime == 0 && !($timeL5T2 > 8) && !($timeL5T1 > 7)>>
 <<set $timeL6T1 = 0>>
@@ -1695,7 +1691,7 @@ Use the following option only if you have specifically considered your inventory
 
 :: Layer5 Threat1 Descend [layer5]
 <<set $tempTime = 1>>\
-<<include "GeneralTimeStats">>\
+<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -1755,7 +1751,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <</if>>
 <</nobr>>
-[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
 
 :: Layer5 notes [image layer5 noreturn]
 

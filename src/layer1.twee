@@ -80,7 +80,7 @@ Her thoughts trail off, and after a moment, she stands and resumes the journey w
 <br>
 What do you want to do while you're here?<br><br>
 [[Use Items and Relics]]<br>
-<<if $hiredCompanions.length > 0 || $items[21].count>0>>
+<<if $hiredCompanions.length > 0 || setup.haveSmartphoneAI>>
 [[Interact with your party|Party overview]] <<CheckParty>><br>
 <</if>>
 <</nobr>>
@@ -111,7 +111,7 @@ What do you want to do while you're here?<br><br>
 
 If there were ever any powerful, versatile, noteworthy Relics to be found in such an early layer, they were likely claimed by someone else by now. Of course, almost any Relic can be useful under the right circumstances or with some lateral thinking &mdash; these are just a bit harder to find applications for than the rarer Relics you can find deeper in.
 <br><br>
-Some Relic may be particularly well-hidden or require significant detours, causing them to incur a day cost in the search for them, in addition to the standard corruption cost.
+Some Relics may be particularly well-hidden or require significant detours, causing them to incur a day cost in the search for them, in addition to the standard corruption cost.
 <br><br>
 Certain Relics possess straightforward uses that become readily apparent in specific circumstances, while others might demand a touch of ingenuity. If a Relic has an explicit gameplay function, it will bear a ☸ symbol. Seeing this symbol indicates that the Relic has a predetermined use coded within the game. However, even without this symbol, a Relic can still prove valuable - it's up to you to discover its potential and apply it creatively!
 </p>
@@ -944,9 +944,7 @@ But gradually, a newfound certainty washes over you - the realization that your 
 <<nobr>>
 <<set $corruption -= $playerCurses[$temp].corr>>
 <<set $iconUsed = 1>>
-<<set $tempTime=3>>
-<<include "GeneralTimeSetup">>
-<<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 The Curse, $playerCurses[$temp].name, has been successfully removed and your corruption has been refunded.<br>
 <<RemoveCurse $playerCurses[$temp]>>
 <</nobr>>
@@ -979,8 +977,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <</if>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime=1>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" 1>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -988,6 +985,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 	<<set $tempTime=1>>
 	<<include "GeneralTimeStats">>
 <</for>>
+<<include "GeneralTimeFinal">>
 
 <<set $corruption -= (10 - $corRed)>>
 
@@ -1083,34 +1081,34 @@ Choose the Relic you would like to hand over to the bandits:
 		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
 			You would never hand over your Dolly... Uh, the Creepy Doll, you mean.<br>
 		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$colwear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$colwear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 
 		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$hsswear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$hsswear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 
 		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$SibylBuff=0,$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$SibylBuff=0,$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $companionLily.affec-=(3-$hsswear)]]">> 
-			<br> You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away <br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (3-$hsswear)]]">> 
+			<br>You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away.<br>
 		<<elseif $ownedRelics[$i].name=="Everhevea">>
 			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i), $items[2].count-=2]]">>
+				<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">>
 			<<else>>
 				You need to empty the Everheavea to hand it over (have at least two empty flasks in your inventory) <br>
 			<</if>>
 		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$DaedalusEquip = false, $DaedalusFly = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$DaedalusEquip = false, $DaedalusFly = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Blind Divine">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$BDwear = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$BDwear = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$HeavyHeadwear= false, $surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$HeavyHeadwear= false, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
 			<<print $ownedRelics[$i].name>> You can't give away Relics that have become part of your body.<br>
 		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
 			<<print $ownedRelics[$i].name>> You can't give away Relics that have become part of your body.<br>
 		<<else>>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), $soldRelics.push($ownedRelics[$i]), $ownedRelics.deleteAt($i)]]">><br>
+			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -1263,7 +1261,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <</if>>
 <</nobr>>
-[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
 
 :: Layer1 notes [image layer1 noreturn]
 
