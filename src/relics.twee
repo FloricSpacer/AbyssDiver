@@ -1610,14 +1610,22 @@ The one supernatural effect not cancelled is the unbreakability of Eternal Repos
     <div>
     <<set _relic = $relics.find(r => r.name === _name)>>
     <<set _corr = Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
-    <<set _time = Math.max(_relic.time - $SibylBuff, 0)>>
+    <<silently>><<AdjustedTravelTime "_time" _relic.time true `-$SibylBuff`>><</silently>>
+    <<set _corrStyle = _corr > _relic.corr ? "@@color:red;" : _corr < _relic.corr ? "@@color:green;" : "">>
+    <<set _timeStyle = _time > _relic.time ? "@@color:red;" : _time < _relic.time ? "@@color:green;" : "">>
     [img[setup.ImagePath + _relic.pic]]
     <h2>_name<<if setup.functionalRelics.contains(_name)>> ☸<</if>></h2>
     <p class="cost">
-        <<if _corr || _time>>Cost:<<else>>Free!<</if>>
-        <<if _corr > 0>>_corr corruption<</if>>
-        <<if _corr > 0 && _time > 0>> + <</if>>
-        <<if _time > 0>>_time day<<if _time > 1>>s<</if>><</if>>
+        <<if _corr != _relic.corr || _time != _relic.time>><s>
+            <<if _relic.corr > 0 || _relic.time > 0>>Cost:<<else>>Free!<</if>>
+            <<if _relic.corr > 0>><<print _relic.corr + " corruption">><</if>>
+            <<if _relic.corr > 0 && _relic.time > 0>> and <</if>>
+            <<if _relic.time > 0>><<print _relic.time + (_relic.time == 1 ? " day" : " days")>><</if>>
+        </s><br><</if>>
+        <<if _corr > 0 || _time > 0>>Cost:<<else>>@@color:green;Free!@@<</if>>
+        <<if _corr > 0>><<print _corrStyle + _corr + " corruption" + (_corrStyle ? "@@" : "")>><</if>>
+        <<if _corr > 0 && _time > 0>> and <</if>>
+        <<if _time > 0>><<print _timeStyle + _time + (_time == 1 ? " day" : " days") + (_timeStyle ? "@@" : "")>><</if>>
     </p>
     <p>
     <<if _totalRelics.some(e => e.name === _name)>>
