@@ -7,154 +7,10 @@
 <<if $hiredCompanions.length> 0>>\
 [[Party|Party Sidebar]]
 <</if>>\
-<<if setup.haveNotepad()>>\
+<<if setup.haveNotepad>>\
 [[Layer Notes]]
 <</if>>\
 <br>
-
-
-:: Count Curse Instances [script]
-setup.activeCurseCount = function(name) {
-	return variables().playerCurses.countWith(
-		e => e.name === name
-	);
-}
-setup.takenCurseCount = function(name) {
-	return variables().playerCurses.concat(variables().StoredCurse).countWith(
-		e => e.name === name
-	);
-}
-
-
-:: Calculate Carried Weight [script]
-setup.calcCarriedWeight = function() {
-	return (
-		variables().items.reduce((total, item) => total + item.weight * item.count, 0) +
-		variables().ownedRelics.reduce((total, relic) => total + relic.weight, 0)
-	);
-}
-
-:: Sell or unsell relic [script]
-setup.sellRelic = relicOrNameOrIndex => {
-	const vars = variables();
-	let relic, name, index;
-	switch (typeof relicOrNameOrIndex) {
-		case 'string':
-			name = relicOrNameOrIndex;
-			index = vars.ownedRelics.findIndex(relic => relic.name == name);
-			if (index >= 0) {
-				relic = vars.ownedRelics[index];
-			} else {
-				console.error(`Relic '${name}' not found in $ownedRelics!`);
-			}
-			break;
-		case 'number':
-			index = relicOrNameOrIndex;
-			if (0 <= index && index < vars.ownedRelics.length) {
-				relic = vars.ownedRelics[index];
-				name = relic.name;
-			} else {
-				console.error(`${index} is not a valid index in $ownedRelics!`);
-			}
-			break;
-		default:
-			relic = relicOrNameOrIndex;
-			if (relic) {
-				name = relic.name;
-				index = vars.ownedRelics.findIndex(relic => relic.name == name);
-				if (index < 0) console.error(`Relic '${name}' not found in $ownedRelics!`);
-			} else {
-				console.error('Passed relic was undefined!');
-			}
-	}
-	if (0 <= index && index < vars.ownedRelics.length) vars.ownedRelics.splice(index, 1);
-	if (relic) vars.soldRelics.push(relic);
-};
-setup.unsellRelic = relicOrName => {
-	const vars = variables();
-	let relic, name, index;
-	if (typeof relicOrName == 'string') {
-		name = relicOrName;
-		index = vars.soldRelics.findLastIndex(relic => relic.name == name);
-		if (index >= 0) {
-			relic = vars.soldRelics[index];
-		} else {
-			relic = vars.relics.findLast(relic => relic.name == name);
-		}
-		if (!relic) console.error(`Relic '${name}' does not exist!`);
-	} else {
-		relic = relicOrName;
-		if (relic) {
-			name = relic.name;
-			index = vars.soldRelics.findLastIndex(relic => relic.name == name);
-		} else {
-			console.error('Passed relic was undefined!');
-		}
-	}
-	if (index >= 0) vars.soldRelics.splice(index, 1);
-	if (relic) vars.ownedRelics.push(relic);
-};
-
-:: Check Availability of Cutting Tool [script]
-setup.haveCuttingTool = function() {
-	return variables().cut != 0 || variables().items[14].count > 0 || variables().ownedRelics.some(
-		r => r.name === "Giddy Reaper" || r.name === "Sharing Shears" || r.name === "Sunbeam"
-	);
-}
-
-:: Check Availability of Scuba Gear [script]
-setup.haveScubaGear = function() {
-	return variables().scuba != 0 || variables().items[15].count > 0 || variables().ownedRelics.some(
-		r => r.name === "Pneuma Wisp" 
-	);
-}
-
-:: Smartphone helpers [script]
-Object.defineProperty(setup, 'smartphoneRegular', {
-	get: () => variables().items[17],
-});
-Object.defineProperty(setup, 'haveSmartphoneRegular', {
-	get: () => variables().items[17].count > 0,
-	set: have => { variables().items[17].count = have ? 1 : 0; },
-});
-Object.defineProperty(setup, 'haveSmartphoneAI', {
-	get: () => variables().items[21].count > 0,
-	set: have => { variables().items[21].count = have ? 1 : 0; },
-});
-Object.defineProperty(setup, 'haveSmartphone', {
-	get: () => setup.haveSmartphoneRegular || setup.haveSmartphoneAI,
-});
-
-:: Check Availability of Light Source [script]
-// Light sources that are not going to run out during an expedition.
-setup.haveUnlimitedLightSource = function() {
-	return variables().light != 0 || variables().items[10].count > 0 || setup.haveSmartphone || variables().ownedRelics.some(
-		r => r.name === "Sunbeam" || r.name === "Glare Vantage"|| variables().BDwear
-	);
-}
-// Light sources that either consume supplies or can only be used in short bursts.
-// Use this function to check for Relic reachability.
-setup.havePotentialLightSource = function() {
-	return variables().items[9].count > 0 || variables().ownedRelics.some(
-		r => r.name === "Firmament Pigment"
-	) || setup.haveUnlimitedLightSource();
-}
-// Use this function to check whether a light source is on while traversing the Abyss.
-setup.haveTravelLightSource = function() {
-	return variables().torchUse == 1 
-	|| setup.haveUnlimitedLightSource();
-}
-
-:: Check Availability of notepad [script]
-setup.haveNotepad = function() {
-	return variables().notepad != 0 || setup.haveSmartphone || variables().items[26].count > 0;
-}
-
-:: Check Availability of rope [script]
-setup.haveRope = function() {
-	return variables().rope != 0 || variables().items[11].count > 0 ||  variables().ownedRelics.some(
-		r => r.name === "Orbweaver");
-}
 
 :: Curses [noreturn]
 <<AppearanceCorrect>>\
@@ -247,7 +103,7 @@ The total value of all your Relics is $total_value_relics dubloons.<br><br>
 	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.<br>
 <</if>>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
-Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br><br>
+Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br><br>
 
 <<back [[$menuReturn]]>>
 <</nobr>>
@@ -1961,12 +1817,12 @@ How many dubloons would you like to pay back?
 <<switch $currentLayer>>
 	<<case 2>>
 		/* Reduce travel time if player has a cutting tool. */
-		<<if setup.haveCuttingTool()>>
+		<<if setup.haveCuttingTool>>
 			<<set _additiveModifier -= 1>>
 		<</if>>
 	<<case 3>>
-		/* Reduce travel time if player has a light source. */
-		<<if setup.haveTravelLightSource()>>
+		/* Reduce travel time if player has an active light source. */
+		<<if setup.haveTravelLightSource>>
 			<<set _additiveModifier -= 1>>
 		<</if>>
 		/* Apply Chlorophyll curse penalty, if any. */
@@ -2123,8 +1979,8 @@ How many dubloons would you like to pay back?
 	<<case 3>>
 		<<set $timeL3 += $tempTime>>
 		<<set $timeL3T1 += $tempTime>>
-		/* Check if player has a light source. */
-		<<if !setup.haveTravelLightSource()>>
+		/* Check if player has an active light source. */
+		<<if !setup.haveTravelLightSource>>
 			<<set $timeL3T2 += $tempTime>>
 		<</if>>
 	<<case 4>>
@@ -3073,7 +2929,7 @@ Which gender will the soul you summon to inhabit the golem possess?<br>
 	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
 <</if>><br>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
-Your team is currently carrying <<print setup.calcCarriedWeight().toFixed(1)>> kg.<br>
+Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br>
 
 /*<<if >>
 <</if>> message for item redundancy*/
