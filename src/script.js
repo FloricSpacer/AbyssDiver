@@ -96,22 +96,97 @@ Config.history.maxStates = 20;
 $(document).on(':passagestart', () => {
 	// Get a reference to the active story variables store.
 	const vars = variables();
+
+	/* ---- Companion object identity ---- */
+
 	// Get name of twin so we don't have to look it up each time.
 	const twinName = vars.companionTwin.name;
-	// Restore object identity between $companions array and $companionName variables.
-	const companions = vars.companions;
-	for (const [i, companion] of companions.entries()) {
-		const name = companion.name != twinName ? companion.name : "Twin";
-		companions[i] = vars[`companion${name}`];
+
+	// Get all the companion array variables.
+	const companionArrays = [
+		'companions',
+		'hiredCompanions',
+		'DesertedCompanions',
+	].map(varName => vars[varName]);
+
+	// Restore object identity between elements of companion arrays and $companionName variables.
+	for (const companions of companionArrays) {
+		for (const [i, companion] of companions.entries()) {
+			const name = companion.name != twinName ? companion.name : "Twin";
+			const companionVar = vars[`companion${name}`];
+			if (companionVar) {
+				companions[i] = companionVar;
+			} else {
+				console.error(`Couldn't find named companion variable for companion with name ${companion.name}!`);
+			}
+		}
 	}
-	// Restore object identity between $hiredCompanions array and $companionName variables.
-	const hiredCompanions = vars.hiredCompanions;
-	for (const [i, hiredCompanion] of hiredCompanions.entries()) {
-		const name = hiredCompanion.name != twinName ? hiredCompanion.name : "Twin";
-		hiredCompanions[i] = vars[`companion${name}`];
+
+	/* ---- Curse object identity ---- */
+
+	// Get all numbered curse variables.
+	const curseVars = Object.keys(vars).filter(key => /curse\d+/.test(key)).map(key => vars[key]);
+
+	// Get all the curse array variables.
+	const miscCurseArrays = [
+		'curses',
+		'playerCurses',
+		'StoredCurse',
+		'ManagedMisfortuneActive',
+	].map(varName => vars[varName]);
+	const companionCurseArrays = vars.companions.map(companion => companion.curses);
+	const curseArrays = miscCurseArrays.concat(companionCurseArrays);
+
+	// Restore object identity between elements of curse arrays and $curseN variables.
+	// Note: Change this if curses become instanced.
+	for (const curses of curseArrays) {
+		for (const [i, curse] of curses.entries()) {
+			const curseVar = curseVars.find(curseVar => curse.name == curseVar.name);
+			if (curseVar) {
+				curses[i] = curseVar;
+			} else {
+				console.error(`Couldn't find numbered curse variable for curse with name ${curse.name}!`);
+			}
+		}
 	}
-	// Restore object identity between $app.curses and $playerCurses.
-	vars.app.curses = vars.playerCurses;	
+
+	// Restore object identity between $app.curses, $companionTwin.curses and $playerCurses.
+	for (const target of ['app', 'companionTwin']) {
+		vars[target].curses = vars.playerCurses;
+	}
+
+	// Restore object identity between twin curse logs and mc curse logs.
+	for (const type of ['Height', 'Gender', 'Age', 'Libido', 'Handicap']) {
+		vars[`${type}LogTwin`] = vars[`${type}Log`];
+	}
+
+	/* ---- Relic object identity ---- */
+
+	// Get all numbered relic variables.
+	const relicVars = Object.keys(vars).filter(key => /relic\d+/.test(key)).map(key => vars[key]);
+
+	// Get all the relic array variables.
+	const miscRelicArrays = [
+		'relics',
+		'ownedRelics',
+		'innRelics',
+		'soldRelics',
+	].map(varName => vars[varName]);
+	const relicSwapRelicArrays = vars.relicSwap;
+	const relicArrays = miscRelicArrays.concat(relicSwapRelicArrays);
+
+	// Restore object identity between elements of relic arrays and $relicN variables.
+	// Note: Change this if relics become instanced.
+	for (const relics of relicArrays) {
+		for (const [i, relic] of relics.entries()) {
+			const relicVar = relicVars.find(relicVar => relic.name == relicVar.name);
+			if (relicVar) {
+				relics[i] = relicVar;
+			} else {
+				console.error(`Couldn't find numbered relic variable for relic with name ${relic.name}!`);
+			}
+		}
+	}
 });
 
 predisplay["Menu Return"] = function (taskName) {

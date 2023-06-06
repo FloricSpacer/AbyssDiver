@@ -1,8 +1,7 @@
 :: Layer2 1 [layer2]
 <<nobr>>
 <<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
-<<set $tempTime = 2>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <<set $timeL2T1 = 0>>
 <<set $currentLayer = 2>>
 <</nobr>>\
@@ -12,7 +11,7 @@
 !Layer 2 - Dewdrop Rain Underbrush
 @@
 \
-As you enter the second layer, the clear open fields of the first gradually give way to a convoluted mass of trees, vines, and thorns, a thicket more dense than any you've ever seen. You proceed further down, the inscrutable tangle of plant matter growing taller and taller above you, eventually completely shielding the first layer from view. You feel a light pinprick on your nose and look up, thinking it to be rain, but no - these drops are falling from the plants above you, tiny dewdrops coalescing on the vines, falling down as a light drizzle at first, gathering yet more water as they fall through the enormous jungle, and finally reachiing the roots of some of the tallest trees as a veritable monsoon.
+As you enter the second layer, the clear open fields of the first gradually give way to a convoluted mass of trees, vines, and thorns, a thicket more dense than any you've ever seen. You proceed further down, the inscrutable tangle of plant matter growing taller and taller above you, eventually completely shielding the first layer from view. You feel a light pinprick on your nose and look up, thinking it to be rain, but no - these drops are falling from the plants above you, tiny dewdrops coalescing on the vines, falling down as a light drizzle at first, gathering yet more water as they fall through the enormous jungle, and finally reaching the roots of some of the tallest trees as a veritable monsoon.
 
 This layer is filled with a very dense growth of vines, bushes, and other plant life that impedes you and makes movement very time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
 
@@ -56,7 +55,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 		A small feline-looking creature approaches you and gives a little mewling sound. As you hesitate with how to react, Cherry bends down and rubs it behind one of its furry ears. Her expression is blank and she sighs as the feline mews, whispering under her breath.
 		
 		<<say $companionCherry>>I remember this being fun. Why isn't this fun anymore?<</say>>
-		She stands up and steps back, giving you a chance o touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.includes("Maru")>>Maru walks over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<</if>><br><br>
+		She stands up and steps back, giving you a chance to touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.includes("Maru")>>Maru walks over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<</if>><br><br>
 	<<elseif $layerTemp == 5>>
 		You stumble upon a tranquil, crystal-clear pond, with bioluminescent plants casting a soft, otherworldly glow upon its surface. The gentle hum of insects creates a soothing melody, accompanied by the occasional splash of leaping fish as they break the water's surface. As you draw closer, you notice that the fish are adorned with vivid, iridescent scales, shimmering like living gemstones under the luminescent light. You are momentarily entranced by this serene oasis, a welcome reprieve from the dangers you've faced thus far. However, you remind yourself to remain vigilant and continue on your journey, with the memory of the pond's enchanting beauty etched in your mind. <br><br>
 	<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
@@ -223,7 +222,7 @@ After collecting enough berries, you head back to camp with Maru. He mashes the 
 
 Some Relics may have special obstacles that must be overcome and certain supplies required in order to reach them. If you cannot retrieve such Relics, @@.unreachable;red text@@ will tell you why.
 <br><br>
-By default, your companions' reward for coming down here with you is the dubloons you hired them with (and the experience of travelling the Abyss and possibly learing useful information), and they won't be taking any Relics home. Maybe you'd like to give a few Relics to them as gifts? It could really improve your relationship, especially if you give them Relics in line with their goals or personality. After all, if you forge a lifelong bond with them, you'll still get to see and use those gifted Relics whenever you're with them!
+By default, your companions' reward for coming down here with you is the dubloons you hired them with (and the experience of travelling the Abyss and possibly learning useful information), and they won't be taking any Relics home. Maybe you'd like to give a few Relics to them as gifts? It could really improve your relationship, especially if you give them Relics in line with their goals or personality. After all, if you forge a lifelong bond with them, you'll still get to see and use those gifted Relics whenever you're with them!
 </p>
 
 <p>[[Continue exploring the second layer|Layer2 Hub]]</p>
@@ -528,8 +527,7 @@ What type of fur would you like to gain?
 <<nobr>>
 <<set $corruption += 100>>
 <<set $brokerUsed = 1>>
-<<set $tempTime = 2>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
 
@@ -577,8 +575,7 @@ Whose body do you find yourself in?
 <<set $corruption += 70>>
 <<set $starUsed = 1>>
 <<set $swapComp = $temp>>
-<<set $tempTime = 3>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <<set $hiredCompanions[$swapComp].carry = $temp2>>
 <<CarryAdjust>>
 <</nobr>>
@@ -1472,8 +1469,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<set $tempTime=5>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" 5>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -1490,6 +1486,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<</if>>
 	
 <</for>>
+<<include "GeneralTimeFinal">>
 
 <</nobr>><<if $layerExitTime == 0 && !($timeL2T1 > 3 && $hiredCompanions.length < 4)>>
 Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
@@ -1509,7 +1506,7 @@ Subtle changes in your surroundings continue, large rocks start to appear in you
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" $tempTime>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
@@ -1525,6 +1522,7 @@ Subtle changes in your surroundings continue, large rocks start to appear in you
 	<</if>>
 
 <</for>>
+<<include "GeneralTimeFinal">>
 
 
 <</nobr>><<if $layerExitTime == 0 && !($timeL2T1 > 3 && $hiredCompanions.length < 4)>>
@@ -1754,7 +1752,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <</if>>
 <</nobr>>
-[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
 
 :: Layer2 notes [image layer2 noreturn]
 

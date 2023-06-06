@@ -234,13 +234,11 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 <<elseif $steadyForced < 4>>
 	Would you like to use the Steady Shrine to copy a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Steady Shrine to copy a Curse" "Layer4 Steady1a">>
-		<<set $tempTime = 3>>
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 	<</link>><br><br>
 	Would you like to use the Steady Shrine to forcibly copy a Curse onto one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Steady Shrine to forcibly copy a Curse" "Layer4 Steady 2a">>
-		<<set $tempTime = 3>>
-		<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 	<</link>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
@@ -810,7 +808,6 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 						/* The CYOA states that the cost counter is shared between shrines. */
 						<<set $dubloons -= ($skewedUsed * 5)>>
 						<<set $skewedUsed += 1>>
-						<<statUpdateCompanions>>
 					<</link>><br>
 				<</capture>>
 			<</if>>
@@ -857,8 +854,7 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 :: Layer4 Purity 1 [layer4]
 <<nobr>>
 <<set $purityUsed = 1>>
-<<set $tempTime = 5>>
-<<include "GeneralTimeSetup">><<include "GeneralTimeStats">>
+<<AdjustedTravelTime "$tempTime" 5>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/puritytree.png']]
 
@@ -922,7 +918,6 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 				/* The CYOA states that the cost counter is shared between shrines. */
 				<<set $dubloons -= ($skewedUsed * 5)>>
 				<<set $skewedUsed += 1>>
-				<<statUpdateCompanions>>
 
 				<<set $temp2 = _companion>>
 			<</link>><br>
@@ -1099,7 +1094,7 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 		<<set $tempTime = 19>>
 	<</if>>
 
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" $tempTime>>
 	<<set $layerExitTime=$tempTime>>
 
 <</if>>
@@ -1153,6 +1148,7 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 	<</if>>
 	*/
 <</for>>
+<<include "GeneralTimeFinal">>
 
 <<if $layerExitTime == 0 && !($timeL4T1 > 6)>>
 	<<nobr>>
@@ -1183,7 +1179,7 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<include "GeneralTimeSetup">>
+	<<AdjustedTravelTime "$tempTime" $tempTime>>
 	<<set $layerExitTime=$tempTime>>
 <</if>>
 
@@ -1241,7 +1237,7 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 		<<break>>
 	<</if>>*/
 <</for>>
-
+<<include "GeneralTimeFinal">>
 
 <</nobr>>
 <<if $layerExitTime == 0 && !($timeL4T1 > 6)>>
@@ -1516,7 +1512,7 @@ Finally, the vision fades, leaving you standing once again where you were before
 	<</for>>
 <</if>>
 <</nobr>>
-[[Return|$previewReturn][$soldRelics.push($ownedRelics[$temp]), $ownedRelics.deleteAt($temp), $endloop=false]]
+[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
 
 :: Layer4 notes [image layer4 noreturn]
 
