@@ -2243,7 +2243,7 @@ How many dubloons would you like to pay back?
 				<<set $hexflame -= 1>>
 			<</if>>
 		<<elseif !$forageWater>>
-			<<include "Drinking code">>
+			<<include "Drinking code">><<if !_drank>><<break>><</if>>
 		<<elseif !$abyssKnow>>
 			<<switch $currentLayer>>
 				<<case 1>>
@@ -2253,19 +2253,19 @@ How many dubloons would you like to pay back?
 					<<set $waterL2 += 1>>
 					<<set $bewitchBabies += 1>>
 				<<case 3>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 4>>
 					<<set $waterL4 += 1>>
 					<<set $algalSize += 1>>
 				<<case 5>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 8>>
 					<<set $waterL8 += 1>>
 					<<set $IQdrop += 0.5>>
@@ -2277,18 +2277,18 @@ How many dubloons would you like to pay back?
 				<<case 2>>
 					<<set $waterL2 += 1>>
 				<<case 3>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 4>>
 					<<set $waterL4 += 1>>
 				<<case 5>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 8>>
 					<<set $waterL8 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
@@ -2360,13 +2360,15 @@ How many dubloons would you like to pay back?
 			<<set $corruption -= 1>>
 		<</if>>
 	<</if>>
+	<<set _drank = true>>
 <<elseif $items[25].count >= _consumptionPerDay>>
 	<<set $items[25].count -= _consumptionPerDay>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
 	<</if>>
+	<<set _drank = true>>
 <<else>>
-	<<break>>
+	<<set _drank = false>>
 <</if>>
 
 :: Water drop code[nobr]
