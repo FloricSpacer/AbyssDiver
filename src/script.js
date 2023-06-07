@@ -261,3 +261,179 @@ Setting.addRange("appAgeControl", {
 	step     : 1,
 });
 
+function findByName(variable, name) {
+	return variables()[variable].find(obj => obj.name == name);
+}
+
+function findByNames(variable, names) {
+	return variables()[variable].filter(obj => names.includes(obj.name));
+}
+
+function checkAvailability(itemNames, relicNames, varNames) {
+	const vars = variables();
+	// Check variables.
+	if (varNames && varNames.length && varNames.some(variable => vars[variable])) return true;
+	// Check items.
+	if (itemNames && itemNames.length && findByNames('items', itemNames).some(item => item.count > 0)) return true;
+	// Check relics.
+	if (relicNames && relicNames.length && vars.ownedRelics.some(relic => relicNames.includes(relic.name))) return true;
+	// Not found.
+	return false;
+}
+
+Object.defineProperties(setup, {
+	// Get curse by name.
+	curse: {
+		value: name => findByName('curses', name),
+	},
+	// Get curses by names.
+	curses: {
+		value: names => findByNames('curses', names),
+	},
+	// Get item by name.
+	item: {
+		value: name => findByName('items', name),
+	},
+	// Get items by name.
+	items: {
+		value: names => findByNames('items', names),
+	},
+	// Get relic by name.
+	relic: {
+		value: name => findByName('relics', name),
+	},
+	// Get relics by name.
+	relics: {
+		value: names => findByName('relics', names),
+	},
+	// Get companion by name (note: internal name, like "Twin").
+	companion: {
+		value: name => variables()[`companion${name}`],
+	},
+	// Get companions by name (note: internal name, like "Twin").
+	companions: {
+		value: names => names.map(setup.companion),
+	},
+	// Count the number of instances of a Curse active on the main character.
+	activeCurseCount: {
+		value: name => variables().playerCurses.filter(curse => curse.name == name).length,
+	},
+	// Returns the weight of the carried items and relics.
+	carriedWeight: {
+		get() {
+			let sum = 0;
+			for (const item of variables().items) sum += item.count * item.weight;
+			for (const relic of variables().ownedRelics) sum += relic.weight;
+			return sum;
+		},
+	},
+	// Check whether the player has a cutting tool.
+	haveCuttingTool: {
+		get: () => checkAvailability(['Sword'], ['Giddy Reaper', 'Sharing Shears', 'Sunbeam'], ['cut']),
+	},
+	// Check whether the player has scuba gear or an equivalent.
+	haveScubaGear: {
+		get: () => checkAvailability(['Scuba Gear'], ['Pneuma Wisp'], ['scuba']),
+	},
+	// Check or set whether the player has a regular smartphone.
+	haveSmartphoneRegular: {
+		get: () => setup.item('Smartphone').count > 0,
+		set: (have) => { setup.item('Smartphone').count = have ? 1 : 0; },
+	},
+	// Check whether the player has a smartphone upgraded with the Omoikane AI.
+	haveSmartphoneAI: {
+		get: () => setup.item('Omoikane Smartphone').count > 0,
+		set: (have) => { setup.item('Omoikane Smartphone').count = have ? 1 : 0; },
+	},
+	// Check whether the player has a smartphone of any kind.
+	haveSmartphone: {
+		get: () => setup.haveSmartphoneRegular || setup.haveSmartphoneAI,
+	},
+	// Check whether the player has a light source that won't run out.
+	haveUnlimitedLightSource: {
+		get: () => checkAvailability(['Flashlight'], ['Sunbeam', 'Glare Vantage'], ['light', 'BDwear']) || setup.haveSmartphone,
+	},
+	// Check whether the player has a light source, including consumables and ones that can only be used in short bursts.
+	havePotentialLightSource: {
+		get: () => checkAvailability(['Torch'], ['Firmament Pigment']) || setup.haveUnlimitedLightSource,
+	},
+	// Check whether the player has an active light source that can be used while traversing the Abyss.
+	haveTravelLightSource: {
+		get: () => variables().torchUse || setup.haveUnlimitedLightSource,
+	},
+	// Check whether the player has a way to take notes.
+	haveNotepad: {
+		get: () => checkAvailability(['Notepad and pen'], null, ['notepad']) || setup.haveSmartphone,
+	},
+	// Check whether the player has a rope or equivalent.
+	haveRope: {
+		get: () => checkAvailability(['Rope'], ['Orbweaver'], ['rope']),
+	},
+	// Sell a relic (dubloon reward optional).
+	sellRelic: {
+		value: (relicOrNameOrIndex, dubloonReward) => {
+			const vars = variables();
+			let relic, name, index;
+			switch (typeof relicOrNameOrIndex) {
+				case 'string':
+					name = relicOrNameOrIndex;
+					index = vars.ownedRelics.findIndex(relic => relic.name == name);
+					if (index >= 0) {
+						relic = vars.ownedRelics[index];
+					} else {
+						console.error(`Relic '${name}' not found in $ownedRelics!`);
+					}
+					break;
+				case 'number':
+					index = relicOrNameOrIndex;
+					if (0 <= index && index < vars.ownedRelics.length) {
+						relic = vars.ownedRelics[index];
+						name = relic.name;
+					} else {
+						console.error(`${index} is not a valid index in $ownedRelics!`);
+					}
+					break;
+				default:
+					relic = relicOrNameOrIndex;
+					if (relic) {
+						name = relic.name;
+						index = vars.ownedRelics.findIndex(relic => relic.name == name);
+						if (index < 0) console.error(`Relic '${name}' not found in $ownedRelics!`);
+					} else {
+						console.error('Passed relic was undefined!');
+					}
+			}
+			if (0 <= index && index < vars.ownedRelics.length) vars.ownedRelics.splice(index, 1);
+			if (relic) vars.soldRelics.push(relic);
+			if (dubloonReward) vars.dubloons += dubloonReward;
+		},
+	},
+	// Unsell a relic (dubloon cost optional).
+	unsellRelic: {
+		value: (relicOrName, dubloonCost) => {
+			const vars = variables();
+			let relic, name, index;
+			if (typeof relicOrName == 'string') {
+				name = relicOrName;
+				index = vars.soldRelics.findLastIndex(relic => relic.name == name);
+				if (index >= 0) {
+					relic = vars.soldRelics[index];
+				} else {
+					relic = vars.relics.findLast(relic => relic.name == name);
+				}
+				if (!relic) console.error(`Relic '${name}' does not exist!`);
+			} else {
+				relic = relicOrName;
+				if (relic) {
+					name = relic.name;
+					index = vars.soldRelics.findLastIndex(relic => relic.name == name);
+				} else {
+					console.error('Passed relic was undefined!');
+				}
+			}
+			if (index >= 0) vars.soldRelics.splice(index, 1);
+			if (relic) vars.ownedRelics.push(relic);
+			if (dubloonCost) vars.dubloons -= dubloonCost;
+		},
+	},
+});
