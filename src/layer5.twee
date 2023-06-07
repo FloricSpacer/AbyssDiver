@@ -373,10 +373,10 @@ You do not have a medkit to cure your status condition.<br>
 <p>
 <<if _totalRelics.some(e => e.name === _name)>>
 Already taken
-<<elseif _name === "Moonwatcher" && !setup.havePotentialLightSource()>>
+<<elseif _name === "Moonwatcher" && !setup.havePotentialLightSource>>
 @@.unreachable;Located in a dark, sealed chamber with a light-activated lock. Requires a source of light.@@
-<<elseif _name === "Twin Polaris" && setup.calcCarriedWeight() + $hiredCompanions.length * 60 < 90>>
-@@.unreachable;Located in a sealed chamber locked by a pressure switch that must be held down with 90 kg of weight. The weight you and your companions can currently put on the switch is only <<print (setup.calcCarriedWeight() + $hiredCompanions.length * 60).toFixed(1)>> kg.@@
+<<elseif _name === "Twin Polaris" && setup.carriedWeight + $hiredCompanions.length * 60 < 90>>
+@@.unreachable;Located in a sealed chamber locked by a pressure switch that must be held down with 90 kg of weight. The weight you and your companions can currently put on the switch is only <<print (setup.carriedWeight + $hiredCompanions.length * 60).toFixed(1)>> kg.@@
 <<elseif _name === "Empath Coil" && ($items[20].count < 1 || $items[13].count < 1) && $slingshot == 0>>
 @@.unreachable;Located in a sealed chamber locked by a switch on the ceiling, far out of reach. Can be hit with a pistol, using 1 bullet.@@
 <<else>>
@@ -1517,7 +1517,7 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
 
-	<<if setup.haveRope()>>
+	<<if setup.haveRope>>
 		<<set $tempTime = 11>>
 	<<else>>
 		<<set $tempTime = 24>>
