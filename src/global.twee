@@ -142,9 +142,13 @@ Click this if you have found something that can be used as a light source:
 [[I have a Light|Adjustments][$light = 1]]
 [[No Light|Adjustments][$light = 0]]
 
-Click this if you have found something that can be used as a substantial heat source:
-[[I have a source of Heat|Adjustments][$heat = 1]]
-[[No Heat|Adjustments][$heat = 0]]
+Click this if you have found something that can be used to persistently keep you warm:
+[[I have protection from cold|Adjustments][$heatOverride = true]]
+[[No protection from cold|Adjustments][$heatOverride = false]]
+
+Click this if you have found something that can be used to persistently keep from overheating:
+[[I have protection from heat|Adjustments][$coolOverride = true]]
+[[No protection from cold|Adjustments][$coolOverride = false]]
 
 Click this if you have found something that can be used as a climbing rope:
 [[I have something that can be a Rope|Adjustments][$rope = 1]]
@@ -1688,7 +1692,7 @@ You can use the balloon to send requests and Relics back to Outset Town. You can
 	<<if $ownedRelics[$i].name == "Rømer Stones" && $warmCloth == 0 && $coolCloth == 0>>
 	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either buy some winter clothers for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
-		[[Use the Rømer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30,$warmCloth=1]]<br>
+		[[Use the Rømer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30, $warmCloth=1]]<br>
 		[[Use the Rømer Stones for self-cooling summer gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1]]<br>
 	<</if>>
 	<<if $ownedRelics[$i].name == "Brave Vector" && $slingshot == 0>>
@@ -1788,10 +1792,6 @@ How many dubloons would you like to pay back?
 */
 <<set _inputTime = _args[1]>>
 
-/* Ensure the $heat and $cool variables are set correctly. */
-<<set $heat = $slwear || ($warmCloth && !$dollevent2) ? 1 : 0>>
-<<set $cool = $slwear || ($coolCloth && !$dollevent2) ? 1 : 0>>
-
 /* Start by computing the overall additive modifier. */
 <<set _additiveModifier = _args[3] || 0>>
 
@@ -1801,10 +1801,12 @@ How many dubloons would you like to pay back?
 /* Apply status penalty, if any. */
 <<if $status.duration > 0>>
 	<<set _additiveModifier += $status.penalty>>
-	/* Decrement status duration and remove status penalty if duration is now 0. */
-	<<set $status.duration -= 1>>
-	<<if $status.duration < 1>>
-		<<set $status.penalty = 0>>
+	<<if !_args[2]>>
+		/* Decrement status duration and remove status penalty if duration is now 0. */
+		<<set $status.duration -= 1>>
+		<<if $status.duration < 1>>
+			<<set $status.penalty = 0>>
+		<</if>>
 	<</if>>
 <</if>>
 
@@ -1832,7 +1834,7 @@ How many dubloons would you like to pay back?
 		<</if>>
 	<<case 4>>
 		/* Reduce travel time if player has a heat source. */
-		<<if $heat>>
+		<<if setup.haveColdProtection>>
 			<<set _additiveModifier -= 2>>
 		<<elseif $torchUse == 1 && $items[9].count > 0>>
 			<<set _additiveModifier -= 2>>
@@ -1853,7 +1855,7 @@ How many dubloons would you like to pay back?
 		<</if>>
 	<<case 5 6>>
 		/* Reduce travel time if player has a way to keep from overheating. */
-		<<if $cool>>
+		<<if setup.haveHeatProtection>>
 			<<set _additiveModifier -= 1>>
 		<</if>>
 	<<case 8>>

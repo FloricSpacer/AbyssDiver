@@ -1781,47 +1781,6 @@ Threats:
 
 <<back>>
 
-:: Layer5Time
-<<nobr>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10)) - $cool), 0))>>
-<<set $timeL5 += $tempTime>>
-<<if ($items[0].count + $items[3].count) > 10>>
-	<<set $timeL5T2 += $tempTime>>
-<</if>>
-<<set $timeL5T1 += $tempTime>>
-<<set $time += $tempTime>>
-<<if $forageFood == 0>>
-	<<set $items[1].count -= $tempTime>>
-	<<else>>
-	<<set $foodL5 += $tempTime>>
-	<<if $abyssKnow == 0>>
-		<<set $crumbleFluid += (5 * $tempTime)>>
-		<<else>>
-		<<set $crumbleFluid += $tempTime>>
-	<</if>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-	<<else>>
-		<<set $waterL5 += 1>>
-	<</if>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-<</for>>
-<</nobr>>
-
 :: Layer5 Camp
 
 <<include 'CampCode'>>
