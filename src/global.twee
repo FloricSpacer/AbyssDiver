@@ -1965,8 +1965,9 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 <<widget "PassTime">>
-<<capture _i _days>>
+<<capture _consumptionPerDay _day _days _i _random _threshold _timeDilation>>
 <<set _days = _args[0]>>
+<<set _timeDilation = 1>>
 
 /* Check for wetting events. */
 <<if $WettingSolution == 0>>
@@ -1989,69 +1990,6 @@ How many dubloons would you like to pay back?
 	<<SemenDemonCalc _days>>
 <</if>>
 
-<<switch $currentLayer>>
-	<<case 1>>
-		<<set $timeL1 += _days>>
-	<<case 2>>
-		<<set $timeL2 += _days>>
-		/* Check if player has 10+ food rations. */
-		<<if $items[1].count >= 10>>
-			<<set $timeL2T1 += _days>>
-		<</if>>
-	<<case 3>>
-		<<set $timeL3 += _days>>
-		<<set $timeL3T1 += _days>>
-		/* Check if player has an active light source. */
-		<<if !setup.haveTravelLightSource>>
-			<<set $timeL3T2 += _days>>
-		<</if>>
-	<<case 4>>
-		<<set $timeL4 += _days>>
-		<<set $timeL4T1 += _days>>
-	<<case 5>>
-		<<set $timeL5 += _days>>
-		/* Check if player has 10+ water or filled flasks. */
-		<<if ($items[0].count + $items[3].count) >= 10>>
-			<<set $timeL5T2 += _days>>
-		<</if>>
-		<<set $timeL5T1 += _days>>
-	<<case 6>>
-		<<set $timeL6 += _days>>
-		/* Check if player has 200+ dubloons. */
-		<<if $dubloons >= 200>>
-			<<set $timeL6T2 += _days>>
-		<</if>>
-		<<set $timeL6T1 += _days>>
-		/* Add a jinxed flame counter for every day unless the player is flying. */
-		<<if !$DaedalusFly>>
-			<<set $hexflame += _days>>
-		<</if>>
-	<<case 7>>
-		<<set $timeL7 += _days>>
-		/* Check if the player has fewer than 500 dubloons. */
-		<<if $dubloons < 500>>
-			<<set $timeL7T2 += _days>>
-		<</if>>
-		/* Subtract dubloons for every day spent on this layer. */
-		<<for _i = 0; _i < _days; ++_i>>
-			<<if $dubloons >= 300>>
-				<<set $dubloons -= 1>>
-			<<elseif $dubloons >= 100>>
-				<<set $dubloons -= 2>>
-			<<else>>
-				<<set $dubloons -= 3>>
-			<</if>>
-		<</for>>
-	<<case 8>>
-		<<set $timeL8 += _days>>
-		<<set $timeL8T2a += _days>>
-		<<set $timeL8T2b += _days>>
-		/* Trigger an Inanis Ego event (once per trip). */
-		<<if !$L8loopLim>>
-			<<include "Layer 8 Threat 1a">>
-		<</if>>
-<</switch>>
-
 /* Calculate the amount of food and drink that needs to be consumed per day. */
 <<set _consumptionPerDay = 1>>
 <<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
@@ -2061,13 +1999,85 @@ How many dubloons would you like to pay back?
 	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
 
-<<for _i = 0; _i < _days; ++_i>>
+<<for _i = 0, _day = 0; _i < _days; ++_i>>
+	/* Check whether we need to be foraging for food to avoid dying of starvation. */
 	<<if !$forageFood && $starving > 4 && $currentLayer != 7 && $items[1].count + $items[24].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by starvation, you are currently foraging for food on this layer, no matter the consequences.<br>
 		<<set $forageFood = 1>>
 	<</if>>
-	<<for ++$starving; $starving > 0; --$starving>>
-		<<if _daysOfEnergyRations>>
+	/* Check whether we need to be foraging for water to avoid dying of dehydration. */
+	<<if !$forageWater && $dehydrated > 1 && $currentLayer != 3 && $currentLayer != 5 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
+		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
+		<<set $forageWater = 1>>
+	<</if>>
+	/* Starvation and dehydration go up by 1 every day. If the player is starving */
+	/* or dehydrated, assume that they will stop to forage until they are sated. */
+	<<for ++$starving, ++$dehydrated; $starving > 0 || $dehydrated > 0; --$starving, --$dehydrated, ++_day>>
+		/* Adjust layer-specific state. */
+		<<if (_day % _timeDilation) == 0>>
+			<<switch $currentLayer>>
+				<<case 1>>
+					<<set $timeL1 += 1>>
+				<<case 2>>
+					<<set $timeL2 += 1>>
+					/* Check if player has 10+ food rations. */
+					<<if $items[1].count >= 10>>
+						<<set $timeL2T1 += 1>>
+					<</if>>
+				<<case 3>>
+					<<set $timeL3 += 1>>
+					<<set $timeL3T1 += 1>>
+					/* Check if player has an active light source. */
+					<<if !setup.haveTravelLightSource>>
+						<<set $timeL3T2 += 1>>
+					<</if>>
+				<<case 4>>
+					<<set $timeL4 += 1>>
+					<<set $timeL4T1 += 1>>
+				<<case 5>>
+					<<set $timeL5 += 1>>
+					/* Check if player has 10+ water or filled flasks. */
+					<<if ($items[0].count + $items[3].count) >= 10>>
+						<<set $timeL5T2 += 1>>
+					<</if>>
+					<<set $timeL5T1 += 1>>
+				<<case 6>>
+					<<set $timeL6 += 1>>
+					/* Check if player has 200+ dubloons. */
+					<<if $dubloons >= 200>>
+						<<set $timeL6T2 += 1>>
+					<</if>>
+					<<set $timeL6T1 += 1>>
+					/* Add a jinxed flame counter for every day unless the player is flying. */
+					<<if !$DaedalusFly>>
+						<<set $hexflame += 1>>
+					<</if>>
+				<<case 7>>
+					<<set $timeL7 += 1>>
+					/* Check if the player has fewer than 500 dubloons. */
+					<<if $dubloons < 500>>
+						<<set $timeL7T2 += 1>>
+					<</if>>
+					/* Subtract dubloons for every day spent on this layer. */
+					<<if $dubloons >= 300>>
+						<<set $dubloons -= 1>>
+					<<elseif $dubloons >= 100>>
+						<<set $dubloons -= 2>>
+					<<else>>
+						<<set $dubloons -= 3>>
+					<</if>>
+				<<case 8>>
+					<<set $timeL8 += 1>>
+					<<set $timeL8T2a += 1>>
+					<<set $timeL8T2b += 1>>
+					/* Trigger an Inanis Ego event (once per trip). */
+					<<if !$L8loopLim>>
+						<<include "Layer 8 Threat 1a">>
+					<</if>>
+			<</switch>>
+		<</if>>
+		/* Try to eat. */
+		<<if _daysOfEnergyRations > 0>>
 			/* If we used energy rations to speed up travel, use those first (regardless of foraging settings). */
 			<<set $items[24].count -= _consumptionPerDay>>
 			<<set _daysOfEnergyRations -= 1>>
@@ -2166,10 +2176,10 @@ How many dubloons would you like to pay back?
 						<<elseif $items[13].count && $items[20].count >= 1>>
 							<<set $items[20].count -= 1>>
 						<<else>>
-							<<set $lastFlan = $time + _i>>
+							<<set $lastFlan = $time + Math.round(_day / _timeDilation)>>
 						<</if>>
 					<<else>>
-						<<set $lastFlan = $time + _i>>
+						<<set $lastFlan = $time + Math.round(_day / _timeDilation)>>
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>
@@ -2228,17 +2238,9 @@ How many dubloons would you like to pay back?
 					<<set $LibidoLog.push($ForageFoodMinor)>>
 			<</switch>>
 		<</if>>
-	<</for>>
-<</for>>
-
-<<for _i = 0; _i < _days; ++_i>>
-	<<if !$forageWater && $dehydrated > 1 && $currentLayer != 3 && $currentLayer != 5 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
-		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
-		<<set $forageWater = 1>>
-	<</if>>
-	<<for ++$dehydrated; $dehydrated > 0; --$dehydrated>>
-		/* First check if we're drinking ward water. */
+		/* Try to drink. */
 		<<if $items[25].count >= _consumptionPerDay && ($wardWaterDrink == 1 || ($wardWaterDrink == 2 && $hexflame > 9))>>
+			/* If we're drinking ward water, use that first (regardless of foraging settings). */
 			<<set $items[25].count -= _consumptionPerDay>>
 			<<if $hexflame > 9>>
 				<<set $hexflame -= 1>>
@@ -2299,15 +2301,15 @@ How many dubloons would you like to pay back?
 					<</if>>
 			<</switch>>
 		<</if>>
+		/* Decrease the jinxed flame counter if not on layer 6. */
+		<<if $currentLayer != 6 && $hexflame > 9>>
+			<<set $hexflame -= 1>>
+		<</if>>
 	<</for>>
-	/* Decrease the jinxed flame counter if not on layer 6. */
-	<<if $currentLayer != 6 && $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
 <</for>>
 
 /* Increase the elapsed time. */
-<<set $time += _days>>
+<<set $time += Math.round(_day / _timeDilation)>>
 
 <</capture>>
 <</widget>>
