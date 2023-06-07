@@ -45,19 +45,8 @@ Finally the nauseous feeling passes but is replaced by a brief sense of terror a
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 8-threats.png']]
 
 Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the Relic is cracked and broken.
-<<nobr>>
-<<if $ownedRelics.length==1>>
-	<<set $temp=0>>
-<<else>>
-	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
-		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
-			<<set $temp=$i>>
-			<<set $endloop=false>>
-		<</if>>
-	<</for>>
-<</if>>
-<</nobr>>
-[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
+
+[[Return|$previewReturn][setup.loseRelic('Gleam Dazer')]]
 
 :: Layer7 notes [image layer7 noreturn]
 
@@ -634,38 +623,63 @@ Here you can permanently recycle any of your collected Relics for a nice haul of
 
 Choose the Relic you would like to sell:
 <<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-			You can't seem to part ways with the Creepy Doll<br>
-		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$colwear=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$hsswear=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$SibylBuff=0,$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
-			You promised Lily she could use the World Stone at the end of your journey, recycling it now will surely disappoint her quite a lot. <br>
-		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i), $items[2].count -= 2]]">>
-			<<else>>
-				You need to empty the Everheavea to recycle it (have at least two empty flasks in your inventory) <br>
-			<</if>>
-		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Blind Divine">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$BDwear = false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$HeavyHeadwear= false, $dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
-			<<print $ownedRelics[$i].name>> You can't sell Relics that have become part of your body.<br>
-		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
-			<<print $ownedRelics[$i].name>> You can't sell Relics that have become part of your body.<br>		
-		<<else>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2)))>><<print " dubloons ">><<print "[[Sell|Layer7 Recycle][$dubloons += (Math.max($ownedRelics[$i].value - 15 + ($sellAdd / 2))), setup.sellRelic($i)]]">><br>
-		<</if>>
+<<set _callback = v => v - 15 + $sellAdd / 2>>
+<<for _relic range $ownedRelics>>
+	<<capture _callback, _relic>>
+		<<set _linkText = `Sell ${_relic.name} for ${Math.max(_callback(_relic.value), 0)} dubloons`>>
+		/* Add a bit of indentation: */ &nbsp;
+		<<switch _relic.name>>
+			<<case "Creepy Doll">>
+				<<if $creepydoll.affec > 5>>
+					You can't seem to part ways with the Creepy Doll...
+				<<else>>
+					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+				<</if>>
+			<<case "Chain of Lorelei">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $colwear = 0]]
+			<<case "Heart-stealing Stole">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $hsswear = 0]]
+			<<case "Solace Lace">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $slwear = 0]]
+			<<case "Sibyl Blend">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $SibylBuff = 0]]
+			<<case "World Stone">>
+				<<if $LilyPromise>>
+					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), setup.modAffection('Lily', -5)]]
+					You promised Lily she could use the World Stone at the end of your journey. Recycling it now will surely dissapoint her quite a lot.
+				<<else>>
+					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]<br>
+				<</if>>
+			<<case "Everhevea">>
+				<<if setup.item('Empty Flask').count >= 2>>
+					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), setup.item('Empty Flask').count -= 2]]
+				<<else>>
+					You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory).
+				<</if>>
+			<<case "Brave Vector">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $slingshot = 0]]
+			<<case "Daedalus Mechanism">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $DaedalusEquip = false, $DaedalusFly = false]]
+			<<case "Blind Divine">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $BDwear = false]]
+			<<case "Heavy is the Head">>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), $HeavyHeadwear = false]]
+			<<case "Moonwatcher">>
+				<<if $BionicEye>>
+					_relic.name: You can't sell Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+				<</if>>
+			<<case "Glory's Grasp">>
+				<<if $BionicArm>>
+					_relic.name: You can't sell Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+				<</if>>
+			<<default>>
+				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+		<</switch>>
+		<br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -1213,8 +1227,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 
-		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set setup.sellRelic(_temp)>>
+		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
 <</if>>
@@ -1285,8 +1298,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 
-		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set setup.sellRelic(_temp)>>
+		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
 <</if>>
@@ -1350,8 +1362,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 			<</if>>
 		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
-		<<set _temp = $ownedRelics.findIndex(e=> e.name==="Devil's Own")>>
-		<<set setup.sellRelic(_temp)>>
+		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
 <</if>>

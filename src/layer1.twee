@@ -1076,40 +1076,62 @@ Nervously, you begin going trough your bag, attempting to decide which Relics to
 <<if $surrVal < _temp>>
 Choose the Relic you would like to hand over to the bandits:
 <<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-			You would never hand over your Dolly... Uh, the Creepy Doll, you mean.<br>
-		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$colwear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-
-		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$hsswear=0, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-
-		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$SibylBuff=0,$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (3-$hsswear)]]">> 
-			<br>You promised Lily she could use the World Stone. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away.<br>
-		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">>
-			<<else>>
-				You need to empty the Everheavea to hand it over (have at least two empty flasks in your inventory) <br>
-			<</if>>
-		<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$DaedalusEquip = false, $DaedalusFly = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Blind Divine">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$BDwear = false, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$HeavyHeadwear= false, $surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
-			<<print $ownedRelics[$i].name>> You can't give away Relics that have become part of your body.<br>
-		<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
-			<<print $ownedRelics[$i].name>> You can't give away Relics that have become part of your body.<br>
-		<<else>>
-			<<print $ownedRelics[$i].name>><<print " worth ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Hand over|Relic Surrender][$surrVal += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<</if>>
+<<for _relic range $ownedRelics>>
+	<<capture _relic>>
+		<<set _linkText = `Hand over ${_relic.name} worth ${setup.sellValue(_relic)} dubloons`>>
+		/* Add a bit of indentation: */ &nbsp;
+		<<switch _relic.name>>
+			<<case "Creepy Doll">>
+				<<if $creepydoll.affec > 5>>
+					You would never hand over your Dolly... Uh, the Creepy Doll, you mean.
+				<<else>>
+					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
+				<</if>>
+			<<case "Chain of Lorelei">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $colwear = 0]]
+			<<case "Heart-stealing Stole">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $hsswear = 0]]
+			<<case "Solace Lace">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $slwear = 0]]
+			<<case "Sibyl Blend">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $SibylBuff = 0]]
+			<<case "World Stone">>
+				<<if $LilyPromise>>
+					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.modAffection('Lily', -3)]]
+					You promised Lily she could use the World Stone at the end of your journey. Although you are not exactly selling it, you feel she would still be dissapointed if you gave it away.
+				<<else>>
+					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]<br>
+				<</if>>
+			<<case "Everhevea">>
+				<<if setup.item('Empty Flask').count >= 2>>
+					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.item('Empty Flask').count -= 2]]
+				<<else>>
+					You need to empty the Everheavea to hand it over (have at least two empty flasks in your inventory).
+				<</if>>
+			<<case "Brave Vector">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $slingshot = 0]]
+			<<case "Daedalus Mechanism">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $DaedalusEquip = false, $DaedalusFly = false]]
+			<<case "Blind Divine">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $BDwear = false]]
+			<<case "Heavy is the Head">>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), $HeavyHeadwear = false]]
+			<<case "Moonwatcher">>
+				<<if $BionicEye>>
+					_relic.name: You can't give away Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
+				<</if>>
+			<<case "Glory's Grasp">>
+				<<if $BionicArm>>
+					_relic.name: You can't give away Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
+				<</if>>
+			<<default>>
+				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
+		<</switch>>
+		<br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -1249,19 +1271,8 @@ Finally the nauseous feeling passes but is replaced by a brief sense of terror a
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-threats.png']]
 
 Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the Relic is cracked and broken.
-<<nobr>>
-<<if $ownedRelics.length==1>>
-	<<set $temp=0>>
-<<else>>
-	<<for $i = 0; $i < $ownedRelics.length && !$endloop; $i++>>
-		<<if $ownedRelics[$i].name=="Gleam Dazer" >>
-			<<set $temp=$i>>
-			<<set $endloop=false>>
-		<</if>>
-	<</for>>
-<</if>>
-<</nobr>>
-[[Return|$previewReturn][setup.sellRelic($temp), $endloop=false]]
+
+[[Return|$previewReturn][setup.loseRelic('Gleam Dazer')]]
 
 :: Layer1 notes [image layer1 noreturn]
 
