@@ -675,44 +675,64 @@ Cashing out, really? Where is your sense of adventure?
 
 	Choose the Relic you would like to sell:
 	<<nobr>>
-	<<for $i = 0; $i < $ownedRelics.length; $i++>>
-		<<capture $i>>
-			<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-				You can't seem to part ways with the Creepy Doll<br>
-			<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$colwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$hsswear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="Solace Lace">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$slwear=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$SibylBuff=0, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
-				You promised Lily she could use the World Stone at the end of your journey, selling it now will surely disappoint her greatly. <br>
-			<<elseif $ownedRelics[$i].name=="Everhevea">>
-				<<if $items[2].count >= 2>>
-					<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">><br>
+<<for _relic range $ownedRelics>>
+	<<capture _relic>>
+		<<set _linkText = `Sell ${_relic.name} for ${setup.sellValue(_relic)} dubloons`>>
+		/* Add a bit of indentation: */ &nbsp;
+		<<switch _relic.name>>
+			<<case "Creepy Doll">>
+				<<if $creepydoll.affec > 5>>
+					You can't seem to part ways with the Creepy Doll...
 				<<else>>
-					You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory) <br>
+					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
 				<</if>>
-			<<elseif $ownedRelics[$i].name=="Daedalus Mechanism">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$DaedalusEquip = false, $DaedalusFly = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="Blind Divine">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$BDwear = false, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="Heavy is the Head">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$HeavyHeadwear= false, $dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<<elseif $ownedRelics[$i].name=="Brave Vector">>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $slingshot = 0]]">><br>
-			<<elseif $ownedRelics[$i].name=="Moonwatcher" & $BionicEye >>
-				<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
-			<<elseif $ownedRelics[$i].name=="Glory's Grasp" & $BionicArm >>
-				<<print $ownedRelics[$i].name>> You can not sell Relics that have become part of your body.<br>
-			<<else>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Surface Sell 1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-			<</if>>
-		<</capture>>
-	<</for>>
+			<<case "Chain of Lorelei">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $colwear = 0]]
+			<<case "Heart-stealing Stole">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $hsswear = 0]]
+			<<case "Solace Lace">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $slwear = 0]]
+			<<case "Sibyl Blend">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $SibylBuff = 0]]
+			<<case "World Stone">>
+				<<if $LilyPromise>>
+					[[_linkText|Surface Sell 1][setup.sellRelic(_relic), setup.modAffection('Lily', -5)]]
+					You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely dissapoint her greatly.
+				<<else>>
+					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]<br>
+				<</if>>
+			<<case "Everhevea">>
+				<<if setup.item('Empty Flask').count >= 2>>
+					[[_linkText|Surface Sell 1][setup.sellRelic(_relic), setup.item('Empty Flask').count -= 2]]
+				<<else>>
+					You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory).
+				<</if>>
+			<<case "Brave Vector">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $slingshot = 0]]
+			<<case "Daedalus Mechanism">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $DaedalusEquip = false, $DaedalusFly = false]]
+			<<case "Blind Divine">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $BDwear = false]]
+			<<case "Heavy is the Head">>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $HeavyHeadwear = false]]
+			<<case "Moonwatcher">>
+				<<if $BionicEye>>
+					_relic.name: You can't sell Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+				<</if>>
+			<<case "Glory's Grasp">>
+				<<if $BionicArm>>
+					_relic.name: You can't sell Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+				<</if>>
+			<<default>>
+				[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+		<</switch>>
+		<br>
+	<</capture>>
+<</for>>
 	<</nobr>>
 <</if>>\
 
@@ -733,54 +753,45 @@ The Relic $ownedRelics[$temp].name has been successfully sold and you've gotten 
 You step into the Relic Workshop of Outset Town. The air is thick with the smell of glue, sawdust, and molten metal. You see a couple of other adventurers tinkering away at Relics they found themselves. You approach one of the free workbenches and decide what you want to do.
 
 <<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-	<<if $ownedRelics[$i].name == "Purity Tree Plank">>
-
-		<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
-
-		[[Use Purity Wood Plank|Surface Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
-	<</if>>
-
-	<<if $ownedRelics[$i].name == "Rømer Stones">>
-	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
-	You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will require using all of the Rømer stones to craft.<br>
-		<<if $warmCloth == 0>>
-		[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][setup.sellRelic($i), $items[22].count = 1, $warmCloth=1]]<br>
-		<</if>>
-		<<if $coolCloth == 0>>
-		[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][setup.sellRelic($i), $items[23].count = 1, $coolCloth=1]]<br>
-		<</if>>
-	<</if>>
-	<<if $ownedRelics[$i].name == "Creepy Doll" && $dollevent==false>>
-		<br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
-		[[Use scizzors to cut open the doll|Doll event]]<br>
-	<</if>>
-	<<if $ownedRelics[$i].name == "Brave Vector" && $slingshot == 0>>
-		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo.<br>
-		[[Reshape the Brave Vector into a powerful slingshot|Surface Workshop][$slingshot = 1]]<br>
-	<</if>>
-	<<if $ownedRelics[$i].name == "Joyous Sunder" && $joyousSword == 0>>
-		<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. <br>
-		[[Reshape the Joyous Sunder into a true sword|Surface Workshop][$joyousSword = 1]]<br>
-	<</if>>
-	<<if $ownedRelics[$i].name == "Moonwatcher" && $BionicEye == false>>
-		<br>As you contemplate the potential benefits of the Moonwatcher serving as a bionic eye, an almost electric thrill runs through you. The thought of gaining night vision and the ability to see through objects seems incredibly appealing. Here, at the Relic Workshop, they can safely perform the installation for you.<br>
-		[[Opt to have the Moonwatcher installed as your bionic eye|Surface Workshop][$light = 1, $BionicEye=true]]<br>
-	<</if>>
-	<<if $ownedRelics[$i].name == "Glory's Grasp" && $BionicArm == false>>
-		<br>The allure of Glory's Grasp replacing your organic arm with a bionic one is not lost on you. The notion carries with it a certain charm and intrigue. Here, in the Relic Workshop, they can ensure a secure and proficient installation.<br>
-		[[Proceed with the installation of Glory's Grasp as your bionic arm|Surface Workshop][$BionicArm=true]]<br>
-	<</if>>
-	<<if $ownedRelics[$i].name == "Omoikane Circuit" && setup.haveSmartphoneRegular>>
-		<br>The Omoikane Circuit, you've heard, is a Relic specifically designed for integration with your phone. Why not seize this opportunity to upgrade your device right here in the safety of the Relic Workshop?<br>
-		[[It's time to revolutionize your phone!|AI ConvoIn][setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.sellRelic($i) ]]<br>
-	<</if>>
+<<for _relic range $ownedRelics>>
+	<<capture _relic>>
+		<<switch _relic.name>>
+			<<case "Purity Tree Plank">>
+				<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
+				[[Use Purity Wood Plank|Surface Workshop][setup.loseRelic(_relic), $corruption += 25]]<br>
+			<<case "Rømer Stones">>
+				<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br>
+				<br>You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will require using all of the Rømer stones to craft.<br>
+				<<if $warmCloth == 0>>
+					[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Warming Clothes').count = 1, $warmCloth = 1]]<br>
+				<</if>>
+				<<if $coolCloth == 0>>
+					[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Cooling Clothes').count = 1, $coolCloth = 1]]<br>
+				<</if>>
+			<<case "Creepy Doll" && $dollevent==false>>
+				<br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
+				[[Use scizzors to cut open the doll|Doll event]]<br>
+			<<case "Brave Vector" && $slingshot == 0>>
+				<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo.<br>
+				[[Reshape the Brave Vector into a powerful slingshot|Surface Workshop][$slingshot = 1]]<br>
+			<<case "Joyous Sunder" && $joyousSword == 0>>
+				<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. <br>
+				[[Reshape the Joyous Sunder into a true sword|Surface Workshop][$joyousSword = 1]]<br>
+			<<case "Moonwatcher" && $BionicEye == false>>
+				<br>As you contemplate the potential benefits of the Moonwatcher serving as a bionic eye, an almost electric thrill runs through you. The thought of gaining night vision and the ability to see through objects seems incredibly appealing. Here, at the Relic Workshop, they can safely perform the installation for you.<br>
+				[[Opt to have the Moonwatcher installed as your bionic eye|Surface Workshop][$light = 1, $BionicEye = true]]<br>
+			<<case "Glory's Grasp" && $BionicArm == false>>
+				<br>The allure of Glory's Grasp replacing your organic arm with a bionic one is not lost on you. The notion carries with it a certain charm and intrigue. Here, in the Relic Workshop, they can ensure a secure and proficient installation.<br>
+				[[Proceed with the installation of Glory's Grasp as your bionic arm|Surface Workshop][$BionicArm = true]]<br>
+			<<case "Omoikane Circuit" && setup.haveSmartphoneRegular>>
+				<br>The Omoikane Circuit, you've heard, is a Relic specifically designed for integration with your phone. Why not seize this opportunity to upgrade your device right here in the safety of the Relic Workshop?<br>
+				[[It's time to revolutionize your phone!|AI ConvoIn][setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.loseRelic(_relic) ]]<br>
+		<</switch>>
 	<</capture>>
 <</for>>
 <<if setup.haveSmartphoneAI>>
 	<br>Is listening to that snarky AI worth the spec upgrade to the Omoikone Smartphone?<br>
-	[[Hell no, time for a downgrade|AI ConvoOut][setup.haveSmartphoneRegular = true, setup.haveSmartphoneAI = false, setup.unsellRelic("Omoikane Circuit")]]<br>
+	[[Hell no, time for a downgrade|AI ConvoOut][setup.haveSmartphoneRegular = true, setup.haveSmartphoneAI = false, setup.unsellRelic('Omoikane Circuit')]]<br>
 <</if>>
 <</nobr>>
 
@@ -1202,9 +1213,9 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 
 <<if $innRelics.length > 0>>
 	You can pick up any of the Relics you've previously stored in your inn room:<br>
-	<<for $i = 0; $i < $innRelics.length; $i++>>
-		<<capture $i>>
-			<<print $innRelics[$i].name + " [[Retrieve|passage()][setup.unsellRelic($innRelics[$i]), $innRelics.deleteAt($i)]]">><br>
+	<<for _i, _relic range $innRelics>>
+		<<capture _i _relic>>
+			[[`Retrieve ${_relic.name}`|passage()][setup.unsellRelic(_relic), $innRelics.deleteAt(_i)]]<br>
 		<</capture>>
 	<</for>>
 	<br>
@@ -1213,25 +1224,55 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 <<if $ownedRelics.length > 0>>
 	You can store any Relics you're holding here for safe keeping or if you just want to reduce the weight you're holding.
 	Choose a Relic you would like to store here at the inn:<br>
-	<<for $i = 0; $i < $ownedRelics.length; $i++>>
-		<<capture $i>>
-			<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-				You can't seem to part ways with the Creepy Doll<br>
-			<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $colwear = 0]]">><br>
-			<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $hsswear = 0]]">><br>
-			<<elseif $ownedRelics[$i].name=="Solace Lace">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $slwear = 0]]">><br>
-			<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $SibylBuff = 0]]">><br>
-			<<elseif $ownedRelics[$i].name=="Everhevea">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $items[2].count -= 2]]">><br>
-			<<elseif $ownedRelics[$i].name=="Brave Vector">>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i), $slingshot = 0]]">><br>
-			<<else>>
-				<<print $ownedRelics[$i].name>><<print " [[Store|passage()][$innRelics.push($ownedRelics[$i]), setup.sellRelic($i)]]">><br>
-			<</if>>
+	<<for _relic range $ownedRelics>>
+		<<capture _relic>>
+			<<set _linkText = `Store ${_relic.name}`>>
+			/* Add a bit of indentation: */ &nbsp;
+			<<switch _relic.name>>
+				<<case "Creepy Doll">>
+					<<if $creepydoll.affec > 5>>
+						You can't seem to part ways with the Creepy Doll...
+					<<else>>
+						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+					<</if>>
+				<<case "Chain of Lorelei">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $colwear = 0]]
+				<<case "Heart-stealing Stole">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $hsswear = 0]]
+				<<case "Solace Lace">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $slwear = 0]]
+				<<case "Sibyl Blend">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $SibylBuff = 0]]
+				<<case "Everhevea">>
+					<<if setup.item('Empty Flask').count >= 2>>
+						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2]]
+					<<else>>
+						You need to empty the Everheavea to store it (have at least two empty flasks in your inventory).
+					<</if>>
+				<<case "Brave Vector">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $slingshot = 0]]
+				<<case "Daedalus Mechanism">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $DaedalusEquip = false, $DaedalusFly = false]]
+				<<case "Blind Divine">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $BDwear = false]]
+				<<case "Heavy is the Head">>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $HeavyHeadwear = false]]
+				<<case "Moonwatcher">>
+					<<if $BionicEye>>
+						_relic.name: You can't store Relics that have become part of your body.
+					<<else>>
+						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+					<</if>>
+				<<case "Glory's Grasp">>
+					<<if $BionicArm>>
+						_relic.name: You can't store Relics that have become part of your body.
+					<<else>>
+						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+					<</if>>
+				<<default>>
+					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+			<</switch>>
+			<br>
 		<</capture>>
 	<</for>>
 	<br>
