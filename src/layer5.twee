@@ -149,8 +149,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Main [layer5]
-<<set $tempTime = 1>>\
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime 1>><<include "GeneralTimeFinal">>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -300,8 +299,7 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 		<<set $items[2].count = 0>>
 		<<set $items[0].count += (5 - $items[3].count)>>
 	<</if>>
-	<<set $tempTime = parseInt($temp)>>
-	<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+	<<PassTime `parseInt($temp, 10)`>><<include "GeneralTimeFinal">>
 <</link>><br><br><</nobr>>
 <</nobr>>
 
@@ -506,7 +504,7 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 	<<set $status.penalty = 0>>
 <</if>>
 <<set $tempTime = (Math.max(4 - ($oasisVisit * 2) - $abyssKnow, 0))>>
-<<AdjustedTravelTime "$tempTime" $tempTime>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" $tempTime>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
 
 <<for $i = 0; $i < 999; $i++>>
 	<<if $items[2].count > 0>>
@@ -1398,7 +1396,7 @@ Please enter your new exoskeleton color:
 
 :: Layer5 Tunnel [layer5]
 <<nobr>>
-<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/one-sidedtunnel.png']]
 
@@ -1451,7 +1449,7 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 <<if $timeL5T1 < 8 && $timeL5T2 < 11>>[img[setup.ImagePath+'Wonders/miragevault.png']]
 <<nobr>>
 <<if $vaultWait == 0>>
-	<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+	<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
 <<else>>
 	<<set $vaultWait = 0>>
 <</if>>
@@ -1466,9 +1464,8 @@ The timer on the door reads <<print (60 - $time + $vaultTimer)>>.
 You can wait here for a while if you'd like to check when the door is open. If you'd like to wait, enter the number of days you'd like to wait and choose to wait.
 <<textbox "$temp" "0">>
 <<nobr>><<link "Wait" "Layer5 Vault">>
-	<<set $tempTime = parseInt($temp)>>
 	<<set $vaultWait = 1>>
-	<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+	<<PassTime `parseInt($temp, 10)`>><<include "GeneralTimeFinal">>
 <</link>><br><br><</nobr>>
 
 <<if (60 - $time + $vaultTimer) > 0>>
@@ -1527,9 +1524,7 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 <</if>>
 
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
+	<<PassTime 1>>
 
 	<<if $timeL5T2 > 8>>
 		<br><<include "Layer5 Borer Encounter">><br><br>
@@ -1601,8 +1596,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Ascend [layer5]
-<<set $tempTime = 1>>\
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime 1>><<include "GeneralTimeFinal">>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -1624,9 +1618,7 @@ Use the following option only if you have specifically considered your inventory
 <</if>>
 
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
+	<<PassTime 1>>
 
 	<<if $timeL5T2 > 8>>
 
@@ -1695,8 +1687,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Descend [layer5]
-<<set $tempTime = 1>>\
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime 1>><<include "GeneralTimeFinal">>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 

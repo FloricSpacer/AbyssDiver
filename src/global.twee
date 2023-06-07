@@ -668,7 +668,7 @@ This will also consume food/water/etc. as necessary based on your current layer.
 :: Adjust time2 [noreturn]
 <<nobr>>
 <<set _tempTime = parseInt($temp)>>
-/*<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>*/
+/*<<PassTime _tempTime>><<include "GeneralTimeFinal">>*/
 <<set $time += _tempTime>>
 <</nobr>>
 
@@ -961,7 +961,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 	You have pushed yourself quite a bit, which hampers your recovery. So it takes 7 days until you feel fit enough to begin your journey once again. And your weakened condition will increase your next 3 travel times by 1 day each.
 	<<set $status.duration += 3>>\
 	<<set $status.penalty += 1>>\
-	<<set $tempTime=7>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+	<<PassTime 7>><<include "GeneralTimeFinal">>\
 <<elseif $hiredCompanions.length==1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. $hiredCompanions[0].name helps you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -972,7 +972,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<set $tempTime=4>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+	<<PassTime 4>><<include "GeneralTimeFinal">>\
 <<elseif $hiredCompanions.length>1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. Your companions help you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -983,7 +983,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<set $tempTime=4>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+	<<PassTime 4>><<include "GeneralTimeFinal">>\
 <</if>>\
 
 [[You cast your eyes once more on the path ahead, it's time to get moving once again|_string]]
@@ -1040,7 +1040,7 @@ Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her rec
 In the end, you don't truly resume your travels in earnest until after 7 days.
 <<set $tempTime=7>>
 <</if>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime $tempTime>><<include "GeneralTimeFinal">>\
 
 [[You cast your eyes once more on the central location of this layer, ready to get moving again|_string]]
 
@@ -1799,7 +1799,7 @@ How many dubloons would you like to pay back?
 <</capture>>
 <</widget>>
 
-:: AdjustedTravelTime widget [widget nobr]
+:: Widgets for the passage of time [widget nobr]
 <<widget "AdjustedTravelTime">>
 /*
 	_args[0]: string       = the variable to write to, as a string (e.g. "$tempTime")
@@ -1964,18 +1964,19 @@ How many dubloons would you like to pay back?
 
 <</widget>>
 
-:: GeneralTimeStats [nobr]
-<<capture _i>>
+<<widget "PassTime">>
+<<capture _i _days>>
+<<set _days = _args[0]>>
 
 /* Check for wetting events. */
 <<if $WettingSolution == 0>>
 	<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
 		<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-			<<set _random = random(1, Math.pow(3, $tempTime))>>
-			<<set _threshold = Math.pow(3, $tempTime) - Math.pow(2, $tempTime)>>
+			<<set _random = random(1, Math.pow(3, _days))>>
+			<<set _threshold = Math.pow(3, _days) - Math.pow(2, _days)>>
 		<<else>>
-			<<set _random = random(1, Math.pow(15, $tempTime))>>
-			<<set _threshold = Math.pow(15, $tempTime) - Math.pow(14, $tempTime)>>
+			<<set _random = random(1, Math.pow(15, _days))>>
+			<<set _threshold = Math.pow(15, _days) - Math.pow(14, _days)>>
 		<</if>>
 		<<if _random <= _threshold>>
 			<<include "Wetting Events">>
@@ -1985,54 +1986,54 @@ How many dubloons would you like to pay back?
 
 /* Check for Semen Demon events. */
 <<if $playerCurses.some(e => e.name === "Semen Demon")>>
-	<<SemenDemonCalc $tempTime>>
+	<<SemenDemonCalc _days>>
 <</if>>
 
 <<switch $currentLayer>>
 	<<case 1>>
-		<<set $timeL1 += $tempTime>>
+		<<set $timeL1 += _days>>
 	<<case 2>>
-		<<set $timeL2 += $tempTime>>
+		<<set $timeL2 += _days>>
 		/* Check if player has 10+ food rations. */
 		<<if $items[1].count >= 10>>
-			<<set $timeL2T1 += $tempTime>>
+			<<set $timeL2T1 += _days>>
 		<</if>>
 	<<case 3>>
-		<<set $timeL3 += $tempTime>>
-		<<set $timeL3T1 += $tempTime>>
+		<<set $timeL3 += _days>>
+		<<set $timeL3T1 += _days>>
 		/* Check if player has an active light source. */
 		<<if !setup.haveTravelLightSource>>
-			<<set $timeL3T2 += $tempTime>>
+			<<set $timeL3T2 += _days>>
 		<</if>>
 	<<case 4>>
-		<<set $timeL4 += $tempTime>>
-		<<set $timeL4T1 += $tempTime>>
+		<<set $timeL4 += _days>>
+		<<set $timeL4T1 += _days>>
 	<<case 5>>
-		<<set $timeL5 += $tempTime>>
+		<<set $timeL5 += _days>>
 		/* Check if player has 10+ water or filled flasks. */
 		<<if ($items[0].count + $items[3].count) >= 10>>
-			<<set $timeL5T2 += $tempTime>>
+			<<set $timeL5T2 += _days>>
 		<</if>>
-		<<set $timeL5T1 += $tempTime>>
+		<<set $timeL5T1 += _days>>
 	<<case 6>>
-		<<set $timeL6 += $tempTime>>
+		<<set $timeL6 += _days>>
 		/* Check if player has 200+ dubloons. */
 		<<if $dubloons >= 200>>
-			<<set $timeL6T2 += $tempTime>>
+			<<set $timeL6T2 += _days>>
 		<</if>>
-		<<set $timeL6T1 += $tempTime>>
+		<<set $timeL6T1 += _days>>
 		/* Add a jinxed flame counter for every day unless the player is flying. */
 		<<if !$DaedalusFly>>
-			<<set $hexflame += $tempTime>>
+			<<set $hexflame += _days>>
 		<</if>>
 	<<case 7>>
-		<<set $timeL7 += $tempTime>>
+		<<set $timeL7 += _days>>
 		/* Check if the player has fewer than 500 dubloons. */
 		<<if $dubloons < 500>>
-			<<set $timeL7T2 += $tempTime>>
+			<<set $timeL7T2 += _days>>
 		<</if>>
 		/* Subtract dubloons for every day spent on this layer. */
-		<<for _i = 0; _i < $tempTime; ++_i>>
+		<<for _i = 0; _i < _days; ++_i>>
 			<<if $dubloons >= 300>>
 				<<set $dubloons -= 1>>
 			<<elseif $dubloons >= 100>>
@@ -2042,9 +2043,9 @@ How many dubloons would you like to pay back?
 			<</if>>
 		<</for>>
 	<<case 8>>
-		<<set $timeL8 += $tempTime>>
-		<<set $timeL8T2a += $tempTime>>
-		<<set $timeL8T2b += $tempTime>>
+		<<set $timeL8 += _days>>
+		<<set $timeL8T2a += _days>>
+		<<set $timeL8T2b += _days>>
 		/* Trigger an Inanis Ego event (once per trip). */
 		<<if !$L8loopLim>>
 			<<include "Layer 8 Threat 1a">>
@@ -2060,7 +2061,7 @@ How many dubloons would you like to pay back?
 	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
 
-<<for _i = 0; _i < $tempTime; ++_i>>
+<<for _i = 0; _i < _days; ++_i>>
 	<<if !$forageFood && $starving > 4 && $currentLayer != 7 && $items[1].count + $items[24].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by starvation, you are currently foraging for food on this layer, no matter the consequences.<br>
 		<<set $forageFood = 1>>
@@ -2230,7 +2231,7 @@ How many dubloons would you like to pay back?
 	<</for>>
 <</for>>
 
-<<for _i = 0; _i < $tempTime; ++_i>>
+<<for _i = 0; _i < _days; ++_i>>
 	<<if !$forageWater && $dehydrated > 1 && $currentLayer != 3 && $currentLayer != 5 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
 		<<set $forageWater = 1>>
@@ -2306,9 +2307,10 @@ How many dubloons would you like to pay back?
 <</for>>
 
 /* Increase the elapsed time. */
-<<set $time += $tempTime>>
+<<set $time += _days>>
 
 <</capture>>
+<</widget>>
 
 :: GeneralTimeFinal [nobr]
 /* Ensure that _daysOfEnergyRations is now 0. */
@@ -2429,8 +2431,7 @@ How many days would you like to rest here?
 	<<set _tempTimeWait = parseInt(_temp)>>
 
 	<<for _tempTimeWait; _tempTimeWait >0; _tempTimeWait-->>
-		<<set $tempTime = 1>>
-		<<include "GeneralTimeStats">>
+		<<PassTime 1>>
 	<</for>>
 	<<include "GeneralTimeFinal">>
 

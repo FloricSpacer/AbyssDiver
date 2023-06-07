@@ -320,8 +320,7 @@ If you're not dissuaded and choose to continue onward, it will take you 8 days t
 :: Layer7 Threat2 Main [layer7]
 <<nobr>>
 <<set $timeL7T2 -= 6>>
-<<set $tempTime = 1>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime 1>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 <<if $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 3>><<set $layer7Hypno += 1>>
@@ -1376,7 +1375,7 @@ You retrieve your Relics and find that you have successfully switched the abilit
 
 [[Continue your business on the seventh layer|Layer7 Hub]]<br><br>
 
-<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
 <<set $dubloons -= 4>>
 
 <<set $temp = $relicSwap.length>>
@@ -1412,9 +1411,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 <</if>>
 
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
+	<<PassTime 1>>
 
 	<<if $dubloons < 0 && $easymode==false>>
 		<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
@@ -1486,8 +1483,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 :: Layer7 Threat2 Ascend [layer7]
 <<nobr>>
 <<set $timeL7T2 -= 6>>
-<<set $tempTime = 1>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime 1>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 
@@ -1556,10 +1552,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 <</if>>
 
 <<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-
+	<<PassTime 1>>
 
 	<<if $dubloons < 0 && $easymode==false>>
 		<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
@@ -1622,7 +1615,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 :: Layer7 Threat2 Descend [layer7]
 <<nobr>>
 <<set $timeL7T2 -= 6>>
-<<AdjustedTravelTime "$tempTime" 1>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 1>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 
@@ -1695,11 +1688,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<<set $heavyLiftDubloons += $temp2>>
 <</if>>
 <<set $dubloons += $temp2>>
-<<set $tempTime = $temp1>>
-<<if $tempTime < 0>>
-	<<set $tempTime = 0>>
-<</if>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime `Math.max($temp1, 0)`>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/heavylifting.png']]
 
@@ -1721,12 +1710,7 @@ You have worked $temp1 days and moved $temp2 loads of "construction material" to
 	<<set $landExcavDubloons += $temp2>>
 <</if>>
 <<set $dubloons += $temp2>>
-
-<<set $tempTime = $temp1>>
-<<if $tempTime < 0>>
-	<<set $tempTime = 0>>
-<</if>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime `Math.max($temp1, 0)`>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/landexcavation.png']]
 
@@ -1748,12 +1732,7 @@ You have worked $temp1 days and excavated $temp2 2x2x2 cubic meters of earth to 
 	<<set $cityPaintDubloons += $temp2>>
 <</if>>
 <<set $dubloons += $temp2>>
-
-<<set $tempTime = $temp1>>
-<<if $tempTime < 0>>
-	<<set $tempTime = 0>>
-<</if>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime `Math.max($temp1, 0)`>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/citypainter.png']]
 
@@ -1775,12 +1754,7 @@ You have worked $temp1 days and painted $temp2 square km of building surface to 
 	<<set $energyGenDubloons += $temp2>>
 <</if>>
 <<set $dubloons += $temp2>>
-
-<<set $tempTime = $temp1>>
-<<if $tempTime < 0>>
-	<<set $tempTime = 0>>
-<</if>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime `Math.max($temp1, 0)`>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/energygenerator.png']]
 
@@ -1802,12 +1776,7 @@ You have worked $temp1 days and generated <<print ($temp2 / 4)>> kWh of energy t
 	<<set $roboProstituteDubloons += $temp2>>
 <</if>>
 <<set $dubloons += $temp2>>
-
-<<set $tempTime = $temp1>>
-<<if $tempTime < 0>>
-	<<set $tempTime = 0>>
-<</if>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime `Math.max($temp1, 0)`>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Foraging/energygenerator.png']]
 
@@ -1824,8 +1793,7 @@ You have worked $temp1 days and brought robots to artificial orgasm $temp2 times
 :: Layer7 Threat2 [layer7]
 <<nobr>>
 <<set $timeL7T2 -= 6>>
-<<set $tempTime = 1>>
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<PassTime 1>><<include "GeneralTimeFinal">>
 <</nobr>>
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 
