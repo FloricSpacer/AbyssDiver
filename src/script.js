@@ -369,6 +369,20 @@ Object.defineProperties(setup, {
 	haveRope: {
 		get: () => checkAvailability(['Rope'], ['Orbweaver'], ['rope']),
 	},
+	// Check whether the player has protection from cold.
+	haveColdProtection: {
+		get: () => {
+			const vars = variables();
+			return Boolean(vars.heatOverride || vars.slwear || (vars.warmCloth && !vars.dollevent2));
+		},
+	},
+	// Check whether the player has protection from heat.
+	haveHeatProtection: {
+		get: () => {
+			const vars = variables();
+			return Boolean(vars.coolOverride || vars.slwear || (vars.coolCloth && !vars.dollevent2));
+		},
+	},
 	// Sell a relic (dubloon reward optional).
 	sellRelic: {
 		value: (relicOrNameOrIndex, dubloonReward) => {
