@@ -715,39 +715,57 @@ Using your balloon, you're able to send up any Relics you want to sell and get b
 [[Finish using balloon to trade|$layerReturn]]
 
 
-:: Balloon Sell1 [balloon]
-Here you can permanently sell any of your collected Relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.
-
-Choose the Relic you would like to sell:
-<<nobr>>
-<<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<capture $i>>
-		<<if $ownedRelics[$i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-			You can't seem to part ways with the Creepy Doll<br>
-		<<elseif $ownedRelics[$i].name=="Chain of Lorelei">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$colwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Heart-stealing Stole">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$hsswear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Solace Lace">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$slwear=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="Sibyl Blend">>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$SibylBuff=0,$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<<elseif $ownedRelics[$i].name=="World Stone" && $LilyPromise>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $companionLily.affec -= (5 - $hsswear)]]">>
-			You promised Lily she could use the World Stone, selling it now will surely dissapoint her greatly.<br>
-		<<elseif $ownedRelics[$i].name=="Everhevea">>
-			<<if $items[2].count >= 2>>
-				<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i), $items[2].count -= 2]]">>
-			<<else>>
-				You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory) <br>
-			<</if>>
-		<<else>>
-			<<print $ownedRelics[$i].name>><<print " for ">><<print ($ownedRelics[$i].value + $sellAdd)>><<print " dubloons ">><<print "[[Sell|Balloon Sell1][$dubloons += ($ownedRelics[$i].value + $sellAdd), setup.sellRelic($i)]]">><br>
-		<</if>>
+:: Balloon Sell1 [balloon nobr]
+<<CarryAdjust>>
+Here you can permanently sell any of your collected Relics for a nice haul of dubloons. You can use this to fund further expeditions, pay off your debt, or just get a nice payday at the end of your expedition.<br><br>
+<<if $ownedRelics.length < 1>>
+You have no relics to sell.<br>
+<<else>>
+Choose the Relic you would like to sell:<br>
+<</if>>
+<<for _relic range $ownedRelics>>
+	<<capture _relic>>
+		<<set _linkText = `Sell ${_relic.name} for ${setup.sellValue(_relic)} dubloons`>>
+		/* Add a bit of indentation: */ &nbsp;
+		<<switch _relic.name>>
+			<<case "Creepy Doll">>
+				<<if $creepydoll.affec > 5>>
+					You can't seem to part ways with the Creepy Doll...
+				<<else>>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+				<</if>>
+			<<case "World Stone">>
+				<<if $LilyPromise>>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic), setup.modAffection('Lily', -5)]]
+					You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely dissapoint her greatly.
+				<<else>>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]<br>
+				<</if>>
+			<<case "Everhevea">>
+				<<if setup.item('Empty Flask').count >= 2>>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic), setup.item('Empty Flask').count -= 2]]
+				<<else>>
+					You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory).
+				<</if>>
+			<<case "Moonwatcher">>
+				<<if $BionicEye>>
+					_relic.name: You can't sell Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+				<</if>>
+			<<case "Glory's Grasp">>
+				<<if $BionicArm>>
+					_relic.name: You can't sell Relics that have become part of your body.
+				<<else>>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+				<</if>>
+			<<default>>
+				[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+		<</switch>>
+		<br>
 	<</capture>>
 <</for>>
-<</nobr>>
-
+<br>
 [[Continue using the commerce balloon|Commerce Balloon]]
 
 
@@ -824,7 +842,6 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <h1 class="gameover">You Are Dead</h1>\
 \
 <<if $ownedRelics.some(e => e.name === "Phoenix Obol")>>
-	<<set _string = "Layer" + $currentLayer + " Hub">>
 	The Abyss has proven to much for you. You feel your life fade as you close your eyes for a final time.
 
 	But suddenly, you startle awake again! You look around at your surroundings, and see that you're utterly alone and completely naked in an otherworldy white void that extends in every direction as you can see. The glow is not overly bright, but seems to pierce you in a way which is both unique and hard to describe. As if the light permeated your essense, rather than just illuminating your view. But before you have a chance to think too deeply about the situation, you feel a warm sensation in your clenched hand.
@@ -835,24 +852,24 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 	Then you recover and find yourself once again in a new place. But this is one that you've been to before.
 
-	<<for _i = 0; _i < $ownedRelics.length; _i++>>
-		<<capture _i>>
-			<<if $ownedRelics[_i].name=="Phoenix Obol">>
-				[[Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil|_string][setup.sellRelic(_i),$starving=0,$dehydrated=0,$SemenDemonBalance=0,$gameOver=false]]
-			<</if>>
-		<</capture>>
-	<</for>>
+	<<link 'Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil' `"Layer" + $currentLayer + " Hub"`>>
+		<<set setup.loseRelic('Phoenix Obol')>>
+		<<set $starving = 0>>
+		<<set $dehydrated = 0>>
+		<<set $SemenDemonBalance = 0>>
+		<<set $gameOver = false>>
+	<</link>>
 <<elseif $starving > 5>>
-You have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
+	You have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
 <<elseif $dehydrated > 2>>
-You managed to survive without water for a few days, but eventually died of dehydration. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
-<<elseif $SemenDemonBalance<-14>>
-Your hunger for sexual fluids was not without risks in the end. You couldn't keep up the amount of fluids your body was now requiring and in the end you collapsed. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
+	You managed to survive without water for a few days, but eventually died of dehydration. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
+<<elseif $SemenDemonBalance < -14>>
+	Your hunger for sexual fluids was not without risks in the end. You couldn't keep up the amount of fluids your body was now requiring and in the end you collapsed. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
 <<else>>
-The horrors of the Abyss were simply too much for you. Perhaps better equipement, different companions, or a totally new approach to the encounter that ended your life could have saved you.
-<</if>><<if $corruption < 0>>
-
-Due to your negative corruption, you are unable to accept a habitation option at this time. However, you can go back to the main part of the layer, then take Curses until you have reached a corruption above 0 to survive. This is highly reccomended if you wish to avoid death.
+	The horrors of the Abyss were simply too much for you. Perhaps better equipement, different companions, or a totally new approach to the encounter that ended your life could have saved you.
+<</if>>
+<<if $corruption < 0>>
+	Due to your negative corruption, you are unable to accept a habitation option at this time. However, you can go back to the main part of the layer, then take Curses until you have reached a corruption above 0 to survive. This is highly reccomended if you wish to avoid death.
 <</if>>
 
 :: Labor Scene
@@ -1647,7 +1664,7 @@ The current total value of Relics you have copied is $relic38.copiedValue dubloo
 		<</if>>
 	<</for>>
 <<else>>
-	<<set setup.sellRelic("Kin Shifter")>>
+	<<set setup.loseRelic('Kin Shifter')>>
 	As you touched the final Relic to the Kin Shifter, the last of the goo was used up and your Relic was copied. The cute eyes faded as the slime transmuted into the new Relic you chose.<br><br>
 
 	Now that you have become better equipped, you can continue your journey.<br>
@@ -2226,7 +2243,7 @@ How many dubloons would you like to pay back?
 				<<set $hexflame -= 1>>
 			<</if>>
 		<<elseif !$forageWater>>
-			<<include "Drinking code">>
+			<<include "Drinking code">><<if !_drank>><<break>><</if>>
 		<<elseif !$abyssKnow>>
 			<<switch $currentLayer>>
 				<<case 1>>
@@ -2236,19 +2253,19 @@ How many dubloons would you like to pay back?
 					<<set $waterL2 += 1>>
 					<<set $bewitchBabies += 1>>
 				<<case 3>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 4>>
 					<<set $waterL4 += 1>>
 					<<set $algalSize += 1>>
 				<<case 5>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 8>>
 					<<set $waterL8 += 1>>
 					<<set $IQdrop += 0.5>>
@@ -2260,18 +2277,18 @@ How many dubloons would you like to pay back?
 				<<case 2>>
 					<<set $waterL2 += 1>>
 				<<case 3>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 4>>
 					<<set $waterL4 += 1>>
 				<<case 5>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
-					<<include "Drinking code">>
+					<<include "Drinking code">><<if !_drank>><<break>><</if>>
 				<<case 8>>
 					<<set $waterL8 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
@@ -2343,13 +2360,15 @@ How many dubloons would you like to pay back?
 			<<set $corruption -= 1>>
 		<</if>>
 	<</if>>
+	<<set _drank = true>>
 <<elseif $items[25].count >= _consumptionPerDay>>
 	<<set $items[25].count -= _consumptionPerDay>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
 	<</if>>
+	<<set _drank = true>>
 <<else>>
-	<<break>>
+	<<set _drank = false>>
 <</if>>
 
 :: Water drop code[nobr]

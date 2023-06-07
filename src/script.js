@@ -281,6 +281,48 @@ function checkAvailability(itemNames, relicNames, varNames) {
 	return false;
 }
 
+function moveRelic(findWith, from, to, relicOrNameOrIndex) {
+	const vars = variables();
+	const fromVar = vars[from];
+	let relic, name, index;
+	switch (typeof relicOrNameOrIndex) {
+		case 'string':
+			name = relicOrNameOrIndex;
+			index = fromVar[findWith](relic => relic.name == name);
+			if (index >= 0) {
+				relic = fromVar[index];
+			} else {
+				console.error(`Relic '${name}' not found in $${from}!`);
+			}
+			break;
+		case 'number':
+			index = relicOrNameOrIndex;
+			if (0 <= index && index < fromVar.length) {
+				relic = fromVar[index];
+				name = relic.name;
+			} else {
+				console.error(`${index} is not a valid index in $${from}!`);
+			}
+			break;
+		default:
+			relic = relicOrNameOrIndex;
+			if (relic) {
+				name = relic.name;
+				index = fromVar[findWith](fromRelic => fromRelic === relic);
+				if (index < 0) index = fromVar[findWith](relic => relic.name == name);
+				if (index < 0) console.error(`Relic '${name}' not found in $${from}!`);
+			} else {
+				console.error('Passed relic was undefined!');
+			}
+	}
+	if (0 <= index && index < fromVar.length) fromVar.splice(index, 1);
+	if (relic) vars[to].push(relic);
+	return relic;
+}
+
+const moveFirstRelic = (from, to, relicOrNameOrIndex) => moveRelic('findIndex', from, to, relicOrNameOrIndex);
+const moveLastRelic = (from, to, relicOrNameOrIndex) => moveRelic('findLastIndex', from, to, relicOrNameOrIndex);
+
 Object.defineProperties(setup, {
 	// Get curse by name.
 	curse: {
@@ -313,6 +355,18 @@ Object.defineProperties(setup, {
 	// Get companions by name (note: internal name, like "Twin").
 	companions: {
 		value: names => names.map(setup.companion),
+	},
+	// Get the sell value of the given relic.
+	sellValue: {
+		value: relic => Math.max(relic.value + variables().sellAdd, 0),
+	},
+	// Modify the affection of the given companion (by name or reference).
+	// The actual change may depend on owned or equipped relics and items.
+	modAffection: {
+		value(nameOrCompanion, change) {
+			const companion = typeof nameOrCompanion == 'string' ? setup.companion(nameOrCompanion) : nameOrCompanion;
+			companion.affec += change + variables().hsswear;
+		},
 	},
 	// Count the number of instances of a Curse active on the main character.
 	activeCurseCount: {
@@ -383,71 +437,24 @@ Object.defineProperties(setup, {
 			return Boolean(vars.coolOverride || vars.slwear || (vars.coolCloth && !vars.dollevent2));
 		},
 	},
-	// Sell a relic (dubloon reward optional).
+	// Sell a relic.
 	sellRelic: {
-		value: (relicOrNameOrIndex, dubloonReward) => {
-			const vars = variables();
-			let relic, name, index;
-			switch (typeof relicOrNameOrIndex) {
-				case 'string':
-					name = relicOrNameOrIndex;
-					index = vars.ownedRelics.findIndex(relic => relic.name == name);
-					if (index >= 0) {
-						relic = vars.ownedRelics[index];
-					} else {
-						console.error(`Relic '${name}' not found in $ownedRelics!`);
-					}
-					break;
-				case 'number':
-					index = relicOrNameOrIndex;
-					if (0 <= index && index < vars.ownedRelics.length) {
-						relic = vars.ownedRelics[index];
-						name = relic.name;
-					} else {
-						console.error(`${index} is not a valid index in $ownedRelics!`);
-					}
-					break;
-				default:
-					relic = relicOrNameOrIndex;
-					if (relic) {
-						name = relic.name;
-						index = vars.ownedRelics.findIndex(relic => relic.name == name);
-						if (index < 0) console.error(`Relic '${name}' not found in $ownedRelics!`);
-					} else {
-						console.error('Passed relic was undefined!');
-					}
+		value: (relicOrNameOrIndex, valueCallback) => {
+			const relic = moveLastRelic('ownedRelics', 'soldRelics', relicOrNameOrIndex);
+			if (!relic) return;
+			if (valueCallback) {
+				variables().dubloons += Math.max(valueCallback(relic.value), 0);
+			} else {
+				variables().dubloons += setup.sellValue(relic);
 			}
-			if (0 <= index && index < vars.ownedRelics.length) vars.ownedRelics.splice(index, 1);
-			if (relic) vars.soldRelics.push(relic);
-			if (dubloonReward) vars.dubloons += dubloonReward;
 		},
 	},
-	// Unsell a relic (dubloon cost optional).
+	// Unsell a relic.
 	unsellRelic: {
-		value: (relicOrName, dubloonCost) => {
-			const vars = variables();
-			let relic, name, index;
-			if (typeof relicOrName == 'string') {
-				name = relicOrName;
-				index = vars.soldRelics.findLastIndex(relic => relic.name == name);
-				if (index >= 0) {
-					relic = vars.soldRelics[index];
-				} else {
-					relic = vars.relics.findLast(relic => relic.name == name);
-				}
-				if (!relic) console.error(`Relic '${name}' does not exist!`);
-			} else {
-				relic = relicOrName;
-				if (relic) {
-					name = relic.name;
-					index = vars.soldRelics.findLastIndex(relic => relic.name == name);
-				} else {
-					console.error('Passed relic was undefined!');
-				}
-			}
-			if (index >= 0) vars.soldRelics.splice(index, 1);
-			if (relic) vars.ownedRelics.push(relic);
-			if (dubloonCost) vars.dubloons -= dubloonCost;
-		},
+		value: relicOrNameOrIndex => moveLastRelic('soldRelics', 'ownedRelics', relicOrNameOrIndex),
+	},
+	// Lose a relic. To do: Switch from 'soldRelics' to a different variable.
+	loseRelic: {
+		value: relicOrNameOrIndex => moveLastRelic('ownedRelics', 'soldRelics', relicOrNameOrIndex),
 	},
 });
