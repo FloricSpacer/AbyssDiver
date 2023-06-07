@@ -430,7 +430,7 @@ There is a very easily accessible source of water on this layer, the River Dycx,
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
 <<nobr>>
 <<set _totalRelics = $ownedRelics.concat($soldRelics)>>
-<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 <</nobr>><<if $mawUse == 0>>
 As you press through the thicket of incessantly writhing tentacles, the tentacles subtly change their rhythm. The heat has long ago seared your sense of comfort away, replaced with a strange duality of torment and transcendence. The harsh, yet strangely savory, scent of burning flesh punctuates the air, becoming richer and more distinct. Suddenly, the sea of tentacles parts like the Red Sea before Moses, revealing a broad expanse of barren rock.
 
@@ -1086,7 +1086,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 
 :: Layer6 Threat1 Main2 [layer6]
-<<PassTime $tentacleFucked>><<include "GeneralTimeFinal">>\
+<<PassTime $tentacleFucked>>\
 
 <<if $khemiaFucked == 0>>
 	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
@@ -1109,32 +1109,24 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<AdjustedTravelTime "$tempTime" $tempTime>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
+<</if>>
+<<set _triggers = {
+	fellDragon: () => $timeL6T2 > 7 && $dragonKill < 5,
+	greaterTentacleBeast: () => $timeL6T1 > 14,
+}>>
+
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.fellDragon()>>
+	<br><<include "Layer6 Dragon Encounter">><br><br>
+	[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = passage()]]<br><br>
+<<elseif _triggers.greaterTentacleBeast()>>
+	<br><<include "Layer6 Tentacle Encounter">><br><br>
+	[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]<br><br>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-	<<PassTime 1>>
-
-	<<if $timeL6T2 > 7 && $dragonKill < 5>>
-
-		<br><<include "Layer6 Dragon Encounter">><br><br>
-
-		[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Ascend2"]]<br><br>
-
-		<<set $layerExitTime -= 1>><<break>>
-
-	<</if>>
-		<<if $timeL6T1 > 14>>
-		<br><<include "Layer6 Tentacle Encounter">><br><br>
-
-		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Ascend2"]]<br><br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-<</for>>
-<<include "GeneralTimeFinal">>
-
-<</nobr>><<if $layerExitTime == 0 && !($timeL6T2 > 7 && $dragonKill < 5) && !($timeL6T1 > 14)>>
+<</nobr>><<if _done>>
 	<<nobr>>
 	<<set $corruption -= (65 - $corRed)>>
 	<<set $timeL5T1 = 0>>
@@ -1263,7 +1255,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer6 Threat1 Ascend2 [layer6]
-<<PassTime $tentacleFucked>><<include "GeneralTimeFinal">>\
+<<PassTime $tentacleFucked>>\
 
 <<if $khemiaFucked == 0>>
 	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
@@ -1279,32 +1271,24 @@ Use the following option only if you have specifically considered your inventory
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$tempTime" 16>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" 16>>
+<</if>>
+<<set _triggers = {
+	fellDragon: () => $timeL6T2 > 7 && $dragonKill < 5,
+	greaterTentacleBeast: () => $timeL6T1 > 14,
+}>>
+
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.fellDragon()>>
+	<br><<include "Layer6 Dragon Encounter">><br><br>
+	[[Deal with the Fell Dragon|Layer6 Threat2 Descend][$returnPassage = passage()]]<br><br>
+<<elseif _triggers.greaterTentacleBeast()>>
+	<br><<include "Layer6 Tentacle Encounter">><br><br>
+	[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]<br><br>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-	<<PassTime 1>>
-
-	<<if $timeL6T2 > 7 && $dragonKill < 5>>
-
-		<br><<include "Layer6 Dragon Encounter">><br><br>
-
-		[[Deal with the Fell Dragon|Layer6 Threat2 Descend][$returnPassage = "Layer6 Exit2"]]<br><br>
-
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-	<<if $timeL6T1 > 14>>
-		<br><<include "Layer6 Tentacle Encounter">><br><br>
-
-		[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Exit2"]]<br><br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-<</for>>
-<<include "GeneralTimeFinal">>
-
-<</nobr>><<if $layerExitTime == 0 && !($timeL6T2 > 7 && $dragonKill < 5) && !($timeL6T1 > 14)>>
+<</nobr>><<if _done>>
 <<set $timeL7T2 = 0>>
 	You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
 
@@ -1424,7 +1408,7 @@ Use the following option only if you have specifically considered your inventory
 [[Use a combination of Relics not mentioned above you believe would be able to defeat the beast|Layer6 Exit2]]
 
 :: Layer6 Threat1 Descend2 [layer6]
-<<PassTime $tentacleFucked>><<include "GeneralTimeFinal">>\
+<<PassTime $tentacleFucked>>\
 
 <<if $khemiaFucked == 0>>
 	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
@@ -1648,7 +1632,7 @@ Use the following option only if you have specifically considered your inventory
 
 :: Layer6 Threat1 2 [layer6]
 [img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
-<<PassTime $tentacleFucked>><<include "GeneralTimeFinal">>\
+<<PassTime $tentacleFucked>>\
 
 <<if $khemiaFucked == 0 && $app.vagina == 1 && $app.breastsCor > 0>>\
 	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they delicately caress your $app.breastsLabel cup breasts, teasing your nipples, and exploring the soft flesh of your inner thighs.

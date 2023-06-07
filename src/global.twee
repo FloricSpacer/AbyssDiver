@@ -668,7 +668,7 @@ This will also consume food/water/etc. as necessary based on your current layer.
 :: Adjust time2 [noreturn]
 <<nobr>>
 <<set _tempTime = parseInt($temp)>>
-/*<<PassTime _tempTime>><<include "GeneralTimeFinal">>*/
+/*<<PassTime _tempTime>>*/
 <<set $time += _tempTime>>
 <</nobr>>
 
@@ -961,7 +961,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 	You have pushed yourself quite a bit, which hampers your recovery. So it takes 7 days until you feel fit enough to begin your journey once again. And your weakened condition will increase your next 3 travel times by 1 day each.
 	<<set $status.duration += 3>>\
 	<<set $status.penalty += 1>>\
-	<<PassTime 7>><<include "GeneralTimeFinal">>\
+	<<PassTime 7>>\
 <<elseif $hiredCompanions.length==1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. $hiredCompanions[0].name helps you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -972,7 +972,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<PassTime 4>><<include "GeneralTimeFinal">>\
+	<<PassTime 4>>\
 <<elseif $hiredCompanions.length>1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. Your companions help you a lot and after a few days you start walking around a little bit again.
 	It takes 7 days until you feel fit enough to begin your journey once again.
@@ -983,7 +983,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 		<<set $status.duration += 3>>\
 		<<set $status.penalty += 1>>\
 	<</if>>
-	<<PassTime 4>><<include "GeneralTimeFinal">>\
+	<<PassTime 4>>\
 <</if>>\
 
 [[You cast your eyes once more on the path ahead, it's time to get moving once again|_string]]
@@ -1040,7 +1040,7 @@ Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her rec
 In the end, you don't truly resume your travels in earnest until after 7 days.
 <<set $tempTime=7>>
 <</if>>
-<<PassTime $tempTime>><<include "GeneralTimeFinal">>\
+<<PassTime $tempTime>>\
 
 [[You cast your eyes once more on the central location of this layer, ready to get moving again|_string]]
 
@@ -1855,10 +1855,12 @@ How many dubloons would you like to pay back?
 			<<set _additiveModifier -= 2>>
 		<<elseif $torchUse == 1 && $items[9].count > 0>>
 			<<set _additiveModifier -= 2>>
-			/* Decrement number of torches and stop using torches if the count is now 0. */
-			<<set $items[9].count -= 1>>
-			<<if $items[9].count < 1>>
-				<<set $torchUse = 0>>
+			<<if !_args[2]>>
+				/* Decrement number of torches and stop using torches if the count is now 0. */
+				<<set $items[9].count -= 1>>
+				<<if $items[9].count < 1>>
+					<<set $torchUse = 0>>
+				<</if>>
 			<</if>>
 		<<elseif $playerCurses.some(e => e.name === "Cold Blooded")>>
 			/* Apply Cold Blooded curse penalty. */
@@ -1908,10 +1910,9 @@ How many dubloons would you like to pay back?
 		Your exceptional physical condition is reducing your travel time.<br>
 		<<set _multiplicativeModifier /= 1 + $app.HandicapMovement / 10>>
 	<</if>>
-	/* Halve travel time if player has the Aeonglass with Endless Time relic active. */
+	/* Print a message if the Aeonglass with Endless Time relic is causing time dilation, but don't handle it here. */
 	<<if $EndlessAeonglass>>
 		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
-		<<set _multiplicativeModifier /= 2>>
 	<</if>>
 	/* Apply the multiplicative modifiers. */
 	<<set _inputTime *= _multiplicativeModifier>>
@@ -1965,29 +1966,52 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 <<widget "PassTime">>
-<<capture _consumptionPerDay _day _days _i _random _threshold _timeDilation>>
-<<set _days = _args[0]>>
-<<set _timeDilation = 1>>
+<<capture _consumptionPerDay _doneVar _passage _random _state _threshold _timeWeight _triggers>>
+<<set _triggers = _args[1] ?? {}>> /* The event triggers, if any. */
+<<set _doneVar = _args[2]>> /* The variable to write to if we don't break early. */
 
-/* Check for wetting events. */
-<<if $WettingSolution == 0>>
-	<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-		<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-			<<set _random = random(1, Math.pow(3, _days))>>
-			<<set _threshold = Math.pow(3, _days) - Math.pow(2, _days)>>
-		<<else>>
-			<<set _random = random(1, Math.pow(15, _days))>>
-			<<set _threshold = Math.pow(15, _days) - Math.pow(14, _days)>>
-		<</if>>
-		<<if _random <= _threshold>>
-			<<include "Wetting Events">>
+/* Let the caller know that we aren't done. */
+<<if _doneVar>><<print `<<set ${_doneVar} = false>>`>><</if>>
+
+/* Get the persistent state. */
+<<set _passage = passage()>>
+<<set $passTimeState ??= new Map()>>
+<<if $passTimeState.has(_passage)>>
+	/* We already have state for this passage, so use it. */
+	<<set _state = $passTimeState.get(_passage)>>
+<<else>>
+	/* Add new state for this passage. */
+	<<set _state = {
+		expectedDays: _args[0], /* The number of days of time to pass, modulo the time weight. */
+		unweightedDayIndex: 0,
+		weightedDayIndex: 0,
+		unweightedDay: 0,
+		weightedDay: 0,
+		nextRealDay: 0,
+		energy: _daysOfEnergyRations ?? 0,
+	}>>
+	<<set $passTimeState.set(_passage, _state)>>
+
+	/* Check for wetting events. */
+	<<if $WettingSolution == 0>>
+		<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+			<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+				<<set _random = random(1, Math.pow(3, _days))>>
+				<<set _threshold = Math.pow(3, _days) - Math.pow(2, _days)>>
+			<<else>>
+				<<set _random = random(1, Math.pow(15, _days))>>
+				<<set _threshold = Math.pow(15, _days) - Math.pow(14, _days)>>
+			<</if>>
+			<<if _random <= _threshold>>
+				<<include "Wetting Events">>
+			<</if>>
 		<</if>>
 	<</if>>
-<</if>>
 
-/* Check for Semen Demon events. */
-<<if $playerCurses.some(e => e.name === "Semen Demon")>>
-	<<SemenDemonCalc _days>>
+	/* Check for Semen Demon events. */
+	<<if $playerCurses.some(e => e.name === "Semen Demon")>>
+		<<SemenDemonCalc _days>>
+	<</if>>
 <</if>>
 
 /* Calculate the amount of food and drink that needs to be consumed per day. */
@@ -1999,7 +2023,15 @@ How many dubloons would you like to pay back?
 	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
 
-<<for _i = 0, _day = 0; _i < _days; ++_i>>
+/* Set time weight to 1/2 if the Aeonglass with Endless Time relic is active. */
+<<set _timeWeight = $EndlessAeonglass ? 1/2 : 1>>
+
+<<set _breakForEvent = false>>
+<<for _state.unweightedDayIndex < _state.expectedDays>>
+	/* Increment the day index. We only break out of the inner loop because we're sated, can't eat/drink or */
+	/* because an event is about to happen. An event might interrupt our attempts to decrease starvation or */
+	/* dehydration, but that's okay - we'll try again during the next trip. */
+	<<set _state.unweightedDayIndex += 1, _state.weightedDayIndex += _timeWeight>>
 	/* Check whether we need to be foraging for food to avoid dying of starvation. */
 	<<if !$forageFood && $starving > 4 && $currentLayer != 7 && $items[1].count + $items[24].count < _consumptionPerDay>>
 		@@.alert2; In order to avoid death by starvation, you are currently foraging for food on this layer, no matter the consequences.<br>
@@ -2012,9 +2044,15 @@ How many dubloons would you like to pay back?
 	<</if>>
 	/* Starvation and dehydration go up by 1 every day. If the player is starving */
 	/* or dehydrated, assume that they will stop to forage until they are sated. */
-	<<for ++$starving, ++$dehydrated; $starving > 0 || $dehydrated > 0; --$starving, --$dehydrated, ++_day>>
-		/* Adjust layer-specific state. */
-		<<if (_day % _timeDilation) == 0>>
+	<<set $starving += 1, $dehydrated += 1>>
+	<<for $starving > 0 || $dehydrated > 0>>
+		/* Increment the actual day. */
+		<<set _state.unweightedDay += 1, _state.weightedDay += _timeWeight>>
+		/* Check if a real day passed. */
+		<<if _state.weightedDay >= _state.nextRealDay>>
+			/* Adjust the overall time. */
+			<<set $time += 1>>
+			/* Adjust layer-specific state. */
 			<<switch $currentLayer>>
 				<<case 1>>
 					<<set $timeL1 += 1>>
@@ -2070,17 +2108,19 @@ How many dubloons would you like to pay back?
 					<<set $timeL8 += 1>>
 					<<set $timeL8T2a += 1>>
 					<<set $timeL8T2b += 1>>
-					/* Trigger an Inanis Ego event (once per trip). */
+					/* Trigger an Inanis Ego event (once per event trigger). */
 					<<if !$L8loopLim>>
 						<<include "Layer 8 Threat 1a">>
+						<<set $L8loopLim = true>>
 					<</if>>
 			<</switch>>
 		<</if>>
 		/* Try to eat. */
-		<<if _daysOfEnergyRations > 0>>
+		<<set _ate = true>>
+		<<if _state.energy > 0>>
 			/* If we used energy rations to speed up travel, use those first (regardless of foraging settings). */
 			<<set $items[24].count -= _consumptionPerDay>>
-			<<set _daysOfEnergyRations -= 1>>
+			<<set _state.energy -= 1>>
 		<<elseif !$forageFood>>
 			<<if $items[1].count >= _consumptionPerDay>>
 				<<set $items[1].count -= _consumptionPerDay>>
@@ -2088,7 +2128,7 @@ How many dubloons would you like to pay back?
 				<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 				<<set $items[1].count = 0>>
 			<<else>>
-				<<break>>
+				<<set _ate = false>>
 			<</if>>
 		<<elseif !$abyssKnow>>
 			<<switch $currentLayer>>
@@ -2127,7 +2167,7 @@ How many dubloons would you like to pay back?
 							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 							<<set $items[1].count = 0>>
 						<<else>>
-							<<break>>
+							<<set _ate = false>>
 						<</if>>
 					<</if>>
 				<<case 5>>
@@ -2147,7 +2187,7 @@ How many dubloons would you like to pay back?
 							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 							<<set $items[1].count = 0>>
 						<<else>>
-							<<break>>
+							<<set _ate = false>>
 						<</if>>
 					<</if>>
 				<<case 7>>
@@ -2158,7 +2198,7 @@ How many dubloons would you like to pay back?
 						<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 						<<set $items[1].count = 0>>
 					<<else>>
-						<<break>>
+						<<set _ate = false>>
 					<</if>>
 				<<case 8>>
 					<<set $foodL8 += 1>>
@@ -2176,10 +2216,10 @@ How many dubloons would you like to pay back?
 						<<elseif $items[13].count && $items[20].count >= 1>>
 							<<set $items[20].count -= 1>>
 						<<else>>
-							<<set $lastFlan = $time + Math.round(_day / _timeDilation)>>
+							<<set $lastFlan = $time>>
 						<</if>>
 					<<else>>
-						<<set $lastFlan = $time + Math.round(_day / _timeDilation)>>
+						<<set $lastFlan = $time>>
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>
@@ -2200,7 +2240,7 @@ How many dubloons would you like to pay back?
 							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 							<<set $items[1].count = 0>>
 						<<else>>
-							<<break>>
+							<<set _ate = false>>
 						<</if>>
 					<</if>>
 				<<case 5>>
@@ -2220,7 +2260,7 @@ How many dubloons would you like to pay back?
 							<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 							<<set $items[1].count = 0>>
 						<<else>>
-							<<break>>
+							<<set _ate = false>>
 						<</if>>
 					<</if>>
 				<<case 7>>
@@ -2231,14 +2271,16 @@ How many dubloons would you like to pay back?
 						<<set $items[24].count -= _consumptionPerDay - $items[1].count>>
 						<<set $items[1].count = 0>>
 					<<else>>
-						<<break>>
+						<<set _ate = false>>
 					<</if>>
 				<<case 8>>
 					<<set $foodL8 += 1>>
 					<<set $LibidoLog.push($ForageFoodMinor)>>
 			<</switch>>
 		<</if>>
+		<<if _ate>><<set $starving -= 1>><</if>>
 		/* Try to drink. */
+		<<set _drank = true>>
 		<<if $items[25].count >= _consumptionPerDay && ($wardWaterDrink == 1 || ($wardWaterDrink == 2 && $hexflame > 9))>>
 			/* If we're drinking ward water, use that first (regardless of foraging settings). */
 			<<set $items[25].count -= _consumptionPerDay>>
@@ -2246,7 +2288,7 @@ How many dubloons would you like to pay back?
 				<<set $hexflame -= 1>>
 			<</if>>
 		<<elseif !$forageWater>>
-			<<include "Drinking code">><<if !_drank>><<break>><</if>>
+			<<include "Drinking code">>
 		<<elseif !$abyssKnow>>
 			<<switch $currentLayer>>
 				<<case 1>>
@@ -2256,19 +2298,19 @@ How many dubloons would you like to pay back?
 					<<set $waterL2 += 1>>
 					<<set $bewitchBabies += 1>>
 				<<case 3>>
-					<<include "Drinking code">><<if !_drank>><<break>><</if>>
+					<<include "Drinking code">>
 				<<case 4>>
 					<<set $waterL4 += 1>>
 					<<set $algalSize += 1>>
 				<<case 5>>
-					<<include "Drinking code">><<if !_drank>><<break>><</if>>
+					<<include "Drinking code">>
 				<<case 6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
-					<<include "Drinking code">><<if !_drank>><<break>><</if>>
+					<<include "Drinking code">>
 				<<case 8>>
 					<<set $waterL8 += 1>>
 					<<set $IQdrop += 0.5>>
@@ -2280,18 +2322,18 @@ How many dubloons would you like to pay back?
 				<<case 2>>
 					<<set $waterL2 += 1>>
 				<<case 3>>
-					<<include "Drinking code">><<if !_drank>><<break>><</if>>
+					<<include "Drinking code">>
 				<<case 4>>
 					<<set $waterL4 += 1>>
 				<<case 5>>
-					<<include "Drinking code">><<if !_drank>><<break>><</if>>
+					<<include "Drinking code">>
 				<<case 6>>
 					<<set $waterL6 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
-					<<include "Drinking code">><<if !_drank>><<break>><</if>>
+					<<include "Drinking code">>
 				<<case 8>>
 					<<set $waterL8 += 1>>
 					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
@@ -2301,35 +2343,58 @@ How many dubloons would you like to pay back?
 					<</if>>
 			<</switch>>
 		<</if>>
+		<<if _drank>><<set $dehydrated -= 1>><</if>>
 		/* Decrease the jinxed flame counter if not on layer 6. */
 		<<if $currentLayer != 6 && $hexflame > 9>>
 			<<set $hexflame -= 1>>
 		<</if>>
+		<<if _state.weightedDay >= _state.nextRealDay>>
+			/* Increment the next real day. */
+			<<set _state.nextRealDay += 1>>
+			/* Check event triggers. */
+			<<if Object.values(_triggers).some(trigger => trigger())>>
+				<<set _breakForEvent = true>>
+			<</if>>
+		<</if>>
+		<<if !_drank || !_ate || _breakForEvent>><<break>><</if>>
 	<</for>>
+	/* Check if we need to stop to let an event happen. */
+	<<if _breakForEvent>><<break>><</if>>
 <</for>>
 
-/* Increase the elapsed time. */
-<<set $time += Math.round(_day / _timeDilation)>>
+<<if !_breakForEvent>>
+	/* Remove the persistent state for this passage. */
+	<<set $passTimeState.delete(_passage)>>
+
+	/* Let the caller know that we're done. */
+	<<if _doneVar>><<print `<<set ${_doneVar} = true>>`>><</if>>
+
+	/* Print a notice if travel time was longer than predicted due to starvation or dehydration. */
+	<<if Math.round(_state.weightedDay) > Math.round(_state.weightedDayIndex)>>
+		Desperate to stave off starvation and dehydration, you spent an extra
+		<<print Math.round(_state.weightedDay) - Math.round(_state.weightedDayIndex)>>
+		days foraging, extending the time spent to <<print Math.round(_state.weightedDay)>> days!
+	<</if>>
+
+	/* If we ended on a fractional day that should be rounded up, increment the time. */
+	<<if Math.round(_state.weightedDay) > _state.weightedDay>><<set $time += 1>><</if>>
+
+	/* Ensure that we aren't left with a fractional number of rations. */
+	<<set $items[1].count = Math.floor($items[1].count)>>
+	<<set $items[24].count = Math.floor($items[24].count)>>
+
+	/* Ensure that we aren't left with a fractional amount of water. */
+	<<set $items[0].count = Math.floor($items[0].count)>>
+	<<set $items[2].count = Math.ceil($items[2].count)>> /* Empty flasks */
+	<<set $items[3].count = Math.floor($items[3].count)>>
+	<<set $items[25].count = Math.floor($items[25].count)>>
+	<<for _i = 0; _i < $flaskMatrix.length; ++_i>>
+		<<set $flaskMatrix[_i] = Math.floor($flaskMatrix[_i])>>
+	<</for>>
+<</if>>
 
 <</capture>>
 <</widget>>
-
-:: GeneralTimeFinal [nobr]
-/* Ensure that _daysOfEnergyRations is now 0. */
-<<set _daysOfEnergyRations = 0>>
-
-/* Ensure that we aren't left with a fractional number of rations. */
-<<set $items[1].count = Math.floor($items[1].count)>>
-<<set $items[24].count = Math.floor($items[24].count)>>
-
-/* Ensure that we aren't left with a fractional amount of water. */
-<<set $items[0].count = Math.floor($items[0].count)>>
-<<set $items[2].count = Math.ceil($items[2].count)>> /* Empty flasks */
-<<set $items[3].count = Math.floor($items[3].count)>>
-<<set $items[25].count = Math.floor($items[25].count)>>
-<<for _i = 0; _i < $flaskMatrix.length; ++_i>>
-	<<set $flaskMatrix[_i] = Math.floor($flaskMatrix[_i])>>
-<</for>>
 
 :: Drinking code [nobr]
 <<FlaskFirst>>
@@ -2364,13 +2429,11 @@ How many dubloons would you like to pay back?
 			<<set $corruption -= 1>>
 		<</if>>
 	<</if>>
-	<<set _drank = true>>
 <<elseif $items[25].count >= _consumptionPerDay>>
 	<<set $items[25].count -= _consumptionPerDay>>
 	<<if $hexflame > 9>>
 		<<set $hexflame -= 1>>
 	<</if>>
-	<<set _drank = true>>
 <<else>>
 	<<set _drank = false>>
 <</if>>
@@ -2427,16 +2490,9 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that. 
 
 How many days would you like to rest here?
-<<set _string = "Layer" + $currentLayer + " Hub" >>
 <<textbox "_temp" "0">>
-<<nobr>><<link "Set up camp and wait" _string>>
-	<<set _tempTimeWait = parseInt(_temp)>>
-
-	<<for _tempTimeWait; _tempTimeWait >0; _tempTimeWait-->>
-		<<PassTime 1>>
-	<</for>>
-	<<include "GeneralTimeFinal">>
-
+<<nobr>><<link "Set up camp and wait" `"Layer" + $currentLayer + " Hub"`>>
+	<<PassTime `parseInt(_temp, 10)`>>
 <</link>><</nobr>>
 
 :: Curse Descriptions

@@ -1,7 +1,7 @@
 :: Layer2 1 [layer2]
 <<nobr>>
 <<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
-<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
 <<set $timeL2T1 = 0>>
 <<set $currentLayer = 2>>
 <</nobr>>\
@@ -527,7 +527,7 @@ What type of fur would you like to gain?
 <<nobr>>
 <<set $corruption += 100>>
 <<set $brokerUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
 
@@ -575,7 +575,7 @@ Whose body do you find yourself in?
 <<set $corruption += 70>>
 <<set $starUsed = 1>>
 <<set $swapComp = $temp>>
-<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 <<set $hiredCompanions[$swapComp].carry = $temp2>>
 <<CarryAdjust>>
 <<set _companionSwapHandle = $hiredCompanions[$swapComp]>>
@@ -1416,29 +1416,27 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$tempTime" 5>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" 5>>
 <</if>>
+<<set _triggers = {
+	bayingGourmet: () => $timeL2T1 > 3 && $hiredCompanions.length < 4,
+}>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-	<<PassTime 1>>
+<<PassTime $layerExitTime _triggers "_done">>
 
-	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
+<<if _triggers.bayingGourmet()>>
 	Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.<br><br>
 
-	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = "Layer2 Exit2"]]
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-	
-<</for>>
-<<include "GeneralTimeFinal">>
+	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = passage()]]<br>
+<</if>>
 
-<</nobr>><<if $layerExitTime == 0 && !($timeL2T1 > 3 && $hiredCompanions.length < 4)>>
+<</nobr>><<if _done>>
 Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
 
 <<include "Curse Descriptions">>
 
-[[Enter the deep caverns|Layer3 1]]<</if>>
+[[Enter the deep caverns|Layer3 1]]
+<</if>>
 
 :: Layer2 Ascend2 [layer2]
 <<nobr>>
@@ -1451,24 +1449,21 @@ Subtle changes in your surroundings continue, large rocks start to appear in you
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<AdjustedTravelTime "$tempTime" $tempTime>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
 <</if>>
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-	<<PassTime 1>>
+<<set _triggers = {
+	bayingGourmet: () => $timeL2T1 > 3 && $hiredCompanions.length < 4,
+}>>
 
-	<<if $timeL2T1 > 3 && $hiredCompanions.length < 4>>
-		Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.<br><br>
+<<PassTime $layerExitTime _triggers "_done">>
 
-		[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = "Layer2 Ascend2"]]<br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
+<<if _triggers.bayingGourmet()>>
+	Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.<br><br>
 
-<</for>>
-<<include "GeneralTimeFinal">>
+	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = passage()]]<br>
+<</if>>
 
-
-<</nobr>><<if $layerExitTime == 0 && !($timeL2T1 > 3 && $hiredCompanions.length < 4)>>
+<</nobr>><<if _done>>
 <<nobr>>
 <<set $corruption -= (15 - $corRed)>>
 <</nobr>>
