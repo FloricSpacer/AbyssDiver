@@ -641,7 +641,7 @@ Cashing out, really? Where is your sense of adventure?
 <</nobr>>
 
 :: Surface Sell 1 [surface]
-<<Inhuman>>\
+<<CarryAdjust>><<Inhuman>>\
 <<if $visitL1 == 0>>
 	Stepping into the shop, you're immediately greeted by a spectacle of Relics, in varying stages of packaging, ready to be shipped off to unknown buyers across the globe.
 
@@ -686,14 +686,6 @@ Cashing out, really? Where is your sense of adventure?
 				<<else>>
 					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
 				<</if>>
-			<<case "Chain of Lorelei">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $colwear = 0]]
-			<<case "Heart-stealing Stole">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $hsswear = 0]]
-			<<case "Solace Lace">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $slwear = 0]]
-			<<case "Sibyl Blend">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $SibylBuff = 0]]
 			<<case "World Stone">>
 				<<if $LilyPromise>>
 					[[_linkText|Surface Sell 1][setup.sellRelic(_relic), setup.modAffection('Lily', -5)]]
@@ -707,14 +699,6 @@ Cashing out, really? Where is your sense of adventure?
 				<<else>>
 					You need to empty the Everheavea to sell it (have at least two empty flasks in your inventory).
 				<</if>>
-			<<case "Brave Vector">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $slingshot = 0]]
-			<<case "Daedalus Mechanism">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $DaedalusEquip = false, $DaedalusFly = false]]
-			<<case "Blind Divine">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $BDwear = false]]
-			<<case "Heavy is the Head">>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic), $HeavyHeadwear = false]]
 			<<case "Moonwatcher">>
 				<<if $BionicEye>>
 					_relic.name: You can't sell Relics that have become part of your body.
@@ -1197,6 +1181,7 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 
 
 :: Inn Storage [nobr]
+<<CarryAdjust>>
 
 <<if $innDubloons > 0>>
 	You can retrieve all of the dubloons you have stored in your inn room. You currently have $innDubloons stored.<br>
@@ -1235,28 +1220,12 @@ You want to throw the doll away, but your body simply refuses. At the moment it 
 					<<else>>
 						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
 					<</if>>
-				<<case "Chain of Lorelei">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $colwear = 0]]
-				<<case "Heart-stealing Stole">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $hsswear = 0]]
-				<<case "Solace Lace">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $slwear = 0]]
-				<<case "Sibyl Blend">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $SibylBuff = 0]]
 				<<case "Everhevea">>
 					<<if setup.item('Empty Flask').count >= 2>>
 						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2]]
 					<<else>>
 						You need to empty the Everheavea to store it (have at least two empty flasks in your inventory).
 					<</if>>
-				<<case "Brave Vector">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $slingshot = 0]]
-				<<case "Daedalus Mechanism">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $DaedalusEquip = false, $DaedalusFly = false]]
-				<<case "Blind Divine">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $BDwear = false]]
-				<<case "Heavy is the Head">>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), $HeavyHeadwear = false]]
 				<<case "Moonwatcher">>
 					<<if $BionicEye>>
 						_relic.name: You can't store Relics that have become part of your body.
