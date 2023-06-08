@@ -1801,6 +1801,7 @@ How many dubloons would you like to pay back?
 
 :: Widgets for the passage of time [widget nobr]
 <<widget "AdjustedTravelTime">>
+<<capture _additiveModifier _consumptionPerDay _forPreview _inputTime _multiplicativeModifier>>
 /*
 	_args[0]: string       = the variable to write to, as a string (e.g. "$tempTime")
 	_args[1]: var|number   = the raw, unadjusted travel time
@@ -1808,6 +1809,7 @@ How many dubloons would you like to pay back?
 	_args[3]: [var|number] = initial additive modifier (optional, can be negative)
 */
 <<set _inputTime = _args[1]>>
+<<set _forPreview = _args[2]>>
 
 /* Start by computing the overall additive modifier. */
 <<set _additiveModifier = _args[3] || 0>>
@@ -1818,7 +1820,7 @@ How many dubloons would you like to pay back?
 /* Apply status penalty, if any. */
 <<if $status.duration > 0>>
 	<<set _additiveModifier += $status.penalty>>
-	<<if !_args[2]>>
+	<<if !_forPreview>>
 		/* Decrement status duration and remove status penalty if duration is now 0. */
 		<<set $status.duration -= 1>>
 		<<if $status.duration < 1>>
@@ -1855,7 +1857,7 @@ How many dubloons would you like to pay back?
 			<<set _additiveModifier -= 2>>
 		<<elseif $torchUse == 1 && $items[9].count > 0>>
 			<<set _additiveModifier -= 2>>
-			<<if !_args[2]>>
+			<<if !_forPreview>>
 				/* Decrement number of torches and stop using torches if the count is now 0. */
 				<<set $items[9].count -= 1>>
 				<<if $items[9].count < 1>>
@@ -1910,10 +1912,7 @@ How many dubloons would you like to pay back?
 		Your exceptional physical condition is reducing your travel time.<br>
 		<<set _multiplicativeModifier /= 1 + $app.HandicapMovement / 10>>
 	<</if>>
-	/* Print a message if the Aeonglass with Endless Time relic is causing time dilation, but don't handle it here. */
-	<<if $EndlessAeonglass>>
-		The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
-	<</if>>
+
 	/* Apply the multiplicative modifiers. */
 	<<set _inputTime *= _multiplicativeModifier>>
 	/* Adjust the travel time if the player is using energy rations. */
@@ -1930,7 +1929,7 @@ How many dubloons would you like to pay back?
 		<<set _daysOfEnergyRations = Math.min(_inputTime / 2, $items[24].count / _consumptionPerDay)>>
 		/* Every day with an energy ration counts for twice as much. */
 		<<set _inputTime -= _daysOfEnergyRations>>
-		<<if !_args[2]>>
+		<<if !_forPreview>>
 			/* Round up the number of days of energy rations to a whole number, as GeneralTimeStats iterates per day. */
 			<<set _daysOfEnergyRations = Math.ceil(_daysOfEnergyRations)>>
 			/* If we used up all the energy rations we had, stop using them. */
@@ -1946,13 +1945,19 @@ How many dubloons would you like to pay back?
 	<<set _inputTime += _additiveModifier>>
 <</if>>
 
+/* Print a message about the Aeonglass with Endless Time relic, but only apply the bonus if we're in preview mode. */
+<<if $EndlessAeonglass>>
+	The enhanced Aeonglass, shimmering with a timeless aura, grants you the remarkable ability to reduce your travel time by half.<br>
+	<<if _forPreview>><<set _inputTime /= 2>><</if>>
+<</if>>
+
 /* Don't allow travel time to become negative. */
 <<if _inputTime < 0>><<set _inputTime = 0>><</if>>
 
 /* Round travel time to a whole number of days. */
 <<set _inputTime = Math.round(_inputTime)>>
 
-<<if !_args[2]>>
+<<if !_forPreview>>
 	<<if _daysOfEnergyRations && _daysOfEnergyRations > _inputTime>>
 		/* Ensure all days of energy rations end up used. */
 		<<set $items[24].count -= _consumptionPerDay * (_daysOfEnergyRations - _inputTime)>>
@@ -1963,6 +1968,7 @@ How many dubloons would you like to pay back?
 /* Write to the output variable. */
 <<print `<<set ${_args[0]} = ${_inputTime}>>`>>
 
+<</capture>>
 <</widget>>
 
 <<widget "PassTime">>
