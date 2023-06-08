@@ -149,8 +149,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Main [layer5]
-<<set $tempTime = 1>>\
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime 1>>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -300,8 +299,7 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 		<<set $items[2].count = 0>>
 		<<set $items[0].count += (5 - $items[3].count)>>
 	<</if>>
-	<<set $tempTime = parseInt($temp)>>
-	<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+	<<PassTime `parseInt($temp, 10)`>>
 <</link>><br><br><</nobr>>
 <</nobr>>
 
@@ -506,7 +504,7 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 	<<set $status.penalty = 0>>
 <</if>>
 <<set $tempTime = (Math.max(4 - ($oasisVisit * 2) - $abyssKnow, 0))>>
-<<AdjustedTravelTime "$tempTime" $tempTime>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" $tempTime>><<PassTime $tempTime>>
 
 <<for $i = 0; $i < 999; $i++>>
 	<<if $items[2].count > 0>>
@@ -1398,7 +1396,7 @@ Please enter your new exoskeleton color:
 
 :: Layer5 Tunnel [layer5]
 <<nobr>>
-<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/one-sidedtunnel.png']]
 
@@ -1451,7 +1449,7 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 <<if $timeL5T1 < 8 && $timeL5T2 < 11>>[img[setup.ImagePath+'Wonders/miragevault.png']]
 <<nobr>>
 <<if $vaultWait == 0>>
-	<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+	<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 <<else>>
 	<<set $vaultWait = 0>>
 <</if>>
@@ -1466,9 +1464,8 @@ The timer on the door reads <<print (60 - $time + $vaultTimer)>>.
 You can wait here for a while if you'd like to check when the door is open. If you'd like to wait, enter the number of days you'd like to wait and choose to wait.
 <<textbox "$temp" "0">>
 <<nobr>><<link "Wait" "Layer5 Vault">>
-	<<set $tempTime = parseInt($temp)>>
 	<<set $vaultWait = 1>>
-	<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+	<<PassTime `parseInt($temp, 10)`>>
 <</link>><br><br><</nobr>>
 
 <<if (60 - $time + $vaultTimer) > 0>>
@@ -1522,38 +1519,30 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<AdjustedTravelTime "$tempTime" $tempTime>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
+<</if>>
+<<set _triggers = {
+	duneDevouringBorer: () => $timeL5T2 > 8,
+	mayflyScuttler: () => $timeL5T1 > 7,
+}>>
+
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.duneDevouringBorer()>>
+	<br><<include "Layer5 Borer Encounter">><br><br>
+	[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]<br>
+<<elseif _triggers.mayflyScuttler()>>
+	<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.<br><br>
+	[[Deal with the Mayfly Scuttler|Layer5 Threat1 Ascend]]<br>
+
+	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
+		[[Summon a powerful gust to drive the swarm away from you|Layer5 Ascend2][$timeL5T1 -= 8]]<br>
+	<</if>>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-
-	<<if $timeL5T2 > 8>>
-		<br><<include "Layer5 Borer Encounter">><br><br>
-
-		[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = "Layer5 Ascend2"]]<br><br>
-
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-	
-	<<if $timeL5T1 > 7>>
-		<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today. <br><br>
-
-		[[Deal with the Mayfly Scuttler|Layer5 Threat1 Ascend]]<br><br><<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-
-		The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
-		[[Summon a powerful gust to drive the swarm away from you|Layer5 Ascend2][$timeL5T1 -= 8]]
-		<</if>>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-<</for>>
-<<include "GeneralTimeFinal">>
 <</nobr>>
-<<if $layerExitTime == 0 && !($timeL5T2 > 8) && !($timeL5T1 > 7)>>
+<<if _done>>
 	<<set $timeL4T1 = 0>>\
 	<<set $corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10)))>>\
 	<<set $currentLayer = 5>>\
@@ -1601,8 +1590,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Ascend [layer5]
-<<set $tempTime = 1>>\
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime 1>>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
@@ -1619,47 +1607,37 @@ Use the following option only if you have specifically considered your inventory
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$tempTime" 13>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" 13>>
+<</if>>
+<<set _triggers = {
+	duneDevouringBorer: () => $timeL5T2 > 8,
+	mayflyScuttler: () => $timeL5T1 > 7,
+}>>
+
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.duneDevouringBorer()>>
+	<br><<include "Layer5 Borer Encounter">><br><br>
+	[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]<br>
+<<elseif _triggers.mayflyScuttler()>>
+	<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.<br><br>
+	[[Deal with the Mayfly Scuttler|Layer5 Threat1 Descend]]<br>
+
+	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
+		[[Summon a powerful gust to drive the swarm away from you|Layer5 Exit2][$timeL5T1 -= 8]]<br>
+	<</if>>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-
-	<<if $timeL5T2 > 8>>
-
-		<br><<include "Layer5 Borer Encounter">><br><br>
-
-		[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = "Layer5 Exit2"]]<br><br>
-
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-	<<if $timeL5T1 > 7>>
-		<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today. <br><br>
-
-		[[Deal with the Mayfly Scuttler|Layer5 Threat1 Descend]]<br><br><<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-
-		The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
-		[[Summon a powerful gust to drive the swarm away from you|Layer5 Exit2][$timeL5T1 -= 8]]
-		<</if>>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-<</for>>
-<<include "GeneralTimeFinal">>
-
-<<if $layerExitTime == 0 && !($timeL5T2 > 8) && !($timeL5T1 > 7)>>
-<<set $timeL6T1 = 0>>
-<<set $timeL6T2 = 0>>
+<<if _done>>
+	<<set $timeL6T1 = 0>>
+	<<set $timeL6T2 = 0>>
 
 	You continue through the scorching desert for days on end, but the heat only seems to get more intense. But the smell is different, you catch a whiff of more exotic, meaty scents than the fragrance of the flowers of the fifth layer. As the ground begins to change from sand to a more organic texture, you know you're approaching the sixth layer.<br><br>
 
 	<<include "Curse Descriptions">><br><br>
 
 	[[Descend to the sixth layer|Layer6 1]]
-
 <</if>>
 <</nobr>>
 
@@ -1695,8 +1673,7 @@ Use the following option only if you have specifically considered your inventory
 
 
 :: Layer5 Threat1 Descend [layer5]
-<<set $tempTime = 1>>\
-<<include "GeneralTimeStats">><<include "GeneralTimeFinal">>\
+<<PassTime 1>>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 

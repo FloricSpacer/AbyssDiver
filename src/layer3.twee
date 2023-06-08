@@ -200,11 +200,11 @@ You have already used the scales on your journey. You may not use them again.
 <<elseif $skewedForced < 4>>
 	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Skewed Shrine to transfer a Curse" "Layer3 Skewed1a">>
-		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+		<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 	<</link>><br><br>
 	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Skewed Shrine to force a Curse" "Layer3 Skewed 2a">>
-		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+		<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 	<</link>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
@@ -267,66 +267,28 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<AdjustedTravelTime "$tempTime" $tempTime>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
+<</if>>
+<<set _triggers = {
+	lesserTentacleBeast: () => $timeL3T1 > 5,
+	slackslime: () => $timeL3T2 > 4,
+}>>
+
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.lesserTentacleBeast()>>
+	<br><<include "Layer3 Tentacle Encounter">><br><br>
+
+	[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<br>
+	<<set _breakForEvent = true>>
+<<elseif _triggers.slackslime()>>
+	<br><<include "Layer3 Slackslime Encounter">><br><br>
+
+	[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<br>
+	<<set _breakForEvent = true>>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-	<<set $tempTime=1>>
-	<<include "GeneralTimeStats">>	
-/* 		<<set $timeL3T1 += 1>>
-	<<if !setup.haveTravelLightSource>>
-		<<set $timeL3T2 += 1>>
-	<</if>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL3 += 1>>
-	<</if>>
-<<if $forageFood == 0>>
-		<<set $items[1].count -= 1>>
-	<<else>>
-		<<set $foodL3 += $tempTime>>
-		<<if $abyssKnow == 0>>
-			<<for _i = 0; _i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageFoodMajor)>>
-			<</for>>
-		<<else>>
-			<<for _i = 0; _i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageFoodMinor)>>
-			<</for>>
-		<</if>>
-<</if>>
-	<<set $time += 1>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-	*/
-
-	<<if $timeL3T1 > 5>>
-
-		<br><<include "Layer3 Tentacle Encounter">><br><br>
-
-		[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Ascend2"]]<br>
-
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-	<<if $timeL3T2 > 4>>
-		<br><<include "Layer3 Slackslime Encounter">><br><br>
-
-		[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Ascend2"]]<br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-<</for>>
-<<include "GeneralTimeFinal">>
-<<if $layerExitTime == 0 && !($timeL3T1 > 5) && !($timeL3T2 > 4)>>
+<<if _done>>
 	<<set $corruption -= (25 - $corRed)>>
 	<br>You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
 	<br><br><<include "Curse Descriptions">><br><br>
@@ -342,7 +304,7 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 <<set $temp = Math.round($corruption / 5)>>
 <<set $dubloons += $temp>>
 <<set $scalesUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
@@ -358,7 +320,7 @@ Once you pick them up, the luster of the scales fades, indicating that they will
 <<set $temp = Math.round($dubloons / 5)>>
 <<set $corruption += $temp>>
 <<set $scalesUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 2>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
@@ -408,7 +370,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 			<</switch>>
 
 			<<if _flag>>
-				<<capture _companion, _curse, _tempName>>
+				<<capture _companion _curse _tempName>>
 					&nbsp; _curse.name
 					<<link "Choose" "Layer3 Skewed1a">>
 						<<set _companion.curses.push(_curse)>>
@@ -851,7 +813,7 @@ On the other hand, the idea of each encounter feeling like your first time holds
 <<set $tempTime = (Math.max(4 -$abyssKnow - $riverVisit, 0))>>
 <<set $riverVisit = 1>>
 
-<<AdjustedTravelTime "$tempTime" $tempTime>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" $tempTime>><<PassTime $tempTime>>
 
 <<for _i = 0; _i < 999; _i++>>
 	<<if $items[2].count > 0>>
@@ -899,7 +861,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 	<</switch>>
 
 	<<if _flag>>
-		<<capture _companion, _tempName>>
+		<<capture _companion _tempName>>
 			<<set _choiceText = "Transfer to " + _tempName>>
 			<<link _choiceText "Layer3 Skewed Apply">>
 				<<set _companion.curses.push(_curse)>>
@@ -1273,65 +1235,25 @@ Please enter your new skin/eye color:
 <<nobr>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$tempTime" 6>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" 6>>
+<</if>>
+<<set _triggers = {
+	lesserTentacleBeast: () => $timeL3T1 > 5,
+	slackslime: () => $timeL3T2 > 4,
+}>>
+
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.lesserTentacleBeast()>>
+	<br><<include "Layer3 Tentacle Encounter">><br><br>
+	[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<br><br>
+<<elseif _triggers.slackslime()>>
+	<br><<include "Layer3 Slackslime Encounter">><br><br>
+	[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<br><br>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-	/* 
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1>>
-			<<set $items[2].count += 1>>
-			<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL3 += 1>>
-	<</if>>
-<<if $forageFood == 0>>
-		<<set $items[1].count -= 1>>
-	<<else>>
-		<<set $foodL3 += 1>>
-		<<if $abyssKnow == 0>>
-			<<for _i = 0; _i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageFoodMajor)>>
-			<</for>>
-		<<else>>
-			<<for _i = 0; _i < $tempTime; $i++>>
-				<<set $AgeLog.push($ForageFoodMinor)>>
-			<</for>>
-		<</if>>
-<</if>>
-	<<set $time += 1>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-	*/
-
-	<<if $timeL3T1 > 5>>
-
-		<br><<include "Layer3 Tentacle Encounter">><br><br>
-
-		[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Exit2"]]<br><br>
-
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-	
-	<<if $timeL3T2 > 4>>
-		<br><<include "Layer3 Slackslime Encounter">><br><br>
-
-		[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Exit2"]]<br><br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-<</for>>
-<<include "GeneralTimeFinal">>
 <</nobr>>
-<<if $layerExitTime == 0 && !($timeL3T1 > 5) && !($timeL3T2 > 4)>>
+<<if _done>>
 	<<nobr>>
 	<<set $timeL4T1 = 0>>
 	<</nobr>>

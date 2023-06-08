@@ -944,7 +944,7 @@ But gradually, a newfound certainty washes over you - the realization that your 
 <<nobr>>
 <<set $corruption -= $playerCurses[$temp].corr>>
 <<set $iconUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 The Curse, $playerCurses[$temp].name, has been successfully removed and your corruption has been refunded.<br>
 <<RemoveCurse $playerCurses[$temp]>>
 <</nobr>>
@@ -977,15 +977,10 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <</if>>
 <<if $layerExit == 0>>
 	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$tempTime" 1>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" 1>>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-	<<set $tempTime=1>>
-	<<include "GeneralTimeStats">>
-<</for>>
-<<include "GeneralTimeFinal">>
+<<PassTime $layerExitTime>>
 
 <<set $corruption -= (10 - $corRed)>>
 
