@@ -223,10 +223,18 @@ setup.SoundPath = setup.Path + "sounds/";
 Macro.add('say', {
 		tags: null,
 		handler: function () {
-			let person = this.args[0];
-			let output = '<div class="say clearfix" style="'+ person.style + person.style1 +'">';
-			output += '<div class="avatar"><img src="'+ setup.ImagePath + person.imageIcon +'"  width="100" height="100"></div>';
-			output += '<span class="say-nameB">' + person.name + '</span><hr><span class="say-contents"><span class ="gdr' +person.genderVoice+'">' + this.payload[0].contents + '</span></span></div>';
+			const person = this.args[0];
+			const output =
+				`<div class="say clearfix" style="${person?.style ?? ''}${person?.style1 ?? ''}">` +
+					`<div class="avatar">` +
+						`<img src="${setup.ImagePath}${person?.imageIcon ?? ''}" style="width:100px;height:100px">` +
+					`</div>` +
+					`<span class="say-nameB">${person?.name ?? ''}</span>` +
+					`<hr>` +
+					`<span class="say-contents">` +
+						`<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
+					`</span>` +
+				`</div>`;
 			$(this.output).wiki(output);
 		}
 });
