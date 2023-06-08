@@ -1,10 +1,10 @@
 :: Layer9 1 [layer9]
 <<nobr>>
-<<masteraudio stop>><<audio "layer9" volume 0.2 play loop>>
 <<set $currentLayer = 9>>
-<<set $L9visit += 1>>
+<<masteraudio stop>>
+<<audio "layer9" volume 0.2 play loop>>
+<<set $timeL8T2a = 0, $timeL8T2b = 0>>
 <<set $timeL9T1 += 1>>
-
 <</nobr>>\
 \
 @@.layerTitle;
@@ -33,7 +33,15 @@ Hopefully you'll be able to get used to it.
 
 
 :: Layer9 Hub [layer9]
-<<nobr>><<set $currentLayer = 9>><<if $timeL9T1 < 1>><<set $layerExit = 0>><<CarryAdjust>>
+<<nobr>>
+<<set $currentLayer = 9>>
+<<if !isPlaying("layer9")>>
+	<<masteraudio stop>>
+	<<audio "layer9" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+
+<<if $timeL9T1 < 1>>
 <<if $visitL9 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL9 = 1>>
