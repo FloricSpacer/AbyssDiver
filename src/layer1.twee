@@ -1,9 +1,11 @@
 :: Layer1 1 [layer1]
 <<nobr>>
 <<set $currentLayer = 1>>
-<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
+<<masteraudio stop>>
+<<audio "layer1" volume 0.2 play loop>>
+/* No threat timers to reset on layer 1. */
 <<if $dubloons < 0>>
-	<<set $debt += parseInt(Math.round(-1 * $dubloons * 1.2))>>
+	<<set $debt += Math.round(-1.2 * $dubloons)>>
 	<<set $dubloons = 0>>
 <</if>>
 <</nobr>>\
@@ -25,12 +27,16 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 :: Layer1 Hub [layer1]
 <<nobr>>
 <<set $currentLayer = 1>>
+<<if !isPlaying("layer1")>>
+	<<masteraudio stop>>
+	<<audio "layer1" volume 0.2 play loop>>
+<</if>>
 <<CarryAdjust>>
 
 You find yourself amidst the slightly-off natural splendor of the first layer.<br><br> 
 <<if $visitL1 == 0>>
-	<<set $layerTemp = 8>>
 	<<set $visitL1 = 1>>
+	<<set $layerTemp = 8>>
 <<elseif $secondVisitL1 == 0>>
 	<<set $secondVisitL1 = 1>>
 	<<set $layerTemp = 18>>
@@ -92,8 +98,8 @@ What do you want to do while you're here?<br><br>
 [[Set up camp and rest here|Layer1 Camp]]
 [[View the Layer 1 habitation option|Layer1 Habitation]]
 
-[[Look up towards the surface|Layer1 Ascend]]
-[[Look down at the next layer|Layer1 Exit]]
+[[Look up towards the surface|Layer1 Ascend 1]]
+[[Look down at the next layer|Layer1 Exit1]]
 
 
 :: Layer1 Threats [image layer1]
@@ -317,14 +323,32 @@ You sit by the fire with your party and chat, the mood is pretty upbeat and opti
 <</nobr>>
 
 
-:: Layer1 Exit [layer1]
+:: Layer1 Exit1 [layer1]
 
 Descending to the next layer will take 2 days. How are your supplies of food and water? It's only going to get harder from here.
 
-You notice the air is a bit more humid and the plants are a bit greener as you approach the path towards the second layer.
+[[Turn back and continue your business on the first layer|Layer1 Hub]]
+[[Continue your descent to the second layer|Layer1 Exit2]]
 
-[[Stay on layer 1|Layer1 Hub]]
-[[Descend down to the second layer|Layer2 1]]
+
+:: Layer1 Exit2 [layer1]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 2>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer1 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
+	You notice the air is a bit more humid and the plants are a bit greener as you approach the path towards the second layer.
+
+	<<include "Curse Descriptions">>
+
+	[[Descend down to the second layer|Layer2 1]]
+<</if>>
 
 
 :: Layer1 Cherry [layer1]
@@ -951,17 +975,17 @@ The Curse, $playerCurses[$temp].name, has been successfully removed and your cor
 [[Continue exploring the layer|Layer1 Hub]]
 
 
-:: Layer1 Ascend [layer1]
+:: Layer1 Ascend 1 [layer1]
 Traveling back to the surface from here will take 1 day, and will cost 10 corruption. Leaving the Abyss also requires that you don't have any negative corruption points even if you plan to come back.
 
 <<if $corruption >= (10 - $corRed)>>\
 	<<if $DaedalusEquip==true >>\
 		<<if $DaedalusFly==false>>\
 			You are currently commited to simply walking to the surface, though it iss only a one day walk.
-			[[Flap your wings and prepare to fly to the surface|Layer1 Ascend][$DaedalusFly=true]]
+			[[Flap your wings and prepare to fly to the surface|Layer1 Ascend 1][$DaedalusFly=true]]
 		<<else>>\
 			You are about to fly to the surface, which you can of course do if you want! On the other hand, it's only a one day walk.
-			[[Maybe it's better to walk to the surface|Layer1 Ascend][$DaedalusFly=false]]
+			[[Maybe it's better to walk to the surface|Layer1 Ascend 1][$DaedalusFly=false]]
 		<</if>>\
 	<</if>>\
 	[[Continue your ascent|Layer1 Ascend2]]
@@ -970,28 +994,44 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <</if>>
 [[Turn back and continue your business on the first layer|Layer1 Hub]]
 
+
+:: Layer1 Travel Events [layer1 nobr]
+<<set _triggers = {
+	/* No timed events for layer 1. */
+}>>
+
+<<PassTime _triggers>>
+
+
 :: Layer1 Ascend2 [layer1]
 <<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" 1 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 1>>
+
+<<include "Layer1 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
+	<<nobr>>
+		<<set $corruption -= 10 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+	<</nobr>>
+	You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
+
+	<<include "Curse Descriptions">>
+	<<if $TwinFly == true>>
+		<<include "Twin rejoin">>
+	<</if>>
+	[[Return to Outset Town|Surface Hub]]
 <</if>>
 
-<<PassTime $layerExitTime>>
-
-<<set $corruption -= (10 - $corRed)>>
-
-<</nobr>><<masteraudio stop>><<audio "surface" volume 0.2 play loop>>
-You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
-
-<<include "Curse Descriptions">>
-<<if $TwinFly == true>>
-	<<include "Twin rejoin">>
-<</if>>
-[[Return to Outset Town|Surface Hub]]
 
 :: Layer1 Flasks [layer1]
 <<nobr>>
@@ -1028,7 +1068,7 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <</for>>
 <<include "Curse Randomizer">>
 
-:: Layer1 Threat1 Ascend [layer1]
+:: Layer1 Threat1 [layer1]
 
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
