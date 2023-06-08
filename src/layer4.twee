@@ -234,11 +234,11 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 <<elseif $steadyForced < 4>>
 	Would you like to use the Steady Shrine to copy a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Steady Shrine to copy a Curse" "Layer4 Steady1a">>
-		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+		<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 	<</link>><br><br>
 	Would you like to use the Steady Shrine to forcibly copy a Curse onto one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Steady Shrine to forcibly copy a Curse" "Layer4 Steady 2a">>
-		<<AdjustedTravelTime "$tempTime" 3>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+		<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
 	<</link>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
@@ -795,7 +795,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 			<</switch>>
 
 			<<if _flag>>
-				<<capture _companion, _curse, _tempName>>
+				<<capture _companion _curse _tempName>>
 					&nbsp; _curse.name
 					<<link "Choose" "Layer4 Steady1a">>
 						<<set _companion.curses.push(_curse)>>
@@ -854,7 +854,7 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 :: Layer4 Purity 1 [layer4]
 <<nobr>>
 <<set $purityUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 5>><<include "GeneralTimeStats">><<include "GeneralTimeFinal">>
+<<AdjustedTravelTime "$tempTime" 5>><<PassTime $tempTime>>
 <</nobr>>
 [img[setup.ImagePath+'Wonders/puritytree.png']]
 
@@ -905,7 +905,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 	<</switch>>
 
 	<<if _flag>>
-		<<capture _companion, _tempName>>
+		<<capture _companion _tempName>>
 			<<set _choiceText = "Transfer to " + _tempName>>
 			<<link _choiceText "Layer4 Steady Apply">>
 				<<set _companion.curses.push(_curse)>>
@@ -1156,63 +1156,21 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 		<<set $tempTime = 19>>
 	<</if>>
 
-	<<AdjustedTravelTime "$tempTime" $tempTime>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
+<</if>>
+<<set _triggers = {
+	driftingSwallower: () => $timeL4T1 > 6,
+}>>
 
+<<PassTime $layerExitTime _triggers "_done">>
+
+<<if _triggers.driftingSwallower()>>
+	<br>During your long trip down towards the fifth layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
+
+	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]<br>
 <</if>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
-
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-	
-	<<if $timeL4T1 > 6>>
-		<br>During your long trip down towards the fifth layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
-
-		[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = "Layer4 Exit2"]]<br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-/*
-	<<if $items[1].count > 9>>
-		<<set $timeL4T1 += 1>>
-	<</if>>
-<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
-	<<if $slingshot == 0>>
-		<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<</if>>
-	<<set $foodL4 += 1>>
-	<<if $abyssKnow == 0>>
-		<<set $HeightLog.push($ForageFoodMajor)>>
-	<<else>>
-		<<set $HeightLog.push($ForageFoodMinor)>>
-	<</if>>
-<<else>>
-	<<set $items[1].count -= 1>>
-<</if>>
-<<for $i = 0; $i < 1; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-	<<set $time += 1>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-	*/
-<</for>>
-<<include "GeneralTimeFinal">>
-
-<<if $layerExitTime == 0 && !($timeL4T1 > 6)>>
+<<if _done>>
 	<<nobr>>
 	<<set $currentLayer = 5>>
 	<<set $timeL5T1 = 0>>
@@ -1241,68 +1199,23 @@ You have successfully taken the $relic48.name Relic. Hopefully you can make good
 	<<if $DaedalusFly==true>>
 		<<set $tempTime= Math.ceil($tempTime/2)>>
 	<</if>>
-	<<AdjustedTravelTime "$tempTime" $tempTime>>
-	<<set $layerExitTime=$tempTime>>
+	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
 <</if>>
+<<set _triggers = {
+	driftingSwallower: () => $timeL4T1 > 6,
+}>>
 
-<<for $layerExitTime; $layerExitTime >0; $layerExitTime-->>
+<<PassTime $layerExitTime _triggers "_done">>
 
-	<<set $tempTime = 1>>
-	<<include "GeneralTimeStats">>
-
-	<<if $timeL4T1 > 6>>
-		<br>
+<<if _triggers.driftingSwallower()>>
+	<br>
 	During your long hike back up towards the third layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
 
-	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = "Layer4 Ascend2"]]<br>
-		<<set $layerExitTime -= 1>><<break>>
-	<</if>>
-
-	/* 
-	<<if $items[1].count > 9>>
-		<<set $timeL4T1 += 1>>
-	<</if>>
-<<if $forageFood == 1 && (($items[13].count > 0 && $items[20].count > 1) || $slingshot == 1)>>
-	<<if $slingshot == 0>>
-		<<set $items[20].count -= Math.max((2 * $tempTime) - $bullRed, 1)>>
-	<</if>>
-	<<set $foodL4 += 1>>
-	<<if $abyssKnow == 0>>
-		<<set $HeightLog.push($ForageFoodMajor)>>
-	<<else>>
-		<<set $HeightLog.push($ForageFoodMinor)>>
-	<</if>>
-<<else>>
-	<<set $items[1].count -= 1>>
+	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]<br>
 <</if>>
-<<for $i = 0; $i < 1; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-		<<else>>
-		<<set $waterL4 += 1>>
-		<<if $abyssKnow == 0>>
-			<<set $algalSize += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-	<<set $time += 1>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-	<<set $layerExitTime -= 1>>
-	<<if $layerExitTime == 0>>
-		<<break>>
-	<</if>>*/
-<</for>>
-<<include "GeneralTimeFinal">>
 
 <</nobr>>
-<<if $layerExitTime == 0 && !($timeL4T1 > 6)>>
+<<if _done>>
 	<<nobr>>
 	<<set $corruption -= (35 - $corRed)>>
 	<<set $forageWater = 0>>
