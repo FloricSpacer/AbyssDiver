@@ -1994,7 +1994,11 @@ How many dubloons would you like to pay back?
 	/* If we aren't passing time yet, assume that the number of days was passed in the first argument. */
 	<<set _state = setup.startPassingTime(_args[0])>>
 <</if>>
-<<if _state.expectedDays && !_state.unweightedDayIndex>>
+
+/* Check event triggers. */
+<<set _breakForEvent = Object.values(_triggers).some(trigger => trigger())>>
+
+<<if !_breakForEvent && _state.expectedDays && !_state.unweightedDayIndex>>
 	/* Temporarily use the weighted day index to store the weighted expected number of days. */
 	<<set _state.weightedDayIndex = Math.round(_timeWeight * _state.expectedDays)>>
 	/* Check for wetting events. */
@@ -2020,8 +2024,7 @@ How many dubloons would you like to pay back?
 	<<set _state.weightedDayIndex = 0>>
 <</if>>
 
-<<set _breakForEvent = false>>
-<<for _state.unweightedDayIndex < _state.expectedDays>>
+<<for !_breakForEvent && _state.unweightedDayIndex < _state.expectedDays>>
 	/* Increment the day index. We only break out of the inner loop because we're sated, can't eat/drink or */
 	/* because an event is about to happen. An event might interrupt our attempts to decrease starvation or */
 	/* dehydration, but that's okay - we'll try again during the next trip. */
@@ -2346,14 +2349,10 @@ How many dubloons would you like to pay back?
 			/* Increment the next real day. */
 			<<set _state.nextRealDay += 1>>
 			/* Check event triggers. */
-			<<if Object.values(_triggers).some(trigger => trigger())>>
-				<<set _breakForEvent = true>>
-			<</if>>
+			<<set _breakForEvent = Object.values(_triggers).some(trigger => trigger())>>
 		<</if>>
 		<<if !_drank || !_ate || _breakForEvent>><<break>><</if>>
 	<</for>>
-	/* Check if we need to stop to let an event happen. */
-	<<if _breakForEvent>><<break>><</if>>
 <</for>>
 
 <<if !_breakForEvent>>
