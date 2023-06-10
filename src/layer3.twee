@@ -1,11 +1,10 @@
 :: Layer3 1 [layer3]
 <<nobr>>
 <<set $currentLayer = 3>>
-
-<<set $timeL3T1 = 0>>
-<<set $timeL3T2 = 0>>
-
-<<masteraudio stop>><<audio "layer3" volume 0.2 play loop>>
+<<masteraudio stop>>
+<<audio "layer3" volume 0.2 play loop>>
+<<set $timeL2T1 = 0>>
+<<set $timeL3T1 = 0, $timeL3T2 = 0>>
 <<set $forageWater = 0>>
 <</nobr>>\
 \
@@ -25,10 +24,19 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 
 
 :: Layer3 Hub [layer3]
-<<set $currentLayer = 3>><<if $timeL3T1 < 6 && $timeL3T2 < 5>><<set $layerExit = 0>><<CarryAdjust>><<nobr>>
+<<nobr>>
+<<set $currentLayer = 3>>
+<<if !isPlaying("layer3")>>
+	<<masteraudio stop>>
+	<<audio "layer3" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+<<set $forageWater = 0>>
+<</nobr>>\
+<<if $timeL3T1 < 6 && $timeL3T2 < 5>><<nobr>>
 <<if $visitL3 == 0>>
-	<<set $layerTemp = 8>>
 	<<set $visitL3 = 1>>
+	<<set $layerTemp = 8>>
 <<elseif $secondVisitL3 == 0>>
 	<<set $secondVisitL3 = 1>>
 	<<set $layerTemp = 18>>
@@ -92,10 +100,10 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 [[Look down at the next layer|Layer3 Exit1]]<<elseif $timeL3T2 < 5>>
 <<include "Layer3 Tentacle Encounter">>
 
-[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Hub"]]<<else>>
+[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<<else>>
 <<include "Layer3 Slackslime Encounter">>
 
-[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Hub"]]<</if>>
+[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<</if>>
 
 
 :: Layer3 Threats [image layer3]
@@ -256,49 +264,53 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 [[Continue your descent to the fourth layer|Layer3 Exit2]]
 
 
-:: Layer3 Ascend2 [layer3]
-<<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<set $tempTime=6>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
-	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
+:: Layer3 Travel Events [layer3 nobr]
 <<set _triggers = {
 	lesserTentacleBeast: () => $timeL3T1 > 5,
 	slackslime: () => $timeL3T2 > 4,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
 <<if _triggers.lesserTentacleBeast()>>
 	<br><<include "Layer3 Tentacle Encounter">><br><br>
-
 	[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<br>
-	<<set _breakForEvent = true>>
 <<elseif _triggers.slackslime()>>
 	<br><<include "Layer3 Slackslime Encounter">><br><br>
-
 	[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<br>
-	<<set _breakForEvent = true>>
 <</if>>
 
-<<if _done>>
-	<<set $corruption -= (25 - $corRed)>>
-	<br>You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
-	<br><br><<include "Curse Descriptions">><br><br>
+
+:: Layer3 Ascend2 [layer3]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" 6 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer3 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
+	<<nobr>>
+		<<set $corruption -= 25 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+	<</nobr>>
+	You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. The sheer stone walls morphing into large rock formations, then shrinking and making way for the jungle of the second layer. A familiar sound of eternal rainfall welcomes you back to the second layer.
+	
+	<<include "Curse Descriptions">>
 	<<if $TwinFly == true>>
 		<<include "Twin rejoin">>
 	<</if>>
-	<<set $currentLayer = 2>>
-	<br>[[Return to the second layer|Layer2 Hub]]
+	[[Return to the second layer|Layer2 Hub]]
 <</if>>
-<</nobr>>
+
+
 :: Layer3 Scales 1 [layer3]
 <<nobr>>
 <<set $temp = Math.round($corruption / 5)>>
@@ -896,183 +908,6 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 [[Continue with your journey|Layer3 Hub]]
 
 
-:: Layer3 Threat1 Main [layer3]
-<<set $timeL3T1 -= 6>>
-[img[setup.ImagePath+'Threats/lessertentaclebeast.png']]
-
-The beast's slick, dark tentacles glisten in the dim light, their tips adorned with suction cups that seem to twitch with anticipation. Its amorphous body is both mesmerizing and repulsive, and you find yourself momentarily paralyzed by the sight of it.
-
-As the creature draws closer, you can almost feel the cool, damp embrace of its probing tendrils. The air around you grows heavy with the scent of damp earth and something more animalistic, a musk that sends shivers down your spine.
-
-Suddenly, you snap back to reality, and a primal instinct to survive takes over. You hastily assess your options, understanding that bullets will be of little use against this strange, amorphous foe. Instead, you weigh the risks of engaging it with your sword, knowing that the battle could leave you injured and vulnerable.
-
-As the tentacle beast inches closer, you can almost taste the cool, slimy texture of its tendrils against your skin. The thought of it ravaging you, leaving you and your companions weak and helpless, spurs you into action. 
-
-How do you want to deal with the tentacle beast moving in on you?
-
-
-<<nobr>>
-<<if $items[14].count > 0>>
-	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
-	[[Fight it off with your sword yourself|Layer3 Hub][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
-<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|Layer3 Hub]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 10>>
-	Due to its amorphous nature, it will take at least 11 bullets to take down the monster.<br>
-	[[Shoot it with your pistol|Layer3 Hub][$items[20].count -= (11 - $bullRed)]]<br><br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily pebbles to use as ammo are abundant in the rocky caves of this layer.<br>
-[[Defeat it with the Brave Vector|Layer3 Hub]]<br><br>
-<</if>>
-If you allow it to overpower you, it will give you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>a very thorough tentacle fucking, leaving you with a serious limp, increasing your next 3 travel times by 2 days each. <br>
-<<link "Allow it to overpower you" "Layer3 Hub">>
-	<<set $status.duration += (3 - $statRed)>>
-	<<set $status.penalty += 2>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-	<<MonsterPregCheckParty>>
-<</link>><br>
-<br>
-
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the tentacles close in on you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
-
-A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
-
-<<link "Hold the doll tight and squeeze your eyes shut" "Layer3 Hub">>
-  <<dollTF>>
-<</link>><br>
-<</if>>
-
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer3 Hub]]
-
-
-:: Layer3 Threat2 Main [layer3]
-<<nobr>>
-<<set $tempTime = 2>>
-<<set $timeL3T2 -= 5>>
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-	<<set $tempTime = 1>>
-<</if>>
-<<set $items[0].count -= $tempTime>>
-<<set $items[1].count -= $tempTime>>
-<<set $time += $tempTime>>
-<<set $timeL3 += $tempTime>>
-<</nobr>>
-[img[setup.ImagePath+'Threats/slackslime.png']]
-
-The ameboid creature that has trapped you seem to hiss slightly, then you smell something a little strange before your muscles completely relax. It seems that no matter how much you try, you aren't able to move at all.
-
-The slime moves slowly, but surely over your paralyzed body and into your most sensitive locations. Even though you can't move, you can feel every moment the creature spends milking your sexual fluids for protein.
-
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-The slime lets you go after only 1 day, perhaps feeling some sense of kinship with a slimey being such as yourself.
-<<else>>
-The process lasts two days before the slime finally moves on and allows you to go on your way.
-<</if>>
-
-[[You continue on your way after the slime releases you|Layer3 Hub]]
-
-
-:: Layer3 Threat1 Ascend [layer3]
-<<set $timeL3T1 -= 6>>
-[img[setup.ImagePath+'Threats/lessertentaclebeast.png']]
-
-The beast's slick, dark tentacles glisten in the dim light, their tips adorned with suction cups that seem to twitch with anticipation. Its amorphous body is both mesmerizing and repulsive, and you find yourself momentarily paralyzed by the sight of it.
-
-As the creature draws closer, you can almost feel the cool, damp embrace of its probing tendrils. The air around you grows heavy with the scent of damp earth and something more animalistic, a musk that sends shivers down your spine.
-
-Suddenly, you snap back to reality, and a primal instinct to survive takes over. You hastily assess your options, understanding that bullets will be of little use against this strange, amorphous foe. Instead, you weigh the risks of engaging it with your sword, knowing that the battle could leave you injured and vulnerable.
-
-As the tentacle beast inches closer, you can almost taste the cool, slimy texture of its tendrils against your skin. The thought of it ravaging you, leaving you and your companions weak and helpless, spurs you into action. 
-
-How do you want to deal with the tentacle beast moving in on you?
-
-
-<<nobr>>
-<<if $items[14].count > 0>>
-	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
-	[[Fight it off with your sword yourself|Layer3 Ascend2][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
-<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|Layer3 Ascend2]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 10>>
-	Due to its amorphous nature, it will take at least 11 bullets to take down the monster.<br>
-	[[Shoot it with your pistol|Layer3 Ascend2][$items[20].count -= (11 - $bullRed)]]<br><br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily pebbles to use as ammo are abundant in the rocky caves of this layer.<br>
-[[Defeat it with the Brave Vector|Layer3 Ascend2]]<br><br>
-<</if>>
-If you allow it to overpower you, it will give you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>a very thorough tentacle fucking, leaving you with a serious limp, increasing your next 3 travel times by 2 days each. <br>
-<<link "Allow it to overpower you" "Layer3 Ascend2">>
-	<<set $status.duration += (3 - $statRed)>>
-	<<set $status.penalty += 2>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-	<<MonsterPregCheckParty>>
-	<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-		<<set $SemenDemonBalance+=10>>
-	<</if>>
-<</link>><br>
-<br>
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the tentacles close in on you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
-
-A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
-
-<<link "Hold the doll tight and squeeze your eyes shut" "Layer3 Ascend2">>
-  <<dollTF>>
-<</link>><br>
-<</if>>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer3 Ascend2]]
-
-
-:: Layer3 Threat2 Ascend [layer3]
-<<nobr>>
-<<set $tempTime = 2>>
-<<set $timeL3T2 -= 5>>
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-	<<set $tempTime = 1>>
-<</if>>
-<<set $items[0].count -= $tempTime>>
-<<set $items[1].count -= $tempTime>>
-<<set $time += $tempTime>>
-<<set $timeL3 += $tempTime>>
-<</nobr>>
-[img[setup.ImagePath+'Threats/slackslime.png']]
-
-The ameboid creature that has trapped you seem to hiss slightly, then you smell something a little strange before your muscles completely relax. It seems that no matter how much you try, you aren't able to move at all.
-
-The slime moves slowly, but surely over your paralyzed body and into your most sensitive locations. Even though you can't move, you can feel every moment the creature spends milking your sexual fluids for protein.
-
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-The slime lets you go after only 1 day, perhaps feeling some sense of kinship with a slimey being such as yourself.
-<<else>>
-The process lasts two days before the slime finally moves on and allows you to go on your way.
-<</if>>
-
-[[You continue on your way after the slime releases you|Layer3 Ascend2]]
-
-
 :: Layer3 Cherry [layer3]
 [img[setup.ImagePath+'Surface/cherry.png']]
 
@@ -1233,126 +1068,24 @@ Please enter your new skin/eye color:
 
 :: Layer3 Exit2 [layer3]
 <<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 6>>
-<</if>>
-<<set _triggers = {
-	lesserTentacleBeast: () => $timeL3T1 > 5,
-	slackslime: () => $timeL3T2 > 4,
-}>>
 
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers.lesserTentacleBeast()>>
-	<br><<include "Layer3 Tentacle Encounter">><br><br>
-	[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<br><br>
-<<elseif _triggers.slackslime()>>
-	<br><<include "Layer3 Slackslime Encounter">><br><br>
-	[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<br><br>
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 6>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<</nobr>>
-<<if _done>>
-	<<nobr>>
-	<<set $timeL4T1 = 0>>
-	<</nobr>>
+<<include "Layer3 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
 	You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. But rather than the wet forest from above, you feel the air getting colder, and occasionally notice frost on the walls of the caves.
 
 	Eventually you notice a bright, cool light at the end of the tunnel, it seems like you've made it to the end of the third layer.
 
-<<include "Curse Descriptions">>
+	<<include "Curse Descriptions">>
 
 	[[Emerge onto the fourth layer|Layer4 1]]
 <</if>>
-
-
-:: Layer3 Threat1 Descend [layer3]
-<<set $timeL3T1 -= 6>>
-[img[setup.ImagePath+'Threats/lessertentaclebeast.png']]
-
-The beast's slick, dark tentacles glisten in the dim light, their tips adorned with suction cups that seem to twitch with anticipation. Its amorphous body is both mesmerizing and repulsive, and you find yourself momentarily paralyzed by the sight of it.
-
-As the creature draws closer, you can almost feel the cool, damp embrace of its probing tendrils. The air around you grows heavy with the scent of damp earth and something more animalistic, a musk that sends shivers down your spine.
-
-Suddenly, you snap back to reality, and a primal instinct to survive takes over. You hastily assess your options, understanding that bullets will be of little use against this strange, amorphous foe. Instead, you weigh the risks of engaging it with your sword, knowing that the battle could leave you injured and vulnerable.
-
-As the tentacle beast inches closer, you can almost taste the cool, slimy texture of its tendrils against your skin. The thought of it ravaging you, leaving you and your companions weak and helpless, spurs you into action. 
-
-How do you want to deal with the tentacle beast moving in on you?
-
-
-<<nobr>>
-<<if $items[14].count > 0>>
-	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
-	[[Fight it off with your sword yourself|Layer3 Exit2][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
-<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|Layer3 Exit2]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 10>>
-	Due to its amorphous nature, it will take at least 11 bullets to take down the monster.<br>
-	[[Shoot it with your pistol|Layer3 Exit2][$items[20].count -= (11 - $bullRed)]]<br><br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily pebbles to use as ammo are abundant in the rocky caves of this layer.<br>
-[[Defeat it with the Brave Vector|Layer3 Exit2]]<br><br>
-<</if>>
-
-If you allow it to overpower you, it will give you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>a very thorough tentacle fucking, leaving you with a serious limp, increasing your next 3 travel times by 2 days each. <br>
-<<link "Allow it to overpower you" "Layer3 Exit2">>
-	<<set $status.duration += (3 - $statRed)>>
-	<<set $status.penalty += 2>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-	<<MonsterPregCheckParty>>
-<</link>><br>
-<br>
-
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the tentacles close in on you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
-
-A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
-
-<<link "Hold the doll tight and squeeze your eyes shut" "Layer3 Exit2">>
-  <<dollTF>>
-<</link>><br>
-<</if>>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer3 Exit2]]
-
-
-:: Layer3 Threat2 Descend [layer3]
-<<nobr>>
-<<set $tempTime = 2>>
-<<set $timeL3T2 -= 5>>
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-	<<set $tempTime = 1>>
-<</if>>
-<<set $items[0].count -= $tempTime>>
-<<set $items[1].count -= $tempTime>>
-<<set $time += $tempTime>>
-<<set $timeL3 += $tempTime>>
-<</nobr>>
-[img[setup.ImagePath+'Threats/slackslime.png']]
-
-The ameboid creature that has trapped you seem to hiss slightly, then you smell something a little strange before your muscles completely relax. It seems that no matter how much you try, you aren't able to move at all.
-
-The slime moves slowly, but surely over your paralyzed body and into your most sensitive locations. Even though you can't move, you can feel every moment the creature spends milking your sexual fluids for protein.
-
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-The slime lets you go after only 1 day, perhaps feeling some sense of kinship with a slimey being such as yourself.
-<<else>>
-The process lasts two days before the slime finally moves on and allows you to go on your way.
-<</if>>
-
-[[You continue on your way after the slime releases you|Layer3 Exit2]]
 
 
 :: Pick up the Sibyl Blend [layer3]

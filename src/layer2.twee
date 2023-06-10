@@ -1,9 +1,9 @@
 :: Layer2 1 [layer2]
 <<nobr>>
-<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
-<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
-<<set $timeL2T1 = 0>>
 <<set $currentLayer = 2>>
+<<masteraudio stop>>
+<<audio "layer2" volume 0.2 play loop>>
+<<set $timeL2T1 = 0>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -23,13 +23,19 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 
 
 :: Layer2 Hub [layer2]
-<<nobr>><<set $currentLayer = 2>>
-<<set $layerExit = 0>>
+<<nobr>>
+<<set $currentLayer = 2>>
+<<if !isPlaying("layer2")>>
+	<<masteraudio stop>>
+	<<audio "layer2" volume 0.2 play loop>>
+<</if>>
 <<CarryAdjust>>
-<</nobr>><<if $timeL2T1 < 4 || $hiredCompanions.length > 3>><<nobr>>
+
+<</nobr>>\
+<<if $timeL2T1 < 4 || $hiredCompanions.length > 3>><<nobr>>
 	<<if $visitL2 == 0>>
-		<<set $layerTemp = 8>>
 		<<set $visitL2 = 1>>
+		<<set $layerTemp = 8>>
 	<<elseif $secondVisitL2 == 0>>
 		<<set $secondVisitL2 = 1>>
 		<<set $layerTemp = 18>>
@@ -101,7 +107,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 	[[View the Layer 2 habitation option|Layer2 Habitation]]
 
 	[[Look up towards the surface|Layer2 Ascend 1]]
-	[[Look down at the next layer|Layer2 Exit]]
+	[[Look down at the next layer|Layer2 Exit1]]
 
 <<else>>
 
@@ -323,7 +329,7 @@ Returning to the first layer will take 4 days, and cost 15 corruption.
 [[Turn back and continue your business on the second layer|Layer2 Hub]]
 
 
-:: Layer2 Exit [layer2]
+:: Layer2 Exit1 [layer2]
 Descending to the next layer will take 5 days. As you travel further down, the layer tends to get larger, both vertically and horizontally.
 
 Accessing drinkable water tends to get a but more difficult from here on out, so having a fair emergency supply of water would be a good idea before continuing onward. At a minimum, about a week's worth of water should be enough to avoid the worst case scenario.
@@ -1329,59 +1335,6 @@ You can use this Relic to see into your future and see what awaits you on the la
 [[Continue exploring the second layer|Layer2 Hub]]
 
 
-/* :: Layer2 Threat1 Main [image layer2]
-<<set $timeL2T1 -= 4>>
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
-
-How do you want to deal with the beast moving in on you?
-
-
-<<nobr>>
-<<if $items[14].count > 0>>
-	A simple beast like this could be fought off by even an amateur using a human weapon, like a sword.<br>[[Fight it off with your sword|Layer2 Hub]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 2>>
-	While the beast is large and burly, a few shots from a gun will easily bring it down.<br>
-	[[Shoot it 3 times with your pistol|Layer2 Hub][$items[20].count -= 3]]<br><br>
-<</if>>
-<<if $items[1].count > 4>>
-	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and cause it to leave you alone.<br>
-	[[Feed it 5 days of your food rations|Layer2 Hub][$items[1].count -= 5]]<br><br>
-<</if>>
-<<if $hiredCompanions.length > 3>>
-	[[Scare it off with your large group of companions|Layer2 Hub]]<br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun and is able to easily dispatch the beast with only a few well-placed shots.
-[[Defeat it with the Brave Vector|Layer2 Hub]]
-<</if>>
-
-<<link "Allow it to overpower you" "Layer2 Hub">>
-	<<set $status.duration = (4 - $statRed)>>
-	<<set $status.penalty = 1>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-<</link>>
-<br>
-
-<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
-
-A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
-
-<<link "Hold the doll tight and squeeze your eyes shut" "Layer2 Hub">>
-  <<dollTF>>
-<</link>><br>
-<</if>>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Hub]]
-*/
-
 :: Layer2 Flasks [layer2]
 <<nobr>>
 <<for $i = 0; $i < 999; $i++>>
@@ -1412,17 +1365,12 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 [[Return to exploring your food and water options on this layer|Layer2 Forage]]
 
 
-:: Layer2 Exit2 [layer2]
-<<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 5>>
-<</if>>
+:: Layer2 Travel Events [layer2 nobr]
 <<set _triggers = {
 	bayingGourmet: () => $timeL2T1 > 3 && $hiredCompanions.length < 4,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
 <<if _triggers.bayingGourmet()>>
 	Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.<br><br>
@@ -1430,127 +1378,80 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = passage()]]<br>
 <</if>>
 
-<</nobr>><<if _done>>
-Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
-
-<<include "Curse Descriptions">>
-
-[[Enter the deep caverns|Layer3 1]]
-<</if>>
 
 :: Layer2 Ascend2 [layer2]
 <<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<set $tempTime=4>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
-<<set _triggers = {
-	bayingGourmet: () => $timeL2T1 > 3 && $hiredCompanions.length < 4,
-}>>
-
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers.bayingGourmet()>>
-	Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.<br><br>
-
-	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = passage()]]<br>
+	<<AdjustedTravelTime "_travelTime" 4 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<</nobr>><<if _done>>
-<<nobr>>
-<<set $corruption -= (15 - $corRed)>>
-<</nobr>>
+<<include "Layer2 Travel Events">>
 
-
-You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.
-<<CarryAdjust>>
-<<Threat1Criterion>>
-<<include "Curse Descriptions">>
-<<if $TwinFly == true>>
-	<<include "Twin rejoin">>
-<</if>>
-
-<<if $threat1Crit == 1>>
-	<br>Worn down by the long trek up through the dense jungle of the previous layer, you're relieved when you finally reach the bridge to the Outcast Village. However, upon approaching the bridge a figure appears from behind a column.
-
-	<<say $Banditleader>> Well now, what do we have here?<</say>>
-	Turning around, you find yourself surrounded by a group of bandits, shrouded in ragged cloaks, emerging from the bushes behind you.
-
+<</nobr>>\
+<<if !setup.passingTime()>>
 	<<nobr>>
-	<<if $hiredCompanions.length < 1>>
-		<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> all by <<ObjectivePronoun>>self, with an awful lot of valuable stuff for 1 person. How about we take that stuff of your hands so you don't have to worry about it anymore, hmm?<</say>>
-	<<elseif $hiredCompanions.length == 1 && $app.appAge>13 >>
-		<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> on date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date, hmm? How about we take some of that stuff off your hands, so you don't have to worry about it anymore?<</say>>
-	<<elseif $hiredCompanions.length == 1 && $app.appAge<=13 >>
-		<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> on a stroll with <<PossesivePronoun>> babysitter. It seems you're carrying a lot of adult stuff that you don't really need. How about we take that stuff of your hands, so you don't have to worry about it anymore, hmm?<</say>> <br><br>
-	<<else>>
-		<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> with <<PossesivePronoun>> merry band of losers. Don't worry, we wont bite. As long as you do as we ask, we're very friendly. How about we take that stuff off your hands, so you don't have to worry about keeping it safe anymore, hmm?<</say>><br><br>
-	<</if>>
+		<<set $corruption -= 15 - $corRed + 5 * Math.trunc($hexflame / 10)>>
 	<</nobr>>
+	You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.
+	<<CarryAdjust>>
+	<<Threat1Criterion>>
+	<<include "Curse Descriptions">>
+	<<if $TwinFly == true>>
+		<<include "Twin rejoin">>
+	<</if>>
 
-	[[Deal with the opportunistic bandits|Layer1 Threat1 Ascend]]<br>
-<<else>>
-	<<set $currentLayer = 1>>
-	[[Return to the first layer|Layer1 Hub]]
+	<<if $threat1Crit == 1>>
+		<br>Worn down by the long trek up through the dense jungle of the previous layer, you're relieved when you finally reach the bridge to the Outcast Village. However, upon approaching the bridge a figure appears from behind a column.
+
+		<<say $Banditleader>> Well now, what do we have here?<</say>>
+		Turning around, you find yourself surrounded by a group of bandits, shrouded in ragged cloaks, emerging from the bushes behind you.
+
+		<<nobr>>
+		<<if $hiredCompanions.length < 1>>
+			<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> all by <<ObjectivePronoun>>self, with an awful lot of valuable stuff for 1 person. How about we take that stuff of your hands so you don't have to worry about it anymore, hmm?<</say>>
+		<<elseif $hiredCompanions.length == 1 && $app.appAge>13 >>
+			<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> on date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date, hmm? How about we take some of that stuff off your hands, so you don't have to worry about it anymore?<</say>>
+		<<elseif $hiredCompanions.length == 1 && $app.appAge<=13 >>
+			<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> on a stroll with <<PossesivePronoun>> babysitter. It seems you're carrying a lot of adult stuff that you don't really need. How about we take that stuff of your hands, so you don't have to worry about it anymore, hmm?<</say>> <br><br>
+		<<else>>
+			<<say $Banditleader>> It looks like a <<PerceivedStature $app>> <<PerceivedGender $app>> with <<PossesivePronoun>> merry band of losers. Don't worry, we wont bite. As long as you do as we ask, we're very friendly. How about we take that stuff off your hands, so you don't have to worry about keeping it safe anymore, hmm?<</say>><br><br>
+		<</if>>
+		<</nobr>>
+
+		[[Deal with the opportunistic bandits|Layer1 Threat1]]<br>
+	<<else>>
+		[[Return to the first layer|Layer1 Hub]]
+	<</if>>
 <</if>>
 
 
-
-<</if>>
-
-/* :: Layer2 Threat1 Ascend [image layer2]
-<<set $timeL2T1 -= 4>>
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-threats.png']]
-
-How do you want to deal with the beast moving in on you?
-
-
+:: Layer2 Exit2 [layer2]
 <<nobr>>
-<<if $items[14].count > 0>>
-	A simple beast like this could be fought off by even an amateur using a human weapon, like a sword.<br>[[Fight it off with your sword|Layer2 Ascend2]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 2>>
-	While the beast is large and burly, a few shots from a gun will easily bring it down.<br>
-	[[Shoot it 3 times with your pistol|Layer2 Ascend2][$items[20].count -= 3]]<br><br>
-<</if>>
-<<if $items[1].count > 4>>
-	The ravenous creature doesn't want much besides food. Luckily you have an ample supply, so you could give it some of your rations and cause it to leave you alone.<br>
-	[[Feed it 5 days of your food rations|Layer2 Ascend2][$items[1].count -= 5]]<br><br>
-<</if>>
-<<if $hiredCompanions.length > 3>>
-	[[Scare it off with your large group of companions|Layer2 Ascend2]]<br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun and is able to easily dispatch the beast with only a few well-placed shots.
-[[Defeat it with the Brave Vector|Layer2 Ascend2]]
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 5>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-[[Allow it to overpower you|Layer2 Ascend2][$status.duration = (4 - $statRed), $status.penalty = 1]]<br>
+<<include "Layer2 Travel Events">>
 
-<<if $hiredCompanions.length < 1 && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the beast approaches you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
+<</nobr>>\
+<<if !setup.passingTime()>>
+	Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
 
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will disappear. <</say>><br>
+	<<include "Curse Descriptions">>
 
-A pleasant warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into yout heart.<br><br>
-
-<<link "Hold the doll tight and squeeze your eyes shut" "Layer2 Ascend2">>
-  <<dollTF>>
-<</link>><br>
+	[[Enter the deep caverns|Layer3 1]]
 <</if>>
-<</nobr>>
 
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer2 Ascend2]]
 
-*/
 :: Layer2 Curses Random [nobr]
 <<set _tempCurses = ["Libido Reinforcement B","Gender Reversal B","Asset Robustness B","Age Reduction A","Fluffy Ears","Fluffy Tail","Maximum Fluff","Heat/Rut","Lightweight","Sex Switcheroo","Futa Fun","Blushing Virgin"]>>
 <<set _totalCurses = $playerCurses>>
