@@ -2477,14 +2477,22 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 <<return>>
 
 
-:: CampCode
-You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that. 
+:: CampCode [nobr]
+<<if setup.passingTime()>>
+	<<include `"Layer" + $currentLayer + " Travel Events"`>>
+<</if>>
+<<if !setup.passingTime()>>
+	You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that.<br><br>
 
-How many days would you like to rest here?
-<<textbox "_temp" "0">>
-<<nobr>><<link "Set up camp and wait" `"Layer" + $currentLayer + " Hub"`>>
-	<<PassTime `parseInt(_temp, 10)`>>
-<</link>><</nobr>>
+	How many days would you like to rest here?<br>
+	<<textbox "_campTime" "0">><br>
+	<<link "Set up camp and wait" `passage()`>>
+		<<set setup.startPassingTime(parseInt(_campTime, 10) || 0)>>
+	<</link>><br><br>
+
+	<<link "Return to exploring the layer without waiting" `"Layer" + $currentLayer + " Hub"`>><</link>>
+<</if>>
+
 
 :: Curse Descriptions
 <<nobr>>
