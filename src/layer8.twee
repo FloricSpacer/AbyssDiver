@@ -1,11 +1,11 @@
 :: Layer8 1 [layer8]
 <<nobr>>
-<<masteraudio stop>><<audio "layer8" volume 0.2 play loop>>
 <<set $currentLayer = 8>>
+<<masteraudio stop>>
+<<audio "layer8" volume 0.2 play loop>>
+<<set $timeL7T2 = 0>>
+<<set $timeL8T2a = 0, $timeL8T2b = 0>>
 <<set $L8visit += 1>>
-<<set $timeL8T1 = 0>>
-<<set $timeL8T2a = 0>>
-<<set $timeL8T2b = 0>>
 <</nobr>>
 @@.layerTitle;
 <<nobr>>
@@ -82,11 +82,15 @@ Threats:
 <<back>>
 
 :: Layer8 Hub [layer8 nobr]
+
 <<set $currentLayer = 8>>
-<<set $L8loopLim=false>>
-<<set $temp1 = random(0,20)>>
+<<if !isPlaying("layer8")>>
+	<<masteraudio stop>>
+	<<audio "layer8" volume 0.2 play loop>>
+<</if>>
 <<CarryAdjust>>
-<<set $layerExit = 0>>
+<<set $L8loopLim = false>>
+<<set $temp1 = random(0,20)>>
 <<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2a > 7 && $L8T1aCount < 2)>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
@@ -318,7 +322,7 @@ If you decide to start foraging for food or water, it means that you will not co
 [[Return to exploring the rest of the layer|Layer8 Hub]]
 
 
-:: Layer8 Flasks [layer6]
+:: Layer8 Flasks [layer8]
 <<nobr>>
 <<for $i = 0; $i < 999; $i++>>
 	<<if $items[2].count > 0>>
@@ -509,7 +513,7 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 [[Continue exploring the eighth layer|Layer8 Hub]]
 
 
-:: Layer8 Curses  [layer3 cards nobr]
+:: Layer8 Curses  [layer8 cards nobr]
 <p><<CarryAdjust>></p>
 
 <p><<if $escBalDepl==0>>
@@ -1284,34 +1288,23 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 <<if $DaedalusEquip==true >>\
 	<<if $DaedalusFly==false>>\
 		You are currently commited to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer7 Ascend 1][$DaedalusFly=true]]
+		[[Flap your wings and prepare to fly to the next layer|Layer8 Ascend 1][$DaedalusFly=true]]
 	<<else>>\
 		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer7 Ascend 1][$DaedalusFly=false]]
+		[[Maybe it's better to walk to the next layer|Layer8 Ascend 1][$DaedalusFly=false]]
 	<</if>>\
 <</if>>\
 [[Continue your ascent|Layer8 Ascend2]]
 [[Turn back and continue your business on the eighth layer|Layer8 Hub]]
 
-:: Layer8 Ascend2 [layer8]
-<<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<set $tempTime = 40>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
-	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
+
+:: Layer8 Travel Events [layer8 nobr]
 <<set _triggers = {
 	dementialAberrations2a: () => ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2a > 7 && $L8T1aCount < 2),
 	dementialAberrations2b: () => ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
 <<if _triggers.dementialAberrations2a()>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
@@ -1319,18 +1312,36 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
 	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
 	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = passage(), $L8loopLim=false]]
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = passage(), $L8loopLim = false]]
 <<elseif _triggers.dementialAberrations2b()>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
 	You can feel the deepest fears of your party manifesting into reality once again. 
 	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2b][$returnPassage = passage(), $L8loopLim=false]]
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2b][$returnPassage = passage(), $L8loopLim = false]]
 <</if>>
 
-<</nobr>>
-<<if _done>>
-	<<set $corruption -= (100 - $corRed)>><<set $timeL7T2 = 0>>\
+
+:: Layer8 Ascend2 [layer8]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" 40 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer8 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
+	<<nobr>>
+		<<set $corruption -= 100 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+	<</nobr>>
 	Despite the fact your journey was through hallways and staircases rather than fields of tentacles or sandy deserts the journey was somehow especially arduous. The dimension-bending appearance of this layer combined with the horrific visions and terrifying manifestions it brought upon you makes you grateful to return to the dystopian city you descended from.
 
 	As your reach the top of the layer, you find one final staircase, which twists upon itself until it reachs the pinnacle of the architecture. Once you've ascended you see yourself looking down through an enormous circular gate, which you recognize falling through when you first entered this place. Now you step down and ascend (descend?) once again to seventh layer.
@@ -1341,10 +1352,9 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 	<<if $TwinFly == true>>
 		<<include "Twin rejoin">>
 	<</if>>
-	<<set $currentLayer = 7>>
-	[[Return to the Seventh layer|Layer7 Hub]]
-
+	[[Return to the seventh layer|Layer7 Hub]]
 <</if>>
+
 
 :: Layer8 Exit1 [layer8]
 If you continue your descent in spite of everything, descending past this layer's mind-boggling architecture and into what lies beyond will take 45 days.
@@ -1352,49 +1362,34 @@ If you continue your descent in spite of everything, descending past this layer'
 [[Turn back and continue your business on the eighth layer|Layer8 Hub]]
 [[Continue your descent to the ninth layer|Layer8 Exit2]]
 
+
 :: Layer8 Exit2 [layer8]
 <<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 45>>
-<</if>>
-<<set _triggers = [
-	() => ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru") && $L8T1aCount < 2) || ($timeL8T2a > 7 && $L8T1aCount < 2),
-	() => ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23,
-]>>
 
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers[0]()>>
-	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
-
-	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
-	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
-	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = passage(), $L8loopLim=false]]
-<<elseif _triggers[1]()>>
-	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
-
-	You can feel the deepest fears of your party manifesting into reality once again. 
-	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2b][$returnPassage = passage(), $L8loopLim=false]]
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 45>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<<if _done>>
+<<include "Layer8 Travel Events">>
 
-	At the very bottom of the layer you come across what appears to be a very deep pool of water. There doesn't seem to be any other way through besides this pool, so you'll need some kind of way to breathe underwater to continue forwards. The diving gear from Outset town or the Merfolk Curse could work, or you could use the Pneuma Wisp Relic to bypass the issue entirely. Other than that, you would need to get creative.<br><br>
-	<<set $L8loopLim=false>>
+<</nobr>>\
+<<if !setup.passingTime()>>
+	At the very bottom of the layer you come across what appears to be a very deep pool of water. There doesn't seem to be any other way through besides this pool, so you'll need some kind of way to breathe underwater to continue forwards. The diving gear from Outset town or the Merfolk Curse could work, or you could use the Pneuma Wisp Relic to bypass the issue entirely. Other than that, you would need to get creative.
+
+	<<include "Curse Descriptions">>
+
 	<<if $scuba == 1>>
 		[[Descend into the pool|Layer9 1]]
 	<<else>>
-		Because you have no way to continue through the deep pool, you must return to exploring the layer.<br>
-		[[Continue exploring Layer 8|Layer8 Hub]]<br><br>
+		Because you have no way to continue through the deep pool, you must return to exploring the layer.
+		[[Continue exploring Layer 8|Layer8 Hub]]
 
-		Or, if you believe you have an alternative way to keep exploring in a purely underwater environment, you can continue through the pool.<br>
+		Or, if you believe you have an alternative way to keep exploring in a purely underwater environment, you can continue through the pool.
 		[[Descend into the pool|Layer9 1]]
 	<</if>>
 <</if>>
-<</nobr>>
+
 
 :: Layer8 Inanis Check
 

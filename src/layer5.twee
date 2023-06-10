@@ -1,10 +1,11 @@
 :: Layer5 1 [layer5]
 <<nobr>>
-<<masteraudio stop>><<audio "layer5" volume 0.2 play loop>>
 <<set $currentLayer = 5>>
+<<masteraudio stop>>
+<<audio "layer5" volume 0.2 play loop>>
+<<set $timeL4T1 = 0>>
+<<set $timeL5T1 = 0, $timeL5T2 = 0>>
 <<set $forageWater = 0>>
-<<set $timeL5T1 = 1>>
-<<set $timeL5T2 = 0>>
 <</nobr>>
 
 @@.layerTitle;
@@ -21,11 +22,19 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 
 
 :: Layer5 Hub [layer5]
-<<set $currentLayer = 5>><<if $timeL5T1 < 8 && $timeL5T2 < 11>><<set $visitL5 = 1>><<set $layerExit = 0>><<CarryAdjust>>\
 <<nobr>>
+<<set $currentLayer = 5>>
+<<if !isPlaying("layer5")>>
+	<<masteraudio stop>>
+	<<audio "layer5" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+
+<</nobr>>\
+<<if $timeL5T1 < 8 && $timeL5T2 < 11>><<nobr>>
 <<if $visitL5 == 0>>
-	<<set $layerTemp = 8>>
 	<<set $visitL5 = 1>>
+	<<set $layerTemp = 8>>
 <<elseif $secondVisitL5 == 0>>
 	<<set $secondVisitL5 = 1>>
 	<<set $layerTemp = 18>>
@@ -95,11 +104,11 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 [[Look down at the next layer|Layer5 Exit1]]<<elseif $timeL5T1 < 8>>
 <<include "Layer5 Borer Encounter">>
 
-[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = "Layer5 Hub"]]
+[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]
 <<else>>
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
 
-[[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = passage()]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 
 The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
 [[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]
@@ -116,51 +125,6 @@ How would you like to use Cherry's chaotic luck ability?
 [[Get 2 random Curses for +50% corruption|Layer5 Cherry Curse]]
 [[Get 1 Relic and 1 Curse|Layer5 Cherry Mix]]
 
-
-:: Layer5 Threat2 Main [layer5]
-<<set $timeL5T2 -= 9>>
-[img[setup.ImagePath+'Threats/dunedevouringborer.png']]
-
-How do you want to deal with the enormous worm approaching you?
-
-
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer5 Hub][$time += 1]]<br><br>
-<</if>>
-<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
-	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
-	[[Have Khemia fight it off with Joyous Sunder|Layer5 Hub]]<br><br>
-<</if>>
-You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away. You will drop the water based on your drinking water priority order, since that is what is most quickly accessible in this dangerous situation.<br>
-	/*[[Use 10 days of water as a distraction to get away|Layer5 Hub][$items[0].count -= 10]]<br><br>*/
-	<<link "Use 10 days of water as a distraction to get away" "Layer5 Hub">>
-		<<for _k=0; _k<10; _k++>>
-			<<include "Water drop code">>
-		<</for>>
-	<</link>>
-	<br><br>
-If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|Layer5 Hub]]
-
-
-:: Layer5 Threat1 Main [layer5]
-<<PassTime 1>>\
-<<set $timeL5T1 -= 8>>\
-[img[setup.ImagePath+'Threats/mayflyscuttler.png']]
-
-When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
-
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities][$returnPassage = "Layer5 Hub"]]
-
-[[Hide out in the ruins for the day|Layer5 Hub]]
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of or avoid these pests.
-[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|Layer5 Hub]]
 
 :: Layer5 Mayfly Scuttler Sexual Activities [layer5 nobr]
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]<br><br>
@@ -310,7 +274,7 @@ You can also wait at the Oasis if you'd like to pass the time while waiting for 
 <<else>>
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
 
-[[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = "Layer5 Hub"]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 
 The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
 [[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]
@@ -399,7 +363,7 @@ Already taken
 
 <p>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.</p>
 
-<p>[[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]</p><<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+<p>[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = "Layer5 Hub"]]</p><<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 
 <p>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.</p>
 
@@ -1495,7 +1459,7 @@ The timer has passed its endpoint, there is no more door and no more vault that 
 <<else>>
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
 
-[[Deal with the Mayfly Scuttler|Layer5 Threat1 Main]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = "Layer5 Hub"]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 
 The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
 [[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]
@@ -1503,50 +1467,48 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 <</if>>
 
 
-:: Layer5 Ascend2 [layer5]
-<<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-
-	<<if setup.haveRope>>
-		<<set $tempTime = 11>>
-	<<else>>
-		<<set $tempTime = 24>>
-	<</if>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
-	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
+:: Layer5 Travel Events [layer5 nobr]
 <<set _triggers = {
 	duneDevouringBorer: () => $timeL5T2 > 8,
 	mayflyScuttler: () => $timeL5T1 > 7,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
 <<if _triggers.duneDevouringBorer()>>
 	<br><<include "Layer5 Borer Encounter">><br><br>
 	[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]<br>
 <<elseif _triggers.mayflyScuttler()>>
 	<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.<br><br>
-	[[Deal with the Mayfly Scuttler|Layer5 Threat1 Ascend]]<br>
+	[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = passage()]]<br>
 
 	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
-		[[Summon a powerful gust to drive the swarm away from you|Layer5 Ascend2][$timeL5T1 -= 8]]<br>
+		<<link "Summon a powerful gust to drive the swarm away from you" `passage()`>><<set $timeL5T1 -= 8>><</link>><br>
 	<</if>>
 <</if>>
 
-<</nobr>>
-<<if _done>>
-	<<set $timeL4T1 = 0>>\
-	<<set $corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10)))>>\
-	<<set $currentLayer = 5>>\
 
+:: Layer5 Ascend2 [layer5]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" `setup.haveRope ? 11 : 24` false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer5 Travel Events">>
+
+<</nobr>>
+<<if !setup.passingTime()>>
+	<<nobr>>
+		<<set $corruption -= 50 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+	<</nobr>>
 	You continue through the scorching desert for days on end, until you eventually reach the contrasting bitter cold of the fourth layer. But before you can do anything on the fourth layer, you need to spend many days in the agonizingly slow climb through the enormous crevasse at its bottom. After many days of climbing, you're back to the snowy wastes of the fourth layer proper.
 
 	<<include "Curse Descriptions">>
@@ -1554,137 +1516,43 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 		<<include "Twin rejoin">>
 	<</if>>
 	[[Return to the fourth layer|Layer4 Hub]]
-
 <</if>>
 
 
-:: Layer5 Threat2 Ascend [layer5]
-<<set $timeL5T2 -= 9>>
-[img[setup.ImagePath+'Threats/dunedevouringborer.png']]
-
-How do you want to deal with the enormous worm approaching you?
-
-
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer5 Ascend2][$time += 1]]<br><br>
-<</if>>
-<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
-	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
-	[[Have Khemia fight it off with Joyous Sunder|Layer5 Ascend2]]<br><br>
-<</if>>
-You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away. You will drop the water based on your drinking water priority order, since that is what is most quickly accessible in this dangerous situation.<br>
-	/*[[Use 10 days of water as a distraction to get away|Layer5 Layer5 Ascend2][$items[0].count -= 10]]<br><br>*/
-	<<link "Use 10 days of water as a distraction to get away" "Layer5 Ascend2">>
-		<<for _k=0; _k<10; _k++>>
-			<<include "Water drop code">>
-		<</for>>
-	<</link>>
-	<br><br>
-If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|Layer5 Ascend2]]
-
-
-:: Layer5 Threat1 Ascend [layer5]
+:: Layer5 Threat1 [layer5]
 <<PassTime 1>>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
 
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities][$returnPassage = "Layer5 Ascend2"]]
+[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities]]
 
-[[Hide out in the ruins for the day|Layer5 Ascend2]]
+[[Hide out in the ruins for the day|$returnPassage]]
 
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of these pests.
-[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|Layer5 Ascend2]]
+Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of or avoid these pests.
+[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|$returnPassage]]
+
 
 :: Layer5 Exit2 [layer5]
 <<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 13>>
-<</if>>
-<<set _triggers = {
-	duneDevouringBorer: () => $timeL5T2 > 8,
-	mayflyScuttler: () => $timeL5T1 > 7,
-}>>
 
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers.duneDevouringBorer()>>
-	<br><<include "Layer5 Borer Encounter">><br><br>
-	[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]<br>
-<<elseif _triggers.mayflyScuttler()>>
-	<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.<br><br>
-	[[Deal with the Mayfly Scuttler|Layer5 Threat1 Descend]]<br>
-
-	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
-		[[Summon a powerful gust to drive the swarm away from you|Layer5 Exit2][$timeL5T1 -= 8]]<br>
-	<</if>>
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 13>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<<if _done>>
-	<<set $timeL6T1 = 0>>
-	<<set $timeL6T2 = 0>>
+<<include "Layer5 Travel Events">>
 
-	You continue through the scorching desert for days on end, but the heat only seems to get more intense. But the smell is different, you catch a whiff of more exotic, meaty scents than the fragrance of the flowers of the fifth layer. As the ground begins to change from sand to a more organic texture, you know you're approaching the sixth layer.<br><br>
+<</nobr>>\
+<<if !setup.passingTime()>>
+	You continue through the scorching desert for days on end, but the heat only seems to get more intense. But the smell is different, you catch a whiff of more exotic, meaty scents than the fragrance of the flowers of the fifth layer. As the ground begins to change from sand to a more organic texture, you know you're approaching the sixth layer.
 
-	<<include "Curse Descriptions">><br><br>
+	<<include "Curse Descriptions">>
 
 	[[Descend to the sixth layer|Layer6 1]]
 <</if>>
-<</nobr>>
 
-:: Layer5 Threat2 Descend [layer5]
-<<set $timeL5T2 -= 9>>
-[img[setup.ImagePath+'Threats/dunedevouringborer.png']]
-
-How do you want to deal with the enormous worm approaching you?
-
-
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off, but even he would be injured by fighting it, taking one day to recover.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer5 Exit2][$time += 1]]<br><br>
-<</if>>
-<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
-	The sword Joyous Sunder is a truly terrifying weapon in the hands of an expert like Khemia, allowing him to defeat a worm without even being injured himself.<br>
-	[[Have Khemia fight it off with Joyous Sunder|Layer5 Exit2]]<br><br>
-<</if>>
-You can run away, but this requires sacrificing 10 days of water to distract the worm to give you a chance to get away. You will drop the water based on your drinking water priority order, since that is what is most quickly accessible in this dangerous situation.<br>
-	/*[[Use 10 days of water as a distraction to get away|Layer5 Exit2][$items[0].count -= 10]]<br><br>*/
-	<<link "Use 10 days of water as a distraction to get away" "Layer5 Exit2">>
-		<<for _k=0; _k<10; _k++>>
-			<<include "Water drop code">>
-		<</for>>
-	<</link>>
-<br><br>
-If you allow it to overpower you, prepare to be vored! However, this will be much more brutal than what may have occured on the previous layer. In this case you will almost certainly die after being eaten by a worm you can't fight off. It's reccomended you don't allow that to happen.
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|Layer5 Exit2]]
-
-
-:: Layer5 Threat1 Descend [layer5]
-<<PassTime 1>>\
-<<set $timeL5T1 -= 8>>\
-[img[setup.ImagePath+'Threats/mayflyscuttler.png']]
-
-When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
-
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities][$returnPassage = "Layer5 Exit2"]]
-
-[[Hide out in the ruins for the day|Layer5 Exit2]]
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of these pests.
-[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|Layer5 Exit2]]
 
 :: Escape Balloon L5 [layer5]
 <<nobr>><<set $currentLayer = 5>><<if !isPlaying("layer5")>>
