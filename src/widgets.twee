@@ -132,7 +132,7 @@
 		<</if>>
 		<<set _due = $due>>
 
-		<<if  ($time - $app.pregnantT> 270 & $time - $app.pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
+		<<if  ($time - $app.pregnantT> 270 && $time - $app.pregnantT<=$due) || ($time - $menCycleT < -30 && $menCycleFlag == true)>>
 			<<set _handle.lactation += 2>>
 		<</if>>
 
@@ -150,13 +150,13 @@
 		<</if>>
 	<</if>>
 	<<if _handle.pregnantT != 9999>>
-		<<if $time - _handle.pregnantT>= 90 & $time - _tempPreg<=130 >>
+		<<if $time - _handle.pregnantT>= 90 && $time - _tempPreg<=130 >>
 			<<set _handle.breastsCor += 0.5>>
-		<<elseif $time - _handle.pregnantT> 130 & $time - _tempPreg<=180 >>
+		<<elseif $time - _handle.pregnantT> 130 && $time - _tempPreg<=180 >>
 			<<set _handle.breastsCor += 1>>
-		<<elseif $time - _handle.pregnantT> 180 & $time - _tempPreg<=240>>
+		<<elseif $time - _handle.pregnantT> 180 && $time - _tempPreg<=240>>
 			<<set _handle.breastsCor += 1.5>>
-		<<elseif $time - _handle.pregnantT> 240 & $time - _tempPreg<=_due>>
+		<<elseif $time - _handle.pregnantT> 240 && $time - _tempPreg<=_due>>
 			<<set _handle.lactation += 1>> 
 			<<set _handle.breastsCor += 1>>
 		<</if>>
@@ -623,7 +623,7 @@
 		<<print "<<set _handle  = $companion"+ _tempName +" >>">>
 	<</if>>
 
-	<<if $time - _tempPreg>= 90 & $time - _tempPreg<=_due >>
+	<<if $time - _tempPreg>= 90 && $time - _tempPreg<=_due >>
 		<<set _handle.gender += 1>>
 	<</if>>
 	<<include "BreastCorrected">>
@@ -780,9 +780,9 @@
 	<</for>>
 	
 	<<if _i==$hiredCompanions.length>>
-		<<if $time-$menCycleT<16 & $time-$menCycleT>=13>>
+		<<if $time-$menCycleT<16 && $time-$menCycleT>=13>>
 			<<set $app.libido += 1>>
-		<<elseif $time-$menCycleT<25 & $time-$menCycleT>=20>>
+		<<elseif $time-$menCycleT<25 && $time-$menCycleT>=20>>
 			<<set $app.libido -= 1>>
 		<</if>>
 
@@ -1350,21 +1350,21 @@
 			<<set _handle.HandicapThreat -=2>>
 		<</if>>
 
-		<<if $time - $app.pregnantT< 45 & $time - $app.pregnantT>= 35>>
+		<<if $time - $app.pregnantT< 45 && $time - $app.pregnantT>= 35>>
 			<<set _handle.HandicapMovement -=2>>
-		<<elseif $time - $app.pregnantT< 90 & $time - $app.pregnantT>= 45>>
+		<<elseif $time - $app.pregnantT< 90 && $time - $app.pregnantT>= 45>>
 			<<set _handle.HandicapThreat -=2>>
 			<<set _handle.HandicapMovement -=4>>
 			<<set _handle.HandicapCarry -=3>>
-		<<elseif $time - $app.pregnantT< 180 & $time - $app.pregnantT>= 120>>
+		<<elseif $time - $app.pregnantT< 180 && $time - $app.pregnantT>= 120>>
 			<<set _handle.HandicapThreat -=1>>
 			<<set _handle.HandicapMovement -=2>>
 			<<set _handle.HandicapCarry -=2>>
-		<<elseif $time - $app.pregnantT< 240 & $time - $app.pregnantT>=180>>
+		<<elseif $time - $app.pregnantT< 240 && $time - $app.pregnantT>=180>>
 			<<set _handle.HandicapThreat -=2>>
 			<<set _handle.HandicapMovement -=3>>
 			<<set _handle.HandicapCarry -=3>>
-		<<elseif $time - $app.pregnantT< $due & $time - $app.pregnantT>=240>>
+		<<elseif $time - $app.pregnantT< $due && $time - $app.pregnantT>=240>>
 			<<set _handle.HandicapThreat -=4>>
 			<<set _handle.HandicapMovement -=5>>
 			<<set _handle.HandicapCarry -=5>>
@@ -2134,9 +2134,9 @@
 			<<set $menstruating = true>>
 		<</if>>
 		<<set $pregChance = 0>>
-	<<elseif $menFirstCycle == false & $time-$menCycleT>28 >>
+	<<elseif $menFirstCycle == false && $time-$menCycleT>28 >>
 		@@.alert1; You expected your cycle to have started by now, but it hasn't. Still, there's no need to worry – periods can be late, right?<br><br>
-	<<elseif $time-$menCycleT<5 & $time-$menCycleT>0 & $menstruating == true>>
+	<<elseif $time-$menCycleT<5 && $time-$menCycleT>0 && $menstruating == true>>
 		<<if !settings.MenCycleToggleFilter>>
 			<<if $menFirstCycle == true>>
 				<<if $EventHorizonWear== false>>
@@ -2158,16 +2158,16 @@
 			<</if>>
 		<</if>>
 		<<set $pregChance = 0>>
-	<<elseif $time-$menCycleT<9 & $time-$menCycleT>=5>>
+	<<elseif $time-$menCycleT<9 && $time-$menCycleT>=5>>
 		<<set $menstruating == false>>
 		<<set $pregChance = 0>>
-	<<elseif $time-$menCycleT<13 & $time-$menCycleT>=9>>
+	<<elseif $time-$menCycleT<13 && $time-$menCycleT>=9>>
 		<<set $menstruating == false>>
 		<<set $pregChance = ($time-$menCycleT-8)*0.06>>
-	<<elseif $time-$menCycleT<16 & $time-$menCycleT>=13>>
+	<<elseif $time-$menCycleT<16 && $time-$menCycleT>=13>>
 		<<set $menstruating == false>>
 		<<set $pregChance = 0.3>>
-	<<elseif $time-$menCycleT<18 & $time-$menCycleT>=16>>
+	<<elseif $time-$menCycleT<18 && $time-$menCycleT>=16>>
 		<<set $menstruating == false>>
 		<<set $pregChance = 0.3-($time-$menCycleT-15)*0.1>>
 	<<else>>	
@@ -2183,11 +2183,11 @@
 <</if>>
 
 <<if $app.pregnantT <= $time - 14>>
-	<<if $time - $app.pregnantT < 35 & $time - $app.pregnantT >= 28 & $menFirstCycle == false>>
+	<<if $time - $app.pregnantT < 35 && $time - $app.pregnantT >= 28 && $menFirstCycle == false>>
 		@@.alert1; Your heart races as you realize your cycle should have started by now. Perhaps it's simply late, no need to panic just yet, right? The uncertainty lingers.<br><br>
-	<<elseif $time - $app.pregnantT < 45 & $time - $app.pregnantT >= 35 & $menFirstCycle == false>>
+	<<elseif $time - $app.pregnantT < 45 && $time - $app.pregnantT >= 35 && $menFirstCycle == false>>
 		@@.alert1; Anxiety creeps in as your period remains conspicuously absent. This lateness is unusual for you, and the thought of pregnancy begins to haunt your mind.<br><br>
-	<<elseif $time - $app.pregnantT < 90 & $time - $app.pregnantT >= 45 && $random == 0>>
+	<<elseif $time - $app.pregnantT < 90 && $time - $app.pregnantT >= 45 && $random == 0>>
 		@@.alert1; You find yourself overwhelmed by exhaustion, and bouts of nausea threaten to topple you. This isn't ideal for your travels or facing any threats.
 		<<if $menFirstCycle == false>>
 			@@.alert1; The truth is undeniable – you're pregnant. Now, you must decide what to do next.
@@ -2195,17 +2195,17 @@
 			@@.alert1; The miasma could be causing some sort of illness. Maybe it will pass, or perhaps you need medical attention.
 		<</if>>
 		<br><br>
-	<<elseif $time - $app.pregnantT < 120 & $time - $app.pregnantT >= 90 & $menFirstCycle == false && $random == 0>>
+	<<elseif $time - $app.pregnantT < 120 && $time - $app.pregnantT >= 90 && $menFirstCycle == false && $random == 0>>
 		@@.alert1; Your pregnancy occupies your thoughts, but aside from that, you feel relatively fine. You notice your breasts and butt have grown a little, and a hint of fatigue lingers, but there's nothing too concerning.<br><br>
-	<<elseif $time - $app.pregnantT < 180 & $time - $app.pregnantT >= 120 & $menFirstCycle == false && $random == 0>>
+	<<elseif $time - $app.pregnantT < 180 && $time - $app.pregnantT >= 120 && $menFirstCycle == false && $random == 0>>
 		@@.alert1; Your pregnancy belly is now round and prominent. You occasionally feel a gentle kick from within, but your growing belly begins to hinder your travels more and more.<br><br>
-	<<elseif $time - $app.pregnantT < 180 & $time - $app.pregnantT >= 120 & $menFirstCycle == true && $random == 0>>
-		@@.alert1; You've gained considerable weight, especially around your belly, which sometimes experiences a peculiar tickling sensation. Your butt, thighs, and <<if $app.breastsCor<3 & $app.sex=="male">>pecs<<else>>breasts<</if>> have also accumulated some fat. This extra weight will slow you down during your travels.<br><br>
-	<<elseif $time - $app.pregnantT < 240 & $time - $app.pregnantT >=180 & $menFirstCycle == false && $random == 0>>
+	<<elseif $time - $app.pregnantT < 180 && $time - $app.pregnantT >= 120 && $menFirstCycle == true && $random == 0>>
+		@@.alert1; You've gained considerable weight, especially around your belly, which sometimes experiences a peculiar tickling sensation. Your butt, thighs, and <<if $app.breastsCor<3 && $app.sex=="male">>pecs<<else>>breasts<</if>> have also accumulated some fat. This extra weight will slow you down during your travels.<br><br>
+	<<elseif $time - $app.pregnantT < 240 && $time - $app.pregnantT >=180 && $menFirstCycle == false && $random == 0>>
 		@@.alert1; It's impossible to deny your pregnancy now. Your child's movements inside your swollen belly have become more frequent. But the added weight and energy-draining nature of pregnancy make navigating the Abyss increasingly difficult.<br><br>
-	<<elseif $time - $app.pregnantT < 240 & $time - $app.pregnantT >=180 & $menFirstCycle == true && $random == 0>>
+	<<elseif $time - $app.pregnantT < 240 && $time - $app.pregnantT >=180 && $menFirstCycle == true && $random == 0>>
 		@@.alert1; You can no longer ignore the truth – you're pregnant and have been for some time. Your child's movements within your belly are unmistakable. Your energy is drained more quickly than usual, whether from the added weight or the pregnancy itself. With a large, round belly and about half your normal energy, navigating the Abyss has become significantly more challenging.<br><br>
-	<<elseif $time - $app.pregnantT < $due & $time - $app.pregnantT >=240 && $random == 0>>
+	<<elseif $time - $app.pregnantT < $due && $time - $app.pregnantT >=240 && $random == 0>>
 		@@.alert2; Your advanced pregnancy has made even simple tasks feel like monumental challenges. Standing, sitting, bending, and sleeping require great effort. Walking is limited to short distances, while running and fighting are out of the question. Milk stains from your breasts mar your clothes, reminding you of your impending labor. Your ability to traverse the Abyss is severely limited. Ensure you have enough supplies for the days you'll be immobilized after giving birth!<br><br>
 	<</if>>
 <</if>>
@@ -2302,7 +2302,7 @@
 <<widget "PregCheck">>
 <<set _temp = random(0,100)>>
 
-<<if _temp <= $pregChance*100 & $app.pregnantT==9999 & $menCycleFlag == true >>
+<<if _temp <= $pregChance*100 && $app.pregnantT==9999 && $menCycleFlag == true >>
 	<<if  $playerCurses.some(e => e.name === "Eggxellent")>>
 		<<set $EggsFertilized = true>>
 	<<else>>
@@ -3014,13 +3014,19 @@
 
 :: Collect Relic widget [widget nobr]
 <<widget "CollectRelic">>
-<<capture _relic>>
+<<capture _relic _travelTime>>
 	<<set _relic = _args[0]>>
-	<<set $ownedRelics.push(_relic)>>
-	<<AdjustedTravelTime "$tempTime" _relic.time false `-$SibylBuff`>><<PassTime $tempTime>>
-	<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
-	<<if _relic.pic>>
-		[img[setup.ImagePath + _relic.pic]]<br>
+	<<if !setup.passingTime()>>
+		<<AdjustedTravelTime "_travelTime" _relic.time false `-$SibylBuff`>>
+		<<set setup.startPassingTime(_travelTime)>>
+	<</if>>
+	<<include `"Layer" + $currentLayer + " Travel Events"`>>
+	<<if !setup.passingTime()>>
+		<<set $ownedRelics.push(_relic)>>
+		<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+		<<if _relic.pic>>
+			[img[setup.ImagePath + _relic.pic]]<br>
+		<</if>>
 	<</if>>
 <</capture>>
 <</widget>>

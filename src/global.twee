@@ -465,7 +465,7 @@ Your R cup breasts are truly magnificent, but be cautious of the potential for v
 <<elseif $app.breastsCor >= 20>>
 Boasting an incredible S cup size, you must always be vigilant for the risk of extremely serious back pain.
 <</if>>
-<<if $time-$menCycleT-$menCycleVar>20 & $menCycleFlag==true>>
+<<if $time-$menCycleT-$menCycleVar>20 && $menCycleFlag==true>>
 They are a bit sore at the moment.
 <</if>>
 <<if $app.lactation > 1 >>
@@ -546,13 +546,13 @@ Your body appears rather out of shape, and you could certainly benefit from some
 <</if>>
 <<if $AegisWear>>Although imperceptible to an outside observer, your natural skeleton has been seamlessly replaced with a lightweight and resilient orichalcum framework.<br><br><</if>>
 
-<<if $time - $app.pregnantT < 180 & $time - $app.pregnantT >= 120 & $menFirstCycle == false>>
+<<if $time - $app.pregnantT < 180 && $time - $app.pregnantT >= 120 && $menFirstCycle == false>>
 	Your pregnancy is now visibly noticeable, with your belly round and growing. You occasionally feel a gentle flutter within, a reminder of the life blossoming inside you.<br><br>
-<<elseif $time - $app.pregnantT < 180 & $time - $app.pregnantT >= 120 & $menFirstCycle == true>>
+<<elseif $time - $app.pregnantT < 180 && $time - $app.pregnantT >= 120 && $menFirstCycle == true>>
 	You've gained some weight, and your belly has become rounder. Every so often, you experience ticklish spasms from within, possibly a sign of your baby's movements.<br><br>
-<<elseif $time - $app.pregnantT < 240 & $time - $app.pregnantT >= 180 & $menFirstCycle == false>>
+<<elseif $time - $app.pregnantT < 240 && $time - $app.pregnantT >= 180 && $menFirstCycle == false>>
 	Your belly is now large and unmistakably that of a pregnant person. Your child's movements within your womb are frequent, and at times, the intensity of the sensations surprises you.<br><br>
-<<elseif $time - $app.pregnantT < $due & $time - $app.pregnantT >= 240>>
+<<elseif $time - $app.pregnantT < $due && $time - $app.pregnantT >= 240>>
 	Your belly is sizable and clearly pregnant. Your child often tries to move and kick within your womb, but space is becoming limited. The sensations can be quite intense, but you sense that your pregnancy is nearing its end.<br><br>
 <</if>>
 
@@ -1217,7 +1217,7 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <<if $ownedRelics.some(e => e.name === "Blind Divine")>>
 	<<if $BDwear>>
 		<br>You are currently wearing the Blind Divine, 
-		<<if $eyeCount<2 && ~$BionicEye>>
+		<<if $eyeCount<2 && !$BionicEye>>
 			it feels you can perceive even more than when you still had both your eyes. The limited range of the Relic still makes it feel a little more awkward than when you had your normal vision.
 		<<else>>
 			which allows you to perceive your immediate surroundings to a precise level you could never hope to achieve with your eyes.
@@ -1994,7 +1994,11 @@ How many dubloons would you like to pay back?
 	/* If we aren't passing time yet, assume that the number of days was passed in the first argument. */
 	<<set _state = setup.startPassingTime(_args[0])>>
 <</if>>
-<<if _state.expectedDays && !_state.unweightedDayIndex>>
+
+/* Check event triggers. */
+<<set _breakForEvent = Object.values(_triggers).some(trigger => trigger())>>
+
+<<if !_breakForEvent && _state.expectedDays && !_state.unweightedDayIndex>>
 	/* Temporarily use the weighted day index to store the weighted expected number of days. */
 	<<set _state.weightedDayIndex = Math.round(_timeWeight * _state.expectedDays)>>
 	/* Check for wetting events. */
@@ -2020,8 +2024,7 @@ How many dubloons would you like to pay back?
 	<<set _state.weightedDayIndex = 0>>
 <</if>>
 
-<<set _breakForEvent = false>>
-<<for _state.unweightedDayIndex < _state.expectedDays>>
+<<for !_breakForEvent && _state.unweightedDayIndex < _state.expectedDays>>
 	/* Increment the day index. We only break out of the inner loop because we're sated, can't eat/drink or */
 	/* because an event is about to happen. An event might interrupt our attempts to decrease starvation or */
 	/* dehydration, but that's okay - we'll try again during the next trip. */
@@ -2241,7 +2244,7 @@ How many dubloons would you like to pay back?
 					<<set $foodL5 += 1>>
 					<<set $crumbleFluid += 1>>
 				<<case 6>>
-					<<if $slingshot == 1>>
+					<<if $slingshot>>
 						<<set $foodL6 += 1>>
 					<<elseif $items[13].count && $items[20].count >= Math.max(3 - $bullRed, 1)>>
 						<<set $foodL6 += 1>>
@@ -2346,14 +2349,10 @@ How many dubloons would you like to pay back?
 			/* Increment the next real day. */
 			<<set _state.nextRealDay += 1>>
 			/* Check event triggers. */
-			<<if Object.values(_triggers).some(trigger => trigger())>>
-				<<set _breakForEvent = true>>
-			<</if>>
+			<<set _breakForEvent = Object.values(_triggers).some(trigger => trigger())>>
 		<</if>>
 		<<if !_drank || !_ate || _breakForEvent>><<break>><</if>>
 	<</for>>
-	/* Check if we need to stop to let an event happen. */
-	<<if _breakForEvent>><<break>><</if>>
 <</for>>
 
 <<if !_breakForEvent>>
@@ -2477,14 +2476,22 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 <<return>>
 
 
-:: CampCode
-You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that. 
+:: CampCode [nobr]
+<<if setup.passingTime()>>
+	<<include `"Layer" + $currentLayer + " Travel Events"`>>
+<</if>>
+<<if !setup.passingTime()>>
+	You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that.<br><br>
 
-How many days would you like to rest here?
-<<textbox "_temp" "0">>
-<<nobr>><<link "Set up camp and wait" `"Layer" + $currentLayer + " Hub"`>>
-	<<PassTime `parseInt(_temp, 10)`>>
-<</link>><</nobr>>
+	How many days would you like to rest here?<br>
+	<<textbox "_campTime" "0">><br>
+	<<link "Set up camp and wait" `passage()`>>
+		<<set setup.startPassingTime(parseInt(_campTime, 10) || 0)>>
+	<</link>><br><br>
+
+	<<link "Return to exploring the layer without waiting" `"Layer" + $currentLayer + " Hub"`>><</link>>
+<</if>>
+
 
 :: Curse Descriptions
 <<nobr>>
@@ -3078,9 +3085,9 @@ Items:<br>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$BDwear = false, $ownedRelics.deleteAt(_i)]]">><br>
 			<<elseif $ownedRelics[_i].name=="Heavy is the Head">>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$HeavyHeadwear= false, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Moonwatcher" & $BionicEye >>
+			<<elseif $ownedRelics[_i].name=="Moonwatcher" && $BionicEye >>
 				<<print $ownedRelics[_i].name>> You can not drop Relics that have become part of your body.<br>
-			<<elseif $ownedRelics[_i].name=="Glory's Grasp" & $BionicArm >>
+			<<elseif $ownedRelics[_i].name=="Glory's Grasp" && $BionicArm >>
 				<<print $ownedRelics[_i].name>> You can not drop Relics that have become part of your body.<br>
 			<<else>>
 				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i)]]">><br>
