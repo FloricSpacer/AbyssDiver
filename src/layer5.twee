@@ -339,7 +339,7 @@ Already taken
 @@.unreachable;Located in a dark, sealed chamber with a light-activated lock. Requires a source of light.@@
 <<elseif _name === "Twin Polaris" && setup.carriedWeight + $hiredCompanions.length * 60 < 90>>
 @@.unreachable;Located in a sealed chamber locked by a pressure switch that must be held down with 90 kg of weight. The weight you and your companions can currently put on the switch is only <<print (setup.carriedWeight + $hiredCompanions.length * 60).toFixed(1)>> kg.@@
-<<elseif _name === "Empath Coil" && ($items[20].count < 1 || $items[13].count < 1) && $slingshot == 0>>
+<<elseif _name === "Empath Coil" && !$slingshot && (!setup.item('Pistol').count || setup.item('Pistol Bullets').count < 1)>>
 @@.unreachable;Located in a sealed chamber locked by a switch on the ceiling, far out of reach. Can be hit with a pistol, using 1 bullet.@@
 <<else>>
 <<print "[[Pick up the " + _name + "|Layer5 Booby][$temp = " + (_i + 1) + ", $booby = " + (_i % 3 + 1) + "]]">>
@@ -712,9 +712,9 @@ You have successfully taken the $relic57.name Relic. Hopefully you can make good
 
 
 :: Empath Coil [layer5]
+<<if !setup.passingTime() && !$slingshot>><<set setup.item('Pistol Bullets').count -= 1>><</if>>\
 <<CollectRelic $relic58>>\
-<<if !setup.passingTime()>>\
-<<if !$slingshot>><<set $items[20].count -= 1>><</if>>
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic58.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
