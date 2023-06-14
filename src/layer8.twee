@@ -596,7 +596,7 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 
 
 :: Take on Asset Robustness F [layer8]
-<<set $playerCurses.push($curse99)>><<set $corruption += $curse99.corr>><<set $GenderLog.push($curse99)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact F")>><</if>>\
+<<set $playerCurses.push($curse99)>><<set $corruption += $curse99.corr>><<set $GenderLog.push($curse99)>>\
 [img[setup.ImagePath + $curse99.pic]]
 
 You have successfully taken on the $curse99.name Curse. Hopefully you are okay with accepting the permanent consequences.
@@ -1154,7 +1154,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 	<<set $GenderLog.push($curse98)>>
 <</if>>
 <<if $curses[$temp1].name == "Asset Robustness F" || $curses[$temp2].name == "Asset Robustness F" >>
-	<<set $GenderLog.push($curse99)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact F")>><</if>>
+	<<set $GenderLog.push($curse99)>>
 <</if>>
 <<if $curses[$temp1].name == "Eye on the Prize" || $curses[$temp2].name == "Eye on the Prize" >>
 	<<set $HandicapLog.push($curse101)>>
@@ -1193,21 +1193,9 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 
 	<<link "Reroll with Devil's Own" "Layer8 Cherry Curse">>
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp1].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp1]>>
 		
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp2].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 
 		<<set setup.loseRelic("Devil's Own")>>
@@ -1245,7 +1233,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 	<<set $GenderLog.push($curse98)>>
 <</if>>
 <<if $curses[$temp2].name == "Asset Robustness F" >>
-	<<set $GenderLog.push($curse99)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact F")>><</if>>
+	<<set $GenderLog.push($curse99)>>
 <</if>>
 <<if  $curses[$temp2].name == "Eye on the Prize" >>
 	<<set $HandicapLog.push($curse101)>>
@@ -1287,12 +1275,6 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp2].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
