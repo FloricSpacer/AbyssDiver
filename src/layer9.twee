@@ -1,10 +1,10 @@
 :: Layer9 1 [layer9]
 <<nobr>>
-<<masteraudio stop>><<audio "layer9" volume 0.2 play loop>>
 <<set $currentLayer = 9>>
-<<set $L9visit += 1>>
+<<masteraudio stop>>
+<<audio "layer9" volume 0.2 play loop>>
+<<set $timeL8T2a = 0, $timeL8T2b = 0>>
 <<set $timeL9T1 += 1>>
-
 <</nobr>>\
 \
 @@.layerTitle;
@@ -33,7 +33,15 @@ Hopefully you'll be able to get used to it.
 
 
 :: Layer9 Hub [layer9]
-<<nobr>><<set $currentLayer = 9>><<if $timeL9T1 < 1>><<set $layerExit = 0>><<CarryAdjust>>
+<<nobr>>
+<<set $currentLayer = 9>>
+<<if !isPlaying("layer9")>>
+	<<masteraudio stop>>
+	<<audio "layer9" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+
+<<if $timeL9T1 < 1>>
 <<if $visitL9 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL9 = 1>>
@@ -124,7 +132,7 @@ Hopefully you'll be able to get used to it.
 
 <p>[[Allow the Abyss to bestow a random Curse upon you|Layer9 Curses Random]]</p>
 
-<<CurseGrid `["Libido Reinforcement G ", "Gender Reversal G", "Asset Robustness G", "Literalization", "Consent Dissent", "The Maxim", "Adverse Possession", "Erased", "Tickly Tentacles", "Eye-scream", "A Mouthful", "Below the Veil"]`>>
+<<CurseGrid `setup.cursesOnLayer[9]`>>
 
 <<if $escBalDepl==0>>
 	<p>[[Return to exploring layer 9|Layer9 Hub]]</p>
@@ -291,7 +299,7 @@ You have successfully taken on the $curse124.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Layer9 Curses Random [nobr]
-<<set _tempCurses = ["Libido Reinforcement G ", "Gender Reversal G", "Asset Robustness G", "Literalization", "Consent Dissent", "The Maxim", "Adverse Possession", "Erased", "Tickly Tentacles", "Eye-scream, A Mouthful", "Below the Veil"]>>
+<<set _tempCurses = setup.cursesOnLayer[9]>>
 <<set _totalCurses = $playerCurses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
@@ -364,5 +372,3 @@ Threats:
 :: Layer9 Camp
 
 <<include 'CampCode'>>
-
-[[Return to exploring the layer without waiting|Layer9 Hub]]

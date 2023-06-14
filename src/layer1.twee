@@ -1,9 +1,11 @@
 :: Layer1 1 [layer1]
 <<nobr>>
 <<set $currentLayer = 1>>
-<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
+<<masteraudio stop>>
+<<audio "layer1" volume 0.2 play loop>>
+/* No threat timers to reset on layer 1. */
 <<if $dubloons < 0>>
-	<<set $debt += parseInt(Math.round(-1 * $dubloons * 1.2))>>
+	<<set $debt += Math.round(-1.2 * $dubloons)>>
 	<<set $dubloons = 0>>
 <</if>>
 <</nobr>>\
@@ -25,12 +27,16 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 :: Layer1 Hub [layer1]
 <<nobr>>
 <<set $currentLayer = 1>>
+<<if !isPlaying("layer1")>>
+	<<masteraudio stop>>
+	<<audio "layer1" volume 0.2 play loop>>
+<</if>>
 <<CarryAdjust>>
 
 You find yourself amidst the slightly-off natural splendor of the first layer.<br><br> 
 <<if $visitL1 == 0>>
-	<<set $layerTemp = 8>>
 	<<set $visitL1 = 1>>
+	<<set $layerTemp = 8>>
 <<elseif $secondVisitL1 == 0>>
 	<<set $secondVisitL1 = 1>>
 	<<set $layerTemp = 18>>
@@ -92,8 +98,8 @@ What do you want to do while you're here?<br><br>
 [[Set up camp and rest here|Layer1 Camp]]
 [[View the Layer 1 habitation option|Layer1 Habitation]]
 
-[[Look up towards the surface|Layer1 Ascend]]
-[[Look down at the next layer|Layer1 Exit]]
+[[Look up towards the surface|Layer1 Ascend 1]]
+[[Look down at the next layer|Layer1 Exit1]]
 
 
 :: Layer1 Threats [image layer1]
@@ -145,7 +151,7 @@ Below are tables describing the effects of two of the Curses in detail. Feel fre
 
 <p>[[Allow the Abyss to bestow a random Curse upon you|Layer1 Curses Random]]</p>
 
-<<CurseGrid `["Libido Reinforcement A", "Gender Reversal A", "Asset Robustness A", "Clothing Restriction A", "Shrunken Assets", "Hair Removal", "Perma-dye", "Freckle Speckle", "Knife-ear", "Dizzying Heights", "Increased Sensitivity","Refractory Refactorization"]`>>
+<<CurseGrid `setup.cursesOnLayer[1]`>>
 
 <<if $escBalDepl==0>>
 	<p>[[Return to exploring layer 1|Layer1 Hub]]</p>
@@ -317,14 +323,32 @@ You sit by the fire with your party and chat, the mood is pretty upbeat and opti
 <</nobr>>
 
 
-:: Layer1 Exit [layer1]
+:: Layer1 Exit1 [layer1]
 
 Descending to the next layer will take 2 days. How are your supplies of food and water? It's only going to get harder from here.
 
-You notice the air is a bit more humid and the plants are a bit greener as you approach the path towards the second layer.
+[[Turn back and continue your business on the first layer|Layer1 Hub]]
+[[Continue your descent to the second layer|Layer1 Exit2]]
 
-[[Stay on layer 1|Layer1 Hub]]
-[[Descend down to the second layer|Layer2 1]]
+
+:: Layer1 Exit2 [layer1]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 2>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer1 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
+	You notice the air is a bit more humid and the plants are a bit greener as you approach the path towards the second layer.
+
+	<<include "Curse Descriptions">>
+
+	[[Descend down to the second layer|Layer2 1]]
+<</if>>
 
 
 :: Layer1 Cherry [layer1]
@@ -489,7 +513,8 @@ Choose the Curse you wish to remove:
 
 
 :: Pick up the Star Compass [layer1]
-<<CollectRelic $relic1>>
+<<CollectRelic $relic1>>\
+<<if !setup.passingTime()>>
 
 The journey to this Relic takes you over undulating hills covered in grasses which sway gently in the wind. Night falls, but you press onwards, knowing that you're almost at your destination. It's peaceful out here, and the stars are out, giving you just enough light to keep moving.
 
@@ -501,10 +526,12 @@ This may not be very useful in most circumstances, but perhaps at some point in 
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Rømer Stones [layer1]
-<<CollectRelic $relic2>>
+<<CollectRelic $relic2>>\
+<<if !setup.passingTime()>>
 
 The Relic you're looking for is in the deeper parts of the layer. The rain from countless clouds runs down in tributaries, and eventually into rivers. Down this far there are many ponds and lakes that slowly flow into rivers and then deeper into the next layer of the Abyss. Some denser vegetation and lots of fungi slow your progress, but they make the journey quite beautiful.
 
@@ -518,10 +545,12 @@ While they aren't useful on their own, perhaps you can take these stones back to
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Creepy Doll [layer1]
-<<CollectRelic $relic3>>
+<<CollectRelic $relic3>>\
+<<if !setup.passingTime()>>
 
 <<if $app.appAge > 13>><<if $hiredCompanions.some(e => e.name === "Maru")>>
 As you and Maru search for an interesting doll you've heard about, you come across the decaying jusk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
@@ -577,10 +606,12 @@ Recognizing the doll's mysterious properties and potential value, you overcome y
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Giddy Reaper [layer1]
-<<CollectRelic $relic4>>
+<<CollectRelic $relic4>>\
+<<if !setup.passingTime()>>
 
 The gradual slopes and sweeping grasslands of this layer of the Abyss are occassionally broken up by small streams and clumps of more robust vegetation. Your quest for this latest Relic sends you across the landscape until you reach a particularly verdant thicket. No paths exist through it, but many shrieks and squaks from birds inhabiting the many branches of the short trees here greet you as you find a space between trees and slowly make your way inside.
 
@@ -596,10 +627,12 @@ On the way back, you decide to test your prize, and you swipe it through some of
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Silk Twister [layer1]
-<<CollectRelic $relic5>>
+<<CollectRelic $relic5>>\
+<<if !setup.passingTime()>>
 
 You set out after a Relic that's a bit higher up in a nearby canyon. The vegetation along your path isn't too thick, but you soon find yourself traveling along a small river. Miasma laden mist clings to the surface of the water, thrown up by small rapids. There are some large trees along the watercourse, and above it are flocks of birds that are either native to this layer of the Abyss, or that have flown down here. Your path takes you up a tributary into the river, and you move through dappled light from a low canopy.
 
@@ -613,10 +646,12 @@ The creature has no interest in preying upon things that do not fly, an odd pecu
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Vertebra Key [layer1]
-<<CollectRelic $relic6>>
+<<CollectRelic $relic6>>\
+<<if !setup.passingTime()>>
 
 The Relic you're pursuing takes you off the beaten path. You leave the plains and rivers behind, climbing down a rocky ravine. You struggle as you climb down narrow ledges, large boulders, and dusty rocks. Everything is dry here, compared to the verdant sanctuary that is the rest of the layer.
 
@@ -636,10 +671,12 @@ Something clicks in your brain, and you have a sudden instinct. This is your cel
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Chain of Lorelei [layer1]
-<<CollectRelic $relic7>>
+<<CollectRelic $relic7>>\
+<<if !setup.passingTime()>>
 
 Long-term erosion is evident throughout this layer of the Abyss. Yet in every landscape, some things resist erosion better than others. To the southeast there is a butte that rises well above the surrounding landscape. You journey towards it. Far to the north you can see a crimson kite dragon briefly arc above the horizon before gliding back down below it.
 
@@ -659,10 +696,12 @@ You can wear this choker to change your voice, which may influence how some peop
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Hive Tassel [layer1]
-<<CollectRelic $relic8>>
+<<CollectRelic $relic8>>\
+<<if !setup.passingTime()>>
 
 As you wander through a grove of trees in search of the mysterious tassel that's somehow connected to the bees, you notice something new. A constant buzzing surrounds you all at once, as if you were swallowed by a swarm of bees. And in fact, when you glance at the trees, you can see that their bark is now impossible to make out, instead covered in layers of yellow and black insects moving over each other.
 
@@ -676,10 +715,12 @@ As you investigate the new sound, you spot a tree with a few branches vibrating 
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Smitten Mitt [layer1]
-<<CollectRelic $relic9>>
+<<CollectRelic $relic9>>\
+<<if !setup.passingTime()>>
 
 There are many beautiful things in this layer of the Abyss, but also lots of places that are slightly monotonous. Your Relic expedition sets you out through vast grasslands. In places the grasses are sparse and intermixed with other types of vegetation. In other places they rise high, thick, and dominant.
 
@@ -693,6 +734,7 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 
 [[Continue searching for the Relics of layer 1|Layer1 Relics]]
 [[Continue exploring the first layer|Layer1 Hub]]
+<</if>>
 
 
 :: Take on Libido Reinforcement A [layer1]
@@ -951,17 +993,17 @@ The Curse, $playerCurses[$temp].name, has been successfully removed and your cor
 [[Continue exploring the layer|Layer1 Hub]]
 
 
-:: Layer1 Ascend [layer1]
+:: Layer1 Ascend 1 [layer1]
 Traveling back to the surface from here will take 1 day, and will cost 10 corruption. Leaving the Abyss also requires that you don't have any negative corruption points even if you plan to come back.
 
 <<if $corruption >= (10 - $corRed)>>\
 	<<if $DaedalusEquip==true >>\
 		<<if $DaedalusFly==false>>\
 			You are currently commited to simply walking to the surface, though it iss only a one day walk.
-			[[Flap your wings and prepare to fly to the surface|Layer1 Ascend][$DaedalusFly=true]]
+			[[Flap your wings and prepare to fly to the surface|Layer1 Ascend 1][$DaedalusFly=true]]
 		<<else>>\
 			You are about to fly to the surface, which you can of course do if you want! On the other hand, it's only a one day walk.
-			[[Maybe it's better to walk to the surface|Layer1 Ascend][$DaedalusFly=false]]
+			[[Maybe it's better to walk to the surface|Layer1 Ascend 1][$DaedalusFly=false]]
 		<</if>>\
 	<</if>>\
 	[[Continue your ascent|Layer1 Ascend2]]
@@ -970,28 +1012,44 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <</if>>
 [[Turn back and continue your business on the first layer|Layer1 Hub]]
 
+
+:: Layer1 Travel Events [layer1 nobr]
+<<set _triggers = {
+	/* No timed events for layer 1. */
+}>>
+
+<<PassTime _triggers>>
+
+
 :: Layer1 Ascend2 [layer1]
 <<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" 1 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 1>>
+
+<<include "Layer1 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
+	<<nobr>>
+		<<set $corruption -= 10 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+	<</nobr>>
+	You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
+
+	<<include "Curse Descriptions">>
+	<<if $TwinFly == true>>
+		<<include "Twin rejoin">>
+	<</if>>
+	[[Return to Outset Town|Surface Hub]]
 <</if>>
 
-<<PassTime $layerExitTime>>
-
-<<set $corruption -= (10 - $corRed)>>
-
-<</nobr>><<masteraudio stop>><<audio "surface" volume 0.2 play loop>>
-You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
-
-<<include "Curse Descriptions">>
-<<if $TwinFly == true>>
-	<<include "Twin rejoin">>
-<</if>>
-[[Return to Outset Town|Surface Hub]]
 
 :: Layer1 Flasks [layer1]
 <<nobr>>
@@ -1021,14 +1079,14 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 [[Return to exploring your food and water options on this layer|Layer1 Forage]]
 
 :: Layer1 Curses Random [nobr]
-<<set _tempCurses = ["Libido Reinforcement A", "Gender Reversal A", "Asset Robustness A", "Clothing Restriction A", "Shrunken Assets", "Hair Removal", "Perma-dye", "Freckle Speckle", "Knife-ear", "Dizzying Heights", "Increased Sensitivity","Refractory Refactorization"]>>
+<<set _tempCurses = setup.cursesOnLayer[1]>>
 <<set _totalCurses = $playerCurses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
 <<include "Curse Randomizer">>
 
-:: Layer1 Threat1 Ascend [layer1]
+:: Layer1 Threat1 [layer1]
 
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
@@ -1064,7 +1122,7 @@ Use the following option only if you have specifically considered your inventory
 
 Nervously, you begin going trough your bag, attempting to decide which Relics to surrender and which to keep.
 
-<<if $ownedRelics.some(e => e.name === "Moonwatcher") & $BionicEye>>
+<<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye>>
 	<<set _temp = 145-95>>
 <<else>>
 	<<set _temp = 145>>
@@ -1305,6 +1363,4 @@ Sometimes you get a feeling like you lost something. Somethin precious to you th
 :: Layer1 Camp
 
 <<include 'CampCode'>>
-
-[[Return to exploring the layer without waiting|Layer1 Hub]]
 

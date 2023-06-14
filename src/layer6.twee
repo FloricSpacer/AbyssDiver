@@ -1,7 +1,10 @@
 :: Layer6 1 [layer6]
 <<nobr>>
-<<masteraudio stop>><<audio "layer6" volume 0.2 play loop>>
 <<set $currentLayer = 6>>
+<<masteraudio stop>>
+<<audio "layer6" volume 0.2 play loop>>
+<<set $timeL5T1 = 0, $timeL5T2 = 0>>
+<<set $timeL6T1 = 0, $timeL6T2 = 0>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -18,7 +21,15 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 
 
 :: Layer6 Hub [layer6]
-<<nobr>><<set $currentLayer = 6>><<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>><<set $layerExit = 0>><<CarryAdjust>>
+<<nobr>>
+<<set $currentLayer = 6>>
+<<if !isPlaying("layer6")>>
+	<<masteraudio stop>>
+	<<audio "layer6" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+
+<<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>>
 <<if $visitL6 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL6 = 1>>
@@ -87,11 +98,11 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 
 <<elseif $timeL6T2 > 7 && $dragonKill < 5>>
 <<include "Layer6 Dragon Encounter">><br><br>
-[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Hub"]]
+[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = passage()]]
 <<else>>
 <<include "Layer6 Tentacle Encounter">><br><br>
 
-[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Hub"]]
+[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]
 <</if>><</nobr>>
 
 
@@ -137,7 +148,7 @@ If you decide to start foraging for food or water, it means that you will not co
 
 :: Layer6 Relics [layer6 cards nobr]
 <p><<CarryAdjust>></p>
-<<if $timeL4T1 < 7>>
+<<if $timeL6T1 < 7>>
 
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
 
@@ -170,7 +181,7 @@ If you decide to start foraging for food or water, it means that you will not co
 
 <p>[[Allow the Abyss to bestow a random Curse upon you|Layer6 Curses Random]]</p>
 
-<<CurseGrid `["Submissiveness Rectification B", "Lactation Rejuvenation B", "Pleasure Respecification B", "Age Reduction C", "Horny", "Drawing Spades", "Tattoo Tally", "Leaky", "Wandering Hands", "Semen Demon", "Quota", "In the Limelight"]`>>
+<<CurseGrid `setup.cursesOnLayer[6]`>>
 
 <<if $escBalDepl==0>>
 	<p>[[Return to exploring layer 6|Layer6 Hub]]</p>
@@ -229,173 +240,6 @@ Traversing down and past this hell will take 16 days.
 
 [[Turn back and continue your business on the sixth layer|Layer6 Hub]]
 [[Continue your descent to the seventh layer|Layer6 Exit2]]
-
-
-:: Layer6 Threat2 Main [layer6]
-<<set $timeL6T2 -= 8>>
-[img[setup.ImagePath+'Threats/felldragon.png']]
-
-How do you want to deal with the awe-inspiring dragon flying above your head?
-
-
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
-The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration += 99, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
-	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration += 3, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
-While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	[[Use your Relics to electrocute the dragon|Layer6 Hub][$status.duration += 3, $status.penalty += 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
-	[[Offer 100 dubloons to appease the dragon|Layer6 Hub][$dubloons -= 100]]<br><br>
-If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
-	[[Try to run and accept the consequences|Layer6 Hub][$status.duration += 99, $status.penalty += 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons|Layer6 Hub][$dragonKill += 1, $dubloons += 50]]
-
-
-:: Layer6 Threat1 Main1 [layer6]
-<<set $timeL6T1 -= 15>>
-[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
-
-As the enormous tentacle beast approaches, you must quickly decide on a course of action for defeating it, or fall into its slimy clutches and allow it to use you to sate its lust.
-
-<<nobr>>
-<<if $items[13].count > 0 && $items[20].count > 18>>
-	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
-	[[Shoot it with your pistol|Layer6 Hub][$items[20].count -= (19 - $bullRed)]]<br><br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
-[[Defeat it with the Brave Vector|Layer6 Hub]]<br><br>
-<</if>>
-<<if $items[14].count > 0>>
-Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
-	<<link "Fight it off with a sword" "Layer6 Threat1 Main2">>
-		<<set $tentacleFucked = 10>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
-			<<PregCheck>>
-		<</if>>
-	<</link>><br>
-	<<if $items[4].count > 4>>
-		<<link "Fight it off with a sword and use a medkit to cure the status" "Layer6 Hub">>
-			<<set $items[4].count -= 1>>
-			<<if $playerCurses.some(e => e.name === "Omnitool")>>
-				<<PregCheck>>
-			<</if>>
-		<</link>><br>
-	<</if>>	
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
-Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
-	<<link "Fight it off with Sunbeam" "Layer6 Threat1 Main2">>
-		<<set $tentacleFucked = 9>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
-			<<PregCheck>>
-		<</if>>
-	<</link>><br>
-	<<if $items[4].count > 4>>
-		<<link "Fight it off with Sunbeam and use a medkit to cure the status" "Layer6 Hub">>
-			<<set $items[4].count -= 1>>
-			<<if $playerCurses.some(e => e.name === "Omnitool")>>
-				<<PregCheck>>
-			<</if>>
-		<</link>><br>
-	<</if>>	
-<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
-	<<link "Have Khemia fight it off with a sword" "Layer6 Threat1 Main2">>
-		<<set $tentacleFucked = 2>>
-		<<set $khemiaFucked = 1 >>
-		<<set _temp = random(0,100)>>
-		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
-				<<set $pregKhemia = $time-14>>
-		<</if>>
-	<</link>><br>
-	<<if $items[4].count > 4>>
-		<<link "Have Khemia fight it off with a sword and use a medkit to cure his status" "Layer6 Hub">>
-			<<set $items[4].count -= 1>>
-			<<set _temp = random(0,100)>>
-			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
-				<<set $pregKhemia = $time-14>>
-			<</if>>
-		<</link>><br>	
-	<</if>>
-<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
-	<<link "Have Khemia fight it off with Sunbeam" "Layer6 Threat1 Main2">>
-		<<set $tentacleFucked = 1>>
-		<<set $khemiaFucked = 1 >>
-		<<set _temp = random(0,100)>>
-		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
-			<<set $pregKhemia = $time-14>>
-		<</if>>
-	<</link>><br>	
-	<<if $items[4].count > 4>>
-		<<link "Have Khemia fight it off with Sunbeam and use a medkit to cure his status" "Layer6 Hub">>
-			<<set $items[4].count -= 1>>
-			<<set _temp = random(0,100)>>
-			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
-				<<set $pregKhemia = $time-14>>
-			<</if>>
-		<</link>><br>	
-	<</if>>
-<</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
-	[[Have Khemia fight it off with Joyous Sunder|Layer6 Hub]]<br><br>
-<</if>>
-If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
-<<link "Allow it to overpower you" "Layer6 Threat1 Main2">>
-	<<set $tentacleFucked = 12>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-	<<MonsterPregCheckParty>>
-	<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-		<<set $SemenDemonBalance+=20>>
-	<</if>>
-<</link>><br>
-
-<<if $items[4].count > 4>>
-	<<link "Allow it to overpower you and use a medkit to cure the status" "Layer6 Hub">>
-		<<set $items[4].count -= 1>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
-			<<PregCheck>>
-		<</if>>
-		<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-			<<set $SemenDemonBalance+=20>>
-		<</if>>
-	<<MonsterPregCheckParty>>
-	<</link>><br>
-<</if>><br>
-
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the titanic tentacle beast approaches you, suddenly you hear a voice talking to you.<br><br>
-<<say $creepydoll>>Oh, this one looks really scary! But don't worry, I'll make him go away. You might need to keep your eyes closed a little longer than normal, but just keep holding me tight and everything will be ok, I promise. <</say>><br>
-
-An intense, yet somehow comforting, warmth radiates from the Creepy Doll. You sense that it is a deep and powerful energy, but somehow, other descriptions of it elude you.<br><br>
-<<link "Hold the doll very tight and shut your eyes shut for a long time" "Layer6 Hub">>
-  <<dollTF>>
-  <<dollTF>>
-<</link>><br><br>
-<</if>>
-
-<</nobr>>
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to defeat the beast|Layer6 Hub]]
 
 
 :: Layer6 Flasks [layer6]
@@ -462,7 +306,8 @@ You may pick up a copy of an old Relic for 20 dubloons and 2x its corruption cos
 
 
 :: Pick up the Ring of the Devourer [layer6]
-<<CollectRelic $relic61>>
+<<CollectRelic $relic61>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic61.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -470,37 +315,45 @@ Note: This Relic's functionality is not currently implemented.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Pulse Bloom [layer6]
-<<CollectRelic $relic62>>
+<<CollectRelic $relic62>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic62.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Out of Mind [layer6]
-<<CollectRelic $relic63>>
+<<CollectRelic $relic63>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic63.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Still Film [layer6]
-<<CollectRelic $relic64>>
+<<CollectRelic $relic64>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic64.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Forbidden Grimoire [layer6]
-<<CollectRelic $relic65>>
+<<CollectRelic $relic65>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic65.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -508,69 +361,84 @@ You can use this to improve the boons granted by your companions one time, choos
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Luminous Phantasmagoria [layer6]
-<<CollectRelic $relic66>>
+<<CollectRelic $relic66>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic66.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Relativity Eye [layer6]
-<<CollectRelic $relic67>>
+<<CollectRelic $relic67>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic67.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Return to Sender [layer6]
-<<CollectRelic $relic68>>
+<<CollectRelic $relic68>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic68.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Yliaster Materia [layer6]
-<<CollectRelic $relic69>>
+<<CollectRelic $relic69>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic69.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Aeonglass [layer6]
-<<CollectRelic $relic70>>
+<<CollectRelic $relic70>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic70.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Apparatus Diaboli [layer6]
-<<CollectRelic $relic71>>
+<<CollectRelic $relic71>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic71.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Heavy is the Head [layer6]
-<<CollectRelic $relic72>>
+<<CollectRelic $relic72>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic72.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 6|Layer6 Relics]]
 [[Continue exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Take on Submissiveness Rectification B [layer6]
@@ -924,7 +792,7 @@ You have successfully taken on the $curse84.name Curse. Hopefully you are okay w
 <</if>>
 
 :: Layer6 Curses Random [nobr]
-<<set _tempCurses = ["Submissiveness Rectification B", "Lactation Rejuvenation B", "Pleasure Respecification B", "Age Reduction C", "Horny", "Drawing Spades", "Tattoo Tally", "Leaky", "Wandering Hands", "Semen Demon", "Quota", "In the Limelight"]>>
+<<set _tempCurses = setup.cursesOnLayer[6]>>
 <<set _totalCurses = $playerCurses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
@@ -1085,38 +953,13 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 <</if>>
 
 
-:: Layer6 Threat1 Main2 [layer6]
-<<PassTime $tentacleFucked>>\
-
-<<if $khemiaFucked == 0>>
-	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
-<<else>>
-	<<set $khemiaFucked = 0>>
-	Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
-<</if>>
-
-[[Return to exploring the sixth layer|Layer6 Hub]]
-
-
-:: Layer6 Ascend2 [layer6]
-<<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<set $tempTime = 15>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
-	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
+:: Layer6 Travel Events [layer6 nobr]
 <<set _triggers = {
 	fellDragon: () => $timeL6T2 > 7 && $dragonKill < 5,
 	greaterTentacleBeast: () => $timeL6T1 > 14,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
 <<if _triggers.fellDragon()>>
 	<br><<include "Layer6 Dragon Encounter">><br><br>
@@ -1126,13 +969,26 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 	[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]<br><br>
 <</if>>
 
-<</nobr>><<if _done>>
+
+:: Layer6 Ascend2 [layer6]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" 15 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer6 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
 	<<nobr>>
-	<<set $corruption -= (65 - $corRed)>>
-	<<set $timeL5T1 = 0>>
-	<<set $timeL5T2 = 0>>
-	
-	<<set $currentLayer = 5>>
+		<<set $corruption -= 65 - $corRed>>
 	<</nobr>>
 	You continue through the flaming fields of tentacles for much longer than you'd like, until you eventually reach the slightly less hellish heat of the fifth layer. The scent of burning meat is replaced with fragrant spices and the tentacles are replaced with sand, you've made it out of hell.
 
@@ -1144,280 +1000,24 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 <</if>>
 
 
-:: Layer6 Threat2 Ascend [layer6]
-<<set $timeL6T2 -= 8>>
-[img[setup.ImagePath+'Threats/felldragon.png']]
-
-How do you want to deal with the awe-inspiring dragon flying above your head?
-
-
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
-The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Ascend2][$status.duration += 99, $status.penalty += 2, $khemiaDragon = 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
-	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration += 3, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
-While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	[[Use your Relics to electrocute the dragon|Layer6 Hub][$status.duration += 3, $status.penalty += 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
-	[[Offer 100 dubloons to appease the dragon|Layer6 Ascend2][$dubloons -= 100]]<br><br>
-If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
-	[[Try to run and accept the consequences|Layer6 Ascend2][$status.duration += 99, $status.penalty += 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons|Layer6 Ascend2][$dragonKill += 1, $dubloons += 50]]
-
-
-:: Layer6 Threat1 Ascend1 [layer6]
-<<set $timeL6T1 -= 15>>
-[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
-
-As the enormous tentacle beast approaches, you must quickly decide on a course of action for defeating it, or fall into its slimy clutches and allow it to use you to sate its lust.
-
-<<nobr>>
-<<if $items[13].count > 0 && $items[20].count > 18>>
-	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
-	[[Shoot it with your pistol|Layer6 Ascend2][$items[20].count -= (19 - $bullRed)]]<br><br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
-[[Defeat it with the Brave Vector|Layer6 Ascend2]]<br><br>
-<</if>>
-<<if $items[14].count > 0>>
-Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
-	[[Fight it off with a sword|Layer6 Threat1 Ascend2][$tentacleFucked = 10]]<br>
-	<<if $items[4].count > 4>>[[Fight it off with a sword and use a medkit to cure the status|Layer6 Ascend2][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
-Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
-	[[Fight it off with Sunbeam|Layer6 Threat1 Ascend2][$tentacleFucked = 9]]<br>
-	<<if $items[4].count > 4>>[[Fight it off with Sunbeam and use a medkit to cure the status|Layer6 Ascend2][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
-	[[Have Khemia fight it off with a sword|Layer6 Threat1 Ascend2][$tentacleFucked = 2, $khemiaFucked = 1]]<br>
-	<<if $items[4].count > 4>>[[Have Khemia fight it off with a sword and use a medkit to cure his status|Layer6 Ascend2][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Ascend2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
-	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Ascend2][$items[4].count -= 1]]<br><</if>><br>
-<</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
-	[[Have Khemia fight it off with Joyous Sunder|Layer6 Ascend2]]<br><br>
-<</if>>
-If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
-<<link "Allow it to overpower you" "Layer6 Threat1 Ascend2">>
-	<<set $tentacleFucked = 12>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-	<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-		<<set $SemenDemonBalance+=20>>
-	<</if>>
-<</link>><br>
-<<if $items[4].count > 4>>
-	<<link "Allow it to overpower you and use a medkit to cure the status" "Layer6 Ascend2">>
-		<<set $items[4].count -= 1>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
-			<<PregCheck>>
-		<</if>>
-		<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-			<<set $SemenDemonBalance+=20>>
-		<</if>>
-	<</link>><br>
-<</if>><br>
-
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the titanic tentacle beast approaches you, suddenly you hear a voice talking to you.<br><br>
-<<say $creepydoll>>Oh, this one looks really scary! But don't worry, I'll make him go away. You might need to keep your eyes closed a little longer than normal, but just keep holding me tight and everything will be ok, I promise. <</say>><br>
-
-An intense, yet somehow comforting, warmth radiates from the Creepy Doll. You sense that it is a deep and powerful energy, but somehow, other descriptions of it elude you.<br><br>
-<<link "Hold the doll very tight and shut your eyes shut for a long time" "Layer6 Hub">>
-  <<dollTF>>
-  <<dollTF>>
-<</link>><br><br>
-<</if>>
-
-<</nobr>>
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to defeat the beast|Layer6 Ascend2]]
-
-
-:: Layer6 Threat1 Ascend2 [layer6]
-<<PassTime $tentacleFucked>>\
-
-<<if $khemiaFucked == 0>>
-	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
-<<else>>
-	<<set $khemiaFucked = 0>>
-	Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
-<</if>>
-
-[[Return to exploring the sixth layer|Layer6 Ascend2]]
-
-
 :: Layer6 Exit2 [layer6]
 <<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 16>>
-<</if>>
-<<set _triggers = {
-	fellDragon: () => $timeL6T2 > 7 && $dragonKill < 5,
-	greaterTentacleBeast: () => $timeL6T1 > 14,
-}>>
 
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers.fellDragon()>>
-	<br><<include "Layer6 Dragon Encounter">><br><br>
-	[[Deal with the Fell Dragon|Layer6 Threat2 Descend][$returnPassage = passage()]]<br><br>
-<<elseif _triggers.greaterTentacleBeast()>>
-	<br><<include "Layer6 Tentacle Encounter">><br><br>
-	[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]<br><br>
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 16>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<</nobr>><<if _done>>
-<<set $timeL7T2 = 0>>
+<<include "Layer6 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
 	You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
 
 	<<include "Curse Descriptions">>
 
 	[[Descend down to the seventh layer|Layer7 1]]
 <</if>>
-
-
-:: Layer6 Threat2 Descend [layer6]
-<<set $timeL6T2 -= 8>>
-[img[setup.ImagePath+'Threats/felldragon.png']]
-
-How do you want to deal with the awe-inspiring dragon flying above your head?
-
-
-<<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 1>>
-The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Exit2][$status.duration += 99, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia") && $khemiaDragon == 0>>
-	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Hub][$status.duration += 3, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
-While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	[[Use your Relics to electrocute the dragon|Layer6 Hub][$status.duration += 3, $status.penalty += 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
-<</if>>
-You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
-	[[Offer 100 dubloons to appease the dragon|Layer6 Exit2][$dubloons -= 100]]<br><br>
-If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
-	[[Try to run and accept the consequences|Layer6 Exit2][$status.duration += 99, $status.penalty += 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a dragon. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons|Layer6 Exit2][$dragonKill += 1, $dubloons += 50]]
-
-
-:: Layer6 Threat1 Descend [layer6]
-<<set $timeL6T1 -= 15>>
-[img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
-
-As the enormous tentacle beast approaches, you must quickly decide on a course of action for defeating it, or fall into its slimy clutches and allow it to use you to sate its lust.
-
-<<nobr>>
-<<if $items[13].count > 0 && $items[20].count > 18>>
-	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
-	[[Shoot it with your pistol|Layer6 Exit2][$items[20].count -= (19 - $bullRed)]]<br><br>
-<</if>>
-<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
-[[Defeat it with the Brave Vector|Layer6 Exit2]]<br><br>
-<</if>>
-<<if $items[14].count > 0>>
-Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
-	[[Fight it off with a sword|Layer6 Threat1 Descend2][$tentacleFucked = 10]]<br>
-	<<if $items[4].count > 4>>[[Fight it off with a sword and use a medkit to cure the status|Layer6 Exit2][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
-Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
-	[[Fight it off with Sunbeam|Layer6 Threat1 Descend2][$tentacleFucked = 9]]<br>
-	<<if $items[4].count > 4>>[[Fight it off with Sunbeam and use a medkit to cure the status|Layer6 Exit2][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
-	[[Have Khemia fight it off with a sword|Layer6 Threat1 Descend2][$tentacleFucked = 2, $khemiaFucked = 1]]<br>
-	<<if $items[4].count > 4>>[[Have Khemia fight it off with a sword and use a medkit to cure his status|Layer6 Exit2][$items[4].count -= 1]]<br><</if>><br>
-	<</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
-	[[Have Khemia fight it off with Sunbeam|Layer6 Threat1 Descend2][$tentacleFucked = 1, $khemiaFucked = 1]]<br>
-	<<if $items[4].count > 4>>[[Have Khemia fight it off with Sunbeam and use a medkit to cure his status|Layer6 Exit2][$items[4].count -= 1]]<br><</if>><br>
-<</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
-	[[Have Khemia fight it off with Joyous Sunder|Layer6 Exit2]]<br><br>
-<</if>>
-If you allow it to overpower you, you will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
-<<link "Allow it to overpower you" "Layer6 Threat1 Descend2">>
-	<<set $tentacleFucked = 12>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
-		<<PregCheck>>
-	<</if>>
-	<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-		<<set $SemenDemonBalance+=20>>
-	<</if>>
-<</link>><br>
-<<if $items[4].count > 4>>
-	<<link "Allow it to overpower you and use a medkit to cure the status" "Layer6 Exit2">>
-		<<set $items[4].count -= 1>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
-			<<PregCheck>>
-		<</if>>
-		<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
-			<<set $SemenDemonBalance+=20>>
-		<</if>>
-	<</link>><br>
-<</if>><br>
-
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the titanic tentacle beast approaches you, suddenly you hear a voice talking to you.<br><br>
-<<say $creepydoll>>Oh, this one looks really scary! But don't worry, I'll make him go away. You might need to keep your eyes closed a little longer than normal, but just keep holding me tight and everything will be ok, I promise. <</say>><br>
-
-An intense, yet somehow comforting, warmth radiates from the Creepy Doll. You sense that it is a deep and powerful energy, but somehow, other descriptions of it elude you.<br><br>
-<<link "Hold the doll very tight and shut your eyes shut for a long time" "Layer6 Hub">>
-  <<dollTF>>
-  <<dollTF>>
-<</link>><br><br>
-<</if>>
-
-<</nobr>>
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to defeat the beast|Layer6 Exit2]]
-
-:: Layer6 Threat1 Descend2 [layer6]
-<<PassTime $tentacleFucked>>\
-
-<<if $khemiaFucked == 0>>
-	After an intense encounter with the greater tentacle beast, you are left in a sorry state, needing to be left stationary for $tentacleFucked days. Slowly you regain your sensations and manage to prepare yourself to get going and continue your travels on the sixth layer.
-<<else>>
-	<<set $khemiaFucked = 0>>
-	Khemia is not in a good state after the battle, even with his experience, he obviously wasn't ready to deal with a fully grown tentacle beast on his own. He dealt a lot of damage, but he's still incapacitated. Despite some claims of his that you can keep going, it's impossible to move on with him in this state, so you need to make camp and stay with him until he's recovered.
-<</if>>
-
-[[Continue your descent to the seventh layer|Layer6 Exit2]]
 
 
 :: Escape Balloon L6 [layer6]
@@ -1483,8 +1083,6 @@ Threats:
 :: Layer6 Camp
 
 <<include 'CampCode'>>
-
-[[Return to exploring the layer without waiting|Layer6 Hub]]
 
 
 :: Layer6 Tentacle Encounter [layer6 nobr]

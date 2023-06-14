@@ -1,7 +1,10 @@
 :: Layer4 1 [layer4]
 <<nobr>>
-<<masteraudio stop>><<audio "layer4" volume 0.2 play loop>>
 <<set $currentLayer = 4>>
+<<masteraudio stop>>
+<<audio "layer4" volume 0.2 play loop>>
+<<set $timeL3T1 = 0, $timeL3T2 = 0>>
+<<set $timeL4T1 = 0>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -35,12 +38,19 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 [[Walk through the fourth layer of the Abyss|Layer4 Hub]]
 
 :: Layer4 Hub [layer4]
-<<set $currentLayer = 4>><<if $visitL4 == 0>><<set $endSpectre = $time>><</if>><<if $timeL4T1 < 7>><<set $layerExit = 0>><<CarryAdjust>>\
 <<nobr>>
-
+<<set $currentLayer = 4>>
+<<if !isPlaying("layer4")>>
+	<<masteraudio stop>>
+	<<audio "layer4" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+<<if $visitL4 == 0>><<set $endSpectre = $time>><</if>>
+<</nobr>>\
+<<if $timeL4T1 < 7>><<nobr>>
 <<if $visitL4 == 0>>
-	<<set $layerTemp = 8>>
 	<<set $visitL4 = 1>>
+	<<set $layerTemp = 8>>
 <<elseif $secondVisitL4 == 0>>
 	<<set $secondVisitL4 = 1>>
 	<<set $layerTemp = 18>>
@@ -127,7 +137,7 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 
 A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.
 
-[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = "Layer4 Hub"]]
+[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]
 
 <</if>>
 
@@ -198,7 +208,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <p>A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.</p>
 
-<p>[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = "Layer4 Hub"]]</p>
+<p>[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]</p>
 
 <</if>>
 
@@ -214,7 +224,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <p>[[Allow the Abyss to bestow a random Curse upon you|Layer4 Curses Random]]</p>
 
-<<CurseGrid `["Libido Reinforcement C", "Lactation Rejuvenation A", "Asset Robustness D", "Age Reduction B", "Sleep Tight", "Sweet Dreams", "Hypno Happytime", "Crossdress Your Heart", "Lie Detector", "Megadontia", "Softie", "Hard Mode", "Lingual Leviathan", "Tipping the Scales", "Reptail", "Cold Blooded"]`>>
+<<CurseGrid `setup.cursesOnLayer[4]`>>
 
 <<if $escBalDepl==0>>
 	<p>[[Return to exploring layer 4|Layer4 Hub]]</p>
@@ -291,55 +301,6 @@ The air seems to get drier as you proceed further down. You might want to stockp
 
 [[Turn back and continue your business on the fourth layer|Layer4 Hub]]
 [[Continue your descent to the fifth layer|Layer4 Exit2]]
-
-
-:: Layer4 Threat1 Main [layer4]
-<<set $timeL4T1 -= 7>>
-[img[setup.ImagePath+'Threats/driftingswallower.png']]
-
-How do you want to deal with the creature descending upon you?
-
-
-<<nobr>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured by fighting it, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|Layer4 Hub][$status.duration += (6 - $statRed), $status.penalty += 1]]<br><br>
-<</if>>
-	<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.name === "Khemia")>>
-You can arm Khemia with your more powerful Relic sword and he will be able to defeat the creature without any major issues after a brief battle.<br>
-[[Allow Khemia to defeat it with his Relic blade|Layer4 Hub]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 4>>
-	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
-	[[Shoot it with your pistol|Layer4 Hub][$items[20].count -= (5 - $bullRed)]]<br><br>
-<</if>>
-	<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
-[[Defeat it with the Brave Vector|Layer4 Hub]]<br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Tranquility Knell")>>
-The Drifting Swallower detects its prey by the vibrations that surround them, but the Tranquility Knell silences the noise in both the air and all other media, meaning the vibrations are nearly silenced and the Swallower is left nearly blind. This effect should give you 30 minutes where the creature is unable to find you, allowing you to escape unnoticed until you are out of range.<br>
-[[Escape with the Tranquility Knell|Layer4 Hub]]<br><br>
-<</if>>
-If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
-[[Allow it to overpower you|Layer4 Hub][$status.duration += 99, $status.penalty += 1]]
-
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br><br>As the nightmarish beast drifts closer to you, you suddenly hear a voice talking to you.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will dissapear <</say>><br>
-
-A pleasant warmth is radiating from the doll you found<br>
-<<link "Hold the doll tight and close your eyes" "Layer4 Hub">>
-  <<dollTF>>
-<</link>>
-
-<</if>>
-
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Hub]]
 
 
 :: Take on Libido Reinforcement C [layer4]
@@ -941,7 +902,8 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 [[Continue with your journey|Layer4 Hub]]
 
 :: Pick up the Ghost-righter Writing Down [layer4]
-<<CollectRelic $relic34>>
+<<CollectRelic $relic34>>\
+<<if !setup.passingTime()>>
 
 As your eyes adjust to the swirling, icy fog, you notice something peculiar - an odd, crystalline formation that stands out amid the snow and ice. It's a colossal glacier, perfectly clear and shining with a strange light through its blue glacial ice. What catches your attention are the countless, intricate carvings etched into its surface. Scenes of forgotten tales, narratives of ages past, and cryptic symbols intertwine, their elaborate designs shimmering and dancing under the dim, diffused light.
 
@@ -955,10 +917,12 @@ Retrieving the Relic was just the beginning of the adventure. Holding the feathe
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Gilded Prison [layer4]
-<<CollectRelic $relic35>>
+<<CollectRelic $relic35>>\
+<<if !setup.passingTime()>>
 
 The biting winds occasionally loosen icy chunks from the overhead canopy, which then tumble to the ground as snow or hail. Amidst this icy wilderness, you notice sparse, hardy shrubs huddling for warmth, their struggle for survival a stark contrast to the layer's serene beauty.
 
@@ -972,10 +936,12 @@ You retrieve the cage, taking care not to jostle it too much. It's surprisingly 
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Omoikane Circuit [layer4]
-<<CollectRelic $relic36>>
+<<CollectRelic $relic36>>\
+<<if !setup.passingTime()>>
 
 Up ahead, you see a sudden break in the icy monotony of the fourth layer. A massive glacier, towering into the foggy abyss above and buried deep into the frost-laden ground below. In its frozen heart, the faint outline of a structure, half buried and time-forgotten. A technological hub, perhaps once bristling with activity, now silenced by the inexorable march of time and ice. You approach, your curiosity piqued.
 
@@ -993,10 +959,12 @@ You stand there, in the heart of this icy ruin, holding the ultimate symbol of p
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Afar Wanderer [layer4]
-<<CollectRelic $relic37>>
+<<CollectRelic $relic37>>\
+<<if !setup.passingTime()>>
 
 Ahead, a peculiar sight breaks the endless white: an unusual, frosted structure that resembles a spiral staircase, formed by twisted, tortured ice formations. You approach cautiously, noticing a faint indigo glow emanating from the heart of the structure, buried deep within the coiled ice.
 
@@ -1010,10 +978,12 @@ With the Afar Wanderer secured, you make your way back, leaving the silent, icy 
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Kin Shifter [layer4]
-<<CollectRelic $relic38>>
+<<CollectRelic $relic38>>\
+<<if !setup.passingTime()>>
 
 As you delve deeper into the fourth layer, the landscape subtly morphs. The snow-blanketed expanse is punctuated by small glacial mountains. You notice a peculiar cluster of icicles suspended from a protruding ledge, refracting the dim ambient light, providing just enough illumination to pierce through the fog. It appears like a gateway, an entrance to somewhere yet unexplored.
 
@@ -1029,10 +999,12 @@ You can use this Relic to copy other Relics you have to get more uses out of the
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Brave Vector [layer4]
-<<CollectRelic $relic39>>
+<<CollectRelic $relic39>>\
+<<if !setup.passingTime()>>
 
 Your heart races as you approach the icy monolith, a hulking structure of metal and gears embedded in the snowy mountainside. The entrance, a yawning gateway with intricately interlocking cogwork, beckons you into its mechanical maw. As you draw closer, the relentless bitter cold seeping through your insulating gear seems to dissipate, replaced by an eerie warmth emanating from the mechanical fortress. You rub your frosted gloves together, relishing the momentary reprieve from the cold as you cross the threshold into the unknown.
 
@@ -1050,10 +1022,12 @@ While this Relic may not be very functional in its current form as a bent pipe, 
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Devil's Own [layer4]
-<<CollectRelic $relic40>>
+<<CollectRelic $relic40>>\
+<<if !setup.passingTime()>>
 
 As you move through the frosty expanse of the fourth layer, the chill seeping through your heavy clothing is almost unbearable. Each breath you draw is laced with the biting cold, making your lungs ache. Despite the layers of gear you donned before your descent, the miasma-enhanced cold pierces through, making your teeth chatter in an unending cadence. Small patches of stubborn vegetation peep out from under the snow, brittle from the relentless cold.
 
@@ -1069,10 +1043,12 @@ If you have Cherry, this Relic will provide the useful boon of a single use rero
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Verve Cell [layer4]
-<<CollectRelic $relic41>>
+<<CollectRelic $relic41>>\
+<<if !setup.passingTime()>>
 
 You trudge onward through the biting cold, every step crunching beneath your feet on the snow-laden ground. The fourth layer of the Abyss, an icy wasteland, is as beautiful as it is deadly. Small glacial mountains, crystalline in their sheen, rise like the backbones of ancient leviathans around you.
 
@@ -1088,10 +1064,12 @@ As you secure the Verve Cell into your satchel, you can't help but marvel at the
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Vessel Vivisector [layer4]
-<<CollectRelic $relic42>>
+<<CollectRelic $relic42>>\
+<<if !setup.passingTime()>>
 
 Your instincts lead you towards a tall, glacier-topped mountain. Your eyes squint through the snowfall and you can see the mountain's icy apex, an ominous and daunting silhouette.
 
@@ -1107,10 +1085,12 @@ Looking around, you decide to use the Vivisector on one of the hardy plants, cur
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Sated Artist [layer4]
-<<CollectRelic $relic43>>
+<<CollectRelic $relic43>>\
+<<if !setup.passingTime()>>
 
 As the freezing winds rip through your protective gear, you lower your gaze to the small, sparse vegetation around you. Trudging through the bitter cold, you spot a peculiar set of tracks leading to one of the ice mounds. You decide to follow it.
 
@@ -1132,10 +1112,12 @@ Carefully stowing the Sated Artist into your pack, you step back into the brutal
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Timekeeper's Keepsake [layer4]
-<<CollectRelic $relic44>>
+<<CollectRelic $relic44>>\
+<<if !setup.passingTime()>>
 
 Off to your left, you notice an anomaly in this frost-bitten world - a giant mechanical sundial, half-buried in the snow, its large gnomon casting a long shadow despite the gloom. Surrounding the sundial are numerous metallic objects, suspended in mid-air, coated in thick ice, as if time had stopped for them eons ago.
 
@@ -1149,10 +1131,12 @@ The cold suddenly seems to bite deeper, a reminder of the hostile environment yo
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Creator's Bolt [layer4]
-<<CollectRelic $relic45>>
+<<CollectRelic $relic45>>\
+<<if !setup.passingTime()>>
 
 Ahead, through the dense veil of fog, a glimmer catches your eye. You squint, straining your eyes, and trudge towards the flicker. Gradually, the silhouette of an enormous, frozen archway materializes from the fog, standing resolute amidst the bleak, snowy expanse. Carved into the ice, the archway is etched with countless intricate patterns of twisting, intertwining lines - they almost appear like the plotlines of a thousand different stories, a silent testimony to the countless tales born in the hearts of humans.
 
@@ -1166,19 +1150,23 @@ An idea forms in your mind. You take a sock out of your bag, and open it as a sm
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Perpetual Repose [layer4]
-<<CollectRelic $relic46>>
+<<CollectRelic $relic46>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic46.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Toral Wave [layer4]
-<<CollectRelic $relic47>>
+<<CollectRelic $relic47>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic47.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -1186,197 +1174,82 @@ A source of electricity like this would be hard to use in combat, but perhaps if
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
+<</if>>
 
 
 :: Pick up the Flamel's Folly [layer4]
-<<CollectRelic $relic48>>
+<<CollectRelic $relic48>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic48.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 4|Layer4 Relics]]
 [[Continue exploring the fourth layer|Layer4 Hub]]
-
-
-:: Layer4 Exit2 [layer4]
-<<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-
-	<<if setup.haveRope>>
-		<<set $tempTime = 8>>
-	<<else>>
-		<<set $tempTime = 19>>
-	<</if>>
-
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
 <</if>>
+
+
+:: Layer4 Travel Events [layer4 nobr]
 <<set _triggers = {
 	driftingSwallower: () => $timeL4T1 > 6,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
 <<if _triggers.driftingSwallower()>>
-	<br>During your long trip down towards the fifth layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
+	<br>A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
 
 	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]<br>
 <</if>>
-
-<<if _done>>
-	<<nobr>>
-	<<set $currentLayer = 5>>
-	<<set $timeL5T1 = 0>>
-	<<set $timeL5T2 = 0>>
-	<</nobr>><br>
-	You continue your hike and try to keep somewhat warm despite the bone-chilling cold and your treacherous journey along the pit of sheer ice. As you get closer to the bottom, the temperature rises and the air starts to dry out.<br><br>
-
-	<<include "Curse Descriptions">><br><br>
-	<<if $TwinFly == true>>
-		<<include "Twin rejoin">>
-	<</if>>
-	[[Continue to the Fifth layer|Layer5 1]]
-
-<</if>>
-<</nobr>>
 
 
 :: Layer4 Ascend2 [layer4]
 <<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<set $tempTime = 7>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
-<<set _triggers = {
-	driftingSwallower: () => $timeL4T1 > 6,
-}>>
-
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers.driftingSwallower()>>
-	<br>
-	During your long hike back up towards the third layer you hear a great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
-
-	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]<br>
+	<<AdjustedTravelTime "_travelTime" 7 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<</nobr>>
-<<if _done>>
+<<include "Layer4 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
 	<<nobr>>
-	<<set $corruption -= (35 - $corRed)>>
-	<<set $forageWater = 0>>
-	<<set $currentLayer = 3>>
+		<<set $corruption -= 35 - $corRed + 5 * Math.trunc($hexflame / 10)>>
 	<</nobr>>
 	You continue your hike and try to keep somewhat warm despite the bone-chilling cold, but eventually the temperature starts to rise. However, once you've gotten to the comfortable warmth of the cave systems, you find the light is once again disappearing, leaving you in the dim darkness of the third layer.
 
 	<<include "Curse Descriptions">>
-
+	<<if $TwinFly == true>>
+		<<include "Twin rejoin">>
+	<</if>>
 	[[Return to the third layer|Layer3 Hub]]
-
 <</if>>
 
 
-:: Layer4 Threat1 Ascend [layer4]
-<<set $timeL4T1 -= 7>>
-[img[setup.ImagePath+'Threats/driftingswallower.png']]
-
-How do you want to deal with the creature descending upon you?
-
-
+:: Layer4 Exit2 [layer4]
 <<nobr>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured by fighting it, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|Layer4 Ascend2][$status.duration += (6 - $statRed), $status.penalty += 1]]<br><br>
-<</if>>
-	<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.name === "Khemia")>>
-You can arm Khemia with your more powerful Relic sword and he will be able to defeat the creature without any major issues after a brief battle.<br>
-[[Allow Khemia to defeat it with his Relic blade|Layer4 Ascend2]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 4>>
-	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
-	[[Shoot it with your pistol|Layer4 Ascend2][$items[20].count -= (5 - $bullRed)]]<br><br>
-<</if>>
-	<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
-[[Defeat it with the Brave Vector|Layer4 Ascend2]]<br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Tranquility Knell")>>
-The Drifting Swallower detects its prey by the vibrations that surround them, but the Tranquility Knell silences the noise in both the air and all other media, meaning the vibrations are nearly silenced and the Swallower is left nearly blind. This effect should give you 30 minutes where the creature is unable to find you, allowing you to escape unnoticed until you are out of range.<br>
-[[Escape with the Tranquility Knell|Layer4 Ascend2]]<br><br>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" `setup.haveRope ? 8 : 19`>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
-[[Allow it to overpower you|Layer4 Ascend2][$status.duration += 99, $status.penalty += 1]]
+<<include "Layer4 Travel Events">>
 
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br>As the nightmarish beast drifts closer to you, you suddenly hear a voice talking to you.<br><br>
+<</nobr>>\
+<<if !setup.passingTime()>>
+	You continue your hike and try to keep somewhat warm despite the bone-chilling cold and your treacherous journey along the pit of sheer ice. As you get closer to the bottom, the temperature rises and the air starts to dry out.
 
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will dissapear <</say>><br>
+	<<include "Curse Descriptions">>
 
-A pleasant warmth is radiating from the doll you found<br>
-<<link "Hold the doll tight and close your eyes" "Layer4 Ascend2">>
-  <<dollTF>>
-<</link>><br>
-
+	[[Continue to the fifth layer|Layer5 1]]
 <</if>>
-
-<</nobr>>
-
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Ascend2]]
-
-
-:: Layer4 Threat1 Descend [layer4]
-<<set $timeL4T1 -= 7>>
-[img[setup.ImagePath+'Threats/driftingswallower.png']]
-
-How do you want to deal with the creature descending upon you?
-
-
-<<nobr>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured by fighting it, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|Layer4 Exit2][$status.duration += (6 - $statRed), $status.penalty += 1]]<br><br>
-<</if>>
-	<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.name === "Khemia")>>
-You can arm Khemia with your more powerful Relic sword and he will be able to defeat the creature without any major issues after a brief battle.<br>
-[[Allow Khemia to defeat it with his Relic blade|Layer4 Exit2]]<br><br>
-<</if>>
-<<if $items[13].count > 0 && $items[20].count > 4>>
-	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to the way it moves around and evades your shots.<br>
-	[[Shoot it with your pistol|Layer4 Exit2][$items[20].count -= (5 - $bullRed)]]<br><br>
-<</if>>
-	<<if $slingshot == 1>>
-Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
-[[Defeat it with the Brave Vector|Layer4 Exit2]]<br><br>
-<</if>>
-<<if $ownedRelics.some(e => e.name === "Tranquility Knell")>>
-The Drifting Swallower detects its prey by the vibrations that surround them, but the Tranquility Knell silences the noise in both the air and all other media, meaning the vibrations are nearly silenced and the Swallower is left nearly blind. This effect should give you 30 minutes where the creature is unable to find you, allowing you to escape unnoticed until you are out of range.<br>
-[[Escape with the Tranquility Knell|Layer4 Exit2]]<br><br>
-<</if>>
-If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices lapping over your whole body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
-[[Allow it to overpower you|Layer4 Exit2][$status.duration += 99, $status.penalty += 1]]
-
-<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
-<br>As the nightmarish beast drifts closer you, you suddenly hear a voice talking to you.<br><br>
-
-<<say $creepydoll>>Don't be scared, nobody will hurt you. Just hold me tight and all the bad things will dissapear <</say>><br>
-
-A pleasant warmth is radiating from the doll you found<br>
-<<link "Hold the doll tight and close your eyes" "Layer4 Exit2">>
-  <<dollTF>>
-<</link>><br>
-<</if>>
-
-<</nobr>>
-Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|Layer4 Exit2]]
 
 
 :: Layer4 Cherry Relic [layer4]
@@ -1485,7 +1358,7 @@ Please enter your new scale color:
 <</nobr>>
 
 :: Layer4 Curses Random [nobr]
-<<set _tempCurses = ["Libido Reinforcement C", "Lactation Rejuvenation A", "Asset Robustness D", "Age Reduction B", "Sleep Tight", "Sweet Dreams", "Hypno Happytime", "Crossdress Your Heart", "Lie Detector", "Megadontia", "Softie", "Hard Mode", "Lingual Leviathan", "Tipping the Scales", "Reptail", "Cold Blooded"]>>
+<<set _tempCurses = setup.cursesOnLayer[4]>>
 <<set _totalCurses = $playerCurses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
@@ -1554,8 +1427,6 @@ Threats:
 
 <<include 'CampCode'>>
 
-[[Return to exploring the layer without waiting|Layer4 Hub]]
-
 :: Layer4 Threat1 [layer4]
 <<set $timeL4T1 -= 7>>
 [img[setup.ImagePath+'Threats/driftingswallower.png']]
@@ -1593,7 +1464,7 @@ How do you want to deal with the creature descending upon you?
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistant light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration += 99, $status.penalty += 1]]
 
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
 	<br>As the creature descends, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
 
 	<<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>

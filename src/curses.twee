@@ -1103,6 +1103,18 @@ type: ""
 <<set $playerCurses = []>>
 <<set $StoredCurse = []>>
 
+<<set setup.cursesOnLayer = {
+    1: ["Libido Reinforcement A", "Gender Reversal A", "Asset Robustness A", "Clothing Restriction A", "Shrunken Assets", "Hair Removal", "Perma-dye", "Freckle Speckle", "Knife-ear", "Dizzying Heights", "Increased Sensitivity", "Refractory Refactorization"],
+    2: ["Libido Reinforcement B", "Gender Reversal B", "Asset Robustness B", "Age Reduction A", "Fluffy Ears", "Fluffy Tail", "Maximum Fluff", "Heat/Rut", "Lightweight", "Sex Switcheroo", "Futa Fun", "Blushing Virgin"],
+    3: ["Submissiveness Rectification A", "Gender Reversal C", "Asset Robustness C", "Clothing Restriction B", "Power Dom", "20/20000000", "Comic Relief", "Equal Opportunity", "Absolute Pregnancy", "Absolute Birth Control", "Wacky Wombs", "Omnitool", "Gooey", "Rainbow Swirl", "Double Pepperoni", "Literal Blushing Virgin"],
+    4: ["Libido Reinforcement C", "Lactation Rejuvenation A", "Asset Robustness D", "Age Reduction B", "Sleep Tight", "Sweet Dreams", "Hypno Happytime", "Crossdress Your Heart", "Lie Detector", "Megadontia", "Softie", "Hard Mode", "Lingual Leviathan", "Tipping the Scales", "Reptail", "Cold Blooded"],
+    5: ["Libido Reinforcement D", "Gender Reversal D", "Pleasure Respecification A", "Clothing Restriction C", "Massacre Manicure", "DoS", "DoM", "Hijinks Ensue", "Flower Power", "Cellulose", "Chlorophyll", "Pheromones", "Carapacian", "Hemospectrum", "Wriggly Antennae", "Eggxellent"],
+    6: ["Submissiveness Rectification B", "Lactation Rejuvenation B", "Pleasure Respecification B", "Age Reduction C", "Horny", "Drawing Spades", "Tattoo Tally", "Leaky", "Wandering Hands", "Semen Demon", "Quota", "In the Limelight"],
+    7: ["Libido Reinforcement E", "Gender Reversal E", "Asset Robustness E", "Urine Reamplification A", "Barter System", "Shared Space", "Weakling", "Random Orgasms", "Beastly", "Creature of the Night", "Minish-ish", "Colossal-able"],
+    8: ["Libido Reinforcement F", "Gender Reversal F", "Asset Robustness F", "Urine Reamplification B", "Eye on the Prize", "Deafening Silence", "Taciturn Turnaround", "Ampu-Q-tie", "Nose Goes", "Arm Army", "A Little Extra", "Null", "Seafolk", "Taken for Granite", "Double Trouble", "Conjoined"],
+    9: ["Libido Reinforcement G", "Gender Reversal G", "Asset Robustness G", "Literalization", "Consent Dissent", "The Maxim", "Adverse Possession", "Erased", "Tickly Tentacles", "Eye-scream", "A Mouthful", "Below the Veil"],
+}>>
+
 :: Libido Reinforcement A Description
 
 Gives one level of the Libido Reinforcement Curse, which boosts your sex drive according to how many Libido Reinforcement effects you've taken. See the above table for details.
@@ -1883,21 +1895,23 @@ You have touched the void and tasted just a hint of the Truth, and you will neve
         <<set _curseLimitation=false>>
     <</if>>  
 
-    <<if _curse.name == "Dizzying Heights" || "A Mouthful">>/* tree for multiple instance curses */
-        <<set _maxCurses=5>>
-    <<elseif _curse.name == "Wacky Wombs">> 
-        <<set _maxCurses=2>>
-    <<elseif _curse.name == "Quota" || _curse.name == "In the Limelight">>
-        <<set _maxCurses=4>>
-    <<elseif _curse.name == "Arm Army">> 
-        <<set _maxCurses=6>>
-    <<elseif _curse.name ==  "Tickly Tentacles">>
-        <<set _maxCurses=10>>
-    <<elseif _curse.name ==  "Eye-scream">>
-        <<set _maxCurses=20>>        
-    <<else>>
-        <<set _maxCurses=1>>
-    <</if>>
+    /* tree for multiple instance curses */
+    <<switch _curse.name>>
+        <<case "Dizzying Heights" "A Mouthful">>
+            <<set _maxCurses=5>>
+        <<case "Wacky Wombs">>
+            <<set _maxCurses=2>>
+        <<case "Quota" "In the Limelight">>
+            <<set _maxCurses=4>>
+        <<case "Arm Army">>
+            <<set _maxCurses=6>>
+        <<case "Tickly Tentacles">>
+            <<set _maxCurses=10>>
+        <<case "Eye-scream">>
+            <<set _maxCurses=20>>
+        <<default>>
+            <<set _maxCurses=1>>
+    <</switch>>
 
 :: Curse Randomizer [nobr]
 <<set _validNames = []>>
