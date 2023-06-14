@@ -1,7 +1,10 @@
 :: Layer7 1 [layer7]
 <<nobr>>
-<<masteraudio stop>><<audio "layer7" volume 0.2 play loop>>
 <<set $currentLayer = 7>>
+<<masteraudio stop>>
+<<audio "layer7" volume 0.2 play loop>>
+<<set $timeL6T1 = 0, $timeL6T2 = 0>>
+<<set $timeL7T2 = 0>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -69,7 +72,16 @@ Threats:
 <<back>>
 
 :: Layer7 Hub [layer7]
-<<set $currentLayer = 7>><<CarryAdjust>><<if $dubloons < 0 && $easymode==false>>[img[setup.ImagePath+'Threats/taxdrone.png']]
+<<nobr>>
+<<set $currentLayer = 7>>
+<<if !isPlaying("layer7")>>
+	<<masteraudio stop>>
+	<<audio "layer7" volume 0.2 play loop>>
+<</if>>
+<<CarryAdjust>>
+
+<</nobr>>\
+<<if $dubloons < 0 && $easymode==false>>[img[setup.ImagePath+'Threats/taxdrone.png']]
 
 A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.
 
@@ -97,7 +109,7 @@ As you awaken later that day you feel your entire body still aching. However, th
 
 [[Continue your journey|Layer7 Hub]]
 
-<<elseif $timeL7T2 < 6>><<set $layerExit = 0>>\
+<<elseif $timeL7T2 < 6>>\
 <<nobr>>
 
 <<if $visitL7 == 0>>
@@ -247,7 +259,7 @@ It is reccomended that you get creative with your Relics and think of more effic
 
 <p>[[Allow the Abyss to bestow a random Curse upon you|Layer7 Curses Random]]</p>
 
-<<CurseGrid `["Libido Reinforcement E", "Gender Reversal E", "Asset Robustness E", "Urine Reamplification A", "Barter System", "Shared Space", "Weakling", "Random Orgasms", "Beastly", "Creature of the Night", "Minish-ish", "Colossal-able"]`>>
+<<CurseGrid `setup.cursesOnLayer[7]`>>
 
 <<if $escBalDepl==0>>
 	<p>[[Return to exploring layer 7|Layer7 Hub]]</p>
@@ -317,82 +329,21 @@ If you're not dissuaded and choose to continue onward, it will take you 8 days t
 [[Continue your descent to the eighth layer|Layer7 Exit2]]
 
 
-:: Layer7 Threat2 Main [layer7]
-<<nobr>>
-<<set $timeL7T2 -= 6>>
-<<PassTime 1>>
-<</nobr>>
-[img[setup.ImagePath+'Threats/securityrobot.png']]
-<<if $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 3>><<set $layer7Hypno += 1>>
-	After you are pulled into the giant security robot, you are placed in a cell and bombarded with propaganda recordings about life in the city and your place in it. It seems to be nonsense, why would you want to serve organics? You are an organic!
-
-	Of course you can't tone it all out, but it's pretty easy to keep your eyes on what matters and you patiently wait until the time is up and you are released.
-
-	[[Return to exploring the city|Layer7 Hub]]
-
-<<elseif $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 5>><<set $layer7Hypno += 1>>
-	Once again, you are pulled into the security robot to hear the familiar tales of how to be a productive part of society.
-
-	For some reason, you find yourself paying a but more attention to the videos and voices, and you realize that they're not actually as ridiculous as you first thought.
-
-	Sure, you're free right now, but with subservience can come great pleasure, and what greater pursuit in life is there than pleasure? Your pleasure centers could be continually stimulated by following orders and following what is demanded of you.
-
-	Fine, you're an organic being, but the miraculous technology of the city could change that, they could change you so that you fit neatly into the mechanisms of society here. No need to let your messy fleshy bits get in the way of a better life for you and everyone else.
-
-	Yeah, you do have goals of things you want to do, but why are your goals more important than the goals of an entire city? Especially when they are as grand as the City of Agartha preparing for the future awakening of its organic population!
-
-	When the robot releases you, you are tempted to go back and take up residence here, but shake off the feeling and continue your journey.
-
-	[[Return to exploring the city|Layer7 Hub]]
-
-<<elseif $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno == 5>>
-	Once again, you are pulled into the security robot to hear the familiar tales of how to be a productive part of society. And yeah, you do wish you were a better member of society, don't you?
-
-	The arguments they are making actually make perfect sense, they seem to precisely match your own thoughts actually. As if they were molded to you (or the other way around.)
-
-	With subservience can come great pleasure, and what greater pursuit in life is there than pleasure? Your pleasure centers could be continually stimulated by following orders and following what is demanded of you.
-
-	The miraculous technology of the city could change that, they could change your organic body so that you fit neatly into the mechanisms of society here. No need to let your messy fleshy bits get in the way of a better life for you and everyone else.
-
-	Why are your goals more important than the goals of an entire city? Especially when they are as grand as the City of Agartha preparing for the future awakening of its organic population!
-
-	When the robot releases you, you are free to go, but you do not use that freedom.
-
-	Now is your chance, you've found a place where you belong.
-
-	It's time to stay in your new home.
-
-	You tell the robot that you are ready to take your place as a gear in the mechanism of society and almost immediately a syringe comes out of the wall and pokes your neck. You smile as your consciousness fades.
-
-	[[Awaken to your new life|Layer7 Tax End]]
-
-<<else>>
-
-	After you are pulled into the giant security robot, you are placed in a cell and bombarded with propaganda recordings about life in the city and your place in it. It seems to be nonsense, why would you want to serve organics? You are an organic!
-
-	The biggest threat here is your boredom, honestly. While you try to fall asleep the robot makes an effort to keep you awake, in a kind of minor psychological torture through annoyance.
-
-	Eventually you are released though, with no harm done, and ready to continue your journey in the seventh layer.
-
-	[[Return to exploring the city|Layer7 Hub]]
-
-<</if>>
-
-
 :: Pick up the Daedalus Mechanism [layer7]
-<<CollectRelic $relic73>>
+<<CollectRelic $relic73>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic73.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Blind Divine [layer7]
-<<nobr>>
-<<if !$slingshot>><<set $items[20].count -= 4>><</if>>
-<<CollectRelic $relic74>>
-<</nobr>>
+<<if !setup.passingTime() && !$slingshot>><<set setup.item('Pistol Bullets').count -= 4>><</if>>\
+<<CollectRelic $relic74>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic74.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -400,10 +351,12 @@ This Relic grants you the ability to see in any dark place, removing the need fo
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Lambent Specter [layer7]
-<<CollectRelic $relic75>>
+<<CollectRelic $relic75>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic75.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -411,46 +364,56 @@ This Relic grants you the power to create a golem, a steadfast and loyal compani
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Phoenix Obol [layer7]
-<<CollectRelic $relic76>>
+<<CollectRelic $relic76>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic76.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Granted Granite [layer7]
-<<CollectRelic $relic77>>
+<<CollectRelic $relic77>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic77.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Joyous Sunder [layer7]
-<<CollectRelic $relic78>>
+<<CollectRelic $relic78>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic78.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Azure Aozora [layer7]
-<<CollectRelic $relic79>>
+<<CollectRelic $relic79>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic79.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Glare Vantage [layer7]
-<<CollectRelic $relic80>>
+<<CollectRelic $relic80>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic80.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -458,19 +421,23 @@ If you don't already have a source of light, the Glare Vantage will provide you 
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Final Stage [layer7]
-<<CollectRelic $relic81>>
+<<CollectRelic $relic81>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic81.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Solace Lace [layer7]
-<<CollectRelic $relic82>>
+<<CollectRelic $relic82>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic82.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
@@ -478,24 +445,29 @@ This Relic provides you with comfort in the cold to reduce travel times by 2 day
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Red Thread Flourish [layer7]
-<<CollectRelic $relic83>>
+<<CollectRelic $relic83>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic83.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Pick up the Triage Rain [layer7]
-<<CollectRelic $relic84>>
+<<CollectRelic $relic84>>\
+<<if !setup.passingTime()>>
 
 You have successfully taken the $relic84.name Relic. Hopefully you can make good use of it and make it worth that corruption cost.
 
 [[Continue searching for the Relics of layer 7|Layer7 Relics]]
 [[Continue exploring the seventh layer|Layer7 Hub]]
+<</if>>
 
 
 :: Layer7Time
@@ -1160,7 +1132,7 @@ Navigating the Abyss in this colossal form will be challenging, the once wide st
 <</nobr>>
 
 :: Layer7 Curses Random [nobr]
-<<set _tempCurses = ["Libido Reinforcement E", "Gender Reversal E", "Asset Robustness E", "Urine Reamplification A", "Barter System", "Shared Space", "Weakling", "Random Orgasms", "Beastly", "Creature of the Night", "Minish-ish", "Colossal-able"]>>
+<<set _tempCurses = setup.cursesOnLayer[7]>>
 <<set _totalCurses = $playerCurses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
@@ -1394,28 +1366,15 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 @@.layerTitle;GAME OVER@@
 
 
-:: Layer7 Ascend2 [layer7]
-<<nobr>>
-<<if $DaedalusFly==true>>
-	<<include "Companions Stranded">>
-<</if>>
-
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<set $tempTime = 7>>
-	<<if $DaedalusFly==true>>
-		<<set $tempTime= Math.ceil($tempTime/2)>>
-	<</if>>
-	<<AdjustedTravelTime "$layerExitTime" $tempTime>>
-<</if>>
+:: Layer7 Travel Events [layer7 nobr]
 <<set _triggers = {
 	inDebt: () => $dubloons < 0,
 	rehabilitated: () => $timeL7T2 > 5,
 }>>
 
-<<PassTime $layerExitTime _triggers "_done">>
+<<PassTime _triggers>>
 
-<<if _triggers.inDebt() && $easymode>>
+<<if _triggers.inDebt()>>
 	<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
 
 	<br>A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.<br><br>
@@ -1424,24 +1383,18 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 
 	Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.<br><br>
 
-	As you awaken later that day you feel your entire body still aching. However, the Taxdrone is nowhere to be found and you feel like you escaped a terrible fate.<br><br>
+	<<if $easymode>>
+		As you awaken later that day you feel your entire body still aching. However, the Taxdrone is nowhere to be found and you feel like you escaped a terrible fate.<br><br>
 
-	[[Continue your journey|Layer7 Ascend2]]<br><br>
-	<<set $status.penalty += 2>>
-	<<set $status.duration += 1>>
-	<<set $dubloons = 3>>
-<<elseif _triggers.inDebt() && !$easymode>>
-	<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
+		<<link "Continue your journey" `passage()`>><</link>><br><br>
+		<<set $status.penalty += 2>>
+		<<set $status.duration += 1>>
+		<<set $dubloons = 3>>
+	<<else>>
+		You are now forced to become a permanent resident of Layer 7.<br><br>
 
-	<br>A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.<br><br>
-
-	The Taxdrone patiently requests that you submit your taxes as it displays a slot for you to deposit the dubloons into, but soon it realizes you will not be paying and the typically soft blue lights on the drone change to glaring red and an alarm sounds.<br><br>
-
-	Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.<br><br>
-
-	You are now forced to become a permanent resident of Layer 7.<br><br>
-
-	[[Awaken to your new life|Layer7 Tax End]]<br><br>
+		[[Awaken to your new life|Layer7 Tax End]]<br><br>
+	<</if>>
 <<elseif _triggers.rehabilitated()>>
 	<br>A an enormous rumbling catches your attention as you walk through the seventh layer. A brief glance around reveals the source, an enormous, building-sized machine that is now rapidly approaching you. You consider running, but the Security Robot is moving at an incredible speed, leaving you no chance to get away. <br><br>
 
@@ -1452,15 +1405,26 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	[[Get rehabilitated|Layer7 Threat2][$returnPassage = passage()]]<br><br>
 <</if>>
 
-<</nobr>>
-<<if _done>>
+
+:: Layer7 Ascend2 [layer7]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<if $DaedalusFly>>
+		<<include "Companions Stranded">>
+		<<set _multiplier = 1/2>>
+	<</if>>
+	<<AdjustedTravelTime "_travelTime" 7 false 0 _multiplier>>
+	<<set setup.startPassingTime(_travelTime)>>
+<</if>>
+
+<<include "Layer7 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>
 	<<nobr>>
-	<<set $corruption -= (80 - $corRed)>>
-
-	<<set $timeL6T1 = 0>>
-	<<set $timeL6T2 = 0>>
-
-	<<set $currentLayer = 6>>
+		<<set $corruption -= 80 - $corRed + 5 * Math.trunc($hexflame / 10)>>
 	<</nobr>>
 	Surprisingly, the ascent up to the sixth layer is relatively easy. While you did need to deal with the typical, meddlesome robots, there weren't any additional obstacles in your path.
 
@@ -1470,198 +1434,29 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	<<if $TwinFly == true>>
 		<<include "Twin rejoin">>
 	<</if>>
-	[[Return to the Sixth layer|Layer6 Hub]]
-
-<</if>>
-
-
-:: Layer7 Threat2 Ascend [layer7]
-<<nobr>>
-<<set $timeL7T2 -= 6>>
-<<PassTime 1>>
-<</nobr>>
-[img[setup.ImagePath+'Threats/securityrobot.png']]
-
-<<if $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 3>><<set $layer7Hypno += 1>>
-	After you are pulled into the giant security robot, you are placed in a cell and bombarded with propaganda recordings about life in the city and your place in it. It seems to be nonsense, why would you want to serve organics? You are an organic!
-
-	Of course you can't tone it all out, but it's pretty easy to keep your eyes on what matters and you patiently wait until the time is up and you are released.
-
-	[[Continue your ascent to the sixth layer|Layer7 Ascend2]]
-
-<<elseif $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 5>><<set $layer7Hypno += 1>>
-	Once again, you are pulled into the security robot to hear the familiar tales of how to be a productive part of society.
-
-	For some reason, you find yourself paying a but more attention to the videos and voices, and you realize that they're not actually as ridiculous as you first thought.
-
-	Sure, you're free right now, but with subservience can come great pleasure, and what greater pursuit in life is there than pleasure? Your pleasure centers could be continually stimulated by following orders and following what is demanded of you.
-
-	Fine, you're an organic being, but the miraculous technology of the city could change that, they could change you so that you fit neatly into the mechanisms of society here. No need to let your messy fleshy bits get in the way of a better life for you and everyone else.
-
-	Yeah, you do have goals of things you want to do, but why are your goals more important than the goals of an entire city? Especially when they are as grand as the City of Agartha preparing for the future awakening of its organic population!
-
-	When the robot releases you, you are tempted to go back and take up residence here, but shake off the feeling and continue your journey.
-
-	[[Continue your ascent to the sixth layer|Layer7 Ascend2]]
-
-<<elseif $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno == 5>>
-	Once again, you are pulled into the security robot to hear the familiar tales of how to be a productive part of society. And yeah, you do wish you were a better member of society, don't you?
-
-	The arguments they are making actually make perfect sense, they seem to precisely match your own thoughts actually. As if they were molded to you (or the other way around.)
-
-	With subservience can come great pleasure, and what greater pursuit in life is there than pleasure? Your pleasure centers could be continually stimulated by following orders and following what is demanded of you.
-
-	The miraculous technology of the city could change that, they could change your organic body so that you fit neatly into the mechanisms of society here. No need to let your messy fleshy bits get in the way of a better life for you and everyone else.
-
-	Why are your goals more important than the goals of an entire city? Especially when they are as grand as the City of Agartha preparing for the future awakening of its organic population!
-
-	When the robot releases you, you are free to go, but you do not use that freedom.
-
-	Now is your chance, you've found a place where you belong.
-
-	It's time to stay in your new home.
-
-	You tell the robot that you are ready to take your place as a gear in the mechanism of society and almost immediately a syringe comes out of the wall and pokes your neck. You smile as your consciousness fades.
-
-	[[Awaken to your new life|Layer7 Tax End]]
-
-<<else>>
-
-	After you are pulled into the giant security robot, you are placed in a cell and bombarded with propaganda recordings about life in the city and your place in it. It seems to be nonsense, why would you want to serve organics? You are an organic!
-
-	The biggest threat here is your boredom, honestly. While you try to fall asleep the robot makes an effort to keep you awake, in a kind of minor psychological torture through annoyance.
-
-	Eventually you are released though, with no harm done, and ready to continue your journey in the seventh layer.
-
-	[[Continue your ascent to the sixth layer|Layer7 Ascend2]]
-
+	[[Return to the sixth layer|Layer6 Hub]]
 <</if>>
 
 
 :: Layer7 Exit2 [layer7]
 <<nobr>>
-<<if $layerExit == 0>>
-	<<set $layerExit = 1>>
-	<<AdjustedTravelTime "$layerExitTime" 8>>
-<</if>>
-<<set _triggers = {
-	inDebt: () => $dubloons < 0,
-	rehabilitated: () => $timeL7T2 > 5,
-}>>
 
-<<PassTime $layerExitTime _triggers "_done">>
-
-<<if _triggers.inDebt() && $easymode>>
-	<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
-
-	<br>A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.<br><br>
-
-	The Taxdrone patiently requests that you submit your taxes as it displays a slot for you to deposit the dubloons into, but soon it realizes you will not be paying and the typically soft blue lights on the drone change to glaring red and an alarm sounds.<br><br>
-
-	Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.<br><br>
-
-	As you awaken later that day you feel your entire body still aching. However, the Taxdrone is nowhere to be found and you feel like you escaped a terrible fate.<br><br>
-
-	[[Continue your journey|Layer7 Exit2]]<br><br>
-	<<set $status.penalty += 2>>
-	<<set $status.duration += 1>>
-	<<set $dubloons = 3>>
-<<elseif _triggers.inDebt() && !$easymode>>
-	<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
-
-	<br>A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.<br><br>
-
-	The Taxdrone patiently requests that you submit your taxes as it displays a slot for you to deposit the dubloons into, but soon it realizes you will not be paying and the typically soft blue lights on the drone change to glaring red and an alarm sounds.<br><br>
-
-	Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.<br><br>
-
-	You are now forced to become a permanent resident of Layer 7.<br><br>
-
-	[[Awaken to your new life|Layer7 Tax End]]<br><br>
-<<elseif _triggers.rehabilitated()>>
-	<br>A an enormous rumbling catches your attention as you walk through the seventh layer. A brief glance around reveals the source, an enormous, building-sized machine that is now rapidly approaching you. You consider running, but the Security Robot is moving at an incredible speed, leaving you no chance to get away. <br><br>
-
-	"ACCEPT REHABILITATION" a synthetic voice calls out, with the huge robot nearly upon you. <br><br>
-
-	And suddenly, it's here, reaching down to grab you with shining metallic arms and pulling you into its shell.<br><br>
-
-	[[Get rehabilitated|Layer7 Threat2][$returnPassage = passage()]]<br><br>
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 8>>
+	<<set setup.startPassingTime(_travelTime)>>
 <</if>>
 
-<</nobr>><<if _done>>
+<<include "Layer7 Travel Events">>
 
-<<set $timeL8T1 = 0>>\
-<<set $timeL8T2a = 0>>\
-<<set $timeL8T2b = 0>>\
-
+<</nobr>>\
+<<if !setup.passingTime()>>
 	After days of travel, you reach the bottom of the city. What awaits you is an enormous, circular gate, embedded into the ground at the lowest point of the city, almost like an elaborate manhole cover.
 
 	The rest of the layer slopes up all around it, every direction funneling down into it. There is no other way downward except through the other side of this gate. Will you push it open, and continue to push yourself ever downward?
 
+	<<include "Curse Descriptions">>
+
 	[[Descend into the circular gate|Layer8 1]]
-<</if>>
-
-
-:: Layer7 Threat2 Descend [layer7]
-<<nobr>>
-<<set $timeL7T2 -= 6>>
-<<AdjustedTravelTime "$tempTime" 1>><<PassTime $tempTime>>
-<</nobr>>
-[img[setup.ImagePath+'Threats/securityrobot.png']]
-
-<<if $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 3>><<set $layer7Hypno += 1>>
-	After you are pulled into the giant security robot, you are placed in a cell and bombarded with propaganda recordings about life in the city and your place in it. It seems to be nonsense, why would you want to serve organics? You are an organic!
-
-	Of course you can't tone it all out, but it's pretty easy to keep your eyes on what matters and you patiently wait until the time is up and you are released.
-
-	[[Continue your descent to the eighth layer|Layer7 Exit2]]
-
-<<elseif $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 5>><<set $layer7Hypno += 1>>
-	Once again, you are pulled into the security robot to hear the familiar tales of how to be a productive part of society.
-
-	For some reason, you find yourself paying a but more attention to the videos and voices, and you realize that they're not actually as ridiculous as you first thought.
-
-	Sure, you're free right now, but with subservience can come great pleasure, and what greater pursuit in life is there than pleasure? Your pleasure centers could be continually stimulated by following orders and following what is demanded of you.
-
-	Fine, you're an organic being, but the miraculous technology of the city could change that, they could change you so that you fit neatly into the mechanisms of society here. No need to let your messy fleshy bits get in the way of a better life for you and everyone else.
-
-	Yeah, you do have goals of things you want to do, but why are your goals more important than the goals of an entire city? Especially when they are as grand as the City of Agartha preparing for the future awakening of its organic population!
-
-	When the robot releases you, you are tempted to go back and take up residence here, but shake off the feeling and continue your journey.
-
-	[[Continue your descent to the eighth layer|Layer7 Exit2]]
-
-<<elseif $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno == 5>>
-	Once again, you are pulled into the security robot to hear the familiar tales of how to be a productive part of society. And yeah, you do wish you were a better member of society, don't you?
-
-	The arguments they are making actually make perfect sense, they seem to precisely match your own thoughts actually. As if they were molded to you (or the other way around.)
-
-	With subservience can come great pleasure, and what greater pursuit in life is there than pleasure? Your pleasure centers could be continually stimulated by following orders and following what is demanded of you.
-
-	The miraculous technology of the city could change that, they could change your organic body so that you fit neatly into the mechanisms of society here. No need to let your messy fleshy bits get in the way of a better life for you and everyone else.
-
-	Why are your goals more important than the goals of an entire city? Especially when they are as grand as the City of Agartha preparing for the future awakening of its organic population!
-
-	When the robot releases you, you are free to go, but you do not use that freedom.
-
-	Now is your chance, you've found a place where you belong.
-
-	It's time to stay in your new home.
-
-	You tell the robot that you are ready to take your place as a gear in the mechanism of society and almost immediately a syringe comes out of the wall and pokes your neck. You smile as your consciousness fades.
-
-	[[Awaken to your new life|Layer7 Tax End]]
-
-<<else>>
-
-	After you are pulled into the giant security robot, you are placed in a cell and bombarded with propaganda recordings about life in the city and your place in it. It seems to be nonsense, why would you want to serve organics? You are an organic!
-
-	The biggest threat here is your boredom, honestly. While you try to fall asleep the robot makes an effort to keep you awake, in a kind of minor psychological torture through annoyance.
-
-	Eventually you are released though, with no harm done, and ready to continue your journey in the seventh layer.
-
-	[[Continue your descent to the eighth layer|Layer7 Exit2]]
-
 <</if>>
 
 
@@ -1777,8 +1572,6 @@ You have worked $temp1 days and brought robots to artificial orgasm $temp2 times
 :: Layer7 Camp
 
 <<include 'CampCode'>>
-
-[[Return to exploring the layer without waiting|Layer7 Hub]]
 
 :: Layer7 Threat2 [layer7]
 <<nobr>>

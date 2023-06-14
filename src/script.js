@@ -465,4 +465,28 @@ Object.defineProperties(setup, {
 	loseRelic: {
 		value: relicOrNameOrIndex => moveLastRelic('ownedRelics', 'soldRelics', relicOrNameOrIndex),
 	},
+	// Check whether we're passing time for the active passage (returns the active state).
+	passingTime: {
+		value: () => (variables().passTimeState ??= new Map()).get(passage())
+	},
+	// Start passing time for the active passage (initializes state for <<PassTime>>).
+	startPassingTime: {
+		value(days) {
+			const state = {
+				expectedDays: days, /* The number of days of time to pass, modulo the time weight. */
+				unweightedDayIndex: 0,
+				weightedDayIndex: 0,
+				unweightedDay: 0,
+				weightedDay: 0,
+				nextRealDay: 0,
+				energy: temporary().daysOfEnergyRations ?? 0,
+			};
+			variables().passTimeState.set(passage(), state);
+			return state;
+		},
+	},
+	// Stops passing time for the active passage (called by <<PassTime>>).
+	stopPassingTime: {
+		value: () => variables().passTimeState?.delete(passage()),
+	},
 });
