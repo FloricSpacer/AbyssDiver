@@ -470,46 +470,6 @@ You have successfully taken the $relic84.name Relic. Hopefully you can make good
 <</if>>
 
 
-:: Layer7Time
-<<nobr>>
-<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10))), 0))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $timeL7 += $tempTime>>
-<<if $dubloons < 500>>
-	<<set $timeL7T2 += $tempTime>>
-<</if>>
-<<set $time += $tempTime>>
-<<if $dubloons >= 300>>
-	<<set $dubloons -= 1>>
-	<<elseif $dubloons >= 100>>
-	<<set $dubloons -= 2>>
-	<<else>>
-	<<set $dubloons -= 3>>
-<</if>>
-<<if $forageFood == 1>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-	<</if>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-<</for>>
-<</nobr>>
-
-
 :: Layer7 Forge1 [layer7]
 <<nobr>>
 <<set $temp1 = -1>>

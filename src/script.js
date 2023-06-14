@@ -15,56 +15,56 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.starving >= 6 || StoryVar.dehydrated >= 3 || StoryVar.gameOver) {
 		return "GameOver";
 	}
-	if (StoryVar.time >= StoryVar.due) {
+	if (setup.daysUntilDue(StoryVar.app) == 0) {
 		return "Labor Scene";
 	}
-	if (StoryVar.time - StoryVar.companionMaru.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionMaru.name
-		StoryVar.MaruConvoPreg = false
-		StoryVar.companionMaru.pregnantT = 9999
-		StoryVar.lastBirthMaru = StoryVar.time
+	if (setup.daysUntilDue('Maru') == 0) {
+		StoryVar.companionLabor = StoryVar.companionMaru.name;
+		StoryVar.MaruConvoPreg = false;
+		setup.setNotPregnant('Maru');
+		StoryVar.lastBirthMaru = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.time - StoryVar.companionLily.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionLily.name
-		StoryVar.LilyConvoPreg = false
-		StoryVar.companionLily.pregnantT = 9999
-		StoryVar.lastBirthLily = StoryVar.time
+	if (setup.daysUntilDue('Lily') == 0) {
+		StoryVar.companionLabor = StoryVar.companionLily.name;
+		StoryVar.LilyConvoPreg = false;
+		setup.setNotPregnant('Lily');
+		StoryVar.lastBirthLily = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.time - StoryVar.companionKhemia.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionKhemia.name
-		StoryVar.KhemiaConvoPreg = false
-		StoryVar.companionKhemia.pregnantT = 9999
-		StoryVar.lastBirthKhemia = StoryVar.time
+	if (setup.daysUntilDue('Khemia') == 0) {
+		StoryVar.companionLabor = StoryVar.companionKhemia.name;
+		StoryVar.KhemiaConvoPreg = false;
+		setup.setNotPregnant('Khemia');
+		StoryVar.lastBirthKhemia = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.time - StoryVar.companionCherry.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionCherry.name
-		StoryVar.CherryConvoPreg = false
-		StoryVar.companionCherry.pregnantT = 9999
-		StoryVar.lastBirthCherry = StoryVar.time
+	if (setup.daysUntilDue('Cherry') == 0) {
+		StoryVar.companionLabor = StoryVar.companionCherry.name;
+		StoryVar.CherryConvoPreg = false;
+		setup.setNotPregnant('Cherry');
+		StoryVar.lastBirthCherry = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.time - StoryVar.companionCloud.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionCloud.name
-		StoryVar.CloudConvoPreg = false
-		StoryVar.companionCloud.pregnantT = 9999
-		StoryVar.lastBirthCloud = StoryVar.time
+	if (setup.daysUntilDue('Cloud') == 0) {
+		StoryVar.companionLabor = StoryVar.companionCloud.name;
+		StoryVar.CloudConvoPreg = false;
+		setup.setNotPregnant('Cloud');
+		StoryVar.lastBirthCloud = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.time - StoryVar.companionSaeko.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionSaeko.name
-		StoryVar.SaekoConvoPreg = false
-		StoryVar.companionSaeko.pregnantT = 9999
-		StoryVar.lastBirthSaeko = StoryVar.time
+	if (setup.daysUntilDue('Saeko') == 0) {
+		StoryVar.companionLabor = StoryVar.companionSaeko.name;
+		StoryVar.SaekoConvoPreg = false;
+		setup.setNotPregnant('Saeko');
+		StoryVar.lastBirthSaeko = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (StoryVar.time - StoryVar.companionTwin.pregnantT >= 280) {
-		StoryVar.companionLabor = StoryVar.companionTwin.name
-		StoryVar.TwinConvoPreg = false
-		StoryVar.companionTwin.pregnantT = 9999
-		StoryVar.lastBirthTwin = StoryVar.time
+	if (setup.daysUntilDue('Twin') == 0) {
+		StoryVar.companionLabor = StoryVar.companionTwin.name;
+		StoryVar.TwinConvoPreg = false;
+		setup.setNotPregnant('Twin');
+		StoryVar.lastBirthTwin = StoryVar.time;
 		return "Labor Scene Companion";
 	}
 	if (isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
@@ -150,14 +150,23 @@ $(document).on(':passagestart', () => {
 		}
 	}
 
+	// Restore object identity between curses in curse logs and $curseN variables.
+	const logNameSuffixes = ['', ...vars.companions.map(companion => companion.name)];
+	for (const type of ['Height', 'Gender', 'Age', 'Libido', 'Handicap']) {
+		for (const suffix of logNameSuffixes) {
+			const events = vars[`${type}Log${suffix}`];
+			for (const [i, event] of events.entries()) {
+				const curseVar = curseVars.find(curseVar => event.name == curseVar.name);
+				if (curseVar) events[i] = curseVar;
+			}
+		}
+		// Restore object identity between twin curse logs and mc curse logs.
+		vars[`${type}LogTwin`] = vars[`${type}Log`];
+	}
+
 	// Restore object identity between $app.curses, $companionTwin.curses and $playerCurses.
 	for (const target of ['app', 'companionTwin']) {
 		vars[target].curses = vars.playerCurses;
-	}
-
-	// Restore object identity between twin curse logs and mc curse logs.
-	for (const type of ['Height', 'Gender', 'Age', 'Libido', 'Handicap']) {
-		vars[`${type}LogTwin`] = vars[`${type}Log`];
 	}
 
 	/* ---- Relic object identity ---- */
@@ -243,22 +252,22 @@ Setting.addHeader("Content Settings");
 
 Setting.addToggle("MaleSceneToggleFilter", {
 	label : "Enable random sex scences involving male characters",
-	default  : 1,
+	default  : true,
 });
 
 Setting.addToggle("FemaleSceneToggleFilter", {
 	label : "Enable random sex scences involving female characters",
-	default  : 1,
+	default  : true,
 });
 
 Setting.addToggle("OtherSceneToggleFilter", {
 	label : "Enable random sex scences involving futa characters or characters without genitals",
-	default  : 1,
+	default  : true,
 });
 
 Setting.addToggle("MenCycleToggleFilter", {
 	label : "Hide messages containing information about your menstrual cycle ",
-	default  : 1,
+	default  : true,
 });
 
 Setting.addRange("appAgeControl", {
@@ -488,5 +497,58 @@ Object.defineProperties(setup, {
 	// Stops passing time for the active passage (called by <<PassTime>>).
 	stopPassingTime: {
 		value: () => variables().passTimeState?.delete(passage()),
+	},
+	never: {
+		value: 999999999, // Just needs to be an unreasonably large number so that $time can never exceed it.
+	},
+	// Checks whether the given character is pregnant.
+	isPregnant: {
+		value(character) {
+			const characterVar = typeof character != 'string' ? character : setup.companion(character);
+			return characterVar.pregnantT <= variables().time;
+		}
+	},
+	// Sets the given character as pregnant (fertilized) from two weeks ago.
+	setConsideredPregnant: {
+		value(character) {
+			const characterVar = typeof character != 'string' ? character : setup.companion(character);
+			characterVar.pregnantT = variables().time - 14;
+			characterVar.due = characterVar.pregnantT + 280 + random(-7, 7);
+		},
+	},
+	// Sets the given character as not pregnant.
+	setNotPregnant: {
+		value(character) {
+			const characterVar = typeof character != 'string' ? character : setup.companion(character);
+			characterVar.pregnantT = setup.never;
+			characterVar.due = setup.never;
+		},
+	},
+	// Gets (or sets) the due date for the given character if they're pregnant (max value otherwise).
+	dueDate: {
+		value(character) {
+			const characterVar = typeof character != 'string' ? character : setup.companion(character);
+			if (!setup.isPregnant(characterVar)) {
+				characterVar.due = setup.never;
+			} else if (typeof characterVar.due == 'undefined') {
+				characterVar.due = characterVar.pregnantT + 280 + random(-7, 7);
+			}
+			return characterVar.due;
+		},
+	},
+	// Gets the number of days that the given character has been pregnant.
+	daysConsideredPregnant: {
+		value(character) {
+			const characterVar = typeof character != 'string' ? character : setup.companion(character);
+			return Math.max(variables().time - characterVar.pregnantT, 0);
+		},
+	},
+	// Gets the number of days until the given character is due to give birth.
+	daysUntilDue: {
+		value(character) {
+			const characterVar = typeof character != 'string' ? character : setup.companion(character);
+			if (!setup.isPregnant(characterVar)) return setup.never;
+			return Math.max(setup.dueDate(characterVar) - variables().time, 0);
+		},
 	},
 });

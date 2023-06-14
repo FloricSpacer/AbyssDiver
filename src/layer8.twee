@@ -919,21 +919,14 @@ You give a wry smile, looking down at your new arms. There's a certain allure to
 [img[setup.ImagePath + $curse108.pic]]
 <<nobr>>
 	<<set $playerCurses.push($curse108)>><<set $corruption += $curse108.corr>><<set $GenderLog.push($curse108)>>
-	<<if $playerCurses.some(e => e.name === "Double Pepperoni")>>
-		<<RemoveCurse $curse39.name>>
-		<<set $corruption -= $curse39.corr>>
-		<br>You feel the Double Pepperoni Curse leaving your body.<br>
-	<</if>>
-	<<if $playerCurses.some(e => e.name === "Softie")>>
-		<<RemoveCurse $curse51.name>>
-		<<set $corruption -= $curse51.corr>>
-		<br>You feel the Softie Curse leaving your body.<br>
-	<</if>>
-	<<if $playerCurses.some(e => e.name === "Hard Mode")>>
-		<<RemoveCurse $curse52.name>>
-		<<set $corruption -= $curse52.corr>>
-		<br>You feel the Hard Mode Curse leaving your body.<br>
-	<</if>>
+	<<for _curseName range setup.cursesNegatedByNull>>
+		<<set _curse = setup.curse(_curseName)>>
+		<<if $playerCurses.some(e => e.name == _curseName)>>
+			<<RemoveCurse _curseName>>
+			<<set $corruption -= _curse.corr>>
+			<br>You feel the _curseName Curse leaving your body.<br>
+		<</if>>
+	<</for>>
 <</nobr>>\
 
 A soft hum resonates in your ear, growing louder and more persistent. You can't discern its source, but it wraps itself around your senses, penetrating deep within you, leaving you with an uneasy anticipation. Your heart pounds in sync with this uncanny rhythm, and you realize - it's the pulsating heartbeat of the Abyss.
@@ -1019,7 +1012,7 @@ What biological sex do you want your twin to be?
 <<radiobutton "$curse111.variation2"  "same" >> Give me a perfectly identical twin!
 
 :: Take on Double Trouble 2 [;ayer 8]
-<<set $playerCurses.push($curse111)>><<set $corruption += $curse111.corr>><<set $TwinVar1=random(0,1)>><<set $Twin_LastT=$time>>\
+<<set $playerCurses.push($curse111)>><<set $corruption += $curse111.corr>><<set $TwinVar1=random(0,1)>><<set $Twin_LastT = $time>>\
 [img[setup.ImagePath + $curse111.pic]]
 <<CloneSelf>><<CarryAdjust>>
 You feel dizzy and tumble forward. You manage to catch yourself before you hit the ground, but your backpack and all your equipment falls on the ground. As the dizzyness increases, the world goes black. 
