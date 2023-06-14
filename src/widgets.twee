@@ -303,15 +303,23 @@
 					/* Curse may be taken multiple times, so check the index to get the right variation. */
 					<<set _eventVariation = _event[`variation${_wombEvents.indexOf(_event) + 1}`]>>
 					<<if !_handle.womb1>>
-						<<if _eventVariation != 'vagina' || _handle.vagina > 0>>
+						<<if _handle.sex == 'doll-like'>>
+							<<set _handle.womb1 = ['vagina', 'urethra'].includes(_eventVariation) ? 'anus' : _eventVariation>>
+						<<elseif _handle.vagina < 1>>
+							<<set _handle.womb1 = _eventVariation == 'vagina' ? 'anus' : _eventVariation>>
+						<<else>>
 							<<set _handle.womb1 = _eventVariation>>
-							<<set _handle.womb += 1>>
 						<</if>>
+						<<set _handle.womb += 1>>
 					<<elseif !_handle.womb2>>
-						<<if _eventVariation != 'vagina' || _handle.vagina > 0>>
+						<<if _handle.sex == 'doll-like'>>
+							<<set _handle.womb2 = ['vagina', 'urethra'].includes(_eventVariation) ? 'anus' : _eventVariation>>
+						<<elseif _handle.vagina < 1>>
+							<<set _handle.womb2 = _eventVariation == 'vagina' ? 'anus' : _eventVariation>>
+						<<else>>
 							<<set _handle.womb2 = _eventVariation>>
-							<<set _handle.womb += 1>>
 						<</if>>
+						<<set _handle.womb += 1>>
 					<</if>>
 				<<case '1 Day Water Forage Major Impact'>>
 					<<if _handle.penis > 0>><<set _handle.penis += 1>><</if>>
@@ -323,25 +331,23 @@
 					<<elseif _handle.penis > 0>>
 						<<set _handle.penis -= 1>>
 						<<if _handle.penis < 1>>
-							<<set _handle.sex = _handle.vagina > 0 ? 'female' : 'doll-like'>>
+							<<if _handle.vagina < 1>>
+								<<if _handle.womb1 == 'urethra'>><<set _handle.womb1 = 'anus'>><</if>>
+								<<if _handle.womb2 == 'urethra'>><<set _handle.womb2 = 'anus'>><</if>>
+								<<set _handle.sex = 'doll-like'>>
+							<<else>>
+								<<set _handle.sex = 'female'>>
+							<</if>>
 						<</if>>
 					<<elseif _handle.vagina > 0>>
 						<<if _handle.appAge < 10>>
 							<<set _handle.vagina -= 1>>
 							<<set _handle.womb -= 1>>
 							<<if _handle.vagina < 1>>
-								<<if _handle.womb2 == 'vagina'>>
-									<<set _handle.womb2 = ''>>
-									<<set _handle.womb -= 1>>
-								<</if>>
-								<<if _handle.womb1 == 'vagina'>>
-									<<set _handle.womb1 = _handle.womb2>>
-									<<set _handle.womb2 = ''>>
-									<<set _handle.womb -= 1>>
-								<</if>>
+								<<if ['vagina', 'urethra'].includes(_handle.womb1)>><<set _handle.womb1 = 'anus'>><</if>>
+								<<if ['vagina', 'urethra'].includes(_handle.womb2)>><<set _handle.womb2 = 'anus'>><</if>>
 								<<set _handle.sex = 'doll-like'>>
 							<</if>>
-							<<set _handle.sex = _handle.vagina > 0 ? 'female' : 'doll-like'>>
 						<</if>>
 					<</if>>
 			<</switch>>
