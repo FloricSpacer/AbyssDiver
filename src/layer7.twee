@@ -470,46 +470,6 @@ You have successfully taken the $relic84.name Relic. Hopefully you can make good
 <</if>>
 
 
-:: Layer7Time
-<<nobr>>
-<<set $tempTime = (Math.max((1+$SizeHandicap)*($tempTime - $timeRed + $status.penalty + (Math.trunc($hexflame / 10))), 0))>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
-<</if>>
-<<set $timeL7 += $tempTime>>
-<<if $dubloons < 500>>
-	<<set $timeL7T2 += $tempTime>>
-<</if>>
-<<set $time += $tempTime>>
-<<if $dubloons >= 300>>
-	<<set $dubloons -= 1>>
-	<<elseif $dubloons >= 100>>
-	<<set $dubloons -= 2>>
-	<<else>>
-	<<set $dubloons -= 3>>
-<</if>>
-<<if $forageFood == 1>>
-	<<else>>
-	<<set $items[1].count -= $tempTime>>
-<</if>>
-<<for $i = 0; $i < $tempTime; $i++>>
-	<<if $forageWater == 0>>
-		<<if $items[3].count > 0>>
-			<<set $items[3].count -= 1, 0>>
-			<<set $items[2].count += 1, 0>>
-		<<else>>
-			<<set $items[0].count -= 1>>
-		<</if>>
-	<</if>>
-	<<if $hexflame > 9>>
-		<<set $hexflame -= 1>>
-	<</if>>
-<</for>>
-<</nobr>>
-
-
 :: Layer7 Forge1 [layer7]
 <<nobr>>
 <<set $temp1 = -1>>
@@ -879,7 +839,7 @@ Dubloons:
 
 
 :: Take on Asset Robustness E [layer7]
-<<set $playerCurses.push($curse87)>><<set $corruption += $curse87.corr>><<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><</if>>\
+<<set $playerCurses.push($curse87)>><<set $corruption += $curse87.corr>><<set $GenderLog.push($curse87)>>\
 [img[setup.ImagePath + $curse87.pic]]
 
 <<GenderCorrected>><<if $app.penisCor>0 && $app.breastsCor==0 >>
@@ -1218,7 +1178,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 	<<set $GenderLog.push($curse86)>>
 <</if>>
 <<if $curses[$temp1].name == "Asset Robustness E" || $curses[$temp2].name == "Asset Robustness E" >>
-	<<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><</if>>
+	<<set $GenderLog.push($curse87)>>
 <</if>>
 <<if $curses[$temp1].name == "Weakling" || $curses[$temp2].name == "Weakling">>
 	<<set $playerCurses.push($curse91)>>
@@ -1237,21 +1197,9 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 
 	<<link "Reroll with Devil's Own" "Layer7 Cherry Curse">>
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp1].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp1]>>
 		
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp2].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 
 		<<set setup.loseRelic("Devil's Own")>>
@@ -1289,7 +1237,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 	<<set $GenderLog.push($curse86)>>
 <</if>>
 <<if $curses[$temp2].name == "Asset Robustness E">>
-	<<set $GenderLog.push($curse87)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact E")>><</if>>
+	<<set $GenderLog.push($curse87)>>
 <</if>>
 <<if $curses[$temp2].name == "Weakling">>
 	<<set $playerCurses.push($curse91)>>
@@ -1311,12 +1259,6 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp2].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>

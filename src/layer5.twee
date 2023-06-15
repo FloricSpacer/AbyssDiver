@@ -134,8 +134,8 @@ How would you like to use Cherry's chaotic luck ability?
 	As the aphrodisiacs permeate the air, a primal urge seizes you, igniting an intense heat deep within. Overwhelmed by a desire more powerful than anything you've ever experienced, your senses are heightened and your body craves satisfaction. Intoxicated by this tidal wave of passion, your thoughts blur, and your memories of the day meld together into a tapestry of sensual encounters.<br><br>
 	<<if _selection == "Oral Dom">>
 	At one point, you recall _handle.name's <<if _handle.sex=="male">>his<<else>>her<</if>> lips <<if $app.penisCor > 2 && $app.vagina == 0>>encircling your throbbing cock, the moist warmth enveloping you entirely. It wasn't long before you released your pent-up desires, filling _handle.name's throat with your essence.<<elseif $app.penisCor <= 2 && $app.vagina > 0>>pressed firmly against your quivering pussy, their tongue working relentlessly, driving you to an earth-shattering climax that left you weak in the knees.<<else>>wrapped tightly around your cock, then shifting lower to lavish attention on your pulsating pussy. You lost count of your orgasms, but one particularly intense wave left _handle.name eagerly swallowing your release.<</if>>
-	<<if _handle.pregnantT == 9999 && $app.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && $app.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Oral Sub">>
 	At one point, you remember your lips <<if _handle.penisCor > 2 && _handle.vagina == 0>>wrapped around _handle.name's throbbing cock, taking it deep into your throat as the salty tip occasionally rewarded your efforts with a burst of flavor.<<elseif _handle.penisCor <= 2 && _handle.vagina > 0>>pressed against _handle.name's slick pussy, your tongue exploring <<if _handle.sex=="male">>his<<else>>her<</if>> warm folds with fervor.<<else>>wrapped around _handle.name's cock, swallowing it to the hilt before switching to lavish attention on <<if _handle.sex=="male">>his<<else>>her<</if>> dripping pussy.<</if>>
@@ -152,11 +152,11 @@ How would you like to use Cherry's chaotic luck ability?
 	<</if>>
 	<<elseif _selection == "DP Dom">>
 	Some memories flicker more clearly than others, but you're certain that at one point both your penises were simultaneously filling _handle.name's eager holes. The unique sensation of two cocks being stimulated at the same time was exhilarating, and the shared orgasm that followed was a transcendent experience unlike any other.
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<if (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Anal Sub">>
 	Your memory is filled with the sultry sound of your own moans, as _handle.name's throbbing penis penetrated your tight, quivering ass. You can't quite remember the exact duration of the relentless pounding, but the aftermath left you breathless and drooling, utterly sated.
@@ -165,8 +165,8 @@ How would you like to use Cherry's chaotic luck ability?
 	<</if>>
 	<<elseif _selection == "Anal Dom">>
 	The vivid recollection of _handle.name's desperate moans rings in your ears, as your rock-hard dick relentlessly pounded <<if _handle.sex=="male">>his<<else>>her<</if>> inviting ass. The memory of how long you dominated _handle.name's behind is hazy, but one thing is clear: <<if _handle.sex=="male">>he<<else>>she<</if>> was left a panting, drooling mess in the aftermath.
-	<<if _handle.pregnantT == 9999 && (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Sub">>
 	Your memories are filled with the warmth and comfort of being embraced by _handle.name. The tender cuddling gradually evolved into passionate kisses and caresses until <<if _handle.sex=="male">>he<<else>>she<</if>> was lying naked on top of you. Your ecstatic screams filled the air as <<if _handle.sex=="male">>he<<else>>she<</if>> filled you with their essence, your legs locked around their waist, trapping them in your loving embrace.
@@ -175,13 +175,13 @@ How would you like to use Cherry's chaotic luck ability?
 	<</if>>
 	<<elseif _selection == "Regular Dom">>
 	The memory of gently cuddling _handle.name soon turned into a passionate session of intimate hugs and feverish kisses. Before long, <<if _handle.sex=="male">>he<<else>>she<</if>> was naked beneath you, trembling with anticipation. As you penetrated <<if _handle.sex=="male">>him<<else>>her<</if>>, _handle.name's cries of ecstasy filled the room, their legs locked around your waist, while you released your passion deep inside of <<if _handle.sex=="male">>him<<else>>her<</if>>.
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Alt Sub">>
 	You recall the moment when _handle.name tenderly took your hand and guided you down to lie beside <<if _handle.sex=="male">>him<<else>>her<</if>>. As your lips met in a passionate embrace, <<if _handle.sex=="male">>he<<else>>she<</if>> eagerly undressed you. Your arousal was evident as both of you became naked, and _handle.name couldn't help but notice. <<if _handle.sex=="male">>He<<else>>She<</if>> climbed on top of you, sensually riding you until you both reached shuddering, toe-curling climaxes.
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>	
 	<<elseif _selection == "Regular Alt Dom">>
 	You remember taking _handle.name's hand and drawing <<if _handle.sex=="male">>him<<else>>her<</if>> close to lie beside you. As your lips collided in fervent kisses, you eagerly undressed <<if _handle.sex=="male">>him<<else>>her<</if>>. _handle.name was visibly aroused by the time you were both naked, a fact you delighted in. You straddled _handle.name and rode <<if _handle.sex=="male">>him<<else>>her<</if>> passionately, the intensity building until you both succumbed to electrifying, toe-curling orgasms.
@@ -190,8 +190,8 @@ How would you like to use Cherry's chaotic luck ability?
 	<</if>>
 	<<elseif _selection == "Boobjob Dom">>
 	You remember accidentally brushing against _handle.name's breast, which surprisingly elicited a flirtatious giggle. Within moments, <<if _handle.sex=="male">>his<<else>>her<</if>> breasts were exposed and you were caressing them with fervor. Unable to control yourself any longer, you pushed <<if _handle.sex=="male">>him<<else>>her<</if>> down and unveiled your throbbing arousal. Then, you reveled in the sensation of _handle.name enveloping your shaft with <<if _handle.sex=="male">>his<<else>>her<</if>> ample cleavage, working it expertly until you reached a climactic release, showering <<if _handle.sex=="male">>him<<else>>her<</if>> with your essence.
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Boobjob Sub">>
 	You remember _handle.name accidentally brushing against your breast, evoking a wicked giggle that you couldn't suppress. Soon, your breasts were bared, and <<if _handle.sex=="male">>he<<else>>she<</if>> was eagerly fondling them. Unable to contain <<if _handle.sex=="male">>himself<<else>>herself<</if>> any longer, _handle.name pushed you down and revealed <<if _handle.sex=="male">>his<<else>>her<</if>> throbbing arousal. Then, you felt _handle.name nestle <<if _handle.sex=="male">>his<<else>>her<</if>> shaft between your enticing cleavage, and you eagerly worked it with equal enthusiasm. The pleasure built until <<if _handle.sex=="male">>he<<else>>she<</if>> reached a powerful climax, drenching you in <<if _handle.sex=="male">>his<<else>>her<</if>> hot, sticky release.
@@ -204,8 +204,8 @@ How would you like to use Cherry's chaotic luck ability?
 		<<set $pregChance /= 10>>
 		<<PregCheck>>
 	<</if>>
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Self">>
 	<<if $app.sex=="doll-like">>
@@ -1276,21 +1276,9 @@ Please enter your new exoskeleton color:
 
 	<<link "Reroll with Devil's Own" "Layer5 Cherry Curse">>
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp1].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp1]>>
 		
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp2].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 
 		<<set setup.loseRelic("Devil's Own")>>
@@ -1367,12 +1355,6 @@ Please enter your new exoskeleton color:
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
 		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<if $curses[$temp2].type == "Gender" >>
-			<<set _temp = $GenderLog.length>>
-			<<if $GenderLog[_temp-1] == "Interact A" || $GenderLog[_temp-1] == "Interact B" || $GenderLog[_temp-1] == "Interact C" || $GenderLog[_temp-1] == "Interact D" || $GenderLog[_temp-1] == "Interact E" || $GenderLog[_temp-1] == "Interact F" || $GenderLog[_temp-1] == "Interact G">>
-				<<set $GenderLog.deleteAt(_temp-1)>>
-			<</if>>
-		<</if>>
 		<<RemoveCurse $curses[$temp2]>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
