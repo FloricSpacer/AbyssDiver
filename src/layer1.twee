@@ -409,9 +409,6 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name
 <</if>>
 <<if _temp1==2 || _temp2==2>>
 	<<set $GenderLog.push($curse3)>>
-	<<if $app.sex=="male" && $app.breastsCor>0 >>
-		<<set $GenderLog.push("Interact A")>>
-	<</if>>
 <</if>>
 <<if _temp1==4 || _temp2==4>>
 	<<set $GenderLog.push($curse5)>>
@@ -422,10 +419,10 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name
 <</if>>
 <<if _temp1==9 || _temp2==9>>
 	<<set $dizzyCount +=1>>
-	<<if $HeightIncrease == 0>>
-		<br>Would you like to increase or descrease your height?<br>
-		<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
-		<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+	<<if !$HeightIncrease>>
+		<br>Would you like to increase or decrease your height?<br>
+		<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
+		<<radiobutton "$HeightIncrease" 1 >> Increase<br>
 	<<elseif $HeightIncrease == 1>>
 		You feel yourself growing even more.<br>
 	<<else>>
@@ -461,15 +458,15 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 <<elseif $temp2==1>>
 	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==2>>
-	<<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>[[Continue on to the rest of the layer|Layer1 Hub]]
+	<<set $GenderLog.push($curse3)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==4>>
 	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
 <<elseif $temp2==9>>
 	<<set $dizzyCount +=1>>
-	<<if $HeightIncrease == 0>>
-		Would you like to increase or descrease your height?<br>
-		<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
-		<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+	<<if !$HeightIncrease>>
+		Would you like to increase or decrease your height?<br>
+		<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
+		<<radiobutton "$HeightIncrease" 1 >> Increase<br>
 	<<elseif $HeightIncrease == 1>>
 		You feel yourself growing even more.<br>
 	<<else>>
@@ -765,7 +762,7 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 
 
 :: Take on Asset Robustness A [layer1]
-<<set $playerCurses.push($curse3)>><<set $corruption += $curse3.corr>><<set $GenderLog.push($curse3)>><<if $app.sex=="male" && $app.breastsCor>0 >><<set $GenderLog.push("Interact A")>><</if>>\
+<<set $playerCurses.push($curse3)>><<set $corruption += $curse3.corr>><<set $GenderLog.push($curse3)>>\
 [img[setup.ImagePath + $curse3.pic]]
 <<GenderCorrected>>\
 <<if $app.penisCor>0 && $app.breastsCor==0 >>
@@ -906,10 +903,10 @@ It seems that you now look like either an elf out of a storybook or someone who 
 [img[setup.ImagePath + $curse10.pic]]
 
 <<nobr>>
-<<if $HeightIncrease == 0>>
-	Would you like to increase or descrease your height?<br>
-	<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
-	<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+<<if !$HeightIncrease>>
+	Would you like to increase or decrease your height?<br>
+	<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
+	<<radiobutton "$HeightIncrease" 1 >> Increase<br>
 <<elseif $HeightIncrease == 1>>
 	In the first moments after the Curse sets in, you hardly notice anything amiss. However, a growing discomfort seizes your body, leaving you feeling sore and aching. You sit down, trying to alleviate the pain as dizziness overwhelms you. The sensation feels familiar, reminiscent of something from long ago... growing pains.<br><br>
 

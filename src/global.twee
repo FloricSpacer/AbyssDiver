@@ -546,13 +546,13 @@ Your body appears rather out of shape, and you could certainly benefit from some
 <</if>>
 <<if $AegisWear>>Although imperceptible to an outside observer, your natural skeleton has been seamlessly replaced with a lightweight and resilient orichalcum framework.<br><br><</if>>
 
-<<if $time - $app.pregnantT < 180 && $time - $app.pregnantT >= 120 && $menFirstCycle == false>>
+<<if 120 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 180 && !$menFirstCycle>>
 	Your pregnancy is now visibly noticeable, with your belly round and growing. You occasionally feel a gentle flutter within, a reminder of the life blossoming inside you.<br><br>
-<<elseif $time - $app.pregnantT < 180 && $time - $app.pregnantT >= 120 && $menFirstCycle == true>>
+<<elseif 120 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 180 && $menFirstCycle>>
 	You've gained some weight, and your belly has become rounder. Every so often, you experience ticklish spasms from within, possibly a sign of your baby's movements.<br><br>
-<<elseif $time - $app.pregnantT < 240 && $time - $app.pregnantT >= 180 && $menFirstCycle == false>>
+<<elseif 180 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 240>>
 	Your belly is now large and unmistakably that of a pregnant person. Your child's movements within your womb are frequent, and at times, the intensity of the sensations surprises you.<br><br>
-<<elseif $time - $app.pregnantT < $due && $time - $app.pregnantT >= 240>>
+<<elseif setup.daysConsideredPregnant($app) >= 240 && setup.daysUntilDue($app) > 0>>
 	Your belly is sizable and clearly pregnant. Your child often tries to move and kick within your womb, but space is becoming limited. The sensations can be quite intense, but you sense that your pregnancy is nearing its end.<br><br>
 <</if>>
 
@@ -874,8 +874,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 :: Labor Scene
 <<set _string = "Layer" + $currentLayer + " Hub">>\
-<<set $due = 9999>>\
-<<set $app.pregnantT = 9999>>\
+<<set setup.setNotPregnant($app)>>\
 <<set $menCycleFlag = true>>\
 <<set $menCycleT = $time+63>>\
 <<set $BabysBirthed += 1>>\
@@ -997,7 +996,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 <<set _temp1 = _i>>
 <</if>>
 <</for>>
-<<set $hiredCompanions[_temp1].pregnantT =9999>>
+<<set setup.setNotPregnant($hiredCompanions[_temp1])>>
 <</nobr>>
 As you walk together, $companionLabor begins to lag slightly behind. Suddenly, you hear a soft moan. Turning around, you find $companionLabor hunched over, her face twisted in pain.
 
@@ -1523,8 +1522,8 @@ If you are over 18, please go back and enter an age above 18 to continue.
 					<<elseif _curse.name == "Dizzying Heights" && !$HeightIncrease>>
 						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within.<br>
 						You see your own reflection alternating between growing and shrinking. After a while you see the Curse has settle on a height...<br>
-						<<radiobutton "$HeightIncrease " -1 checked>> Decrease<br>
-						<<radiobutton "$HeightIncrease " 1 >> Increase<br>
+						<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
+						<<radiobutton "$HeightIncrease" 1 >> Increase<br>
 					<<elseif _curse.name == "Hemospectrum" && !$curse70.variation>>
 						What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?<br>
 						<<radiobutton "$curse70.variation" "blue" checked>> Blue<br>
@@ -2005,11 +2004,11 @@ How many dubloons would you like to pay back?
 	<<if $WettingSolution == 0>>
 		<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
 			<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-				<<set _random = random(1, Math.pow(3, _state.weightedDayIndex))>>
-				<<set _threshold = Math.pow(3, _state.weightedDayIndex) - Math.pow(2, _state.weightedDayIndex)>>
+				<<set _random = random(1, 3**_state.weightedDayIndex)>>
+				<<set _threshold = 3**_state.weightedDayIndex - 2**_state.weightedDayIndex>>
 			<<else>>
-				<<set _random = random(1, Math.pow(15, _state.weightedDayIndex))>>
-				<<set _threshold = Math.pow(15, _state.weightedDayIndex) - Math.pow(14, _state.weightedDayIndex)>>
+				<<set _random = random(1, 15**_state.weightedDayIndex)>>
+				<<set _threshold = 15**_state.weightedDayIndex - 14**_state.weightedDayIndex>>
 			<</if>>
 			<<if _random <= _threshold>>
 				<<include "Wetting Events">>
@@ -2861,8 +2860,8 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 	<br><br>
 	<<if _selection == "Oral Dom">>
 	<<include "Hijinks Oral Dom">>
-	<<if _handle.pregnantT == 9999 && $app.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && $app.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Oral Sub">>
 	<<include "Hijinks Oral Sub">>
@@ -2879,11 +2878,11 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 	<</if>>
 	<<elseif _selection == "DP Dom">>
 
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<if (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Anal Sub">>
 
@@ -2892,8 +2891,8 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 	<</if>>
 	<<elseif _selection == "Anal Dom">>
 
-	<<if _handle.pregnantT == 9999 && (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Sub">>
 
@@ -2902,13 +2901,13 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 	<</if>>
 	<<elseif _selection == "Regular Dom">>
 
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Alt Sub">>
 
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>	
 	<<elseif _selection == "Regular Alt Dom">>
 
@@ -2917,8 +2916,8 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 	<</if>>
 	<<elseif _selection == "Boobjob Dom">>
 
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Boobjob Sub">>
 
@@ -2931,8 +2930,8 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 		<<set $pregChance /= 10>>
 		<<PregCheck>>
 	<</if>>
-	<<if _handle.pregnantT == 9999 && _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
-		<<set _handle.pregnantT = $time-14>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$app.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>*/
 	<</if>>
 <</if>>
