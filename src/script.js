@@ -1,3 +1,10 @@
+Object.defineProperties(Number.prototype, {
+	// Rounds the number to the given number of decimals.
+	toRounded: {
+		value(decimals) { return Math.round(10**decimals * this) / 10**decimals; },
+	}
+});
+
 Config.navigation.override = function (destPassage) {
 	var StoryVar = State.variables;
 	if (StoryVar.brokerUsed == 1 && StoryVar.corruption < 0) {
@@ -341,6 +348,22 @@ const moveFirstRelic = (from, to, relicOrNameOrIndex) => moveRelic('findIndex', 
 const moveLastRelic = (from, to, relicOrNameOrIndex) => moveRelic('findLastIndex', from, to, relicOrNameOrIndex);
 
 Object.defineProperties(setup, {
+	setup: {
+		value: 999999999, // Just needs to be an unreasonably large number so that $time can never exceed it.
+	},
+	flaskLabels: {
+		value: [
+			'Flask with normal water',
+			'Flask with heavily contaminated water from the first layer',
+			'Flask with heavily contaminated water from the second layer',
+			'Flask with heavily contaminated water from the fourth layer',
+			'Flask with heavily contaminated water from the sixth layer',
+			'Flask with lightly contaminated water from the eighth layer',
+			'Flask with heavily contaminated water from the eighth layer',
+			'Flask with heavily contaminated water from the ninth layer',
+			'Bottled water',
+		],
+	},
 	// Get curse by name.
 	curse: {
 		value: name => findByName('curses', name),
@@ -365,11 +388,11 @@ Object.defineProperties(setup, {
 	relics: {
 		value: names => findByName('relics', names),
 	},
-	// Get companion by name (note: internal name, like "Twin").
+	// Get companion by name (note: internal name, like 'Twin').
 	companion: {
 		value: name => variables()[`companion${name}`],
 	},
-	// Get companions by name (note: internal name, like "Twin").
+	// Get companions by name (note: internal name, like 'Twin').
 	companions: {
 		value: names => names.map(setup.companion),
 	},
@@ -497,9 +520,6 @@ Object.defineProperties(setup, {
 	// Stops passing time for the active passage (called by <<PassTime>>).
 	stopPassingTime: {
 		value: () => variables().passTimeState?.delete(passage()),
-	},
-	never: {
-		value: 999999999, // Just needs to be an unreasonably large number so that $time can never exceed it.
 	},
 	// Checks whether the given character is pregnant.
 	isPregnant: {

@@ -651,59 +651,69 @@ Notes on layers visited:<br>
 <<back>>
 
 :: Adjust dubloons [noreturn]
-<<set $temp = 0>>How many dubloons would you like to add? (Use a negative number to subtract)
+How many dubloons would you like to add? (Use a negative number to subtract)
 
-<<textbox "$temp" "">>
+<<textbox '_input' ''>>
 
-[[Confirm|Adjustments][$dubloons += (parseInt($temp))]]
+<<link 'Confirm' 'Adjustments'>>
+	<<set _parsed = parseInt(_input, 10) || 0>>
+	<<set $dubloons += _parsed>>
+<</link>>
 <<back>>
 
 
 :: Adjust corruption [noreturn]
-<<set $temp = 0>>How many corruption points would you like to add? (Use a negative number to subtract)
+How many corruption points would you like to add? (Use a negative number to subtract)
 
-<<textbox "$temp" "">>
+<<textbox '_input' ''>>
 
-[[Confirm|Adjustments][$corruption += (parseInt($temp))]]
+<<link 'Confirm' 'Adjustments'>>
+	<<set _parsed = parseInt(_input, 10) || 0>>
+	<<set $corruption += _parsed>>
+<</link>>
 <<back>>
 
 
 :: Adjust time [noreturn]
-<<set $temp = 0>>How many days would you like to add? (Use a negative number to subtract)
+How many days would you like to add? (Use a negative number to subtract)
 
 This will not consume food, water, or any other resources, but it will affect timers such as pregnancy time.
 
-<<textbox "$temp" "">>
+<<textbox '_input' ''>>
 
-[[Confirm|Adjust time2]]
+<<link 'Confirm' 'Adjustments'>>
+	<<set _parsed = parseInt(_input, 10) || 0>>
+	<<set _parsed = Math.max(_parsed, -$time)>>
+	<<set $time += _parsed>>
+<</link>>
 <<back>>
 
-:: Adjust time2 [noreturn]
-<<nobr>>
-<<set _tempTime = parseInt($temp)>>
-/*<<PassTime _tempTime>>*/
-<<set $time += _tempTime>>
-<</nobr>>
-
-You have adjusted the day counter by $temp days.
-
-[[Confirm|Adjustments]]
 
 :: Adjust water [noreturn]
-<<set $temp = 0>>How many water rations would you like to add? (Use a negative number to subtract)
+How many water rations would you like to add? (Use a negative number to subtract)
 
-<<textbox "$temp" "">>
+<<textbox '_input' ''>>
 
-[[Confirm|Adjustments][$items[0].count += (parseInt($temp))]]
+<<link 'Confirm' 'Adjustments'>>
+	<<set _parsed = parseInt(_input, 10) || 0>>
+	<<set _bottledIndex = setup.flaskLabels.indexOf('Bottled water')>>
+	<<set _parsed = Math.max(_parsed, -$flaskMatrix[_bottledIndex])>>
+	<<set setup.item('Water').count += _parsed>>
+	<<set $flaskMatrix[_bottledIndex] += _parsed>>
+<</link>>
 <<back>>
 
 
 :: Adjust food [noreturn]
-<<set $temp = 0>>How many food rations would you like to add? (Use a negative number to subtract)
+How many food rations would you like to add? (Use a negative number to subtract)
 
-<<textbox "$temp" "">>
+<<textbox '_input' ''>>
 
-[[Confirm|Adjustments][$items[1].count += (parseInt($temp))]]
+<<link 'Confirm' 'Adjustments'>>
+	<<set _parsed = parseInt(_input, 10) || 0>>
+	<<set _parsed = Math.max(_parsed, -setup.item('Food Rations').count)>>
+	<<set setup.item('Food Rations').count += _parsed>>
+<</link>>
 <<back>>
 
 
@@ -750,9 +760,9 @@ Choose the Relic you would like to sell:<br>
 			<<case "World Stone">>
 				<<if $LilyPromise>>
 					[[_linkText|Balloon Sell1][setup.sellRelic(_relic), setup.modAffection('Lily', -5)]]
-					You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely dissapoint her greatly.
+					You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely disappoint her greatly.
 				<<else>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]<br>
+					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
 				<</if>>
 			<<case "Everhevea">>
 				<<if setup.item('Empty Flask').count >= 2>>
@@ -976,7 +986,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 	<<PassTime 7>>\
 <<elseif $hiredCompanions.length==1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. $hiredCompanions[0].name helps you a lot and after a few days you start walking around a little bit again.
-	It takes 7 days until you feel fit enough to begin your journey once again.
+	It takes 4 days until you feel fit enough to begin your journey once again.
 	<<if $hiredCompanions[0].name == "Cherry">>
 		Cherry has taken great care of you and ensured you were able to properly recover from the ordeal, so you have no movement penalty after the initial recovery period.
 	<<else>>
@@ -987,7 +997,7 @@ It emits of a brigth flash of light that forces you to close your eyes, and you 
 	<<PassTime 4>>\
 <<elseif $hiredCompanions.length>1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. Your companions help you a lot and after a few days you start walking around a little bit again.
-	It takes 7 days until you feel fit enough to begin your journey once again.
+	It takes 4 days until you feel fit enough to begin your journey once again.
 	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
 		Cherry has taken great care of you and ensured you were able to properly recover from the ordeal, so you have no movement penalty after the initial recovery period.
 	<<else>>
@@ -2406,35 +2416,36 @@ How many dubloons would you like to pay back?
 :: Drinking code [nobr]
 <<FlaskFirst>>
 <<if $items[3].count >= _consumptionPerDay || $items[0].count >= _consumptionPerDay>>
-	<<if $items[3].count < _consumptionPerDay || $flaskMatrixLabel[$flaskPref] == "Bottled water">>	
+	<<if $items[3].count < _consumptionPerDay || setup.flaskLabels[$flaskPref] == 'Bottled water'>>	
 		<<set $items[0].count -= _consumptionPerDay>>
 	<<else>>
 		<<set $items[3].count -= _consumptionPerDay>>
 		<<set $items[2].count += _consumptionPerDay>>
 		<<set $flaskMatrix[$flaskPref] -= _consumptionPerDay>>
 
-		<<if $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the first layer">>
-			<<set $waterL1 += 1>>
-			<<set $GenderLog.push($ForageWaterMajor)>> /* Cloudpools without knowledge */
-		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the second layer">>
-			<<set $waterL2 += 1>>
-			<<set $bewitchBabies += 1>>
-		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the fourth layer">>
-			<<set $waterL4 += 1>>
-			<<set $algalSize += 1>>
-		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the sixth layer">>
-			<<set $waterL6 += 1>>
-			<<set $hexflame += 1>>
-		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with lightly contaiminated water from the eighth layer">>
-			<<set $waterL8 += 1>>
-			<<set $IQdrop += 0.05>>
-		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the eighth layer">>
-			<<set $waterL8 += 1>>
-			<<set $IQdrop += 0.5>>
-		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the ninth layer">>
-			<<set $waterL9 += 1>>
-			<<set $corruption -= 1>>
-		<</if>>
+		<<switch setup.flaskLabels[$flaskPref]>>
+			<<case 'Flask with heavily contaminated water from the first layer'>>
+				<<set $waterL1 += 1>>
+				<<set $GenderLog.push($ForageWaterMajor)>> /* Cloudpools without knowledge */
+			<<case 'Flask with heavily contaminated water from the second layer'>>
+				<<set $waterL2 += 1>>
+				<<set $bewitchBabies += 1>>
+			<<case 'Flask with heavily contaminated water from the fourth layer'>>
+				<<set $waterL4 += 1>>
+				<<set $algalSize += 1>>
+			<<case 'Flask with heavily contaminated water from the sixth layer'>>
+				<<set $waterL6 += 1>>
+				<<set $hexflame += 1>>
+			<<case 'Flask with lightly contaminated water from the eighth layer'>>
+				<<set $waterL8 += 1>>
+				<<set $IQdrop += 0.05>>
+			<<case 'Flask with heavily contaminated water from the eighth layer'>>
+				<<set $waterL8 += 1>>
+				<<set $IQdrop += 0.5>>
+			<<case 'Flask with heavily contaminated water from the ninth layer'>>
+				<<set $waterL9 += 1>>
+				<<set $corruption -= 1>>
+		<</switch>>
 	<</if>>
 <<elseif $items[25].count >= _consumptionPerDay>>
 	<<set $items[25].count -= _consumptionPerDay>>
@@ -2448,7 +2459,7 @@ How many dubloons would you like to pay back?
 :: Water drop code[nobr]
 <<FlaskFirst>>
 <<if $items[3].count > 0 || $items[0].count > 0>>
-	<<if $flaskMatrixLabel[$flaskPref]=="Bottled water" || $items[3].count <= 0>>	
+	<<if setup.flaskLabels[$flaskPref]=="Bottled water" || $items[3].count <= 0>>	
 		<<set $items[0].count -= 1 >>
 	<<else>>
 		<<set $items[3].count -= 1  >>
@@ -2464,7 +2475,7 @@ How many dubloons would you like to pay back?
 Here you can organize your drinking water to choose what you will drink first.<br><br>
 
 You will first drink:<br>
-$flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
+<<print setup.flaskLabels[$flaskPref]>> ($flaskMatrix[$flaskPref] remaining)
 
 <<if $flaskMatrixOrderAvailable.length>1 >>
 	<<for _i=0; _i<$flaskMatrixOrderAvailable.length; _i++ >>
@@ -2476,7 +2487,7 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 			<br><br>Afterwards the order in which you will drink your drinking rations will be:
 		<</if>>
 		<<if _i>0>>
-		<br>$flaskMatrixLabel[_temp] ($flaskMatrix[_temp] remaining)
+		<br><<print setup.flaskLabels[_temp]>> ($flaskMatrix[_temp] remaining)
 		<</if>>
 		<<if $switchFlask==false>>
 			<<capture _i>>
@@ -3014,139 +3025,141 @@ Which gender will the soul you summon to inhabit the golem possess?<br>
 	<<createGolem>>
 <</link>>	
 
-:: Drop Items Menu[noreturn]
-<<nobr>>
+:: Drop Items Menu [nobr noreturn]
 <<CarryAdjust>>
-<<set $flaskID= -1>>
-
-<<if $DaedalusFly==true>><br>
-	Your personal carrying capacity is only <<print Math.round($carryWeight)>> kg now that you are flying. If you went back to walking, you would be able carry double that amount.
-<<else>><br>
-	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.
-<</if>><br>
-Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
-Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br>
-
-/*<<if >>
-<</if>> message for item redundancy*/
-
+<<set $flaskID = -1>>
+<<if $DaedalusFly>>
+	Your personal carrying capacity is only <<print $carryWeight.toRounded(1)>> kg now that you are flying. If you went back to walking, you would be able carry double that amount.
+<<else>>
+	Your personal carrying capacity is <<print $carryWeight.toRounded(1)>> kg.
+<</if>>
 <br>
-Items:<br>
+Your team has a total carrying capacity of <<print $totalCarry.toRounded(1)>> kg.<br>
+Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<br>
 
-<<for _k = 0; _k < $items.length; _k++>> /*FlaskFirst changes the value of _i so I used _k */
-	<<capture _k>>
-		<<if _k == 3 >> /*filled flask code */
-			<<if $items[_k].count>= 1>>
-				<<FlaskFirst>> 
-				<<for _j=0; _j<$flaskMatrixOrderAvailable.length; _j++ >>
-					<<capture _j>>
-					<<set _temp = $flaskMatrixOrderAvailable[_j]>>
-					<</capture>>
-					
-					<<if $flaskMatrix[_temp]>1 && $flaskMatrixLabel[_temp]!="Bottled water">>
+<br>Items:<br>
+
+<<for _k, _item range $items>>
+	<<capture _k _item>>
+		<<if _item.name == 'Filled Flask'>>
+			<<if _item.count > 0>>
+				<<FlaskFirst>>
+				<<for _temp range $flaskMatrixOrderAvailable>>
+					<<if setup.flaskLabels[_temp] != 'Bottled water'>>
 						<<capture _temp>>
-						<<print "$flaskMatrix[_temp] x $flaskMatrixLabel[_temp] ">><<print Math.round($items[_k].weight*$flaskMatrix[_j] * 100)/100>><<print" kg | [[Empty|Drop Item Count][$temp = _k, $flaskID = _temp]]">> <br>
-						<</capture>>
-					<<elseif $flaskMatrix[_temp]==1 && $flaskMatrixLabel[_temp]!="Bottled water">>
-						<<capture _temp>>
-						<<print "$flaskMatrixLabel[_temp] Math.round($items[_k].weight).toFixed(1) kg | ">>
-						<<link "Empty" "Drop Items Menu">>
-							<<set $items[3].count -= 1>> 
-							<<set $items[2].count += 1>> 
-							<<set $flaskMatrix[_temp] -= 1>> 
-						<</link>>
-						<<print "(net emptying gain = ">><<print Math.round(($items[_k].weight-$items[2].weight) * 100)/100>><<print " kg)">><br>
+							<<if $flaskMatrix[_temp] > 1>>
+								<<print `&nbsp; ${$flaskMatrix[_temp]} × ${setup.flaskLabels[_temp]}`>>
+								<<print `(${(_item.weight * $flaskMatrix[_temp]).toRounded(1)} kg) |`>>
+								[[Empty|Drop Item Count][$temp = _k, $flaskID = _temp]]<br>
+							<<elseif $flaskMatrix[_temp] == 1>>
+								<<print `&nbsp; 1 × ${setup.flaskLabels[_temp]} (${_item.weight.toRounded(1)} kg) |`>>
+								[[Empty|Drop Items Menu][_item.count -= 1, setup.item('Empty Flask').count += 1, $flaskMatrix[_temp] -= 1]]
+								<<print `(net emptying gain = ${(_item.weight - $items[2].weight).toRounded(1)} kg)`>><br>
+							<</if>>
 						<</capture>>
 					<</if>>
 				<</for>>
-			<</if>> 
-		<<elseif $items[_k].count > 1 || $items[_k].count < 0>>
-			<<print "$items[_k].count x [[$items[_k].name|Item Info][$temp = _k]] ">><<print Math.round($items[_k].weight*$items[_k].count * 100)/100>><<print" kg | [[Drop|Drop Item Count][$temp = _k]]">> <br>
-		<<elseif $items[_k].name == "Self-Warming Clothes" && $items[_k].count > 0>>
-			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1, $warmCloth = 0]]">> <br>
-		<<elseif $items[_k].name == "Self-Cooling Clothes" && $items[_k].count > 0>>
-			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1, $coolCloth = 0]]">> <br>
-		<<elseif $items[_k].count == 1>>
-			<<print "[[$items[_k].name|Item Info][$temp = _k]] $items[_k].weight kg | [[Drop|Drop Items Menu][$items[_k].count -= 1]]">> <br> /*need to handle exceptions : slingshot (if it starts existing)*/
+			<</if>>
+		<<elseif _item.name == 'Self-Warming Clothes' && _item.count > 0>>
+			&nbsp; 1 × [[_item.name|Item Info][$temp = _k]] (_item.weight kg) | [[Drop|Drop Items Menu][_item.count -= 1, $warmCloth = 0]]<br>
+		<<elseif _item.name == 'Self-Cooling Clothes' && _item.count > 0>>
+			&nbsp; 1 × [[_item.name|Item Info][$temp = _k]] (_item.weight kg) | [[Drop|Drop Items Menu][_item.count -= 1, $coolCloth = 0]]<br>
+		<<elseif _item.count > 1 || _item.count < 0>>
+			<<print `&nbsp; ${_item.count} ×`>>
+			[[_item.name|Item Info][$temp = _k]]
+			<<print `(${(_item.weight * _item.count).toRounded(1)} kg) |`>>
+			[[Drop|Drop Item Count][$temp = _k]]<br>
+		<<elseif _item.count == 1>>
+			&nbsp; 1 × [[_item.name|Item Info][$temp = _k]] (_item.weight kg) | [[Drop|Drop Items Menu][_item.count -= 1]]<br>
 		<</if>>
 	<</capture>>
 <</for>>
-<br>
-<<if $ownedRelics.length > 0>>
-	Relics:<br> 
-	<<for _i = 0; _i < $ownedRelics.length; _i++>>
-		<<capture _i>>
-			<<if $ownedRelics[_i].name=="Creepy Doll" && $creepydoll.affec > 5>>
-				You can't seem to part ways with the Creepy Doll<br>
-			<<elseif $ownedRelics[_i].name=="Chain of Lorelei">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$colwear=0, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Heart-stealing Stole">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$hsswear=0, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Solace Lace">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$slwear=0, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Sibyl Blend">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$SibylBuff=0, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="World Stone" && $LilyPromise>>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $companionLily.affec -= (5 - $hsswear)]]">>
-				You promised Lily she could use the World Stone, Droping it now will surely dissapoint her greatly.<br>
-			<<elseif $ownedRelics[_i].name=="Everhevea">>
-				<<if $items[2].count >= 2>>
-					<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i), $items[2].count-=2]]">><br>
-				<<else>>
-					You need to empty the Everheavea before dropping it (have at least two empty flasks in your inventory) <br>
-				<</if>>
-			<<elseif $ownedRelics[_i].name=="Daedalus Mechanism">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$DaedalusEquip = false, $DaedalusFly = false, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Blind Divine">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$BDwear = false, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Heavy is the Head">>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$HeavyHeadwear= false, $ownedRelics.deleteAt(_i)]]">><br>
-			<<elseif $ownedRelics[_i].name=="Moonwatcher" && $BionicEye >>
-				<<print $ownedRelics[_i].name>> You can not drop Relics that have become part of your body.<br>
-			<<elseif $ownedRelics[_i].name=="Glory's Grasp" && $BionicArm >>
-				<<print $ownedRelics[_i].name>> You can not drop Relics that have become part of your body.<br>
-			<<else>>
-				<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]] $ownedRelics[_i].weight kg | [[Drop|Drop Items Menu][$ownedRelics.deleteAt(_i)]]">><br>
-			<</if>>
-		<</capture>>
-	<</for>>
-<</if>>
-<br>
-[[return|$layerReturn]]
-<</nobr>>
 
-:: Drop Item Count[nobr noreturn]
-<<set _itemID = $temp>>
+<<if $ownedRelics.length>><br>Relics:<br><</if>>
+
+<<for _i, _relic range $ownedRelics>>
+	<<capture _i _relic>>
+		<<set _linkText = `Hand over ${_relic.name} worth ${setup.sellValue(_relic)} dubloons`>>
+		/* Add a bit of indentation: */ &nbsp;
+		<<switch _relic.name>>
+			<<case "Creepy Doll">>
+				<<if $creepydoll.affec > 5>>
+					You can't seem to part ways with the Creepy Doll...
+				<<else>>
+					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+				<</if>>
+			<<case "World Stone">>
+				<<if $LilyPromise>>
+					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic), setup.modAffection('Lily', -5)]]
+					You promised Lily she could use the World Stone, dropping it now will surely disappoint her greatly.
+				<<else>>
+					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+				<</if>>
+			<<case "Everhevea">>
+				<<if setup.item('Empty Flask').count >= 2>>
+					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2]]
+				<<else>>
+					You need to empty the Everheavea to drop it (have at least two empty flasks in your inventory).
+				<</if>>
+			<<case "Moonwatcher">>
+				<<if $BionicEye>>
+					_relic.name: You can't drop Relics that have become part of your body.
+				<<else>>
+					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+				<</if>>
+			<<case "Glory's Grasp">>
+				<<if $BionicArm>>
+					_relic.name: You can't drop Relics that have become part of your body.
+				<<else>>
+					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+				<</if>>
+			<<default>>
+				[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+		<</switch>>
+		<br>
+	<</capture>>
+<</for>>
+
+<br>
+
+[[Return|$layerReturn]]
+
+:: Drop Item Count [nobr noreturn]
+<<set _item = $items[$temp]>>
 <<if $flaskID == -1>>
-	<<print "You have $items[_itemID].count $items[_itemID].name, each weighing $items[_itemID].weight kg, for a total of ">><<print Math.round($items[_itemID].count*$items[_itemID].weight*100)/100>><<print " kg">><br>
+	You have _item.count _item.name, each weighing _item.weight kg,
+	for a total of <<print (_item.count * _item.weight).toRounded(1)>> kg.<br>
 	Select the amount you want to drop:<br><br>
 
-	<<textbox "_temp" "0">>
+	<<textbox '_input' '0'>>
 
-	<<link " Drop" "Drop Items Menu">>
-		<<set _temp = parseInt(_temp)>>
-		<<if _temp >=0 && _temp <= $items[_itemID].count>>
-			<<set $items[_itemID].count -= _temp>>
-		<<elseif _temp >= $items[_itemID].count>>
-			<<set $items[_itemID].count = 0>>
+	<<link 'Drop' 'Drop Items Menu'>>
+		<<set _parsed = parseInt(_input, 10) || 0>>
+		<<if _item.count >= 0>>
+			<<set _parsed = Math.clamp(_parsed, 0, _item.count)>>
+		<<else>>
+			<<set _parsed = Math.clamp(_parsed, _item.count, 0)>>
 		<</if>>
+		<<set _item.count -= _parsed>>
 	<</link>>
 <<else>>
-	<<print "You have $flaskMatrix[$flaskID] days worth of $flaskMatrixLabel[$flaskID], each weighing $items[_itemID].weight kg, for a total of ">><<print $items[_itemID].weight*$flaskMatrix[$flaskID]>><<print " kg">><br>
-	<<print "Since an empty flask weighs $items[2].weight kg, emptying one flask will save ">><<print $items[_itemID].weight-$items[2].weight>><<print " kg">><br>
+	You have $flaskMatrix[$flaskID] days worth of <<print setup.flaskLabels[$flaskID]>>, each weighing _item.weight kg,
+	for a total of <<print (_item.weight * $flaskMatrix[$flaskID]).toRounded(1)>> kg.<br>
+	Since an empty flask weighs $items[2].weight kg, emptying one flask will save <<print (_item.weight - $items[2].weight).toRounded(1)>> kg.<br>
 	Select the amount you want to empty:<br><br>
-	<<textbox "_temp" "0">>
-	<<link " Empty" "Drop Items Menu">>
-		<<set _temp = parseInt(_temp)>>
-		<<if _temp >=0 && _temp <= $flaskMatrix[$flaskID]>>
-			<<set $items[3].count -= _temp  >>
-			<<set $items[2].count += _temp  >>
-			<<set $flaskMatrix[$flaskID] -= _temp  >>
-		<<elseif _temp >= $flaskMatrix[$flaskID]>>
-			<<set $items[3].count -= $flaskMatrix[$flaskID]  >>
-			<<set $items[2].count += $flaskMatrix[$flaskID]  >>
-			<<set $flaskMatrix[$flaskID] = 0  >>
+
+	<<textbox '_input' '0'>>
+
+	<<link 'Empty' 'Drop Items Menu'>>
+		<<set _parsed = parseInt(_input, 10) || 0>>
+		<<if $flaskMatrix[$flaskID] >= 0>>
+			<<set _parsed = Math.clamp(_parsed, 0, $flaskMatrix[$flaskID])>>
+		<<else>>
+			<<set _parsed = Math.clamp(_parsed, $flaskMatrix[$flaskID], 0)>>
 		<</if>>
+		<<set setup.item('Filled Flask').count -= _parsed>>
+		<<set setup.item('Empty Flask').count += _parsed>>
+		<<set $flaskMatrix[$flaskID] -= _parsed>>
 	<</link>>
 <</if>>
 
