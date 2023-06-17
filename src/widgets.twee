@@ -1,69 +1,3 @@
-:: HeightCorrected [widget nobr]
-<<widget "HeightCorrected">>
-
-<<GenderCorrected>>
-
-<<capture _handle _log _genderlvl _height_adult _height_change _x _x_rel>>
-	<<for _handle range $hiredCompanions.concat($app)>>
-		<<set _name = _handle != $companionTwin ? _handle.name : 'Twin'>>
-		<<set _logName = _handle === $app ? 'Log' : `Log${_name}`>>
-		<<print `<<set _log = $Height${_logName}>>`>>
-
-		<<set _genderlvl = _handle.gender - 1>>
-
-		<<set _height_change = $HeightIncrease * (
-			5.0 * _log.filter(e => e.name === "Dizzying Heights").length +
-			3.0 * _log.filter(e => e.name === "1 Day Food Forage Major Impact").length +
-			0.5 * _log.filter(e => e.name === "1 Day Food Forage Minor Impact").length
-		)>>
-
-		<<if _log.some(e => e.name === "Colossal-able")>>
-			<<set _height_change = _handle.height * 70 - _handle.height>>
-			<<set $SizeHandicap = 1>>
-		<<elseif _log.some(e => e.name === "Minish-ish")>>
-			<<set _height_change = _handle.height / 10 - _handle.height>>
-			<<set $SizeHandicap = $hiredCompanions.length < 1 ? 1 : 0>>
-		<</if>>
-
-		/* Change in height with genderlevel changes and height increases/decreases; it is modeled such that */
-		/* 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender.     */
-		<<set _height_adult = 
-			_handle.oheight * (1 - 0.01525 * (_genderlvl - (_handle.osex == "female" ? 5 : 0))) +
-			_height_change  * (1 - 0.01525 * (_handle.osex == "female" ? 5 : 0))
-		>>
-
-		<<set _x = 18 - _handle.appAge>>
-
-		<<if _x <= 0.2 * _genderlvl>>
-			<<set _handle.heightCor = _height_adult>>
-		<<elseif 0.2 * _genderlvl < _x && _x <= 6>>
-			/* Puberty phase: It shifts for females as theirs ends earlier; for simplicity */
-			/* I assumed the start is the same regardless although this is not entirely    */
-			/* correct. I used a polynomial here to simulate the 'reverse growth spurt'.   */
-			<<set _x_rel = _x - 0.2 * _genderlvl>>
-			<<set _handle.heightCor = _height_adult * (1 -
-				( 4.70611e-3 - 8.1433e-4 * _genderlvl) * _x_rel -
-				( 1.1049e-4  - 1.140e-5  * _genderlvl) * _x_rel**2 -
-				( 1.6698e-3  - 1.3722e-4 * _genderlvl) * _x_rel**3 -
-				(-1.7701e-4  + 2.114e-5  * _genderlvl) * _x_rel**4
-			)>>
-		<<elseif 6 < _x && _x <= 15>>
-			/* The second phase of linear growth or decline, it's a decent approximation without making things too     */
-			/* complicated. It ends at age 3 (originally 4, but changed it to not break the rest of the code). The     */
-			/* calculation for the puberty growth spurt is in here to provide a starting point for the linear decline. */
-			<<set _x_rel = 6 - 0.2 * _genderlvl>>
-			<<set _handle.heightCor = _height_adult * (1 -
-				( 4.70611e-3 - 8.1433e-4 * _genderlvl) * _x_rel -
-				( 1.1049e-4  - 1.140e-5  * _genderlvl) * _x_rel**2 -
-				( 1.6698e-3  - 1.3722e-4 * _genderlvl) * _x_rel**3 -
-				(-1.7701e-4  + 2.114e-5  * _genderlvl) * _x_rel**4 -
-				(0.033 + 0.0009 * _genderlvl) * (_x - 6)
-			)>>
-		<</if>>
-	<</for>>
-<</capture>>
-<</widget>>
-
 :: GenderCorrected [widget nobr]
 <<widget "GenderCorrected">>
 <<capture
@@ -254,11 +188,12 @@
 
 		/* Clamp gender between 1 (= fully masculine) and 6 (= fully feminine). */
 		<<set _handle.gender = Math.clamp(_handle.gender, 1, 6)>>
+		<<set _genderlvl = _handle.gender - 1>>
 
 		/* For younger characters, compute breast size reduction according to age. */
 		/* Note: Asset robustness does not affect breasts if _handle.breastsCor == 0 unless _robustBreasts == true. */
 		<<set _handle.breastsCor = _handle.breasts>>
-		<<set _fullyGrownAge = 18 - (_handle.gender - 1) / 5>> /* 1 year lower for fully feminine characters. */
+		<<set _fullyGrownAge = 18 - _genderlvl / 5>> /* 1 year lower for fully feminine characters. */
 		<<if _handle.appAge < _fullyGrownAge>>
 			<<set _handle.breastsCor = _handle.breasts * Math.max(1 - (_fullyGrownAge - _handle.appAge) / 10, 0)>>
 		<</if>>
@@ -400,7 +335,7 @@
 		<<set _handle.breastsCor = _handle.breasts>>
 
 		/* For younger characters, compute breast size reduction according to age. */
-		<<set _fullyGrownAge = 18 - (_handle.gender - 1) / 5>> /* 1 year lower for fully feminine characters. */
+		<<set _fullyGrownAge = 18 - _genderlvl / 5>> /* 1 year lower for fully feminine characters. */
 		<<if _handle.appAge < _fullyGrownAge>>
 			<<set _handle.breastsCor = _handle.breasts * Math.max(1 - (_fullyGrownAge - _handle.appAge) / 10, 0)>>
 		<</if>>
@@ -486,27 +421,203 @@
 		<<set _handle.penisCor = _handle.penis>>
 		<<if _handle.penis > 0>>
 			/* For younger characters, compute penis size reduction according to age. */
-			<<set _fullyGrownAge = 16 - (_handle.gender - 1) / 5>> /* 1 year lower for fully feminine characters. */
+			<<set _fullyGrownAge = 16 - _genderlvl / 5>> /* 1 year lower for fully feminine characters. */
 			<<if _handle.appAge < _fullyGrownAge>>
 				<<set _handle.penisCor = _handle.penis * Math.max(1 - (_fullyGrownAge - _handle.appAge) / 12, 1)>>
 			<</if>>
 
-			<<if _handle.curses.some(e => e.name === "Colossal-able")>>
+			<<if _handle.curses.some(e => e.name === 'Colossal-able')>>
 				<<set _handle.penisCor *= 70>>
 			<</if>>
 
-			<<if _handle.curses.some(e => e.name === "Minish-ish")>>
+			<<if _handle.curses.some(e => e.name === 'Minish-ish')>>
 				<<set _handle.penisCor /= 10>>
 			<</if>>
 		<</if>>
+
+		/* ---------------------------------------- Compute corrected height ---------------------------------------- */
+
+		<<print `<<set _log = $Height${_logName}>>`>>
+
+		<<set _height_change = $HeightIncrease * (
+			5.0 * _log.filter(e => e.name === 'Dizzying Heights').length +
+			3.0 * _log.filter(e => e.name === '1 Day Food Forage Major Impact').length +
+			0.5 * _log.filter(e => e.name === '1 Day Food Forage Minor Impact').length
+		)>>
+
+		<<if _log.some(e => e.name === 'Colossal-able')>>
+			<<set _height_change = _handle.oheight * 70 - _handle.oheight>>
+			<<set $SizeHandicap = 1>>
+		<<elseif _log.some(e => e.name === 'Minish-ish')>>
+			<<set _height_change = _handle.oheight / 10 - _handle.oheight>>
+			<<set $SizeHandicap = $hiredCompanions.length < 1 ? 1 : 0>>
+		<</if>>
+
+		/* Change in height with genderlevel changes and height increases/decreases; it is modeled such that */
+		/* 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender.     */
+		<<set _height_adult = 
+			_handle.oheight * (1 - 0.01525 * (_genderlvl - (_handle.osex == 'female' ? 5 : 0))) +
+			_height_change  * (1 - 0.01525 * (_handle.osex == 'female' ? 5 : 0))
+		>>
+
+		<<set _x = 18 - _handle.appAge>>
+
+		<<if _x <= 0.2 * _genderlvl>>
+			<<set _handle.heightCor = _height_adult>>
+		<<elseif 0.2 * _genderlvl < _x && _x <= 6>>
+			/* Puberty phase: It shifts for females as theirs ends earlier; for simplicity */
+			/* I assumed the start is the same regardless although this is not entirely    */
+			/* correct. I used a polynomial here to simulate the 'reverse growth spurt'.   */
+			<<set _x_rel = _x - 0.2 * _genderlvl>>
+			<<set _handle.heightCor = _height_adult * (1 -
+				( 4.70611e-3 - 8.1433e-4 * _genderlvl) * _x_rel -
+				( 1.1049e-4  - 1.140e-5  * _genderlvl) * _x_rel**2 -
+				( 1.6698e-3  - 1.3722e-4 * _genderlvl) * _x_rel**3 -
+				(-1.7701e-4  + 2.114e-5  * _genderlvl) * _x_rel**4
+			)>>
+		<<elseif 6 < _x && _x <= 15>>
+			/* The second phase of linear growth or decline, it's a decent approximation without making things too     */
+			/* complicated. It ends at age 3 (originally 4, but changed it to not break the rest of the code). The     */
+			/* calculation for the puberty growth spurt is in here to provide a starting point for the linear decline. */
+			<<set _x_rel = 6 - 0.2 * _genderlvl>>
+			<<set _handle.heightCor = _height_adult * (1 -
+				( 4.70611e-3 - 8.1433e-4 * _genderlvl) * _x_rel -
+				( 1.1049e-4  - 1.140e-5  * _genderlvl) * _x_rel**2 -
+				( 1.6698e-3  - 1.3722e-4 * _genderlvl) * _x_rel**3 -
+				(-1.7701e-4  + 2.114e-5  * _genderlvl) * _x_rel**4 -
+				(0.033 + 0.0009 * _genderlvl) * (_x - 6)
+			)>>
+		<</if>>
+
+		/* ---------------------------------------- Compute corrected libido ---------------------------------------- */
+
+		<<print `<<set _log = $Libido${_logName}>>`>>
+
+		/* Initialize libido and sub/dom leaning. */
+		<<set _handle.libido = 2, _handle.subdom = 0>>
+
+		/* Reset lowered standards. */
+		<<if _handle === $app>><<set $standardsLower = 0>><</if>>
+
+		<<for _event range _log>>
+			<<switch _event.name>>
+				<<case
+					'Libido Reinforcement A' 'Libido Reinforcement B' 'Libido Reinforcement C' 'Libido Reinforcement D'
+					'Libido Reinforcement E' 'Libido Reinforcement F' 'Libido Reinforcement G'
+					'1 Day Food Forage Major Impact'
+				>>
+					<<set _handle.libido += 1>>
+				<<case '1 Day Food Forage Minor Impact'>> /* Bedlam's Banquet */
+					<<set _handle.libido += 0.2>>
+					<<if _handle === $app>>
+						<<set $standardsLower += 1>>
+					<</if>>
+				<<case 'DoM' 'Submissiveness Rectification A' 'Submissiveness Rectification B'>>
+					<<set _handle.subdom += 1>>
+				<<case 'DoS' 'Power Dom'>>
+					<<set _handle.subdom -= 1>>
+			<</switch>>
+		<</for>>
+		
+		/* Apply player specific effects. */
+		<<if _handle === $app>>
+			/* Boost libido if unripe flans were eaten within the last day. */
+			<<if $lastFlan !== undefined && $time < $lastFlan + 1>><<set _handle.libido += 1>><</if>>
+
+			<<if $menCycleFlag>>
+				/* Libido boost around 14 days into the cycle. */
+				<<if 13 <= $time - $menCycleT && $time - $menCycleT <= 15>><<set $app.libido += 1>><</if>>
+				/* Libido penalty around 22 days into the cycle. */
+				<<if 20 <= $time - $menCycleT && $time - $menCycleT <= 24>><<set $app.libido -= 1>><</if>>
+			<</if>>
+
+			<<if $playerCurses.some(e => e.name === 'Heat/Rut')>>
+				<<if !$heatCycleT_flag>>
+					<<set $heatCycleT = $time - 7>>
+					<<set $heatCycleT_flag = true>>
+				<</if>>
+
+				/* Libido boost on day 14 of the cycle (coincides with day 14 of menstruation cycle if active). */
+				<<if $time - $heatCycleT == 14>><<set $app.libido += 2>><</if>>
+			<</if>>
+		<</if>>
+
+		/* Undo effects of Colossal-able and Minish-ish on penis size for the calculation below. */
+		<<set _penisCorTemp = _handle.penisCor>>
+		<<if _handle.curses.some(e => e.name === 'Colossal-able')>><<set _penisCorTemp /= 70>><</if>>
+		<<if _handle.curses.some(e => e.name === 'Minish-ish')>><<set _penisCorTemp *= 10>><</if>>
+
+		/* Set appGender. Note 1: Companions also have this. */
+		/* Note 2: Uses *apparent* fitness, so ignores the Weakling curse. */
+		<<set _handle.appGender = 0
+			+ 2 * _genderlvl
+			- 0.25 * (_penisCorTemp - 4)
+			+ 0.5 * (_handle.breastsCor - 3)
+			- (_handle.fit > 7)
+		>>
+		<<if _handle === $app>>
+			/* Apply adjustments from Chain of Lorelei, Seafoam scent and Solace Lace. */
+			<<set _handle.appGender += 0.5 * $colwear + 0.25 * $scent + 0.5 * $slwear>>
+			/* mc looks more feminine if wearing the Creepy Doll's tattered pink dress. */
+			<<if $dollevent2>><<set _handle.appGender += 1>><</if>>
+		<</if>>
 	<</for>>
+
+	/* ---------------------------------------------- Update mc object ---------------------------------------------- */
+
+	<<if $app.appAge > 18>>
+		<<set _boxShadowOpacity = 1.0>>
+	<<elseif $app.appAge > 15>>
+		<<set _boxShadowOpacity = 0.8>>
+	<<elseif $app.appAge > 12>>
+		<<set _boxShadowOpacity = 0.6>>
+	<<elseif $app.appAge > 9>>
+		<<set _boxShadowOpacity = 0.4>>
+	<<else>>
+		<<set _boxShadowOpacity = 0.2>>
+	<</if>>
+
+	<<switch $app.gender>>
+		<<case 1>><<set _boxShadowColor = [ 40,  40, 255]>>
+		<<case 2>><<set _boxShadowColor = [ 80,  80, 240]>>
+		<<case 3>><<set _boxShadowColor = [120, 100, 230]>>
+		<<case 4>><<set _boxShadowColor = [165, 120, 220]>>
+		<<case 5>><<set _boxShadowColor = [210, 140, 210]>>
+		<<case 6>><<set _boxShadowColor = [255, 160, 200]>>
+	<</switch>>
+
+	<<set $boxColor = [
+			`box-shadow: 0 0 10px 2px rgba(${_boxShadowColor.concat(_boxShadowOpacity).join(', ')})`,
+			'background-color: black',
+		].join(';')
+	>>
+
+	<<set $mc = {
+		name: $app.name,
+		genderVoice: $app.gender,
+		style: 'border: 2px solid rgb(1, 0, 0);',
+		style1: $boxColor
+	}>>
+
+	/* $PulseBloomUse used to be initialized as an array, so check carefully. */
+	<<set _pulseBloomInUse = $PulseBloomUse !== "" && !Array.isArray($PulseBloomUse)>>
+
+	<<if !_pulseBloomInUse && !$app.switch && !$starUsed>>
+		<<if $app.appGender <= 5 >>
+			<<set $mc.imageIcon = 'Player Icons/playerM.png'>>
+		<<else>>
+			<<set $mc.imageIcon = 'Player Icons/playerF.png'>>
+		<</if>>
+	<<elseif _pulseBloomInUse>>
+		<<print `<<set _handle = $companion${$PulseBloomUse}>>`>>
+		<<set $mc.imageIcon = _handle.imageIcon>>
+	<<elseif $app.switch>>
+		<<print `<<set _handle = $companion${$companionSwitched}>>`>>
+		<<print `<<set $mc.imageIcon = 'Icons/${$companionSwitched}Icon.png'>>`>>
+	<</if>>
+
+	<<set $mc.genderVoice = $colwear ? 99 : $app.gender>>
 <</capture>>
-
-<<checkTime>>
-
-<<LibidoCorrected>>
-<<Update_MC_Speech>>
-
 <</widget>>
 
 :: Appearance widgets [widget nobr]
@@ -517,85 +628,6 @@
 <<widget "BodyHeightText">>
 	<<set _meters = ($app.heightCor > 100)>>
 	<<print (Math.round($app.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>>\
-<</widget>>
-
-:: Libido widget [widget nobr]
-<<widget "LibidoCorrected">>
-<<for _i=0; _i<=$hiredCompanions.length; _i++>>
-	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $app>>
-		<<set _LibidoLog = $LibidoLog>>
-	<<else>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name >>
-			<<set _name = "Twin">>
-		<<else>>
-			<<set _name = $hiredCompanions[_i].name>>
-		<</if>>
-		<<print "<<set _handle  = $companion"+ _name +" >>">>
-		<<print "<<set _LibidoLog  = $LibidoLog"+ _name +" >>">>
-	<</if>>
-	<<set _handle.libido = 2>>
-	<<set _handle.subdom = 0>>
-	<<for _libidoEvent range _LibidoLog>>
-
-		<<if _libidoEvent.name == "Libido Reinforcement A" || _libidoEvent.name == "Libido Reinforcement B" || _libidoEvent.name == "Libido Reinforcement C" || _libidoEvent.name == "Libido Reinforcement D" || _libidoEvent.name == "Libido Reinforcement E" || _libidoEvent.name == "Libido Reinforcement F" || _libidoEvent.name == "Libido Reinforcement G"  >>
-			<<set _handle.libido += 1>>
-		<</if>>
-
-
-		<<if _libidoEvent.name == "DoM" || _libidoEvent.name == "Submissiveness Rectification A" || _libidoEvent.name == "Submissiveness Rectification B" >>
-			<<set _handle.subdom += 1>>
-		<</if>>
-
-		<<if _libidoEvent.name == "DoS" || _libidoEvent.name == "Power Dom">>
-			<<set _handle.subdom -= 1>>
-		<</if>>
-
-		<<if _libidoEvent.name == "1 Day Food Forage Major Impact" >>
-			<<set _handle.libido += 1>>
-		<</if>>
-
-		<<if _libidoEvent.name == "1 Day Food Forage Minor Impact" >>
-			<<set _handle.libido += 0.2>>
-			<<if _i==$hiredCompanions.length>>
-				<<set $standardsLower +=1>>
-			<</if>>
-		<</if>>
-	
-		<<if _i==$hiredCompanions.length>>
-			<<if $lastFlan >0 >>
-				<<if $lastFlan==$time>>
-					<<set _handle.libido += 1>>
-				<</if>>
-			<</if>>
-		<</if>>
-
-	<</for>>
-	
-	<<if _i==$hiredCompanions.length>>
-		<<if $time-$menCycleT<16 && $time-$menCycleT>=13>>
-			<<set $app.libido += 1>>
-		<<elseif $time-$menCycleT<25 && $time-$menCycleT>=20>>
-			<<set $app.libido -= 1>>
-		<</if>>
-
-		<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
-			<<if !$heatCycleT_flag>>	
-				<<if $menCycleT_flag == true>>
-					<<set $heatCycleT = $menCycleT>>
-				<<else>>
-					<<set $heatCycleT = $time -7>>
-				<</if>>
-				<<set $heatCycleT_flag = true>>
-			<</if>>
-
-			<<if $time-$heatCycleT==14 >>
-				<<set $app.libido += 2>>
-			<</if>>
-		<</if>>
-	<</if>>
-
-<</for>>
 <</widget>>
 
 :: Semen Demon Widget [widget nobr]
@@ -664,42 +696,6 @@
 <</widget>>
 
 :: Perceived widgets [widget nobr]
-<<widget "appGender">>
-
-<<for _i=0; _i<=$hiredCompanions.length; _i++>>
-	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $app>>
-	<<else>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name >>
-			<<set _name = "Twin">>
-		<<else>>
-			<<set _name = $hiredCompanions[_i].name>>
-		<</if>>
-		<<print "<<set _handle  = $companion"+ _name +" >>">>
-	<</if>>
-
-	<<set _penisCorTemp = _handle.penisCor>>
-	<<if $playerCurses.some(e => e.name === "Colossal-able")>>
-		<<set _penisCorTemp /= 70>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Minish-ish")>>
-		<<set _penisCorTemp *= 10>>
-	<</if>>
-	<<if $app.fit>7>>
-		<<set _handle.appGender = 2*(_handle.gender-1) -0.25*(_penisCorTemp-4) + 0.5*(_handle.breastsCor-3)-1>>
-	<<else>>
-		<<set _handle.appGender = 2*(_handle.gender-1) -0.25*(_penisCorTemp-4) + 0.5*(_handle.breastsCor-3)>>
-	<</if>>
-	<<if _i==$hiredCompanions.length>>
-		<<set _handle.appGender += 0.5*$colwear+0.25*$scent+0.5*$slwear>>
-		<<if $dollevent2>>
-			<<set _handle.appGender += 1>>
-		<</if>>
-	<</if>>
-<</for>>
-<</widget>>
-
 <<widget "mrms">>
 	<<if $app.appGender<=5>>
 		mr.
@@ -1091,12 +1087,10 @@
 		
 	<</if>>
 
-	<<if _handle.curses.some(e => e.name === "Weakling")>>
-		<<set _handle.fit = 0>>
-	<</if>>
+	<<set _fitCor = _handle.curses.some(e => e.name === "Weakling") ? 0 : _handle.fit>>
+	<<set _handle.HandicapThreat += _fitCor / 4 - 1.25>>
+	<<set _handle.HandicapMovement += _fitCor / 4 - 1.25>>
 
-	<<set _handle.HandicapThreat += _handle.fit/4-1.25>>
-	<<set _handle.HandicapMovement += _handle.fit/4-1.25>>
 	<<if _handle.armCount == 1 && (_handle.legCount >1 || $DaedalusEquip)>>
 		<<set _handle.HandicapThreat -=2>>
 		<<set _handle.HandicapMovement -=1>>
@@ -1232,125 +1226,6 @@
 <</if>>
 <</widget>>
 
-
-:: Speech settings [widget nobr]
-<<widget "Update_MC_Speech">>
-<<appGender>>
-	<<if $app.gender<=1 >>
-
-		<<if $app.appAge>18>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,1);background-color: black;">>
-		<<elseif $app.appAge>15>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.8);background-color: black;">>
-		<<elseif $app.appAge>12>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.6);background-color: black;">>
-		<<elseif $app.appAge>9>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.4);background-color: black;">>
-		<<else>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(40, 40, 255,0.2);background-color: black;">>
-		<</if>>
-
-	<<elseif $app.gender==2 >>
-
-		<<if $app.appAge>18>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,1);background-color: black;">>
-		<<elseif $app.appAge>15>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.8);background-color: black;">>
-		<<elseif $app.appAge>12>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.6);background-color: black;">>
-		<<elseif $app.appAge>9>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.4);background-color: black;">>
-		<<else>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(80, 80, 240,0.2);background-color: black;">>
-		<</if>>
-
-	<<elseif $app.gender==3 >>
-
-		<<if $app.appAge>18>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,1);background-color: black;">>
-		<<elseif $app.appAge>15>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.8);background-color: black;">>
-		<<elseif $app.appAge>12>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.6);background-color: black;">>
-		<<elseif $app.appAge>9>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.4);background-color: black;">>
-		<<else>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(120, 100, 230,0.2);background-color: black;">>
-		<</if>>
-
-	<<elseif $app.gender==4 >>
-
-		<<if $app.appAge>18>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,1);background-color: black;">>
-		<<elseif $app.appAge>15>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.8);background-color: black;">>
-		<<elseif $app.appAge>12>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.6);background-color: black;">>
-		<<elseif $app.appAge>9>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.4);background-color: black;">>
-		<<else>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(165, 120, 220,0.2);background-color: black;">>
-		<</if>>
-
-	<<elseif $app.gender==5 >>
-
-		<<if $app.appAge>18>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,1);background-color: black;">>
-		<<elseif $app.appAge>15>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.8);background-color: black;">>
-		<<elseif $app.appAge>12>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.6);background-color: black;">>
-		<<elseif $app.appAge>9>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.4);background-color: black;">>
-		<<else>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(210, 140, 210,0.2);background-color: black;">>
-		<</if>>
-
-	<<else>>
-		<<if $app.appAge>18>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
-		<<elseif $app.appAge>15>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
-		<<elseif $app.appAge>12>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
-		<<elseif $app.appAge>9>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
-		<<else>>
-			<<set $boxColor="box-shadow: 0px 0px 10px 2px rgba(255, 160, 200,1);background-color: black;">>
-		<</if>>
-
-	<</if>>
-		<<set $mc = {
-	name: $app.name,
-	genderVoice: $app.gender,
-	style: "border: 2px solid rgb(1,0,0);",
-	style1: $boxColor
-	}>>
-	<<if $PulseBloomUse=="" && $app.switch==false && $starUsed == 0>>
-		<<if $app.appGender<=5 >>
-			<<set $mc.imageIcon="Player Icons/playerM.png">>
-		<<else>>
-			<<set $mc.imageIcon="Player Icons/playerF.png">>
-		<</if>>
-	<<elseif $PulseBloomUse!="">>
-		<<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
-		<<set $mc.imageIcon = _companion.imageIcon>>
-	<<elseif $app.switch==true>>
-		<<print "<<set _companion  = $companion"+ $companionSwitched +" >>">>
-		<<print "<<set $mc.imageIcon = \"Icons/"+ $companionSwitched +"Icon.png\">>">>
-	<</if>>
-
-	<<if $app.gender<1 >>
-		<<set $mc.genderVoice=1>>
-	<<elseif $app.gender>6>>
-		<<set $mc.genderVoice=6>>
-	<</if>>
-
-	<<if $colwear>>
-		<<set $mc.genderVoice=99>>
-	<</if>>
-<</widget>>
-
 :: Doll transformation [widget nobr]
 <<widget "dollTF">>
 <<if $creepydoll.affec == 0>>
@@ -1403,7 +1278,6 @@
 		pregnantT: $app.pregnantT,
 		due: setup.dueDate($app),
 		ears: "normal human",
-		height: $app.oheight,
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
@@ -1489,7 +1363,6 @@
 		pregnantT: $app.pregnantT,
 		due: setup.dueDate($app),
 		ears: "normal human",
-		height: $app.oheight,
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
@@ -1526,18 +1399,11 @@
 	<</if>>
 <</if>>
 
-<<if $colwear>>
-	<<set $colwear=0>>
-	<<Update_MC_Speech>>
-	<<set $companionTwin.genderVoice = -1*($mc.genderVoice-3.5)+3.5>>
-	<<set $colwear=1>>
-	<<Update_MC_Speech>>
-<<else>>
-	<<set $companionTwin.genderVoice = -1*($mc.genderVoice-3.5)+3.5>>
-<</if>>
+<<set $companionTwin.genderVoice = 7 - $app.gender>>
 
-<<set $companionTwin.name =  $curse111.variation1>>
+<<set $companionTwin.name = $curse111.variation1>>
 <<set $hiredCompanions.push($companionTwin)>>
+<<CarryAdjust>>
 <</widget>>
 
 :: Creating a Golem with Lambent Specter [widget nobr]
@@ -1582,7 +1448,6 @@
 		pregnantT: setup.never,
 		due: setup.never,
 		ears: "",
-		height: 170,
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
@@ -1712,7 +1577,6 @@
 		pregnantT: setup.never,
 		due: setup.never,
 		ears: "",
-		height: 163,
 		modheight: 0,
 		bodyHair: 0,
 		skinType: "",
@@ -1823,64 +1687,65 @@
 <</if>>
 
 <<if $time > $Maru_LastT + 7>>
-<<set $companionMaru.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Maru_LastT = $time>>
-<<if $MaruConvo1 && $forageFood == 0>>
-	<<set $items[1].count +=1 >>
-	@@.alert1; Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
-<</if>>
+	<<set $companionMaru.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Maru_LastT = $time>>
+	<<if $MaruConvo1 && $forageFood == 0>>
+		<<set $items[1].count += 1>>
+		@@.alert1; Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
+	<</if>>
 <</if>>
 
 <<if $time > $Lily_LastT + 7>>
-<<set $companionLily.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Lily_LastT = $time>>
+	<<set $companionLily.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Lily_LastT = $time>>
 <</if>>
 
 <<if $time > $Khemia_LastT + 7>>
-<<set $companionKhemia.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Khemia_LastT = $time>>
+	<<set $companionKhemia.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Khemia_LastT = $time>>
 <</if>>
 
 <<if $time > $Cherry_LastT + 7>>
-<<set $companionCherry.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Cherry_LastT = $time>>
+	<<set $companionCherry.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Cherry_LastT = $time>>
 <</if>>
 
 <<if $time > $Cloud_LastT + 7>>
-<<set $companionCloud.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Cloud_LastT = $time>>
-<<set $altCloud = random(0,3)>>
-<<if $CloudConvo1>>
-	<<if $altCloud == 1>>
-	<<set $temp = random(2,3) >>
-	<<set $items[20].count += $temp >>
-	@@.alert1; Cloud seems to have been able to scavenge some ammunition somehow. You aren't quite sure whether he found it or made it himself, but either way you've gained $temp bullets.<br><br>
-	<<elseif $altCloud == 2>>
-	<<set $temp = random(2,5) >>
-	<<set $dubloons += $temp >>
-	@@.alert1; Cloud somehow managed to scavenge a bit of cash, perhaps left behind by a previous diver? It's not like dubloons would be down here for any other reason. You've gained $temp dubloons.<br><br>
+	<<set $companionCloud.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Cloud_LastT = $time>>
+	<<set $altCloud = random(0,3)>>
+	<<if $CloudConvo1>>
+		<<if $altCloud == 1>>
+		<<set $temp = random(2,3) >>
+		<<set $items[20].count += $temp >>
+		@@.alert1; Cloud seems to have been able to scavenge some ammunition somehow. You aren't quite sure whether he found it or made it himself, but either way you've gained $temp bullets.<br><br>
+		<<elseif $altCloud == 2>>
+		<<set $temp = random(2,5) >>
+		<<set $dubloons += $temp >>
+		@@.alert1; Cloud somehow managed to scavenge a bit of cash, perhaps left behind by a previous diver? It's not like dubloons would be down here for any other reason. You've gained $temp dubloons.<br><br>
+		<</if>>
 	<</if>>
-<</if>>
 <</if>>
 
 <<if $time > $Saeko_LastT + 7>>
-<<set $companionSaeko.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Saeko_LastT = $time>>
+	<<set $companionSaeko.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Saeko_LastT = $time>>
 <</if>>
 
 <<if $time > $Twin_LastT + 7>>
-<<set $companionTwin.affec+=(1+$hsswear + $maruPangea)>>
-<<set $Twin_LastT = $time>>
+	<<set $companionTwin.affec+=(1+$hsswear + $maruPangea)>>
+	<<set $Twin_LastT = $time>>
 <</if>>
 
 <<if $time > $fit_adjustLastT + 20>>
-	<<if $fit>8>>
-	<<set $fit-=1>>
-	@@.alert1; Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
-	<<elseif $fit<5>>
-	<<set $fit+=1>>
-	@@.alert1; The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
+	<<if $app.fit > 8>>
+		<<set $app.fit -= 1>>
+		@@.alert1; Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
+	<<elseif $app.fit < 5>>
+		<<set $app.fit += 1>>
+		@@.alert1; The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
 	<</if>>
+	<<set $fit_adjustLastT = $time>>
 <</if>>
 
 <<if $app.appAge <= 13>>
@@ -2071,7 +1936,10 @@
 
 <</if>>
 
-<<if $PulseBloomUse!="" && $time-2 > $PulseBloomDate >>
+/* $PulseBloomUse used to be initialized as an array, so check carefully. */
+<<set _pulseBloomInUse = $PulseBloomUse !== "" && !Array.isArray($PulseBloomUse)>>
+
+<<if _puseBloomInUse && $time-2 > $PulseBloomDate >>
 	<<set $app.osex = $PulseBloomStorage.osex>>
 	<<set $app.obreasts = $PulseBloomStorage.obreasts>>
 	<<set $app.openis = $PulseBloomStorage.openis>>
@@ -2085,7 +1953,7 @@
 	<<set $app.fit -= $PulseBloomStorage.fit>>
 	<<set $PulseBloomDate = setup.never>>
 	<<set $PulseBloomUse="">>
-	<<Update_MC_Speech>>
+	<<CarryAdjust>>
 <</if>>
 <</widget>>
 
@@ -2118,19 +1986,18 @@
 <<widget "CarryAdjust">>
 <<Equipment>>
 <<Handicap>>
-<<HeightCorrected>>
+<<GenderCorrected>>
 <<Update_Misc_Stat>>
-
-/*<<set $totalCarry -= $carryWeight>>*/
 
 <<if $playerCurses.some(e => e.name === "Weakling")>>
 	<<set $ocarryWeight = 7.5>>
 <</if>>
 
-<<if $app.osex=='male'>>
-	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5-$app.gender+1) )>>
+<<set _fitCor = $app.curses.some(e => e.name === "Weakling") ? 0 : $app.fit>>
+<<if $app.osex == 'male'>>
+	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $app.gender + 1))>>
 <<else>>
-	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5*($app.fit-5+6-$app.gender) )>>
+	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $app.gender + 6))>>
 <</if>>
 
 <<set $carryWeight = $carryWeight*(1+ $app.HandicapCarry/10)>>
