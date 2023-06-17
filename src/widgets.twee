@@ -1682,6 +1682,12 @@
 
 <<set $random = Math.random(0,3)>>
 
+<<if $totalCarry * 1.1 < setup.carriedWeight>>
+	@@.alert2; You are severely overburdened!@@<br><br>
+<<elseif $totalCarry * 1 < setup.carriedWeight>>
+	@@.alert1; You are overburdened!@@<br><br>
+<</if>>
+
 <<if $status.duration > 0>>
 	@@.alert2; You are currently injured, increasing your next $status.duration travel times by $status.penalty days each. @@<br><br>
 <</if>>
@@ -2049,13 +2055,6 @@
 <<if $playerCurses.some(e => e.name === "Double Trouble")>>
 	/*<<set $totalCarry += $companionTwin.carry>>*/
 	<<set $totalCarry +=$carryWeight>>
-<</if>>
-
-<<set _carriedWeight = setup.carriedWeight>>
-<<if $totalCarry*1.1 < _carriedWeight >>
-	@@.alert2; You are severely overburdened!@@<br><br>
-<<elseif $totalCarry*1 < _carriedWeight  >>
-	@@.alert1; You are overburdened!@@<br><br>
 <</if>>
 
 <</widget>>
