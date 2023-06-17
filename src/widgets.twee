@@ -68,9 +68,9 @@
 					<<else>>
 						<<set _eventAge -= 2>>
 					<</if>>
-				<<case '1 Day Food Forage Minor Impact'>>
+				<<case '1 Day Food Forage Minor Impact'>> /* Layer 3 Crystalline Confectionaries with knowledge */
 					<<set _eventAge -= 0.08>>
-				<<case '1 Day Food Forage Major Impact'>>
+				<<case '1 Day Food Forage Major Impact'>> /* Layer 3 Crystalline Confectionaries without knowledge */
 					<<set _eventAge -= 1>>
 			<</switch>>
 		<</for>>
@@ -176,7 +176,7 @@
 				<<case
 					'Gender Reversal A' 'Gender Reversal B' 'Gender Reversal C' 'Gender Reversal D'
 					'Gender Reversal E' 'Gender Reversal F' 'Gender Reversal G'
-					'1 Day Food Forage Major Impact'
+					'1 Day Food Forage Major Impact' /* Layer 1 Blisshrooms without knowledge. */
 				>>
 					<<set _handle.gender += _handle.osex == 'male' ? 1 : -1>>
 				<<case 'Doll Transformation'>>
@@ -260,7 +260,7 @@
 						<</if>>
 						<<set _handle.womb += 1>>
 					<</if>>
-				<<case '1 Day Water Forage Major Impact'>>
+				<<case '1 Day Water Forage Major Impact'>> /* Layer 1 Cloudpools without knowledge */
 					<<if _handle.penis > 0>><<set _handle.penis += 1>><</if>>
 					<<if _handle.breastsCor > 0 || _robustBreasts>><<set _handle.breasts += 1>><</if>>
 				<<case 'Doll Transformation'>>
@@ -443,11 +443,17 @@
 
 		<<print `<<set _log = $Height${_logName}>>`>>
 
-		<<set _height_change = $HeightIncrease * (
-			5.0 * _log.filter(e => e.name === 'Dizzying Heights').length +
-			3.0 * _log.filter(e => e.name === '1 Day Food Forage Major Impact').length +
-			0.5 * _log.filter(e => e.name === '1 Day Food Forage Minor Impact').length
-		)>>
+		<<set _height_change = 0>>
+		<<for _event range _log>>
+			<<switch _event.name>>
+				<<case 'Dizzying Heights'>>
+					<<set _height_change += 5 * $HeightIncrease>>
+				<<case '1 Day Food Forage Major Impact'>> /* Layer 4 Flairabou without knowledge */
+					<<set _height_change += 3 * $HeightIncrease>>
+				<<case '1 Day Food Forage Minor Impact'>> /* Layer 4 Flairabou with knowledge */
+					<<set _height_change += 0.5 * $HeightIncrease>>
+			<</switch>>
+		<</for>>
 
 		<<if _log.some(e => e.name === 'Colossal-able')>>
 			<<set _height_change = _handle.oheight * 70 - _handle.oheight>>
@@ -508,10 +514,10 @@
 				<<case
 					'Libido Reinforcement A' 'Libido Reinforcement B' 'Libido Reinforcement C' 'Libido Reinforcement D'
 					'Libido Reinforcement E' 'Libido Reinforcement F' 'Libido Reinforcement G'
-					'1 Day Food Forage Major Impact' /* Unripe flanberries */
+					'1 Day Food Forage Major Impact' /* Layer 2 unripe flanberries */
 				>>
 					<<set _handle.libido += 1>>
-				<<case '1 Day Food Forage Minor Impact'>> /* Bedlam's Banquet */
+				<<case '1 Day Food Forage Minor Impact'>> /* Layer 8 Bedlam's Banquet */
 					<<set _handle.libido += 0.2>>
 					<<if _handle === $app>>
 						<<set $standardsLower += 1>>
@@ -525,7 +531,7 @@
 		
 		/* Apply player specific effects. */
 		<<if _handle === $app>>
-			/* Boost libido if ripe flanberries were eaten within the last day. */
+			/* Boost libido if ripe flanberries from layer 2 were eaten within the last day. */
 			<<if $lastFlan !== undefined && $time < $lastFlan + 1>><<set _handle.libido += 1>><</if>>
 
 			<<if $menCycleFlag>>
