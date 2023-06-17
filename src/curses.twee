@@ -1747,7 +1747,13 @@ You have touched the void and tasted just a hint of the Truth, and you will neve
         <</if>>
     <</if>>
     </p>
-    <p><<include `_curse.name + " Description"`>></p>
+    <p>
+    <<if _curse.name.startsWith("Libido Reinforcement ") || _curse.name.startsWith("Gender Reversal ")>>
+      <<LeveledCurseDescription `_curse.name`>>
+    <<else>>
+      <<include `_curse.name + " Description"`>>
+    <</if>>
+    </p>
     </div>
 <</for>>
   <div>
@@ -1758,6 +1764,16 @@ You have touched the void and tasted just a hint of the Truth, and you will neve
     <p>Allow the Abyss to bestow a random Curse from this layer upon you.</p>
   </div>
 </div>
+<</widget>>
+
+:: LeveledCurseDescription [widget nobr]
+<<widget "LeveledCurseDescription">>
+  <<set _base = _args[0].slice(0, -1)>>
+  <<set _level = $playerCurses.countWith(e => e.name.startsWith(_base))>>
+  <<if !$playerCurses.some(e => e.name === _args[0])>>
+    <<set _level += 1>>
+  <</if>>
+  <<include `_base + "Stage " + Math.min(_level, 6)`>>
 <</widget>>
 
 :: Curse Limits [nobr]
