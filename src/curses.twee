@@ -1770,6 +1770,11 @@ You have touched the void and tasted just a hint of the Truth, and you will neve
 <<widget "LeveledCurseDescription">>
   <<set _base = _args[0].slice(0, -1)>>
   <<set _level = $playerCurses.countWith(e => e.name.startsWith(_base))>>
+  <<if _base === "Libido Reinforcement ">>
+    <<set _level += $LibidoLog.countWith(e => e.name === $ForageFoodMajor.name)>>
+  <<elseif _base === "Gender Reversal ">>
+    <<set _level += $GenderLog.countWith(e => e.name === $ForageFoodMajor.name)>>
+  <</if>>
   <<if !$playerCurses.some(e => e.name === _args[0])>>
     <<set _level += 1>>
   <</if>>
