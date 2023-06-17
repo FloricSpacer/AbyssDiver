@@ -535,15 +535,28 @@ They are a bit sore at the moment.
 	Your <<if $app.sex == "male">>testicles are<<elseif $app.sex == "female">>clitoris is<<else>>testicles and clitoris are<</if>> approximately <<print (10 * $algalSize)>>% larger than usual due to drinking contaminated melted snow from the fourth layer.<<print " ">>
 <</if>>
 
-<<if $app.fit > 8>>
-Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. This will allow you to carry more weight and may even marginally decrease your travel time.<br><br>
-<<elseif $app.fit > 6>>
-You possess a well-toned, athletic body. Thus, you might be able to carry slightly more weight and require a bit more time to travel than a regular adventurer.<br><br>
-<<elseif $app.fit > 4>>
-You have an unremarkable yet healthy body. <br><br>
+<<if $playerCurses.some(e => e.name === "Weakling")>>
+	<<if $app.fit > 8>>
+		Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. If it wasn't for your Curse, this would allow you to carry more weight and might have even marginally decreases your travel time.<br><br>
+	<<elseif $app.fit > 6>>
+		You possess a well-toned, athletic body. If it wasn't for your Curse, you might have been able to carry slightly more weight and required a bit less time to travel than a regular adventurer.<br><br>
+	<<elseif $app.fit > 4>>
+		You have an unremarkable yet healthy body, but thanks to your Curse you are as weak as a babe.<br><br>
+	<<else>>
+		Your body appears rather out of shape - although with your Curse, no amount of exercise would improve your physical ability.<br><br>
+	<</if>>
 <<else>>
-Your body appears rather out of shape, and you could certainly benefit from some exercise. Consequently, you can carry significantly less and must take more frequent breaks while traveling compared to a fit expedition leader.<br><br>
+	<<if $app.fit > 8>>
+		Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. This will allow you to carry more weight and may even marginally decrease your travel time.<br><br>
+	<<elseif $app.fit > 6>>
+		You possess a well-toned, athletic body. Thus, you might be able to carry slightly more weight and require a bit less time to travel than a regular adventurer.<br><br>
+	<<elseif $app.fit > 4>>
+		You have an unremarkable yet healthy body.<br><br>
+	<<else>>
+		Your body appears rather out of shape, and you could certainly benefit from some exercise. Consequently, you can carry significantly less and must take more frequent breaks while traveling compared to a fit expedition leader.<br><br>
+	<</if>>
 <</if>>
+
 <<if $AegisWear>>Although imperceptible to an outside observer, your natural skeleton has been seamlessly replaced with a lightweight and resilient orichalcum framework.<br><br><</if>>
 
 <<if 120 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 180 && !$menFirstCycle>>
@@ -1191,15 +1204,17 @@ If you are over 18, please go back and enter an age above 18 to continue.
 	<</if>>
 <</if>>
 
-
 <<if $ownedRelics.some(e => e.name === "World Stone")>>
-	<<if $app.fit>=10>>
-		<br>You don't think you would get anymore fit than you are from working out with the World Stone. Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
-	<<elseif $LastEx < ($time-1)>>
-		<br> You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body. If you want to get stronger and more fit, using this Relic is the best way to do it.<br>
-		[[Work out with the World Stone|Use Items and Relics][$app.fit+=1, $LastEx = $time]]<br>
+	<br>
+	<<if $app.fit >= 10>>
+		You don't think you would get anymore fit than you are from working out with the World Stone.
+		Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
+	<<elseif $time > $LastEx + 1>>
+		You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body.
+		If you want to get <<if !$playerCurses.some(e => e.name === "Weakling")>>stronger and<</if>> more fit, using this Relic is the best way to do it.<br>
+		[[Work out with the World Stone|Use Items and Relics][$app.fit += 1, $LastEx = $time, $fit_adjustLastT = $time]]<br>
 	<<else>>
-		<br>Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
+		Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
 	<</if>>
 <</if>>
 
@@ -1262,10 +1277,13 @@ If you are over 18, please go back and enter an age above 18 to continue.
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Pulse Bloom")>>
-	<<if $hiredCompanions.length > 0 && $PulseBloomUse=="">>
+	/* $PulseBloomUse used to be initialized as an array, so check carefully. */
+	<<set _pulseBloomInUse = $PulseBloomUse !== "" && !Array.isArray($PulseBloomUse)>>
+
+	<<if $hiredCompanions.length > 0 && !_pulseBloomInUse>>
 		<br>You can use the Pulse Bloom to copy the appearance of one of your companions.<br>
 		[[Use the Pulse Bloom|Pulse Bloom Use]]<br>
-	<<elseif $PulseBloomUse==true >>
+	<<elseif _pulseBloomInUse>>
 		<br>You are already under the effect of the Pulse Bloom.<br>
 	<<else>>
 		<br>You have nobody to use the Pulse Bloom on.<br>
@@ -2130,7 +2148,7 @@ How many dubloons would you like to pay back?
 			<<switch $currentLayer>>
 				<<case 1>>
 					<<set $foodL1 += 1>>
-					<<set $GenderLog.push($ForageFoodMajor)>>
+					<<set $GenderLog.push($ForageFoodMajor)>> /* Blisshrooms without knowledge. */
 				<<case 2>>
 					<<set $foodL2 += 1>>
 					<<if $mudHunt>>
@@ -2139,22 +2157,22 @@ How many dubloons would you like to pay back?
 						<<elseif $items[13].count && $items[20].count >= 1>>
 							<<set $items[20].count -= 1>>
 						<<else>>
-							<<set $LibidoLog.push($ForageFoodMajor)>>
+							<<set $LibidoLog.push($ForageFoodMajor)>> /* Unripe flanberries */
 						<</if>>
 					<<else>>
-						<<set $LibidoLog.push($ForageFoodMajor)>>
+						<<set $LibidoLog.push($ForageFoodMajor)>> /* Unripe flanberries */
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>
-					<<set $AgeLog.push($ForageFoodMajor)>>
+					<<set $AgeLog.push($ForageFoodMajor)>> /* Crystalline Confectionaries without knowledge */
 				<<case 4>>
 					<<if $slingshot>>
 						<<set $foodL4 += 1>>
-						<<set $HeightLog.push($ForageFoodMajor)>>
+						<<set $HeightLog.push($ForageFoodMajor)>> /* Flairabou without knowledge */
 					<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
 						<<set $foodL4 += 1>>
 						<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
-						<<set $HeightLog.push($ForageFoodMajor)>>
+						<<set $HeightLog.push($ForageFoodMajor)>> /* Flairabou without knowledge */
 					<<else>>
 						/* Cannot forage for food. */
 						<<if $items[1].count >= _consumptionPerDay>>
@@ -2198,7 +2216,7 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 8>>
 					<<set $foodL8 += 1>>
-					<<set $LibidoLog.push($ForageFoodMinor)>>
+					<<set $LibidoLog.push($ForageFoodMinor)>> /* Bedlam's Banquet */
 			<</switch>>
 		<<else>>
 			<<switch $currentLayer>>
@@ -2212,22 +2230,22 @@ How many dubloons would you like to pay back?
 						<<elseif $items[13].count && $items[20].count >= 1>>
 							<<set $items[20].count -= 1>>
 						<<else>>
-							<<set $lastFlan = $time>>
+							<<set $lastFlan = $time>> /* Ripe flanberries */
 						<</if>>
 					<<else>>
-						<<set $lastFlan = $time>>
+						<<set $lastFlan = $time>> /* Ripe flanberries */
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>
-					<<set $AgeLog.push($ForageFoodMinor)>>
+					<<set $AgeLog.push($ForageFoodMinor)>> /* Crystalline Confectionaries with knowledge */
 				<<case 4>>
 					<<if $slingshot>>
 						<<set $foodL4 += 1>>
-						<<set $HeightLog.push($ForageFoodMinor)>>
+						<<set $HeightLog.push($ForageFoodMinor)>> /* Flairabou with knowledge */
 					<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
 						<<set $foodL4 += 1>>
 						<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
-						<<set $HeightLog.push($ForageFoodMinor)>>
+						<<set $HeightLog.push($ForageFoodMinor)>> /* Flairabou with knowledge */
 					<<else>>
 						/* Cannot forage for food. */
 						<<if $items[1].count >= _consumptionPerDay>>
@@ -2271,7 +2289,7 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 8>>
 					<<set $foodL8 += 1>>
-					<<set $LibidoLog.push($ForageFoodMinor)>>
+					<<set $LibidoLog.push($ForageFoodMinor)>> /* Bedlam's Banquet */
 			<</switch>>
 		<</if>>
 		<<if _ate>><<set $starving -= 1>><</if>>
@@ -2289,7 +2307,7 @@ How many dubloons would you like to pay back?
 			<<switch $currentLayer>>
 				<<case 1>>
 					<<set $waterL1 += 1>>
-					<<set $GenderLog.push($ForageWaterMajor)>>
+					<<set $GenderLog.push($ForageWaterMajor)>> /* Cloudpools without knowledge */
 				<<case 2>>
 					<<set $waterL2 += 1>>
 					<<set $bewitchBabies += 1>>
@@ -2397,7 +2415,7 @@ How many dubloons would you like to pay back?
 
 		<<if $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the first layer">>
 			<<set $waterL1 += 1>>
-			<<set $GenderLog.push($ForageWaterMajor)>>
+			<<set $GenderLog.push($ForageWaterMajor)>> /* Cloudpools without knowledge */
 		<<elseif $flaskMatrixLabel[$flaskPref] == "Flask with heavily contaiminated water from the second layer">>
 			<<set $waterL2 += 1>>
 			<<set $bewitchBabies += 1>>
@@ -2480,6 +2498,7 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 	<<include `"Layer" + $currentLayer + " Travel Events"`>>
 <</if>>
 <<if !setup.passingTime()>>
+	<<checkTime>>
 	You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that.<br><br>
 
 	How many days would you like to rest here?<br>
@@ -2497,10 +2516,8 @@ $flaskMatrixLabel[$flaskPref] ($flaskMatrix[$flaskPref] remaining)
 <<if $playerCurses.length>0>>
 	<<set $temp = random(0,$playerCurses.length - 1)>>
 	<<set $tempCurse = $playerCurses[$temp]>>
-	<<LibidoCorrected>>
-	<<appGender>>
+	<<CarryAdjust>>
 	<<AppearanceCorrect>>
-	<<GenderCorrected>>
 
 <<if $tempCurse.name == "Libido Reinforcement A" || $tempCurse.name == "Libido Reinforcement B" || $tempCurse.name == "Libido Reinforcement C" || $tempCurse.name == "Libido Reinforcement D" || $tempCurse.name == "Libido Reinforcement E">>
 	<<if $app.libido == 3>>
