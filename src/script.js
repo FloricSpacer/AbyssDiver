@@ -234,7 +234,7 @@ Macro.add('say', {
 		handler: function () {
 			const person = this.args[0];
 			const output =
-				`<div class="say clearfix" style="${person?.style ?? ''}${person?.style1 ?? ''}">` +
+				`<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
 					`<div class="avatar">` +
 						`<img src="${setup.ImagePath}${person?.imageIcon ?? ''}" style="width:100px;height:100px">` +
 					`</div>` +
