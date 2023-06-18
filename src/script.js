@@ -503,7 +503,15 @@ Object.defineProperties(setup, {
 	},
 	// Start passing time for the active passage (initializes state for <<PassTime>>).
 	startPassingTime: {
-		value(days) {
+		value(passage, days) {
+			const vars = variables();
+
+			if (!['Labor Scene', 'Labor Scene Companion'].includes(passage)) {
+				// If we're on a layer without a daily source of water and we're traveling somewhere, reset $atWaterSource.
+				if (vars.currentLayer == 3 && !['Layer3 Camp', 'Layer3 Forage'].includes(passage)) vars.atWaterSource = false;
+				if (vars.currentLayer == 5 && !['Layer5 Camp', 'Layer5 Forage'].includes(passage)) vars.atWaterSource = false;
+			}
+
 			const state = {
 				expectedDays: days, /* The number of days of time to pass, modulo the time weight. */
 				unweightedDayIndex: 0,
@@ -513,7 +521,7 @@ Object.defineProperties(setup, {
 				nextRealDay: 0,
 				energy: temporary().daysOfEnergyRations ?? 0,
 			};
-			variables().passTimeState.set(passage(), state);
+			vars.passTimeState.set(passage, state);
 			return state;
 		},
 	},

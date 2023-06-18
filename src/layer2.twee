@@ -233,7 +233,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 
 <p>[[Continue exploring the second layer|Layer2 Hub]]</p>
 
-<<RelicGrid `["Firmament Pigment", "Pearly Gates", "World Stone", "Forest's Gift", "Harmless Harmony", "Umbra Trident", "Event Horizon", "Heart-stealing Stole", "Effacing Asperity", "Wholly Ale", "Memoir Remnant", "Gleam Dazer"]`>>
+<<RelicGrid `setup.relicsOnLayer[2]`>>
 
 <p>[[Continue exploring the second layer|Layer2 Hub]]</p>
 
@@ -269,19 +269,19 @@ By default, your companions' reward for coming down here with you is the dubloon
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-wonders.png']]
 
 <<nobr>>
-<<if ($visitL3 == 0) && ($brokerUsed == 0) && ($corruption > -100)>>
+<<if $visitL3 == 0 && !$brokerUsed && $corruption > -100>>
 	Would you like to use the Empty-handed Broker?<br>
 	[[Yes, use the Broker|Layer2 Broker]]
-	<<else>>
+<<else>>
 	You have already used the Empty-handed Broker or traveled further into the Abyss, you may not use it now.<br>
 <</if>>
 <</nobr>>
 
 <<nobr>>
-<<if ($starUsed == 0) && ($hiredCompanions.length > 0)>>
+<<if !$starUsed && $hiredCompanions.length > 0>>
 	Would you like to use the Fate-crossing Star?<br>
 	[[Yes, bathe in the Star's lake|Layer2 Star 1]]<br>
-	<<else>>
+<<else>>
 	You must have companions and have not already used the Fate-crossing Star before if you wish to swap bodies with someone.<br>
 <</if>>
 <</nobr>>
@@ -527,10 +527,20 @@ What type of fur would you like to gain?
 
 :: Layer2 Broker [layer2]
 <<nobr>>
-<<set $corruption += 100>>
-<<set $brokerUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
-<</nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 2>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
+<</if>>
+
+<<include "Layer2 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
+<<nobr>>
+	<<set $corruption += 100>>
+	<<set $brokerUsed = true>>
+<</nobr>>\
 [img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
 
 You press forward through the second layer as your seach from the Empty-handed Broker, and as you do, the dewdrops from above accumulate, each one adding to the symphony of droplets cascading down from the treetops. The once gentle drizzle intensifies into a monsoon, pounding against the soil and leaves, filling the air with the deafening roar of water.
@@ -544,9 +554,21 @@ As the chilling rain continues to pour down around you, you realize the weight o
 You have gained 100 corruption points, but you must always keep your corruptions points above 0 from now until the end of your journey. 
 
 [[Continue exploring the second layer|Layer2 Hub]]
+<</if>>
 
 
 :: Layer2 Star 1 [layer2]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 3>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
+<</if>>
+
+<<include "Layer2 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/fate-crossingstar.png']]
 
 You push through the dense foliage, seeking the site of the pond, until the sight of rugged rocks breaks the monotony of green. As you approach, you find a hidden gem: the Fate-crossing Star's pond. The water is a glistening, crystalline blue, its surface disturbed only by the faintest of ripples. The scent of freshness, a welcome contrast to the cloying jungle air, fills your nostrils.
@@ -558,30 +580,25 @@ As you immerse yourself, the sounds of the jungle seem to fade, replaced by the 
 When morning comes, you find yourself waking to an entirely different reality. The familiar weight of your body is gone, replaced by a foreign, alien sensation. You open your eyes and realize that you have swapped bodies with one of your companions. You look into a puddle on the ground and stare in disbelief at your own face, now looking back at you with equal astonishment.
 
 Whose body do you find yourself in?
-
 <<nobr>>
-<<for $i = 0; $i < $hiredCompanions.length; $i++>>
-	<<capture $i>>
-		<<print $hiredCompanions[$i].name>><<print " ">><<print "[[Switch|Layer2 Star 2][$temp to $i]]">><br>
+<<for _i, _companion range $hiredCompanions>>
+	<<capture _i>>
+		&nbsp; [[_companion.name|Layer2 Star 2][$temp = _i]]<br>
 	<</capture>>
 <</for>>
-<<if $aiSuggest==true>>
-	Ai [[Switch| AI switch end]]
+<<if setup.haveSmartphoneAI && $aiSuggest>>
+	Ai [[Switch|AI switch end]]
 <</if>>
 <</nobr>>
+<</if>>
+
 
 :: Layer2 Star 2 [layer2]
 <<nobr>>
-<<set $temp2 = $ocarryWeight>>
-<<set $ocarryWeight = $hiredCompanions[$temp].carry>>
+<<set $starUsed = true>>
 <<set $corruption += 70>>
-<<set $starUsed = 1>>
-<<set $swapComp = $temp>>
-<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
-<<set $hiredCompanions[$swapComp].carry = $temp2>>
-<<CarryAdjust>>
-<<set _companionSwapHandle = $hiredCompanions[$swapComp]>>
-<</nobr>>
+<<set _companionSwapHandle = $hiredCompanions[$temp]>>
+<</nobr>>\
 You've woken up in the body of _companionSwapHandle.name! And _companionSwapHandle.name has woken up in your body!
 
 How do you feel? Did you ask your companion before the switch? Be prepared for your relationship to change if they didn't want this.
@@ -599,6 +616,7 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 <<set _companionSwapHandle.ohair = $app.ohair>>
 <<set _companionSwapHandle.oskinColor = $app.oskinColor>>
 <<set _companionSwapHandle.oeyeColor = $app.oeyeColor>>
+<<set _companionSwapHandle.carry = $ocarryWeight>>
 <<set _companionSwapHandle.switch = true>>
 
 <<set $app.age = _copy.age>>
@@ -610,6 +628,7 @@ How do you feel? Did you ask your companion before the switch? Be prepared for y
 <<set $app.ohair = _copy.ohair>>
 <<set $app.oskinColor = _copy.oskinColor>>
 <<set $app.oeyeColor = _copy.oeyeColor>>
+<<set $ocarryWeight = _copy.carry>>
 <<set $app.switch = true>>
 
 <<set $app.desc += _copy.appDesc>>
@@ -1408,7 +1427,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 		<<set _multiplier = 1/2>>
 	<</if>>
 	<<AdjustedTravelTime "_travelTime" 4 false 0 _multiplier>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer2 Travel Events">>
@@ -1456,7 +1475,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 <<if !setup.passingTime()>>
 	<<AdjustedTravelTime "_travelTime" 5>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer2 Travel Events">>
