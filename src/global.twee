@@ -336,8 +336,10 @@ You have $app.ears ears.<br>
 You are $app.realAge years old<<if $app.realAge != $app.appAge>>, but you appear to be $app.appAge years old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
 <br><br>
 <<if $DaedalusEquip==true>> You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br><br><</if>>
-<<if $swapComp > -1>>
-	You are in the body originally belonging to $hiredCompanions[$swapComp].name and $hiredCompanions[$swapComp].name is in your old body.<br><br>
+<<if $companionSwitched == 'Twin'>>
+	You are in the body originally belonging to $companionTwin.name and $companionTwin.name is in your old body.<br><br>
+<<elseif $companionSwitched>>
+	You are in the body originally belonging to $companionSwitched and $companionSwitched is in your old body.<br><br>
 <</if>>
 
 <<if $app.subdom > 0>>
@@ -2018,8 +2020,12 @@ How many dubloons would you like to pay back?
 /* Get the persistent state for the active passage. */
 <<set _state = setup.passingTime()>>
 <<if !_state>>
-	/* If we aren't passing time yet, assume that the number of days was passed in the first argument. */
-	<<set _state = setup.startPassingTime(_args[0])>>
+	/* If we aren't passing time yet, check if the number of days was passed in the first argument. */
+	<<if typeof _args[0] == 'number'>>
+		<<set _state = setup.startPassingTime(passage(), _args[0])>>
+	<<else>> /* Otherwise, just pass 0 days. */
+		<<set _state = setup.startPassingTime(passage(), 0)>>
+	<</if>>
 <</if>>
 
 /* Check event triggers. */
@@ -2311,6 +2317,9 @@ How many dubloons would you like to pay back?
 			<<if $hexflame > 9>>
 				<<set $hexflame -= 1>>
 			<</if>>
+		<<elseif $atWaterSource>>
+			/* If we're currently at a source of clean water (e.g. layer 3 river or layer 5 oasis), drink from it. */
+			<<print `<<set $waterL${$currentLayer} += 1>>`>>
 		<<elseif !$forageWater>>
 			<<include "Drinking code">>
 		<<elseif !$abyssKnow>>
@@ -2390,7 +2399,7 @@ How many dubloons would you like to pay back?
 	<<if Math.round(_state.weightedDay) > Math.round(_state.weightedDayIndex)>>
 		Desperate to stave off starvation and dehydration, you spent an extra
 		<<print Math.round(_state.weightedDay) - Math.round(_state.weightedDayIndex)>>
-		days foraging, extending the time spent to <<print Math.round(_state.weightedDay)>> days!
+		days foraging, extending the time spent to <<print Math.round(_state.weightedDay)>> days!<br>
 	<</if>>
 
 	/* If we ended on a fractional day that should be rounded up, increment the time. */
@@ -2515,7 +2524,7 @@ You will first drink:<br>
 	How many days would you like to rest here?<br>
 	<<textbox "_campTime" "0">><br>
 	<<link "Set up camp and wait" `passage()`>>
-		<<set setup.startPassingTime(parseInt(_campTime, 10) || 0)>>
+		<<set setup.startPassingTime(passage(), Math.max(parseInt(_campTime, 10) || 0, 0))>>
 	<</link>><br><br>
 
 	<<link "Return to exploring the layer without waiting" `"Layer" + $currentLayer + " Hub"`>><</link>>

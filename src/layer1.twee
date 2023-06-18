@@ -124,7 +124,7 @@ Certain Relics possess straightforward uses that become readily apparent in spec
 
 <p>[[Continue exploring the first layer|Layer1 Hub]]</p>
 
-<<RelicGrid `["Star Compass", "Rømer Stones", "Creepy Doll", "Giddy Reaper", "Silk Twister", "Vertebra Key", "Chain of Lorelei", "Hive Tassel", "Smitten Mitt"]`>>
+<<RelicGrid `setup.relicsOnLayer[1]`>>
 
 <p>[[Continue exploring the first layer|Layer1 Hub]]</p>
 
@@ -244,13 +244,13 @@ You sit by the fire with your party and chat, the mood is pretty upbeat and opti
 
 <<nobr>>
 <<if $playerCurses.length > 0>>
-	<<if $iconUsed == 0>>
+	<<if !$iconUsed>>
 		Would you like to use the Icon of Mercy?<br><br>
 		[[Yes, use the Icon|Layer1 Icon]]<br>
-		<<else>>
+	<<else>>
 		You have already used the Icon of Mercy, you may not use it again.<br>
 	<</if>>
-	<<else>>
+<<else>>
 	You have no Curses to remove, there's no need to use the Icon.<br>
 <</if>>
 <</nobr>>
@@ -329,7 +329,7 @@ Descending to the next layer will take 2 days. How are your supplies of food and
 
 <<if !setup.passingTime()>>
 	<<AdjustedTravelTime "_travelTime" 2>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer1 Travel Events">>
@@ -480,6 +480,17 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 
 :: Layer1 Icon [layer1]
+<<nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 3>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
+<</if>>
+
+<<include "Layer1 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/iconofmercy.png']]
 
 As you meander through the lush, verdant slopes of the first layer of the Abyss, your eyes catch a glint of something unusual, and you are drawn to a small clearing where the captivating figure of the Icon of Mercy stands. Awestruck, you approach the statue, taking in the exquisite craftsmanship and the elegant lines of her flowing dress. Her exposed breast seems to represent vulnerability and nurturing, and the feeling of comfort emanating from the statue is palpable.
@@ -490,16 +501,17 @@ A sudden realization dawns upon you: by touching the statue, you can remove one 
 
 Choose the Curse you wish to remove:
 <<nobr>>
-<<for $i = 0; $i < $playerCurses.length; $i++>>
-	<<capture $i>>
-		<<if !($playerCurses[$i].name == "Double Trouble" || $playerCurses[$i].name == "Conjoined")>>
-			<<print "[[$playerCurses[$i].name|Icon Removal][$temp to $i]]">><br>
-		<</if>>
-	<</capture>>
+<<for _i, _curse range $playerCurses>>
+	<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined'>>
+		<<capture _i>>
+			&nbsp; [[_curse.name|Icon Removal][$temp = _i]]<br>
+		<</capture>>
+	<</if>>
 <</for>>
 <</nobr>>
 
-<<back>>
+[[Return to exploring layer 1|Layer1 Hub]]
+<</if>>
 
 
 :: Pick up the Star Compass [layer1]
@@ -972,14 +984,13 @@ But gradually, a newfound certainty washes over you - the realization that your 
 <</if>>
 
 
-:: Icon Removal [layer1]
-<<nobr>>
-<<set $corruption -= $playerCurses[$temp].corr>>
-<<set $iconUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
-The Curse, $playerCurses[$temp].name, has been successfully removed and your corruption has been refunded.<br>
-<<RemoveCurse $playerCurses[$temp]>>
-<</nobr>>
+:: Icon Removal [layer1 nobr]
+<<set _curse = $playerCurses[$temp]>>
+<<set $iconUsed = true>>
+<<set $corruption -= _curse.corr>>
+<<RemoveCurse _curse>>
+The Curse, _curse.name, has been successfully removed and your corruption has been refunded.<br><br>
+
 [[Continue exploring the layer|Layer1 Hub]]
 
 
@@ -1021,7 +1032,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 		<<set _multiplier = 1/2>>
 	<</if>>
 	<<AdjustedTravelTime "_travelTime" 1 false 0 _multiplier>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer1 Travel Events">>
