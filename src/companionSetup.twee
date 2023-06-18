@@ -643,6 +643,7 @@ The rest of the world just sees you as a pair of twins who did everything togeth
 <q>This is so weird. I'm starting to wonder whether you're really the copy, or if I am...</q>
 
 :: Party overview [nobr]
+<<set _numConvos = 0>>
 <<CarryAdjust>>
 <<AppearanceCorrect>>
 <<Inhuman>> 
@@ -650,27 +651,16 @@ The rest of the world just sees you as a pair of twins who did everything togeth
 <<if $ConvoHandicapLarge || $ConvoHandicapSmall>>
 	@@.alert2; Because of your handicaps you are unable to have an effective conversation with your companions.@@ <br>
 	<<for _companion range $hiredCompanions>>
-		<<set $temp = _companion.name>>
-		<<if $temp==$companionTwin.name>>
-			<<print "[[_companion.name| Twin Overview]]: $companionTwin.affec">>
-		<<else>>
-			<<print "[[_companion.name|" + _companion.name + " Overview]]: $companion" + _companion.name + ".affec">>
-		<</if>>
+		<<set _name = _companion !== $companionTwin ? _companion.name : 'Twin'>>
+		<<print `[[${_companion.name}|${_name} Overview]]: $companion${_name}.affec`>>
 		<br>
 	<</for>>
 <<else>>
 	<<for _companion range $hiredCompanions>>
-		<<set $temp = _companion.name>>
-		<<if $temp==$companionTwin.name>>
-			<<print "[[_companion.name| Twin Overview]]: $companionTwin.affec">>
-			<br>
-			<<include "Twin Conversations">>
-		<<else>>
-			<<print "[[_companion.name|" + _companion.name + " Overview]]: $companion" + _companion.name + ".affec">>
-			<br>
-			<<if $temp!=$companionGolem.name>>
-				<<include `_companion.name + " Conversations"`>>
-			<</if>>
+		<<set _name = _companion !== $companionTwin ? _companion.name : 'Twin'>>
+		<<print `[[${_companion.name}|${_name} Overview]]: $companion${_name}.affec`>>
+		<<if _companion !== $companionGolem>>
+			<br><<include `_name + ' Conversations'`>>
 		<</if>>
 		<br>
 	<</for>>
