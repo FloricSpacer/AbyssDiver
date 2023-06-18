@@ -1678,7 +1678,7 @@ In your inventory you have:
 		<<set _temp = $flaskMatrixOrderAvailable[_i]>>
 	<</capture>>
 	
-	<br>$flaskMatrix[_temp] $flaskMatrixLabel[_temp] remaining 
+	<br>$flaskMatrix[_temp] <<print setup.flaskLabels[_temp]>> remaining 
 		
 	<<capture _temp>>
 		<<link "Drop""Layer5 Borer Drop Count">>
@@ -1691,7 +1691,7 @@ In your inventory you have:
 		<<capture _temp>>
 			<<link "Drop <<print $waterDropNb>> water" "Layer5 Borer Water">>
 				<<if $items[3].count > 0 || $items[0].count > 0>>
-					<<if $flaskMatrixLabel[_temp]=="Bottled water" || $items[3].count <= 0>>	
+					<<if setup.flaskLabels[_temp]=="Bottled water" || $items[3].count <= 0>>	
 						<<set $items[0].count -= $waterDropNb >>
 					<<else>>
 						<<set $items[3].count -= $waterDropNb  >>
@@ -1708,7 +1708,7 @@ In your inventory you have:
 <</nobr>>
 
 :: Layer5 Borer Drop Count[nobr]
-You have $flaskMatrix[$flaskBorerID] days worth of $flaskMatrixLabel[$flaskBorerID], select the amount you want to drop:<br>
+You have $flaskMatrix[$flaskBorerID] days worth of <<print setup.flaskLabels[$flaskBorerID]>>, select the amount you want to drop:<br>
 (You need $waterDropNb more to distract the Borer)<br><br>
 
 <<textbox "_temp" "0">>
@@ -1723,7 +1723,7 @@ You have $flaskMatrix[$flaskBorerID] days worth of $flaskMatrixLabel[$flaskBorer
 	<<if _temp >= $waterDropNb>>
 		<<set _enoughWaterTest = "Layer5 Borer Water" >>
 		<<if $items[3].count > 0 || $items[0].count > 0>>
-			<<if $flaskMatrixLabel[$flaskBorerID]=="Bottled water" || $items[3].count <= 0>>	
+			<<if setup.flaskLabels[$flaskBorerID]=="Bottled water" || $items[3].count <= 0>>	
 				<<set $items[0].count -= $waterDropNb >>
 			<<else>>
 				<<set $items[3].count -= $waterDropNb  >>
@@ -1736,7 +1736,7 @@ You have $flaskMatrix[$flaskBorerID] days worth of $flaskMatrixLabel[$flaskBorer
 	<<elseif _temp >= 0 >>
 		<<set $waterDropNb -= _temp>>
 		<<if $items[3].count > 0 || $items[0].count > 0>>
-			<<if $flaskMatrixLabel[$flaskBorerID]=="Bottled water" || $items[3].count <= 0>>	
+			<<if setup.flaskLabels[$flaskBorerID]=="Bottled water" || $items[3].count <= 0>>	
 				<<set $items[0].count -= _temp >>
 			<<else>>
 				<<set $items[3].count -= _temp  >>
