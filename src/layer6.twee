@@ -193,11 +193,7 @@ If you decide to start foraging for food or water, it means that you will not co
 
 Do you want to approach the Maw of Kimaris to get a copy of a Relic from a higher layer?
 
-<<link "Approach the Maw" "Layer6 Maw1">>
-	<<AdjustedTravelTime "_travelTime" 3>>
-	<<set setup.startPassingTime('Layer6 Maw1', _travelTime)>>
-<</link>>
-
+<<TravelToPassage 'Approach the Maw' 'Layer6 Maw1' 3>>
 
 <<back>>
 
@@ -238,7 +234,7 @@ There is no indication of what you might find beyond layer 6. There are a few hi
 Traversing down and past this hell will take 16 days.
 
 [[Turn back and continue your business on the sixth layer|Layer6 Hub]]
-[[Continue your descent to the seventh layer|Layer6 Exit2]]
+<<TravelToPassage 'Continue your descent to the seventh layer' 'Layer6 Exit2' 16>>
 
 
 :: Layer6 Flasks [layer6]
@@ -270,11 +266,7 @@ There is a very easily accessible source of water on this layer, the River Dycx,
 
 
 :: Layer6 Maw1 [image layer6]
-<<nobr>>
-
-<<include "Layer6 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
 <<if !$mawUse>>
@@ -962,19 +954,15 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 :: Layer6 Ascend2 [layer6]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 15 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 15 0 _multiplier>>
 <</if>>
-
-<<include "Layer6 Travel Events">>
-
+<<PassTimeWithEvents>>
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -991,16 +979,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 
 :: Layer6 Exit2 [layer6]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 16>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer6 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
 

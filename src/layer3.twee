@@ -113,9 +113,7 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 
 
 :: Layer3 Forage [image layer3]
-<<if setup.passingTime()>>
-	<<include "Layer3 Travel Events">>
-<</if>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 <<checkTime>>
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 4-foraging.png']]
@@ -130,24 +128,22 @@ If you decide to start foraging for food or water, it means that you will not co
 <</if>>
 <<if $items[2].count > 0>>
 	<<if $atWaterSource>>
-		[[Fill your empty flasks with water from the underground river|Layer3 Flasks]]<br><br>
+		<<link 'Fill your empty flasks with water from the underground river' 'Layer3 Flasks'>><</link>><br><br>
 	<<else>>
-		[[Fill your empty flasks with water from underground rivers|Layer3 Flasks]]<br><br>
+		<<TravelToPassage 'Fill your empty flasks with water from underground rivers' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>><br><br>
 	<</if>>
 <<else>>
 	<<if $atWaterSource>>
 		You need empty flasks to fill them with water from the underground river.<br><br>
 	<<else>>
-		[[Find an underground river to avoid using your water|Layer3 Flasks]]<br><br>
+		<<TravelToPassage 'Find an underground river to avoid using your water' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>><br><br>
 	<</if>>
 <</if>>
 <<if $atWaterSource>>
 	You can also wait at the underground river if you'd like to pass the time while waiting for something.<br>
 	How many days would you like to wait at the underground river?<br>
 	<<textbox "_waitTime" "0">>
-	<<link "Wait" `passage()`>>
-		<<set setup.startPassingTime(passage(), Math.max(parseInt(_waitTime, 10) || 0, 0))>>
-	<</link>><br><br>
+	<<WaitAtPassage 'Wait' `passage()` `Math.max(parseInt(_waitTime, 10) || 0, 0)`>><br><br>
 <</if>>
 <</nobr>>\
 [[Return to exploring the rest of the layer|Layer3 Hub]]
@@ -214,9 +210,9 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 <<nobr>>
 <<if $scalesUsed == 0>>
 Would you like to use the Gossamery Scales to gain dubloons based on your corruption?<br>
-[[Yes, use the Scales to gain dubloons|Layer3 Scales 1]]<br><br>
+<<TravelToPassage 'Yes, use the Scales to gain dubloons' 'Layer3 Scales 1' 2>><br><br>
 Would you like to use the Gossamery Scales to gain corruption based on your dubloons?<br>
-[[Yes, use the Scales to gain corruption|Layer3 Scales 2]]<br><br>
+<<TravelToPassage 'Yes, use the Scales to gain corruption' 'Layer3 Scales 2' 2>><br><br>
 <<else>>
 You have already used the scales on your journey. You may not use them again.<br><br>
 <</if>>
@@ -224,15 +220,9 @@ You have already used the scales on your journey. You may not use them again.<br
 	You must have companions if you would like to use the Skewed Shrine.<br><br>
 <<elseif $skewedForced < 4>>
 	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<link "Yes, use the Skewed Shrine to transfer a Curse" "Layer3 Skewed1a">>
-		<<AdjustedTravelTime "_travelTime" 3>>
-		<<set setup.startPassingTime('Layer3 Skewed1a', _travelTime)>>
-	<</link>><br><br>
+	<<TravelToPassage 'Yes, use the Skewed Shrine to transfer a Curse' 'Layer3 Skewed1a' 3>><br><br>
 	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<link "Yes, use the Skewed Shrine to force a Curse" "Layer3 Skewed 2a">>
-		<<AdjustedTravelTime "_travelTime" 3>>
-		<<set setup.startPassingTime('Layer3 Skewed 2a', _travelTime)>>
-	<</link>><br><br>
+	<<TravelToPassage 'Yes, use the Skewed Shrine to force a Curse' 'Layer3 Skewed 2a' 3>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
 <</if>>
@@ -280,7 +270,7 @@ Easily-accessible foraged food isn't guaranteed from here on. Taking a gun with 
 In the deeper parts of the layer, a cold breeze occasionally blows through the caverns, hinting at something frigid deeper below.
 
 [[Turn back and continue your business on the third layer|Layer3 Hub]]
-[[Continue your descent to the fourth layer|Layer3 Exit2]]
+<<TravelToPassage 'Continue your descent to the fourth layer' 'Layer3 Exit2' 6>>
 
 
 :: Layer3 Travel Events [layer3 nobr]
@@ -302,19 +292,15 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 
 :: Layer3 Ascend2 [layer3]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 6 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 6 0 _multiplier>>
 <</if>>
-
-<<include "Layer3 Travel Events">>
-
+<<PassTimeWithEvents>>
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -331,16 +317,7 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 
 
 :: Layer3 Scales 1 [layer3]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 2>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer3 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 <<nobr>>
 	<<set $temp = Math.round($corruption / 5)>>
@@ -358,16 +335,7 @@ Once you pick them up, the luster of the scales fades, indicating that they will
 
 
 :: Layer3 Scales 2 [layer3]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 2>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer3 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 <<nobr>>
 	<<set $temp = Math.round($dubloons / 5)>>
@@ -387,11 +355,7 @@ As you pick up the dubloons from the scales, you notice that the luster of the s
 
 
 :: Layer3 Skewed1a [layer3]
-<<nobr>>
-
-<<include "Layer3 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
@@ -455,11 +419,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 
 
 :: Layer3 Skewed 2a [layer3]
-<<nobr>>
-
-<<include "Layer3 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
@@ -883,16 +843,7 @@ On the other hand, the idea of each encounter feeling like your first time holds
 
 
 :: Layer3 Flasks [layer3]
-<<nobr>>
-
-<<if !setup.passingTime() && !$atWaterSource>>
-	<<AdjustedTravelTime "_travelTime" 4 true `-$abyssKnow - $riverVisit`>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer3 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Foraging/undergroundrivers.png']]
 <<if $atWaterSource>>
@@ -1146,16 +1097,7 @@ Please enter a new eye color:
 <</nobr>>
 
 :: Layer3 Exit2 [layer3]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 6>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer3 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	You continue through the dark winding caverns for days on end. After a long and monotonous journey, broken up only by evading threats that may have interrupted you, you notice that the caves are opening up. But rather than the wet forest from above, you feel the air getting colder, and occasionally notice frost on the walls of the caves.
 

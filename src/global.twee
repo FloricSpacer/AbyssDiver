@@ -1059,12 +1059,12 @@ A bright flash of light forces you to close your eyes. When you open them, both 
 $hiredCompanions[_temp1].name spends the next few days recovering, with you at her side offering emotional and physical support. Gradually, she starts walking around a little again.
 <<if $hiredCompanions[_temp1].name != "Cherry" && $hiredCompanions.some(e => e.name === "Cherry")>>
 Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her recovery. In the end, you don't truly resume your travels in earnest until after 4 days.
-<<set $tempTime=4>>
+<<set _waitTime = 4>>
 <<else>>
 In the end, you don't truly resume your travels in earnest until after 7 days.
-<<set $tempTime=7>>
+<<set _waitTime = 7>>
 <</if>>
-<<PassTime $tempTime>>\
+<<PassTime _waitTime>>\
 
 [[You cast your eyes once more on the central location of this layer, ready to get moving again|_string]]
 
@@ -1828,21 +1828,50 @@ How many dubloons would you like to pay back?
 <</capture>>
 <</widget>>
 
-:: Widgets for the passage of time [widget nobr]
-<<widget "AdjustedTravelTime">>
-<<capture _additiveModifier _consumptionPerDay _forPreview _inputTime _multiplicativeModifier>>
+:: Widgets for traveling and the passage of time [widget nobr]
+<<widget "WaitAtPassage">>
 /*
-	_args[0]: string       = the variable to write to, as a string (e.g. "$tempTime")
-	_args[1]: var|number   = the raw, unadjusted travel time
-	_args[2]: [bool]       = whether to avoid adjustments beyond the travel time (optional, defaults to false)
-	_args[3]: [var|number] = initial additive modifier (optional, can be negative)
-	_args[4]: [var|number] = initial multiplicative modifier (optional, <1 is a bonus, >1 is a penalty)
+	_args[0]: var|string = As linkText in <<link>>. The text of the link. May contain markup.
+	_args[1]: var|string = As passageName in <<link>>. The name of the passage to go to.
+	_args[2]: var|number = The number of days to wait.
+	_args[3]: [string]   = Set expression to execute (optional).
 */
-<<set _inputTime = _args[1]>>
-<<set _forPreview = _args[2]>>
+<<link _args[0] _args[1]>>
+	<<if _args[2] > 0>><<set setup.startPassingTime(_args[1], _args[2])>><</if>>
+	<<if _args[3]>><<print `<<set ${_args[3]}>>`>><</if>>
+<</link>>
+<</widget>>
+
+<<widget "TravelToPassage">>
+/*
+	_args[0]: var|string   = As linkText in <<link>>. The text of the link. May contain markup.
+	_args[1]: var|string   = As passageName in <<link>>. The name of the passage to go to.
+	_args[2]: var|number   = The raw, unadjusted travel time.
+	_args[3]: [var|number] = Initial additive modifier (optional, can be negative).
+	_args[4]: [var|number] = Initial multiplicative modifier (optional, <1 is a bonus, >1 is a penalty).
+	_args[5]: [string]     = Set expression to execute (optional).
+*/
+<<link _args[0] _args[1]>>
+	<<StartTraveling _args[2] _args[3] _args[4] _args[1]>>
+	<<if _args[5]>><<print `<<set ${_args[5]}>>`>><</if>>
+<</link>>
+<</widget>>
+
+<<widget "StartTraveling">>
+<<capture _additiveModifier _consumptionPerDay _forPreview _inputTime _multiplicativeModifier _passageOrOutVar>>
+/*
+	_args[0]: var|number   = The raw, unadjusted travel time.
+	_args[1]: [var|number] = Initial additive modifier (optional, can be negative).
+	_args[2]: [var|number] = Initial multiplicative modifier (optional, <1 is a bonus, >1 is a penalty).
+	_args[3]: [string]     = The passage name, or the output variable in preview mode (optional).
+	_args[4]: ['preview']  = If set, no state is modified and the time is written to the variable in the first argument.
+*/
+<<set _inputTime = _args[0]>>
+<<set _passageOrOutVar = _args[3] ?? passage()>>
+<<set _forPreview = _args[4]>>
 
 /* Start by computing the overall additive modifier. */
-<<set _additiveModifier = _args[3] ?? 0>>
+<<set _additiveModifier = _args[1] ?? 0>>
 
 /* Apply time reduction from having Khemia with you. */
 <<set _additiveModifier -= $timeRed>>
@@ -1928,7 +1957,7 @@ How many dubloons would you like to pay back?
 
 /* If travel time wasn't eliminated entirely, apply multiplicative modifiers. */
 <<if _inputTime > 0>>
-	<<set _multiplicativeModifier = _args[4] ?? 1>>
+	<<set _multiplicativeModifier = _args[2] ?? 1>>
 	/* Double travel time if player has a size handicap (Colossal-able, or Minish-ish with no one to carry them). */
 	<<if $SizeHandicap>>
 		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
@@ -1993,12 +2022,33 @@ How many dubloons would you like to pay back?
 		<<set $items[24].count -= _consumptionPerDay * (_daysOfEnergyRations - _inputTime)>>
 		<<set _daysOfEnergyRations = _inputTime>>
 	<</if>>
+
+	/* Actually start passing time. */
+	<<if _inputTime > 0>>
+		<<set setup.startPassingTime(_passageOrOutVar, _inputTime)>>
+	<</if>>
+<<else>>
+	/* Write the adjusted time to the output variable. */
+	<<print `<<set ${_passageOrOutVar} = ${_inputTime}>>`>>
 <</if>>
 
-/* Write to the output variable. */
-<<print `<<set ${_args[0]} = ${_inputTime}>>`>>
-
 <</capture>>
+<</widget>>
+
+<<widget "PreviewTravelTime">>
+/*
+	_args[0]: string       = The output variable.
+	_args[1]: var|number   = The raw, unadjusted travel time.
+	_args[2]: [var|number] = Initial additive modifier (optional, can be negative).
+	_args[3]: [var|number] = Initial multiplicative modifier (optional, <1 is a bonus, >1 is a penalty).
+*/
+<<silently>>
+	<<StartTraveling _args[1] _args[2] _args[3] _args[0] 'preview'>>
+<</silently>>
+<</widget>>
+
+<<widget "PassTimeWithEvents">>
+	<<if setup.passingTime()>><<include `"Layer" + $currentLayer + " Travel Events"`>><</if>>
 <</widget>>
 
 <<widget "PassTime">>
@@ -2020,12 +2070,8 @@ How many dubloons would you like to pay back?
 /* Get the persistent state for the active passage. */
 <<set _state = setup.passingTime()>>
 <<if !_state>>
-	/* If we aren't passing time yet, check if the number of days was passed in the first argument. */
-	<<if typeof _args[0] == 'number'>>
-		<<set _state = setup.startPassingTime(passage(), _args[0])>>
-	<<else>> /* Otherwise, just pass 0 days. */
-		<<set _state = setup.startPassingTime(passage(), 0)>>
-	<</if>>
+	/* If we aren't passing time yet, assume that the number of days was passed in the first argument. */
+	<<set _state = setup.startPassingTime(passage(), _args[0])>>
 <</if>>
 
 /* Check event triggers. */
@@ -2514,18 +2560,14 @@ You will first drink:<br>
 
 
 :: CampCode [nobr]
-<<if setup.passingTime()>>
-	<<include `"Layer" + $currentLayer + " Travel Events"`>>
-<</if>>
+<<PassTimeWithEvents>>
 <<if !setup.passingTime()>>
 	<<checkTime>>
 	You can set up camp and rest here for a while before continuing your journey. You still need to eat and drink and the layer's threats continue to loom over you even as you rest. This won't accomplish much on its own, but if you'd like to spend some time sampling the local cuisine or studying this layer's threats, then this could be a good way to do that.<br><br>
 
 	How many days would you like to rest here?<br>
 	<<textbox "_campTime" "0">><br>
-	<<link "Set up camp and wait" `passage()`>>
-		<<set setup.startPassingTime(passage(), Math.max(parseInt(_campTime, 10) || 0, 0))>>
-	<</link>><br><br>
+	<<WaitAtPassage 'Set up camp and wait' `passage()` `Math.max(parseInt(_campTime, 10) || 0, 0)`>><br><br>
 
 	<<link "Return to exploring the layer without waiting" `"Layer" + $currentLayer + " Hub"`>><</link>>
 <</if>>

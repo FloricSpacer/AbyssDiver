@@ -270,7 +270,7 @@ It is reccomended that you get creative with your Relics and think of more effic
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 8-wonders2.png']]
 
 Do you want to visit the Clockwork Forge to swap Relic abilities?
-[[Approach the Forge|Layer7 Forge1]]
+<<TravelToPassage 'Approach the Forge' 'Layer7 Forge1' 2>>
 
 Do you want to check out the Vend-o-matic 6900 to purchase new items?
 [[Approach the Vend-o-matic|Layer7 Vend]]
@@ -322,7 +322,7 @@ As you head towards the bottom of the city to descend to the next layer, you not
 If you're not dissuaded and choose to continue onward, it will take you 8 days to reach this layer's bottom.
 
 [[Turn back and continue your business on the seventh layer|Layer7 Hub]]
-[[Continue your descent to the eighth layer|Layer7 Exit2]]
+<<TravelToPassage 'Continue your descent to the eighth layer' 'Layer7 Exit2' 8>>
 
 
 :: Pick up the Daedalus Mechanism [layer7]
@@ -485,7 +485,7 @@ If you choose to place 2 Relics in the Clockwork Forge, along with 4 dubloons, y
 
 
 [[Use the Forge to swap the abilities of 2 Relics|Layer7 Forge2]]
-<<back>>
+[[Continue exploring the seventh layer|Layer7 Hub]]
 
 
 :: Layer7 Vend [layer7 cards nobr]
@@ -1285,7 +1285,6 @@ You retrieve your Relics and find that you have successfully switched the abilit
 
 [[Continue your business on the seventh layer|Layer7 Hub]]<br><br>
 
-<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
 <<set $dubloons -= 4>>
 
 <<set $temp = $relicSwap.length>>
@@ -1346,19 +1345,15 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 
 :: Layer7 Ascend2 [layer7]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 7 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 7 0 _multiplier>>
 <</if>>
-
-<<include "Layer7 Travel Events">>
-
+<<PassTimeWithEvents>>
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -1377,16 +1372,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 
 
 :: Layer7 Exit2 [layer7]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 8>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer7 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	After days of travel, you reach the bottom of the city. What awaits you is an enormous, circular gate, embedded into the ground at the lowest point of the city, almost like an elaborate manhole cover.
 
@@ -1525,10 +1511,7 @@ You have worked $temp1 days and brought robots to artificial orgasm $temp2 times
 <<include 'CampCode'>>
 
 :: Layer7 Threat2 [layer7]
-<<nobr>>
-<<set $timeL7T2 -= 6>>
-<<PassTime 1>>
-<</nobr>>
+<<set $timeL7T2 -= 6>><<PassTime 1>>\
 [img[setup.ImagePath+'Threats/securityrobot.png']]
 
 <<if $playerCurses.some(e => e.name === "Hypno Happytime") && $layer7Hypno < 3>><<set $layer7Hypno += 1>>

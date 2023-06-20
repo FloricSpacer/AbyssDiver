@@ -239,22 +239,16 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 	You must have companions if you would like to use the Steady Shrine.<br><br>
 <<elseif $steadyForced < 4>>
 	Would you like to use the Steady Shrine to copy a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<link "Yes, use the Steady Shrine to copy a Curse" "Layer4 Steady1a">>
-		<<AdjustedTravelTime "_travelTime" 3>>
-		<<set setup.startPassingTime('Layer4 Steady1a', _travelTime)>>
-	<</link>><br><br>
+	<<TravelToPassage 'Yes, use the Steady Shrine to copy a Curse' 'Layer4 Steady1a' 3>><br><br>
 	Would you like to use the Steady Shrine to forcibly copy a Curse onto one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<link "Yes, use the Steady Shrine to forcibly copy a Curse" "Layer4 Steady 2a">>
-		<<AdjustedTravelTime "_travelTime" 3>>
-		<<set setup.startPassingTime('Layer4 Steady 2a', _travelTime)>>
-	<</link>><br><br>
+	<<TravelToPassage 'Yes, use the Steady Shrine to forcibly copy a Curse' 'Layer4 Steady 2a' 3>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
 <</if>>
 
 <<if !$purityUsed>>
 	Would you like to travel to the Purity Tree?<br>
-	[[Yes, choose what you want to do with the tree|Layer4 Purity 1]]<br><br>
+	<<TravelToPassage 'Yes, choose what you want to do with the tree' 'Layer4 Purity 1' 5>><br><br>
 	<<else>>
 	You can only use the rare species of purity tree one time.<br><br>
 <</if>>
@@ -298,7 +292,7 @@ Between this layer and the next is a kilometers-long sheer drop with a near-feat
 The air seems to get drier as you proceed further down. You might want to stockpile plenty of water before continuing on, probably around 2 weeks worth at a minimum.
 
 [[Turn back and continue your business on the fourth layer|Layer4 Hub]]
-[[Continue your descent to the fifth layer|Layer4 Exit2]]
+<<TravelToPassage 'Continue your descent to the fifth layer' 'Layer4 Exit2' `setup.haveRope ? 8 : 19`>>
 
 
 :: Take on Libido Reinforcement C [layer4]
@@ -718,11 +712,7 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 
 
 :: Layer4 Steady1a [layer4]
-<<nobr>>
-
-<<include "Layer4 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
@@ -787,11 +777,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 
 
 :: Layer4 Steady 2a [layer4]
-<<nobr>>
-
-<<include "Layer4 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
@@ -826,16 +812,7 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 
 
 :: Layer4 Purity 1 [layer4]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 5>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer4 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/puritytree.png']]
 
@@ -1252,19 +1229,15 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 
 :: Layer4 Ascend2 [layer4]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 7 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 7 0 _multiplier>>
 <</if>>
-
-<<include "Layer4 Travel Events">>
-
+<<PassTimeWithEvents>>
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -1281,16 +1254,7 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 
 
 :: Layer4 Exit2 [layer4]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" `setup.haveRope ? 8 : 19`>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer4 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	You continue your hike and try to keep somewhat warm despite the bone-chilling cold and your treacherous journey along the pit of sheer ice. As you get closer to the bottom, the temperature rises and the air starts to dry out.
 
