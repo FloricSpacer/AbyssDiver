@@ -1829,6 +1829,22 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 :: Widgets for the passage of time [widget nobr]
+<<widget "TravelToPassage">>
+/*
+	_args[0]: var|string   = As linkText in <<link>>. The text of the link. May contain markup.
+	_args[1]: var|string   = As passageName in <<link>>. The name of the passage to go to.
+	_args[2]: var|number   = The raw, unadjusted travel time.
+	_args[3]: [var|number] = Initial additive modifier (optional, can be negative)
+	_args[4]: [var|number] = Initial multiplicative modifier (optional, <1 is a bonus, >1 is a penalty)
+*/
+<<link _args[0] _args[1]>>
+	<<capture _travelTime>>
+		<<AdjustedTravelTime "_travelTime" _args[2] false _args[3] _args[4]>>
+		<<if _travelTime > 0>><<set setup.startPassingTime(_args[1], _travelTime)>><</if>>
+	<</capture>>
+<</link>>
+<</widget>>
+
 <<widget "AdjustedTravelTime">>
 <<capture _additiveModifier _consumptionPerDay _forPreview _inputTime _multiplicativeModifier>>
 /*
