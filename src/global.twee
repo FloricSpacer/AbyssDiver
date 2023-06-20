@@ -1829,6 +1829,19 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 :: Widgets for traveling and the passage of time [widget nobr]
+<<widget "WaitAtPassage">>
+/*
+	_args[0]: var|string = As linkText in <<link>>. The text of the link. May contain markup.
+	_args[1]: var|string = As passageName in <<link>>. The name of the passage to go to.
+	_args[2]: var|number = The number of days to wait.
+	_args[3]: [string]   = Set expression to execute (optional).
+*/
+<<link _args[0] _args[1]>>
+	<<if _args[2] > 0>><<set setup.startPassingTime(_args[1], _args[2])>><</if>>
+	<<if _args[3]>><<print `<<set ${_args[3]}>>`>><</if>>
+<</link>>
+<</widget>>
+
 <<widget "TravelToPassage">>
 /*
 	_args[0]: var|string   = As linkText in <<link>>. The text of the link. May contain markup.
@@ -2057,12 +2070,8 @@ How many dubloons would you like to pay back?
 /* Get the persistent state for the active passage. */
 <<set _state = setup.passingTime()>>
 <<if !_state>>
-	/* If we aren't passing time yet, check if the number of days was passed in the first argument. */
-	<<if typeof _args[0] == 'number'>>
-		<<set _state = setup.startPassingTime(passage(), _args[0])>>
-	<<else>> /* Otherwise, just pass 0 days. */
-		<<set _state = setup.startPassingTime(passage(), 0)>>
-	<</if>>
+	/* If we aren't passing time yet, assume that the number of days was passed in the first argument. */
+	<<set _state = setup.startPassingTime(passage(), _args[0])>>
 <</if>>
 
 /* Check event triggers. */
@@ -2558,9 +2567,7 @@ You will first drink:<br>
 
 	How many days would you like to rest here?<br>
 	<<textbox "_campTime" "0">><br>
-	<<link "Set up camp and wait" `passage()`>>
-		<<set setup.startPassingTime(passage(), Math.max(parseInt(_campTime, 10) || 0, 0))>>
-	<</link>><br><br>
+	<<WaitAtPassage 'Set up camp and wait' `passage()` `Math.max(parseInt(_campTime, 10) || 0, 0)`>><br><br>
 
 	<<link "Return to exploring the layer without waiting" `"Layer" + $currentLayer + " Hub"`>><</link>>
 <</if>>
