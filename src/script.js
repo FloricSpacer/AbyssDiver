@@ -5,24 +5,44 @@ Object.defineProperties(Number.prototype, {
 	}
 });
 
+Config.history.maxStates = 20;
+
+Config.saves.version = 1;
+
+function backwardCompat(vars, version) {
+	if (!version || version < 1) {
+		// Copy any missing properties from the deprecated $app object to the $mc object.
+		vars.mc = { ...vars.app, ...vars.mc };
+		// Remove the $app object.
+		delete vars.app;
+	}
+}
+
+Save.onLoad.add(save => {
+	for (const { variables } of save.state.history) {
+		backwardCompat(variables, save.version);
+	}
+});
+
 Config.navigation.override = function (destPassage) {
-	var StoryVar = State.variables;
+	const StoryVar = variables();
+
 	if (StoryVar.brokerUsed == 1 && StoryVar.corruption < 0) {
 		return "BrokerEnd";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 10 && StoryVar.dollevent2==false){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && StoryVar.dollevent2==false){
 		return "DollWarning";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 4 && StoryVar.dollevent2==true){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2==true){
 		return "DollEnd";
 	}
-	if (StoryVar.app.age < 18) {
+	if (StoryVar.mc.age < 18) {
 		return "AgeLimit";
 	}
 	if (StoryVar.starving >= 6 || StoryVar.dehydrated >= 3 || StoryVar.gameOver) {
 		return "GameOver";
 	}
-	if (setup.daysUntilDue(StoryVar.app) == 0) {
+	if (setup.daysUntilDue(StoryVar.mc) == 0) {
 		return "Labor Scene";
 	}
 	if (setup.daysUntilDue('Maru') == 0) {
@@ -74,7 +94,7 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.lastBirthTwin = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (isFinite(StoryVar.app.appAge) && StoryVar.app.appAge < 3 && StoryVar.app.age > 17) {
+	if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 3 && StoryVar.mc.age > 17) {
 		return "AgeEnd";
 	}
 	if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap && StoryVar.hiredCompanions.some(e => e.name === "Maru")) {
@@ -97,8 +117,6 @@ Config.navigation.override = function (destPassage) {
 	}
 	return destPassage;
 };
-
-Config.history.maxStates = 20;
 
 $(document).on(':passagestart', () => {
 	// Get a reference to the active story variables store.
@@ -171,8 +189,8 @@ $(document).on(':passagestart', () => {
 		vars[`${type}LogTwin`] = vars[`${type}Log`];
 	}
 
-	// Restore object identity between $app.curses, $companionTwin.curses and $playerCurses.
-	for (const target of ['app', 'companionTwin']) {
+	// Restore object identity between $mc.curses, $companionTwin.curses and $playerCurses.
+	for (const target of ['mc', 'companionTwin']) {
 		vars[target].curses = vars.playerCurses;
 	}
 
