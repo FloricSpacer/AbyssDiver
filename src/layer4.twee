@@ -248,7 +248,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <<if !$purityUsed>>
 	Would you like to travel to the Purity Tree?<br>
-	[[Yes, choose what you want to do with the tree|Layer4 Purity 1]]<br><br>
+	<<TravelToPassage 'Yes, choose what you want to do with the tree' 'Layer4 Purity 1' 5>><br><br>
 	<<else>>
 	You can only use the rare species of purity tree one time.<br><br>
 <</if>>
@@ -292,7 +292,7 @@ Between this layer and the next is a kilometers-long sheer drop with a near-feat
 The air seems to get drier as you proceed further down. You might want to stockpile plenty of water before continuing on, probably around 2 weeks worth at a minimum.
 
 [[Turn back and continue your business on the fourth layer|Layer4 Hub]]
-[[Continue your descent to the fifth layer|Layer4 Exit2]]
+<<TravelToPassage 'Continue your descent to the fifth layer' 'Layer4 Exit2' `setup.haveRope ? 8 : 19`>>
 
 
 :: Take on Libido Reinforcement C [layer4]
@@ -812,16 +812,7 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 
 
 :: Layer4 Purity 1 [layer4]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 5>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<PassTimeWithEvents>>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/puritytree.png']]
 
@@ -1238,19 +1229,15 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 
 :: Layer4 Ascend2 [layer4]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 7 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 7 0 _multiplier>>
 <</if>>
-
 <<PassTimeWithEvents>>
-
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -1267,16 +1254,7 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 
 
 :: Layer4 Exit2 [layer4]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" `setup.haveRope ? 8 : 19`>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<PassTimeWithEvents>>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	You continue your hike and try to keep somewhat warm despite the bone-chilling cold and your treacherous journey along the pit of sheer ice. As you get closer to the bottom, the temperature rises and the air starts to dry out.
 
