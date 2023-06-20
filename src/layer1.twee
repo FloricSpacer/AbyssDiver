@@ -246,7 +246,7 @@ You sit by the fire with your party and chat, the mood is pretty upbeat and opti
 <<if $playerCurses.length > 0>>
 	<<if !$iconUsed>>
 		Would you like to use the Icon of Mercy?<br><br>
-		[[Yes, use the Icon|Layer1 Icon]]<br>
+		<<TravelToPassage 'Yes, use the Icon' 'Layer1 Icon' 3>><br>
 	<<else>>
 		You have already used the Icon of Mercy, you may not use it again.<br>
 	<</if>>
@@ -321,20 +321,11 @@ You sit by the fire with your party and chat, the mood is pretty upbeat and opti
 Descending to the next layer will take 2 days. How are your supplies of food and water? It's only going to get harder from here.
 
 [[Turn back and continue your business on the first layer|Layer1 Hub]]
-[[Continue your descent to the second layer|Layer1 Exit2]]
+<<TravelToPassage 'Continue your descent to the second layer' 'Layer1 Exit2' 2>>
 
 
 :: Layer1 Exit2 [layer1]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 2>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer1 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	You notice the air is a bit more humid and the plants are a bit greener as you approach the path towards the second layer.
 
@@ -480,16 +471,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 
 :: Layer1 Icon [layer1]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 3>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer1 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/iconofmercy.png']]
 
@@ -1024,19 +1006,15 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 
 :: Layer1 Ascend2 [layer1]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 1 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 1 0 _multiplier>>
 <</if>>
-
-<<include "Layer1 Travel Events">>
-
+<<PassTimeWithEvents>>
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
