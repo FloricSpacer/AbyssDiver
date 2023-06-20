@@ -271,7 +271,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 <<nobr>>
 <<if $visitL3 == 0 && !$brokerUsed && $corruption > -100>>
 	Would you like to use the Empty-handed Broker?<br>
-	[[Yes, use the Broker|Layer2 Broker]]
+	<<TravelToPassage 'Yes, use the Broker' 'Layer2 Broker' 2>>
 <<else>>
 	You have already used the Empty-handed Broker or traveled further into the Abyss, you may not use it now.<br>
 <</if>>
@@ -280,7 +280,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 <<nobr>>
 <<if !$starUsed && $hiredCompanions.length > 0>>
 	Would you like to use the Fate-crossing Star?<br>
-	[[Yes, bathe in the Star's lake|Layer2 Star 1]]<br>
+	<<TravelToPassage "Yes, bathe in the Star's lake" 'Layer2 Star 1' 3>><br>
 <<else>>
 	You must have companions and have not already used the Fate-crossing Star before if you wish to swap bodies with someone.<br>
 <</if>>
@@ -331,7 +331,7 @@ Descending to the next layer will take 5 days. As you travel further down, the l
 Accessing drinkable water tends to get a but more difficult from here on out, so having a fair emergency supply of water would be a good idea before continuing onward. At a minimum, about a week's worth of water should be enough to avoid the worst case scenario.
 
 [[Stay on layer 2|Layer2 Hub]]
-[[Descend down to the third layer|Layer2 Exit2]]
+<<TravelToPassage 'Descend down to the third layer' 'Layer2 Exit2' 5>>
 
 
 :: Layer2 Cherry Relic [layer2]
@@ -526,16 +526,7 @@ What type of fur would you like to gain?
 <</nobr>>
 
 :: Layer2 Broker [layer2]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 2>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<PassTimeWithEvents>>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 <<nobr>>
 	<<set $corruption += 100>>
@@ -558,16 +549,7 @@ You have gained 100 corruption points, but you must always keep your corruptions
 
 
 :: Layer2 Star 1 [layer2]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 3>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<PassTimeWithEvents>>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/fate-crossingstar.png']]
 
@@ -1447,19 +1429,15 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 :: Layer2 Ascend2 [layer2]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 4 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 4 0 _multiplier>>
 <</if>>
-
 <<PassTimeWithEvents>>
-
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -1499,16 +1477,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 
 :: Layer2 Exit2 [layer2]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 5>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<PassTimeWithEvents>>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	Subtle changes in your surroundings continue, large rocks start to appear in your path, and the entire terrain changes from the lush rainforest you previously found yourself in to a more temperate forest. But slowly the trees become more sparse and the rocks become more common.
 
