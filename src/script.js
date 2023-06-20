@@ -5,8 +5,28 @@ Object.defineProperties(Number.prototype, {
 	}
 });
 
+Config.history.maxStates = 20;
+
+Config.saves.version = 1;
+
+function backwardCompat(vars, version) {
+	if (!version || version < 1) {
+		// Copy any missing properties from the deprecated $mc object to the $app object.
+		vars.app = { ...vars.mc, ...vars.app };
+		// Remove the $mc object.
+		delete vars.mc;
+	}
+}
+
+Save.onLoad.add(save => {
+	for (const { variables } of save.state.history) {
+		backwardCompat(variables, save.version);
+	}
+});
+
 Config.navigation.override = function (destPassage) {
-	var StoryVar = State.variables;
+	const StoryVar = variables();
+
 	if (StoryVar.brokerUsed == 1 && StoryVar.corruption < 0) {
 		return "BrokerEnd";
 	}
@@ -97,8 +117,6 @@ Config.navigation.override = function (destPassage) {
 	}
 	return destPassage;
 };
-
-Config.history.maxStates = 20;
 
 $(document).on(':passagestart', () => {
 	// Get a reference to the active story variables store.
