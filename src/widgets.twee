@@ -19,9 +19,9 @@
 	_robustBreasts
 	_wombEvents
 >>
-	<<for _handle range $hiredCompanions.concat($app)>>
+	<<for _handle range $hiredCompanions.concat($mc)>>
 		<<set _name = _handle !== $companionTwin ? _handle.name : 'Twin'>>
-		<<set _logName = _handle === $app ? 'Log' : `Log${_name}`>>
+		<<set _logName = _handle === $mc ? 'Log' : `Log${_name}`>>
 
 		/* ------------------------------------ Compute age (real and apparent) ------------------------------------- */
 
@@ -34,7 +34,7 @@
 			<<if _event.variation>>
 				<<set _newTime = _event.variation>>
 				/* If we're adjusting the mc with eternal youth, only age them until they drank from the fountain. */
-				<<if _handle === $app && _newTime > $eternalYouth>>
+				<<if _handle === $mc && _newTime > $eternalYouth>>
 					<<set _newTime = $eternalYouth>>
 				<</if>>
 				<<if _oldTime < _newTime>>
@@ -78,7 +78,7 @@
 		/* Add any additional elapsed time to the subject's age. */
 		<<set _newTime = $time>>
 		/* If we're adjusting the MC and MC has eternal youth, only age them until they drank from the fountain. */
-		<<if _handle === $app && _newTime > $eternalYouth>>
+		<<if _handle === $mc && _newTime > $eternalYouth>>
 			<<set _newTime = $eternalYouth>>
 		<</if>>
 		<<if _oldTime < _newTime>>
@@ -309,7 +309,7 @@
 		<</if>>
 
 		/* Set menstruation cycle flags for mc. */
-		<<if _handle === $app>>
+		<<if _handle === $mc>>
 			<<set $menCycleFlag = _handle.womb >= 1 && !setup.isPregnant(_handle)>>
 			<<if $menCycleFlag && !$menCycleT_flag>>
 				<<set $menCycleT = $time - 7>>
@@ -361,7 +361,7 @@
 			<<elseif setup.daysConsideredPregnant(_handle) >= 270 && setup.daysUntilDue(_handle) > 0>>
 				<<set _handle.lactation += 2>>
 			<</if>>
-		<<elseif _handle === $app>>
+		<<elseif _handle === $mc>>
 			<<if $menCycleFlag>>
 				/* Boost breast size after day 20 of the menstruation cycle. */
 				<<if $time - $menCycleT - $menCycleVar > 20>>
@@ -507,7 +507,7 @@
 		<<set _handle.libido = 2, _handle.subdom = 0>>
 
 		/* Reset lowered standards. */
-		<<if _handle === $app>><<set $standardsLower = 0>><</if>>
+		<<if _handle === $mc>><<set $standardsLower = 0>><</if>>
 
 		<<for _event range _log>>
 			<<switch _event.name>>
@@ -518,7 +518,7 @@
 				>>
 					<<set _handle.libido += 1>>
 				<<case '1 Day Food Forage Minor Impact'>> /* Layer 8 Bedlam's Banquet */
-					<<if _handle === $app>>
+					<<if _handle === $mc>>
 						<<set $standardsLower += 1>>
 					<</if>>
 				<<case 'DoM' 'Submissiveness Rectification A' 'Submissiveness Rectification B'>>
@@ -529,15 +529,15 @@
 		<</for>>
 		
 		/* Apply player specific effects. */
-		<<if _handle === $app>>
+		<<if _handle === $mc>>
 			/* Boost libido if ripe flanberries from layer 2 were eaten within the last day. */
 			<<if $lastFlan !== undefined && $time < $lastFlan + 1>><<set _handle.libido += 1>><</if>>
 
 			<<if $menCycleFlag>>
 				/* Libido boost around 14 days into the cycle. */
-				<<if 13 <= $time - $menCycleT && $time - $menCycleT <= 15>><<set $app.libido += 1>><</if>>
+				<<if 13 <= $time - $menCycleT && $time - $menCycleT <= 15>><<set $mc.libido += 1>><</if>>
 				/* Libido penalty around 22 days into the cycle. */
-				<<if 20 <= $time - $menCycleT && $time - $menCycleT <= 24>><<set $app.libido -= 1>><</if>>
+				<<if 20 <= $time - $menCycleT && $time - $menCycleT <= 24>><<set $mc.libido -= 1>><</if>>
 			<</if>>
 
 			<<if $playerCurses.some(e => e.name === 'Heat/Rut')>>
@@ -547,7 +547,7 @@
 				<</if>>
 
 				/* Libido boost on day 14 of the cycle (coincides with day 14 of menstruation cycle if active). */
-				<<if $time - $heatCycleT == 14>><<set $app.libido += 2>><</if>>
+				<<if $time - $heatCycleT == 14>><<set $mc.libido += 2>><</if>>
 			<</if>>
 		<</if>>
 
@@ -566,7 +566,7 @@
 			+ 0.5 * (_handle.breastsCor - 3)
 			- (_handle.fit > 7)
 		>>
-		<<if _handle === $app>>
+		<<if _handle === $mc>>
 			/* Apply adjustments from Chain of Lorelei, Seafoam scent and Solace Lace. */
 			<<set _handle.appGender += 0.5 * $colwear + 0.25 * $scent + 0.5 * $slwear>>
 			/* mc looks more feminine if wearing the Creepy Doll's tattered pink dress. */
@@ -574,21 +574,21 @@
 		<</if>>
 	<</for>>
 
-	/* ---------------------------------------------- Update mc object ---------------------------------------------- */
+	/* ------------------------------------------- Update mc dialog styles ------------------------------------------ */
 
-	<<if $app.appAge > 18>>
+	<<if $mc.appAge > 18>>
 		<<set _boxShadowOpacity = 1.0>>
-	<<elseif $app.appAge > 15>>
+	<<elseif $mc.appAge > 15>>
 		<<set _boxShadowOpacity = 0.8>>
-	<<elseif $app.appAge > 12>>
+	<<elseif $mc.appAge > 12>>
 		<<set _boxShadowOpacity = 0.6>>
-	<<elseif $app.appAge > 9>>
+	<<elseif $mc.appAge > 9>>
 		<<set _boxShadowOpacity = 0.4>>
 	<<else>>
 		<<set _boxShadowOpacity = 0.2>>
 	<</if>>
 
-	<<switch $app.gender>>
+	<<switch $mc.gender>>
 		<<case 1>><<set _boxShadowColor = [ 40,  40, 255]>>
 		<<case 2>><<set _boxShadowColor = [ 80,  80, 240]>>
 		<<case 3>><<set _boxShadowColor = [120, 100, 230]>>
@@ -597,55 +597,45 @@
 		<<case 6>><<set _boxShadowColor = [255, 160, 200]>>
 	<</switch>>
 
-	<<set $boxColor = [
+	<<set $mc.genderVoice = $colwear ? 99 : $mc.gender>>
+	<<set $mc.style = "border: 2px solid rgb(1, 0, 0);">>
+	<<set $mc.style1 = [
 			`box-shadow: 0 0 10px 2px rgba(${_boxShadowColor.concat(_boxShadowOpacity).join(', ')})`,
 			'background-color: black',
-		].join(';')
-	>>
-
-	<<set $mc = {
-		name: $app.name,
-		genderVoice: $app.gender,
-		style: 'border: 2px solid rgb(1, 0, 0);',
-		style1: $boxColor
-	}>>
+		].join(';')>>
 
 	/* $PulseBloomUse used to be initialized as an array, so check carefully. */
 	<<set _pulseBloomInUse = $PulseBloomUse !== "" && !Array.isArray($PulseBloomUse)>>
 
-	<<if !_pulseBloomInUse && !$app.switch && !$starUsed>>
-		<<if $app.appGender <= 5 >>
-			<<set $mc.imageIcon = 'Player Icons/playerM.png'>>
-		<<else>>
-			<<set $mc.imageIcon = 'Player Icons/playerF.png'>>
-		<</if>>
-	<<elseif _pulseBloomInUse>>
+	<<if _pulseBloomInUse>>
 		<<print `<<set _handle = $companion${$PulseBloomUse}>>`>>
 		<<set $mc.imageIcon = _handle.imageIcon>>
-	<<elseif $app.switch>>
+	<<elseif $mc.switch>>
 		<<print `<<set _handle = $companion${$companionSwitched}>>`>>
-		<<print `<<set $mc.imageIcon = 'Icons/${$companionSwitched}Icon.png'>>`>>
+		<<set $mc.imageIcon = _handle.imageIcon>>
+	<<elseif $mc.appGender <= 5>>
+		<<set $mc.imageIcon = 'Player Icons/playerM.png'>>
+	<<else>>
+		<<set $mc.imageIcon = 'Player Icons/playerF.png'>>
 	<</if>>
-
-	<<set $mc.genderVoice = $colwear ? 99 : $app.gender>>
 <</capture>>
 <</widget>>
 
 :: Appearance widgets [widget nobr]
 <<widget "PenisLengthText">>
-	<<print (Math.round($app.penisCor)*(!!_args[0] ? 0.0254 : 2.54)).toFixed(1) + (!!_args[0] ? " meters" : " cm")>>\
+	<<print (Math.round($mc.penisCor)*(!!_args[0] ? 0.0254 : 2.54)).toFixed(1) + (!!_args[0] ? " meters" : " cm")>>\
 <</widget>>
 
 <<widget "BodyHeightText">>
-	<<set _meters = ($app.heightCor > 100)>>
-	<<print (Math.round($app.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>>\
+	<<set _meters = ($mc.heightCor > 100)>>
+	<<print (Math.round($mc.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>>\
 <</widget>>
 
 :: Semen Demon Widget [widget nobr]
 <<widget "SemenDemonCalc">>
 <<set _contributions =0>>
 
-<<if ($app.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($app.vagina > 0 && $curse82.variation!="semen") >>
+<<if ($mc.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($mc.vagina > 0 && $curse82.variation!="semen") >>
 		<<if $playerCurses.some(e => e.name === "Leaky")>>
 			<<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
 		<<else>>
@@ -669,7 +659,7 @@
 
 :: Pronoun widgets [widget nobr]
 <<widget "Pronoun">>
-	<<if $app.appGender<=5>>
+	<<if $mc.appGender<=5>>
 		he
 	<<else>>
 		she
@@ -677,7 +667,7 @@
 <</widget>>
 
 <<widget "ObjectivePronoun">>
-	<<if $app.appGender<=5 >>
+	<<if $mc.appGender<=5 >>
 		him
 	<<else>>
 		her
@@ -685,7 +675,7 @@
 <</widget>>
 
 <<widget "PossesivePronoun">>
-	<<if $app.appGender<=5 >>
+	<<if $mc.appGender<=5 >>
 		his
 	<<else>>
 		hers
@@ -693,13 +683,13 @@
 <</widget>>
 
 <<widget "GenderPronoun">> 
-	<<if $app.gender<2 && $app.appAge > 15>>
+	<<if $mc.gender<2 && $mc.appAge > 15>>
 		manly
-	<<elseif $app.gender<3 >>
+	<<elseif $mc.gender<3 >>
 		boyish
-	<<elseif $app.gender<4>>
+	<<elseif $mc.gender<4>>
 		androgynous
-	<<elseif $app.gender<5 || $app.appAge < 15>>
+	<<elseif $mc.gender<5 || $mc.appAge < 15>>
 		girlish
 	<<else>>
 		feminine
@@ -708,7 +698,7 @@
 
 :: Perceived widgets [widget nobr]
 <<widget "mrms">>
-	<<if $app.appGender<=5>>
+	<<if $mc.appGender<=5>>
 		mr.
 	<<else>>
 		miss
@@ -716,7 +706,7 @@
 <</widget>>
 
 <<widget "sirmaam">>
-	<<if $app.appGender<=5>>
+	<<if $mc.appGender<=5>>
 		sir
 	<<else>>
 		ma'am
@@ -782,7 +772,7 @@
 
 :: Threat1 Criterion [widget nobr]
 <<widget "Threat1Criterion">>
-<<if $app.heightCor<140>>
+<<if $mc.heightCor<140>>
 	<<set $groupsize= $hiredCompanions.length >>
 <<else>>
 	<<set $groupsize= $hiredCompanions.length +1>>
@@ -793,7 +783,7 @@
 <<set $total_value_relics = $ownedRelics[$i].value + $total_value_relics>>
 <</for>>
 
-<<if $groupsize<4 && $total_value_relics>=150 && $app.heightCor<5000>>
+<<if $groupsize<4 && $total_value_relics>=150 && $mc.heightCor<5000>>
 	<<set $threat1Crit=1>>
 <<else>>
 	<<set $threat1Crit=0>>
@@ -806,20 +796,20 @@
 	<<set _semenCount = $curse82.variation1>>
 	<<set _quotaCount = setup.activeCurseCount("Quota")>>
 	<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
-	<<set $lewdness = ($app.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize + $standardsLower + $foodL6>>
+	<<set $lewdness = ($mc.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize + $standardsLower + $foodL6>>
 
 	<<if !$LuminousWear>>
-		<<if $app.breastsCor>5>>
+		<<if $mc.breastsCor>5>>
 			<<set $lewdness +=1>>
-		<<elseif $app.breastsCor>7>>
+		<<elseif $mc.breastsCor>7>>
 			<<set $lewdness +=2>>
-		<<elseif $app.breastsCor>9>>
+		<<elseif $mc.breastsCor>9>>
 			<<set $lewdness +=3>>
 		<</if>>
 
-		<<if $app.penis>6>>
+		<<if $mc.penis>6>>
 			<<set $lewdness +=1>>
-		<<elseif $app.penis>10>>
+		<<elseif $mc.penis>10>>
 			<<set $lewdness +=2>>
 		<</if>>
 
@@ -881,7 +871,7 @@
 <<widget "Inhuman">>
 <<for _i=0; _i<=$hiredCompanions.length; _i++>>
 	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $app>>
+		<<set _handle = $mc>>
 	<<else>>
 		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _name = "Twin">>
@@ -958,7 +948,7 @@
 <<widget "Handicap">>
 <<for _i=0; _i<=$hiredCompanions.length; _i++>>
 	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $app>>
+		<<set _handle = $mc>>
 		<<set _HandicapLog = $HandicapLog>>
 		<<set $ConvoHandicapSmall = false>>
 		<<set $ConvoHandicapLarge = false>>
@@ -1078,8 +1068,8 @@
 		<</if>>
 
 		<<if $BionicEye>>
-			<<if $app.eyeCount<2>>
-				<<set $app.eyeCount +=1>>
+			<<if $mc.eyeCount<2>>
+				<<set $mc.eyeCount +=1>>
 			<</if>>
 		<</if>>
 
@@ -1138,9 +1128,9 @@
 	<</if>>
 
 	<<if _handle.armCount >2 >>
-		<<set _handle.HandicapThreat -= 2*($app.armCount-2)>>
-		<<set _handle.HandicapMovement += 1*($app.armCount-2)>>
-		<<set _handle.HandicapCarry += ($app.armCount-2)>>
+		<<set _handle.HandicapThreat -= 2*($mc.armCount-2)>>
+		<<set _handle.HandicapMovement += 1*($mc.armCount-2)>>
+		<<set _handle.HandicapCarry += ($mc.armCount-2)>>
 	<</if>>
 			
 	<<if _i==$hiredCompanions.length>>
@@ -1148,21 +1138,21 @@
 			<<set _handle.HandicapThreat -= 2>>
 		<</if>>
 
-		<<if 35 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 45>>
+		<<if 35 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 45>>
 			<<set _handle.HandicapMovement -= 2>>
-		<<elseif 45 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 90>>
+		<<elseif 45 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 90>>
 			<<set _handle.HandicapThreat -= 2>>
 			<<set _handle.HandicapMovement -= 4>>
 			<<set _handle.HandicapCarry -= 3>>
-		<<elseif 120 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 180>>
+		<<elseif 120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180>>
 			<<set _handle.HandicapThreat -= 1>>
 			<<set _handle.HandicapMovement -= 2>>
 			<<set _handle.HandicapCarry -= 2>>
-		<<elseif 180 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 240>>
+		<<elseif 180 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 240>>
 			<<set _handle.HandicapThreat -= 2>>
 			<<set _handle.HandicapMovement -= 3>>
 			<<set _handle.HandicapCarry -= 3>>
-		<<elseif setup.daysConsideredPregnant($app) >= 240 && setup.daysUntilDue($app) > 0>>
+		<<elseif setup.daysConsideredPregnant($mc) >= 240 && setup.daysUntilDue($mc) > 0>>
 			<<set _handle.HandicapThreat -= 4>>
 			<<set _handle.HandicapMovement -= 5>>
 			<<set _handle.HandicapCarry -= 5>>
@@ -1259,43 +1249,43 @@
 		imageIcon: "Player Icons/playerF.png",
 		curses: $playerCurses,
 		osex: "",
-		obreasts: $app.openis,
+		obreasts: $mc.openis,
 		breastsLabel: "flat",
-		openis: $app.obreast,
-		ogender: $app.ogender,
+		openis: $mc.obreast,
+		ogender: $mc.ogender,
 		genderVoice: 0,
-		fit: $app.fit,
-		oheight: $app.oheight,
-		/*hairColor: $app.hairColor,
-		skinColor: $app.skinColor,*/
-		age: $app.age,
+		fit: $mc.fit,
+		oheight: $mc.oheight,
+		/*hairColor: $mc.hairColor,
+		skinColor: $mc.skinColor,*/
+		age: $mc.age,
 		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
 		fear: $fear,
 
 		sex: "",
-		ohair: $app.ohair,
-		hair: $app.ohair,
-		penis: $app.openis,
-		penisCor: $app.openis,
+		ohair: $mc.ohair,
+		hair: $mc.ohair,
+		penis: $mc.openis,
+		penisCor: $mc.openis,
 		doublePenis: false,
 		vagina: 0,
-		gender: $app.ogender,
+		gender: $mc.ogender,
 		switch: false,
-		breasts: $app.obreast,
-		breastsCor: $app.obreast,
+		breasts: $mc.obreast,
+		breastsCor: $mc.obreast,
 		lactation: 0,
-		pregnantT: $app.pregnantT,
-		due: setup.dueDate($app),
+		pregnantT: $mc.pregnantT,
+		due: setup.dueDate($mc),
 		ears: "normal human",
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
-		oskinColor: $app.skinColor,
-		skinColor: $app.skinColor,
-		oeyeColor: $app.oeyeColor,
-		eyeColor: $app.oeyeColor,
+		oskinColor: $mc.skinColor,
+		skinColor: $mc.skinColor,
+		oeyeColor: $mc.oeyeColor,
+		eyeColor: $mc.oeyeColor,
 		eyeCount: 2,
 		armCount: 2,
 		legCount: 2,
@@ -1305,35 +1295,34 @@
 		womb2: "",
 		desc: "",
 		blood: "red",
-		appAge: $app.age,
+		appAge: $mc.age,
 		libido: 2,
 		subdom: 0
 		}>>
 	
 
-	<<if $app.osex == "male">>
+	<<if $mc.osex == "male">>
 		<<set $companionTwin.osex = "female">>
 		<<set $companionTwin.ogender = 6>>
-		<<set $companionTwin.oheight = $app.oheight * (1 - 0.01525 * 5)>>
+		<<set $companionTwin.oheight = $mc.oheight * (1 - 0.01525 * 5)>>
 	<<else>>
 		<<set $companionTwin.osex = "male">>
 		<<set $companionTwin.ogender = 1>>
-		<<set $companionTwin.oheight = $app.oheight * (1 + 0.01525 * 5)>>
+		<<set $companionTwin.oheight = $mc.oheight * (1 + 0.01525 * 5)>>
 	<</if>>
-	<<if $app.sex=="male">>
+	<<if $mc.sex=="male">>
 		<<set $companionTwin.sex = "female">>
-	<<elseif $app.sex=="female">>
+	<<elseif $mc.sex=="female">>
 		<<set $companionTwin.sex = "male">>
 	<<else>>
 		<<set $companionTwin.sex = "doll-like">>
 	<</if>>
 
-	<<if $app.appGender<=5 >>
+	<<if $mc.appGender<=5 >>
 		<<set $companionTwin.imageIcon="Player Icons/playerF.png">>
 	<<else>>
 		<<set $companionTwin.imageIcon="Player Icons/playerM.png">>
 	<</if>>
-	/*<<set $mcClone = clone($mc)>>*/
 <<else>>
 	<<set $companionTwin = {
 		name: $curse111.variation1,
@@ -1343,44 +1332,44 @@
 		image: "Curses/doubletrouble.png",
 		imageIcon: "",
 		curses: $playerCurses,
-		osex: $app.osex,
-		obreasts: $app.obreast,
+		osex: $mc.osex,
+		obreasts: $mc.obreast,
 		breastsLabel: "flat",
-		openis: $app.openis,
-		ogender: $app.ogender,
+		openis: $mc.openis,
+		ogender: $mc.ogender,
 		genderVoice: 0,
-		fit: $app.fit,
-		oheight: $app.oheight,
-		/*hairColor: $app.hairColor,
-		skinColor: $app.skinColor,*/
-		age: $app.age,
+		fit: $mc.fit,
+		oheight: $mc.oheight,
+		/*hairColor: $mc.hairColor,
+		skinColor: $mc.skinColor,*/
+		age: $mc.age,
 		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
 		fear: $fear,
 
 		sex: "",
-		ohair: $app.hairColor,
-		hair: $app.hairColor,
-		penis: $app.openis,
-		penisCor: $app.openis,
+		ohair: $mc.hairColor,
+		hair: $mc.hairColor,
+		penis: $mc.openis,
+		penisCor: $mc.openis,
 		doublePenis: false,
 		vagina: 0,
-		gender: $app.ogender,
+		gender: $mc.ogender,
 		switch: false,
-		breasts: $app.obreast,
-		breastsCor: $app.obreast,
+		breasts: $mc.obreast,
+		breastsCor: $mc.obreast,
 		lactation: 0,
-		pregnantT: $app.pregnantT,
-		due: setup.dueDate($app),
+		pregnantT: $mc.pregnantT,
+		due: setup.dueDate($mc),
 		ears: "normal human",
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
-		oskinColor: $app.skinColor,
-		skinColor: $app.skinColor,
-		oeyeColor: $app.oeyeColor,
-		eyeColor: $app.oeyeColor,
+		oskinColor: $mc.skinColor,
+		skinColor: $mc.skinColor,
+		oeyeColor: $mc.oeyeColor,
+		eyeColor: $mc.oeyeColor,
 		eyeCount: 2,
 		armCount: 2,
 		legCount: 2,
@@ -1390,12 +1379,12 @@
 		womb2: "",
 		desc: "",
 		blood: "red",
-		appAge: $app.age,
+		appAge: $mc.age,
 		libido: 2,
 		subdom: 0
 		}>>
 
-	<<if $app.osex=="male">>
+	<<if $mc.osex=="male">>
 		<<set $companionTwin.osex = "male">>
 		<<set $companionTwin.ogender = 1>>
 	<<else>>
@@ -1403,14 +1392,14 @@
 		<<set $companionTwin.ogender = 6>>
 	<</if>>
 
-	<<if $app.appGender<=5 >>
+	<<if $mc.appGender<=5 >>
 		<<set $companionTwin.imageIcon="Player Icons/playerM.png">>
 	<<else>>
 		<<set $companionTwin.imageIcon="Player Icons/playerF.png">>
 	<</if>>
 <</if>>
 
-<<set $companionTwin.genderVoice = 7 - $app.gender>>
+<<set $companionTwin.genderVoice = 7 - $mc.gender>>
 
 <<set $companionTwin.name = $curse111.variation1>>
 <<set $hiredCompanions.push($companionTwin)>>
@@ -1511,11 +1500,11 @@
 		<<set $companionGolem.image= "Icons/maleDollGolem.png">>
 		<<set $companionGolem.imageIcon= $companionGolem.image>>
 		<<set $companionGolem.appDesc= "You are a life-like doll golem">>
-		<<set $companionGolem.ohair= $app.ohair>>
+		<<set $companionGolem.ohair= $mc.ohair>>
 		<<set $companionGolem.hair= $companionGolem.ohair>>
 		<<set $companionGolem.ears= "perfect human replica">>
 		<<set $companionGolem.skinType= "smooth, synthetic">>
-		<<set $companionGolem.skinColor= $app.skinColor>>
+		<<set $companionGolem.skinColor= $mc.skinColor>>
 		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
 		<<set $companionGolem.eyeColor= "glassy, vacant white">>
 		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
@@ -1547,8 +1536,6 @@
 		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
 		<<set $companionGolem.blood= "nonexistent">>
 	<</if>>
-	
-	/*<<set $mcClone = clone($mc)>>*/
 <<else>>
 	<<set $companionGolem = {
 		type: _temp,
@@ -1640,11 +1627,11 @@
 		<<set $companionGolem.image= "Icons/femaleDollGolem.png">>
 		<<set $companionGolem.imageIcon= $companionGolem.image>>
 		<<set $companionGolem.appDesc= "You are a life-like doll golem">>
-		<<set $companionGolem.ohair= $app.ohair>>
+		<<set $companionGolem.ohair= $mc.ohair>>
 		<<set $companionGolem.hair= $companionGolem.ohair>>
 		<<set $companionGolem.ears= "perfect human replica">>
 		<<set $companionGolem.skinType= "smooth, synthetic">>
-		<<set $companionGolem.skinColor= $app.skinColor>>
+		<<set $companionGolem.skinColor= $mc.skinColor>>
 		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
 		<<set $companionGolem.eyeColor= "glassy, vacant white">>
 		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
@@ -1755,27 +1742,27 @@
 <</if>>
 
 <<if $time > $fit_adjustLastT + 20>>
-	<<if $app.fit > 8>>
-		<<set $app.fit -= 1>>
+	<<if $mc.fit > 8>>
+		<<set $mc.fit -= 1>>
 		@@.alert1; Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
-	<<elseif $app.fit < 5>>
-		<<set $app.fit += 1>>
+	<<elseif $mc.fit < 5>>
+		<<set $mc.fit += 1>>
 		@@.alert1; The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
 	<</if>>
 	<<set $fit_adjustLastT = $time>>
 <</if>>
 
-<<if $app.appAge <= 13>>
+<<if $mc.appAge <= 13>>
 	<<set $menCycleT=$time>>
 <</if>>
 
-<<if $menCycleFlag == true && $app.appAge > 13>>
+<<if $menCycleFlag == true && $mc.appAge > 13>>
 	<<if $time-$menCycleT-$menCycleVar>27 >>
 		<<set $menCycleT=$time>>
 		<<set $menCycleVar = random(-4,4)>>
 		<<if $playerCurses.some(e => e.name === "Eggxellent")>>
 
-			<<set _eggs = ($bewitchBabies+1)*($app.womb)>>
+			<<set _eggs = ($bewitchBabies+1)*($mc.womb)>>
 
 			<<if !settings.MenCycleToggleFilter>>Today, you're plagued by a pervasive sense of discomfort. Your lower abdomen cramps incessantly, your breasts feel tender and sore, and a relentless headache pounds at your temples.<</if>> As the day progresses, you become increasingly aware of a compelling need to expel something using your pelvic muscles.
 			<<if $EggsFertilized == true>>
@@ -1808,10 +1795,10 @@
 			<<if $menFirstCycle == true>>
 				<<if $EventHorizonWear== false>>
 					<<set $menFirstCycle = false>>
-					<<if $app.womb1 == "throat" || $app.womb2 == "throat">>
-						@@.alert1; When you start coughing up $app.blood blood, panic sets in as you fear the worst – some Abyssal lung disease. But as you examine the substance, you realize it's not normal blood, and your lungs feel fine. The truth dawns on you suddenly: you're experiencing your first period. With a uterus now residing in your throat, you feel completely overwhelmed and on the verge of tears. <br><br>
+					<<if $mc.womb1 == "throat" || $mc.womb2 == "throat">>
+						@@.alert1; When you start coughing up $mc.blood blood, panic sets in as you fear the worst – some Abyssal lung disease. But as you examine the substance, you realize it's not normal blood, and your lungs feel fine. The truth dawns on you suddenly: you're experiencing your first period. With a uterus now residing in your throat, you feel completely overwhelmed and on the verge of tears. <br><br>
 					<<else>>
-						@@.alert1; The sight of $app.blood bloodstains in your underwear confirms your suspicion – you're having your first period. With a new uterus, you feel overwhelmed and on the verge of tears.<br><br>
+						@@.alert1; The sight of $mc.blood bloodstains in your underwear confirms your suspicion – you're having your first period. With a new uterus, you feel overwhelmed and on the verge of tears.<br><br>
 					<</if>>
 				<<else>>
 						@@.alert1; Your misery persists, and you're desperate for relief from the unbearable headache. You consider taking it easy until this subsides. <br><br>
@@ -1849,36 +1836,36 @@
 	<</if>>	
 <</if>>
 
-<<if setup.daysConsideredPregnant($app) >= 14>>
+<<if setup.daysConsideredPregnant($mc) >= 14>>
 	/* Show symptoms alert once every 3 times, unless it's early in the pregnancy and mc was expecting to start her cycle. */
-	<<if $random == 0 || (!$menFirstCycle && setup.daysConsideredPregnant($app) < 45)>>
-		<<if 28 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 35 && !$menFirstCycle>>
+	<<if $random == 0 || (!$menFirstCycle && setup.daysConsideredPregnant($mc) < 45)>>
+		<<if 28 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 35 && !$menFirstCycle>>
 			@@.alert1; Your heart races as you realize your cycle should have started by now. Perhaps it's simply late, no need to panic just yet, right? The uncertainty lingers.<br><br>
-		<<elseif 35 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 45 && !$menFirstCycle>>
+		<<elseif 35 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 45 && !$menFirstCycle>>
 			@@.alert1; Anxiety creeps in as your period remains conspicuously absent. This lateness is unusual for you, and the thought of pregnancy begins to haunt your mind.<br><br>
-		<<elseif 45 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 90>>
+		<<elseif 45 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 90>>
 			@@.alert1; You find yourself overwhelmed by exhaustion, and bouts of nausea threaten to topple you. This isn't ideal for your travels or facing any threats.
 			<<if !$menFirstCycle>>
 				@@.alert1; The truth is undeniable – you're pregnant. Now, you must decide what to do next.<br><br>
 			<<else>>
 				@@.alert1; The miasma could be causing some sort of illness. Maybe it will pass, or perhaps you need medical attention.<br><br>
 			<</if>>
-		<<elseif  90 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 120 && !$menFirstCycle>>
+		<<elseif  90 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 120 && !$menFirstCycle>>
 			@@.alert1; Your pregnancy occupies your thoughts, but aside from that, you feel relatively fine. You notice your breasts and butt have grown a little, and a hint of fatigue lingers, but there's nothing too concerning.<br><br>
-		<<elseif 120 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 180>>
+		<<elseif 120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180>>
 			<<if !$menFirstCycle>>
 				@@.alert1; Your pregnant belly is now round and prominent. You occasionally feel a gentle kick from within, but your growing belly begins to hinder your travels more and more.<br><br>
 			<<else>>
-				@@.alert1; You've gained considerable weight, especially around your belly, which sometimes experiences a peculiar tickling sensation. Your butt, thighs, and <<if $app.breastsCor<3 && $app.sex=="male">>pecs<<else>>breasts<</if>> have also accumulated some fat. This extra weight will slow you down during your travels.<br><br>
+				@@.alert1; You've gained considerable weight, especially around your belly, which sometimes experiences a peculiar tickling sensation. Your butt, thighs, and <<if $mc.breastsCor<3 && $mc.sex=="male">>pecs<<else>>breasts<</if>> have also accumulated some fat. This extra weight will slow you down during your travels.<br><br>
 			<</if>>
-		<<elseif 180 <= setup.daysConsideredPregnant($app) && setup.daysConsideredPregnant($app) < 240>>
+		<<elseif 180 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 240>>
 			<<if !$menFirstCycle>>
 				@@.alert1; It's impossible to deny your pregnancy now. Your child's movements inside your swollen belly have become more frequent. But the added weight and energy-draining nature of pregnancy make navigating the Abyss increasingly difficult.<br><br>
 			<<else>>
 				@@.alert1; You can no longer ignore the truth – you're pregnant and have been for some time. Your child's movements within your belly are unmistakable. Your energy is drained more quickly than usual, whether from the added weight or the pregnancy itself. With a large, round belly and about half your normal energy, navigating the Abyss has become significantly more challenging.<br><br>
 			<</if>>
-		<<elseif setup.daysConsideredPregnant($app) >= 240 && setup.daysUntilDue($app) > 0>>
-			@@.alert2; Your advanced pregnancy has made even simple tasks feel like monumental challenges. Standing, sitting, bending, and sleeping require great effort. Walking is limited to short distances, while running and fighting are out of the question. <<if $app.lactation > 0>>Milk stains from your breasts mar your clothes, reminding you of your impending labor.<</if>> Your ability to traverse the Abyss is severely limited. Ensure you have enough supplies for the days you'll be immobilized after giving birth!<br><br>
+		<<elseif setup.daysConsideredPregnant($mc) >= 240 && setup.daysUntilDue($mc) > 0>>
+			@@.alert2; Your advanced pregnancy has made even simple tasks feel like monumental challenges. Standing, sitting, bending, and sleeping require great effort. Walking is limited to short distances, while running and fighting are out of the question. <<if $mc.lactation > 0>>Milk stains from your breasts mar your clothes, reminding you of your impending labor.<</if>> Your ability to traverse the Abyss is severely limited. Ensure you have enough supplies for the days you'll be immobilized after giving birth!<br><br>
 		<</if>>
 	<</if>>
 <</if>>
@@ -1957,17 +1944,17 @@
 <<set _pulseBloomInUse = $PulseBloomUse !== "" && !Array.isArray($PulseBloomUse)>>
 
 <<if _puseBloomInUse && $time-2 > $PulseBloomDate >>
-	<<set $app.osex = $PulseBloomStorage.osex>>
-	<<set $app.obreasts = $PulseBloomStorage.obreasts>>
-	<<set $app.openis = $PulseBloomStorage.openis>>
-	<<set $app.ogender = $PulseBloomStorage.ogender>>
-	<<set $app.oheight = $PulseBloomStorage.oheight>>
-	<<set $app.age = $PulseBloomStorage.age>>
-	<<set $app.ohair = $PulseBloomStorage.ohair>>
-	<<set $app.oskinColor = $PulseBloomStorage.oskinColor>>
-	<<set $app.oeyeColor = $PulseBloomStorage.oeyeColor>>
-	<<set $app.desc = "">>
-	<<set $app.fit -= $PulseBloomStorage.fit>>
+	<<set $mc.osex = $PulseBloomStorage.osex>>
+	<<set $mc.obreasts = $PulseBloomStorage.obreasts>>
+	<<set $mc.openis = $PulseBloomStorage.openis>>
+	<<set $mc.ogender = $PulseBloomStorage.ogender>>
+	<<set $mc.oheight = $PulseBloomStorage.oheight>>
+	<<set $mc.age = $PulseBloomStorage.age>>
+	<<set $mc.ohair = $PulseBloomStorage.ohair>>
+	<<set $mc.oskinColor = $PulseBloomStorage.oskinColor>>
+	<<set $mc.oeyeColor = $PulseBloomStorage.oeyeColor>>
+	<<set $mc.desc = "">>
+	<<set $mc.fit -= $PulseBloomStorage.fit>>
 	<<set $PulseBloomDate = setup.never>>
 	<<set $PulseBloomUse="">>
 	<<CarryAdjust>>
@@ -1978,11 +1965,11 @@
 <<widget "PregCheck">>
 <<set _temp = random(0,100)>>
 
-<<if _temp <= 100 * $pregChance && !setup.isPregnant($app) && $menCycleFlag>>
+<<if _temp <= 100 * $pregChance && !setup.isPregnant($mc) && $menCycleFlag>>
 	<<if $playerCurses.some(e => e.name === "Eggxellent")>>
 		<<set $EggsFertilized = true>>
 	<<else>>
-		<<set setup.setConsideredPregnant($app)>>
+		<<set setup.setConsideredPregnant($mc)>>
 		<<set $menCycleFlag = false>>
 	<</if>>
 <</if>>
@@ -2010,14 +1997,14 @@
 	<<set $ocarryWeight = 7.5>>
 <</if>>
 
-<<set _fitCor = $app.curses.some(e => e.name === "Weakling") ? 0 : $app.fit>>
-<<if $app.osex == 'male'>>
-	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $app.gender + 1))>>
+<<set _fitCor = $mc.curses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>
+<<if $mc.osex == 'male'>>
+	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 1))>>
 <<else>>
-	<<set $carryWeight = $app.heightCor / $app.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $app.gender + 6))>>
+	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 6))>>
 <</if>>
 
-<<set $carryWeight = $carryWeight*(1+ $app.HandicapCarry/10)>>
+<<set $carryWeight = $carryWeight*(1+ $mc.HandicapCarry/10)>>
 
 <<if $DaedalusFly==true>>
 	<<set $carryWeight = Math.ceil($carryWeight/2)>>
@@ -2074,7 +2061,7 @@
 <<widget "AppearanceCorrect">>
 <<for _i=0; _i<=$hiredCompanions.length; _i++>>
 	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $app>>
+		<<set _handle = $mc>>
 	<<else>>
 		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _name = "Twin">>
@@ -2161,7 +2148,7 @@
 
 		<<if _appearEvent.name == "Hemospectrum">>
 			<<set _handle.blood = $curse70.variation>>
-			<<set _handle.desc += "Your blood is now $app.blood colored, not a typical color for humans. ">>
+			<<set _handle.desc += "Your blood is now $mc.blood colored, not a typical color for humans. ">>
 		<</if>>	
 
 		<<if _appearEvent.name == "Drawing Spades">>
@@ -2303,7 +2290,7 @@
 	<</for>>
 	<<set _handle = $hiredCompanions[_randCompanion]>>*/
 	<<include "SexAvailable">>
-	<<set _temp = random(-2,2)+$app.subdom-_handle.subdom>>
+	<<set _temp = random(-2,2)+$mc.subdom-_handle.subdom>>
 	<<if _temp > 0>>
 
 		<<for _i=0; _i<1; _i++>>
@@ -2349,18 +2336,18 @@
 <<if _handle.sex != "doll-like" >>
 	<<set _sexOptions.push("Oral Dom")>>
 <</if>>
-<<if $app.sex != "doll-like" >>
+<<if $mc.sex != "doll-like" >>
 	<<set _sexOptions.push("Oral Sub")>>
 <</if>>
-<<if _handle.doublePenis == true && $app.vagina > 0 >>
+<<if _handle.doublePenis == true && $mc.vagina > 0 >>
 	<<set _sexOptions.push("DP Sub")>>
 <</if>>
-<<if $app.doublePenis == true && _handle.vagina > 0 >>
+<<if $mc.doublePenis == true && _handle.vagina > 0 >>
 	<<set _sexOptions.push("DP Dom")>>
 <</if>>
 <<if _handle.penisCor>=2>>
 	<<set _sexOptions.push("Anal Sub")>>
-	<<if $app.penisCor >= 2>>
+	<<if $mc.penisCor >= 2>>
 		<<set _sexOptions.push("Anal Dom")>>
 		<<if _handle.vagina > 0>>
 			<<set _sexOptions.push("Regular Dom")>>
@@ -2371,16 +2358,16 @@
 			<<set _sexOptions.push("Boobjob Sub")>>
 		<</if>>
 	<</if>>
-	<<if $app.vagina > 0>>
+	<<if $mc.vagina > 0>>
 		<<set _sexOptions.push("Regular Sub")>>
 		<<set _sexOptions.push("Regular Alt Dom")>>
 		<<set _sexOptions.push("Pull Out Sub")>>
 	<</if>>
-	<<if $app.breastsCor > 2>>
+	<<if $mc.breastsCor > 2>>
 		<<set _sexOptions.push("Boobjob Sub")>>
 	<</if>>
 <<else>>
-	<<if $app.penisCor >= 2>>
+	<<if $mc.penisCor >= 2>>
 		<<set _sexOptions.push("Anal Dom")>>
 		<<if _handle.vagina > 0>>
 			<<set _sexOptions.push("Regular Dom")>>
@@ -2400,10 +2387,9 @@
 <<capture _relic _travelTime>>
 	<<set _relic = _args[0]>>
 	<<if !setup.passingTime()>>
-		<<AdjustedTravelTime "_travelTime" _relic.time false `-$SibylBuff`>>
-		<<set setup.startPassingTime(passage(), _travelTime)>>
+		<<StartTraveling _relic.time `-$SibylBuff`>>
 	<</if>>
-	<<include `"Layer" + $currentLayer + " Travel Events"`>>
+	<<PassTimeWithEvents>>
 	<<if !setup.passingTime()>>
 		<<set $ownedRelics.push(_relic)>>
 		<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>

@@ -193,11 +193,7 @@ If you decide to start foraging for food or water, it means that you will not co
 
 Do you want to approach the Maw of Kimaris to get a copy of a Relic from a higher layer?
 
-<<link "Approach the Maw" "Layer6 Maw1">>
-	<<AdjustedTravelTime "_travelTime" 3>>
-	<<set setup.startPassingTime('Layer6 Maw1', _travelTime)>>
-<</link>>
-
+<<TravelToPassage 'Approach the Maw' 'Layer6 Maw1' 3>>
 
 <<back>>
 
@@ -238,7 +234,7 @@ There is no indication of what you might find beyond layer 6. There are a few hi
 Traversing down and past this hell will take 16 days.
 
 [[Turn back and continue your business on the sixth layer|Layer6 Hub]]
-[[Continue your descent to the seventh layer|Layer6 Exit2]]
+<<TravelToPassage 'Continue your descent to the seventh layer' 'Layer6 Exit2' 16>>
 
 
 :: Layer6 Flasks [layer6]
@@ -270,11 +266,7 @@ There is a very easily accessible source of water on this layer, the River Dycx,
 
 
 :: Layer6 Maw1 [image layer6]
-<<nobr>>
-
-<<include "Layer6 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
 <<if !$mawUse>>
@@ -620,7 +612,7 @@ As you continue your hoke through the hellish fields of tentacles, you pause to 
 
 Before you can even contemplate the sensation, a sudden burst of energy radiates from the spot, spreading outward in waves that crash through your being, causing your heart to pound and your breath to hitch. With a strange mix of shock and curiosity, you reach down, your fingertips brushing against something sinewy and sleek that hadn't been there before.
 
-Your mind reels as you realize what's happened. A tail. A spade-tipped tail of your own, prehensile and unnaturally sensitive. Its silky surface is inky black, contrasting your $app.skinColor skin, and ending with a cute, spade-shaped tip that catches the fiery lights of the Abyss, shimmering under the dancing flames. It curves gracefully behind you, swishing lightly in the smoky air as if testing its own existence.
+Your mind reels as you realize what's happened. A tail. A spade-tipped tail of your own, prehensile and unnaturally sensitive. Its silky surface is inky black, contrasting your $mc.skinColor skin, and ending with a cute, spade-shaped tip that catches the fiery lights of the Abyss, shimmering under the dancing flames. It curves gracefully behind you, swishing lightly in the smoky air as if testing its own existence.
 
 A breathless laugh escapes your lips, a strange euphoria creeping through your veins as you marvel at the absurdity and yet enticing prospect of this sudden change. You run your fingers down its length, the sensation shooting straight up your spine and spreading warmth all over your body. Your new tail twitches under your touch, responding independently, as though it has a mind of its own.
 
@@ -657,7 +649,7 @@ You have successfully taken on the $curse79.name Curse. Hopefully you are okay w
 [img[setup.ImagePath + $curse80.pic]]
 
 You have successfully taken on the $curse80.name Curse. Hopefully you are okay with accepting the permanent consequences.
-<<if $app.penisCor > 0 && $app.vagina>0 >>
+<<if $mc.penisCor > 0 && $mc.vagina>0 >>
 	As the Leaky Curse takes hold of you, the effects are more subtle than you might have expected.
 	
 	There's no dramatic flash of arousal or some sudden change. In general, you just feel pretty good. However, over the next few minutes you gradually become aware that your loins are turning into one giant sticky swamp that's draining down your legs. A trickle of precum is oozing out of your penis and mixing with a steady dribbling coming out of your sopping vagina. 
@@ -667,7 +659,7 @@ You have successfully taken on the $curse80.name Curse. Hopefully you are okay w
 	Regardless, you must find a solution to prevent leaving a trail that would not only annoy others but also make tracking you a breeze for predators in the Abyss. 
 	
 	If you ever happen to get aroused, would ultra-absorbent sanitary pads suffice for this deluge, or would you need to resort to diapers to hold back the flood of fluids? The prospect of living with this Curse just became much more challenging.
-<<elseif $app.penisCor > 0>>
+<<elseif $mc.penisCor > 0>>
 	As the Leaky Curse takes hold of you, it's more subtle than you might have expected. 
 	
 	There's no dramatic flash of arousal or some sudden change. In general, you just feel pretty good. You shrug your shoulders and continue about your business for a bit, but about half and hour later you notice something. Your penis, your balls, and even your thighs have started getting sticky, and as you reach down to check out what's going on you realize they've all become slick with precum. 
@@ -675,7 +667,7 @@ You have successfully taken on the $curse80.name Curse. Hopefully you are okay w
 	It's not a dramatic event, but a constant, minor flow of precum from the tip of your cock. It's so subtle that it would go unnoticed if not for the accumulating wetness. The continuous emission prevents it from drying, so you won't inadvertently adhere your penis to objects. However, managing this newfound predicament will be tricky. You're going to have to stop frequently to clean yourself up, or put something over your penis that you change frequently to catch the drips, or...
 	
 	The best thing for this might really be those sanitary pads women use for their periods. Barring that, some kind of diaper. Unless of course you just want to spend all your time soaked in sticky clothes or run around naked letting your penis drip on the ground.
-<<elseif $app.vagina>0>>
+<<elseif $mc.vagina>0>>
 	As the Leaky curse takes hold of you, it's more subtle than you might have expected.
 	
 	There's no dramatic flash of arousal or some sudden change. In general, you just feel pretty good. You continue about your business and then notice a small stream of sticky liquid slowly beginning to run down your leg. A sense of foreboding starts growing regarding the Curse you just obtained. You find a secluded place to check your crotch, but a quick obervation revelas you are totally soaked with sexual fluids.
@@ -962,19 +954,15 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 :: Layer6 Ascend2 [layer6]
 <<nobr>>
-
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
 	<<if $DaedalusFly>>
 		<<include "Companions Stranded">>
 		<<set _multiplier = 1/2>>
 	<</if>>
-	<<AdjustedTravelTime "_travelTime" 15 false 0 _multiplier>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
+	<<StartTraveling 15 0 _multiplier>>
 <</if>>
-
-<<include "Layer6 Travel Events">>
-
+<<PassTimeWithEvents>>
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
@@ -991,16 +979,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 
 :: Layer6 Exit2 [layer6]
-<<nobr>>
-
-<<if !setup.passingTime()>>
-	<<AdjustedTravelTime "_travelTime" 16>>
-	<<set setup.startPassingTime(passage(), _travelTime)>>
-<</if>>
-
-<<include "Layer6 Travel Events">>
-
-<</nobr>>\
+<<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
 	You continue through the playfully ticklish yet hellishly searing tentacles for a long hike downward. You find some small hints of paved paths that have long since degraded, but no other indication of what is next for you, until suddenly you are faced with a metal barricade, signaling the end of the sixth layer and the start of the seventh.
 
@@ -1212,7 +1191,7 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 	<</link>><br>
 <</if>><br>
 
-<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $app.appAge<18>>
+<<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
 <br><br>As the titanic tentacle beast closes in on you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
 
 <<say $creepydoll>>Oh, this one is really scary! But don't be scared, I won't let him hurt you. Keep your eyes closed for a long time and Just hold me tight, then I promise all the bad things will disappear. <</say>><br>
@@ -1233,12 +1212,12 @@ Use the following option only if you have specifically considered your inventory
 [img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
 <<PassTime $tentacleFucked>>\
 
-<<if $khemiaFucked == 0 && $app.vagina == 1 && $app.breastsCor > 0>>\
-	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they delicately caress your $app.breastsLabel cup breasts, teasing your nipples, and exploring the soft flesh of your inner thighs.
+<<if $khemiaFucked == 0 && $mc.vagina == 1 && $mc.breastsCor > 0>>\
+	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they delicately caress your $mc.breastsLabel cup breasts, teasing your nipples, and exploring the soft flesh of your inner thighs.
 
 	As the numbing liquid seeps into your flesh, your resistance begins to crumble. Your body, betraying your will, succumbs to the overwhelming sensations flooding your senses. The tendrils, now firmly in control, probe deeper, invading the most private depths of your womanhood with a skillful precision that leaves you gasping for air. Some tendrils continue to play with your breasts, kneading them and tugging gently on your nipples, while others slither their way into your most intimate crevices.
 
-	The relentless invasion of the tendrils sends wave after wave of pleasure coursing through your body, a dizzying blend of ecstasy and agony that threatens to shatter your sanity. The beast's tendrils fill your every orifice, pulsating and writhing with an insatiable hunger that you cannot deny. The heat of the surrounding flames only serves to intensify the experience, their exotic colors casting a sensual glow on your entwined bodies, highlighting the tantalizing curve of your hips and the shape of your $app.breastsLabel cup breasts.
+	The relentless invasion of the tendrils sends wave after wave of pleasure coursing through your body, a dizzying blend of ecstasy and agony that threatens to shatter your sanity. The beast's tendrils fill your every orifice, pulsating and writhing with an insatiable hunger that you cannot deny. The heat of the surrounding flames only serves to intensify the experience, their exotic colors casting a sensual glow on your entwined bodies, highlighting the tantalizing curve of your hips and the shape of your $mc.breastsLabel cup breasts.
 
 	As you lose yourself in the depths of pleasure, a part of you knows that you've surrendered to the greater tentacle beast. The thought of being left immobile for $tentacleFucked days in this hellish environment is a distant concern, dwarfed by the relentless torrent of ecstasy that threatens to drown you. But in this moment, with your body and mind utterly consumed by the beast's advances, there is no room for fear or regret.
 
