@@ -200,7 +200,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
 
-<<RelicGrid `["Ghost-righter Writing Down", "Gilded Prison", "Omoikane Circuit", "Afar Wanderer", "Kin Shifter", "Brave Vector", "Devil's Own", "Verve Cell","Vessel Vivisector", "Sated Artist", "Timekeeper's Keepsake", "Creator's Bolt", "Perpetual Repose", "Toral Wave", "Flamel's Folly"]`>>
+<<RelicGrid `setup.relicsOnLayer[4]`>>
 
 <p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
 
@@ -240,17 +240,19 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 <<elseif $steadyForced < 4>>
 	Would you like to use the Steady Shrine to copy a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Steady Shrine to copy a Curse" "Layer4 Steady1a">>
-		<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
+		<<AdjustedTravelTime "_travelTime" 3>>
+		<<set setup.startPassingTime('Layer4 Steady1a', _travelTime)>>
 	<</link>><br><br>
 	Would you like to use the Steady Shrine to forcibly copy a Curse onto one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
 	<<link "Yes, use the Steady Shrine to forcibly copy a Curse" "Layer4 Steady 2a">>
-		<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
+		<<AdjustedTravelTime "_travelTime" 3>>
+		<<set setup.startPassingTime('Layer4 Steady 2a', _travelTime)>>
 	<</link>><br><br>
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
 <</if>>
 
-<<if ($purityUsed == 0)>>
+<<if !$purityUsed>>
 	Would you like to travel to the Purity Tree?<br>
 	[[Yes, choose what you want to do with the tree|Layer4 Purity 1]]<br><br>
 	<<else>>
@@ -716,6 +718,12 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 
 
 :: Layer4 Steady1a [layer4]
+<<nobr>>
+
+<<include "Layer4 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
 As you draw nearer to the shrine, the structure's true nature reveals itself: an ancient, well-preserved shrine. Awe and relief wash over you as you take in the majesty of the Steady Shrine. The wood gleams with a warm, inviting luster, its finely carved details whispering tales of hope and perseverance.
@@ -772,10 +780,19 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 	<</for>>
 <</if>>
 <</nobr>>
+
 [[On second thought, maybe a more forceful approach is warrented|Layer4 Steady 2a]]
 [[Return to exploring layer 4|Layer4 Hub]]
+<</if>>
+
 
 :: Layer4 Steady 2a [layer4]
+<<nobr>>
+
+<<include "Layer4 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
 As you draw nearer to the shrine, the structure's true nature reveals itself: an ancient, well-preserved shrine. Awe and relief wash over you as you take in the majesty of the Steady Shrine. The wood gleams with a warm, inviting luster, its finely carved details whispering tales of hope and perseverance.
@@ -796,23 +813,30 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 <<if $dubloons < ($skewedUsed * 5)>>
 	You do not have enough dubloons for an offering.
 <<else>>
-	<<for _curse range $playerCurses>>
-		<<capture _curse>>
-			[[_curse.name|Layer4 Steady2b][$temp to _curse]]<br>
+	<<for _i, _curse range $playerCurses>>
+		<<capture _i>>
+			[[_curse.name|Layer4 Steady2b][$temp = _i]]<br>
 		<</capture>>
 	<</for>>
 <</if>>
 <</nobr>>
 
-<<return>>
-
+[[Return to exploring layer 4|Layer4 Hub]]
+<</if>>
 
 
 :: Layer4 Purity 1 [layer4]
 <<nobr>>
-<<set $purityUsed = 1>>
-<<AdjustedTravelTime "$tempTime" 5>><<PassTime $tempTime>>
-<</nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 5>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
+<</if>>
+
+<<include "Layer4 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/puritytree.png']]
 
 As you trudge through the biting cold and the relentless, swirling winds, the endless expanse of snow and ice begins to blur together. The Miasmal light casts eerie shadows across the landscape, and the numbing chill penetrates even the thickest of clothing. Just when hope seems all but lost, you spot a faint glow in the distance, cutting through the thick fog like a beacon.
@@ -826,27 +850,29 @@ You consider your options carefully, knowing that the wood of the Purity Tree ho
 What would you like to do with the Purity Tree?
 <<if setup.haveCuttingTool>>
 You can chop down the dead purity tree and use the 4 pieces to make crude protective gear for a total of +60 corruption immediately.
-[[Chop down the tree and make crude protective gear|Layer4 Hub][$corruption += 60]]
+[[Chop down the tree and make crude protective gear|Layer4 Hub][$purityUsed = true, $corruption += 60]]
 
 You could also chop down the tree and save the wood pieces as Relics, which you can either bring back to the surface and sell for 35 dubloons each or use the Relic Workshop to gain +25 corruption per section of wood (100 total).
-[[Chop down the tree and save the pieces to use them on the surface|Layer4 Hub][$ownedRelics.push($purityPlank), $ownedRelics.push($purityPlank), $ownedRelics.push($purityPlank), $ownedRelics.push($purityPlank)]]
+[[Chop down the tree and save the pieces to use them on the surface|Layer4 Hub][$purityUsed = true, $ownedRelics.push($purityPlank, $purityPlank, $purityPlank, $purityPlank)]]
 <</if>>\
 
 If you can't or don't want to cut down the tree, you can burn it down and bathe in the raw cleansing smoke to gain +20 corruption a single time.
-[[Burn down the tree and bathe in its smoke|Layer4 Hub][$corruption += 20]]
+[[Burn down the tree and bathe in its smoke|Layer4 Hub][$purityUsed = true, $corruption += 20]]
 
-<<back>>
+[[Return to exploring layer 4|Layer4 Hub]]
+<</if>>
+
 
 :: Layer4 Steady2b [layer4]
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
-Which companion would you like to forcibly copy the Curse of $temp.name onto?
+Which companion would you like to forcibly copy the Curse of $playerCurses[$temp].name onto?
 
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
-<<set _curse = $temp>>
-<<for _companion range $hiredCompanions>>
+<<set _curse = $playerCurses[$temp]>>
+<<for _i, _companion range $hiredCompanions>>
 	<<set _flag = false>>
 	<<set _tempName = _companion.name>>
 
@@ -862,7 +888,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 	<</switch>>
 
 	<<if _flag>>
-		<<capture _companion _tempName>>
+		<<capture _companion _i _tempName>>
 			<<set _choiceText = "Transfer to " + _tempName>>
 			<<link _choiceText "Layer4 Steady Apply">>
 				<<set _companion.curses.push(_curse)>>
@@ -876,7 +902,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 				<<set $dubloons -= ($skewedUsed * 5)>>
 				<<set $skewedUsed += 1>>
 
-				<<set $temp2 = _companion>>
+				<<set $temp2 = _i>>
 			<</link>><br>
 		<</capture>>
 	<</if>>
@@ -889,7 +915,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 
 <<nobr>>
 <<set $skewedForced += 1>>
-<<set _companionName = $temp2.name>>
+<<set _companionName = $hiredCompanions[$temp2].name>>
 <<set _affectionPenalty = 5 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
@@ -1234,7 +1260,7 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 		<<set _multiplier = 1/2>>
 	<</if>>
 	<<AdjustedTravelTime "_travelTime" 7 false 0 _multiplier>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer4 Travel Events">>
@@ -1259,7 +1285,7 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 
 <<if !setup.passingTime()>>
 	<<AdjustedTravelTime "_travelTime" `setup.haveRope ? 8 : 19`>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer4 Travel Events">>

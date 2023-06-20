@@ -152,7 +152,7 @@ If you decide to start foraging for food or water, it means that you will not co
 
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
 
-<<RelicGrid `["Ring of the Devourer", "Pulse Bloom", "Out of Mind", "Still Film", "Forbidden Grimoire", "Luminous Phantasmagoria", "Relativity Eye", "Return to Sender", "Yliaster Materia", "Aeonglass", "Apparatus Diaboli", "Heavy is the Head"]`>>
+<<RelicGrid `setup.relicsOnLayer[6]`>>
 
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
 
@@ -193,7 +193,10 @@ If you decide to start foraging for food or water, it means that you will not co
 
 Do you want to approach the Maw of Kimaris to get a copy of a Relic from a higher layer?
 
-[[Approach the Maw|Layer6 Maw1]]
+<<link "Approach the Maw" "Layer6 Maw1">>
+	<<AdjustedTravelTime "_travelTime" 3>>
+	<<set setup.startPassingTime('Layer6 Maw1', _travelTime)>>
+<</link>>
 
 
 <<back>>
@@ -267,38 +270,47 @@ There is a very easily accessible source of water on this layer, the River Dycx,
 
 
 :: Layer6 Maw1 [image layer6]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
 <<nobr>>
-<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
-<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
-<</nobr>><<if $mawUse == 0>>
-As you press through the thicket of incessantly writhing tentacles, the tentacles subtly change their rhythm. The heat has long ago seared your sense of comfort away, replaced with a strange duality of torment and transcendence. The harsh, yet strangely savory, scent of burning flesh punctuates the air, becoming richer and more distinct. Suddenly, the sea of tentacles parts like the Red Sea before Moses, revealing a broad expanse of barren rock.
 
-Before you yawns the Maw of Kimaris, a monstrous mouth carved into the very earth. The sight seizes your breath, casting you into a sudden, terrible silence. The Maw seems to pulse with a horrifying life of its own, promising an eternal fall to any who would dare to trip at its precipice.
+<<include "Layer6 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 7-wonders.png']]
+<<if !$mawUse>>
+	As you press through the thicket of incessantly writhing tentacles, the tentacles subtly change their rhythm. The heat has long ago seared your sense of comfort away, replaced with a strange duality of torment and transcendence. The harsh, yet strangely savory, scent of burning flesh punctuates the air, becoming richer and more distinct. Suddenly, the sea of tentacles parts like the Red Sea before Moses, revealing a broad expanse of barren rock.
+
+	Before you yawns the Maw of Kimaris, a monstrous mouth carved into the very earth. The sight seizes your breath, casting you into a sudden, terrible silence. The Maw seems to pulse with a horrifying life of its own, promising an eternal fall to any who would dare to trip at its precipice.
 <<else>>
-With a horrifyingly human-like belch, the Maw spits forth the Relic you requested, now slightly singed at the edges but still perfectly usable. Retrieving it from the edge of the Maw, you approach the Maw once again and consider what you want to do.
+	With a horrifyingly human-like belch, the Maw spits forth the Relic you requested, now slightly singed at the edges but still perfectly usable. Retrieving it from the edge of the Maw, you approach the Maw once again and consider what you want to do.
 <</if>>
 <<nobr>>
+<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
 You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
-<<for $i = 0; $i < 59; $i++>>
-	<<capture $i>>
-	<<if !_totalRelics.some(e => e.name === $relics[$i].name) && $relics[$i].name != "Kin Shifter">>
-		<<print "[[$relics[$i].name|Layer6 Maw1][$temp = $i, $dubloons -= 10, $corruption -= Math.round(Math.max(($relics[$i].corr * 3 / 2) - $corRed, 10)), $ownedRelics.push($relics[$i])]]">><<print " ">><<print Math.round(Math.max(($relics[$i].corr * 3 / 2) - $corRed, 10))>><<print " corruption points">><br>
+<<for _relic range $relics>>
+	<<set _foundOnLayer = setup.relicsOnLayer.findIndex(relicsOnLayer => relicsOnLayer.includes(_relic.name))>>
+	<<print `<<set _visitedRelicLayer = $visitL${_foundOnLayer}>>`>>
+	<<if _visitedRelicLayer && _relic.name != 'Kin Shifter' && !_totalRelics.some(e => e.name == _relic.name)>>
+		<<capture _relic>>
+			&nbsp; [[_relic.name|Layer6 Maw1][$dubloons -= 10, $corruption -= Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10), $ownedRelics.push(_relic)]]
+			for <<print Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10)>> corruption points<br>
+		<</capture>>
 	<</if>>
-	<</capture>>
 <</for>><br>
 You may pick up a copy of an old Relic for 20 dubloons and 2x its corruption cost:<br>
-<<for $i = 0; $i < 59; $i++>>
-	<<capture $i>>
-	<<if _totalRelics.some(e => e.name === $relics[$i].name) && $relics[$i].name != "Kin Shifter">>
-		<<print "[[$relics[$i].name|Layer6 Maw1][$temp = $i, $dubloons -= 20, $corruption -= Math.round(Math.max(($relics[$i].corr * 2) - $corRed, 10)), $ownedRelics.push($relics[$i])]]">><<print " ">><<print Math.round(Math.max(($relics[$i].corr * 2) - $corRed, 10))>><<print " corruption points">><br>
+<<for _relic range _totalRelics>>
+	<<if _relic.name != 'Kin Shifter'>>
+		<<capture _relic>>
+			&nbsp; [[_relic.name|Layer6 Maw1][$mawUse = true, $dubloons -= 20, $corruption -= Math.max(2 * _relic.corr - $corRed, 10), $ownedRelics.push(_relic)]]
+			for <<print Math.max(2 * _relic.corr - $corRed, 10)>> corruption points<br>
+		<</capture>>
 	<</if>>
-	<</capture>>
 <</for>>
-<<set $mawUse = 0>>
+<<set $mawUse = false>>
 <</nobr>>
 
 [[Return to exploring the sixth layer|Layer6 Hub]]
+<</if>>
 
 
 :: Pick up the Ring of the Devourer [layer6]
@@ -958,7 +970,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<set _multiplier = 1/2>>
 	<</if>>
 	<<AdjustedTravelTime "_travelTime" 15 false 0 _multiplier>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer6 Travel Events">>
@@ -983,7 +995,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 <<if !setup.passingTime()>>
 	<<AdjustedTravelTime "_travelTime" 16>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer6 Travel Events">>

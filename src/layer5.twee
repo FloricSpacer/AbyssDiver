@@ -230,55 +230,44 @@ How would you like to use Cherry's chaotic luck ability?
 
 
 :: Layer5 Forage [image layer5]
-<<if $timeL5T1 < 8 && $timeL5T2 < 11>>[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-foraging.png']]
+<<if setup.passingTime()>>
+	<<include "Layer5 Travel Events">>
+<</if>>\
+<<if !setup.passingTime()>>\
+<<checkTime>>
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 6-foraging.png']]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
 <<nobr>>
 <<if $forageFood == 0>>
-	<<print "[[Start foraging for Crumbleweed for food|Layer5 Forage][$forageFood = 1]]">><br><br>
-	<<else>>
-	<<print "[[Stop foraging for food|Layer5 Forage][$forageFood = 0]]">><br><br>
+	[[Start foraging for Crumbleweed for food|Layer5 Forage][$forageFood = 1]]<br><br>
+<<else>>
+	[[Stop foraging for food|Layer5 Forage][$forageFood = 0]]<br><br>
 <</if>>
 <<if $items[2].count > 0>>
-[[Fill your empty flasks with water from an Oasis|Layer5 Flasks]]<br><br>
-<<else>>
-You need empty flasks to fill them with water from the Oasis.<br><br>
-<</if>>
-You can also wait at the Oasis if you'd like to pass the time while waiting for something. How many days would you like to wait at the oasis?<br>
-<<textbox "$temp" "0">>
-<<nobr>><<link "Wait" "Layer5 Forage">>
-	<<if $items[2].count + $items[3].count >= 5>>
-		<<for $i = 0; $i < 999; $i++>>
-			<<if $items[2].count > 0>>
-				<<set $items[3].count += 1>>
-				<<set $items[2].count -= 1>>
-				<<set $waterL5 += 1>>
-			<<else>>
-				<<break>>
-			<</if>>
-		<</for>>
+	<<if $atWaterSource>>
+		[[Fill your empty flasks with water from the oasis|Layer5 Flasks]]<br><br>
 	<<else>>
-		<<set $items[3].count = $items[2].count + $items[3].count>>
-		<<set $items[2].count = 0>>
-		<<set $items[0].count += (5 - $items[3].count)>>
+		[[Fill your empty flasks with water from an oasis|Layer5 Flasks]]<br><br>
 	<</if>>
-	<<PassTime `parseInt($temp, 10)`>>
-<</link>><br><br><</nobr>>
-<</nobr>>
-
-[[Return to exploring the rest of the layer|Layer5 Hub]]<<elseif $timeL5T1 < 8>>
-<<include "Layer5 Borer Encounter">>
-
-[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = "Layer5 Hub"]]
 <<else>>
-When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
-
-[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = "Layer5 Hub"]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-
-The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
-[[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]
+	<<if $atWaterSource>>
+		You need empty flasks to fill them with water from the oasis.<br><br>
+	<<else>>
+		[[Find an oasis to avoid using your water|Layer5 Flasks]]<br><br>
+	<</if>>
 <</if>>
+<<if $atWaterSource>>
+	You can also wait at the oasis if you'd like to pass the time while waiting for something.<br>
+	How many days would you like to wait at the oasis?<br>
+	<<textbox "_waitTime" "0">>
+	<<link "Wait" `passage()`>>
+		<<set setup.startPassingTime(passage(), Math.max(parseInt(_waitTime, 10) || 0, 0))>>
+	<</link>><br><br>
+<</if>>
+<</nobr>>\
+[[Return to exploring the rest of the layer|Layer5 Hub]]
 <</if>>
 
 
@@ -309,7 +298,7 @@ You do not have a medkit to cure your status condition.<br>
 
 <div class="cards-grid">
 <<set _totalRelics = $ownedRelics.concat($soldRelics)>>
-<<set _layerRelics = ["Pocket Hoard", "Sunbeam", "Moonwatcher", "Siren's Call", "Zelus Band", "Everhevea", "Reflex Emblem", "Twin Polaris", "Superpositional Skewer", "Empath Coil", "Heavenly Merrymaker", "Vain Sculpt"]>>
+<<set _layerRelics = setup.relicsOnLayer[5]>>
 <<for _i = 0; _i < _layerRelics.length; _i++>>
 <div>
 <<set _name = _layerRelics[_i]>>
@@ -411,8 +400,10 @@ Do you want to walk to the Mirage Vault to activate it for the first time?
 Do you want to check on the Mirage Vault and see if it's open?
 <</if>>
 
-[[Walk to the Mirage Vault door|Layer5 Vault]]
-
+<<link "Walk to the Mirage Vault door" "Layer5 Vault">>
+	<<AdjustedTravelTime "_travelTime" 3>>
+	<<set setup.startPassingTime('Layer5 Vault', _travelTime)>>
+<</link>>
 
 <<back>>
 
@@ -457,34 +448,36 @@ Layer 5 is the last layer that anyone on the surface currently has any reliable 
 
 :: Layer5 Flasks [layer5]
 <<nobr>>
-<<set $oasisVisit = 1>>
-<<if $status.duration > 0>>
-	<<set $status.duration -= 1>>
-	<<else>>
-	<<set $status.penalty = 0>>
+
+<<if !setup.passingTime() && !$atWaterSource>>
+	<<AdjustedTravelTime "_travelTime" 7 true `-$abyssKnow - 2 * $oasisVisit`>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
-<<set $tempTime = (Math.max(4 - ($oasisVisit * 2) - $abyssKnow, 0))>>
-<<AdjustedTravelTime "$tempTime" $tempTime>><<PassTime $tempTime>>
 
-<<for $i = 0; $i < 999; $i++>>
-	<<if $items[2].count > 0>>
-		<<set $items[3].count += 1>>
-		<<set $items[2].count -= 1>>
-		<<set $waterL5 += 1>>
-		<<set $flaskMatrix[0]+=1>>
-	<<else>>
-		<<break>>
-	<</if>>
-<</for>>
-<</nobr>>
+<<include "Layer5 Travel Events">>
 
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Foraging/oasis.png']]
-
-After spending $tempTime days searching for an oasis, you manage to eventually find one. In an effort to replenish the water it cost you to get here, you fill all your flasks, taking in the cool, fresh water, a rare relief from the punishing heat and dryness of this layer.
-
+<<if $atWaterSource>>
+	You fill all your flasks, taking in the cool, fresh water, a rare relief from the punishing heat and dryness of this layer.
+<<else>>
+	After spending several days searching for an oasis, you manage to eventually find one. In an effort to replenish the water it cost you to get here, you fill all your flasks, taking in the cool, fresh water, a rare relief from the punishing heat and dryness of this layer.
+<</if>>
 As predicted, the water is pure and you can drink it without side effects!
 
 [[Return to exploring your food and water options on this layer|Layer5 Forage]]
+<<nobr>>
+	<<set $atWaterSource = true>>
+	<<set $oasisVisit = 1>>
+	<<set _emptyFlasks = setup.item('Empty Flask').count>>
+	<<set setup.item('Filled Flask').count += _emptyFlasks>>
+	<<set $flaskMatrix[0] += _emptyFlasks>>
+	<<set $waterL5 += _emptyFlasks>>
+	<<set setup.item('Empty Flask').count = 0>>
+	<<set $dehydrated = 0>>
+<</nobr>>\
+<</if>>
 
 
 :: Layer5 Booby [layer5]
@@ -1360,8 +1353,16 @@ Please enter your new exoskeleton color:
 
 :: Layer5 Tunnel [layer5]
 <<nobr>>
-<<AdjustedTravelTime "$tempTime" 2>><<PassTime $tempTime>>
-<</nobr>>
+
+<<if !setup.passingTime()>>
+	<<AdjustedTravelTime "_travelTime" 2>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
+<</if>>
+
+<<include "Layer5 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/one-sidedtunnel.png']]
 
 After walking through the tunnel for about 5 or 6 hours (it's hard to precisely keep track in there), you find yourself back at the same entrance you started walking into, despite absolutely never turning around.
@@ -1407,63 +1408,51 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 	<<set $items[7].count += 1>>
 <</if>>
 <</nobr>>
+<</if>>
 
 
 :: Layer5 Vault [layer5]
-<<if $timeL5T1 < 8 && $timeL5T2 < 11>>[img[setup.ImagePath+'Wonders/miragevault.png']]
 <<nobr>>
-<<if $vaultWait == 0>>
-	<<AdjustedTravelTime "$tempTime" 3>><<PassTime $tempTime>>
-<<else>>
-	<<set $vaultWait = 0>>
-<</if>>
+
+<<include "Layer5 Travel Events">>
+
+<</nobr>>\
+<<if !setup.passingTime()>>\
+[img[setup.ImagePath+'Wonders/miragevault.png']]
+<<nobr>>
 <<if $vaultTimer == 0>>
-<<set $vaultTimer = $time>>
-<br><br> You touch your hand against the ancient door and the number 60 appears on it, as if there was either a very high-resolution LCD inside the glass or some magic inside it had awakened by your touch.
+	<<set $vaultTimer = $time + 60>>
+	<br><br>You touch your hand against the ancient door and the number 60 appears on it, as if there was either a very high-resolution LCD inside the glass or some magic inside it had awakened by your touch.
 <</if>>
 <</nobr>>
-<<if (60 - $time + $vaultTimer) > -6>>
-The timer on the door reads <<print (60 - $time + $vaultTimer)>>.
+<<if $vaultTimer - $time > 0>>
+	The timer on the door reads <<print $vaultTimer - $time>>.
 
-You can wait here for a while if you'd like to check when the door is open. If you'd like to wait, enter the number of days you'd like to wait and choose to wait.
-<<textbox "$temp" "0">>
-<<nobr>><<link "Wait" "Layer5 Vault">>
-	<<set $vaultWait = 1>>
-	<<PassTime `parseInt($temp, 10)`>>
-<</link>><br><br><</nobr>>
+	You can wait here for a while if you'd like to check when the door is open. If you'd like to wait, enter the number of days you'd like to wait and choose to wait.
+	<<textbox "_waitTime" "0">>
+	<<link "Wait" `passage()`>>
+		<<set setup.startPassingTime(passage(), Math.max(parseInt(_waitTime, 10) || 0, 0))>>
+	<</link>>
 
-<<if (60 - $time + $vaultTimer) > 0>>
-The door remains locked. You must wait until the timer is between 0 and -5 for it to open and reveal the treasures within.
-<<elseif (60 - $time + $vaultTimer) < 1 && (60 - $time + $vaultTimer) > -6>>
-The door to the Vault has opened! When you touch the panel, the doors gently open to reveal the treasures within and aid you on our journey.
+	The door remains locked. You must wait until the timer is between 0 and -5 for it to open and reveal the treasures within.
+<<elseif -5 <= $vaultTimer - $time && $vaultTimer - $time <= 0>>
+	The door to the Vault has opened! When you touch the panel, the doors gently open to reveal the treasures within and aid you on our journey.
 
-Inside the vault you find 200 dubloons, 9 days of food rations, 9 days of bottled water, and 3 medkits!
+	Inside the vault you find 200 dubloons, 9 days of food rations, 9 days of bottled water, and 3 medkits!
 
-You pick up your haul and continue forward through the Abyss, morale boosted by the successful vault expedition.
-<<nobr>>
-<<set $items[0].count += 9>>
-<<set $items[1].count += 9>>
-<<set $items[4].count += 3>>
-<<set $dubloons += 200>>
-<<set $vaultFound = 1>>
-<</nobr>>
-<</if>>
+	You pick up your haul and continue forward through the Abyss, morale boosted by the successful vault expedition.
+	<<nobr>>
+		<<set $items[0].count += 9>>
+		<<set $items[1].count += 9>>
+		<<set $items[4].count += 3>>
+		<<set $dubloons += 200>>
+		<<set $vaultFound = 1>>
+	<</nobr>>
 <<else>>
-The timer has passed its endpoint, there is no more door and no more vault that you can find. Was it ever real? There's no way to know, but you can tell it certainly isn't here now.
+	The timer has passed its endpoint, there is no more door and no more vault that you can find. Was it ever real? There's no way to know, but you can tell it certainly isn't here now.
 <</if>>
 
-[[Return to exploring level 5|Layer5 Hub]]<<elseif $timeL5T1 < 8>>
-<<include "Layer5 Borer Encounter">>
-
-[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = "Layer5 Hub"]]
-<<else>>
-When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
-
-[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = "Layer5 Hub"]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-
-The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
-[[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]
-<</if>>
+[[Return to exploring level 5|Layer5 Hub]]
 <</if>>
 
 
@@ -1499,7 +1488,7 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 		<<set _multiplier = 1/2>>
 	<</if>>
 	<<AdjustedTravelTime "_travelTime" `setup.haveRope ? 11 : 24` false 0 _multiplier>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer5 Travel Events">>
@@ -1520,15 +1509,18 @@ The radiant sun empowers your Breathless Exhale Relic, its energy pulsating with
 
 
 :: Layer5 Threat1 [layer5]
-<<PassTime 1>>\
 <<set $timeL5T1 -= 8>>\
 [img[setup.ImagePath+'Threats/mayflyscuttler.png']]
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
 
-[[Walk out into the swarm and enjoy the sexual festivities|Layer5 Mayfly Scuttler Sexual Activities]]
+<<link "Walk out into the swarm and enjoy the sexual festivities" "Layer5 Mayfly Scuttler Sexual Activities">>
+	<<PassTime 1>>
+<</link>>
 
-[[Hide out in the ruins for the day|$returnPassage]]
+<<link "Hide out in the ruins for the day" `$returnPassage`>>
+	<<PassTime 1>>
+<</link>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of or avoid these pests.
 [[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|$returnPassage]]
@@ -1539,7 +1531,7 @@ Use the following option only if you have specifically considered your inventory
 
 <<if !setup.passingTime()>>
 	<<AdjustedTravelTime "_travelTime" 13>>
-	<<set setup.startPassingTime(_travelTime)>>
+	<<set setup.startPassingTime(passage(), _travelTime)>>
 <</if>>
 
 <<include "Layer5 Travel Events">>
