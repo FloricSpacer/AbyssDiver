@@ -2165,14 +2165,18 @@ How many dubloons would you like to pay back?
 	/* dehydration, but that's okay - we'll try again during the next trip. */
 	<<set _state.unweightedDayIndex += 1, _state.weightedDayIndex += _timeWeight>>
 	/* Check whether we need to be foraging for food to avoid dying of starvation. */
-	<<if !$forageFood && $starving > 4 && $currentLayer != 7 && $items[1].count + $items[24].count < _consumptionPerDay>>
-		@@.alert2; In order to avoid death by starvation, you are currently foraging for food on this layer, no matter the consequences.<br>
-		<<set $forageFood = 1>>
+	<<if !$forageFood && $starving > 4 && $items[1].count + $items[24].count < _consumptionPerDay>>
+		<<if $currentLayer != 7 && passage() != 'Layer3 Threat2'>>
+			@@.alert2; In order to avoid death by starvation, you are currently foraging for food on this layer, no matter the consequences.<br>
+			<<set $forageFood = 1>>
+		<</if>>
 	<</if>>
 	/* Check whether we need to be foraging for water to avoid dying of dehydration. */
-	<<if !$forageWater && $dehydrated > 1 && $currentLayer != 3 && $currentLayer != 5 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
-		@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
-		<<set $forageWater = 1>>
+	<<if !$forageWater && $dehydrated > 1 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
+		<<if $currentLayer != 3 && $currentLayer != 5 && passage() != 'Layer3 Threat2'>>
+			@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
+			<<set $forageWater = 1>>
+		<</if>>
 	<</if>>
 	/* Starvation and dehydration go up by 1 every day. If the player is starving */
 	/* or dehydrated, assume that they will stop to forage until they are sated. */
@@ -2238,13 +2242,9 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 8>>
 					<<set $timeL8 += 1>>
+					<<set $timeL8T1 += 1>>
 					<<set $timeL8T2a += 1>>
 					<<set $timeL8T2b += 1>>
-					/* Trigger an Inanis Ego event (once per event trigger). */
-					<<if !$L8loopLim>>
-						<<include "Layer 8 Threat 1a">>
-						<<set $L8loopLim = true>>
-					<</if>>
 			<</switch>>
 		<</if>>
 		/* Try to eat. */
