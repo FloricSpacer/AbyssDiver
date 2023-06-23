@@ -79,39 +79,6 @@ Threats:
 	<<audio "layer7" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-
-<</nobr>>\
-<<if $dubloons < 0 && $easymode==false>>[img[setup.ImagePath+'Threats/taxdrone.png']]
-
-A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.
-
-The Taxdrone patiently requests that you submit your taxes as it displays a slot for you to deposit the dubloons into, but soon it realizes you will not be paying and the typically soft blue lights on the drone change to glaring red and an alarm sounds.
-
-Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.
-
-You are now forced to become a permanent resident of Layer 7.
-
-[[Awaken to your new life|Layer7 Tax End]]
-<<elseif  $dubloons < 0 && $easymode==true>>
-
-<br>[img[setup.ImagePath+'Threats/taxdrone.png']]<br><br>
-
-<br>A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.<br><br>
-
-The Taxdrone patiently requests that you submit your taxes as it displays a slot for you to deposit the dubloons into, but soon it realizes you will not be paying and the typically soft blue lights on the drone change to glaring red and an alarm sounds.<br><br>
-
-Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.<br><br>
-
-As you awaken later that day you feel your entire body still aching. However, the Taxdrone is nowhere to be found and you feel like you escaped a terrible fate.<br><br>
-<<set $status.penalty += 2>>
-<<set $status.duration += 1>><br><br>
-<<set $dubloons = 3>>
-
-[[Continue your journey|Layer7 Hub]]
-
-<<elseif $timeL7T2 < 6>>\
-<<nobr>>
-
 <<if $visitL7 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL7 = 1>>
@@ -168,15 +135,6 @@ What do you want to do while you're here?<br><br>
 
 [[Look up towards the surface|Layer7 Ascend 1]]
 [[Look down at the next layer|Layer7 Exit1]]
-<<else>>
-A an enormous rumbling catches your attention as you walk through the seventh layer. A brief glance around reveals the source, an enormous, building-sized machine that is now rapidly approaching you. You consider running, but the Security Robot is moving at an incredible speed, leaving you no chance to get away.
-
-"ACCEPT REHABILITATION" a synthetic voice calls out, with the huge robot nearly upon you.
-
-And suddenly, it's here, reaching down to grab you with shining metallic arms and pulling you into its shell.
-
-[[Get rehabilitated|Layer7 Threat2][$returnPassage = "Layer7 Hub"]]
-<</if>>
 
 
 :: Layer7 Cherry [layer7]
@@ -213,39 +171,11 @@ It is reccomended that you get creative with your Relics and think of more effic
 
 :: Layer7 Relics [layer7 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if $dubloons < 0>>
-
-<p>[img[setup.ImagePath+'Threats/taxdrone.png']]</p>
-
-<p>A quiet humming sound descends upon you as you see the Taxdrone floating towards you from over a nearby building. You reach into your pack to get your typical dubloon payment, but then you realize something is wrong, you can't find any dubloons! Perhaps you didn't keep track of them properly? But it's too late to get any now, the taxes are already due.</p>
-
-<p>The Taxdrone patiently requests that you submit your taxes as it displays a slot for you to deposit the dubloons into, but soon it realizes you will not be paying and the typically soft blue lights on the drone change to glaring red and an alarm sounds.</p>
-
-<p>Within a moment you are restrained by nets made of light and you feel a prick on your neck. You notice the drone has stabbed you with a syringe, but at this point it's too late to resist and your consciousness begins to fade, leaving you to succumb to your fate.</p>
-
-<p>You are now forced to become a permanent resident of Layer 7.</p>
-
-<p>[[Awaken to your new life|Layer7 Tax End]]</p>
-
-<<elseif $timeL7T2 < 6>>
-
 <p>[[Continue exploring the seventh layer|Layer7 Hub]]</p>
 
 <<RelicGrid `setup.relicsOnLayer[7]`>>
 
 <p>[[Continue exploring the seventh layer|Layer7 Hub]]</p>
-
-<<else>>
-
-<p>A an enormous rumbling catches your attention as you walk through the seventh layer. A brief glance around reveals the source, an enormous, building-sized machine that is now rapidly approaching you. You consider running, but the Security Robot is moving at an incredible speed, leaving you no chance to get away.</p>
-
-<p>"ACCEPT REHABILITATION" a synthetic voice calls out, with the huge robot nearly upon you.</p>
-
-<p>And suddenly, it's here, reaching down to grab you with shining metallic arms and pulling you into its shell.</p>
-
-<p>[[Get rehabilitated|Layer7 Threat2][$returnPassage = "Layer7 Hub"]]</p>
-
-<</if>>
 
 
 :: Layer7 Curses [layer7 cards nobr]
@@ -1306,7 +1236,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 :: Layer7 Travel Events [layer7 nobr]
 <<set _triggers = {
 	inDebt: () => $dubloons < 0,
-	rehabilitated: () => $timeL7T2 > 5,
+	rehabilitated: () => $timeL7T2 >= 6,
 }>>
 
 <<PassTime _triggers>>
