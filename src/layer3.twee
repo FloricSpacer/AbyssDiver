@@ -1600,16 +1600,15 @@ But even as you gather yourself and prepare to move forward, you can't help but 
 
 :: Layer3 Threat2 [layer3]
 <<nobr>>
-<<set $tempTime = 2>>
 <<set $timeL3T2 -= 5>>
-<<if $playerCurses.some(e => e.name === "Gooey")>>
-	<<set $tempTime = 1>>
-<</if>>
-<<set $items[0].count -= $tempTime>>
-<<set $items[1].count -= $tempTime>>
-<<set $time += $tempTime>>
-<<set $timeL3 += $tempTime>>
-<<set $variation = random(0,1)>>
+/* Disable foraging while held. */
+<<set _forageFood = $forageFood, _forageWater = $forageWater>>
+<<set _forageFood = 0, _forageWater = 0>>
+/* Pass time until no longer held. */
+<<set _waitTime = $playerCurses.some(e => e.name === "Gooey") ? 1 : 2>>
+<<silently>><<PassTime _waitTime>><</silently>>
+/* Restore foraging settings. */
+<<set $forageFood = _forageFood, $forageWater = _forageWater>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/slackslime.png']]
 <<if $playerCurses.some(e => e.name === "Gooey")>>
