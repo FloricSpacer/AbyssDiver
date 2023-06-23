@@ -29,9 +29,6 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 	<<audio "layer5" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-
-<</nobr>>\
-<<if $timeL5T1 < 8 && $timeL5T2 < 11>><<nobr>>
 <<if $visitL5 == 0>>
 	<<set $visitL5 = 1>>
 	<<set $layerTemp = 8>>
@@ -101,19 +98,7 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 [[View the Layer 5 habitation option|Layer5 Habitation]]
 
 [[Look up towards the surface|Layer5 Ascend 1]]
-[[Look down at the next layer|Layer5 Exit1]]<<elseif $timeL5T1 < 8>>
-<<include "Layer5 Borer Encounter">>
-
-[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]
-<<else>>
-When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.
-
-[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = passage()]]<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-
-The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.
-[[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]
-<</if>>
-<</if>>
+[[Look down at the next layer|Layer5 Exit1]]
 
 
 :: Layer5 Cherry [layer5]
@@ -269,8 +254,6 @@ If you decide to start foraging for food or water, it means that you will not co
 
 :: Layer5 Relics [layer5 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if $timeL5T1 < 8 && $timeL5T2 < 11>>
-
 <p>
 @@.floatr;[img[setup.ImagePath+'icon.png']]@@
 
@@ -337,25 +320,6 @@ Already taken
 </div>
 
 <p>[[Continue exploring the fifth layer|Layer5 Hub]]</p>
-
-<<elseif $timeL5T1 < 8>>
-
-<p><<include "Layer5 Borer Encounter">></p>
-
-<p>[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = "Layer5 Hub"]]</p>
-
-<<else>>
-
-<p>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.</p>
-
-<p>[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = "Layer5 Hub"]]</p><<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
-
-<p>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.</p>
-
-<p>[[Summon a powerful gust to drive the swarm away from you|Layer5 Hub][$timeL5T1 -= 8]]</p>
-<</if>>
-
-<</if>>
 
 
 :: Layer5 Curses [layer5 cards nobr]
@@ -1429,8 +1393,8 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 
 :: Layer5 Travel Events [layer5 nobr]
 <<set _triggers = {
-	duneDevouringBorer: () => $timeL5T2 > 8,
-	mayflyScuttler: () => $timeL5T1 > 7,
+	duneDevouringBorer: () => $timeL5T2 >= 9,
+	mayflyScuttler: () => $timeL5T1 >= 8,
 }>>
 
 <<PassTime _triggers>>

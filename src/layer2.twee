@@ -30,92 +30,81 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 	<<audio "layer2" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-
-<</nobr>>\
-<<if $timeL2T1 < 4 || $hiredCompanions.length > 3>><<nobr>>
-	<<if $visitL2 == 0>>
-		<<set $visitL2 = 1>>
-		<<set $layerTemp = 8>>
-	<<elseif $secondVisitL2 == 0>>
-		<<set $secondVisitL2 = 1>>
-		<<set $layerTemp = 18>>
-	<<else>>
-		<<set $layerTemp = random(0,20)>>
-	<</if>>
-	<<if $layerTemp == 1>>
-		Above you, a blood-curdling screech fills the air. Freezing in fear, a bird seems to fly from the canopy above you, paying no mind to you on the ground. Strangely, it looks almost like a hawk, but as if its mouth were turned sideways and it's wings were a bit too sharp-edged to match any bird you've seen before. However, you don't get a chance to get a good look at it before it flaps it's wings and and leaves you once again with only the sound of the dripping rain. <br><br>
-	<<elseif $layerTemp == 2>>
-		At one point along your path, you spot a tangle of vines that seem to rustle slightly, but upon further inspection there is nothing inside them. After spending a minute watching them, you realize the sound comes from the speed at which the vines are growing, which seems to be a few centimeters a minute. You also hear a crunch, which seems to originate from the long-deadbskeleton of a small mammal being crushed by the vines. Wisely, you decide to move on and conclude this would not be a good place to make camp. <br><br>
-	<<elseif $layerTemp == 3 && $hiredCompanions.some(e => e.name === "Saeko") && $hiredCompanions.some(e => e.name === "Lily")>>
-		You hear a loud hissing sound in one of the bushes nearby, and suddenly Saeko stops your group from moving forward.
-		<br><br>
-		<<say $companionSaeko>>Wait, we have to go around here. I'm not sure what would make a sound like that here, but I suspect it's not a good idea to find out.<</say>><br>
-		Lily almost walks forward on her own.
-		<br><br>
-		<<say $companionLily>>I don't know either! I really want to find out though! It can't be that bad if it's only on the second layer, right?<</say>><br>
-		Saeko grabs her collar and sighs.
-		<br><br>
-		<<say $companionSaeko>>I believe I heard of a certain diver who thought similarly, but he was lost a few years ago. Better not to fall prey to some unkown venomous creature here.<</say>><br>
-		Lily hesitates, but eventually agrees and your group ends up going around the potential threat.<br><br>
-	<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.name === "Cherry")>>
-		A small feline-looking creature approaches you and gives a little mewling sound. As you hesitate with how to react, Cherry bends down and rubs it behind one of its furry ears. Her expression is blank and she sighs as the feline mews, whispering under her breath.
-		
-		<<say $companionCherry>>I remember this being fun. Why isn't this fun anymore?<</say>>
-		She stands up and steps back, giving you a chance to touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.includes("Maru")>>Maru walks over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<</if>><br><br>
-	<<elseif $layerTemp == 5>>
-		You stumble upon a tranquil, crystal-clear pond, with bioluminescent plants casting a soft, otherworldly glow upon its surface. The gentle hum of insects creates a soothing melody, accompanied by the occasional splash of leaping fish as they break the water's surface. As you draw closer, you notice that the fish are adorned with vivid, iridescent scales, shimmering like living gemstones under the luminescent light. You are momentarily entranced by this serene oasis, a welcome reprieve from the dangers you've faced thus far. However, you remind yourself to remain vigilant and continue on your journey, with the memory of the pond's enchanting beauty etched in your mind. <br><br>
-	<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
-		<<include "Hijinks Ensue Scenes">>
-	<<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
-		<<include "Companion Layer Interaction">>
-	<<elseif $layerTemp >= 19>>
-		<<include "Curse Descriptions">><br><br>
-	<<else>>
-		The dew continually drips down around you, creating the illusion of a rainstorm without clouds. The atmosphere is heavy, partially with humdity, but mainly with the ever-present, creeping corruption of the miasma.
-
-		This layer is filled with a vey dense growth of vines, bushes, and other plant life that impedes you and makes movement very time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
-	<</if>>
-<br><br>
-	<<if $forageWater == 1>>
-		<<print "You are currently foraging for your daily water on this layer">><br>
-		<<else>>
-		<<print "You are not currently foraging for your daily water on this layer">><br>
-	<</if>>
-	<<if $forageFood == 1 && $mudHunt == 1>>
-		<<print "You are currently foraging for your daily food on this layer by spending 1 bullet each day to hunt mudgrazers">><br>
-		<<elseif $forageFood == 1>>
-		<<print "You are currently foraging for your daily food on this layer by finding flanberries to eat.">><br>
-		<<else>>
-		<<print "You are not currently foraging for your daily food on this layer">><br>
-	<</if>>
-	<<if !isPlaying("layer2")>>
-		<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
-	<</if>>
-
-	<br>What do you want to do while you're here?<br><br>
-	[[Use Items and Relics]]<br>
-	<<if $hiredCompanions.length > 0>>
-		[[Interact with your party|Party overview]] <<CheckParty>><br>
-	<</if>>
-	<</nobr>>
-	[[Learn about the threats on this layer|Layer2 Threats]]
-	[[Check for food and water you can forage for|Layer2 Forage]]
-	[[Search for Relics|Layer2 Relics]]
-	[[Take on Curses to purge your corruption|Layer2 Curses]]
-	[[Look for any wonders you can take advantage of|Layer2 Wonders]]
-	[[Set up camp and rest here|Layer2 Camp]]
-	[[View the Layer 2 habitation option|Layer2 Habitation]]
-
-	[[Look up towards the surface|Layer2 Ascend 1]]
-	[[Look down at the next layer|Layer2 Exit1]]
-
+<<if $visitL2 == 0>>
+	<<set $visitL2 = 1>>
+	<<set $layerTemp = 8>>
+<<elseif $secondVisitL2 == 0>>
+	<<set $secondVisitL2 = 1>>
+	<<set $layerTemp = 18>>
 <<else>>
-
-	Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.
-
-	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage="Layer2 Hub"]]
-
+	<<set $layerTemp = random(0,20)>>
 <</if>>
+<<if $layerTemp == 1>>
+	Above you, a blood-curdling screech fills the air. Freezing in fear, a bird seems to fly from the canopy above you, paying no mind to you on the ground. Strangely, it looks almost like a hawk, but as if its mouth were turned sideways and it's wings were a bit too sharp-edged to match any bird you've seen before. However, you don't get a chance to get a good look at it before it flaps it's wings and and leaves you once again with only the sound of the dripping rain. <br><br>
+<<elseif $layerTemp == 2>>
+	At one point along your path, you spot a tangle of vines that seem to rustle slightly, but upon further inspection there is nothing inside them. After spending a minute watching them, you realize the sound comes from the speed at which the vines are growing, which seems to be a few centimeters a minute. You also hear a crunch, which seems to originate from the long-deadbskeleton of a small mammal being crushed by the vines. Wisely, you decide to move on and conclude this would not be a good place to make camp. <br><br>
+<<elseif $layerTemp == 3 && $hiredCompanions.some(e => e.name === "Saeko") && $hiredCompanions.some(e => e.name === "Lily")>>
+	You hear a loud hissing sound in one of the bushes nearby, and suddenly Saeko stops your group from moving forward.
+	<br><br>
+	<<say $companionSaeko>>Wait, we have to go around here. I'm not sure what would make a sound like that here, but I suspect it's not a good idea to find out.<</say>><br>
+	Lily almost walks forward on her own.
+	<br><br>
+	<<say $companionLily>>I don't know either! I really want to find out though! It can't be that bad if it's only on the second layer, right?<</say>><br>
+	Saeko grabs her collar and sighs.
+	<br><br>
+	<<say $companionSaeko>>I believe I heard of a certain diver who thought similarly, but he was lost a few years ago. Better not to fall prey to some unkown venomous creature here.<</say>><br>
+	Lily hesitates, but eventually agrees and your group ends up going around the potential threat.<br><br>
+<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.name === "Cherry")>>
+	A small feline-looking creature approaches you and gives a little mewling sound. As you hesitate with how to react, Cherry bends down and rubs it behind one of its furry ears. Her expression is blank and she sighs as the feline mews, whispering under her breath.
+	
+	<<say $companionCherry>>I remember this being fun. Why isn't this fun anymore?<</say>>
+	She stands up and steps back, giving you a chance to touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.includes("Maru")>>Maru walks over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<</if>><br><br>
+<<elseif $layerTemp == 5>>
+	You stumble upon a tranquil, crystal-clear pond, with bioluminescent plants casting a soft, otherworldly glow upon its surface. The gentle hum of insects creates a soothing melody, accompanied by the occasional splash of leaping fish as they break the water's surface. As you draw closer, you notice that the fish are adorned with vivid, iridescent scales, shimmering like living gemstones under the luminescent light. You are momentarily entranced by this serene oasis, a welcome reprieve from the dangers you've faced thus far. However, you remind yourself to remain vigilant and continue on your journey, with the memory of the pond's enchanting beauty etched in your mind. <br><br>
+<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+	<<include "Hijinks Ensue Scenes">>
+<<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
+	<<include "Companion Layer Interaction">>
+<<elseif $layerTemp >= 19>>
+	<<include "Curse Descriptions">><br><br>
+<<else>>
+	The dew continually drips down around you, creating the illusion of a rainstorm without clouds. The atmosphere is heavy, partially with humdity, but mainly with the ever-present, creeping corruption of the miasma.
+
+	This layer is filled with a vey dense growth of vines, bushes, and other plant life that impedes you and makes movement very time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
+<</if>>
+<br><br>
+<<if $forageWater == 1>>
+	<<print "You are currently foraging for your daily water on this layer">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily water on this layer">><br>
+<</if>>
+<<if $forageFood == 1 && $mudHunt == 1>>
+	<<print "You are currently foraging for your daily food on this layer by spending 1 bullet each day to hunt mudgrazers">><br>
+	<<elseif $forageFood == 1>>
+	<<print "You are currently foraging for your daily food on this layer by finding flanberries to eat.">><br>
+	<<else>>
+	<<print "You are not currently foraging for your daily food on this layer">><br>
+<</if>>
+<<if !isPlaying("layer2")>>
+	<<masteraudio stop>><<audio "layer2" volume 0.2 play loop>>
+<</if>>
+
+<br>What do you want to do while you're here?<br><br>
+[[Use Items and Relics]]<br>
+<<if $hiredCompanions.length > 0>>
+	[[Interact with your party|Party overview]] <<CheckParty>><br>
+<</if>>
+<</nobr>>
+[[Learn about the threats on this layer|Layer2 Threats]]
+[[Check for food and water you can forage for|Layer2 Forage]]
+[[Search for Relics|Layer2 Relics]]
+[[Take on Curses to purge your corruption|Layer2 Curses]]
+[[Look for any wonders you can take advantage of|Layer2 Wonders]]
+[[Set up camp and rest here|Layer2 Camp]]
+[[View the Layer 2 habitation option|Layer2 Habitation]]
+
+[[Look up towards the surface|Layer2 Ascend 1]]
+[[Look down at the next layer|Layer2 Exit1]]
 
 
 :: Layer2 Cherry [layer2]
@@ -219,8 +208,6 @@ After collecting enough berries, you head back to camp with Maru. He mashes the 
 
 :: Layer2 Relics [layer2 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if $timeL2T1 < 4 || $hiredCompanions.length > 3>>
-
 <h1>Relics</h1>
 
 <p>
@@ -236,14 +223,6 @@ By default, your companions' reward for coming down here with you is the dubloon
 <<RelicGrid `setup.relicsOnLayer[2]`>>
 
 <p>[[Continue exploring the second layer|Layer2 Hub]]</p>
-
-<<else>>
-
-<p>Suddenly, you hear a deep, guttural growl that echoes through the layer. A shiver runs down your spine as you recognize it as the ominous call of the Baying Gourmet. The very ground beneath you seems to tremble with anticipation, and a sense of dread washes over you. You clutch your belongings closer, acutely aware of the abundance of food rations you carry.</p>
-
-<p>[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = "Layer2 Relics"]]</p>
-
-<</if>>
 
 
 :: Layer2 Curses [layer2 cards nobr]
@@ -1415,7 +1394,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 :: Layer2 Travel Events [layer2 nobr]
 <<set _triggers = {
-	bayingGourmet: () => $timeL2T1 > 3 && $hiredCompanions.length < 4,
+	bayingGourmet: () => $timeL2T1 >= 4 && $hiredCompanions.length < 4,
 }>>
 
 <<PassTime _triggers>>

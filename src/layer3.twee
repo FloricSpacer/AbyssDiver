@@ -32,8 +32,6 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 <</if>>
 <<CarryAdjust>><<checkTime>>
 <<set $forageWater = 0>>
-<</nobr>>\
-<<if $timeL3T1 < 6 && $timeL3T2 < 5>><<nobr>>
 <<if $visitL3 == 0>>
 	<<set $visitL3 = 1>>
 	<<set $layerTemp = 8>>
@@ -97,13 +95,7 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 [[View the Layer 3 habitation option|Layer3 Habitation]]
 
 [[Look up towards the surface|Layer3 Ascend 1]]
-[[Look down at the next layer|Layer3 Exit1]]<<elseif $timeL3T2 < 5>>
-<<include "Layer3 Tentacle Encounter">>
-
-[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<<else>>
-<<include "Layer3 Slackslime Encounter">>
-
-[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<</if>>
+[[Look down at the next layer|Layer3 Exit1]]
 
 
 :: Layer3 Threats [image layer3]
@@ -152,8 +144,6 @@ If you decide to start foraging for food or water, it means that you will not co
 
 :: Layer3 Relics [layer3 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if $timeL3T1 < 6 && $timeL3T2 < 5>>
-
 <h1>Relics</h1>
 
 <p>
@@ -167,20 +157,6 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 <<RelicGrid `setup.relicsOnLayer[3]`>>
 
 <p>[[Continue exploring the third layer|Layer3 Hub]]</p>
-
-<<elseif $timeL3T2 < 5>>
-
-<p><<include "Layer3 Tentacle Encounter">></p>
-
-<p>[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage="Layer3 Hub"]]</p>
-
-<<else>>
-
-<p><<include "Layer3 Slackslime Encounter">></p>
-
-<p>[[Deal with the slackslime|Layer3 Threat2][$returnPassage="Layer3 Hub"]]</p>
-
-<</if>>
 
 
 :: Layer3 Curses [layer3 cards nobr]
@@ -275,8 +251,8 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 
 :: Layer3 Travel Events [layer3 nobr]
 <<set _triggers = {
-	lesserTentacleBeast: () => $timeL3T1 > 5,
-	slackslime: () => $timeL3T2 > 4,
+	lesserTentacleBeast: () => $timeL3T1 >= 6,
+	slackslime: () => $timeL3T2 >= 5,
 }>>
 
 <<PassTime _triggers>>

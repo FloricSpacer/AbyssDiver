@@ -20,16 +20,13 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 <</if>><</nobr>>
 
 
-:: Layer6 Hub [layer6]
-<<nobr>>
+:: Layer6 Hub [layer6 nobr]
 <<set $currentLayer = 6>>
 <<if !isPlaying("layer6")>>
 	<<masteraudio stop>>
 	<<audio "layer6" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-
-<<if $timeL6T1 < 15 && ($timeL6T2 < 8 || $dragonKill > 4)>>
 <<if $visitL6 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL6 = 1>>
@@ -96,15 +93,6 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 [[Look up towards the surface|Layer6 Ascend 1]]<br>
 [[Look down at the next layer|Layer6 Exit1]]
 
-<<elseif $timeL6T2 > 7 && $dragonKill < 5>>
-<<include "Layer6 Dragon Encounter">><br><br>
-[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = passage()]]
-<<else>>
-<<include "Layer6 Tentacle Encounter">><br><br>
-
-[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]
-<</if>><</nobr>>
-
 
 :: Layer6 Cherry [layer6]
 [img[setup.ImagePath+'Surface/cherry.png']]
@@ -148,26 +136,11 @@ If you decide to start foraging for food or water, it means that you will not co
 
 :: Layer6 Relics [layer6 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if $timeL6T1 < 7>>
-
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
 
 <<RelicGrid `setup.relicsOnLayer[6]`>>
 
 <p>[[Continue exploring the sixth layer|Layer6 Hub]]</p>
-
-<<elseif $timeL6T2 > 7 && $dragonKill < 5>>
-
-<p><<include "Layer6 Dragon Encounter">><p>
-
-<p>[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = "Layer6 Hub"]]<p>
-
-<<else>>
-
-<p><<include "Layer6 Tentacle Encounter">></p>
-
-<p>[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = "Layer6 Hub"]]</p>
-<</if>>
 
 
 :: Layer6 Curses [layer6 cards nobr]
@@ -937,8 +910,8 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 :: Layer6 Travel Events [layer6 nobr]
 <<set _triggers = {
-	fellDragon: () => $timeL6T2 > 7 && $dragonKill < 5,
-	greaterTentacleBeast: () => $timeL6T1 > 14,
+	fellDragon: () => $timeL6T2 >= 8 && $dragonKill < 5,
+	greaterTentacleBeast: () => $timeL6T1 >= 15,
 }>>
 
 <<PassTime _triggers>>
