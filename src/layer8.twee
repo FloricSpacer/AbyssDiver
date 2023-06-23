@@ -91,7 +91,14 @@ Threats:
 <<CarryAdjust>><<checkTime>>
 <<set $L8loopLim = false>>
 <<set $temp1 = random(0,20)>>
-<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru")) || ($timeL8T2a > 7)>>
+<<if $timeL8T2b >= ($hiredCompanions.some(e => e.name === "Maru") ? 24 : 21)>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+
+	You can feel the deepest fears of your party manifesting into reality once again. 
+	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
+
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2b]]
+<<elseif $timeL8T2a >= ($hiredCompanions.some(e => e.name === "Maru") ? 8 : 7)>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
 	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
@@ -99,14 +106,6 @@ Threats:
 	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
 
 	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Hub"]]
-
-<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
-	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
-
-	You can feel the deepest fears of your party manifesting into reality once again. 
-	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
-
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2b]]
 <<else>>
 
 	<<if $visitL8 == 0>>
@@ -378,19 +377,18 @@ You can consider your equipment, allies, and general health to take into account
 
 :: Layer8 Relics [layer8 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru")) || ($timeL8T2a > 7)>>
-	<p>[img[setup.ImagePath+'Threats/dementialaberrations.png']]</p>
-
-	<p>Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br></p>
-
-	<p>[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Hub"]]</p>
-
-<<elseif ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23>>
+<<if $timeL8T2b >= ($hiredCompanions.some(e => e.name === "Maru") ? 24 : 21)>>
 	<p>[img[setup.ImagePath+'Threats/dementialaberrations.png']]</p>
 
 	<p>You can feel the deepest fears of your party manifesting into reality once again. However, this time, they are not mere visions, but physical manifestations of your fears.</p>
 
 	<p>[[Deal with the Demential Aberrations|Layer 8 Threat 2b]]</p>
+<<elseif $timeL8T2a >= ($hiredCompanions.some(e => e.name === "Maru") ? 8 : 7)>>
+	<p>[img[setup.ImagePath+'Threats/dementialaberrations.png']]</p>
+
+	<p>Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br></p>
+
+	<p>[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = "Layer8 Hub"]]</p>
 <<else>>
 <p>[[Continue exploring the eighth layer|Layer8 Hub]]</p>
 <<RelicGrid `setup.relicsOnLayer[8]`>>
@@ -1308,25 +1306,34 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 
 :: Layer8 Travel Events [layer8 nobr]
 <<set _triggers = {
-	dementialAberrations2a: () => ($timeL8T2a > 6 && !$hiredCompanions.some(e => e.name === "Maru")) || ($timeL8T2a > 7),
-	dementialAberrations2b: () => ($timeL8T2b > 20 && !$hiredCompanions.some(e => e.name === "Maru")) || $timeL8T2b > 23,
+	inanisEgo: () => {
+		const state = setup.passingTime();
+		if ($L8loopLim || !state) return false;
+		return $timeL8T2a == 4 || state.unweightedDayIndex === Math.floor(state.expectedDays / 2);
+	},
+	dementialAberrations2a: () => $timeL8T2a >= ($hiredCompanions.some(e => e.name === "Maru") ?  8 :  7),
+	dementialAberrations2b: () => $timeL8T2b >= ($hiredCompanions.some(e => e.name === "Maru") ? 24 : 21),
 }>>
 
 <<PassTime _triggers>>
 
-<<if _triggers.dementialAberrations2a()>>
-	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
-
-	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
-	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
-	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = passage(), $L8loopLim = false]]
+<<if _triggers.inanisEgo()>>
+	<<set $L8loopLim = true>>
+	<<set $returnPassage = passage()>>
+	<<include "Layer 8 Threat 1a">>
 <<elseif _triggers.dementialAberrations2b()>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
 	You can feel the deepest fears of your party manifesting into reality once again. 
 	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
 	[[Deal with the Demential Aberrations|Layer 8 Threat 2b][$returnPassage = passage(), $L8loopLim = false]]
+<<elseif _triggers.dementialAberrations2a()>>
+	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
+
+	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
+	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
+	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
+	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = passage(), $L8loopLim = false]]
 <</if>>
 
 
@@ -1386,176 +1393,130 @@ If you continue your descent in spite of everything, descending past this layer'
 <</if>>
 
 
-:: Layer8 Inanis Check
-
-<<nobr>>
+:: Layer8 Inanis Check [layer8 nobr]
 <<set _relicBonus = 0>>
-	<<set _curseBonus = 0>>
-	<<set _companionBonus = 0>>
-	<<set _equipmentBonus = 0>>
-
 <<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
-		Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningful blows is much easier when you have so much time to react.<br>
-		<<set _relicBonus += 10>>
-	<</if>>
+	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningful blows is much easier when you have so much time to react.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $slingshot>>
+	Your Brave Vector slingshot is proving to be a valuable ranged weapon against the empty dolls.<br>
+	<<set _relicBonus += 20>>
+<</if>>
+<<if $joyousSword>>
+	The sword you made from the Joyous Sunder slices through any resistance as if it were nothing more than air, giving you a great advantage in melee fights.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $DaedalusEquip>>
+	Having wings on your back allows you to stay out of reach of the mimics. Except for the ones that have ranged weapons, of course, but you can certainly dodge those, right?<br>
+	<<set _relicBonus += 7>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
+	The combination of the Toral Wave and Empath Coil allows you to electrocute the mimics easily, it's very useful as long as you get a chance to use it on them.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge < 18>>
+	The eyes of the creepy doll seem to follow young versions of yourself, then those mimics wander off in random directions. Very strange coincidence...<br>
+	<<set _relicBonus += 3>>
+<</if>>
 
-	<<if $slingshot>>
-		Your Brave Vector slingshot is proving to be a valuable ranged weapon against the empty dolls.<br>
-		<<set _relicBonus += 20>>
-	<</if>>
+<<set _curseBonus =  ($mc.heightCor - $mc.oheight) / $mc.oheight * 100>>
+<<if _curseBonus > 0 >>
+	The fact that you have become much larger during your travels means you have a size advantage over most of the mimics.<br>
+<<elseif _curseBonus < 0 >>
+	The fact that you have shrunk significantly during your travels means you are at a size disadvantage over most of the mimics.<br>
+<</if>>
+<<if $mc.skinType == "sticky, slimy">>
+	Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of sticky situations!<br>
+	<<set _curseBonus += 3>>
+<</if>>
+<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+	Your claw-like nails help you somewhat if you get into hand-to-hand combat.<br>
+	<<set _curseBonus += 2>>
+<</if>>
 
-	<<if $joyousSword>>
-		The sword you made from the Joyous Sunder slices through any resistance as if it were nothing more than air, giving you a great advantage in melee fights.<br>
-		<<set _relicBonus += 10>>
-	<</if>>
+<<set _companionBonus = 0>>
+<<set _equipmentBonus = 0>>
 
-	<<if $DaedalusEquip>>
-		Having wings on your back allows you to stay out of reach of the mimics. Except for the ones that have ranged weapons, of course, but you can certainly dodge those, right?<br>
-		<<set _relicBonus += 7>>
-	<</if>>
-
-	<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
-		The combination of the Toral Wave and Empath Coil allows you to electrocute the mimics easily, it's very useful as long as you get a chance to use it on them.<br>
-		<<set _relicBonus += 10>>
-	<</if>>
-
-	<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
-		The eyes of the creepy doll seem to follow young versions of yourself, then those mimics wander off in random directions. Very strange coincidence... <br>
-		<<set _relicBonus += 3>>
-	<</if>>
-
-	<<set _curseBonus +=  ($mc.heightCor - $mc.oheight)/$mc.oheight*100>>
-	<<if ($mc.heightCor - $mc.oheight)/$mc.oheight*100 > 0 >>
-		The fact that you have become much larger during your travels means you have a size advantage over most of the mimics.<br>
-	<<elseif ($mc.heightCor - $mc.oheight)/$mc.oheight*100 < 0 >>
-		The fact that you have shrunk significantly during your travels means you are at a size disadvantage over most of the mimics.<br>
-	<</if>>
-
-	<<if $mc.skinType == "sticky, slimy">>
-		Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of sticky situations!<br>
-		<<set _curseBonus += 3>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
-		Your claw-like nails help you somewhat if you get into hand-to-hand combat. <br>
-		<<set _curseBonus += 2>>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Maru")>>
-		Maru seems scared, but he is still willing to do what he can in a fight.<br>
-		<<set _companionBonus += 2 * (1+$companionMaru.HandicapThreat/10)>>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Lily")>>
-		Lily puffs her chest, lets out something of a battle cry, and charges headfirst into the puppets as she beats them left and right.<br>
-		<<set _companionBonus += 8 * (1+$companionLily.HandicapThreat/10)>>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-		Khemia assumes a fighting stance, dispatching any mimics that finds itself near him. 
-		<<set _companionBonus += 15 * (1+$companionKhemia.HandicapThreat/10)>>
-		<<if setup.haveCuttingTool>>
-			His sword slashes through them almost as fast as you can blink.
-			<<set _companionBonus += 8 * (1+$companionKhemia.HandicapThreat/10)>>
-			<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
-			<<set _companionBonus += 5 * (1+$companionKhemia.HandicapThreat/10)>>
-			<</if>>
-		<</if>>
-		<br>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-		Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
-		<<set _companionBonus += 1 * (1+$companionCherry.HandicapThreat/10)>>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-		Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
-		<<set _companionBonus += 10 * (1+$companionCloud.HandicapThreat/10)>>
-		<<if $slingshot && $cloudStrat==0>>
-			The modified Brave Vector moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
-			<<set _companionBonus += 5 * (1+$companionCloud.HandicapThreat/10)>>
-		<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
-			The gun moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
-			<<set _companionBonus += 5 * (1+$companionCloud.HandicapThreat/10)>>
-			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
-			<<set _equipmentBonus += _ammo*5>>
-			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/(8*_ammo - $bullRed)) >>
-			<<if $items[20].count <= _bulletsUsed>>
-				Cloud has used the last of your bullets...
-				<<set $items[20].count = 0 >>
-				<<set $ammoStrat = 0>>
-				<<set $cloudStrat = 0>>
-			<<else>>
-				Cloud used _bulletsUsed bullets fighting off the enemy.
-				<<set $items[20].count -= _bulletsUsed>>
-			<</if>>
-		<</if>>
-		<br>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-		Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
-		<<set _companionBonus += 5  * (1+$companionSaeko.HandicapThreat/10)>>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === "Golem")>>
-		Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
-		<<set _companionBonus += 10 * (1+$companionGolem.HandicapThreat/10)>>
-	<</if>>
-
-	<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
-		<<set _twinBonus = 5 * (1+$companionTwin.HandicapThreat/10)+_curseBonus>>
-		<<if _twinBonus > 7 >>
-			Your twin fights off the doll-like copies of you with relative ease. It's a strange sight to see a copy of you fight other copies, but next to your twin, the mimics seem like cheap immitations.
-		<<elseif _twinBonus > 5>>
-			Much like yourself, your twin is not the most experienced fighter. But the fact that they are able to keep a few of them busy is a pretty big help.
-		<<elseif _twinBonus > 0>>
-			You're not the fighting type, so neither is your twin. The antics of your twin seems to be drawing some attention away from you, which is helpful, but they are not taking many of them down.
-		<<else>>
-			Previously it was only you who was so inept when handling threats, but now it's both you and your twin...
-		<</if>>
-		<<set _companionBonus += _twinBonus>>
-		<br>
-
-	<</if>>
-
+<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	Maru seems scared, but he is still willing to do what he can in a fight.<br>
+	<<set _companionBonus += 2 * (1 + $companionMaru.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Lily")>>
+	Lily puffs her chest, lets out something of a battle cry, and charges headfirst into the puppets as she beats them left and right.<br>
+	<<set _companionBonus += 8 * (1 + $companionLily.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia assumes a fighting stance, dispatching any mimics that finds itself near him. 
+	<<set _companionBonus += 15 * (1 + $companionKhemia.HandicapThreat / 10)>>
 	<<if setup.haveCuttingTool>>
-		You're glad you brought along a sword to defend yourself.<br>
-		<<set _equipmentBonus += 7>>
-	<</if>>
-
-		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
-			<<set _equipmentBonus += 5*$ammoStrat>>
-			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
-			<<if $items[20].count <= _bulletsUsed>>
-				You has used the last of your bullets...<br>
-				<<set $items[20].count = 0 >>
-				<<set $ammoStrat = 0>>
-			<<else>>
-				You used _bulletsUsed bullets fighting off the enemy.<br>
-				<<set $items[20].count -= _bulletsUsed>>
-			<</if>>
+		His sword slashes through them almost as fast as you can blink.
+		<<set _companionBonus += 8 * (1 + $companionKhemia.HandicapThreat / 10)>>
+		<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
+			<<set _companionBonus += 5 * (1 + $companionKhemia.HandicapThreat / 10)>>
 		<</if>>
-
-	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
-		Your gun is an important asset if you want to survive this horde.<br>
 	<</if>>
+	<br>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
+	<<set _companionBonus += 1 * (1 + $companionCherry.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+	Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
+	<<set _companionBonus += 10 * (1 + $companionCloud.HandicapThreat / 10)>>
+	<<if $slingshot && $cloudStrat == 0>>
+		The modified Brave Vector moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
+		<<set _companionBonus += 5 * (1 + $companionCloud.HandicapThreat / 10)>>
+	<<elseif $items[20].count > 0 && $items[13].count > 0 && ($ammoStrat > 0 || ($slingshot && $cloudStrat > 0))>>
+		The gun moves quickly and gracefully in Cloud's hand, then becomes perfectly still the moment he fires a shot. He doesn't miss his mark.
+		<<set _companionBonus += 5 * (1 + $companionCloud.HandicapThreat / 10)>>
+		<<set _equipmentBonus += 5 * Math.max($ammoStrat, $cloudStrat)>>
+	<</if>>
+	<br>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+	Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
+	<<set _companionBonus += 5 * (1 + $companionSaeko.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Golem")>>
+	Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
+	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+	<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
+	<<if _twinBonus > 7>>
+		Your twin fights off the doll-like copies of you with relative ease. It's a strange sight to see a copy of you fight other copies, but next to your twin, the mimics seem like cheap immitations.
+	<<elseif _twinBonus > 5>>
+		Much like yourself, your twin is not the most experienced fighter. But the fact that they are able to keep a few of them busy is a pretty big help.
+	<<elseif _twinBonus > 0>>
+		You're not the fighting type, so neither is your twin. The antics of your twin seems to be drawing some attention away from you, which is helpful, but they are not taking many of them down.
+	<<else>>
+		Previously it was only you who was so inept when handling threats, but now it's both you and your twin...
+	<</if>>
+	<<set _companionBonus += _twinBonus>>
+	<br>
+<</if>>
 
-	<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
-	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
-	<<set _L8T1_threshold3 = _L8T1_threshold*1.5>>
+<<if setup.haveCuttingTool>>
+	You're glad you brought along a sword to defend yourself.<br>
+	<<set _equipmentBonus += 7>>
+<</if>>
+<<if $items[20].count > 0 && $items[13].count > 0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+	Your gun is an important asset if you want to survive this horde.<br>
+	<<set _equipmentBonus += 5 * $ammoStrat>>
+<</if>>
 
-	<<set _temp =  3*(_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat*10)>>
+<<set _L8T1_threshold = (($L8T1_difficulty + $timeL8T1 / 100) * $timeL8T1).toRounded(1)>>
+
+<<set _temp = (3 * (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
 
 <br>Your relative strength bonus due to these factors against the Inanis Ego is _temp, though in a real fight you would also get a bonus between 1 and 100 based on random factors such as terrain and luck. And based on your experience. If you encountered them today, they would have a strength of _L8T1_threshold, which you would need to overcome.<br>
 
 <br>[[Continue exploring the eighth layer|Layer8 Hub]]
-<</nobr>>
 
 
-:: Layer 8 Threat 1a
-<<nobr>>
+:: Layer 8 Threat 1a [layer8 nobr]
 <<Handicap>>
 <<set _random = random(0,1)>>
 <<if _random == 0>>
@@ -1564,7 +1525,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	[img[setup.ImagePath+'Threats/inanisego2.png']]<br>
 <</if>>
 <<set _temp1=1>>
-<<if $timeL8 >= $L8T1_milestones[$L8T1_counter]>>
+<<if $timeL8T1 >= $L8T1_milestones[$L8T1_counter]>>
 	<<if $L8T1_counter==0>>
 		You spot a distant figure slowly limping in your direction.<br><br>
 
@@ -1609,10 +1570,10 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set $L8T1_difficulty += 0.4>>
 	<</if>>
 <<else>>
-	<<if $timeL8 < 10 >>
-		About $timeL8 of these eerie, clockwork dolls swarm you. You don't know exactly what they are planning, but you're certain it isn't good.<br>
+	<<if $timeL8T1 < 10 >>
+		About $timeL8T1 of these eerie, clockwork dolls swarm you. You don't know exactly what they are planning, but you're certain it isn't good.<br>
 	<<else>>
-		About $timeL8 of these eerie, porcelain versions of yourself swarm you. You don't know exactly what they are planning, but you're certain it isn't good.<br>
+		About $timeL8T1 of these eerie, porcelain versions of yourself swarm you. You don't know exactly what they are planning, but you're certain it isn't good.<br>
 	<</if>>
 <</if>>
 <<if _temp1==1>>
@@ -1687,9 +1648,9 @@ If you continue your descent in spite of everything, descending past this layer'
 			<<set _companionBonus += 5* (1+ $companionCloud.HandicapThreat/10)>>
 		<<elseif $items[20].count>0 && $items[13].count>0 && ($ammoStrat>0 || ($slingshot && $cloudStrat>0 ))>>
 			<<set _companionBonus += 5* (1+ $companionCloud.HandicapThreat/10)>>
-			<<set _ammo = Math.max($ammoStrat,$cloudStrat)>>
+			<<set _ammo = Math.max($ammoStrat, $cloudStrat)>>
 			<<set _equipmentBonus += _ammo*5>>
-			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/(8*_ammo - $bullRed)) >>
+			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * _ammo - $bullRed, 1)>>
 			<<if $items[20].count <= _bulletsUsed>>
 				Cloud has used the last of your bullets...
 				<<set $items[20].count = 0 >>
@@ -1727,7 +1688,7 @@ If you continue your descent in spite of everything, descending past this layer'
 
 		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
 			<<set _equipmentBonus += 5*$ammoStrat>>
-			<<set _bulletsUsed = Math.ceil(($timeL8-$tempTime+$i)/8)*$ammoStrat*(3-$bullRed) >>
+			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * _ammo * 3 - $bullRed, 1)>>
 			<<if $items[20].count <= _bulletsUsed>>
 				You have used the last of your bullets...<br>
 				<<set $items[20].count = 0 >>
@@ -1741,11 +1702,11 @@ If you continue your descent in spite of everything, descending past this layer'
 	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
 	<</if>>
 
-	<<set _L8T1_threshold = ($L8T1_difficulty + ($timeL8-$tempTime+$i)/100)*($timeL8-$tempTime+$i)>>
-	<<set _L8T1_threshold2 = _L8T1_threshold*1.25>>
-	<<set _L8T1_threshold3 = _L8T1_threshold*1.5>>
+	<<set _L8T1_threshold = ($L8T1_difficulty + $timeL8T1 / 100) * $timeL8T1>>
+	<<set _L8T1_threshold2 = _L8T1_threshold * 1.25>>
+	<<set _L8T1_threshold3 = _L8T1_threshold * 1.5>>
 
-	<<set _temp = random(0,100) + 3*_relicBonus + 3*_curseBonus + 3*_companionBonus + 3*_equipmentBonus + 3*$mc.HandicapThreat*10>>
+	<<set _temp = random(1, 100) + 3 * (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10)>>
 
 <br>
 	<<if _temp >  _L8T1_threshold3>>
@@ -1756,7 +1717,6 @@ If you continue your descent in spite of everything, descending past this layer'
 		<br>You had some close calls, a few felt a little too close for comfort. You barely avoided getting caught by the dolls, despite your best efforts. Were you simply unlucky this time or should you consider leaving this place before it's too late?<br>
 	<<elseif _temp <= (_L8T1_threshold - 100) && $easymode==false>>
 			<<set $gameOver = true>>
-			<<set $i=$tempTime>>
 			<br>You fight as hard as you can, but eventually the lifeless dolls overwhelm you. As one of them grabs hold of your face, it closes in for a gentle kiss. 
 			The moment your lips touch, you feel your life flashing before your eyes, and you know you have to escape as quickly as possible. 
 			But you have been so overwhelmed that you are unable to get away, so after a full 5 seconds you feel their hands leaving your face.<br>
@@ -1765,7 +1725,6 @@ If you continue your descent in spite of everything, descending past this layer'
 	<<elseif _temp <= _L8T1_threshold>>
 		<<if $status.duration > 0>>
 			<<set $gameOver = true>>
-			<<set $i=$tempTime>>
 			<br>You fight as hard as you can, but eventually the lifeless dolls overwhelm you. As one of them grabs hold of your face, it closes in for a gentle kiss. 
 			The moment your lips touch, you feel your life flashing before your eyes, and you know you have to escape as quickly as possible. 
 			But your previous injuries have made you too weak to get away, so after a full 5 seconds you feel their hands leaving your face.<br>
@@ -1779,16 +1738,12 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 <</if>>
 <br>
-<</nobr>>
+[[Continue exploring the eighth layer|$returnPassage]]
 
 :: Layer 8 Threat 2a
 
 <<nobr>>
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
-	<<set $timeL8T2a -= 6>>
-<<else>>
-	<<set $timeL8T2a -= 7>>
-<</if>>
+<<set $timeL8T2a -= $hiredCompanions.some(e => e.name === "Maru") ?  8 :  7>>
 <<set $totalFears = []>>
 <<set $totalFears.push($fear)>>
 <<for _companion range $hiredCompanions>>
@@ -2033,13 +1988,8 @@ You're not sure. Still, that sound in the dark... some part of you can't complet
 :: Layer 8 Threat 2b
 
 <<nobr>>
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
-	<<set $timeL8T2a -= 6>>
-	<<set $timeL8T2b -= 18>>
-<<else>>
-	<<set $timeL8T2a -= 7>>
-	<<set $timeL8T2b -= 21>>
-<</if>>
+<<set $timeL8T2a -= $hiredCompanions.some(e => e.name === "Maru") ?  8 :  7>>
+<<set $timeL8T2b -= $hiredCompanions.some(e => e.name === "Maru") ? 24 : 21>>
 <<set $totalFears = []>>
 <<set $totalFears.push($fear)>>
 <<for _companion range $hiredCompanions>>

@@ -530,6 +530,9 @@ Object.defineProperties(setup, {
 				if (vars.currentLayer == 5 && !['Layer5 Camp', 'Layer5 Forage'].includes(passage)) vars.atWaterSource = false;
 			}
 
+			// If we're on layer 8, allow an Inanis Ego event to trigger every time we wait or travel somewhere.
+			if (vars.currentLayer == 8) vars.L8loopLim = false;
+
 			const state = {
 				expectedDays: days, /* The number of days of time to pass, modulo the time weight. */
 				unweightedDayIndex: 0,
