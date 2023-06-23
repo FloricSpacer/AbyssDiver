@@ -45,10 +45,8 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 	<<audio "layer4" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-<<if $visitL4 == 0>><<set $endSpectre = $time>><</if>>
-<</nobr>>\
-<<if $timeL4T1 < 7>><<nobr>>
 <<if $visitL4 == 0>>
+	<<set $endSpectre = $time>>
 	<<set $visitL4 = 1>>
 	<<set $layerTemp = 8>>
 <<elseif $secondVisitL4 == 0>>
@@ -133,13 +131,7 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 [[View the Layer 4 habitation option|Layer4 Habitation]]
 
 [[Look up towards the surface|Layer4 Ascend 1]]
-[[Look down at the next layer|Layer4 Exit1]]<<else>>
-
-A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.
-
-[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]
-
-<</if>>
+[[Look down at the next layer|Layer4 Exit1]]
 
 
 :: Layer4 Cherry [layer4]
@@ -190,8 +182,6 @@ Would you like to increase or decrease your height due to eating flairabou meat?
 
 :: Layer4 Relics [layer4 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
-<<if $timeL4T1 < 7>>
-
 <p>
 @@.floatr;[img[setup.ImagePath+'icon.png']]@@
 
@@ -203,14 +193,6 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 <<RelicGrid `setup.relicsOnLayer[4]`>>
 
 <p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
-
-<<else>>
-
-<p>A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.</p>
-
-<p>[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]</p>
-
-<</if>>
 
 
 :: Layer4 Curses [layer4 cards nobr]
@@ -1215,7 +1197,7 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 
 :: Layer4 Travel Events [layer4 nobr]
 <<set _triggers = {
-	driftingSwallower: () => $timeL4T1 > 6,
+	driftingSwallower: () => $timeL4T1 >= 7,
 }>>
 
 <<PassTime _triggers>>
