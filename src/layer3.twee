@@ -90,7 +90,7 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 [[Check for food and water you can forage for|Layer3 Forage]]
 [[Search for Relics|Layer3 Relics]]
 [[Take on Curses to purge your corruption|Layer3 Curses]]
-[[Look for any wonders you can take advantage of|Layer3 Wonders]]
+[[Look for any Wonders you can take advantage of|Layer3 Wonders]]
 [[Set up camp and rest here|Layer3 Camp]]
 [[View the Layer 3 habitation option|Layer3 Habitation]]
 
@@ -180,30 +180,58 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 <</if>>
 
 
-:: Layer3 Wonders [image layer3]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 4-wonders.png']]
+:: Layer3 Wonders [layer3 cards nobr]
+<h1>Wonders</h1>
 
-<<nobr>>
-<<if $scalesUsed == 0>>
-Would you like to use the Gossamery Scales to gain dubloons based on your corruption?<br>
-<<TravelToPassage 'Yes, use the Scales to gain dubloons' 'Layer3 Scales 1' 2>><br><br>
-Would you like to use the Gossamery Scales to gain corruption based on your dubloons?<br>
-<<TravelToPassage 'Yes, use the Scales to gain corruption' 'Layer3 Scales 2' 2>><br><br>
+<p>[[Continue exploring the third layer|Layer3 Hub]]</p>
+
+<div class="cards-grid cards-wide">
+
+<<set _wonder = setup.gossameryScales>>
+
+<div>
+[img[ setup.ImagePath + _wonder.pic ]]
+<h2>_wonder.name</h2>
+<p class="cost">Cost: <<print _wonder.time>> days</p>
+<p>
+<<if $scalesUsed>>
+    @@.unreachable; Already used
 <<else>>
-You have already used the scales on your journey. You may not use them again.<br><br>
+    <<TravelToPassage 'Use the Scales to gain dubloons' 'Layer3 Scales 1' 2>><br>
+    <<TravelToPassage 'Use the Scales to gain corruption' 'Layer3 Scales 2' 2>>
 <</if>>
-<<if !$hiredCompanions.length>>
-	You must have companions if you would like to use the Skewed Shrine.<br><br>
-<<elseif $skewedForced < 4>>
-	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<TravelToPassage 'Yes, use the Skewed Shrine to transfer a Curse' 'Layer3 Skewed1a' 3>><br><br>
-	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<TravelToPassage 'Yes, use the Skewed Shrine to force a Curse' 'Layer3 Skewed 2a' 3>><br><br>
+</p>
+<p>
+<<include `_wonder.name + " Description"`>>
+</p>
+
+</div>
+
+<<set _wonder = setup.skewedShrine>>
+
+<div>
+[img[ setup.ImagePath + _wonder.pic ]]
+<h2>_wonder.name</h2>
+<p class="cost">Cost: <<print _wonder.time>> days + <<print ($skewedUsed * 5)>> dubloons</p>
+<p>
+<<if $hiredCompanions.length == 0>>
+    @@.unreachable; No companions
+<<elseif $skewedForced >= 4>>
+    @@.unreachable; None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.
+<<elseif $playerCurses.length == 0>>
+    @@.unreachable; You have no Curses to transfer
 <<else>>
-	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
+    <<TravelToPassage `'Travel to the ' + _wonder.name` _wonder.destinationPassage _wonder.time>>
 <</if>>
-<</nobr>>
-[[Continue exploring the third layer|Layer3 Hub]]
+</p>
+<p>
+<<include `_wonder.name + " Description"`>>
+</p>
+
+</div>
+</div>
+
+<p>[[Continue exploring the third layer|Layer3 Hub]]</p>
 
 
 :: Layer3 Habitation [image layer3]
@@ -1652,15 +1680,17 @@ You rise, your body trembling from the lingering effects of the paralysis and th
 
 :: Layer3 Skewed Choose
 
-Would you like to give your companions a minor Curse that they would willingly accept or attempt to force a Curse on them, no matter the consequences?
+[img[ setup.ImagePath + setup.skewedShrine.pic ]]
 
 <<if !$hiredCompanions.length>>
-	You must have companions if you would like to use the Skewed Shrine.<br><br>
+	You must have companions if you would like to use the Skewed Shrine.
 <<elseif $skewedForced < 4>>
-	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<TravelToPassage 'Yes, use the Skewed Shrine to transfer a Curse' 'Layer3 Skewed1a' 3>><br><br>
-	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?<br>
-	<<TravelToPassage 'Yes, use the Skewed Shrine to force a Curse' 'Layer3 Skewed 2a' 3>><br><br>
+	Would you like to use the Skewed Shrine to give a Curse to one of your willing companions at the cost of <<print ($skewedUsed * 5)>> dubloons?
+	[[Yes, use the Skewed Shrine to transfer a Curse|Layer3 Skewed1a]]
+
+	Would you like to use the Skewed Shrine to force a Curse upon one of your unwilling companions at the cost of <<print ($skewedUsed * 5)>> dubloons?
+	[[Yes, use the Skewed Shrine to force a Curse|Layer3 Skewed 2a]]
+	//There will likely be consequences.//
 <<else>>
-	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.<br><br>
+	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.
 <</if>>
