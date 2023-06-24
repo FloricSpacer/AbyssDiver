@@ -239,22 +239,42 @@ You sit by the fire with your party and chat, the mood is pretty upbeat and opti
 [[Return to exploring the rest of the layer|Layer1 Hub]]
 
 
-:: Layer1 Wonders [image layer1]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 2-wonders.png']]
+:: Layer1 Wonders [layer1 cards nobr]
+<h1>Wonders</h1>
+<p>
+@@.floatr;[img[setup.ImagePath+'icon.png']]@@
 
-<<nobr>>
-<<if $playerCurses.length > 0>>
-	<<if !$iconUsed>>
-		Would you like to use the Icon of Mercy?<br><br>
-		<<TravelToPassage 'Yes, use the Icon' 'Layer1 Icon' 3>><br>
-	<<else>>
-		You have already used the Icon of Mercy, you may not use it again.<br>
-	<</if>>
+Apart from Relics, you may also find stationary Wonders hidden away throughout the Abyss. These generally have positive effects and may help you on your expedition, though they sometimes come with a cost.
+<br><br>
+Unlike Relics, their effects come from a complex interaction between them and the Miasma around them, so attempts to move them around and make use of them elsewhere would prove fruitless. They're only useful when left where they are.
+</p>
+
+<p>[[Continue exploring the first layer|Layer1 Hub]]</p>
+
+<div class="cards-grid">
+<div>
+
+<<set _wonder = setup.iconOfMercy>>
+
+[img[ setup.ImagePath + _wonder.pic ]]
+<h2>_wonder.name</h2>
+<p class="cost">Cost: <<print _wonder.time>> days</p>
+<p>
+<<if $iconUsed>>
+    @@.unreachable; Already used
+<<elseif $playerCurses.length == 0>>
+    @@.unreachable; You have no Curses to remove
 <<else>>
-	You have no Curses to remove, there's no need to use the Icon.<br>
+    <<TravelToPassage `'Travel to ' + _wonder.name` _wonder.destinationPassage _wonder.time>>
 <</if>>
-<</nobr>>
-<<back [[Layer1 Hub]]>>
+</p>
+<p>
+<<include `_wonder.name + " Description"`>>
+</p>
+</div>
+</div>
+
+<p>[[Continue exploring the first layer|Layer1 Hub]]</p>
 
 
 :: Layer1 Habitation [image layer1]
