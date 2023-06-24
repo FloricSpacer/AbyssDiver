@@ -252,26 +252,16 @@ Unlike Relics, their effects come from a complex interaction between them and th
 <p>[[Continue exploring the first layer|Layer1 Hub]]</p>
 
 <div class="cards-grid cards-wide">
-<div>
 
 <<set _wonder = setup.iconOfMercy>>
-
+<div>
 [img[ setup.ImagePath + _wonder.pic ]]
 <h2>_wonder.name</h2>
 <p class="cost">Cost: <<print _wonder.time>> days</p>
-<p>
-<<if $iconUsed>>
-    @@.unreachable; Already used
-<<elseif $playerCurses.length == 0>>
-    @@.unreachable; You have no Curses to remove
-<<else>>
-    <<TravelToPassage `'Travel to ' + _wonder.name` _wonder.destinationPassage _wonder.time>>
-<</if>>
-</p>
-<p>
-<<include `_wonder.name + " Description"`>>
-</p>
+<p><<TravelToPassage `'Travel to ' + _wonder.name` _wonder.destinationPassage _wonder.time>></p>
+<p><<include `_wonder.name + " Description"`>></p>
 </div>
+
 </div>
 
 <p>[[Continue exploring the first layer|Layer1 Hub]]</p>
@@ -497,7 +487,13 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 As you meander through the lush, verdant slopes of the first layer of the Abyss, your eyes catch a glint of something unusual, and you are drawn to a small clearing where the captivating figure of the Icon of Mercy stands. Awestruck, you approach the statue, taking in the exquisite craftsmanship and the elegant lines of her flowing dress. Her exposed breast seems to represent vulnerability and nurturing, and the feeling of comfort emanating from the statue is palpable.
 
-The maiden's hands are extended gently, offering an invitation to touch them. As you hesitantly reach out and make contact with the cool, smooth marble, you feel a surge of warmth spreading through your body. It's as if the Icon of Mercy is acknowledging the weight of your choices and offering you a chance for redemption.
+The maiden's hands are extended gently, offering an invitation to touch them. As you hesitantly reach out and make contact with the cool, smooth marble, you feel a surge of warmth spreading through your body. \
+<<if $iconUsed>>\
+However, it's not nearly as strong as the first time. You won't be able to remove any more Curses.
+<<elseif $playerCurses.length == 0>>\
+If you were plagued by a Curse, the Icon of Mercy could offer relief. Until then, there is nothing for you to do here.
+<<else>>\
+It's as if the Icon of Mercy is acknowledging the weight of your choices and offering you a chance for redemption.
 
 A sudden realization dawns upon you: by touching the statue, you can remove one Curse that has plagued you, but the power it bestowed upon you will also vanish. The decision is yours alone to make, as the Icon of Mercy will have no effect on your companions and can only be used once per person.
 
@@ -511,6 +507,7 @@ Choose the Curse you wish to remove:
 	<</if>>
 <</for>>
 <</nobr>>
+<</if>>
 
 [[Return to exploring layer 1|Layer1 Hub]]
 <</if>>
