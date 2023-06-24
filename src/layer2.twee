@@ -99,7 +99,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 [[Check for food and water you can forage for|Layer2 Forage]]
 [[Search for Relics|Layer2 Relics]]
 [[Take on Curses to purge your corruption|Layer2 Curses]]
-[[Look for any wonders you can take advantage of|Layer2 Wonders]]
+[[Look for any Wonders you can take advantage of|Layer2 Wonders]]
 [[Set up camp and rest here|Layer2 Camp]]
 [[View the Layer 2 habitation option|Layer2 Habitation]]
 
@@ -244,27 +244,59 @@ By default, your companions' reward for coming down here with you is the dubloon
 <</if>>
 
 
-:: Layer2 Wonders [image layer2]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-wonders.png']]
+:: Layer2 Wonders [layer2 cards nobr]
+<h1>Wonders</h1>
 
-<<nobr>>
-<<if $visitL3 == 0 && !$brokerUsed && $corruption > -100>>
-	Would you like to use the Empty-handed Broker?<br>
-	<<TravelToPassage 'Yes, use the Broker' 'Layer2 Broker' 2>>
-<<else>>
-	You have already used the Empty-handed Broker or traveled further into the Abyss, you may not use it now.<br>
-<</if>>
-<</nobr>>
+<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
 
-<<nobr>>
-<<if !$starUsed && $hiredCompanions.length > 0>>
-	Would you like to use the Fate-crossing Star?<br>
-	<<TravelToPassage "Yes, bathe in the Star's lake" 'Layer2 Star 1' 3>><br>
+<div class="cards-grid cards-wide">
+
+<<set _wonder = setup.emptyHandedBroker>>
+
+<div>
+[img[ setup.ImagePath + _wonder.pic ]]
+<h2>_wonder.name</h2>
+<p class="cost">Cost: <<print _wonder.time>> days</p>
+<p>
+<<if $visitL3 != 0>>
+    @@.unreachable; The statue has collapsed
+<<elseif $brokerUsed>>
+    @@.unreachable; Already used
+<<elseif $corruption < -100>>
+    @@.unreachable; Corruption too low
 <<else>>
-	You must have companions and have not already used the Fate-crossing Star before if you wish to swap bodies with someone.<br>
+    <<TravelToPassage `'Use the ' + _wonder.name` _wonder.destinationPassage _wonder.time>>
 <</if>>
-<</nobr>>
-<<back [[Layer2 Hub]]>>
+</p>
+<p>
+<<include `_wonder.name + " Description"`>>
+</p>
+
+</div>
+
+<<set _wonder = setup.fateCrossingStar>>
+
+<div>
+[img[ setup.ImagePath + _wonder.pic ]]
+<h2>_wonder.name</h2>
+<p class="cost">Cost: <<print _wonder.time>> days</p>
+<p>
+<<if $starUsed>>
+    @@.unreachable; Already used
+<<elseif $hiredCompanions.length == 0>>
+    @@.unreachable; No companions
+<<else>>
+    <<TravelToPassage "Bathe in the Star's lake" 'Layer2 Star 1' _wonder.time>>
+<</if>>
+</p>
+<p>
+<<include `_wonder.name + " Description"`>>
+</p>
+
+</div>
+</div>
+
+<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
 
 
 :: Layer2 Habitation [image layer2]
