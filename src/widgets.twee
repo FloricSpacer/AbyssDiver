@@ -314,7 +314,7 @@
 			<<if $menCycleFlag && !$menCycleT_flag>>
 				<<set $menCycleT = $time - 7>>
 				<<set $menCycleT_flag = true>>
-				/* If mc has the Heat/Rut curse, make them go into heat when their cycle starts. */
+				/* If mc has the Heat/Rut curse, makes the heat cycle and menstruation cycle allign. */
 				<<set $heatCycleT = $menCycleT>>
 				<<set $heatCycleT_flag = true>>
 			<</if>>
@@ -549,6 +549,21 @@
 				/* Libido boost on day 14 of the cycle (coincides with day 14 of menstruation cycle if active). */
 				<<if $time - $heatCycleT == 14>><<set $mc.libido += 2>><</if>>
 			<</if>>
+
+			<<if $playerCurses.some(e => e.name === 'The Maxim')>>
+				<<if !$MaximCycleT_flag>>
+					<<set $MaximCycleT = $time>>
+					<<set $MaximCycleT_flag = true>>
+				<</if>>
+			<</if>>
+
+			<<set _temp = random(0,2)>>
+			<<if $mc.libido < 2 && _temp < 2>>
+				<<set $mc.libido += 3>> @@.alert2; Your parasite is restlessly worming around inside you. It's touching you in a lot of sensetive places greatly increasing your arousal!xxx<br>
+			<<elseif $mc.libido < 4 && _temp < 1>>
+				<<set $mc.libido += 2>>  @@.alert2; Your parasite is restlessly worming around inside you. It's touching you in a lot of sensetive places increasing your arousal!xxx<br>
+			<</if>>
+
 		<</if>>
 
 		/* ----------------------------------------- Compute apparent gender ---------------------------------------- */
@@ -1140,11 +1155,11 @@
 
 		<<if 35 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 45>>
 			<<set _handle.HandicapMovement -= 2>>
-		<<elseif 45 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 90>>
+		<<elseif 45 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 90 || ($MaximCycleT-$time>=14 && $MaximCycleT-$time<28 && $MaximCycleT_flag)>>
 			<<set _handle.HandicapThreat -= 2>>
 			<<set _handle.HandicapMovement -= 4>>
 			<<set _handle.HandicapCarry -= 3>>
-		<<elseif 120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180>>
+		<<elseif (120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180) || ($MaximCycleT-$time>=28 && $MaximCycleT_flag)>>
 			<<set _handle.HandicapThreat -= 1>>
 			<<set _handle.HandicapMovement -= 2>>
 			<<set _handle.HandicapCarry -= 2>>

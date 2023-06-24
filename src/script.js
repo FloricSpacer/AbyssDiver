@@ -42,6 +42,9 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.starving >= 6 || StoryVar.dehydrated >= 3 || StoryVar.gameOver) {
 		return "GameOver";
 	}
+	if (StoryVar.time - StoryVar.MaximCycleT > 35 && StoryVar.MaximCycleT_flag) {
+		return "Maxim Labor Scene";
+	}
 	if (setup.daysUntilDue(StoryVar.mc) == 0) {
 		return "Labor Scene";
 	}
