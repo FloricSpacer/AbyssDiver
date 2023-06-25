@@ -252,30 +252,15 @@ By default, your companions' reward for coming down here with you is the dubloon
 <div class="cards-grid cards-wide">
 
 <<set _wonder = setup.emptyHandedBroker>>
-
 <div>
 [img[ setup.ImagePath + _wonder.pic ]]
 <h2>_wonder.name</h2>
 <p class="cost">Cost: <<print _wonder.time>> days</p>
-<p>
-<<if $visitL3 != 0>>
-    @@.unreachable; The statue has collapsed
-<<elseif $brokerUsed>>
-    @@.unreachable; Already used
-<<elseif $corruption < -100>>
-    @@.unreachable; Corruption too low
-<<else>>
-    <<TravelToPassage `'Use the ' + _wonder.name` _wonder.destinationPassage _wonder.time>>
-<</if>>
-</p>
-<p>
-<<include `_wonder.name + " Description"`>>
-</p>
-
+<p><<TravelToPassage `'Travel to ' + _wonder.name` _wonder.destinationPassage _wonder.time>></p>
+<p><<include `_wonder.name + " Description"`>></p>
 </div>
 
 <<set _wonder = setup.fateCrossingStar>>
-
 <div>
 [img[ setup.ImagePath + _wonder.pic ]]
 <h2>_wonder.name</h2>
@@ -539,21 +524,28 @@ What type of fur would you like to gain?
 :: Layer2 Broker [layer2]
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
+[img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
+
+You press forward through the second layer as your search from the Empty-handed Broker, and as you do, the dewdrops from above accumulate, each one adding to the symphony of droplets cascading down from the treetops. The once gentle drizzle intensifies into a monsoon, pounding against the soil and leaves, filling the air with the deafening roar of water.
+
+<<if $visitL3 != 0 || $brokerUsed>>\
+Through the deluge, you catch a glimpse of a small worn down shrine. As you approach, you find a pile of rubble in its center, where once was a statue. There is nothing more for you to do here.
+<<else>>\
+Through the deluge, you catch a glimpse of something unusual nestled in the tangled undergrowth. As you approach, the sinister visage of the Broker reveals itself. The alabaster statue stands before you, an eerie contrast to the vibrant, chaotic jungle surrounding it. The twisted horns and chipped robe give the figure a sense of ancient malevolence, as if the statue is an echo of a time long past.
+
+<<if $corruption < -100>>\
+You hesitantly reach out to touch the statue's hands, but as soon as you make contact, your hand slips away. You try again with the same result. The broker is not willing to make a deal with you at this time, as your corruption would still be negative after receiving +100 corruption.
+<<else>>\
+You hesitantly reach out to touch the statue's hands, and a sudden wave of claustrophobia washes over you. The sensation is suffocating, as if the vines and thorns have closed in around you, leaving you with no escape. The feeling passes as quickly as it came, leaving you with a lingering sense of unease.
+
+As the chilling rain continues to pour down around you, you realize the weight of the choice you have made. You have gained 100 corruption points, but you must always keep your corruptions points above 0 from now until the end of your journey.
 <<nobr>>
 	<<set $corruption += 100>>
 	<<set $brokerUsed = true>>
-<</nobr>>\
-[img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
-
-You press forward through the second layer as your seach from the Empty-handed Broker, and as you do, the dewdrops from above accumulate, each one adding to the symphony of droplets cascading down from the treetops. The once gentle drizzle intensifies into a monsoon, pounding against the soil and leaves, filling the air with the deafening roar of water.
-
-Through the deluge, you catch a glimpse of something unusual nestled in the tangled undergrowth. As you approach, the sinister visage of the Broker reveals itself. The alabaster statue stands before you, an eerie contrast to the vibrant, chaotic jungle surrounding it. The twisted horns and chipped robe give the figure a sense of ancient malevolence, as if the statue is an echo of a time long past.
-
-You hesitantly reach out to touch the statue's hands, and a sudden wave of claustrophobia washes over you. The sensation is suffocating, as if the vines and thorns have closed in around you, leaving you with no escape. The feeling passes as quickly as it came, leaving you with a lingering sense of unease.
-
-As the chilling rain continues to pour down around you, you realize the weight of the choice you have made. 
-
-You have gained 100 corruption points, but you must always keep your corruptions points above 0 from now until the end of your journey. 
+<</nobr>>
+Your thoughts are interrupted by the sound of falling rocks. As you look up, you see the Broker statue has collapsed.
+<</if>>\
+<</if>>\
 
 [[Continue exploring the second layer|Layer2 Hub]]
 <</if>>
