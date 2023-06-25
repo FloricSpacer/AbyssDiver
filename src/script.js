@@ -279,17 +279,17 @@ Macro.add('say', {
 Setting.addHeader("Content Settings");
 
 Setting.addToggle("MaleSceneToggleFilter", {
-	label : "Enable random sex scences involving male characters",
+	label : "Enable random sex scenes involving male characters",
 	default  : true,
 });
 
 Setting.addToggle("FemaleSceneToggleFilter", {
-	label : "Enable random sex scences involving female characters",
+	label : "Enable random sex scenes involving female characters",
 	default  : true,
 });
 
 Setting.addToggle("OtherSceneToggleFilter", {
-	label : "Enable random sex scences involving futa characters or characters without genitals",
+	label : "Enable random sex scenes involving futa characters or characters without genitals",
 	default  : true,
 });
 
