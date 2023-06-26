@@ -4,7 +4,7 @@
 <<masteraudio stop>>
 <<audio "layer9" volume 0.2 play loop>>
 <<set $timeL8T2a = 0, $timeL8T2b = 0>>
-<<set $timeL9T1 += 1>>
+<<set $timeL9T1 = 0>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -32,16 +32,13 @@ Hopefully you'll be able to get used to it.
 <</if>><</nobr>>
 */
 
-:: Layer9 Hub [layer9]
-<<nobr>>
+:: Layer9 Hub [layer9 nobr]
 <<set $currentLayer = 9>>
 <<if !isPlaying("layer9")>>
 	<<masteraudio stop>>
 	<<audio "layer9" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-
-<<if $timeL9T1 < 1>>
 <<if $visitL9 == 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL9 = 1>>
@@ -96,12 +93,6 @@ Hopefully you'll be able to get used to it.
 <br>
 [[Look up towards the surface|Layer9 Ascend 1]]<br>
 [[Look down at the next layer|Layer9 Exit1]]
-
-<<else>>
-	<<set $returnPassage = "Layer9 Hub">>
-	<<set $timeL9T1 -= 1>>
-	<<include "Layer9 Elder Encounter">><br><br>
-<</if>><</nobr>>
 
 :: Layer9 Flasks [layer9]
 <<nobr>>
@@ -501,6 +492,20 @@ Threats:
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 10-threats.png']]
 
 <<back>>
+
+:: Layer9 Travel Events [layer9 nobr]
+<<set _triggers = {
+	elder: () => $timeL9 == 0 || $timeL9T1 >= 5,
+}>>
+
+<<PassTime _triggers>>
+
+<<if _triggers.elder()>>
+	<<set $returnPassage = passage()>>
+	<<set $timeL9T1 -= 5>>
+	<<include "Layer9 Elder Encounter">><br><br>
+	[[Return to exploring layer 9|$returnPassage]]
+<</if>>
 
 :: Layer9 Camp
 
