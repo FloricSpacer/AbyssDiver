@@ -266,13 +266,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 <h2>_wonder.name</h2>
 <p class="cost">Cost: <<print _wonder.time>> days</p>
 <p>
-<<if $starUsed>>
-    @@.unreachable; Already used
-<<elseif $hiredCompanions.length == 0>>
-    @@.unreachable; No companions
-<<else>>
-    <<TravelToPassage "Bathe in the Star's lake" 'Layer2 Star 1' _wonder.time>>
-<</if>>
+<<TravelToPassage "Bathe in the Star's lake" 'Fate-crossing Star Site' _wonder.time>>
 </p>
 <p>
 <<include `_wonder.name + " Description"`>>
@@ -521,7 +515,7 @@ What type of fur would you like to gain?
 <</if>>
 <</nobr>>
 
-:: Layer2 Broker [layer2]
+:: Empty-handed Broker Site [layer2]
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/empty-handedbroker.png']]
@@ -551,11 +545,25 @@ Your thoughts are interrupted by the sound of falling rocks. As you look up, you
 <</if>>
 
 
-:: Layer2 Star 1 [layer2]
+:: Fate-crossing Star Site [layer2]
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 [img[setup.ImagePath+'Wonders/fate-crossingstar.png']]
+<<if $starUsed>>
+    You have already used the Fate-crossing Star. Unfortunately, this wonder is one-use only, so when you return to the lake you find it inert and uninteresting (though still refreshing.)
 
+	There's nothing else for you to do here.
+
+	[[Continue exploring the second layer|Layer2 Hub]]
+
+<<elseif $hiredCompanions.length == 0>>
+    You must have companions before if you wish to swap bodies with someone using the Fate-Crossing Star. Body swapping doesn't quite work with only one person, does it?
+
+	There's nothing else for you to do here.
+
+	[[Continue exploring the second layer|Layer2 Hub]]
+	
+<<else>>
 You push through the dense foliage, seeking the site of the pond, until the sight of rugged rocks breaks the monotony of green. As you approach, you find a hidden gem: the Fate-crossing Star's pond. The water is a glistening, crystalline blue, its surface disturbed only by the faintest of ripples. The scent of freshness, a welcome contrast to the cloying jungle air, fills your nostrils.
 
 With cautious curiosity, you step into the water, which embraces your weary limbs like a soothing balm. It's comfortable, despite the foreign environment, but an inexplicable itch dances in the back of your mind. You can't help but feel that the pond hides a secret, waiting to be uncovered.
@@ -575,6 +583,7 @@ Whose body do you find yourself in?
 	Ai [[Switch|AI switch end]]
 <</if>>
 <</nobr>>
+<</if>>
 <</if>>
 
 

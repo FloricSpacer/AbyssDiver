@@ -194,12 +194,7 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 <h2>_wonder.name</h2>
 <p class="cost">Cost: <<print _wonder.time>> days</p>
 <p>
-<<if $scalesUsed>>
-    @@.unreachable; Already used
-<<else>>
-    <<TravelToPassage 'Use the Scales to gain dubloons' 'Layer3 Scales 1' 2>><br>
-    <<TravelToPassage 'Use the Scales to gain corruption' 'Layer3 Scales 2' 2>>
-<</if>>
+<<TravelToPassage 'Use the Scales to gain dubloons' 'Gossamery Scales Site' 2>><br>
 </p>
 <p>
 <<include `_wonder.name + " Description"`>>
@@ -320,9 +315,27 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 <</if>>
 
 
-:: Layer3 Scales 1 [layer3]
+:: Gossamery Scales Site [layer3]
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
+[img[setup.ImagePath+'Wonders/gossameryscales.png']]
+
+<<if $scalesUsed>>
+    You have already used the scales on your journey. They seem to be completely inert now, their previous luster faded away, neither giving you corruption or dubloons no matter what you do with them.
+	
+	You can admire their ancient craftsmanship, but there is no more use of them to you.
+
+	[[Return to exploring the third layer|Layer3 Hub]]
+<<else>>
+    Would you like to use the Gossamery Scales to gain <<print Math.round($corruption / 5)>> dubloons based on your $corruption corruption?
+	[[Yes, use the Scales to gain dubloons|Layer3 Scales 1]]
+
+	Would you like to use the Gossamery Scales to gain <<print Math.round($dubloons / 5)>> corruption based on your $dubloons dubloons?
+	[[Yes, use the Scales to gain corruption|Layer3 Scales 1]]
+<</if>>
+<</if>>
+
+:: Layer3 Scales 1
 <<nobr>>
 	<<set $temp = Math.round($corruption / 5)>>
 	<<set $dubloons += $temp>>
@@ -335,17 +348,14 @@ The moment you touch the scales you feel a slight shock, almost like static. As 
 Once you pick them up, the luster of the scales fades, indicating that they will not allow you to use their power again.
 
 [[Continue exploring the layer|Layer3 Hub]]
-<</if>>
 
 
 :: Layer3 Scales 2 [layer3]
-<<PassTimeWithEvents>>\
-<<if !setup.passingTime()>>\
 <<nobr>>
 	<<set $temp = Math.round($dubloons / 5)>>
 	<<set $corruption += $temp>>
 	<<set $scalesUsed = 1>>
-<</nobr>>
+<</nobr>>\
 [img[setup.ImagePath+'Wonders/gossameryscales.png']]
 
 You place all of your dubloons on one side of the scale, hoping that they will reward you for you investment and savings. The moment you place the final dubloon on the scale, you feel a gentle pulse of... from the scales. It felt warm and vaguely soothing, as if it were purging you of a part of the miasma's corrupting effects.
@@ -355,7 +365,6 @@ You have gained $temp corruption points!
 As you pick up the dubloons from the scales, you notice that the luster of the scales seems to have faded. Perhaps they only had tht final use left in them or perhaps they will only serve to help you one time. Regardless, you won't be using them again on this journey.
 
 [[Continue exploring the layer|Layer3 Hub]]
-<</if>>
 
 
 :: Layer3 Skewed1a [layer3]
@@ -1678,7 +1687,7 @@ You rise, your body trembling from the lingering effects of the paralysis and th
 	With a mix of fear and curiosity, you turn the corner and come face to face with a lesser tentacle beast. Its countless tendrils move and pulse as if driven by an insatiable hunger. The slimy, dark appendages twist and sway in the dim light, their tips decorated with trembling suction cups that seem to crave your touch.
 <</if>>\
 
-:: Layer3 Skewed Choose
+:: Skewed Shrine Site
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 
