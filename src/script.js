@@ -627,14 +627,15 @@ Object.defineProperties(setup, {
 						companion = State.variables.companionSaeko;
 						break;
 					default:
-						console.error(`Companion ${companion} is not a valid target of willing curses`)
+						console.error(`Companion ${companion} is not a valid target of willing curses`);
 						return [];
 				}
 			}
 			if (companion.osex === undefined || companion.sex === undefined ||
-			    companion.name === undefined || companion.breasts === undefined) {
-				console.error(`willingCurses() was passed an object that isn't a companion or a companion name:`)
-				console.error(companion)
+			    companion.name === undefined || companion.breasts === undefined ||
+				companion.vagina === undefined || companion.penis === undefined) {
+				console.error(`willingCurses() was passed an object that isn't a companion or a companion name:`);
+				console.error(companion);
 				return [];
 			}
 
@@ -644,6 +645,9 @@ Object.defineProperties(setup, {
 				case "Maru":
 					willingCurses.push("Hair Removal", "Increased Sensitivity", "Age Reduction A", "Age Reduction B",
 					                   "Submissiveness Rectification A", "Submissiveness Rectification B");
+					if (companion.vagina === 0) {
+						willingCurses.push('Crossdress Your Heart');
+					}
 					break;
 				case "Lily":
 					willingCurses.push("Age Reduction A", "Age Reduction B", "Asset Robustness A",
@@ -651,9 +655,8 @@ Object.defineProperties(setup, {
 					break;
 				case 'Khemia':
 					willingCurses.push("Clothing Restriction A", "Clothing Restriction B", "Power Dom",
-					                   "Absolute Birth Control",
-					                   "Pheromones");
-					if (companion.sex === companion.osex) {
+					                   "Absolute Birth Control", "Pheromones");
+					if (companion.sex === 'male') {
 						willingCurses.push("Asset Robustness A", "Asset Robustness B", "Asset Robustness C",
 						                   "Asset Robustness D");
 					}
@@ -662,11 +665,14 @@ Object.defineProperties(setup, {
 					willingCurses.push("Age Reduction A", "Age Reduction B", "Fluffy Ears", "Fluffy Tail", "Omnitool",
 					                   "Sleep Tight",
 					                   "Submissiveness Rectification A", "Submissiveness Rectification B");
+					if (companion.curses.map(c => c.name).includesAll('Fluffy Ears', 'Fluffy Tail', 'Maximum Fluff')) {
+						willingCurses.push('Literalization');
+					}
 					break;
 				case 'Cloud':
 					willingCurses.push("Age Reduction A", "Age Reduction B", "Equal Opportunity", "Pheromones",
 					                   "Power Dom")
-					if (companion.sex === companion.osex) {
+					if (companion.sex === 'male') {
 						willingCurses.push("Asset Robustness A", "Asset Robustness B");
 					}
 					break;
@@ -676,46 +682,43 @@ Object.defineProperties(setup, {
 					                   "Age Reduction A", "Age Reduction B");
 					break;
 			}
+			let idealGender = companion.mindSex === 'male' ? 1 : 6;
+			if (companion.name === 'Maru') idealGender = 4;
 			// Attempt to go back to original gender (in Meru's case go towards androgyny)
-			if (companion.osex === 'male' && companion.gender < companion.ogender ||
-			    companion.osex === "female" && companion.gender > companion.ogender) {
+			if (companion.osex === 'male' && companion.gender < idealGender ||
+			    companion.osex === "female" && companion.gender > idealGender) {
 				willingCurses.push("Gender Reversal A", "Gender Reversal B", "Gender Reversal C",
-				                   "Gender Reversal D", "Gender Reversal E", "Crossdress Your Heart");
+				                   "Gender Reversal D", "Gender Reversal E");
 			}
 			// Genderbent men want to get rid of their breasts
-			if (companion.osex === 'male' && companion.penis === 0 && companion.breasts > 0) {
-				willingCurses.push('Shrunken Assets')
+			if (companion.mindSex === 'male' && companion.penis === 0 && companion.breasts > 0) {
+				willingCurses.push('Shrunken Assets');
 			}
 			// Women don't like body hair
-			if (companion.sex === 'female') {
+			if (companion.mindSex === 'female') {
 				willingCurses.push('Hair Removal');
 			}
-			// Genderbent companions want to get their genitals back (except Maru)
+			// Genderbent companions want to get their genitals back
 			let wantsOtherGenitals = false;
-			if (companion.name !== 'Maru') {
-				// wants to replace vagina with penis
-				if (companion.openis > 1 && companion.penis < 1 && companion.vagina > 0) {
-					wantsOtherGenitals = true;
-				}
-				// wants to replace penis with vagina
-				if (companion.osex === 'female' && companion.vagina < 1 && companion.penis > 0) {
-					wantsOtherGenitals = true;
-				}
-			// A big penis sticks out, so Maru prefers a vagina
-			} else if (companion.penis > 6) {
+			// wants to replace vagina with penis
+			if (companion.mindSex === 'male' && companion.penis < 1 && companion.vagina > 0) {
+				wantsOtherGenitals = true;
+			}
+			// wants to replace penis with vagina
+			if (companion.mindSex === 'female' && companion.vagina < 1 && companion.penis > 0) {
 				wantsOtherGenitals = true;
 			}
 			if (wantsOtherGenitals) {
 				willingCurses.push('Sex Switcheroo');
 			}
 			// If sex switcheroo is not an option, they'd take futa too
-			if (!willingCurses.includes('Sex Switcheroo') &&
-			    companion.name !== 'Maru' && wantsOtherGenitals) {
-				willingCurses.push('Futa Fun')
+			if (State.variables.playerCurses.find('Sex Switcheroo') === undefined && wantsOtherGenitals) {
+				willingCurses.push('Futa Fun');
 			}
-			// men do *not* want to get pregnant
-			if (companion.osex === 'male' && companion.womb > 0) {
-				willingCurses.push('Absolute Birth Control')
+			// men do *not* want to get pregnant.
+			// Maru will take the risk though, for the opportunity to have a (non-adopted) family later.
+			if (companion.mindSex === 'male' && companion.womb > 0 && companion.name !== 'Maru') {
+				willingCurses.push('Absolute Birth Control');
 			}
 			return willingCurses;
 		}
