@@ -200,13 +200,13 @@ It is reccommended that you get creative with your Relics and think of more effi
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 8-wonders2.png']]
 
 Do you want to visit the Clockwork Forge to swap Relic abilities?
-<<TravelToPassage 'Approach the Forge' 'Layer7 Forge1' 2>>
+<<TravelToPassage 'Approach the Forge' 'Clockwork Forge Site' 2>>
 
 Do you want to check out the Vend-o-matic 6900 to purchase new items?
-[[Approach the Vend-o-matic|Layer7 Vend]]
+[[Approach the Vend-o-matic|Vend-o-matic 6900 Site]]
 
 Do you want to visit the Recycling Centers to recycle some of your Relics?
-[[Approach the Recycling Centers|Layer7 Recycle]]
+[[Approach the Recycling Centers|Recycling Centers Site]]
 
 <<back>>
 
@@ -396,7 +396,7 @@ You have successfully taken the $relic84.name Relic. Hopefully you can make good
 <</if>>
 
 
-:: Layer7 Forge1 [layer7]
+:: Clockwork Forge Site [layer7]
 <<nobr>>
 <<set $temp1 = -1>>
 <<set $temp2 = -1>>\
@@ -418,7 +418,7 @@ If you choose to place 2 Relics in the Clockwork Forge, along with 4 dubloons, y
 [[Continue exploring the seventh layer|Layer7 Hub]]
 
 
-:: Layer7 Vend [layer7 cards nobr]
+:: Vend-o-matic 6900 Site [layer7 cards nobr]
 
 <p><<CarryAdjust>></p>
 
@@ -471,7 +471,7 @@ You have refilled $temp flasks with the cool, refreshing, and surprisingly pure 
 
 [[Continue exploring the seventh layer|Layer7 Hub]]
 
-:: Layer7 Recycle [layer7]
+:: Recycling Centers Site [layer7]
 <<CarryAdjust>>\
 Suddenly, your eyes are drawn to a pulse of light from a nearby structure. As you move closer, the distinct scent of hot metal and the occasional metallic crunch breaks the city's monotonous hum. This is the Recycling Center, a hulking machine of steel that stands stark against the neon skyline, casting long shadows on the cobble of metal beneath.
 
@@ -491,18 +491,18 @@ Choose the Relic you would like to sell:
 				<<if $creepydoll.affec > 5>>
 					You can't seem to part ways with the Creepy Doll...
 				<<else>>
-					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
 				<</if>>
 			<<case "World Stone">>
 				<<if $LilyPromise>>
-					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), setup.modAffection('Lily', -5)]]
+					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback), setup.modAffection('Lily', -5)]]
 					You promised Lily she could use the World Stone at the end of your journey. Recycling it now will surely disappoint her quite a lot.
 				<<else>>
-					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
 				<</if>>
 			<<case "Everhevea">>
 				<<if setup.item('Empty Flask').count >= 2>>
-					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback), setup.item('Empty Flask').count -= 2]]
+					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback), setup.item('Empty Flask').count -= 2]]
 				<<else>>
 					You need to empty the everhevea to sell it (have at least two empty flasks in your inventory).
 				<</if>>
@@ -510,16 +510,16 @@ Choose the Relic you would like to sell:
 				<<if $BionicEye>>
 					_relic.name: You can't sell Relics that have become part of your body.
 				<<else>>
-					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
 				<</if>>
 			<<case "Glory's Grasp">>
 				<<if $BionicArm>>
 					_relic.name: You can't sell Relics that have become part of your body.
 				<<else>>
-					[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
 				<</if>>
 			<<default>>
-				[[_linkText|Layer7 Recycle][setup.sellRelic(_relic, _callback)]]
+				[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
 		<</switch>>
 		<br>
 	<</capture>>
@@ -536,7 +536,7 @@ How much water would you like to buy?
 
 <<textbox "$temp" "">>
 
-[[Confirm|Layer7 Vend][$items[0].count += parseInt($temp), $dubloons -= (parseInt($temp)*2)]]
+[[Confirm|Vend-o-matic 6900 Site][$items[0].count += parseInt($temp), $dubloons -= (parseInt($temp)*2)]]
 <<back>>
 
 
@@ -547,7 +547,7 @@ How many days of food rations would you like to buy?
 
 <<textbox "$temp" "">>
 
-[[Confirm|Layer7 Vend][$items[1].count += parseInt($temp), $dubloons -= (parseInt($temp)*3)]]
+[[Confirm|Vend-o-matic 6900 Site][$items[1].count += parseInt($temp), $dubloons -= (parseInt($temp)*3)]]
 <<back>>
 
 
@@ -558,11 +558,11 @@ How many water flasks would you like to buy?
 
 <<textbox "$temp" "">>
 
-[[Buy filled flasks|Layer7 Vend][$items[3].count += parseInt($temp), $dubloons -= (parseInt($temp)*6), $flaskMatrix[0]+= parseInt($temp)]]
+[[Buy filled flasks|Vend-o-matic 6900 Site][$items[3].count += parseInt($temp), $dubloons -= (parseInt($temp)*6), $flaskMatrix[0]+= parseInt($temp)]]
 
 Or alternatively you can use the tap to fill empty flasks you have for 1 dubloon each.
 
-[[Pay to fill all empty flasks|Layer7 Vend][$items[3].count += $items[2].count, $dubloons -= $items[2].count, $flaskMatrix[0]+= $items[2].count, $items[2].count=0]]
+[[Pay to fill all empty flasks|Vend-o-matic 6900 Site][$items[3].count += $items[2].count, $dubloons -= $items[2].count, $flaskMatrix[0]+= $items[2].count, $items[2].count=0]]
 
 <<back>>
 
@@ -576,7 +576,7 @@ Note: These are currently not lighter than the Outset Town medkits!
 
 <<textbox "$temp" "">>
 
-[[Confirm|Layer7 Vend][$items[4].count += parseInt($temp), $dubloons -= (parseInt($temp)*12)]]
+[[Confirm|Vend-o-matic 6900 Site][$items[4].count += parseInt($temp), $dubloons -= (parseInt($temp)*12)]]
 <<back>>
 
 
@@ -587,7 +587,7 @@ How many days of energy rations would you like to buy?
 
 <<textbox "$temp" "">>
 
-[[Confirm|Layer7 Vend][$items[24].count += parseInt($temp), $dubloons -= (parseInt($temp)*11)]]
+[[Confirm|Vend-o-matic 6900 Site][$items[24].count += parseInt($temp), $dubloons -= (parseInt($temp)*11)]]
 <<back>>
 
 
@@ -600,7 +600,7 @@ Note: By default you will drink 1 Ward Water per day instead of foraging for wat
 
 <<textbox "$temp" "">>
 
-[[Confirm|Layer7 Vend][$items[25].count += parseInt($temp), $dubloons -= (parseInt($temp)*4), $wardWaterDrink = 2]]
+[[Confirm|Vend-o-matic 6900 Site][$items[25].count += parseInt($temp), $dubloons -= (parseInt($temp)*4), $wardWaterDrink = 2]]
 <<back>>
 
 
