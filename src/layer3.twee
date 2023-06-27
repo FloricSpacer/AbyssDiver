@@ -185,46 +185,7 @@ The Abyss is a huge place. The Relics listed in these sections are only a small 
 
 <p>[[Continue exploring the third layer|Layer3 Hub]]</p>
 
-<div class="cards-grid cards-wide">
-
-<<set _wonder = setup.gossameryScales>>
-
-<div>
-[img[ setup.ImagePath + _wonder.pic ]]
-<h2>_wonder.name</h2>
-<p class="cost">Cost: <<print _wonder.time>> days</p>
-<p>
-<<TravelToPassage 'Use the Scales' 'Gossamery Scales Site' 2>><br>
-</p>
-<p>
-<<include `_wonder.name + " Description"`>>
-</p>
-
-</div>
-
-<<set _wonder = setup.skewedShrine>>
-
-<div>
-[img[ setup.ImagePath + _wonder.pic ]]
-<h2>_wonder.name</h2>
-<p class="cost">Cost: <<print _wonder.time>> days + <<print ($skewedUsed * 5)>> dubloons</p>
-<p>
-<<if $hiredCompanions.length == 0>>
-    @@.unreachable; No companions
-<<elseif $skewedForced >= 4>>
-    @@.unreachable; None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.
-<<elseif $playerCurses.length == 0>>
-    @@.unreachable; You have no Curses to transfer
-<<else>>
-    <<TravelToPassage `'Travel to the ' + _wonder.name` `_wonder.name + " Site"` _wonder.time>>
-<</if>>
-</p>
-<p>
-<<include `_wonder.name + " Description"`>>
-</p>
-
-</div>
-</div>
+<<WonderGrid setup.gossameryScales setup.skewedShrine>>
 
 <p>[[Continue exploring the third layer|Layer3 Hub]]</p>
 
