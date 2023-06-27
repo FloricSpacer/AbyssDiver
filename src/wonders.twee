@@ -100,15 +100,22 @@
 :: WonderGrid [widget nobr]
 <<widget "WonderGrid">>
 <div class="cards-grid cards-wide">
-  <<for _wonder range _args>>
-    <div>
-      [img[ setup.ImagePath + _wonder.pic ]]
-      <h2>_wonder.name</h2>
-      <p class="cost">Travel Time: <<print _wonder.time>> days</p>
-      <p><<TravelToPassage `'Travel to ' + _wonder.name` `_wonder.name + " Site"` _wonder.time>></p>
-      <p><<include `_wonder.name + " Description"`>></p>
-    </div>
-  <</for>>
+    <<for _wonder range _args>>
+        <div>
+            [img[setup.ImagePath + _wonder.pic]]
+            <h2>_wonder.name</h2>
+            <<PreviewTravelTime '_time' _wonder.time>>
+            <<set _timeStyle = _time > _wonder.time ? "@@color:red;" : _time < _wonder.time ? "@@color:green;" : "">>
+            <p class="cost">
+                <<if _time != _wonder.time>><s>
+                    Travel Time: <<print _wonder.time + (_wonder.time == 1 ? " day" : " days")>>
+                </s><br><</if>>
+                Travel Time: <<print _timeStyle + _time + (_time == 1 ? " day" : " days") + (_timeStyle ? "@@" : "")>>
+            </p>
+            <p><<TravelToPassage `'Travel to ' + _wonder.name` `_wonder.name + " Site"` _time>></p>
+            <p><<include `_wonder.name + " Description"`>></p>
+        </div>
+    <</for>>
 </div>
 <</widget>>
 
