@@ -167,6 +167,10 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 
 [[Adjust Companion Affection|Adjust Affection]]
 
+[[Adjust Curses]]
+
+[[Adjust Relics]]
+
 [[Debug Menu]]
 
 
@@ -196,6 +200,88 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 [[Take on The Maxim]]
 <<back>>
 
+:: Adjust Curses [nobr noreturn]
+Curses added and removed on this page will not influence corruption.<br><br>
+
+<<for _i, _layer range setup.cursesOnLayer>>
+    <<if _i > 0>>
+        Layer _i:<br>
+        <<for _cursename range _layer>>
+            <<set _curse = $curses.find(c => c.name === _cursename)>>
+            <<capture _cursename, _curse>>
+                <<if $playerCurses.find(c => c.name === _curse.name) !== undefined>>
+                    <<set _linktext = "Remove " + _cursename>>
+                    <<link _linktext "Adjust Curses">>
+                        <<RemoveCurse _curse>>
+                    <</link>><br>
+                <<else>>
+                    <<set _linktext = "Take " + _cursename>>
+                    <<link _linktext "Adjust Curses">>
+                        <<set $playerCurses.push(_curse)>>
+                        <<set _logName = _curse.type + "Log">>
+                        <<set _logVar = State.variables[_logName]>>
+                        <<if _logVar>><<set _logVar.push(_curse)>><</if>>
+                    <</link>><br>
+                <</if>>
+            <</capture>>
+        <</for>>
+    <</if>>
+<</for>>
+<br>
+<<link "Take all curses" "Adjust Curses">>
+    <<for _curse range $curses>>
+        <<if $playerCurses.find(c => c.name === _curse.name) === undefined>>
+            <<set $playerCurses.push(_curse)>>
+            <<set _logName = _curse.type + "Log">>
+            <<set _logVar = State.variables[_logName]>>
+            <<if _logVar>><<set _logVar.push(_curse)>><</if>>
+        <</if>>
+    <</for>>
+<</link>> (including incompatible ones – use at your own risk)<br>
+<<link "Remove all curses" "Adjust Curses">>
+    <<for _curse range $curses>>
+        <<if $playerCurses.find(c => c.name === _curse.name) !== undefined>>
+            <<RemoveCurse _curse>>
+        <</if>>
+    <</for>>
+<</link>><br>
+[[Return|Adjustments]]
+
+:: Adjust Relics [nobr noreturn]
+Relics added and removed on this page will not influence corruption.<br>
+Relics removed this way are returned to the abyss, not sold or thrown away, so you could pick them up again on the layer they are from.<br>
+Relics are removed and added one at a time. To remove all copies of a given relic, keep removing it until there are none left.<br>
+
+<<for _i, _layer range setup.relicsOnLayer>>
+    <<if _i > 0>>
+        Layer _i:<br>
+        <<for _relicname range _layer>>
+            <<set _relic = $relics.find(r => r.name === _relicname)>>
+            <<capture _relicname, _relic>>
+                <<if $ownedRelics.find(r => r.name === _relic.name) !== undefined>>
+                    <<set _linktext = "Remove " + _relicname>>
+                    <<link _linktext "Adjust Relics">>
+                        <<set setup.returnRelic(_relic)>>
+                    <</link>><br>
+                <</if>>
+                <<set _linktext = "Add " + _relicname>>
+                <<link _linktext "Adjust Relics">>
+                    <<set $ownedRelics.push(_relic)>>
+                <</link>><br>
+            <</capture>>
+        <</for>>
+    <</if>>
+<</for>>
+<br>
+<<link "Take one of each relic" "Adjust Relics">>
+    <<for _relic range $relics>>
+        <<set $ownedRelics.push(_relic)>>
+    <</for>>
+<</link>><br>
+<<link "Remove all relics" "Adjust Relics">>
+    <<set $ownedRelics = []>>
+<</link>><br>
+[[Return|Adjustments]]
 
 :: Adjust Affection
 
@@ -384,7 +470,7 @@ You have two normal, $mc.eyeColor eyes.<br>
 <</if>>
 
 You have $mc.skinColor colored $mc.skinType skin.<<if $mc.skinType.includes("furred") >> $curse19.appDesc <</if>><br>
-<<if $mc.armCount==1>>You only have one arm. <<if $BionicArm>>It is a pretty cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount>2>>You have more arms now than you started with. You're not quite used to it yet so the get in the way a lot.<<if $BionicArm>>One of them is cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount==2 &&  $BionicArm>>One of your arms has been replaced with a cool bionic arm, with anti-gravity abilities.<</if>>
+<<if $mc.armCount==1>>You only have one arm. <<if $BionicArm>>It is a pretty cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount>2>>You have more arms now than you started with. You're not quite used to it yet so they get in the way a lot.<<if $BionicArm>>One of them is cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount==2 &&  $BionicArm>>One of your arms has been replaced with a cool bionic arm, with anti-gravity abilities.<</if>>
 <<if $mc.legCount==1>>You only have one leg. <<elseif $mc.legCount==0>> You don't have any legs anymore. <<if $playerCurses.some(e => e.name === "Seafolk")>> Instead you have a beautiful finned tail. Can you be considered a <<if $mc.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
 <br>
 You are <<BodyHeightText>> tall.<br>
