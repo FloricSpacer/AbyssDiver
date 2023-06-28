@@ -27,13 +27,13 @@ Save.onLoad.add(save => {
 Config.navigation.override = function (destPassage) {
 	const StoryVar = variables();
 
-	if (StoryVar.brokerUsed == 1 && StoryVar.corruption < 0) {
+	if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
 		return "BrokerEnd";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && StoryVar.dollevent2==false){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && StoryVar.dollevent2===false){
 		return "DollWarning";
 	}
-	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2==true){
+	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2 === true){
 		return "DollEnd";
 	}
 	if (StoryVar.mc.age < 18) {
@@ -45,52 +45,52 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.time - StoryVar.MaximCycleT > 35 && StoryVar.MaximCycleT_flag) {
 		return "Maxim Labor Scene";
 	}
-	if (setup.daysUntilDue(StoryVar.mc) == 0) {
+	if (setup.daysUntilDue(StoryVar.mc) === 0) {
 		return "Labor Scene";
 	}
-	if (setup.daysUntilDue('Maru') == 0) {
+	if (setup.daysUntilDue('Maru') === 0) {
 		StoryVar.companionLabor = StoryVar.companionMaru.name;
 		StoryVar.MaruConvoPreg = false;
 		setup.setNotPregnant('Maru');
 		StoryVar.lastBirthMaru = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (setup.daysUntilDue('Lily') == 0) {
+	if (setup.daysUntilDue('Lily') === 0) {
 		StoryVar.companionLabor = StoryVar.companionLily.name;
 		StoryVar.LilyConvoPreg = false;
 		setup.setNotPregnant('Lily');
 		StoryVar.lastBirthLily = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (setup.daysUntilDue('Khemia') == 0) {
+	if (setup.daysUntilDue('Khemia') === 0) {
 		StoryVar.companionLabor = StoryVar.companionKhemia.name;
 		StoryVar.KhemiaConvoPreg = false;
 		setup.setNotPregnant('Khemia');
 		StoryVar.lastBirthKhemia = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (setup.daysUntilDue('Cherry') == 0) {
+	if (setup.daysUntilDue('Cherry') === 0) {
 		StoryVar.companionLabor = StoryVar.companionCherry.name;
 		StoryVar.CherryConvoPreg = false;
 		setup.setNotPregnant('Cherry');
 		StoryVar.lastBirthCherry = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (setup.daysUntilDue('Cloud') == 0) {
+	if (setup.daysUntilDue('Cloud') === 0) {
 		StoryVar.companionLabor = StoryVar.companionCloud.name;
 		StoryVar.CloudConvoPreg = false;
 		setup.setNotPregnant('Cloud');
 		StoryVar.lastBirthCloud = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (setup.daysUntilDue('Saeko') == 0) {
+	if (setup.daysUntilDue('Saeko') === 0) {
 		StoryVar.companionLabor = StoryVar.companionSaeko.name;
 		StoryVar.SaekoConvoPreg = false;
 		setup.setNotPregnant('Saeko');
 		StoryVar.lastBirthSaeko = StoryVar.time;
 		return "Labor Scene Companion";
 	}
-	if (setup.daysUntilDue('Twin') == 0) {
+	if (setup.daysUntilDue('Twin') === 0) {
 		StoryVar.companionLabor = StoryVar.companionTwin.name;
 		StoryVar.TwinConvoPreg = false;
 		setup.setNotPregnant('Twin');
@@ -140,7 +140,7 @@ $(document).on(':passagestart', () => {
 	// Restore object identity between elements of companion arrays and $companionName variables.
 	for (const companions of companionArrays) {
 		for (const [i, companion] of companions.entries()) {
-			const name = companion.name != twinName ? companion.name : "Twin";
+			const name = companion.name !== twinName ? companion.name : "Twin";
 			const companionVar = vars[`companion${name}`];
 			if (companionVar) {
 				companions[i] = companionVar;
@@ -169,7 +169,7 @@ $(document).on(':passagestart', () => {
 	// Note: Change this if curses become instanced.
 	for (const curses of curseArrays) {
 		for (const [i, curse] of curses.entries()) {
-			const curseVar = curseVars.find(curseVar => curse.name == curseVar.name);
+			const curseVar = curseVars.find(curseVar => curse.name === curseVar.name);
 			if (curseVar) {
 				curses[i] = curseVar;
 			} else {
@@ -184,7 +184,7 @@ $(document).on(':passagestart', () => {
 		for (const suffix of logNameSuffixes) {
 			const events = vars[`${type}Log${suffix}`];
 			for (const [i, event] of events.entries()) {
-				const curseVar = curseVars.find(curseVar => event.name == curseVar.name);
+				const curseVar = curseVars.find(curseVar => event.name === curseVar.name);
 				if (curseVar) events[i] = curseVar;
 			}
 		}
@@ -216,7 +216,7 @@ $(document).on(':passagestart', () => {
 	// Note: Change this if relics become instanced.
 	for (const relics of relicArrays) {
 		for (const [i, relic] of relics.entries()) {
-			const relicVar = relicVars.find(relicVar => relic.name == relicVar.name);
+			const relicVar = relicVars.find(relicVar => relic.name === relicVar.name);
 			if (relicVar) {
 				relics[i] = relicVar;
 			} else {
@@ -307,7 +307,7 @@ Setting.addRange("appAgeControl", {
 });
 
 function findByName(variable, name) {
-	return variables()[variable].find(obj => obj.name == name);
+	return variables()[variable].find(obj => obj.name === name);
 }
 
 function findByNames(variable, names) {
@@ -333,7 +333,7 @@ function moveRelic(findWith, from, to, relicOrNameOrIndex) {
 	switch (typeof relicOrNameOrIndex) {
 		case 'string':
 			name = relicOrNameOrIndex;
-			index = fromVar[findWith](relic => relic.name == name);
+			index = fromVar[findWith](relic => relic.name === name);
 			if (index >= 0) {
 				relic = fromVar[index];
 			} else {
@@ -354,7 +354,7 @@ function moveRelic(findWith, from, to, relicOrNameOrIndex) {
 			if (relic) {
 				name = relic.name;
 				index = fromVar[findWith](fromRelic => fromRelic === relic);
-				if (index < 0) index = fromVar[findWith](relic => relic.name == name);
+				if (index < 0) index = fromVar[findWith](relic => relic.name === name);
 				if (index < 0) console.error(`Relic '${name}' not found in $${from}!`);
 			} else {
 				console.error('Passed relic was undefined!');
@@ -431,7 +431,7 @@ Object.defineProperties(setup, {
 	},
 	// Count the number of instances of a Curse active on the main character.
 	activeCurseCount: {
-		value: name => variables().playerCurses.filter(curse => curse.name == name).length,
+		value: name => variables().playerCurses.filter(curse => curse.name === name).length,
 	},
 	// Returns the weight of the carried items and relics.
 	carriedWeight: {
@@ -529,12 +529,12 @@ Object.defineProperties(setup, {
 
 			if (!['Labor Scene', 'Labor Scene Companion'].includes(passage)) {
 				// If we're on a layer without a daily source of water and we're traveling somewhere, reset $atWaterSource.
-				if (vars.currentLayer == 3 && !['Layer3 Camp', 'Layer3 Forage'].includes(passage)) vars.atWaterSource = false;
-				if (vars.currentLayer == 5 && !['Layer5 Camp', 'Layer5 Forage'].includes(passage)) vars.atWaterSource = false;
+				if (vars.currentLayer === 3 && !['Layer3 Camp', 'Layer3 Forage'].includes(passage)) vars.atWaterSource = false;
+				if (vars.currentLayer === 5 && !['Layer5 Camp', 'Layer5 Forage'].includes(passage)) vars.atWaterSource = false;
 			}
 
 			// If we're on layer 8, allow an Inanis Ego event to trigger every time we wait or travel somewhere.
-			if (vars.currentLayer == 8) vars.L8loopLim = false;
+			if (vars.currentLayer === 8) vars.L8loopLim = false;
 
 			const state = {
 				expectedDays: days, /* The number of days of time to pass, modulo the time weight. */
@@ -603,4 +603,143 @@ Object.defineProperties(setup, {
 			return Math.max(setup.dueDate(characterVar) - variables().time, 0);
 		},
 	},
+	// Gets the curses a given companion is willing to take
+	willingCurses: {
+		value: companion => {
+			if (typeof companion === 'string') {
+				switch (companion.toLowerCase()) {
+					case "maru":
+						companion = State.variables.companionMaru;
+						break;
+					case "lily":
+						companion = State.variables.companionLily;
+						break;
+					case "khemia":
+						companion = State.variables.companionkhemia;
+						break;
+					case "cherry":
+						companion = State.variables.companioncherry;
+						break;
+					case "cloud":
+						companion = State.variables.companionCloud;
+						break;
+					case "saeko":
+						companion = State.variables.companionSaeko;
+						break;
+					default:
+						console.error(`Companion ${companion} is not a valid target of willing curses`);
+						return [];
+				}
+			}
+			if (companion.osex === undefined || companion.sex === undefined ||
+			    companion.name === undefined || companion.breasts === undefined ||
+				companion.vagina === undefined || companion.penis === undefined) {
+				console.error(`willingCurses() was passed an object that isn't a companion or a companion name:`);
+				console.error(companion);
+				return [];
+			}
+
+			let willingCurses = []
+			// add companion-specific willingness
+			switch (companion.name) {
+				case "Maru":
+					willingCurses.push("Hair Removal", "Increased Sensitivity", "Age Reduction A", "Age Reduction B",
+					                   "Submissiveness Rectification A", "Submissiveness Rectification B");
+					if (companion.vagina === 0) {
+						willingCurses.push('Crossdress Your Heart');
+					}
+					break;
+				case "Lily":
+					willingCurses.push("Age Reduction A", "Age Reduction B", "Asset Robustness A",
+					                   "Perma-dye", "Power Dom", "Equal Opportunity");
+					break;
+				case 'Khemia':
+					willingCurses.push("Clothing Restriction A", "Clothing Restriction B", "Power Dom",
+					                   "Absolute Birth Control", "Pheromones");
+					if (companion.sex === 'male') {
+						willingCurses.push("Asset Robustness A", "Asset Robustness B", "Asset Robustness C",
+						                   "Asset Robustness D");
+					}
+					break;
+				case 'Cherry':
+					willingCurses.push("Age Reduction A", "Age Reduction B", "Fluffy Ears", "Fluffy Tail", "Omnitool",
+					                   "Sleep Tight",
+					                   "Submissiveness Rectification A", "Submissiveness Rectification B");
+					if (companion.curses.map(c => c.name).includesAll('Fluffy Ears', 'Fluffy Tail', 'Maximum Fluff')) {
+						willingCurses.push('Literalization');
+					}
+					break;
+				case 'Cloud':
+					willingCurses.push("Age Reduction A", "Age Reduction B", "Equal Opportunity", "Pheromones",
+					                   "Power Dom")
+					if (companion.sex === 'male') {
+						willingCurses.push("Asset Robustness A", "Asset Robustness B");
+					}
+					break;
+				case 'Saeko':
+					willingCurses.push("Asset Robustness A", "Freckle Speckle", "Equal Opportunity",
+					                   "Crossdress Your Heart",
+					                   "Age Reduction A", "Age Reduction B");
+					break;
+			}
+			let idealGender = companion.mindSex === 'male' ? 1 : 6;
+			if (companion.name === 'Maru') idealGender = 4;
+			// Attempt to go back to original gender (in Meru's case go towards androgyny)
+			if (companion.osex === 'male' && companion.gender < idealGender ||
+			    companion.osex === "female" && companion.gender > idealGender) {
+				willingCurses.push("Gender Reversal A", "Gender Reversal B", "Gender Reversal C",
+				                   "Gender Reversal D", "Gender Reversal E");
+			}
+			// Genderbent men want to get rid of their breasts
+			if (companion.mindSex === 'male' && companion.penis === 0 && companion.breasts > 0) {
+				willingCurses.push('Shrunken Assets');
+			}
+			// Women don't like body hair
+			if (companion.mindSex === 'female') {
+				willingCurses.push('Hair Removal');
+			}
+			// Genderbent companions want to get their genitals back
+			let wantsOtherGenitals = false;
+			// wants to replace vagina with penis
+			if (companion.mindSex === 'male' && companion.penis < 1 && companion.vagina > 0) {
+				wantsOtherGenitals = true;
+			}
+			// wants to replace penis with vagina
+			if (companion.mindSex === 'female' && companion.vagina < 1 && companion.penis > 0) {
+				wantsOtherGenitals = true;
+			}
+			if (wantsOtherGenitals) {
+				willingCurses.push('Sex Switcheroo');
+			}
+			// If sex switcheroo is not an option, they'd take futa too
+			if (State.variables.playerCurses.find('Sex Switcheroo') === undefined && wantsOtherGenitals) {
+				willingCurses.push('Futa Fun');
+			}
+			// men do *not* want to get pregnant.
+			// Maru will take the risk though, for the opportunity to have a (non-adopted) family later.
+			if (companion.mindSex === 'male' && companion.womb > 0 && companion.name !== 'Maru') {
+				willingCurses.push('Absolute Birth Control');
+			}
+			return willingCurses;
+		}
+	},
+	// puts one copy of a relic back where it was found. Only used for debugging purposes.
+	returnRelic: {
+		value: (relic, all=false) => {
+			if (typeof relic === 'string') {
+				relic = State.variables.relics.find(r => r.name === relic);
+				if (!relic) {
+					console.error(`Relic ${relic} cannot be returned because it does not exist.`)
+					return;
+				}
+			}
+			let relics = State.variables.ownedRelics;
+			for (let i = relics.length - 1; i >= 0; i--) {
+				if (relics[i].name === relic.name) {
+					relics.splice(i, 1);
+					if (!all) break;
+				}
+			}
+		}
+	}
 });
