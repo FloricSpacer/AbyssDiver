@@ -369,7 +369,7 @@ const moveFirstRelic = (from, to, relicOrNameOrIndex) => moveRelic('findIndex', 
 const moveLastRelic = (from, to, relicOrNameOrIndex) => moveRelic('findLastIndex', from, to, relicOrNameOrIndex);
 
 Object.defineProperties(setup, {
-	setup: {
+	never: {
 		value: 999999999, // Just needs to be an unreasonably large number so that $time can never exceed it.
 	},
 	flaskLabels: {
