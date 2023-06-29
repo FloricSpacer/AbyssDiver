@@ -27,6 +27,9 @@ Save.onLoad.add(save => {
 Config.navigation.override = function (destPassage) {
 	const StoryVar = variables();
 
+	// For interrupt scenes that don't result in a bad end, set the return passage.
+	StoryVar.interruptReturn = destPassage;
+
 	if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
 		return "BrokerEnd";
 	}
