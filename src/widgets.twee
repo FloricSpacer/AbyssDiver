@@ -80,10 +80,10 @@
 		<</if>>
 
 		/* Update the subject's apparent age. */
-		<<set _handle.appAge = Math.round(_eventAge / _aYear)>>
+		<<set _handle.appAge = _eventAge / _aYear>>
 
 		/* Also set the subject's real age depending on the elapsed time. */
-		<<set _handle.realAge = Math.round((_handle.age * _aYear + _newTime) / _aYear)>>
+		<<set _handle.realAge = (_handle.age * _aYear + _newTime) / _aYear>>
 
 		/* ----------------------------------- Compute apparent gender and assets ----------------------------------- */
 
@@ -775,6 +775,18 @@
 	<<else>>\
 		monster\
 	<</if>>\
+<</widget>>
+
+<<widget "ShowAge">>
+<<capture _months _years>>\
+	<<set _years = Math.floor(Math.round(_args[0] * 12) / 12)>>
+	<<set _months = Math.round(_args[0] * 12) % 12>>
+	<<switch _months>>\
+		<<case 0>>_years years\
+		<<case 1>>_years years and 1 month\
+		<<default>>_years years and _months months\
+	<</switch>>\
+<</capture>>\
 <</widget>>
 
 :: Threat1 Criterion [widget nobr]
