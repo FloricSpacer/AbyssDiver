@@ -1,9 +1,13 @@
 :: UpdateAttributes [widget nobr]
 <<widget "UpdateAttributes">>
 <<capture
+	_aDay
+	_aMonth
+	_aYear
 	_assetMod
 	_boxShadowColor
 	_boxShadowOpacity
+	_eternalYouthTime
 	_event
 	_eventAge
 	_eventVariation
@@ -27,69 +31,59 @@
 
 		<<print `<<set _log = $Age${_logName}>>`>>
 
+		/* The Gregorian calendar has 97 leap years in every 400 year cycle. Thus the average length of a year is */
+		/* 365 + 97 / 400 = 365.2425 days, and the average length of a month is 365.2425 / 12 = 30.436875 days. By */
+		/* dividing each year into 1600 * 365.2425 = 12 * 48699 = 584388 units, we can avoid floating point errors. */
+		<<set _aDay = 1600, _aMonth = 48699, _aYear = 584388>>
+		<<set _eternalYouthTime = $eternalYouth * _aDay>>
+
 		<<set _oldTime = 0>>
-		<<set _eventAge = _handle.age>>
+		<<set _eventAge = _handle.age * _aYear>>
 		<<for _event range _log>>
 			/* If this is an age event with a recorded time, add the elapsed time to the subject's age. */
 			<<if _event.variation>>
-				<<set _newTime = _event.variation>>
-				/* If we're adjusting the mc with eternal youth, only age them until they drank from the fountain. */
-				<<if _handle === $mc && _newTime > $eternalYouth>>
-					<<set _newTime = $eternalYouth>>
+				<<set _newTime = _event.variation * _aDay>>
+				/* If we're adjusting the mc who has eternal youth, only age them until they drank from the fountain. */
+				<<if _handle === $mc && _newTime > _eternalYouthTime>>
+					<<set _newTime = _eternalYouthTime>>
 				<</if>>
 				<<if _oldTime < _newTime>>
-					<<set _eventAge += (_newTime - _oldTime) / 365.2425>>
+					<<set _eventAge += _newTime - _oldTime>>
 				<</if>>
-				<<set _oldTime = _event.variation>>
+				<<set _oldTime = _event.variation * _aDay>>
 			<</if>>
 			/* Now apply the effect of the age event. */
 			<<switch _event.name>>
 				<<case 'Age Reduction A'>>
-					<<if _eventAge > 22>>
-						<<set _eventAge = 20>>
-					<<else>>
-						<<set _eventAge -= 2>>
-					<</if>>
+					<<set _eventAge = Math.min(20 * _aYear, _eventAge - 2 * _aYear)>>
 				<<case 'Age Reduction B'>>
-					<<if _eventAge > 23>>
-						<<set _eventAge = 20>>
-					<<else>>
-						<<set _eventAge -= 3>>
-					<</if>>
+					<<set _eventAge = Math.min(20 * _aYear, _eventAge - 3 * _aYear)>>
 				<<case 'Age Reduction C'>>
-					<<if _eventAge > 24>>
-						<<set _eventAge = 20>>
-					<<else>>
-						<<set _eventAge -= 4>>
-					<</if>>
+					<<set _eventAge = Math.min(20 * _aYear, _eventAge - 4 * _aYear)>>
 				<<case 'Doll Transformation'>>
-					<<if _eventAge > 19>>
-						<<set _eventAge = 17>>
-					<<else>>
-						<<set _eventAge -= 2>>
-					<</if>>
+					<<set _eventAge = Math.min(17 * _aYear, _eventAge - 2 * _aYear)>>
 				<<case '1 Day Food Forage Minor Impact'>> /* Layer 3 Crystalline Confectionaries with knowledge */
-					<<set _eventAge -= 0.08>>
+					<<set _eventAge -= _aMonth>>
 				<<case '1 Day Food Forage Major Impact'>> /* Layer 3 Crystalline Confectionaries without knowledge */
-					<<set _eventAge -= 1>>
+					<<set _eventAge -= _aYear>>
 			<</switch>>
 		<</for>>
 
 		/* Add any additional elapsed time to the subject's age. */
-		<<set _newTime = $time>>
-		/* If we're adjusting the MC and MC has eternal youth, only age them until they drank from the fountain. */
-		<<if _handle === $mc && _newTime > $eternalYouth>>
-			<<set _newTime = $eternalYouth>>
+		<<set _newTime = $time * _aDay>>
+		/* If we're adjusting the mc who has eternal youth, only age them until they drank from the fountain. */
+		<<if _handle === $mc && _newTime > _eternalYouthTime>>
+			<<set _newTime = _eternalYouthTime>>
 		<</if>>
 		<<if _oldTime < _newTime>>
-			<<set _eventAge += (_newTime - _oldTime) / 365.2425>>
+			<<set _eventAge += _newTime - _oldTime>>
 		<</if>>
 
 		/* Update the subject's apparent age. */
-		<<set _handle.appAge = Math.round(_eventAge)>>
+		<<set _handle.appAge = Math.round(_eventAge / _aYear)>>
 
 		/* Also set the subject's real age depending on the elapsed time. */
-		<<set _handle.realAge = Math.round(_handle.age + _newTime / 365.2425)>>
+		<<set _handle.realAge = Math.round((_handle.age * _aYear + _newTime) / _aYear)>>
 
 		/* ----------------------------------- Compute apparent gender and assets ----------------------------------- */
 
