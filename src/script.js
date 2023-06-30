@@ -715,7 +715,7 @@ Object.defineProperties(setup, {
 				willingCurses.push('Sex Switcheroo');
 			}
 			// If sex switcheroo is not an option, they'd take futa too
-			if (State.variables.playerCurses.find('Sex Switcheroo') === undefined && wantsOtherGenitals) {
+			if (State.variables.playerCurses.find(c => c.name === 'Sex Switcheroo') === undefined && wantsOtherGenitals) {
 				willingCurses.push('Futa Fun');
 			}
 			// men do *not* want to get pregnant.
