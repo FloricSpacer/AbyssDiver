@@ -409,6 +409,9 @@
 			<<set _handle.breastsLabel = 'AA'>>
 		<<elseif _handle.breastsCor >= 20>>
 			<<set _handle.breastsLabel = 'S'>> /* Max supported label. */
+		<<elseif !isFinite(_handle.breastsCor)>>
+			/* Shouldn't happen, but prevent it from causing problems. */
+			<<set _handle.breastsLabel = 'immeasurable'>>
 		<<else>>
 			/* String.fromCodePoint(63 + 2) == 'A', String.fromCodePoint(63 + 3) == 'B' etc. */
 			<<set _handle.breastsLabel = String.fromCodePoint(63 + Math.floor(_handle.breastsCor))>>
@@ -1281,7 +1284,7 @@
 		osex: "",
 		obreasts: $mc.openis,
 		breastsLabel: "flat",
-		openis: $mc.obreast,
+		openis: $mc.obreasts,
 		ogender: $mc.ogender,
 		genderVoice: 0,
 		fit: $mc.fit,
@@ -1303,8 +1306,8 @@
 		vagina: 0,
 		gender: $mc.ogender,
 		switch: false,
-		breasts: $mc.obreast,
-		breastsCor: $mc.obreast,
+		breasts: $mc.obreasts,
+		breastsCor: $mc.obreasts,
 		lactation: 0,
 		pregnantT: $mc.pregnantT,
 		due: setup.dueDate($mc),
@@ -1365,7 +1368,7 @@
 		curses: $playerCurses,
         mindSex: $mc.mindSex,
 		osex: $mc.osex,
-		obreasts: $mc.obreast,
+		obreasts: $mc.obreasts,
 		breastsLabel: "flat",
 		openis: $mc.openis,
 		ogender: $mc.ogender,
@@ -1389,8 +1392,8 @@
 		vagina: 0,
 		gender: $mc.ogender,
 		switch: false,
-		breasts: $mc.obreast,
-		breastsCor: $mc.obreast,
+		breasts: $mc.obreasts,
+		breastsCor: $mc.obreasts,
 		lactation: 0,
 		pregnantT: $mc.pregnantT,
 		due: setup.dueDate($mc),
@@ -1983,7 +1986,7 @@
 	<<set $mc.openis = $PulseBloomStorage.openis>>
 	<<set $mc.ogender = $PulseBloomStorage.ogender>>
 	<<set $mc.oheight = $PulseBloomStorage.oheight>>
-	<<set $mc.age = $PulseBloomStorage.age>>
+	<<set $mc.age = Math.max($PulseBloomStorage.age, 18)>> /* Prevent instant bad end. */
 	<<set $mc.ohair = $PulseBloomStorage.ohair>>
 	<<set $mc.oskinColor = $PulseBloomStorage.oskinColor>>
 	<<set $mc.oeyeColor = $PulseBloomStorage.oeyeColor>>
