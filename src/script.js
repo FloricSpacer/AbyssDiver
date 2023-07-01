@@ -229,12 +229,12 @@ $(document).on(':passagestart', () => {
 	}
 });
 
-predisplay["Menu Return"] = function (taskName) {
+predisplay["Menu Return"] = function (/* taskName */) {
 	if (! tags().contains("noreturn")) {
 		State.variables.menuReturn = passage();
 	}
 };
-predisplay["Layer Return"] = function (taskName) {
+predisplay["Layer Return"] = function (/* taskName */) {
 	if (tags().some(t => t === "surface" || t.startsWith("layer"))) {
 		State.variables.layerReturn = passage();
 	}
@@ -249,7 +249,8 @@ predisplay["Layer Return"] = function (taskName) {
 	}
 };
 
-if ((0 || 0 || 0)) {
+// eslint-disable-next-line no-constant-condition -- Change from false to true if running inside Twine.
+if (false) {
 	// Change this to the path where the HTML file is
 	// located if you want to run this from inside Twine.
 	setup.Path = "Documents/Twine/AbyssDiver/";  // Running inside Twine application
@@ -368,6 +369,7 @@ function moveRelic(findWith, from, to, relicOrNameOrIndex) {
 	return relic;
 }
 
+// eslint-disable-next-line no-unused-vars -- Not currently used, but might come in handy later.
 const moveFirstRelic = (from, to, relicOrNameOrIndex) => moveRelic('findIndex', from, to, relicOrNameOrIndex);
 const moveLastRelic = (from, to, relicOrNameOrIndex) => moveRelic('findLastIndex', from, to, relicOrNameOrIndex);
 
@@ -635,7 +637,7 @@ Object.defineProperties(setup, {
 				}
 			}
 			if (companion.osex === undefined || companion.sex === undefined ||
-			    companion.name === undefined || companion.breasts === undefined ||
+					companion.name === undefined || companion.breasts === undefined ||
 				companion.vagina === undefined || companion.penis === undefined) {
 				console.error(`willingCurses() was passed an object that isn't a companion or a companion name:`);
 				console.error(companion);
@@ -647,51 +649,49 @@ Object.defineProperties(setup, {
 			switch (companion.name) {
 				case "Maru":
 					willingCurses.push("Hair Removal", "Increased Sensitivity", "Age Reduction A", "Age Reduction B",
-					                   "Submissiveness Rectification A", "Submissiveness Rectification B");
+						"Submissiveness Rectification A", "Submissiveness Rectification B");
 					if (companion.vagina === 0) {
 						willingCurses.push('Crossdress Your Heart');
 					}
 					break;
 				case "Lily":
-					willingCurses.push("Age Reduction A", "Age Reduction B", "Asset Robustness A",
-					                   "Perma-dye", "Power Dom", "Equal Opportunity");
+					willingCurses.push("Age Reduction A", "Age Reduction B",
+						"Asset Robustness A", "Perma-dye", "Power Dom", "Equal Opportunity");
 					break;
 				case 'Khemia':
-					willingCurses.push("Clothing Restriction A", "Clothing Restriction B", "Power Dom",
-					                   "Absolute Birth Control", "Pheromones");
+					willingCurses.push("Clothing Restriction A", "Clothing Restriction B",
+						"Power Dom", "Absolute Birth Control", "Pheromones");
 					if (companion.sex === 'male') {
-						willingCurses.push("Asset Robustness A", "Asset Robustness B", "Asset Robustness C",
-						                   "Asset Robustness D");
+						willingCurses.push("Asset Robustness A", "Asset Robustness B",
+							"Asset Robustness C", "Asset Robustness D");
 					}
 					break;
 				case 'Cherry':
 					willingCurses.push("Age Reduction A", "Age Reduction B", "Fluffy Ears", "Fluffy Tail", "Omnitool",
-					                   "Sleep Tight",
-					                   "Submissiveness Rectification A", "Submissiveness Rectification B");
+						"Sleep Tight", "Submissiveness Rectification A", "Submissiveness Rectification B");
 					if (companion.curses.map(c => c.name).includesAll('Fluffy Ears', 'Fluffy Tail', 'Maximum Fluff')) {
 						willingCurses.push('Literalization');
 					}
 					break;
 				case 'Cloud':
-					willingCurses.push("Age Reduction A", "Age Reduction B", "Equal Opportunity", "Pheromones",
-					                   "Power Dom")
+					willingCurses.push("Age Reduction A", "Age Reduction B",
+						"Equal Opportunity", "Pheromones", "Power Dom");
 					if (companion.sex === 'male') {
 						willingCurses.push("Asset Robustness A", "Asset Robustness B");
 					}
 					break;
 				case 'Saeko':
 					willingCurses.push("Asset Robustness A", "Freckle Speckle", "Equal Opportunity",
-					                   "Crossdress Your Heart",
-					                   "Age Reduction A", "Age Reduction B");
+						"Crossdress Your Heart", "Age Reduction A", "Age Reduction B");
 					break;
 			}
 			let idealGender = companion.mindSex === 'male' ? 1 : 6;
 			if (companion.name === 'Maru') idealGender = 4;
 			// Attempt to go back to original gender (in Meru's case go towards androgyny)
 			if (companion.osex === 'male' && companion.gender < idealGender ||
-			    companion.osex === "female" && companion.gender > idealGender) {
-				willingCurses.push("Gender Reversal A", "Gender Reversal B", "Gender Reversal C",
-				                   "Gender Reversal D", "Gender Reversal E");
+					companion.osex === "female" && companion.gender > idealGender) {
+				willingCurses.push("Gender Reversal A", "Gender Reversal B",
+					"Gender Reversal C", "Gender Reversal D", "Gender Reversal E");
 			}
 			// Genderbent men want to get rid of their breasts
 			if (companion.mindSex === 'male' && companion.penis === 0 && companion.breasts > 0) {
