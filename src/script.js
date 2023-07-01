@@ -16,6 +16,9 @@ function backwardCompat(vars, version) {
 		// Remove the $app object.
 		delete vars.app;
 	}
+
+	// Prevent instant bad end from improperly set age.
+	if (vars.mc.age < 18) vars.mc.age = 18;
 }
 
 Save.onLoad.add(save => {
