@@ -138,6 +138,7 @@ $(document).on(':passagestart', () => {
 		'companions',
 		'hiredCompanions',
 		'DesertedCompanions',
+		'SemenDemonVec',
 	].map(varName => vars[varName]);
 
 	// Restore object identity between elements of companion arrays and $companionName variables.
