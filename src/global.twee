@@ -283,58 +283,26 @@ Relics are removed and added one at a time. To remove all copies of a given reli
 <</link>><br>
 [[Return|Adjustments]]
 
-:: Adjust Affection [noreturn]
+:: Adjust Affection [noreturn nobr]
+<<set _mods = Array.from({ length: $hiredCompanions.length }, _ => '0')>>
+Enter how much affection you would like each companion to gain.<br><br>
 
-<<nobr>>
-<<set _maru = 0>>
-<<set _lily = 0>>
-<<set _khemia = 0>>
-<<set _cherry = 0>>
-<<set _cloud = 0>>
-<<set _saeko = 0>>
-<</nobr>>
-Enter how much affection you would like each companion to gain.
-
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
-Maru:
-<<textbox '_maru' '0'>>
-<</if>>\
-<<if $hiredCompanions.some(e => e.name === "Lily")>>
-Lily:
-<<textbox '_lily' '0'>>
-<</if>>\
-<<if $hiredCompanions.some(e => e.name === "Khemia")>>
-Khemia:
-<<textbox '_khemia' '0'>>
-<</if>>\
-<<if $hiredCompanions.some(e => e.name === "Cherry")>>
-Cherry:
-<<textbox '_cherry' '0'>>
-<</if>>\
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
-Cloud:
-<<textbox '_cloud' '0'>>
-<</if>>\
-<<if $hiredCompanions.some(e => e.name === "Saeko")>>
-Saeko:
-<<textbox '_saeko' '0'>>
-<</if>>\
-
+<<for _i, _companion range $hiredCompanions>>
+	<<if _companion !== $companionGolem>>
+		<<capture _i>>
+			_companion.name:<br>
+			<<textbox '_mods[_i]' _mods[_i]>><br><br>
+		<</capture>>
+	<</if>>
+<</for>>
 
 <<link 'Confirm' 'Adjustments'>>
-	<<set _parsedMaru = parseInt(_maru)>>
-	<<set _parsedLily = parseInt(_lily)>>
-	<<set _parsedKhemia = parseInt(_khemia)>>
-	<<set _parsedCherry = parseInt(_cherry)>>
-	<<set _parsedCloud = parseInt(_cloud)>>
-	<<set _parsedSaeko = parseInt(_saeko)>>
-	<<set $companionMaru.affec += _parsedMaru>>
-	<<set $companionLily.affec += _parsedLily>>
-	<<set $companionKhemia.affec += _parsedKhemia>>
-	<<set $companionCherry.affec += _parsedCherry>>
-	<<set $companionCloud.affec += _parsedCloud>>
-	<<set $companionSaeko.affec += _parsedSaeko>>
-<</link>>
+	<<for _i, _companion range $hiredCompanions>>
+		<<if _companion !== $companionGolem>>
+			<<set _companion.affec += parseInt(_mods[_i], 10) || 0>>
+		<</if>>
+	<</for>>
+<</link>><br>
 <<back>>
 
 :: Time Stats [noreturn]
@@ -404,24 +372,31 @@ Saeko:
 <</if>>
 
 <<if $waterL6 > 0>>
-	<<print "You have foraged for water on the sixth layer $waterL5 times.">><br>
+	<<print "You have foraged for water on the sixth layer $waterL6 times.">><br>
 <</if>>
 <<if $foodL6 > 0>>
-	<<print "You have foraged for food on the sixth layer $foodL5 times.">><br>
+	<<print "You have foraged for food on the sixth layer $foodL6 times.">><br>
 <</if>>
 
 <<if $waterL7 > 0>>
-	<<print "You have foraged for water on the seventh layer $waterL5 times.">><br>
+	<<print "You have foraged for water on the seventh layer $waterL7 times.">><br>
 <</if>>
 <<if $foodL7 > 0>>
-	<<print "You have foraged for food on the seventh layer $foodL5 times.">><br>
+	<<print "You have foraged for food on the seventh layer $foodL7 times.">><br>
 <</if>>
 
 <<if $waterL8 > 0>>
-	<<print "You have foraged for water on the eighth layer $waterL5 times.">><br>
+	<<print "You have foraged for water on the eighth layer $waterL8 times.">><br>
 <</if>>
 <<if $foodL8 > 0>>
-	<<print "You have foraged for food on the eighth layer $foodL5 times.">><br>
+	<<print "You have foraged for food on the eighth layer $foodL8 times.">><br>
+<</if>>
+
+<<if $waterL9 > 0>>
+	<<print "You have foraged for water on the ninth layer $waterL9 times.">><br>
+<</if>>
+<<if $foodL9 > 0>>
+	<<print "You have foraged for food on the ninth layer $foodL9 times.">><br>
 <</if>>
 <</nobr>>
 
@@ -649,18 +624,15 @@ They are a bit sore at the moment.
 		<<else>>
 			<<set _temp = Math.floor(1+$crumbleFluid/100)>>
 		<</if>>
-		You can supply yourself with <<print _temp*2>> loads a days.
+		You can supply yourself with <<print _temp*2>> loads a day.
 	<</if>>
 	<<if $SemenDemonVec.length > 0>>
 		<<if $SemenDemonVec.length == 1>>
-			$SemenDemonVec[0].name
+			<<print $SemenDemonVec[0].name>>
 		<<else>>
-			<<for _i=0; _i<$SemenDemonVec.length-1; _i++>>
-				$SemenDemonVec[_i].name,
-			<</for>>
-				and $SemenDemonVec[_i+1].name
+			<<print `${$SemenDemonVec.slice(0, -1).map(c => c.name).join(', ')} and ${$SemenDemonVec.at(-1).name}`>>
 		<</if>>
-		<<if $SemenDemonVec.length == 1>> is<<else>> are<</if>> is providing you with <<print ($SemenDemonVec.length*2)>> loads a day.
+		<<if $SemenDemonVec.length == 1>>is<<else>>are<</if>> providing you with <<print 2 * $SemenDemonVec.length>> loads a day.
 	<</if>>
 	<<print " ">>
 <</if>>
@@ -886,7 +858,7 @@ Using your balloon, you're able to send up any Relics you want to sell and get b
 [[Buy items|Balloon Store1]]
 
 
-[[Finish using balloon to trade|$layerReturn]]
+[[Finish using balloon to trade|$hubReturn]]
 
 
 :: Balloon Sell1 [balloon nobr]
@@ -1515,7 +1487,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $ownedRelics.some(e => e.name === "Gleam Dazer")>>
 <br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, Relics, and Curses await you further into the Abyss.<br>
-	<<set $previewReturn = $layerReturn>>
+	<<set $previewReturn = $hubReturn>>
 	<<if $currentLayer == 0>>
 		[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
 	<</if>>
@@ -1548,7 +1520,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <</nobr>>
 [[Perform other stat adjustments to correct for errors|Adjustments]]
 
-[[Return|$layerReturn]]
+[[Return|$hubReturn]]
 
 
 :: Ward Water Drink
@@ -1571,7 +1543,7 @@ You just drank $temp bottles of Ward Water.<<if $temp > 3 >> It was quite an eff
 
 You now have <<print $hexflame - 9>> jinxed flame counters and $items[25].count Ward Waters remaining.
 
-[[Continue exploring the layer|$layerReturn]]
+[[Continue exploring the layer|$hubReturn]]
 
 :: Adjust bullets [noreturn]
 <<set $temp = 0>>How many bullets would you like to add? (Use a negative number to subtract)
@@ -1625,7 +1597,7 @@ The current total value of Relics you have copied is $relic38.copiedValue dubloo
 <</if>>
 <</nobr>>
 
-[[Return to exploring|$layerReturn]]
+[[Return to exploring|$hubReturn]]
 
 :: Daedalus Mechanism Select [noreturn]
 
@@ -2498,7 +2470,7 @@ You will first drink:<br>
 	<<textbox "_campTime" "0">><br>
 	<<WaitAtPassage 'Set up camp and wait' `passage()` 'Math.max(parseInt(_campTime, 10) || 0, 0)'>><br><br>
 
-	<<link "Return to exploring the layer without waiting" `"Layer" + $currentLayer + " Hub"`>><</link>>
+	<<link "Return to exploring the layer without waiting" $hubReturn>><</link>>
 <</if>>
 
 
@@ -2574,8 +2546,8 @@ You will first drink:<br>
 	<<if $tempCurse.name == "Increased Sensitivity">>
 		A part of you knew that being Cursed with Increased Sensitivity would be a major change in erotic situations and it might not be the most convenient thing in everyday life. However, the tantalizing excitement drew you in, and now you're living with the consequences. You hadn't fully understood how the brush of cloth against your nipples and between your legs would draw shivers of desire out of you. You hadn't expected that you'd be splattering your juices simply by brushing against something at the right angle and position, but here you are, hot and panting simply because you brushed against a boulder the wrong way as you were moving past it.
 	<</if>>
-	<<if $foodL6>0>>
-		About $foodL6*3 percent of your body has become a hyper sensative erogenous zone. Merely touching it causes a disabling orgasm.
+	<<if $foodL6 > 0>>
+		About <<print 3 * $foodL6>> percent of your body has become a hyper sensitive erogenous zone. Merely touching it causes a disabling orgasm.
 	<</if>>
 	<<if $tempCurse.name == "Refractory Refactorization">>
 		Getting rid of your refractory period? That's not so bad for a Curse, or so you'd thought. Then you found yourself in an erotic situation, and ended up cumming for seven minutes straight, not a moment's break in between. Your body was locked in spasms, and the experience was just so hot that you just kept on riding orgasm after orgasm in a continuous wave. Now however, you feel used up, worn out, desperately thirsty, and like your body pumped out something vital. Yet, your mind is abuzz with one of the most intense experiences of your life and you feel like you could go again at any moment.
@@ -3102,7 +3074,7 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 
 <br>
 
-[[Return|$layerReturn]]
+[[Return|$hubReturn]]
 
 :: Drop Item Count [nobr noreturn]
 <<set _item = $items[$temp]>>
