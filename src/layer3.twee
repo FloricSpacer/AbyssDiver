@@ -411,7 +411,9 @@ Which Curse would you like to force upon your unwilling companion?
 	You do not have enough dubloons for an offering.
 <<else>>
 	<<for _i, _curse range $playerCurses>>
-		<<if  _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' && _curse.name != 'The Maxim'>>
+		<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' && _curse.name != 'The Maxim' &&
+			!$hiredCompanions.every(companion => companion === $companionGolem || companion.curses.some(curse => curse.name == _curse.name))
+		>>
 			<<capture _i>>
 				[[_curse.name|Layer3 Skewed2b][$temp = _i]]<br>
 			<</capture>>

@@ -1476,8 +1476,6 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 					<<set _text = "Deactivate stored " + _curse.name + " Curse">>
 					<<link _text "Use Items and Relics">>
 						<<RemoveCurse _curse>>
-						<<set _j = $ManagedMisfortuneActive.indexOf(c => c.name === _curse.name)>>
-						<<set $ManagedMisfortuneActive.deleteAt(_j)>>
 					<</link>><br>
 				<</if>>
 			<</capture>>
@@ -1716,6 +1714,12 @@ How many dubloons would you like to pay back?
 			<<if _j >= 0>>
 				<<set State.variables[_logName].deleteAt(_j)>>
 			<</if>>
+		<</if>>
+		<<set _j = $ManagedMisfortuneActive.findLastIndex(curse => curse.name == _targetCurse.name)>>
+		<<if _j != -1>>
+			<<set $ManagedMisfortuneActive.deleteAt(_j)>>
+			<<set _j = $StoredCurse.findLastIndex(curse => curse.name == _targetCurse.name)>>
+			<<set $StoredCurse.deleteAt(_j)>>
 		<</if>>
 		<<set $playerCurses.deleteAt(_i)>>
 		<<break>>
