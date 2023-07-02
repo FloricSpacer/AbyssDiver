@@ -1950,8 +1950,9 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 <<widget "PassTime">>
-<<capture _consumptionPerDay _random _state _threshold _timeWeight _triggers>>
-<<set _triggers = typeof _args[0] == 'object' ? _args[0] : {}>> /* The event triggers, if any. */
+<<capture _consumptionPerDay _handleThreats _random _state _threshold _timeWeight _triggers>>
+<<set _handleThreats = typeof _args[0] == 'object'>> /* Whether threat timers should be adjusted. */
+<<set _triggers = _handleThreats ? _args[0] : {}>> /* The event triggers, if any. */
 
 /* Calculate the amount of food and drink that needs to be consumed per day. */
 <<set _consumptionPerDay = 1>>
@@ -2030,51 +2031,25 @@ How many dubloons would you like to pay back?
 		<<if _state.weightedDay >= _state.nextRealDay>>
 			/* Adjust the overall time. */
 			<<set $time += 1>>
-			/* Adjust layer-specific state. */
+			/* Apply layer-specific effects. */
 			<<switch $currentLayer>>
 				<<case 1>>
 					<<set $timeL1 += 1>>
 				<<case 2>>
 					<<set $timeL2 += 1>>
-					/* Check if player has 10+ food rations. */
-					<<if $items[1].count >= 10>>
-						<<set $timeL2T1 += 1>>
-					<</if>>
 				<<case 3>>
 					<<set $timeL3 += 1>>
-					<<set $timeL3T1 += 1>>
-					/* Check if player has an active light source. */
-					<<if !setup.haveTravelLightSource>>
-						<<set $timeL3T2 += 1>>
-					<</if>>
 				<<case 4>>
 					<<set $timeL4 += 1>>
-					<<set $timeL4T1 += 1>>
 				<<case 5>>
 					<<set $timeL5 += 1>>
-					/* Check if player has 10+ water or filled flasks. */
-					<<if ($items[0].count + $items[3].count) >= 10>>
-						<<set $timeL5T2 += 1>>
-					<</if>>
-					<<set $timeL5T1 += 1>>
 				<<case 6>>
 					<<set $timeL6 += 1>>
-					/* Check if player has 200+ dubloons. */
-					<<if $dubloons >= 200>>
-						<<set $timeL6T2 += 1>>
-					<</if>>
-					<<set $timeL6T1 += 1>>
 					/* Add a jinxed flame counter for every day unless the player is flying. */
-					<<if !$DaedalusFly>>
-						<<set $hexflame += 1>>
-					<</if>>
+					<<if !$DaedalusFly>><<set $hexflame += 1>><</if>>
 				<<case 7>>
 					<<set $timeL7 += 1>>
-					/* Check if the player has fewer than 500 dubloons. */
-					<<if $dubloons < 500>>
-						<<set $timeL7T2 += 1>>
-					<</if>>
-					/* Subtract dubloons for every day spent on this layer. */
+					/* Subtract dubloons for every day spent on this layer (even while detained). */
 					<<if $dubloons >= 300>>
 						<<set $dubloons -= 1>>
 					<<elseif $dubloons >= 100>>
@@ -2084,13 +2059,40 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 8>>
 					<<set $timeL8 += 1>>
-					<<set $timeL8T1 += 1>>
-					<<set $timeL8T2a += 1>>
-					<<set $timeL8T2b += 1>>
 				<<case 9>>
 					<<set $timeL9 += 1>>
-					<<set $timeL9T1 += 1>>
 			<</switch>>
+			<<if _handleThreats>>
+				/* Adjust layer threat timers. */
+				<<switch $currentLayer>>
+					<<case 2>>
+						/* Check if player has 10+ food rations. */
+						<<if $items[1].count >= 10>><<set $timeL2T1 += 1>><</if>>
+					<<case 3>>
+						<<set $timeL3T1 += 1>>
+						/* Check if player has an active light source. */
+						<<if !setup.haveTravelLightSource>><<set $timeL3T2 += 1>><</if>>
+					<<case 4>>
+						<<set $timeL4T1 += 1>>
+					<<case 5>>
+						/* Check if player has 10+ water or filled flasks. */
+						<<if ($items[0].count + $items[3].count) >= 10>><<set $timeL5T2 += 1>><</if>>
+						<<set $timeL5T1 += 1>>
+					<<case 6>>
+						/* Check if player has 200+ dubloons. */
+						<<if $dubloons >= 200>><<set $timeL6T2 += 1>><</if>>
+						<<set $timeL6T1 += 1>>
+					<<case 7>>
+						/* Check if the player has fewer than 500 dubloons. */
+						<<if $dubloons < 500>><<set $timeL7T2 += 1>><</if>>
+					<<case 8>>
+						<<set $timeL8T1 += 1>>
+						<<set $timeL8T2a += 1>>
+						<<set $timeL8T2b += 1>>
+					<<case 9>>
+						<<set $timeL9T1 += 1>>
+				<</switch>>
+			<</if>>
 		<</if>>
 		/* Try to eat. */
 		<<set _ate = true>>
