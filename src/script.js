@@ -16,6 +16,9 @@ function backwardCompat(vars, version) {
 		// Remove the $app object.
 		delete vars.app;
 	}
+
+	// Prevent instant bad end from improperly set age.
+	if (vars.mc.age < 18) vars.mc.age = 18;
 }
 
 Save.onLoad.add(save => {
@@ -124,9 +127,29 @@ Config.navigation.override = function (destPassage) {
 	return destPassage;
 };
 
+// Listen for the :passagestart jQuery event.
 $(document).on(':passagestart', () => {
 	// Get a reference to the active story variables store.
 	const vars = variables();
+
+	// Update $hubReturn.
+	if (vars.currentLayer < 1) {
+		vars.hubReturn = 'Surface Hub';
+	} else {
+		vars.hubReturn = `Layer${vars.currentLayer} Hub`;
+	}
+
+	// Update $menuReturn.
+	if (!tags().includes('noreturn')) vars.menuReturn = passage();
+
+	// Add some CSS classes based on where we are.
+	if (State.variables.comBalloon) {
+		document.body.classList.add('balloon');
+	} else if (vars.currentLayer < 1) {
+		document.body.classList.add('surface');
+	} else {
+		document.body.classList.add(`layer${vars.currentLayer}`);
+	}
 
 	/* ---- Companion object identity ---- */
 
@@ -138,6 +161,7 @@ $(document).on(':passagestart', () => {
 		'companions',
 		'hiredCompanions',
 		'DesertedCompanions',
+		'SemenDemonVec',
 	].map(varName => vars[varName]);
 
 	// Restore object identity between elements of companion arrays and $companionName variables.
@@ -228,26 +252,6 @@ $(document).on(':passagestart', () => {
 		}
 	}
 });
-
-predisplay["Menu Return"] = function (/* taskName */) {
-	if (! tags().contains("noreturn")) {
-		State.variables.menuReturn = passage();
-	}
-};
-predisplay["Layer Return"] = function (/* taskName */) {
-	if (tags().some(t => t === "surface" || t.startsWith("layer"))) {
-		State.variables.layerReturn = passage();
-	}
-	if (State.variables.comBalloon) {
-		$(document.body).addClass("balloon");
-	} else if (State.variables.layerReturn) {
-		for (var tag of tags(State.variables.layerReturn)) {
-			if (tag === "surface" || tag.startsWith("layer")) {
-				$(document.body).addClass(tag);
-			}
-		}
-	}
-};
 
 // eslint-disable-next-line no-constant-condition -- Change from false to true if running inside Twine.
 if (false) {
