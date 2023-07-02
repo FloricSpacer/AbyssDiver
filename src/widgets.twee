@@ -1078,6 +1078,13 @@
 		<</if>>
 		
 	<</for>>
+
+	<<if _handle.heightCor > 185 >>
+		<<set _handle.HandicapThreat += min(floor(((_handle.heightCor-170)/170-1)*10),7)>>
+	<<elseif _handle.heightCor-_handle.oheight < 155>>
+		<<set _handle.HandicapThreat += max(floor(((_handle.heightCor-170)/_handle.heightCor-1)*10),-7)>>
+	<</if>>
+
 	<<if _handle.name=="Khemia">>
 		<<if $convo.khemiaAegis == 1>>
 			<<set _handle.HandicapThreat +=5>>
@@ -1148,12 +1155,6 @@
 		<<set _handle.HandicapCarry -=10>>
 	<</if>>
 
-	<<if _handle.armCount >2 >>
-		<<set _handle.HandicapThreat -= 2*($mc.armCount-2)>>
-		<<set _handle.HandicapMovement += 1*($mc.armCount-2)>>
-		<<set _handle.HandicapCarry += ($mc.armCount-2)>>
-	<</if>>
-			
 	<<if _i==$hiredCompanions.length>>
 		<<if $menstruating == true>>
 			<<set _handle.HandicapThreat -= 2>>
