@@ -409,6 +409,9 @@
 			<<set _handle.breastsLabel = 'AA'>>
 		<<elseif _handle.breastsCor >= 20>>
 			<<set _handle.breastsLabel = 'S'>> /* Max supported label. */
+		<<elseif !isFinite(_handle.breastsCor)>>
+			/* Shouldn't happen, but prevent it from causing problems. */
+			<<set _handle.breastsLabel = 'immeasurable'>>
 		<<else>>
 			/* String.fromCodePoint(63 + 2) == 'A', String.fromCodePoint(63 + 3) == 'B' etc. */
 			<<set _handle.breastsLabel = String.fromCodePoint(63 + Math.floor(_handle.breastsCor))>>
@@ -1277,23 +1280,20 @@
 		image: "Curses/doubletrouble.png",
 		imageIcon: "Player Icons/playerF.png",
 		curses: $playerCurses,
-        mindSex: '',
+		mindSex: '',
 		osex: "",
 		obreasts: $mc.openis,
 		breastsLabel: "flat",
-		openis: $mc.obreast,
-		ogender: $mc.ogender,
+		openis: $mc.obreasts,
+		ogender: 6 - $mc.ogender,
 		genderVoice: 0,
 		fit: $mc.fit,
 		oheight: $mc.oheight,
-		/*hairColor: $mc.hairColor,
-		skinColor: $mc.skinColor,*/
 		age: $mc.age,
 		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
 		fear: $fear,
-
 		sex: "",
 		ohair: $mc.ohair,
 		hair: $mc.ohair,
@@ -1301,10 +1301,10 @@
 		penisCor: $mc.openis,
 		doublePenis: false,
 		vagina: 0,
-		gender: $mc.ogender,
+		gender: 6 - $mc.ogender,
 		switch: false,
-		breasts: $mc.obreast,
-		breastsCor: $mc.obreast,
+		breasts: $mc.obreasts,
+		breastsCor: $mc.obreasts,
 		lactation: 0,
 		pregnantT: $mc.pregnantT,
 		due: setup.dueDate($mc),
@@ -1312,8 +1312,8 @@
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
-		oskinColor: $mc.skinColor,
-		skinColor: $mc.skinColor,
+		oskinColor: $mc.oskinColor,
+		skinColor: $mc.oskinColor,
 		oeyeColor: $mc.oeyeColor,
 		eyeColor: $mc.oeyeColor,
 		eyeCount: 2,
@@ -1363,34 +1363,31 @@
 		image: "Curses/doubletrouble.png",
 		imageIcon: "",
 		curses: $playerCurses,
-        mindSex: $mc.mindSex,
+		mindSex: $mc.mindSex,
 		osex: $mc.osex,
-		obreasts: $mc.obreast,
+		obreasts: $mc.obreasts,
 		breastsLabel: "flat",
 		openis: $mc.openis,
 		ogender: $mc.ogender,
 		genderVoice: 0,
 		fit: $mc.fit,
 		oheight: $mc.oheight,
-		/*hairColor: $mc.hairColor,
-		skinColor: $mc.skinColor,*/
 		age: $mc.age,
 		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
 		style: "border: 2px solid rgb(1,0,0);",
 		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
 		fear: $fear,
-
 		sex: "",
-		ohair: $mc.hairColor,
-		hair: $mc.hairColor,
+		ohair: $mc.ohair,
+		hair: $mc.ohair,
 		penis: $mc.openis,
 		penisCor: $mc.openis,
 		doublePenis: false,
 		vagina: 0,
 		gender: $mc.ogender,
 		switch: false,
-		breasts: $mc.obreast,
-		breastsCor: $mc.obreast,
+		breasts: $mc.obreasts,
+		breastsCor: $mc.obreasts,
 		lactation: 0,
 		pregnantT: $mc.pregnantT,
 		due: setup.dueDate($mc),
@@ -1398,8 +1395,8 @@
 		modheight: 0,
 		bodyHair: 1,
 		skinType: "",
-		oskinColor: $mc.skinColor,
-		skinColor: $mc.skinColor,
+		oskinColor: $mc.oskinColor,
+		skinColor: $mc.oskinColor,
 		oeyeColor: $mc.oeyeColor,
 		eyeColor: $mc.oeyeColor,
 		eyeCount: 2,
@@ -1983,7 +1980,7 @@
 	<<set $mc.openis = $PulseBloomStorage.openis>>
 	<<set $mc.ogender = $PulseBloomStorage.ogender>>
 	<<set $mc.oheight = $PulseBloomStorage.oheight>>
-	<<set $mc.age = $PulseBloomStorage.age>>
+	<<set $mc.age = Math.max($PulseBloomStorage.age, 18)>> /* Prevent instant bad end. */
 	<<set $mc.ohair = $PulseBloomStorage.ohair>>
 	<<set $mc.oskinColor = $PulseBloomStorage.oskinColor>>
 	<<set $mc.oeyeColor = $PulseBloomStorage.oeyeColor>>
