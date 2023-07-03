@@ -82,6 +82,11 @@
 		/* Update the subject's apparent age. */
 		<<set _handle.appAge = _eventAge / _aYear>>
 
+		/* Apply settings override (if any). */
+		<<if settings.appAgeControl > 3 && _handle.appAge < settings.appAgeControl>>
+			<<set _handle.appAge = settings.appAgeControl>>
+		<</if>>
+
 		/* Also set the subject's real age depending on the elapsed time. */
 		<<set _handle.realAge = (_handle.age * _aYear + _newTime) / _aYear>>
 
