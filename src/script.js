@@ -7,7 +7,7 @@ Object.defineProperties(Number.prototype, {
 
 Config.history.maxStates = 20;
 
-Config.saves.version = 1;
+Config.saves.version = 2;
 
 function backwardCompat(vars, version) {
 	if (!version || version < 1) {
@@ -15,6 +15,13 @@ function backwardCompat(vars, version) {
 		vars.mc = { ...vars.app, ...vars.mc };
 		// Remove the $app object.
 		delete vars.app;
+	}
+	if (!version || version < 2) {
+		// Ensure oimageIcon exists (although it might be wrong).
+		for (const companion of ['Maru', 'Lily', 'Khemia', 'Cherry', 'Cloud', 'Saeko', 'Twin', 'AI']) {
+			const companionVar = vars[`companion${companion}`];
+			companionVar.oimageIcon ??= companionVar.imageIcon;
+		}
 	}
 
 	// Prevent instant bad end from improperly set age.
