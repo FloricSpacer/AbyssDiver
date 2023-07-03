@@ -2956,6 +2956,19 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 [[Conclude your conversation|Party overview][$WettingSolution=3]]
 
 
+
+:: Bandit Conversations [nobr]
+<<if $BanditConvo0 == 0 && $companionBandit.affec>-5 >>
+	<<set _numConvos += 1>>[[Take of her gag and talk to the Bandit|Bandit Convo0][$BanditConvo0=true]]<br>
+<</if>>
+
+:: Bandit Convo0
+
+placeholder xxx
+
+[[Conclude your conversation|Party overview]]
+
+
 :: Twin Conversations [nobr]
 <<if $TwinConvo1==false && $companionTwin.affec>6  >>
 	<<set _numConvos += 1>>[[Chat with your Twin|Twin Convo1][$TwinConvo1=true]]<br>
@@ -3873,6 +3886,10 @@ Minutes trickle by, only for you to suddenly sense your heartbeat accelerating, 
 	<<if _companionName != $companionTwin.name && $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 		<<set $companionTwin.affec -= Math.ceil(_affectionPenalty/2)>>
 		<<say $companionTwin>> Although I understand why you did it, I don't know if I would've done the same. <</say>><br>
+	<</if>>
+	<<if _companionName != "Bandit" && $hiredCompanions.some(e => e.name === "Bandit")>>
+		<<set $companionBandit.affec -= Math.ceil(_affectionPenalty/2)>>
+		<<say $companionBandit>> Hmpf! <</say>><br>
 	<</if>>
 	<<if _companionName != $companionGolem.name && $hiredCompanions.some(e => e.name === $companionGolem.name)>>
 		<<say $companionGolem>> ... <</say>><br>

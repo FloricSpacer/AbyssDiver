@@ -1073,35 +1073,158 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <</for>>
 <<include "Curse Randomizer">>
 
-:: Layer1 Threat1 [layer1]
+:: Layer1 Threat1 [layer1 nobr]
 
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
-How are you going to deal with the bandits encircling you?
+How are you going to deal with the bandits encircling you?<br><br>
 
-<<if $items[14].count> 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
-	Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.
-	[[Let Khemia and his sword deal with these jokers|Layer1 Hub]]
+<<if setup.haveCuttingTool && $hiredCompanions.some(e => e.name === "Khemia")>>
+	Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.<br>
+	[[Let Khemia and his sword deal with these jokers|Layer1 Bandits Won]]<br><br>
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 2>>
-	These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.
-	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]
+	These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.<br>
+	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br><br>
 <</if>>
 <<if $slingshot == 1>>
-	Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.
-	[[Scare them off with the Brave Vector|Layer1 Hub]]
+	Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.<br>
+	[[Scare them off with the Brave Vector|Layer1 Hub]]<br><br>
 <</if>>
 <<if $BionicArm>>
-	With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.
-	[[Wield Glory's Grasp to command the situation|Layer1 Hub]]
+	With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
+	[[Wield Glory's Grasp to command the situation|Layer1 Bandits Won]]<br><br>
 <</if>>
-Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?
-[[Hand over some of the Relics you've collected|Relic Surrender][$surrVal to 0 ]]
+<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.name === "Khemia")) && $mc.subdom<1>>
+	Your not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
+	[[Brawl it out with them|Layer1 Bandits Fight]]<br><br>
+<</if>>
+Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?<br>
+[[Hand over some of the Relics you've collected|Relic Surrender][$surrVal to 0 ]]<br><br>
+<br>
+Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.<br>
+[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub]]<br>
 
+:: Layer1 Bandits Fight [layer1 nobr]
 
-Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.
-[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub]]
+<<set _relicBonus = 0>>
+<<set _curseBonus = 0>>
+<<set _companionBonus = 0>>
+<<set _equipmentBonus = 0>>
 
+<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
+	Holding the Lightning Rook seems to slow the world down for you, evading your opponents and landing meaningful blows is much easier when you have so much time to react.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $joyousSword>>
+	The sword you made from the Joyous Sunder slices through any resistance as if it were nothing more than air, giving you a great advantage in melee fights.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $DaedalusEquip>>
+	Having wings on your back allows you to stay out of reach of the bandits. Except for the ones that have ranged weapons, of course, but you can certainly dodge those, right?<br>
+	<<set _relicBonus += 7>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
+	The combination of the Toral Wave and Empath Coil allows you to electrocute the bandits easily, it's very useful as long as you get a chance to use it on them.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+
+<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+	Your claw-like nails help you somewhat if you get into hand-to-hand combat.<br>
+	<<set _curseBonus += 2>>
+<</if>>
+
+<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	Maru seems scared, but he is still willing to do what he can in the fight.<br>
+	<<set _companionBonus += 2 * (1 + $companionMaru.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Lily")>>
+	Lily puffs her chest, lets out something of a battle cry, and charges headfirst towards the leader! She is certainly giving her a run for her money!<br>
+	<<set _companionBonus += 8 * (1 + $companionLily.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+	Khemia assumes a fighting stance, disarming and knocking out bandits that come near him. 
+	<<set _companionBonus += 15 * (1 + $companionKhemia.HandicapThreat / 10)>>
+	<br>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
+	<<set _companionBonus += 1 * (1 + $companionCherry.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+	Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
+	<<set _companionBonus += 10 * (1 + $companionCloud.HandicapThreat / 10)>>
+	<br>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+	Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
+	<<set _companionBonus += 5 * (1 + $companionSaeko.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === "Golem")>>
+	Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
+	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
+<</if>>
+<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+	<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
+	<<if _twinBonus > 7>>
+		Your twin fights seems to be fighting 2 bandits at the same time, and winning! 
+	<<elseif _twinBonus > 5>>
+		Much like yourself, your twin is not the most experienced fighter. But the fact that they are able to keep atleast a bandit busy is already helping you out.
+	<<elseif _twinBonus > 0>>
+		You're not the fighting type, so neither is your twin. The antics of your twin seems to be drawing some attention away from you, which is helpful, but other than that it's not very effective.
+	<<else>>
+		Previously it was only you who was so inept when handling threats, but now it's both you and your twin...
+	<</if>>
+	<<set _companionBonus += _twinBonus>>
+	<br>
+<</if>>
+
+<<if setup.haveSword>>
+	You're glad you brought along a sword to defend yourself.<br>
+	<<set _equipmentBonus += 7>>
+<</if>>
+
+<<set _bandit_threshold = random(20,30)-100>>
+<<set _temp =  (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10).toRounded(1)>>
+<<if _temp > _bandit_threshold >>
+	[[The fight seems to have been decided|Layer1 Bandits Won]]
+<<else>>
+	[[The fight seems to have been decided|Layer1 Bandits Lost]]
+<</if>>
+
+:: Layer1 Bandits Won [layer1]
+The bandits efforts to overpower you prove to be in vein. You manage to knock them all out, only the bandit leader is trying to still get up.
+
+<<say $Banditleader>>Damn, what happend? You're not an easy target at all...<</say>>
+With that she also collapses from excertion and injuries.
+
+[[Continue on your journey|Layer1 Hub]]
+
+<<if setup.haveRope>>
+	<<link "Capture one of the bandits and bring them allong" "Layer1 Hub">>
+		<<set $hiredCompanions.push($companionBandit)>>
+	<</link>>
+<</if>>
+
+:: Layer1 Bandits Lost [layer1]
+You try to hold your own but <<if $hiredCompanions.length>0>> before long your entire party is whipped out and you're the only on left standing<<else>>the entire group proves to much to handle for you by yourself<</if>>.
+As you lock eyes with the bandit leader to anticipate her next move you get hit on the back of your head with some heavy item from one of the other bandits again. You fall to your knees.
+
+<<say $Banditleader>> I was only going to collect a modest fee for crossing this bridge, but now I think I'm going to pick you clean of everthing valuable<</say>>
+Defiantly you spit some blood from your mouth at her feet.
+
+<<say $Banditleader>>Tsk, annoying untill the last moment. Night Night<</say>>
+You hardly register what happens next, but it feels like your face hits a brick wall and soon afterwards everything goes black.
+
+<<nobr>>
+	<<for _i=0; _i<$ownedRelics.length; _i+=0>>
+		<<set $soldRelics.push($ownedRelics[_i])>>
+		<<set $ownedRelics.deleteAt(_i)>>
+	<</for>>
+	/*<<set $ownedRelics=[]>>*/
+<</nobr>>
+When you wake up you find that all of your relics are gone. Damn those bandits!
+[[Continue on your journey|Layer1 Hub]]
 
 :: Relic Surrender [layer1]
 <<CarryAdjust>>\
