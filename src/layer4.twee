@@ -773,9 +773,13 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 	You do not have enough dubloons for an offering.
 <<else>>
 	<<for _i, _curse range $playerCurses>>
-		<<capture _i>>
-			[[_curse.name|Layer4 Steady2b][$temp = _i]]<br>
-		<</capture>>
+		<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' &&
+			!$hiredCompanions.every(companion => companion === $companionGolem || companion.curses.some(curse => curse.name == _curse.name))
+		>>
+			<<capture _i>>
+				[[_curse.name|Layer4 Steady2b][$temp = _i]]<br>
+			<</capture>>
+		<</if>>
 	<</for>>
 <</if>>
 <</nobr>>
