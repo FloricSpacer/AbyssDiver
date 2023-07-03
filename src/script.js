@@ -455,6 +455,10 @@ Object.defineProperties(setup, {
 	haveCuttingTool: {
 		get: () => checkAvailability(['Sword'], ['Giddy Reaper', 'Sharing Shears', 'Sunbeam'], ['cut']),
 	},
+	// Check whether the player specifically has a sword.
+	haveSword: {
+		get: () => checkAvailability(['Sword'], ['Sunbeam'], ['joyousSword']),
+	},
 	// Check whether the player has scuba gear or an equivalent.
 	haveScubaGear: {
 		get: () => checkAvailability(['Scuba Gear'], ['Pneuma Wisp'], ['scuba']),
