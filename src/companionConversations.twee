@@ -2963,6 +2963,9 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 <</if>>
 
 :: Bandit Convo0
+<<set $companionBanit.image = "Surface/bandit_released.png">>
+<<set $companionBanit.imageIcon = "Icons/BanditIcon_released.png">>
+<<set $companionBandit.carry = 25>>
 
 placeholder xxx
 
@@ -3665,10 +3668,46 @@ With a mutual understanding, you and your twin join forces once more, ready to t
 
 :: Pulse Bloom Forced
 <<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
-Silently, you approach _companion.name,  moving stealthily to catch them off guard. You aim to coax <<if _companion.sex=="male">>him<<else>>her<</if>> into a subdued state and wrestle <<if _companion.sex=="male">>him<<else>>her<</if>> into submission.
-<<set _appFitCor = $playerCurses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>
-<<set _companionFitCor = _companion.curses.some(e => e.name === "Weakling") ? 0 : _companion.fit>>
-<<if $mc.HandicapThreat + _appFitCor > _companion.HandicapThreat + _companionFitCor>>
+<<if _companion.name== "Bandit" && !$BanditConvo0>>Your eyes go over your captive as she is struggling helplessly against the ropes.<<else>>Silently, you approach _companion.name,  moving stealthily to catch them off guard. You aim to coax <<if _companion.sex=="male">>him<<else>>her<</if>> into a subdued state and wrestle <<if _companion.sex=="male">>him<<else>>her<</if>> into submission.<</if>>
+<<set _appFitCor = $playerCurses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>\
+<<set _companionFitCor = _companion.curses.some(e => e.name === "Weakling") ? 0 : _companion.fit>>\
+<<if _companion.name== "Bandit" && !$BanditConvo0>>\
+The bound bandit is helpless to resist you!
+
+<<say _companion>>Hmpf!<</say>>
+You ignore the soft, trembling pleas echoing in the cold air, your eyes locked on the task at hand. The Pulse Bloom, vibrant and robust, rests within your grip, ready to perform its unusual magic. An uncanny silence punctuates your forceful extraction of the life fluid, the bloom absorbing it greedily, a vampire of the plant kingdom.
+<<link "Use the Pulse Bloom" "Pulse Bloom Transformation" >>
+		<<set _companion.affec -= 6 - $hsswear>>
+		<<set $PulseBloomStorage.osex = $mc.osex>>
+		<<set $PulseBloomStorage.obreasts = $mc.obreasts>>
+		<<set $PulseBloomStorage.openis = $mc.openis>>
+		<<set $PulseBloomStorage.ogender = $mc.ogender>>
+		<<set $PulseBloomStorage.oheight = $mc.oheight>>
+		<<set $PulseBloomStorage.age = $mc.age>>
+		<<set $PulseBloomStorage.ohair = $mc.ohair>>
+		<<set $PulseBloomStorage.oskinColor = $mc.oskinColor>>
+		<<set $PulseBloomStorage.oeyeColor = $mc.oeyeColor>>
+		<<set $PulseBloomStorage.penisCor = $mc.penisCor>>
+		<<set $PulseBloomStorage.breastsCor = $mc.breastsCor>>
+		<<set $PulseBloomStorage.vagina = $mc.vagina>>
+		<<set $PulseBloomStorage.heightCor = $mc.heightCor>>
+		<<set $PulseBloomStorage.fit = _companionFitCor - _appFitCor>>
+
+		<<set $mc.osex = _companion.osex>>
+		<<set $mc.obreasts = _companion.obreasts>>
+		<<set $mc.openis = _companion.openis>>
+		<<set $mc.ogender = _companion.ogender>>
+		<<set $mc.oheight = _companion.oheight>>
+		<<set $mc.age = Math.max(_companion.age, 18)>> /* Prevent instant bad end. */
+		<<set $mc.ohair = _companion.ohair>>
+		<<set $mc.oskinColor = _companion.oskinColor>>
+		<<set $mc.oeyeColor = _companion.oeyeColor>>
+		<<set $mc.desc += _companion.appDesc>>
+		<<set $mc.fit += $PulseBloomStorage.fit>>
+		<<set $PulseBloomDate = $time>>
+		<<CarryAdjust>>
+	<</link>>
+<<elseif $mc.HandicapThreat + _appFitCor > _companion.HandicapThreat + _companionFitCor >>
 <<say _companion>>What are you..? Please don't...<</say>>
 You ignore the soft, trembling pleas echoing in the cold air, your eyes locked on the task at hand. The Pulse Bloom, vibrant and robust, rests within your grip, ready to perform its unusual magic. An uncanny silence punctuates your forceful extraction of the life fluid, the bloom absorbing it greedily, a vampire of the plant kingdom.
 <<link "Use the Pulse Bloom" "Pulse Bloom Transformation" >>
@@ -3718,7 +3757,23 @@ They dismiss your stuttered apology with a dismissive wave of their hand.
 <</if>>
 
 :: Pulse Bloom Asked
-<<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
+<<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>\
+<<if _companion.name== "Bandit" && !$BanditConvo0>>
+
+<<say $mc>>  Can I ask you something.<</say>>
+<<say $companionBandit>>Hmpf!<</say>>
+<<say $mc>> Here, let me help you with this.<</say>><<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>
+You remove the makeshift gag of the bandit.
+
+<<say $mc>> I want to copy your appearance, but in order to do that I need to extract two liters of blood with this relic.<</say>>
+<<say $companionBandit>>Fuck you!<</say>>
+<<say $mc>> Okay, so I guess this is comming back on.<</say>>
+You gag of the bandit once again.<<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">>
+
+<<say $companionBandit>>Hmpf!<</say>>
+<<link 'Return to your adventure' $hubReturn>><</link>>
+
+<<else>>
 <<say $mc>> Can I ask you a favor<</say>>
 You broach the subject, trying to measure the reaction of your companion.
 
@@ -3775,7 +3830,7 @@ You produce the unusual flower, the crimson hue glimmering in the light.
 
 	<<link 'Return to your adventure' $hubReturn>><</link>>
 <</if>>
-
+<</if>>
 :: Pulse Bloom Transformation[nobr]
 You tenderly clutch the Pulse Bloom, drawing it closer to your face, as you take a deep breath, inhaling its crimson vapors. Your nostrils flare, savoring the intoxicatingly sweet and pungent scent. Yet, oddly, nothing seems to occur immediately. Exhaling, you proceed to draw in more of these ruby-hued emissions, until the Pulse Bloom has no more to offer. You stand there in quiet anticipation, but nothing appears to be taking place.<br>
 Minutes trickle by, only for you to suddenly sense your heartbeat accelerating, each pulse resonating through your veins, making your blood buzz. You're seized by an alarming dizziness, and your body flushes with a heat that is almost too much to bear. Disoriented, you stagger, attempting to regain your balance when you feel the transformation seeping into you like ink in water.<br><br>
