@@ -1076,7 +1076,7 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 :: Layer1 Threat1 [layer1 nobr]
 
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
-
+<br><br>
 How are you going to deal with the bandits encircling you?<br><br>
 
 <<if setup.haveCuttingTool && $hiredCompanions.some(e => e.name === "Khemia")>>
@@ -1095,7 +1095,7 @@ How are you going to deal with the bandits encircling you?<br><br>
 	With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
 	[[Wield Glory's Grasp to command the situation|Layer1 Bandits Won]]<br><br>
 <</if>>
-<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.name === "Khemia")) && $mc.subdom<1 && 0>>
+<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.name === "Khemia")) && $mc.subdom<1>>
 	Your not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
 	[[Brawl it out with them|Layer1 Bandits Fight]]<br><br>
 <</if>>
@@ -1164,6 +1164,19 @@ Use the following option only if you have specifically considered your inventory
 	Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
 	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
 <</if>>
+<<if $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+	<<if $BanditConvo0>>
+		Your captured bandit turned loyal companion shows her true colors... by actually helping you fight off her former gangmembers!<br><br>
+		 
+		<<say $Banditleader>>tsk, you worthless piece of shit. I never liked you, you know<</say>><br>
+
+		<<say $companionBandit>>Trust me when I say the feeling is mutual, you greedy selfish pig<</say>><br>
+		<<set _companionBonus += 10 >>
+	<<else>>
+		Your captive does whatever she can while bound to impede you in the fight and help her former gangmembers.<br>
+		<<set _companionBonus -= 5 >>
+	<</if>>
+<</if>>
 <<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
 	<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
 	<<if _twinBonus > 7>>
@@ -1184,7 +1197,7 @@ Use the following option only if you have specifically considered your inventory
 	<<set _equipmentBonus += 7>>
 <</if>>
 
-<<set _bandit_threshold = random(20,30)-100>>
+<<set _bandit_threshold = random(20,30)>>
 <<set _temp =  (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10).toRounded(1)>>
 <<if _temp > _bandit_threshold >>
 	[[The fight seems to have been decided|Layer1 Bandits Won]]
@@ -1200,7 +1213,7 @@ With that she also collapses from excertion and injuries.
 
 [[Continue on your journey|Layer1 Hub]]
 
-<<if setup.haveRope>>
+<<if setup.haveRope && !$hiredCompanions.some(c=>c.name===$companionBandit.name)>>
 	<<link "Capture one of the bandits and bring them allong" "Bandit Captured">>
 		<<set $hiredCompanions.push($companionBandit)>>
 		<<set $companionBandit.image = "Companions/Bandit.jpg">>
@@ -1225,7 +1238,41 @@ Finally, at the moment she hates you and will do everything in her power to esca
 :: Layer1 Bandits Lost [layer1]
 You try to hold your own but <<if $hiredCompanions.length>0>> before long your entire party is whipped out and you're the only on left standing<<else>>the entire group proves to much to handle for you by yourself<</if>>.
 As you lock eyes with the bandit leader to anticipate her next move you get hit on the back of your head with some heavy item from one of the other bandits again. You fall to your knees.
+<<if $hiredCompanions.some(c=>c.name===$companionBandit.name)>>\
+	<<if $BanditConvo0>>\
 
+		<<say $Banditleader>>What a pathic bunch.<</say>>
+		They leader ignores you and walks right past you to the bandit who joined your party.
+
+		<<say $Banditleader>>You were always a worthless piece of shit, you know? No wonder you got captured. I guess you fit in with these losers.<</say>>
+		Hardly able to talk with her beat up and swollen face your ally sits panting.
+
+		<<say $companionBandit>>Screw you, Kamilla<</say>>
+		The leader's face contorts and she walks over. She stops for a second before your ally as she kicks her in the gut.
+
+		<<say $companionBandit>>Ahh!<</say>>
+		<<say $Banditleader>>As for you...<</say>>
+		As she says that she walks back over to you.
+	<<else>>
+		<<say $Banditleader>>Somebody release Vesper now that this seems about over.<</say>>
+		Some of the bandits rush over to help release your captive. <<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>
+
+		<<say $companionBandit>>Finally! You're going to pay for what you did, you fucker!<</say>>
+		As she says that she starts walking over to you.
+
+		<<say $mc>>Listen, I just want to say that...<</say>>
+		Before you're finnished she kicks you in the side and you double over from the pain.
+
+		<<say $companionBandit>>This piece of shit is all yours, Boss<</say>>
+		<<nobr>>
+		<<for _i=0; _i<$hiredCompanions.length; _i++>>
+			<<if $hiredCompanions[_i].name == $companionBandit.name>>
+				<<set $hiredCompanions.deleteAt(_i)>>
+			<</if>>
+		<</for>>
+		<</nobr>>
+	<</if>>\
+<</if>>\
 <<say $Banditleader>> I was only going to collect a modest fee for crossing this bridge, but now I think I'm going to pick you clean of everthing valuable<</say>>
 Defiantly you spit some blood from your mouth at her feet.
 
@@ -1239,13 +1286,45 @@ You hardly register what happens next, but it feels like your face hits a brick 
 	<</for>>
 	/*<<set $ownedRelics=[]>>*/
 <</nobr>>
-When you wake up you find that all of your relics are gone. Damn those bandits!
+When you wake up you find that all of your relics are gone<<if $hiredCompanions.some(c=>c.name===$companionBandit.name) && !$BanditConvo0>> along with the bandit you captured<</if>>. Damn those bandits!
 [[Continue on your journey|Layer1 Hub]]
 
 :: Relic Surrender [layer1]
 <<CarryAdjust>>\
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
+<<if $hiredCompanions.some(c=>c.name===$companionBandit.name)>>\
+	<<say $Banditleader>>How about you start by returning us what is rightfully ours? Vesper over there.<</say>>
+	She points to the bandit you captured and brought along.
+	
+	<<if $BanditConvo0>>\
+		<<say $companionBandit>>I'm not... uh... I've been thinking...<</say>>
+		As she says that she avoids all eyecontact with her former leader.
+
+		<<say $Banditleader>>Get your ass over here, Vesper!<</say>>
+		Vesper jolts up and runs over to the bandit commander.
+
+		<<say $companionBandit>>Of course, Boss!<</say>>
+	<<else>>\
+		<<say $companionBandit>>Hmpf!<</say>>
+		You hesitate for a second but then start releasing your captive. As soon as she is free she kicks you in the shins and spits on your chest.
+		<<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>\
+
+		<<say $companionBandit>>You piece of shit, you think you can keep me as some trophy or something?<</say>>
+
+		<<say $Banditleader>>Get your ass over here, Vesper!<</say>>
+		Vesper eagerly hurries over to the bandit commander.
+
+		<<say $companionBandit>>Of course, Boss!<</say>>
+	<</if>>\
+	<<nobr>>
+	<<for _i=0; _i<$hiredCompanions.length; _i++>>
+		<<if $hiredCompanions[_i].name == $companionBandit.name>>
+			<<set $hiredCompanions.deleteAt(_i)>>
+		<</if>>
+	<</for>>
+	<</nobr>>
+<</if>>\
 Nervously, you begin going trough your bag, attempting to decide which Relics to surrender and which to keep.
 
 <<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye>>
