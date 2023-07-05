@@ -49,6 +49,9 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2 === true){
 		return "DollEnd";
 	}
+	if (StoryVar.boundBanditEnding) {
+		return "Bound Bandit Ending";
+	}
 	if (StoryVar.mc.age < 18) {
 		return "AgeLimit";
 	}
