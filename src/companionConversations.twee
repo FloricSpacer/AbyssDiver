@@ -2967,7 +2967,7 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 You approach the bandit who is still bound after all this time. She looks at you pissed of, although not with the killer stare she used to had.<br><br>
 <<say $mc>>How about we take this of.<</say>><br>
 <<say $companionBandit>>Hmpf!<</say>><br>
-You untie the makeshift gag. <<set $companionBanit.imageIcon = "Icons/BanditIcon_released.jpg">><br><br>
+You untie the makeshift gag. <<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">><br><br>
 <<say $companionBandit>>What is it? I'm I getting an extra meal or something?<</say>><br>
 <<say $mc>>Nope, I just wanted to talk today.<</say>><br>
 <<say $companionBandit>>I've got nothing to say to you.<</say>><br>
@@ -3001,7 +3001,7 @@ The bandit pauses for a second and looks lost in thought.<br><br>
 <<say $mc>>On second thought, you still seem angry and you're still a flight risk. We better leave those on a little longer.<</say>><br>
 <<say $companionBandit>>Are you fucking kidding me?! Was this all some weird tease? Do you get off on this shit?<</say>><br>
 <<say $mc>>Yeah, I'm sorry we are going to need this as well again.<</say>><br>
-You tie the gag around the head of the thrashing bandit again. <<set $companionBanit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+You tie the gag around the head of the thrashing bandit again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
 <<say $companionBandit>>Hmpfh!<</say>><br>
 <<say $mc>>Much better, let's continue!<</say>><br>
 
@@ -3024,15 +3024,12 @@ And with that Vesper continues to walk away.
 [[Conclude your conversation|Party overview]]
 <<set $BanditConvo0_rejoin = $time+5>>
 <<set $companionBandit.name = "Vesper">>
-<<set $companionBanit.image = "Surface/bandit_released.jpg">>
+<<set $companionBandit.image = "Surface/bandit_released.jpg">>
 <<set $companionBandit.subdom -=3>>
 <<set $companionBandit.carry = 25>>
 <<set $BanditConvo0 = true>>
-<<for _i=0; _i<$hiredCompanions.length; _i++>>
-	<<if $hiredCompanions[_i].name == $companionBandit.name>>
-		<<set $hiredCompanions.deleteAt(_i)>>
-	<</if>>
-<</for>>
+<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
 
 
 :: Bandit Convo0 Fled Permanent
@@ -3044,13 +3041,10 @@ You start untying here right away. She stands up slowly and stretches her limbs.
 As she walks by you she gives you a shove with her shoulders.
 
 <<say $companionBandit>>Later loser.<</say>><br>
-And with that se starts walking off.
+And with that she starts walking off.
 [[Conclude your conversation|Party overview]]
-<<for _i=0; _i<$hiredCompanions.length; _i++>>
-	<<if $hiredCompanions[_i].name == $companionBandit.name>>
-		<<set $hiredCompanions.deleteAt(_i)>>
-	<</if>>
-<</for>>
+<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
 
 :: Bandit Joins
 You suddenly see figure in the distance. As she walks closer it looks like the bandit you released a few days ago, Vesper.<br><br>
@@ -4094,13 +4088,7 @@ Minutes trickle by, only for you to suddenly sense your heartbeat accelerating, 
 			<<else>>
 				<<if $hiredCompanions.length < 2 >>
 					The moment you start flying up you see the bandit hopping in a different direction. She's probably not going to look for you.
-					<<nobr>>
-					<<for _i=0; _i<$hiredCompanions.length; _i++>>
-						<<if $hiredCompanions[_i].name == $companionBandit.name>>
-							<<set $hiredCompanions.deleteAt(_i)>>
-						<</if>>
-					<</for>>
-					<</nobr>>
+					<<set $hiredCompanions.deleteAt(_i)>>
 				<<else>>
 					The moment you start flying up you see the bandit trying to make a break for it. However, she is soon reeled in and dragged along again.
 				<</if>>

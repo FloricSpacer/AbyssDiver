@@ -713,19 +713,13 @@ One can only imagine what she'll do if she manages to break free.
 <<if $ConvoHandicapLarge || $ConvoHandicapSmall>>
 	@@.alert2; Because of your handicaps you are unable to have an effective conversation with your companions.@@ <br>
 	<<for _companion range $hiredCompanions>>
-		<<set _name = _companion !== $companionTwin ? _companion.name : 'Twin'>>
-		<<if _companion.name == $companionBandit.name>>
-			<<set _name = "Bandit">>
-		<</if>>
+		<<set _name = _companion === $companionTwin ? 'Twin' : _companion === $companionBandit ? 'Bandit' : _companion.name>>
 		<<print `[[${_companion.name}|${_name} Overview]]: $companion${_name}.affec`>>
 		<br>
 	<</for>>
 <<else>>
 	<<for _companion range $hiredCompanions>>
-		<<set _name = _companion !== $companionTwin ? _companion.name : 'Twin'>>
-		<<if _companion.name == $companionBandit.name>>
-			<<set _name = "Bandit">>
-		<</if>>
+		<<set _name = _companion === $companionTwin ? 'Twin' : _companion === $companionBandit ? 'Bandit' : _companion.name>>
 		<<print `[[${_companion.name}|${_name} Overview]]: $companion${_name}.affec`>>
 		<<if _companion !== $companionGolem>>
 			<br><<include `_name + ' Conversations'`>>
