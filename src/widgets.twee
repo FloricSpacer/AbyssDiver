@@ -625,13 +625,17 @@
 	<<if _pulseBloomInUse>>
 		<<print `<<set _handle = $companion${$PulseBloomUse}>>`>>
 		<<if _handle === $companionBandit>>
-			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">>
+			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">>/* Note: Exception for the bandit who has 2 icons */
 		<<else>>
 			<<set $mc.imageIcon = _handle.imageIcon>> /* Note: Use the *current* image icon. */
 		<</if>>
 	<<elseif $mc.switch>>
 		<<print `<<set _handle = $companion${$companionSwitched}>>`>>
-		<<set $mc.imageIcon = _handle.oimageIcon>> /* Note: Use the *original* image icon. */
+		<<if _handle === $companionBandit>>
+			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">>/* Note: Exception for the bandit who has 2 icons */
+		<<else>>
+			<<set $mc.imageIcon = _handle.oimageIcon>> /* Note: Use the *original* image icon. */
+		<</if>>
 	<<elseif $mc.appGender <= 5>>
 		<<set $mc.imageIcon = 'Player Icons/playerM.png'>>
 	<<else>>
