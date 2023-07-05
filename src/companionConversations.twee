@@ -2958,18 +2958,112 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 
 
 :: Bandit Conversations [nobr]
-<<if $BanditConvo0 == 0 && $companionBandit.affec>-5 >>
-	<<set _numConvos += 1>>[[Take of her gag and talk to the Bandit|Bandit Convo0][$BanditConvo0=true]]<br>
+<<if $BanditConvo0 == 0 && $companionBandit.affec>-3 >>
+	<<set _numConvos += 1>>[[Take of her gag and talk to the Bandit|Bandit Convo0]]<br>
 <</if>>
 
-:: Bandit Convo0
-<<set $companionBanit.image = "Surface/bandit_released.jpg">>
-<<set $companionBanit.imageIcon = "Icons/BanditIcon_released.jpg">>
-<<set $companionBandit.carry = 25>>
+:: Bandit Convo0 [nobr]
+<<set _temp = Math.random(-3,3)+$companionBandit.affec>>
+You approach the bandit who is still bound after all this time. She looks at you pissed of, although not with the killer stare she used to had.<br><br>
+<<say $mc>>How about we take this of.<</say>><br>
+<<say $companionBandit>>Hmpf!<</say>><br>
+You untie the makeshift gag. <<set $companionBanit.imageIcon = "Icons/BanditIcon_released.jpg">><br><br>
+<<say $companionBandit>>What is it? I'm I getting an extra meal or something?<</say>><br>
+<<say $mc>>Nope, I just wanted to talk today.<</say>><br>
+<<say $companionBandit>>I've got nothing to say to you.<</say>><br>
+<<say $mc>>Well that's to bad, because I wanted to talk about untying you. But maybe we can start with a name.<</say>><br>
+<<say $companionBandit>>Eat shit, is this some kind of mind trick you're trying with me?<</say>><br>
+<<say $mc>>No it's just that you haven't tried to escape for a while, and I don't get the sense that you want to kill me anymore.<</say>><br>
+<<say $companionBandit>>That I don't want to beat you up doesn't mean I'm suddenly your best friend or something.<</say>><br>
+<<say $mc>>Ah, so you really don't want to beat me up anymore.<</say>><br>
+The bandit is speachless for a second after you call her out.<br><br>
 
-placeholder xxx
+<<say $companionBandit>>I've had a though life and you're not the worst person I met.<</say>><br>
+<<say $companionBandit>>Eventhough you did fucking kidnap me.<</say>><br>
+<<say $mc>>Well, you did try to kick my ass and steal my stuff. And since then we fed you and took you on this adventure with us. We could have ditched you somewhere.<</say>><br>
+The bandit pauses for a second and looks lost in thought.<br><br>
+<<say $companionBandit>>I guess...<</say>><br>
+<<say $mc>>How do you feel if I untie you then?<</say>><br>
+<<say $companionBandit>>How do I feel? You act as if I like being tied up or something, cut me loose already!<</say>><br>
+<<if _temp < 0>>
+	<<ConversationChoices
+		[[On second thought, you still seem angry and you're still a flight risk. We better leave those on a little longer|Bandit Convo0 Denied]]
+		[[Don't worry, I'll cut you lose immediately|Bandit Convo0 Fled Permanent]]
+	>>
+<<else>>
+	<<ConversationChoices
+		[[On second thought, you still seem angry and you're still a flight risk. We better leave those on a little longer|Bandit Convo0 Denied]]
+		[[Don't worry, I'll cut you lose immediately|Bandit Convo0 Fled Temporary]]
+	>>
+<</if>>
+:: Bandit Convo0 Denied
+<<set $companionBandit.affec-=(3-$hsswear)>>\
+<<say $mc>>On second thought, you still seem angry and you're still a flight risk. We better leave those on a little longer.<</say>><br>
+<<say $companionBandit>>Are you fucking kidding me?! Was this all some weird tease? Do you get off on this shit?<</say>><br>
+<<say $mc>>Yeah, I'm sorry we are going to need this as well again.<</say>><br>
+You tie the gag around the head of the thrashing bandit again. <<set $companionBanit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+<<say $companionBandit>>Hmpfh!<</say>><br>
+<<say $mc>>Much better, let's continue!<</say>><br>
 
 [[Conclude your conversation|Party overview]]
+
+:: Bandit Convo0 Fled Temporary [nobr]
+<<say $mc>>Don't worry, I'll cut you lose immediately.<</say>><br>
+You start untying here right away. She stands up slowly and stretches her limbs.
+<<say $companionBandit>>I'm free to go wherever I want now?<</say>><br>
+<<say $mc>>Yes, although I was hoping you wanted to stick with us. We could use your help.<</say>><br>
+<<say $companionBandit>>No chance.<</say>><br>
+As she walks by you she gives you a shove with her shoulders.
+
+<<say $companionBandit>>Later loser.<</say>><br>
+And with that se starts walking off. However, after a few paces she stops and murmers something.
+<<say $mc>>Huh? I can't hear you.<</say>><br>
+<<say $companionBandit>>I said, it's Vesper! What a moron.<</say>><br>
+And with that Vesper continues to walk away.
+
+[[Conclude your conversation|Party overview]]
+<<set $BanditConvo0_rejoin = $time+5>>
+<<set $companionBandit.name = "Vesper">>
+<<set $companionBanit.image = "Surface/bandit_released.jpg">>
+<<set $companionBandit.subdom -=3>>
+<<set $companionBandit.carry = 25>>
+<<set $BanditConvo0 = true>>
+<<for _i=0; _i<$hiredCompanions.length; _i++>>
+	<<if $hiredCompanions[_i].name == $companionBandit.name>>
+		<<set $hiredCompanions.deleteAt(_i)>>
+	<</if>>
+<</for>>
+
+
+:: Bandit Convo0 Fled Permanent
+<<say $mc>>Don't worry, I'll cut you lose immediately.<</say>><br>
+You start untying here right away. She stands up slowly and stretches her limbs.
+<<say $companionBandit>>I'm free to go wherever I want now?<</say>><br>
+<<say $mc>>Yes, although I was hoping you wanted to stick with us. We could use your help.<</say>><br>
+<<say $companionBandit>>No chance.<</say>><br>
+As she walks by you she gives you a shove with her shoulders.
+
+<<say $companionBandit>>Later loser.<</say>><br>
+And with that se starts walking off.
+[[Conclude your conversation|Party overview]]
+<<for _i=0; _i<$hiredCompanions.length; _i++>>
+	<<if $hiredCompanions[_i].name == $companionBandit.name>>
+		<<set $hiredCompanions.deleteAt(_i)>>
+	<</if>>
+<</for>>
+
+:: Bandit Joins
+You suddenly see figure in the distance. As she walks closer it looks like the bandit you released a few days ago, Vesper.<br><br>
+<<say $mc>>Hey you returned to us! Did you change your mind about joining us?<</say>><br>
+<<say $companionBandit>>I don't know, I guess I'm back or something.<</say>><br>
+She looks a bit uncharacteristicly bashful as she says that.<br><br>
+
+<<say $mc>>By the way, how did you find us? We moved quite some distance. Where you following us or something?<</say>><br>
+Vesper turns red.<br><br>
+<<say $companionBandit>>I just bumped into you again, just luck!<</say>><br>
+<<say $mc>>Hmm, that seems pretty weird. I thought...<</say>><br>
+<<say $companionBandit>>Just shut up, okay? Do you want my help or not?<</say>><br>
+<<say $mc>>Of course! Welcome in the team Vesper!<</say>><br>
 
 
 :: Twin Conversations [nobr]
