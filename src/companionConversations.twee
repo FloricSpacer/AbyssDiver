@@ -3990,6 +3990,27 @@ Minutes trickle by, only for you to suddenly sense your heartbeat accelerating, 
 			You see anger building behind her typically composed face, but she seems to catch herself before she has an outburst. <br><br>
 			<<set $hiredCompanions.deleteAt(_i)>>
 			<<set $DesertedCompanions.push($companionSaeko)>>
+		<<elseif $hiredCompanions[_i].name == $companionBandit.name && !$DaedalusCompanions.some(e => e.name === $companionBandit.name)>>
+			<<if $BanditConvo0>>
+				<<set $companionBandit.affec -= (_affectionPenalty-$hsswear)>>
+				<<say $companionBandit>> Huh? You're going to try and flee from me now? <</say>><br>
+				She looks mostly hurt actually, but starts walking in your direction anyway.<br><br>
+				<<set $hiredCompanions.deleteAt(_i)>>
+				<<set $DesertedCompanions.push($companionBandit)>>
+			<<else>>
+				<<if $hiredCompanions.length < 2 >>
+					The moment you start flying up you see the bandit hopping in a different direction. She's probably not going to look for you.
+					<<nobr>>
+					<<for _i=0; _i<$hiredCompanions.length; _i++>>
+						<<if $hiredCompanions[_i].name == $companionBandit.name>>
+							<<set $hiredCompanions.deleteAt(_i)>>
+						<</if>>
+					<</for>>
+					<</nobr>>
+				<<else>>
+					The moment you start flying up you see the bandit trying to make a break for it. However, she is soon reeled in and dragged along again.
+				<</if>>
+			<</if>>
 		<<elseif $hiredCompanions[_i].name == $companionTwin.name && !$DaedalusCompanions.some(e => e.name === $companionTwin.name)>>
 			<<set $companionTwin.affec -= _affectionPenalty>>
 			You notice a rock flying through the air, right past your head. When you look for the source of the errant stone, you spot your twin standing there, clearly the perpetrator of the attack.<br><br>
