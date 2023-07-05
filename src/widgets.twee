@@ -25,6 +25,9 @@
 >>
 	<<for _handle range $hiredCompanions.concat($mc)>>
 		<<set _name = _handle !== $companionTwin ? _handle.name : 'Twin'>>
+		<<if _handle.name == $companionBandit.name>>
+			<<set _name = "Bandit">>
+		<</if>>
 		<<set _logName = _handle === $mc ? 'Log' : `Log${_name}`>>
 
 		/* ------------------------------------ Compute age (real and apparent) ------------------------------------- */
@@ -624,7 +627,7 @@
 
 	<<if _pulseBloomInUse>>
 		<<print `<<set _handle = $companion${$PulseBloomUse}>>`>>
-		<<if _handle.name== "Bandit">>
+		<<if _handle.name== $companionBandit.name>>
 			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">> /* Note: Use the *current* image icon. */
 		<<else>>
 			<<set $mc.imageIcon = _handle.imageIcon>> /* Note: Use the *current* image icon. */
@@ -906,6 +909,8 @@
 	<<else>>
 		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _name = "Twin">>
+		<<elseif $hiredCompanions[_i].name == $companionBandit.name>>
+			<<set _name = "Bandit">>
 		<<else>>
 			<<set _name = $hiredCompanions[_i].name>>
 		<</if>>
@@ -987,6 +992,8 @@
 	<<else>>
 		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _name = "Twin">>
+		<<elseif $hiredCompanions[_i].name == $companionBandit.name>>
+			<<set _name = "Bandit">>
 		<<else>>
 			<<set _name = $hiredCompanions[_i].name>>
 		<</if>>
@@ -1893,7 +1900,7 @@
 	/* Show symptoms alert once every 3 times, unless it's early in the pregnancy and mc was expecting to start her cycle. */
 	<<if $random == 0 || (!$menFirstCycle && setup.daysConsideredPregnant($mc) < 45)>>
 		<<if 28 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 35 && !$menFirstCycle>>
-			@@.alert1; Your heart races as you realize your cycle should have started by now. Perhaps it's simply late, no need to panic just yet, right? The uncertainty lingers.<br><br>
+		@@.alert1; You expected your cycle to have started by now, but it hasn't. Still, there's no need to worry – periods can be late, right?<br><br>
 		<<elseif 35 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 45 && !$menFirstCycle>>
 			@@.alert1; Anxiety creeps in as your period remains conspicuously absent. This lateness is unusual for you, and the thought of pregnancy begins to haunt your mind.<br><br>
 		<<elseif 45 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 90>>
@@ -1964,7 +1971,9 @@
 			<<set $DesertedCompanions.deleteAt(_i)>>
 		<</for>>
 	<</if>>
-
+	<<if $BanditConvo0_rejoin < $time>>
+		<<include "Bandit Joins">>
+	<</if>>
 	<<if $companionsDepartT<$time-7>>
 		<<for _i = 0; _i < $DesertedCompanions.length; _i++>>
 			<<if $DesertedCompanions[_i].name == 'Maru'>>
@@ -1985,7 +1994,7 @@
 			<<if $DesertedCompanions[_i].name == 'Saeko'>>
 				<<set $companionSaeko.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == 'Bandit'>>
+			<<if $DesertedCompanions[_i].name == $companionBandit.name>>
 				<<set $companionSaeko.affec -= 1>>
 			<</if>>
 			<<if $DesertedCompanions[_i].name == $companionTwin.name>>
@@ -2121,6 +2130,8 @@
 	<<else>>
 		<<if $hiredCompanions[_i].name == $companionTwin.name >>
 			<<set _name = "Twin">>
+		<<elseif $hiredCompanions[_i].name == $companionBandit.name>>
+			<<set _name = "Bandit">>
 		<<else>>
 			<<set _name = $hiredCompanions[_i].name>>
 		<</if>>
@@ -2333,6 +2344,8 @@
 	<<set _temp = random(0, _elligbleCompanions.length-1)>>
 	<<if _elligbleCompanions[_temp].name==$companionTwin.name>>
 		<<set _handle = $companionTwin>>
+	<<elseif _elligbleCompanions[_temp].name == $companionBandit.name>>
+			<<set _name = "Bandit">>
 	<<else>>
 		<<print "<<set _handle = $companion" + _elligbleCompanions[_temp].name + " >>">>
 	<</if>>
@@ -2559,5 +2572,7 @@
 	<<set $companionCloud.affec += _args[1] + $hsswear>>
 <<elseif _args[0] == "Saeko">>
 	<<set $companionSaeko.affec += _args[1] + $hsswear>>
+<<elseif _args[0] ==  $companionBandit.name>>
+	<<set $companionBandit.affec += _args[1] + $hsswear>>
 <</if>>
 <</widget>>
