@@ -1942,6 +1942,11 @@ How many dubloons would you like to pay back?
 		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
 			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
 		<</if>>
+		<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.curses.some(e => e.name === "Minish-ish")>>
+			<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
+		<<elseif $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+			<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
+		<</if>>
 		/* Using energy rations halves the travel time, so we need at most half the time worth. */
 		<<set _daysOfEnergyRations = Math.min(_inputTime / 2, $items[24].count / _consumptionPerDay)>>
 		/* Every day with an energy ration counts for twice as much. */
@@ -2022,7 +2027,11 @@ How many dubloons would you like to pay back?
 <<if $playerCurses.some(e => e.name === "Minish-ish")>>
 	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
-
+<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.curses.some(e => e.name === "Minish-ish")>>
+	<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
+<<elseif $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+	<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
+<</if>>
 /* Set time weight to 1/2 if the Aeonglass with Endless Time relic is active. */
 <<set _timeWeight = $EndlessAeonglass ? 1/2 : 1>>
 
