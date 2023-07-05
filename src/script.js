@@ -163,13 +163,15 @@ $(document).on(':passagestart', () => {
 
 	/* ---- Companion object identity ---- */
 
-	// Get name of twin so we don't have to look it up each time.
+	// Get names of twin and bandit so we don't have to look them up each time.
 	const twinName = vars.companionTwin.name;
+	const banditName = vars.companionBandit.name;
 
 	// Get all the companion array variables.
 	const companionArrays = [
 		'companions',
 		'hiredCompanions',
+		'DaedalusCompanions',
 		'DesertedCompanions',
 		'SemenDemonVec',
 	].map(varName => vars[varName]);
@@ -177,7 +179,7 @@ $(document).on(':passagestart', () => {
 	// Restore object identity between elements of companion arrays and $companionName variables.
 	for (const companions of companionArrays) {
 		for (const [i, companion] of companions.entries()) {
-			const name = companion.name !== twinName ? companion.name : "Twin";
+			const name = companion.name == twinName ? 'Twin' : companion.name == banditName ? 'Bandit' : companion.name;
 			const companionVar = vars[`companion${name}`];
 			if (companionVar) {
 				companions[i] = companionVar;
@@ -216,7 +218,7 @@ $(document).on(':passagestart', () => {
 	}
 
 	// Restore object identity between curses in curse logs and $curseN variables.
-	const logNameSuffixes = ['', ...vars.companions.map(companion => companion.name)];
+	const logNameSuffixes = ['', ...vars.companions.map(companion => companion.name), 'Bandit'];
 	for (const type of ['Height', 'Gender', 'Age', 'Libido', 'Handicap']) {
 		for (const suffix of logNameSuffixes) {
 			const events = vars[`${type}Log${suffix}`];
