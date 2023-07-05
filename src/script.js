@@ -120,6 +120,10 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.lastBirthTwin = StoryVar.time;
 		return "Labor Scene Companion";
 	}
+	if (StoryVar.BanditConvo0_rejoin < StoryVar.time) {
+		return "Bandit Joins";
+	}
+
 	if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 3 && StoryVar.mc.age > 17) {
 		return "AgeEnd";
 	}
