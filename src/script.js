@@ -106,6 +106,13 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.lastBirthSaeko = StoryVar.time;
 		return "Labor Scene Companion";
 	}
+	if (setup.daysUntilDue('Bandit') === 0) {
+		StoryVar.companionLabor = StoryVar.companionBandit.name;
+		StoryVar.BanditConvoPreg = false;
+		setup.setNotPregnant('Bandit');
+		StoryVar.lastBirthBandit = StoryVar.time;
+		return "Labor Scene Companion";
+	}
 	if (setup.daysUntilDue('Twin') === 0) {
 		StoryVar.companionLabor = StoryVar.companionTwin.name;
 		StoryVar.TwinConvoPreg = false;
