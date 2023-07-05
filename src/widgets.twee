@@ -24,10 +24,7 @@
 	_wombEvents
 >>
 	<<for _handle range $hiredCompanions.concat($mc)>>
-		<<set _name = _handle !== $companionTwin ? _handle.name : 'Twin'>>
-		<<if _handle.name == $companionBandit.name>>
-			<<set _name = "Bandit">>
-		<</if>>
+		<<set _name = _handle === $companionTwin ? 'Twin' : _handle === $companionBandit ? 'Bandit' : _handle.name>>
 		<<set _logName = _handle === $mc ? 'Log' : `Log${_name}`>>
 
 		/* ------------------------------------ Compute age (real and apparent) ------------------------------------- */
@@ -627,8 +624,8 @@
 
 	<<if _pulseBloomInUse>>
 		<<print `<<set _handle = $companion${$PulseBloomUse}>>`>>
-		<<if _handle.name== $companionBandit.name>>
-			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">> /* Note: Use the *current* image icon. */
+		<<if _handle === $companionBandit>>
+			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">>
 		<<else>>
 			<<set $mc.imageIcon = _handle.imageIcon>> /* Note: Use the *current* image icon. */
 		<</if>>
