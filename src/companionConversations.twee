@@ -2961,6 +2961,9 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 <<if $BanditConvo0 == 0 && $companionBandit.affec>-3 >>
 	<<set _numConvos += 1>>[[Take of her gag and talk to the Bandit|Bandit Convo0]]<br>
 <</if>>
+<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionBandit.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionBandit.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === $companionBandit.name)>>
+	<<set _numConvos += 1>><<print "[["+$companionBandit.name+" can maybe help you with your appetite for sexual fluids|Bandit Semen Demon]]<br>">>
+<</if>>
 
 :: Bandit Convo0 [nobr]
 <<set _temp = Math.random(-3,3)+$companionBandit.affec>>
@@ -2968,7 +2971,7 @@ You approach the bandit who is still bound after all this time. She looks at you
 <<say $mc>>How about we take this of.<</say>><br>
 <<say $companionBandit>>Hmpf!<</say>><br>
 You untie the makeshift gag. <<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">><br><br>
-<<say $companionBandit>>What is it? I'm I getting an extra meal or something?<</say>><br>
+<<say $companionBandit>>What is it? Am I getting an extra meal or something?<</say>><br>
 <<say $mc>>Nope, I just wanted to talk today.<</say>><br>
 <<say $companionBandit>>I've got nothing to say to you.<</say>><br>
 <<say $mc>>Well that's to bad, because I wanted to talk about untying you. But maybe we can start with a name.<</say>><br>
@@ -2996,6 +2999,7 @@ The bandit pauses for a second and looks lost in thought.<br><br>
 		[[Don't worry, I'll cut you lose immediately|Bandit Convo0 Fled Temporary]]
 	>>
 <</if>>
+
 :: Bandit Convo0 Denied
 <<set $companionBandit.affec-=(3-$hsswear)>>\
 <<say $mc>>On second thought, you still seem angry and you're still a flight risk. We better leave those on a little longer.<</say>><br>
@@ -3009,17 +3013,17 @@ You tie the gag around the head of the thrashing bandit again. <<set $companionB
 
 :: Bandit Convo0 Fled Temporary [nobr]
 <<say $mc>>Don't worry, I'll cut you lose immediately.<</say>><br>
-You start untying here right away. She stands up slowly and stretches her limbs.
+You start untying here right away. She stands up slowly and stretches her limbs.<br><br>
 <<say $companionBandit>>I'm free to go wherever I want now?<</say>><br>
 <<say $mc>>Yes, although I was hoping you wanted to stick with us. We could use your help.<</say>><br>
 <<say $companionBandit>>No chance.<</say>><br>
-As she walks by you she gives you a shove with her shoulders.
+As she walks by you she gives you a shove with her shoulders.<br><br>
 
 <<say $companionBandit>>Later loser.<</say>><br>
-And with that se starts walking off. However, after a few paces she stops and murmers something.
+And with that se starts walking off. However, after a few paces she stops and murmers something.<br><br>
 <<say $mc>>Huh? I can't hear you.<</say>><br>
 <<say $companionBandit>>I said, it's Vesper! What a moron.<</say>><br>
-And with that Vesper continues to walk away.
+And with that Vesper continues to walk away.<br><br>
 
 [[Conclude your conversation|Party overview]]
 <<set $BanditConvo0_rejoin = $time+5>>
@@ -3030,23 +3034,27 @@ And with that Vesper continues to walk away.
 <<set $BanditConvo0 = true>>
 <<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
 <<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+<<set _i = $SemenDemonVec.findIndex(companion => companion === $companionBandit)>>
+<<if _i != -1>><<set $SemenDemonVec.deleteAt(_i)>><</if>>
 
-
-:: Bandit Convo0 Fled Permanent
+:: Bandit Convo0 Fled Permanent [nobr]
 <<say $mc>>Don't worry, I'll cut you lose immediately.<</say>><br>
-You start untying here right away. She stands up slowly and stretches her limbs.
+You start untying here right away. She stands up slowly and stretches her limbs.<br><br>
 <<say $companionBandit>>I'm free to go wherever I want now?<</say>><br>
 <<say $mc>>Yes, although I was hoping you wanted to stick with us. We could use your help.<</say>><br>
 <<say $companionBandit>>No chance.<</say>><br>
-As she walks by you she gives you a shove with her shoulders.
+As she walks by you she gives you a shove with her shoulders.<br><br>
 
 <<say $companionBandit>>Later loser.<</say>><br>
-And with that she starts walking off.
+And with that she starts walking off.<br><br>
 [[Conclude your conversation|Party overview]]
 <<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
 <<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+<<set _i = $SemenDemonVec.findIndex(companion => companion === $companionBandit)>>
+<<if _i != -1>><<set $SemenDemonVec.deleteAt(_i)>><</if>>
 
-:: Bandit Joins
+
+:: Bandit Joins [nobr]
 You suddenly see figure in the distance. As she walks closer it looks like the bandit you released a few days ago, Vesper.<br><br>
 <<say $mc>>Hey you returned to us! Did you change your mind about joining us?<</say>><br>
 <<say $companionBandit>>I don't know, I guess I'm back or something.<</say>><br>
@@ -3058,6 +3066,77 @@ Vesper turns red.<br><br>
 <<say $mc>>Hmm, that seems pretty weird. I thought...<</say>><br>
 <<say $companionBandit>>Just shut up, okay? Do you want my help or not?<</say>><br>
 <<say $mc>>Of course! Welcome in the team Vesper!<</say>><br>
+
+
+:: Bandit Semen Demon [nobr]
+<<if $BanditConvo0>>
+	<<say $mc>>Vesper, I really need your help with something...<</say>><br>
+	<<say $companionBandit>>Ugh, this better not be some hassle.<</say>><br>
+	<<say $mc>>Ever since I attracted the Semen Demon curse I need specific fluids or else I starve.<</say>><br>
+	<<if $BanditSemenForced==true>>
+		<<say $companionBandit>>How dare you.<</say>><br>
+		Her face hardens. <br><br>
+		<<say $companionBandit>>I may have warmed up a little to you, but that's despite those daily visits. I sure as hell haven't forgotten those.<</say>><br><br>
+		<<say $mc>>But I really can't help it!<</say>><br>
+		<<say $companionBandit>>And that's the only reason I haven't buried you alive somewhere.<</say>><br>
+		<<say $mc>>So, you will help me?<</say>><br>
+		<<say $companionBandit>>Tsk, you can starve for all I care.<</say>><br>
+
+	<<else>>
+		<<if $companionMaru.penisCor > 0 && $companionMaru.vagina >0  >>
+			<<say $mc>>Any kind of sexual fluid you could provide will do, but I need it daily.<</say>><br>
+		<<elseif $companionMaru.penisCor > 0 >>
+			<<say $mc>>More specifically, I need your semen and I need it daily.<</say>><br>
+		<<else>>
+			<<say $mc>>More specifically, I need your vaginal fluids and I need it daily.<</say>><br>
+		<</if>>
+		She seems stunned for a moment and then starts laughing.<br><br>
+		<<say $companionBandit>>Ow my, this is rich. I knew the Abyss could be fucked up, but this is seriously fucked up. Every day you say?<</say>><br>
+		<<say $mc>>Yes, please help me out here.<</say>><br>
+		<<if $companionBandit.subdom>0 || ($companionBandit.affec>10 &&  $mc.appGender>8)>>
+			<<say $companionBandit>>How can I say no, to you basically offering yourself to service me every day?<</say>><br>
+			She grins and looks at you while she starts undressing.<br><br>
+			<<say $companionBandit>>Open wide!<</say>><br>
+			<<set _handle = $companionBandit>>
+			<<include "SemenDemonGeneral">>
+
+		<<elseif $companionBandit.affec>10 || ($companionBandit.affec>0 && $mc.appGender>8)>>
+			<<say $companionBandit>>So it's a hassle in the end.<</say>><br>
+			She scratches the back of her head. You look at her pleadingly.<br><br>
+			<<say $companionBandit>>Shit, whatever. I have done worse for worse reasons. Let's just get this over with.<</say>><br>
+			<<set _handle = $companionBandit>>
+			<<include "SemenDemonGeneral">>
+
+		<<else>>
+			<<say $companionBandit>>What the hell? First you keep me tied up for god knows how long. But when you release me you ask me this?<</say>><br>
+			<<say $mc>>I...<</say>><br>
+			<<say $companionBandit>>You have issues, you know that?<</say>><br>
+			<<say $mc>>Sorry I asked.<</say>><br>
+		<</if>>
+	<</if>>
+<<else>>
+	<<set $companionBandit.affec-=(5-$hsswear)>>
+	<<set $BanditSemenForced=true>>
+	<<set $SemenDemonVec.push($companionBandit)>>
+
+	<<say $mc>>Look, I kind of need your help with something...<</say>><br>
+	<<say $mc>>I need fluids...<</say>><br>
+	<<if $companionMaru.penisCor > 0 && $companionMaru.vagina >0  >>
+		<<say $mc>>Any kind of sexual fluid you could provide will do, but I need it daily.<</say>><br>
+	<<elseif $companionMaru.penisCor > 0 >>
+		<<say $mc>>More specifically, I need your semen and I need it daily.<</say>><br>
+	<<else>>
+		<<say $mc>>More specifically, I need your vaginal fluids and I need it daily.<</say>><br>
+	<</if>>
+	<<say $mc>>And it's not really a request as much as a notification considering your situation.<</say>><br>
+	<<say $companionBandit>>Hmpf!!<</say>><br>
+	She begins thrashing wildly upon hearing that. However, she is powerless against you as you undo her of her clothes. She tries to kick you but with her legs bound it's useless. With her crotch now exposed you put your mouth to work and earn your meal.<br><br>
+	<<say $companionBandit>>Hmmm!<</say>><br>
+	After a few minutes you got what you needed and you get up again. She doesn't want to look at you but she seems very pissed.<br><br>
+	<<say $mc>>Thanks, see you tomorrow.<</say>><br>
+<</if>>
+
+[[End your conversation|Party overview]]
 
 
 :: Twin Conversations [nobr]
