@@ -123,6 +123,9 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.BanditConvo0_rejoin < StoryVar.time) {
 		return "Bandit Joins";
 	}
+	if (StoryVar.companionBandit.affec < -8 && StoryVar.escapeT < StoryVar.time) {
+		return "Bandit Escape";
+	}
 
 	if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 3 && StoryVar.mc.age > 17) {
 		return "AgeEnd";

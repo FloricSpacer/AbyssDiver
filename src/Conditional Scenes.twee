@@ -82,6 +82,115 @@ Vesper turns red.<br><br>
 
 <<link "With a new member in your party you continue your journey again!" $interruptReturn>><<set $BanditConvo0_rejoin=9999>><<set $hiredCompanions.push($companionBandit)>><</link>>
 
+:: Bandit Escape [nobr]
+<<set _temp = $ownedRelics.length>>
+<<set $escapeT = $time + 7 + random(0,7)>>
+<<if $hiredCompanions.length > 1>>
+	<<set _j=0>>
+	<<for _i=0; _j<1; _i++>>
+		<<if $hiredCompanions[_i].name != $companionBandit.name>>
+			<<set _j=1>>
+			<<set _companion = $hiredCompanions[_i]>>
+		<</if>>
+	<</for>>
+<</if>>
+<<if $companionBandit.affec<-20>>
+	<<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>
+	You wake up in the middle of the night by a heavy weight on you chest. As you open your eyes, the bandit sits on top of you completely free of her restraints.<br><br>
+	<<say $companionBandit>>I'm leaving tonight, but not before I fuck you up you piece of shit.<</say>><br>
+	She tries to hit your face, but you manage to roll her off you. Soon you both start brawling with eachother.<br><br>
+	<<if $mc.HandicapThreat + $mc.fit > $companionBandit.HandicapThreat + $companionBandit.fit>>
+		It's clear she is not some amateur when it comes to fights, but soon you manage to subdue her with out to much issues.<br><br>
+		<<say $companionBandit>>You piece of shit, next time I'll end you in your sleep!<</say>><br>
+		<<say $mc>>Okay, so I guess this is going back on<</say>><br>
+		You tie her up again and put a gag in her mouth. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf! Hmmrp!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<else>>
+		She fights hard and she doesn't fight fair. As you keep your guard up she spits in between in your arms in your face. The moment you drop your arms to whipe the spit away, she hits you right on the nose and you reel back.<br><br>
+		She unleashes one combination after another and soon your on the ground with here on top of you, simply pounding away.<br><br>
+		<<say $companionBandit>>You thought you were better than me, huh? Could treat me like dirt? You fucked up big time and now you're going to pay.<</say>><br>
+		You feel streams of blood dripping down your already swollen face.<br><br>
+		<<set $status.duration += 3>><<set $status.penalty += 1>>
+		<<if $hiredCompanions.length >1 >>
+			<<set _j=0>>
+			<<for _i=0; _j<1; _i++>>
+				<<if $hiredCompanions[_i].name != $companionBandit.name>>
+					<<set _j=1>>
+					<<set _companion = $hiredCompanions[_i]>>
+				<</if>>
+			<</for>>
+			Attracted by all the noise _companion.name comes rushing in and jumps on the bandit. Together you manage to subdue her put the restrains back on.<br><br>
+			<<say $mc>>Thanks, I don't know how this happend, but I'm sure she is not getting out tonight anymore. I'm going back to bad<</say>><br>
+			<<say _companion>>Are you sure you're okay? It seems she did quite the number on you.<</say>><br>
+			<<say $mc>>She did, it hurts like hell, but I'll survive. Thanks!<</say>><br>
+			<<link "You both say your goodnights before getting back to bed." $interruptReturn>><</link>>
+		<<else>>
+			Finally she lets up and gets back to her feet. <br><br>
+			<<say $companionBandit>>I'm done here. I'm bringing this as my damages pay.<</say>><br>
+			She points at the $ownedRelics[_temp-1].name.<br><br>
+			<<say $companionBandit>>let's hope I never have to see that mug of yours again<</say>><br>
+			<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+			<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>><<set $ownedRelics.deleteAt(_temp-1)>>
+			<<link "You scramble back to bed in the hope you can forget about this whole ordeal." $interruptReturn>><</link>>
+		<</if>>
+	<</if>>
+
+<<elseif $companionBandit.affec<-14>>
+	You slowly wake up as you hear some noise near you. You see the bandit without her restraints, going through your stuff. <br><br>
+	<<set _maxMove=-10>>
+	<<for _handle range $hiredCompanions.concat($mc)>>
+		<<if _handle !== $companionBandit>>
+			<<set _maxMove = Math.max(_handle.HandicapMovement,_maxMove)>>
+		<</if>>
+	<</for>>
+	<<if $mc.HandicapThreat + $mc.fit +Math.random(-2,2) > $companionBandit.HandicapThreat + $companionBandit.fit +Math.random(-2,2) >>
+		You sneak up on the bandit while she is distracted. When your in position you jump her.<br><br>
+		<<say $companionBandit>>Let go of me you asshole!<</say>><br>
+		<<say $mc>>I'm sorry, no chance!<</say>><br>
+		Having the advantage on here you manage to tie her up again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<elseif _maxMove + $hiredCompanions.length - 1> $companionBandit.movement>>
+		Unfortunately, she notices in time to wrestle away and starts running while clutching the $ownedRelics[_temp-1].name. However, you <<if $hiredCompanions.length>1>>and the rest of your group<</if>> manage to catch her before she got away.<br><br>
+		<<say $mc>>I think you have created enough trouble for one night.<</say>><br>
+		You to tie her up again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<else>>
+		Unfortunately, she notices in time to wrestle away and starts running while clutching the $ownedRelics[_temp-1].name. She proves to be pretty quick and you <<if $hiredCompanions.length>1>>nor the rest of your group<</if>> manage to catch her before she gets away.<br><br>
+		<<say $mc>>Well, this sucks.<</say>><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>><<set $ownedRelics.deleteAt(_temp-1)>>
+		<<link "You scramble back to bed in the hope you can forget about this whole ordeal." $interruptReturn>><</link>>		
+	<</if>>
+
+<<elseif $companionBandit.affec<-8>>
+	You slowly wake up as you hear some noise near you. You see the bandit without her restraints, try to make a quite exit. You immediately give chase. <br><br>
+	<<set _maxMove=-10>>
+	<<for _handle range $hiredCompanions.concat($mc)>>
+		<<if _handle !== $companionBandit>>
+			<<set _maxMove = Math.max(_handle.HandicapMovement,_maxMove)>>
+		<</if>>
+	<</for>>
+	<<say $mc>>Come back here!<</say>><br>
+	She laughs while running.<br><br>
+	<<say $companionBandit>>No way, I'm getting out of here!<</say>><br>
+	<<if _maxMove + $hiredCompanions.length - 1> $companionBandit.movement>>
+		However, you<<if $hiredCompanions.length>1>> and the rest of your group<</if>> manage to catch her before she got away.<br><br>
+		<<say $mc>>I think you have created enough trouble for one night.<</say>><br>
+		You to tie her up again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<else>>
+		Unfortunately, she proves to be pretty quick and you<<if $hiredCompanions.length>1>> nor the rest of your group<</if>> don't manage to catch her before she gets away.<br><br>
+		<<say $mc>>Well, this sucks.<</say>><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+		<<link "You scramble back to bed in the hope you can forget about this whole ordeal." $interruptReturn>><</link>>		
+	<</if>>
+<</if>>
+
 :: Bound Bandit Ending
 /*xxx */
 You got dragged along back to the bandit hidout of the first layer. On the way over there your new captor was not very pleased that the body switch was permanent.
