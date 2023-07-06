@@ -359,9 +359,8 @@ libido: 2,
 subdom: 0
 }>>
 
-
 <<set $companionBandit = {
-name: "Bandit",
+name: "The bandit",
 cost: 0,
 carry: 0,
 affec: -20,
@@ -567,6 +566,8 @@ type: ""
 <<set $HandicapLogTwin = []>>
 
 <<set $BanditConvo0 = false>>
+<<set $BanditConvo0_rejoin = setup.never>>
+<<set $BanditSemenForced=false>>
 <<set $Bandit_LastT = setup.never>>
 <<set $lastBirthBandit = setup.never>>
 
@@ -589,7 +590,7 @@ type: ""
 !<<print $hiredCompanions[$temp].name>>
 [img[setup.ImagePath+$hiredCompanions[$temp].image]]
 
-<<if $hiredCompanions[$temp].name != $companionTwin.name>>
+<<if $hiredCompanions[$temp].name != $companionTwin.name && $hiredCompanions[$temp].name != $companionBandit.name>>
 	<<include `$hiredCompanions[$temp].name + " Introduction"`>>
 	<<nobr>>
 	<<if $hiredCompanions[$temp].name == "Cloud">>
@@ -606,7 +607,7 @@ type: ""
 	<</if>>
 	<</nobr>>
 	<<back>>
-<<else>>
+<<elseif  $hiredCompanions[$temp].name == $companionTwin.name >>
 	<<include "Twin Introduction">>
 	<<nobr>>
 	<<if $companionTwin.curses.length > 0>>
@@ -617,6 +618,20 @@ type: ""
 	<</if>>
 	<<if $companionSwitched == "Twin">>
 		$companionTwin.name is in your original body after your bodies were swapped by the Fate-crossing Star!<<if $curse111.variation2==same>>Not that it makes much of a difference... Fortunately for you, it just means you got some free corruption out of it.<</if>><br><br>
+	<</if>>
+	<</nobr>>
+	<<back>>
+<<else  $hiredCompanions[$temp].name == $companionBandit.name >>
+	<<include "Bandit Introduction">>
+	<<nobr>>
+	<<if $companionBandit.curses.length > 0>>
+		$companionBandit.name has the following Curses:<br><br>
+		<<for $i = 0; $i < $companionBandit.curses.length; $i++>>
+				<<print $companionBandit.curses[$i].name>><br>
+		<</for>><br>
+	<</if>>
+	<<if $companionSwitched == "Bandit">>
+		$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
 	<</if>>
 	<</nobr>>
 	<<back>>
@@ -699,13 +714,13 @@ One can only imagine what she'll do if she manages to break free.
 <<if $ConvoHandicapLarge || $ConvoHandicapSmall>>
 	@@.alert2; Because of your handicaps you are unable to have an effective conversation with your companions.@@ <br>
 	<<for _companion range $hiredCompanions>>
-		<<set _name = _companion !== $companionTwin ? _companion.name : 'Twin'>>
+		<<set _name = _companion === $companionTwin ? 'Twin' : _companion === $companionBandit ? 'Bandit' : _companion.name>>
 		<<print `[[${_companion.name}|${_name} Overview]]: $companion${_name}.affec`>>
 		<br>
 	<</for>>
 <<else>>
 	<<for _companion range $hiredCompanions>>
-		<<set _name = _companion !== $companionTwin ? _companion.name : 'Twin'>>
+		<<set _name = _companion === $companionTwin ? 'Twin' : _companion === $companionBandit ? 'Bandit' : _companion.name>>
 		<<print `[[${_companion.name}|${_name} Overview]]: $companion${_name}.affec`>>
 		<<if _companion !== $companionGolem>>
 			<br><<include `_name + ' Conversations'`>>
@@ -744,6 +759,8 @@ One can only imagine what she'll do if she manages to break free.
 		<<set $temp = _companion.name>>
 		<<if $temp==$companionTwin.name>>
 			<<print "[[_companion.name| Twin Overview]]: $companionTwin.affec">>
+		<<elseif $temp==$companionBandit.name>>
+			<<print "[[_companion.name| Bandit Overview]]: $companionBandit.affec">>
 		<<else>>
 			<<print "[[_companion.name|" + _companion.name + " Overview]]: $companion" + _companion.name + ".affec">>
 		<</if>>
@@ -755,6 +772,8 @@ One can only imagine what she'll do if she manages to break free.
 		<<if $temp==$companionTwin.name>>
 			<<print "[[_companion.name| Twin Overview]]: $companionTwin.affec">>
 			<br>
+		<<elseif $temp==$companionBandit.name>>
+			<<print "[[_companion.name| Bandit Overview]]: $companionBandit.affec">>
 		<<else>>
 			<<print "[[_companion.name|" + _companion.name + " Overview]]: $companion" + _companion.name + ".affec">>
 		<</if>>
@@ -1028,7 +1047,7 @@ Overall the world would probably see <<if _companion.sex=="male">>him<<else>>her
 <<if !$ConvoHandicapLarge>>
 	<<if $hiredCompanions.length > 0>>
 		<<set _temp1 = random(0,$hiredCompanions.length - 1)>>
-		<<if $hiredCompanions[_temp1].name != ($companionTwin.name || $companionGolem.name)>>
+		<<if $hiredCompanions[_temp1].name != $companionTwin.name && $hiredCompanions[_temp1].name != $companionGolem.name && $hiredCompanions[_temp1].name != $companionBandit.name>>
 			<<set _convoOptions = ["layer"]>>
 
 			<<set _string = "$" + $hiredCompanions[_temp1].name + "ConvoLac" >>
