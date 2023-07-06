@@ -123,7 +123,8 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.BanditConvo0_rejoin < StoryVar.time) {
 		return "Bandit Joins";
 	}
-	if (StoryVar.companionBandit.affec < -8 && StoryVar.escapeT < StoryVar.time) {
+	if (StoryVar.companionBandit.affec < -8 && StoryVar.escapeT < StoryVar.time && !StoryVar.companionBandit.swap) {
+		StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
 		return "Bandit Escape";
 	}
 
