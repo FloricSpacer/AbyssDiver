@@ -67,6 +67,197 @@ As quickly an violently as it started, the whole ordeal seems to be over just as
 
 <<link "You cast your eyes once more on the path ahead, it's time to get moving once again" $interruptReturn>><</link>>
 
+:: Bandit Joins [nobr]
+/*xxx */
+You suddenly see a figure in the distance. As she walks closer it looks like the bandit you released a few days ago, Vesper.<br><br>
+<<say $mc>>Hey you returned to us! Did you change your mind about joining us?<</say>><br>
+<<say $companionBandit>>I don't know, I guess I'm back or something.<</say>><br>
+She looks a bit uncharacteristicly bashful as she says that.<br><br>
+
+<<say $mc>>By the way, how did you find us? We moved quite some distance. Were you following us or something?<</say>><br>
+Vesper turns red.<br><br>
+<<say $companionBandit>>I just bumped into you again, just luck!<</say>><br>
+<<say $mc>>Hmm, that seems pretty weird. I thought...<</say>><br>
+<<say $companionBandit>>Just shut up, okay? Do you want my help or not?<</say>><br>
+<<say $mc>>Of course! Welcome in the team Vesper!<</say>><br>
+
+<<link "With a new member in your party you continue your journey again!" $interruptReturn>><<set $BanditConvo0_rejoin=9999>><<set $hiredCompanions.push($companionBandit)>><</link>>
+
+:: Bandit Escape [nobr noreturn]
+/*xxx */
+<<set _temp = $ownedRelics.length-1>>
+<<if $hiredCompanions.length > 1>>
+	<<set _j=0>>
+	<<for _i=0; _j<1; _i++>>
+		<<if $hiredCompanions[_i].name != $companionBandit.name>>
+			<<set _j=1>>
+			<<set _companion = $hiredCompanions[_i]>>
+		<</if>>
+	<</for>>
+<</if>>
+<<set _maxMove=-10>>
+<<for _handle range $hiredCompanions.concat($mc)>>
+	<<if _handle !== $companionBandit>>
+		<<set _maxMove = Math.max(_handle.HandicapMovement,_maxMove)>>
+	<</if>>
+<</for>>
+<<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>
+<<if $companionBandit.affec<-20>>
+	You wake up in the middle of the night by a heavy weight on you chest. As you open your eyes, the bandit sits on top of you completely free of her restraints.<br><br>
+	<<say $companionBandit>>I'm leaving tonight, but not before I fuck you up, you piece of shit.<</say>><br>
+	She tries to hit your face, but you manage to roll her off you. Soon you both start brawling with eachother.<br><br>
+	<<if $mc.HandicapThreat + $mc.fit + random(-1,1)> $companionBandit.HandicapThreat + $companionBandit.fit + + random(-1,1)>>
+		It's clear she is not some amateur when it comes to fights, but soon you manage to subdue her with out to much issues.<br><br>
+		<<say $companionBandit>>You piece of shit, next time I'll end you in your sleep!<</say>><br>
+		<<say $mc>>Okay, so I guess this is going back on<</say>><br>
+		You tie her up again and put a gag in her mouth. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf! Hmmrp!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<else>>
+		She fights hard and she doesn't fight fair. As you keep your guard up she spits in between in your arms in your face. The moment you drop your arms to whipe the spit away, she hits you right on the nose and you reel back.<br><br>
+		She unleashes one combination after another and soon you're on the ground with here on top of you, simply pounding away.<br><br>
+		<<say $companionBandit>>You thought you were better than me, huh? Could treat me like dirt? You fucked up big time and now you're going to pay.<</say>><br>
+		You feel streams of blood dripping down your already swollen face.<br><br>
+		<<set $status.duration += 1>><<set $status.penalty += 3>>
+		<<if $hiredCompanions.length >1 >>
+			Attracted by all the noise _companion.name comes rushing in and jumps on the bandit. Together you manage to subdue her put the restrains back on.<br><br>
+			<<say $mc>>Thanks, I don't know how this happend, but I'm sure she is not getting out tonight anymore. I'm going back to bad<</say>><br>
+			<<say _companion>>Are you sure you're okay? It seems she did quite the number on you.<</say>><br>
+			<<say $mc>>She did, it hurts like hell, but I'll survive. Thanks!<</say>><br>
+			<<link "You both say your goodnights before getting back to bed." $interruptReturn>><</link>>
+		<<else>>
+			Finally she lets up and gets back to her feet. <br><br>
+			<<say $companionBandit>>I'm done here. I'm bringing this as my damages pay.<</say>><br>
+			She puts her hand on the $ownedRelics[_temp].name near both of you.<br><br>
+			<<say $companionBandit>>Let's hope I never have to see that mug of yours again<</say>><br>
+			<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+			<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>><<set $ownedRelics.deleteAt(_temp)>>
+			<<link "You scramble back to bed in the hope you can forget about this whole ordeal." $interruptReturn>><</link>>
+		<</if>>
+	<</if>>
+
+<<elseif $companionBandit.affec<-14>>
+	You slowly wake up in the middle of the night as you hear some noise near you. You see the bandit without her restraints, going through your stuff. <br><br>
+	<<if $mc.HandicapThreat + $mc.fit + random(-2,2) > $companionBandit.HandicapThreat + $companionBandit.fit + random(-2,2) >>
+		You sneak up on the bandit while she is distracted. When your in position you jump her.<br><br>
+		<<say $companionBandit>>Let go of me you asshole!<</say>><br>
+		<<say $mc>>I'm sorry, no chance!<</say>><br>
+		Having the advantage on here you manage to tie her up again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<elseif _maxMove + $hiredCompanions.length - 1 + random(-1,1)> $companionBandit.HandicapMovement + random(-1,1)>>
+		<<say $companionBandit>>What the?!<</say>><br>
+		Unfortunately, she notices in time to wrestle away and starts running while clutching the $ownedRelics[_temp].name in her arms.<br><br>
+		<<say $companionBandit>>Later loser!<</say>><br>
+		<<say $mc>>Stop! Give that back!<</say>><br>
+		However, you <<if $hiredCompanions.length>1>>and the rest of your group<</if>> manage to catch her before she got away.<br><br>
+		<<say $mc>>I think you have created enough trouble for one night.<</say>><br>
+		You gag her and tie her up again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<else>>
+		<<say $companionBandit>>What the?!<</say>><br>
+		Unfortunately, she notices in time to wrestle away and starts running while clutching the $ownedRelics[_temp].name in her arms.<br><br> 
+		<<say $companionBandit>>Later loser!<</say>><br>
+		<<say $mc>>Stop! Give that back!<</say>><br>
+		She proves to be pretty quick and you <<if $hiredCompanions.length>1>>and the rest of your group<</if>>fail to catch her before she gets away.<br><br>
+		<<say $mc>>Well, this sucks.<</say>><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>><<set $ownedRelics.deleteAt(_temp)>>
+		<<link "You scramble back to bed in the hope you can forget about this whole ordeal." $interruptReturn>><</link>>		
+	<</if>>
+
+<<elseif $companionBandit.affec<-8>>
+	You slowly wake up in the middle of the night as you hear some noise near you. You see the bandit without her restraints, trying to make a quite exit. You immediately give chase. <br><br>
+	<<say $mc>>Come back here!<</say>><br>
+	She laughs while running.<br><br>
+	<<say $companionBandit>>No way, I'm getting out of here!<</say>><br>
+	<<if _maxMove + $hiredCompanions.length - 1 + random(-1,1)> $companionBandit.HandicapMovement + random(-1,1)>>
+		However, you<<if $hiredCompanions.length>1>> and the rest of your group<</if>> manage to catch her before she got away.<br><br>
+		<<say $mc>>I think you have created enough trouble for one night.<</say>><br>
+		You gag her and tie her up again. <<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">><br><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<link "Get a few hours more sleep before continuing." $interruptReturn>><</link>>
+	<<else>>
+		Unfortunately, she proves to be pretty quick and you<<if $hiredCompanions.length>1>> nor the rest of your group<</if>> don't manage to catch her before she gets away.<br><br>
+		<<say $mc>>Well, this sucks.<</say>><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+		<<link "You scramble back to bed in the hope you can forget about this whole ordeal." $interruptReturn>><</link>>		
+	<</if>>
+<</if>>
+
+:: Bandit Arrested[nobr]
+<<set $arrested=true>>
+As you walk around in outset town you soon feel a hand on your shoulder. When you turn around your arm gets twisted on your back.<br><br>
+<<say $mc>>Ouch, what the hell are you doing? Who are you?<</say>><br>
+<<say $police>>You are arrested on charges of multiple armed robberies in both Outset town and the villages of Arcadias Garden. You have the right to remain silent.<</say>><br>
+He snaps a pair of cuffs shut around your arms and then turns on his radio.<br><br>
+<<say $police>> I've got her, that tip was solid. Over<</say>><br>
+<<if $mc.inhuman > 2 || $mc.appAge < 16>>
+<<say $police>> Yes, the abyss has changed her a bit compared to our desription, but it's definitly her. Over.<</say>><br>
+<</if>>
+<<if $PulseBloomUse !== "">>
+<<say $police>> What? Copy that again, you got her as well? I'm pretty sure I've got her right here in front of my nose. Lets both bring them to the station. Over.<</say>><br>
+<</if>>
+<<say $mc>>Officer, you are clearly mistaken! This is a case of mixed up identities.<</say>><br>
+<<say $police>>Like I've never heard that one before. Now move!<</say>><br>
+<<if $hiredCompanions.length > 1>>
+	<<set _j=0>>
+	<<for _i=0; _j<1; _i++>>
+		<<if $hiredCompanions[_i].name != $companionBandit.name>>
+			<<set _j=1>>
+			<<set _companion = $hiredCompanions[_i]>>
+		<</if>>
+	<</for>>
+	Just as you're about to be hauled away _companion.name also rounds the corner.<br><br>
+	<<say _companion>>Huh, what's happening here?<</say>>
+	<<say $police>> Stay back <<if _companion.sex=="male">>sir<<else>>miss<</if>>. This is official police buisness. This lady is dangerous and comming with me.<</say>><br>
+	_companion.name looks puzzeled for a second but then can't surpress a small chuckle.<br>
+	<<say _companion>>I'm sorry officer. I think this is a case of mixed up identities<</say>>
+	You see some doubt creeping in the face of the officer. In the end everything is made clear on the station and you're free to go again.<br><br>
+	<<if $PulseBloomUse !== "">>
+		However, you can't avoid telling them that the other one they caught is in fact the real bandit. She has to remain at the station as she was officially arrested. <br><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+	<</if>>
+	[[Continue on into Outset town| Surface Hub]]
+<<else>>
+	You got hauled back into the station and set into an interrogation room.<br><br>
+	<<say $mc>>You really have to believe me! I'm not who you think you are!<</say>><br>
+	<<say $police>>Ugh, again? Look this offer is not going to be on the table forever... Tell us where the hide-out is and who the other members are.<</say>><br>
+	<<say $mc>>I already told you that I don't know!<</say>><br>
+	<<if $PulseBloomUse !== "">>
+		<<say $police>>Tsk.<</say>><br>
+		He picks up the phone that's on the interrogation table.<br><br>
+		<<say $police>>Any progress with the other one? No? Same story here.<</say>><br>
+		He turns back to you.<br><br>
+		<<say $police>>I guess we're going to be here for a while.<</say>><br>
+		In the end, the pulse bloom's transformative effects started to wear off. At this point they had to believe you. But you spend so much time on the station that you had to rush back to the Abyss to not go over the 24 hours limit.<br><br>
+		Your bandit companion however, was officially arrested and had to stay behind in the stations jail.<br><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+		[[Run into the Abyss again!| Layer1 Hub][$time+=1]]
+	<<else>>
+		Without companions to back up your story or real proof that you changed bodies the officers remain sceptical. In the end you feel so pressured that you agree to some guilty-plee deal. It turns out to be not as benificial as you thought though, and you remained in jail for a number of years.<br><br>
+
+		@@.layerTitle;GAME OVER@@
+	<</if>>
+<</if>>
+
+:: Bound Bandit Ending
+/*xxx */
+You got dragged along back to the bandit hidout of the first layer. On the way over there your new captor was not very pleased that the body switch was permanent.
+Soon, you arrived at the bandit hide-out. At first your captor was almost attacked by the rest of the gang in a bid to take revenge and free you. unfortunately for you it never came to that as you captor managed to convince the rest of both your true identities.
+
+Your life was basically over from there on. Initially you were kept in bounds, but the soon chained you to the wall in your captors room in the hide-out so you had a little bit of movement. Your captors frustration about not being able to get her body back from you stayed for a long time.
+She would say things that she had the perfect seductive body to con and rob travelers without them even noticing and that you ruined that. At some point the frustration made place for obsession and she would get more and more handsy with you. In the end she came to terms with her new body as in her mind she traded it for her freedom and a hot sex slave.
+
+Unfortunately for you, you have become the sex slave in this story, which made sure the rest of your life was less about adventuring and more about licking, slurping and getting filled every day.
+
+[img[setup.ImagePath+'hentai-rias-slave-girl-maiku-kuroi-NdoimT.jpg']]
+
+@@.layerTitle;GAME OVER@@
 
 :: AI switch end
 <<nobr>>

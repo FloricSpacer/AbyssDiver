@@ -49,6 +49,9 @@ Config.navigation.override = function (destPassage) {
 	if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2 === true){
 		return "DollEnd";
 	}
+	if (StoryVar.boundBanditEnding) {
+		return "Bound Bandit Ending";
+	}
 	if (StoryVar.mc.age < 18) {
 		return "AgeLimit";
 	}
@@ -103,6 +106,13 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.lastBirthSaeko = StoryVar.time;
 		return "Labor Scene Companion";
 	}
+	if (setup.daysUntilDue('Bandit') === 0) {
+		StoryVar.companionLabor = StoryVar.companionBandit.name;
+		StoryVar.BanditConvoPreg = false;
+		setup.setNotPregnant('Bandit');
+		StoryVar.lastBirthBandit = StoryVar.time;
+		return "Labor Scene Companion";
+	}
 	if (setup.daysUntilDue('Twin') === 0) {
 		StoryVar.companionLabor = StoryVar.companionTwin.name;
 		StoryVar.TwinConvoPreg = false;
@@ -110,6 +120,17 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.lastBirthTwin = StoryVar.time;
 		return "Labor Scene Companion";
 	}
+	if (StoryVar.BanditConvo0_rejoin < StoryVar.time) {
+		return "Bandit Joins";
+	}
+	if (StoryVar.companionBandit.affec < -8 && StoryVar.escapeT < StoryVar.time && !StoryVar.companionBandit.swap) {
+		StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
+		return "Bandit Escape";
+	}
+	if (StoryVar.currentLayer == 0 && StoryVar.mc.imageIcon == "Icons/BanditIcon_released.jpg" &&  StoryVar.mc.inhuman<6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
+		return "Bandit Arrested";
+	}
+	currentLayer
 	if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 3 && StoryVar.mc.age > 17) {
 		return "AgeEnd";
 	}
@@ -160,13 +181,15 @@ $(document).on(':passagestart', () => {
 
 	/* ---- Companion object identity ---- */
 
-	// Get name of twin so we don't have to look it up each time.
+	// Get names of twin and bandit so we don't have to look them up each time.
 	const twinName = vars.companionTwin.name;
+	const banditName = vars.companionBandit.name;
 
 	// Get all the companion array variables.
 	const companionArrays = [
 		'companions',
 		'hiredCompanions',
+		'DaedalusCompanions',
 		'DesertedCompanions',
 		'SemenDemonVec',
 	].map(varName => vars[varName]);
@@ -174,7 +197,7 @@ $(document).on(':passagestart', () => {
 	// Restore object identity between elements of companion arrays and $companionName variables.
 	for (const companions of companionArrays) {
 		for (const [i, companion] of companions.entries()) {
-			const name = companion.name !== twinName ? companion.name : "Twin";
+			const name = companion.name == twinName ? 'Twin' : companion.name == banditName ? 'Bandit' : companion.name;
 			const companionVar = vars[`companion${name}`];
 			if (companionVar) {
 				companions[i] = companionVar;
@@ -213,7 +236,7 @@ $(document).on(':passagestart', () => {
 	}
 
 	// Restore object identity between curses in curse logs and $curseN variables.
-	const logNameSuffixes = ['', ...vars.companions.map(companion => companion.name)];
+	const logNameSuffixes = ['', ...vars.companions.map(companion => companion.name), 'Bandit'];
 	for (const type of ['Height', 'Gender', 'Age', 'Libido', 'Handicap']) {
 		for (const suffix of logNameSuffixes) {
 			const events = vars[`${type}Log${suffix}`];

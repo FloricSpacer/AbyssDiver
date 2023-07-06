@@ -618,6 +618,8 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 <<if _companionSwapHandle.name == $companionTwin.name>>
 	<<set $companionSwitched = "Twin">>
+<<elseif _companionSwapHandle.name == $companionBandit.name>>
+	<<set $companionSwitched = "Bandit">>
 <<else>>
 	<<set $companionSwitched = _companionSwapHandle.name>>
 <</if>>
@@ -739,7 +741,57 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 	She walks off with your body, her frustation evident in the way she moves and the anger with which she places her hands on her head.
 
 	It's hard to tell, but you think you can hear sobbing in the distance where she walked away.
-<<elseif _companionSwapHandle.name == $companionTwin>>
+<<elseif _companionSwapHandle.name == $companionBandit.name>>
+	<<if $BanditConvo0>>/*xxx */
+		<<set $companionBandit.affec -= (7-$hsswear)>>
+		You wake up with a startle when you feel something hard hitting your face. You look at your own enraged face while you're being held at your collar.<br><br>
+		<<say $companionBandit>>What the fuck did you do! Tell me!<</say>><br>
+		Before you can reply she punches your face again.<br><br>
+		<<say $mc>> Stop, stop I can't explain it like this!<</say>><br>
+		<<say $companionBandit>>Well spit it out, start explaining already.<</say>><br>
+		She janks your collar once more to signal her impatience.<br><br>
+		<<say $mc>> Well, there is this wonder here and if you bathe in the water you can switch bodies with whomever...<</say>><br>
+		You get interruted by another punch in the face.<br><br>
+		<<say $companionBandit>>You fucker! First you kidnap me and than the moment I start trusting you, you pull this shit? You're worse than Kamilla...<</say>><br>
+		<<say $mc>> It's for the good of the expedition, I promise<</say>><br>
+		<<say $companionBandit>>Good for the expedition my ass, you just wanted to steel my body. Don't ever rob a thief or you'll be sorry. Now tell me how we reverse this.<</say>><br>
+		<<say $mc>> We can't as far as I know.<</say>><br>
+		For a second she looks like she is going to explode and beat you to a pulp, but she calms down after a few deep breaths.<br><br>
+		<<say $companionBandit>>You are going to find a solution to reverse this and take good care of my body in the meantime, you understand?<</say>><br>
+		<<say $mc>>Yes.<</say>><br>
+		<<say $companionBandit>>And if you so much as touch my body in a way I don't like I'll start lobbing of your fingers, are we clear?<</say>><br>
+		You gulp.<br><br>
+		<<say $mc>>Cristal clear.<</say>><br>
+	<<elseif $hiredCompanions.length< 2>>
+		You wake up when you feel somebody lift you up your feet.<br><br>
+		<<say $companionBandit>>Morning sunshine, I don't know what happend or how it happend but apperently I'm you and you're me.<</say>><<set $mc.imageIcon = "Icons/BanditIcon.jpg">><br>			 
+		<<say $mc>>Hmpf!<</say>><br>
+		<<say $companionBandit>>Yeah, not so nice when the shoe is on the other foot right?<</say>><br>
+		She starts walking while dragging you along.<br><br>
+		<<say $companionBandit>>Anyway, I don't particularly like the fact that you have my body, but now I have your freedom. And to be honest, after being tied down for a while that's still a pretty decent deal.<</say>><br>
+		<<say $mc>>Hmpf!<</say>><br>
+		<<say $companionBandit>>Complain all you want, here is what is going to happen. Were going on a walk and during that walk you fill me in on what the hell happend to us. I still like my body back. Untill we figure that part out though, I'm going back to the old gang and you're staying with me. Understand?<</say>><br>
+		<<say $mc>>Hmpf!!<</say>><br>
+		<<say $companionBandit>>That's what I thought.<</say>><br>
+		<<set $boundBanditEnding = true>>
+	<<else>>
+		<<set $companionBandit.affec -= (7-$hsswear)>>
+		<<set _j=0>>
+		<<for _i=0; _j<1; _i++>>
+			<<if $hiredCompanions[_i].name != $companionBandit.name>>
+				<<set _j=1>>
+				<<set _companion = $hiredCompanions[_i]>>
+			<</if>>
+		<</for>>
+		You were smart enough to instruct _companion.name to bound you in your sleep and untie the bandit in the morning. At the the time <<if _companion.sex == "male">>he<<else>>she<</if>> seemed puzzeled. When you wake up you panic a little as you are still tied down.<br><br>
+		<<set $mc.imageIcon = "Icons/BanditIcon.jpg">>
+		<<say $mc>>Hmpf!<</say>><<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">><br>
+		Upon hearing your noises _companion.name releases you and you explain the whole thing to them. After you're done you walk over to the bandit who is now trapped in both ropes and your old body.<br><br>
+		<<say $mc>>Normally I would explain myself and tell you how this is all about the corruption I'm getting back from the Abyss, but let's not kid ourselves here. I liked your body, and now I have it. Thank you!<</say>><br>
+		<<say $companionBandit>>Hmpf!<</say>><br>
+		<<say $mc>>No complaints? Okay, let's move on then!<</say>><br>
+	<</if>>
+<<elseif _companionSwapHandle.name == $companionTwin.name>>
 	<<say $companionTwin>> Hmm? What something feels off. Wait a second...<</say>><br>
 	<<if $companionTwin.osex=="male">>He <<else>>She <</if>>looks at you intensely.<br><br>
 	<<if $companionTwin.osex==$mc.osex>>
@@ -1432,7 +1484,6 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	[[Deal with the Baying Gourmet|Layer2 Threat1][$returnPassage = passage()]]<br>
 <</if>>
 
-
 :: Layer2 Ascend2 [layer2]
 <<nobr>>
 <<if !setup.passingTime()>>
@@ -1448,15 +1499,14 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <<if !setup.passingTime()>>
 	<<nobr>>
 		<<set $corruption -= 15 - $corRed + 5 * Math.trunc($hexflame / 10)>>
-	<</nobr>>
-	You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.
+	You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.<br>
 	<<CarryAdjust>>
 	<<Threat1Criterion>>
 	<<include "Curse Descriptions">>
 	<<if $TwinFly == true>>
 		<<include "Twin rejoin">>
 	<</if>>
-
+	<</nobr>>
 	<<if $threat1Crit == 1>>
 		<br>Worn down by the long trek up through the dense jungle of the previous layer, you're relieved when you finally reach the bridge to the Outcast Village. However, upon approaching the bridge a figure appears from behind a column.
 
@@ -1464,7 +1514,9 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 		Turning around, you find yourself surrounded by a group of bandits, shrouded in ragged cloaks, emerging from the bushes behind you.
 
 		<<nobr>>
-		<<if $hiredCompanions.length < 1>>
+		<<if $hiredCompanions.some(c=>c.name===$companionBandit.name)>>/*xxx */
+			<<say $Banditleader>>You've got balls, I'll give you that. But if you think you can kidnap one of us and stroll right through here again you've got something else comming!<</say>>
+		<<elseif $hiredCompanions.length < 1>>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> all by <<ObjectivePronoun>>self, with an awful lot of valuable stuff for 1 person. How about we take that stuff of your hands so you don't have to worry about it anymore, hmm?<</say>>
 		<<elseif $hiredCompanions.length == 1 && $mc.appAge>13 >>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> on date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date, hmm? How about we take some of that stuff off your hands, so you don't have to worry about it anymore?<</say>>
@@ -1481,7 +1533,6 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<</if>>
 <</if>>
 
-
 :: Layer2 Exit2 [layer2]
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>
@@ -1491,7 +1542,6 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 	[[Enter the deep caverns|Layer3 1]]
 <</if>>
-
 
 :: Layer2 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[2]>>
