@@ -187,6 +187,64 @@ Vesper turns red.<br><br>
 	<</if>>
 <</if>>
 
+:: Bandit Arrested[nobr]
+<<set $arrested=true>>
+As you walk around in outset town you soon feel a hand on your shoulder. When you turn around your arm gets twisted on your back.<br><br>
+<<say $mc>>Ouch, what the hell are you doing? Who are you?<</say>><br>
+<<say $police>>You are arrested on charges of multiple armed robberies in both Outset town and the villages of Arcadias Garden. You have the right to remain silent.<</say>><br>
+He snaps a pair of cuffs shut around your arms and then turns on his radio.<br><br>
+<<say $police>> I've got her, that tip was solid. Over<</say>><br>
+<<if $mc.inhuman > 2 || $mc.appAge < 16>>
+<<say $police>> Yes, the abyss has changed her a bit compared to our desription, but it's definitly her. Over.<</say>><br>
+<</if>>
+<<if $PulseBloomUse !== "">>
+<<say $police>> What? Copy that again, you got her as well? I'm pretty sure I've got her right here in front of my nose. Lets both bring them to the station. Over.<</say>><br>
+<</if>>
+<<say $mc>>Officer, you are clearly mistaken! This is a case of mixed up identities.<</say>><br>
+<<say $police>>Like I've never heard that one before. Now move!<</say>><br>
+<<if $hiredCompanions.length > 1>>
+	<<set _j=0>>
+	<<for _i=0; _j<1; _i++>>
+		<<if $hiredCompanions[_i].name != $companionBandit.name>>
+			<<set _j=1>>
+			<<set _companion = $hiredCompanions[_i]>>
+		<</if>>
+	<</for>>
+	Just as you're about to be hauled away _companion.name also rounds the corner.<br><br>
+	<<say _companion>>Huh, what's happening here?<</say>>
+	<<say $police>> Stay back <<if _companion.sex=="male">>sir<<else>>miss<</if>>. This is official police buisness. This lady is dangerous and comming with me.<</say>><br>
+	_companion.name looks puzzeled for a second but then can't surpress a small chuckle.<br>
+	<<say _companion>>I'm sorry officer. I think this is a case of mixed up identities<</say>>
+	You see some doubt creeping in the face of the officer. In the end everything is made clear on the station and you're free to go again.<br><br>
+	<<if $PulseBloomUse !== "">>
+		However, you can't avoid telling them that the other one they caught is in fact the real bandit. She has to remain at the station as she was officially arrested. <br><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+	<</if>>
+	[[Continue on into Outset town| Surface Hub]]
+<<else>>
+	You got hauled back into the station and set into an interrogation room.<br><br>
+	<<say $mc>>You really have to believe me! I'm not who you think you are!<</say>><br>
+	<<say $police>>Ugh, again? Look this offer is not going to be on the table forever... Tell us where the hide-out is and who the other members are.<</say>><br>
+	<<say $mc>>I already told you that I don't know!<</say>><br>
+	<<if $PulseBloomUse !== "">>
+		<<say $police>>Tsk.<</say>><br>
+		He picks up the phone that's on the interrogation table.<br><br>
+		<<say $police>>Any progress with the other one? No? Same story here.<</say>><br>
+		He turns back to you.<br><br>
+		<<say $police>>I guess we're going to be here for a while.<</say>><br>
+		In the end, the pulse bloom's transformative effects started to wear off. At this point they had to believe you. But you spend so much time on the station that you had to rush back to the Abyss to not go over the 24 hours limit.<br><br>
+		Your bandit companion however, was officially arrested and had to stay behind in the stations jail.<br><br>
+		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+		[[Run into the Abyss again!| Layer1 Hub][$time+=1]]
+	<<else>>
+		Without companions to back up your story or real proof that you changed bodies the officers remain sceptical. In the end you feel so pressured that you agree to some guilty-plee deal. It turns out to be not as benificial as you thought though, and you remained in jail for a number of years.<br><br>
+
+		@@.layerTitle;GAME OVER@@
+	<</if>>
+<</if>>
+
 :: Bound Bandit Ending
 /*xxx */
 You got dragged along back to the bandit hidout of the first layer. On the way over there your new captor was not very pleased that the body switch was permanent.
