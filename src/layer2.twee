@@ -61,7 +61,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 	She stands up and steps back, giving you a chance to touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.includes("Maru")>>Maru walks over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<</if>><br><br>
 <<elseif $layerTemp == 5>>
 	You stumble upon a tranquil, crystal-clear pond, with bioluminescent plants casting a soft, otherworldly glow upon its surface. The gentle hum of insects creates a soothing melody, accompanied by the occasional splash of leaping fish as they break the water's surface. As you draw closer, you notice that the fish are adorned with vivid, iridescent scales, shimmering like living gemstones under the luminescent light. You are momentarily entranced by this serene oasis, a welcome reprieve from the dangers you've faced thus far. However, you remind yourself to remain vigilant and continue on your journey, with the memory of the pond's enchanting beauty etched in your mind. <br><br>
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse(HijinksEnsue)>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -330,83 +330,70 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp1 = random(0,11) + 12>>
 	<<set $temp2 = random(0,11) + 12>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 14 || $temp2 == 14) ) )>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($mc.hasCurse(ShrunkenAssets) && ($temp1 == 14 || $temp2 == 14) ) )>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
-<<if $temp1==15 || $temp2==15>>
-	<<set $AgeLog.push($curse16)>><<set $curse16.variation=$time>>
-<</if>>
+<<set _curse1 = setup.curseByNum($temp1)>>
+<<set _curse2 = setup.curseByNum($temp2)>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+
+<<set $mc.addCurse(_curse1)>>
+<<set $corruption += _curse1.corr>>
+<<set $mc.addCurse(_curse2)>>
+<<set $corruption += _curse2.corr>>
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
-<<if $curses[$temp1].name ==  "Fluffy Ears" || $curses[$temp2].name ==  "Fluffy Ears">>
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
+<<set _hasEars = (_earCurse = _curse1).name ===  "Fluffy Ears" || (_earCurse = _curse2).name ===  "Fluffy Ears">>\
+<<if _hasEars>>
 
 	What type of ears would you like to gain?
 
-	<<radiobutton "$curse17.variation" "furry cat" checked>> Cat
-	<<radiobutton "$curse17.variation" "fluffy dog" >> Dog
-	<<radiobutton "$curse17.variation" "floppy cow" >> Cow
-	<<radiobutton "$curse17.variation" "furry monkey" >> Monkey
-	<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit
-	<<radiobutton "$curse17.variation" "furry fox" >> Fox
-	<<radiobutton "$curse17.variation" "furry mouse" >> Mouse
-	<<radiobutton "$curse17.variation" "pig" >> Pig
-	<<radiobutton "$curse17.variation" "furry horse" >> Horse
+	<<radiobutton "_earCurse.earType" "furry cat" checked>> Cat
+	<<radiobutton "_earCurse.earType" "fluffy dog" >> Dog
+	<<radiobutton "_earCurse.earType" "floppy cow" >> Cow
+	<<radiobutton "_earCurse.earType" "furry monkey" >> Monkey
+	<<radiobutton "_earCurse.earType" "furry rabbit" >> Rabbit
+	<<radiobutton "_earCurse.earType" "furry fox" >> Fox
+	<<radiobutton "_earCurse.earType" "furry mouse" >> Mouse
+	<<radiobutton "_earCurse.earType" "pig" >> Pig
+	<<radiobutton "_earCurse.earType" "furry horse" >> Horse
 <</if>>
-<<if $curses[$temp1].name ==  "Fluffy Tail" || $curses[$temp2].name ==  "Fluffy Tail">>
+<<set hasTail = (_tailcurse = _curse1).name ===  "Fluffy Tail" || (_tailcurse = _curse2).name ===  "Fluffy Tail">>\
+<<if hasTail>>
 
 	What type of tail would you like to gain?
 
-	<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat
-	<<radiobutton "$curse18.variation" "wagging dog" >> Dog
-	<<radiobutton "$curse18.variation" "lazy cow" >> Cow
-	<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey
-	<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit
-	<<radiobutton "$curse18.variation" "bushy fox" >> Fox
-	<<radiobutton "$curse18.variation" "long mouse" >> Mouse
-	<<radiobutton "$curse18.variation" "twisted pig" >> Pig
-	<<radiobutton "$curse18.variation" "swaying horse" >> Horse
+	<<radiobutton "_tailcurse.tailType" "flowing cat" checked>> Cat
+	<<radiobutton "_tailcurse.tailType" "wagging dog" >> Dog
+	<<radiobutton "_tailcurse.tailType" "lazy cow" >> Cow
+	<<radiobutton "_tailcurse.tailType" "prehensile monkey" >> Monkey
+	<<radiobutton "_tailcurse.tailType" "fluffy rabbit" >> Rabbit
+	<<radiobutton "_tailcurse.tailType" "bushy fox" >> Fox
+	<<radiobutton "_tailcurse.tailType" "long mouse" >> Mouse
+	<<radiobutton "_tailcurse.tailType" "twisted pig" >> Pig
+	<<radiobutton "_tailcurse.tailType" "swaying horse" >> Horse
 <</if>>
 
-<<if $curses[$temp1].name ==  "Maximum Fluff" || $curses[$temp2].name ==  "Maximum Fluff">>
+<<set _hasFur = (_furcurse = _curse1).name ===  "Maximum Fluff" || (_furcurse = _curse2).name ===  "Maximum Fluff">>
+<<if _hasFur>>
 	What type of fur would you like to gain?
 
-	<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat
-	<<radiobutton "$curse19.variation" "dog-furred" >> Dog
-	<<radiobutton "$curse19.variation" "cow-furred" >> Cow
-	<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey
-	<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit
-	<<radiobutton "$curse19.variation" "fox-furred" >> Fox
-	<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse
-	<<radiobutton "$curse19.variation" "pig-furred" >> Pig
-	<<radiobutton "$curse19.variation" "horse-furred" >> Horse
+	<<radiobutton "_furcurse.furType" "cat-furred" checked>> Cat
+	<<radiobutton "_furcurse.furType" "dog-furred" >> Dog
+	<<radiobutton "_furcurse.furType" "cow-furred" >> Cow
+	<<radiobutton "_furcurse.furType" "monkey-furred" >> Monkey
+	<<radiobutton "_furcurse.furType" "rabbit-furred" >> Rabbit
+	<<radiobutton "_furcurse.furType" "fox-furred" >> Fox
+	<<radiobutton "_furcurse.furType" "mouse-furred" >> Mouse
+	<<radiobutton "_furcurse.furType" "pig-furred" >> Pig
+	<<radiobutton "_furcurse.furType" "horse-furred" >> Horse
 <</if>>
 
 
 [[Continue on to the rest of the layer|Layer2 Hub]]
-
-<<nobr>>
-<<if $curses[$temp1].name ==  "Gender Reversal B" || $curses[$temp2].name ==  "Gender Reversal B">>
-	<<set $GenderLog.push($curse14)>>
-<</if>>
-<<if $curses[$temp1].name == "Asset Robustness B" || $curses[$temp2].name == "Asset Robustness B">>
-	<<set $GenderLog.push($curse15)>>
-<</if>>
-<<if $curses[$temp1].name ==  "Sex Switcheroo" || $curses[$temp2].name ==  "Sex Switcheroo">>
-	<<set $GenderLog.push($curse22)>>
-<</if>>
-<<if $curses[$temp1].name ==  "Futa Fun" || $curses[$temp2].name ==  "Futa Fun">>
-	<<set $GenderLog.push($curse23)>>
-<</if>>
-<<if $curses[$temp1].name ==  "Libido Reinforcement B" || $curses[$temp2].name ==  "Libido Reinforcement B" >>
-	<<set $LibidoLog.push($curse13)>>
-<</if>>
-<</nobr>>
 
 
 :: Layer2 Cherry Mix [layer2]
@@ -414,82 +401,65 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<set $temp1 = random(0,11) + 9>>
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp2 = random(0,11) + 12>>
-	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 14 )>>
+	<<if !($mc.hasCurse(ShrunkenAssets) && $temp2 === 14)>>
 		<<break>>
 	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
-<<if $temp2==15>>
-	<<set $AgeLog.push($curse16)>><<set $curse16.variation=$time>>
-<</if>>
+<<set _curse = setup.curseArray[temp2]>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 3 / 2), 0))>>
+<<set $mc.addCurse(_curse)>>
+<<set $corruption += _curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.floor(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
-<<if $curses[$temp2].name == "Fluffy Ears">>
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
+<<if _curse.name === "Fluffy Ears">>
 
 What type of ears would you like to gain?
 
-<<radiobutton "$curse17.variation" "furry cat" checked>> Cat
-<<radiobutton "$curse17.variation" "fluffy dog" >> Dog
-<<radiobutton "$curse17.variation" "floppy cow" >> Cow
-<<radiobutton "$curse17.variation" "furry monkey" >> Monkey
-<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit
-<<radiobutton "$curse17.variation" "furry fox" >> Fox
-<<radiobutton "$curse17.variation" "furry mouse" >> Mouse
-<<radiobutton "$curse17.variation" "pig" >> Pig
-<<radiobutton "$curse17.variation" "furry horse" >> Horse
+<<radiobutton "_curse.earType" "furry cat" checked>> Cat
+<<radiobutton "_curse.earType" "fluffy dog" >> Dog
+<<radiobutton "_curse.earType" "floppy cow" >> Cow
+<<radiobutton "_curse.earType" "furry monkey" >> Monkey
+<<radiobutton "_curse.earType" "furry rabbit" >> Rabbit
+<<radiobutton "_curse.earType" "furry fox" >> Fox
+<<radiobutton "_curse.earType" "furry mouse" >> Mouse
+<<radiobutton "_curse.earType" "pig" >> Pig
+<<radiobutton "_curse.earType" "furry horse" >> Horse
 <</if>>
-<<if $curses[$temp2].name ==  "Fluffy Tail">>
+<<if _curse.name ===  "Fluffy Tail">>
 
 What type of tail would you like to gain?
 
-<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat
-<<radiobutton "$curse18.variation" "wagging dog" >> Dog
-<<radiobutton "$curse18.variation" "lazy cow" >> Cow
-<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey
-<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit
-<<radiobutton "$curse18.variation" "bushy fox" >> Fox
-<<radiobutton "$curse18.variation" "long mouse" >> Mouse
-<<radiobutton "$curse18.variation" "twisted pig" >> Pig
-<<radiobutton "$curse18.variation" "swaying horse" >> Horse
-<</if>><<if $curses[$temp2].name == "Maximum Fluff">>
+<<radiobutton "_curse.tailType" "flowing cat" checked>> Cat
+<<radiobutton "_curse.tailType" "wagging dog" >> Dog
+<<radiobutton "_curse.tailType" "lazy cow" >> Cow
+<<radiobutton "_curse.tailType" "prehensile monkey" >> Monkey
+<<radiobutton "_curse.tailType" "fluffy rabbit" >> Rabbit
+<<radiobutton "_curse.tailType" "bushy fox" >> Fox
+<<radiobutton "_curse.tailType" "long mouse" >> Mouse
+<<radiobutton "_curse.tailType" "twisted pig" >> Pig
+<<radiobutton "_curse.tailType" "swaying horse" >> Horse
+<</if>>
+<<if _curse.name === "Maximum Fluff">>
 What type of fur would you like to gain?
 
-<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat
-<<radiobutton "$curse19.variation" "dog-furred" >> Dog
-<<radiobutton "$curse19.variation" "cow-furred" >> Cow
-<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey
-<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit
-<<radiobutton "$curse19.variation" "fox-furred" >> Fox
-<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse
-<<radiobutton "$curse19.variation" "pig-furred" >> Pig
-<<radiobutton "$curse19.variation" "horse-furred" >> Horse
+<<radiobutton "_curse.furType" "cat-furred" checked>> Cat
+<<radiobutton "_curse.furType" "dog-furred" >> Dog
+<<radiobutton "_curse.furType" "cow-furred" >> Cow
+<<radiobutton "_curse.furType" "monkey-furred" >> Monkey
+<<radiobutton "_curse.furType" "rabbit-furred" >> Rabbit
+<<radiobutton "_curse.furType" "fox-furred" >> Fox
+<<radiobutton "_curse.furType" "mouse-furred" >> Mouse
+<<radiobutton "_curse.furType" "pig-furred" >> Pig
+<<radiobutton "_curse.furType" "horse-furred" >> Horse
 <</if>>
 
 
 [[Continue on to the rest of the layer|Layer2 Hub]]
 
-<<nobr>>
-<<if $curses[$temp2].name ==  "Gender Reversal B">>
-	<<set $GenderLog.push($curse14)>>
-<</if>>
-<<if $curses[$temp2].name ==  "Asset Robustness B">>
-	<<set $GenderLog.push($curse15)>>
-<</if>>
-<<if $curses[$temp2].name ==  "Sex Switcheroo">>
-	<<set $GenderLog.push($curse22)>>
-<</if>>
-<<if $curses[$temp2].name ==  "Futa Fun">>
-	<<set $GenderLog.push($curse23)>>
-<</if>>
-<<if $curses[$temp2].name ==  "Libido Reinforcement B">>
-	<<set $LibidoLog.push($curse13)>>
-<</if>>
-<</nobr>>
 
 :: Empty-handed Broker Site [layer2]
 <<PassTimeWithEvents>>\
@@ -589,6 +559,8 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 <<nobr>>
 /* Make a shallow copy of the companion. */
 <<set _copy = Object.assign({}, _companionSwapHandle)>>
+<<set $mc.events.push(new BodyChangeEvent($mc.clone(), _companionSwapHandle.clone()))>>
+<<set _companionSwapHandle.events.push(new BodyChangeEvent(_companionSwapHandle.clone(), $mc.clone()))>>
 
 <<set _companionSwapHandle.age = $mc.age>>
 <<set _companionSwapHandle.osex = $mc.osex>>
@@ -598,9 +570,15 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 <<set _companionSwapHandle.oheight = $mc.oheight>>
 <<set _companionSwapHandle.ohair = $mc.ohair>>
 <<set _companionSwapHandle.oskinColor = $mc.oskinColor>>
+<<set _companionSwapHandle.oskinType = $mc.oskinType>>
+<<set _companionSwapHandle.oears = $mc.oears>>
 <<set _companionSwapHandle.oeyeColor = $mc.oeyeColor>>
+<<set _companionSwapHandle.oblood = $mc.oblood>>
 <<set _companionSwapHandle.carry = $ocarryWeight>>
 <<set _companionSwapHandle.switch = true>>
+<<set _companionSwapHandle.pregnantT = $mc.pregnantT>>
+<<set _companionSwapHandle.due = $mc.due>>
+<<set _companionSwapHandle.lastBirth = $mc.lastBirth>>
 
 <<set $mc.age = Math.max(_copy.age, 18)>> /* Prevent instant bad end. */
 <<set $mc.osex = _copy.osex>>
@@ -610,11 +588,15 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 <<set $mc.oheight = _copy.oheight>>
 <<set $mc.ohair = _copy.ohair>>
 <<set $mc.oskinColor = _copy.oskinColor>>
+<<set $mc.oskinType = _copy.oskinType>>
+<<set $mc.oears = _copy.oears>>
 <<set $mc.oeyeColor = _copy.oeyeColor>>
+<<set $mc.oblood = _copy.oblood>>
 <<set $ocarryWeight = _copy.carry>>
 <<set $mc.switch = true>>
-
-<<set $mc.desc += _copy.appDesc>>
+<<set $mc.pregnantT = _companionSwapHandle.pregnantT>>
+<<set $mc.due = _companionSwapHandle.due>>
+<<set $mc.lastBirth = _companionSwapHandle.lastBirth>>
 
 <<if _companionSwapHandle.name == $companionTwin.name>>
 	<<set $companionSwitched = "Twin">>
@@ -626,11 +608,10 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 <<CarryAdjust>>
 
-<<set _companionSwapHandle.genderVoice = _companionSwapHandle.gender>>
-<<if _companionSwapHandle.sex == "male">>
+<<if _companionSwapHandle.sex === "male">>
 	<<set _companionSwapHandle.image = "Player Icons/playerM.png">>
 	<<set _companionSwapHandle.imageIcon = "Player Icons/playerM.png">>
-	<<if $mc.sex == "female">><<set $menCycleT = $time - 7>><</if>>
+	<<if $mc.sex === "female">><<set $menCycleT = $time - 7>><</if>>
 <<else>>
 	<<set _companionSwapHandle.image = "Player Icons/playerF.png">>
 	<<set _companionSwapHandle.imageIcon = "Player Icons/playerF.png">>
@@ -749,9 +730,9 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 		Before you can reply she punches your face again.<br><br>
 		<<say $mc>> Stop, stop I can't explain it like this!<</say>><br>
 		<<say $companionBandit>>Well spit it out, start explaining already.<</say>><br>
-		She janks your collar once more to signal her impatience.<br><br>
+		She yanks your collar once more to signal her impatience.<br><br>
 		<<say $mc>> Well, there is this wonder here and if you bathe in the water you can switch bodies with whomever...<</say>><br>
-		You get interruted by another punch in the face.<br><br>
+		You get interrupted by another punch in the face.<br><br>
 		<<say $companionBandit>>You fucker! First you kidnap me and than the moment I start trusting you, you pull this shit? You're worse than Kamilla...<</say>><br>
 		<<say $mc>> It's for the good of the expedition, I promise<</say>><br>
 		<<say $companionBandit>>Good for the expedition my ass, you just wanted to steel my body. Don't ever rob a thief or you'll be sorry. Now tell me how we reverse this.<</say>><br>
@@ -764,13 +745,13 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 		<<say $mc>>Cristal clear.<</say>><br>
 	<<elseif $hiredCompanions.length< 2>>
 		You wake up when you feel somebody lift you up your feet.<br><br>
-		<<say $companionBandit>>Morning sunshine, I don't know what happend or how it happend but apperently I'm you and you're me.<</say>><<set $mc.imageIcon = "Icons/BanditIcon.jpg">><br>			 
+		<<say $companionBandit>>Morning sunshine, I don't know what happened or how it happened but apparently I'm you and you're me.<</say>><<set $mc.imageIcon = "Icons/BanditIcon.jpg">><br>
 		<<say $mc>>Hmpf!<</say>><br>
 		<<say $companionBandit>>Yeah, not so nice when the shoe is on the other foot right?<</say>><br>
 		She starts walking while dragging you along.<br><br>
 		<<say $companionBandit>>Anyway, I don't particularly like the fact that you have my body, but now I have your freedom. And to be honest, after being tied down for a while that's still a pretty decent deal.<</say>><br>
 		<<say $mc>>Hmpf!<</say>><br>
-		<<say $companionBandit>>Complain all you want, here is what is going to happen. Were going on a walk and during that walk you fill me in on what the hell happend to us. I still like my body back. Untill we figure that part out though, I'm going back to the old gang and you're staying with me. Understand?<</say>><br>
+		<<say $companionBandit>>Complain all you want, here is what is going to happen. Were going on a walk and during that walk you fill me in on what the hell happened to us. I still like my body back. Until we figure that part out though, I'm going back to the old gang and you're staying with me. Understand?<</say>><br>
 		<<say $mc>>Hmpf!!<</say>><br>
 		<<say $companionBandit>>That's what I thought.<</say>><br>
 		<<set $boundBanditEnding = true>>
@@ -783,7 +764,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 				<<set _companion = $hiredCompanions[_i]>>
 			<</if>>
 		<</for>>
-		You were smart enough to instruct _companion.name to bound you in your sleep and untie the bandit in the morning. At the the time <<if _companion.sex == "male">>he<<else>>she<</if>> seemed puzzeled. When you wake up you panic a little as you are still tied down.<br><br>
+		You were smart enough to instruct _companion.name to bound you in your sleep and untie the bandit in the morning. At the the time <<if _companion.sex == "male">>he<<else>>she<</if>> seemed puzzled. When you wake up you panic a little as you are still tied down.<br><br>
 		<<set $mc.imageIcon = "Icons/BanditIcon.jpg">>
 		<<say $mc>>Hmpf!<</say>><<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">><br>
 		Upon hearing your noises _companion.name releases you and you explain the whole thing to them. After you're done you walk over to the bandit who is now trapped in both ropes and your old body.<br><br>
@@ -853,8 +834,9 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 
 :: Take on Libido Reinforcement B [layer2]
-<<set $playerCurses.push($curse13)>><<set $corruption += $curse13.corr>><<set $LibidoLog.push($curse13)>>\
-[img[setup.ImagePath + $curse13.pic]]
+<<set _curse = new LibidoReinforcementB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Libido Curse">>
 
@@ -867,8 +849,9 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 
 :: Take on Gender Reversal B [layer2]
-<<set $playerCurses.push($curse14)>><<set $corruption += $curse14.corr>><<set $GenderLog.push($curse14)>>\
-[img[setup.ImagePath + $curse14.pic]]
+<<set _curse = new GenderReversalB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Gender Curse">>
 
@@ -882,8 +865,9 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 
 :: Take on Asset Robustness B [layer2]
-<<set $playerCurses.push($curse15)>><<set $corruption += $curse15.corr>><<set $GenderLog.push($curse15)>>\
-[img[setup.ImagePath + $curse15.pic]]
+<<set _curse = new AssetRobustnessB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 <<CarryAdjust>>
 <<if $mc.penisCor>0 && $mc.breastsCor==0 >>
 	The moment the curse grips you, you feel an intense sensation. Your penis springs to full erection, and then continues to grow. The base, the shaft, and the tip swell larger than they've ever been before, until you're sporting a $mc.penisCor inch long dong.
@@ -908,10 +892,11 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 
 :: Take on Age Reduction A [layer2]
-<<set $playerCurses.push($curse16)>><<set $corruption += $curse16.corr>><<set $AgeLog.push($curse16)>><<set $curse16.variation=$time>>\
-[img[setup.ImagePath + $curse16.pic]]
+<<set _curse = new AgeReductionA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse16.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
 <<if $escBalDepl==0>>
@@ -923,22 +908,23 @@ You have successfully taken on the $curse16.name Curse. Hopefully you are okay w
 
 
 :: Take on Fluffy Ears [layer2]
-<<set $playerCurses.push($curse17)>><<set $corruption += $curse17.corr>>\
-[img[setup.ImagePath + $curse17.pic]]
+<<set _curse = new FluffyEars()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse17.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 What type of ears would you like to gain?
 
-<<radiobutton "$curse17.variation" "furry cat" checked>> Cat
-<<radiobutton "$curse17.variation" "fluffy dog" >> Dog
-<<radiobutton "$curse17.variation" "floppy cow" >> Cow
-<<radiobutton "$curse17.variation" "furry monkey" >> Monkey
-<<radiobutton "$curse17.variation" "furry rabbit" >> Rabbit
-<<radiobutton "$curse17.variation" "furry fox" >> Fox
-<<radiobutton "$curse17.variation" "furry mouse" >> Mouse
-<<radiobutton "$curse17.variation" "pig" >> Pig
-<<radiobutton "$curse17.variation" "furry horse" >> Horse
+<<radiobutton "_curse.earType" "furry cat" checked>> Cat
+<<radiobutton "_curse.earType" "fluffy dog" >> Dog
+<<radiobutton "_curse.earType" "floppy cow" >> Cow
+<<radiobutton "_curse.earType" "furry monkey" >> Monkey
+<<radiobutton "_curse.earType" "furry rabbit" >> Rabbit
+<<radiobutton "_curse.earType" "furry fox" >> Fox
+<<radiobutton "_curse.earType" "furry mouse" >> Mouse
+<<radiobutton "_curse.earType" "pig" >> Pig
+<<radiobutton "_curse.earType" "furry horse" >> Horse
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
 <<if $escBalDepl==0>>
@@ -949,8 +935,9 @@ What type of ears would you like to gain?
 
 
 :: Take on Fluffy Tail [layer2]
-<<set $playerCurses.push($curse18)>><<set $corruption += $curse18.corr>>\
-[img[setup.ImagePath + $curse18.pic]]
+<<set _curse = new FluffyTail()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A shiver runs down your spine, but it doesn't stop at the bottom. The shiver continues towards an imaginary extension of your spine that moves outward from directly above your butt. You involuntarily squirm at first, due to the unfamiliar sensation, but after a few seconds you're able to accommodate it and accept it as just another physical sensation, like your body was adapting to the new sensory inputs.
 
@@ -958,15 +945,15 @@ When you look behind you to see what happened, you're surprised by the sight of 
 
 What type of tail did you gain?
 
-<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat
-<<radiobutton "$curse18.variation" "wagging dog" >> Dog
-<<radiobutton "$curse18.variation" "lazy cow" >> Cow
-<<radiobutton "$curse18.variation" "prehensile monkey" >> Monkey
-<<radiobutton "$curse18.variation" "fluffy rabbit" >> Rabbit
-<<radiobutton "$curse18.variation" "bushy fox" >> Fox
-<<radiobutton "$curse18.variation" "long mouse" >> Mouse
-<<radiobutton "$curse18.variation" "twisted pig" >> Pig
-<<radiobutton "$curse18.variation" "swaying horse" >> Horse
+<<radiobutton "_curse.tailType" "flowing cat" checked>> Cat
+<<radiobutton "_curse.tailType" "wagging dog" >> Dog
+<<radiobutton "_curse.tailType" "lazy cow" >> Cow
+<<radiobutton "_curse.tailType" "prehensile monkey" >> Monkey
+<<radiobutton "_curse.tailType" "fluffy rabbit" >> Rabbit
+<<radiobutton "_curse.tailType" "bushy fox" >> Fox
+<<radiobutton "_curse.tailType" "long mouse" >> Mouse
+<<radiobutton "_curse.tailType" "twisted pig" >> Pig
+<<radiobutton "_curse.tailType" "swaying horse" >> Horse
 
 [[Accept more Curses from the second layer|Layer2 Curses][$mc.tail.push($tail)]]
 <<if $escBalDepl==0>>
@@ -977,26 +964,28 @@ What type of tail did you gain?
 
 
 :: Take on Maximum Fluff [layer2]
-<<set $playerCurses.push($curse19)>><<set $corruption += $curse19.corr>>\
-[img[setup.ImagePath + $curse19.pic]]
+<<set _curse = new MaximumFluff()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse19.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 <<nobr>>
-<<if $playerCurses.some(e => e.name === "Hair Removal")>>
-	<<print "<br>You have lost the corruption gained from Hair Removal.<br>">><<set $corruption -= 5>>
+<<set _hasHair = (_hairCurse = $mc.getCurse(HairRemoval)) !== undefined>>
+<<if _hasHair>>
+	<<print "<br>You have lost the corruption gained from Hair Removal.<br>">><<set $corruption -= _hairCurse.corr>>
 <</if>>
 <</nobr>>
 What type of fur would you like to gain?
 
-<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat
-<<radiobutton "$curse19.variation" "dog-furred" >> Dog
-<<radiobutton "$curse19.variation" "cow-furred" >> Cow
-<<radiobutton "$curse19.variation" "monkey-furred" >> Monkey
-<<radiobutton "$curse19.variation" "rabbit-furred" >> Rabbit
-<<radiobutton "$curse19.variation" "fox-furred" >> Fox
-<<radiobutton "$curse19.variation" "mouse-furred" >> Mouse
-<<radiobutton "$curse19.variation" "pig-furred" >> Pig
-<<radiobutton "$curse19.variation" "horse-furred" >> Horse
+<<radiobutton "_curse.furType" "cat-furred" checked>> Cat
+<<radiobutton "_curse.furType" "dog-furred" >> Dog
+<<radiobutton "_curse.furType" "cow-furred" >> Cow
+<<radiobutton "_curse.furType" "monkey-furred" >> Monkey
+<<radiobutton "_curse.furType" "rabbit-furred" >> Rabbit
+<<radiobutton "_curse.furType" "fox-furred" >> Fox
+<<radiobutton "_curse.furType" "mouse-furred" >> Mouse
+<<radiobutton "_curse.furType" "pig-furred" >> Pig
+<<radiobutton "_curse.furType" "horse-furred" >> Horse
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
 <<if $escBalDepl==0>>
@@ -1007,8 +996,9 @@ What type of fur would you like to gain?
 
 
 :: Take on Heat/Rut [layer2]
-<<set $playerCurses.push($curse20)>><<set $corruption += $curse20.corr>>\
-[img[setup.ImagePath + $curse20.pic]]
+<<set _curse = new HeatRut()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 An intense surge of arousal envelops you, only to gradually ebb away. Then, a weight nestles in the pit of your stomach, and an inescapable sense of fate grips you. The Abyss won't release you that easily. Once a month, an overpowering carnal craving will seize you, driving you to the brink of surrender.
 
@@ -1025,8 +1015,9 @@ How does it feel to know what awaits you? Your quickened breaths betray your inn
 
 
 :: Take on Lightweight [layer2]
-<<set $playerCurses.push($curse21)>><<set $corruption += $curse21.corr>>\
-[img[setup.ImagePath + $curse21.pic]]
+<<set _curse = new Lightweight()>>\
+<<set $mc.addCurse.push(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you proceed, you notice a peculiar sensation washing over you. At first, it's barely perceptible, but gradually, it intensifies. Your limbs feel lighter, your steps more buoyant. You can't help but feel a growing sense of vulnerability, as if your body has become more susceptible to the substances around you.
 
@@ -1043,8 +1034,9 @@ You'll need to be particularly careful with alcohol, or any other similar substa
 
 
 :: Take on Sex Switcheroo [layer2]
-<<set $playerCurses.push($curse22)>><<set $corruption += $curse22.corr>><<set $GenderLog.push($curse22)>><<CarryAdjust>>\
-[img[setup.ImagePath + $curse22.pic]]
+<<set _curse = new SexSwitcheroo()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.osex == "male">>\
 Suddenly, an unexpected warmth washes through your abdomen, spreading outward in pulses. It's not painful, but it's not entirely pleasant either. You glance down, your eyes widening as you notice the changes. Your penis is retreating inwards, morphing, transforming. The sensation is bizarre, a strange hollow feeling enveloping you as you watch it disappear, only to be replaced by the soft, sensitive folds of a vagina.
@@ -1080,8 +1072,9 @@ Standing tall, you brace yourself for the journey ahead. The Abyss has changed y
 
 
 :: Take on Futa Fun [layer2]
-<<set $playerCurses.push($curse23)>><<set $corruption += $curse23.corr>><<set $GenderLog.push($curse23)>><<CarryAdjust>>\
-[img[setup.ImagePath + $curse23.pic]]
+<<set _curse = new FutaFun()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.osex == "male">>\
 In the midst of your journey through the second layer, a peculiar sensation seizes you; it starts as a dull ache in your lower belly and quickly escalates into a throbbing, almost unbearable pain. It's as if something within you is trying to escape, to burst forth into existence. Sweat pours down your face, dripping onto your chest.
@@ -1120,8 +1113,9 @@ But you're a survivor. You've always been one. And if this new challenge is what
 
 
 :: Take on Blushing Virgin [layer2]
-<<set $playerCurses.push($curse24)>><<set $corruption += $curse24.corr>>\
-[img[setup.ImagePath + $curse24.pic]]
+<<set _curse = new BlushingVirgin()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Suddenly, a sharp, stabbing sensation pierces your chest. It feels as if your very soul is being invaded by an unseen force, and you instinctively clutch at your heart. Your mind races with thoughts of the unknown, the fear of the changes that the Curse may bring. A hazy, intoxicating fog fills your thoughts, and your knees buckle as the full weight of the Curse takes hold.
 
@@ -1140,8 +1134,9 @@ Despite the anxiety and uncertainty that grips you, you press on, trying to focu
 
 
 :: Take on Princess Protocol [layer2]
-<<set $playerCurses.push($curse125)>><<set $corruption += $curse125.corr>><<set $mc.name = "Princess">><<set $mc.name = "Princess">>\
-[img[setup.ImagePath + $curse125.pic]]
+<<set _curse = new PrincessProtocol()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<set $mc.name = "Princess">>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you journey further into the second layer of the Abyss, the once drizzle from the colossal green canopy becomes a torrent. Stray droplets strike your face, a sensation akin to cool, soft kisses from an unseen admirer. The metallic tang of the moisture-touched air fills your lungs, saturating your senses in an organic, lively tapestry. But then, a sudden pinprick – not against your skin, but deep within the recesses of your mind – makes your heart skip a beat.
 
@@ -1515,7 +1510,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 		<<nobr>>
 		<<if $hiredCompanions.some(c=>c.name===$companionBandit.name)>>/*xxx */
-			<<say $Banditleader>>You've got balls, I'll give you that. But if you think you can kidnap one of us and stroll right through here again you've got something else comming!<</say>>
+			<<say $Banditleader>>You've got balls, I'll give you that. But if you think you can kidnap one of us and stroll right through here again you've got something else coming!<</say>>
 		<<elseif $hiredCompanions.length < 1>>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> all by <<ObjectivePronoun>>self, with an awful lot of valuable stuff for 1 person. How about we take that stuff of your hands so you don't have to worry about it anymore, hmm?<</say>>
 		<<elseif $hiredCompanions.length == 1 && $mc.appAge>13 >>
@@ -1545,7 +1540,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 :: Layer2 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[2]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
@@ -1751,10 +1746,10 @@ allow the beast to dominate you. While it won't consume you, recognizing you're 
 <<link "Allow the beast to overpower you" "Layer2 Gourmet Ravage">>
 	<<set $status.duration += (4 - $statRed)>>
 	<<set $status.penalty += 1>>
-	<<if $playerCurses.some(e => e.name === "Omnitool") && _temp==0>>
+	<<if $mc.hasCurse(Omnitool) && _temp==0>>
 		<<PregCheck>>
 	<</if>>
-	<<if $playerCurses.some(e => e.name === "Semen Demon") && ((_temp==0 && $curse82.variation!="vaginal fluids") || (_temp==1 && $curse82.variation!="semen")) >>
+	<<if $mc.events.some(e => e instanceof SemenDemon && ((_temp === 0 && e.fluidType !== 'vaginal fluids') || (_temp === 1 && e.fluidType !== 'semen')))>>
 		<<set $SemenDemonBalance+=10>>
 	<</if>>
 <</link>>

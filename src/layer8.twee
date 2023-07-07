@@ -114,7 +114,7 @@ Threats:
 	The hallway you enter is shrouded in a thick, unnatural fog that seems to cling to your skin and makes it difficult to breathe. You hear footsteps behind you and catch glimpses of shadowy figures in the mist, but when you turn to face them, they vanish as if they were never there. Your sense of unease grows with each step, as you feel unseen eyes watching your every move. You press on, eager to leave this suffocating atmosphere behind and praying that the figures lurking in the mist are only figments of your imagination. <br><br>
 <<elseif $layerTemp == 7>>
 	You find yourself in a long hallway that appears to be filled with a dense fog. As you move through the fog, you begin to see faint outlines of figures on either side of the hallway, reaching out to you with desperate, grasping hands. You can hear their whispers, pleading for help and salvation, but you can't determine whether they're real or just a cruel illusion. Despite your compassion, you know that stopping to help could mean your own doom, so you press on, the haunting whispers and outstretched hands fading into the fog behind you. <br><br>
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse("Hijinks Ensue")>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -523,15 +523,16 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 
 :: Layer8 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[8]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
 <<include "Curse Randomizer">>
 
 :: Take on Libido Reinforcement F [layer8]
-<<set $playerCurses.push($curse97)>><<set $corruption += $curse85.corr>><<set $LibidoLog.push($curse97)>>\
-[img[setup.ImagePath + $curse97.pic]]
+<<set _curse = new LibidoReinforcementF()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Libido Curse">>
 
@@ -544,8 +545,9 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 
 
 :: Take on Gender Reversal F [layer8]
-<<set $playerCurses.push($curse98)>><<set $corruption += $curse98.corr>><<set $GenderLog.push($curse98)>>\
-[img[setup.ImagePath + $curse98.pic]]
+<<set _curse = new GenderReversalF()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Gender Curse">>
 
@@ -558,8 +560,9 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 
 
 :: Take on Asset Robustness F [layer8]
-<<set $playerCurses.push($curse99)>><<set $corruption += $curse99.corr>><<set $GenderLog.push($curse99)>>\
-[img[setup.ImagePath + $curse99.pic]]
+<<set _curse = new AssetRobustnessF()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<CarryAdjust>><<if $mc.penisCor>0 && $mc.breastsCor==0 >>
 	The strength of this Curse takes you by surprise. our penis surges to full erection and continues to grow in size. The base, shaft, and tip swell at a disconcerting rate. Drops of precum ooze from the tip like thick honey, yet the growth doesn't cease. 
@@ -586,8 +589,9 @@ You have successfully taken the $relic96.name Relic. Hopefully you can make good
 
 
 :: Take on Urine Reamplification B [layer8]
-<<set $playerCurses.push($curse100)>><<set $corruption += $curse100.corr>>\
-[img[setup.ImagePath + $curse100.pic]]
+<<set _curse = new UrineReamplificationB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you tread through the impossible corridors of the eighth layer, something deep within you shifts. A foreign feeling takes root in the heart of your being, a feeling as confounding as the disordered architecture surrounding you.
 
@@ -608,7 +612,7 @@ In this moment, you look forward, your mind already wrestling with the implicati
 
 
 :: Take on Eye on the Prize [layer8]
-[img[setup.ImagePath + $curse101.pic]]
+[img[setup.ImagePath + setup.allCurses.EyeOnThePrize.pic]]
 <<include "Eye on the Prize Customization">>
 
 [[Confirm|Take on Eye on the Prize pt2]]
@@ -640,8 +644,10 @@ How many eyes do you want to remove?
 [[Continue|Use Items and Relics]]
 
 :: Eye on the Prize Taken [nobr]
-<<set $playerCurses.push($curse101)>><<set $HandicapLog.push($curse101)>>
-<<set $corruption += $curse101.corr * $eyeRemove >>
+<<set _curse = new EyeOnThePrize()>>
+<<set $mc.addCurse(_curse)>>
+<<if $eyeRemove === 2>><<set $mc.addCurse(_curse)>><</if>>
+<<set $corruption += _curse.corr * $eyeRemove >>
 
 :: Eye on the Prize Retrieval [layer8]
 Suddenly, you feel a burning sensation in your eye<<if $eyeRemove > 1>>s<</if>>. It starts burning more and more intensely deep inside your eye<<if $eyeRemove > 1>>s<</if>> as times goes on. You almost want to claw the source of heat out yourself if this intense sensation doesn't stop soon. And then, just as suddenly as the pain started, it ends.
@@ -650,10 +656,11 @@ You take a moment to recover and you feel your eye<<if $eyeRemove > 1>>s<</if>>.
 
 
 :: Take on Deafening Silence [layer8]
-<<set $playerCurses.push($curse102)>><<set $corruption += $curse102.corr>><<set $HandicapLog.push($curse102)>>\
-[img[setup.ImagePath + $curse102.pic]]
+<<set _curse = new DeafeningSilence()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-<<if $playerCurses.some(e => e.name === "Knife Ear") || $playerCurses.some(e => e.name === "Fluffy Ears")>>\
+<<if $mc.hasCurse("Knife Ear") || $mc.hasCurse("Fluffy Ears")>>\
 [[Lose your ability to hear|Deafening Silence 2][$deafeningViolent = 0]]
 
 <<else>>
@@ -665,7 +672,7 @@ Would you like to have your ears violently ripped off for an extra +25 corruptio
 <</if>>
 
 :: Deafening Silence 2
-[img[setup.ImagePath + $curse102.pic]]
+[img[setup.ImagePath + setup.allCurses.DeafeningSilence.pic]]
 
 <<if $deafeningViolent == 0>>\
 As you navigate the dizzying spectacle of the eighth layer, a sudden chill races down your spine. You pause, an instinctive reaction, and try to assess your surroundings. The incoherent whispers of the labyrinth fade, slowly replaced by a vacuum-like silence. It starts subtly, the distant echoes growing quieter, until all you can hear is the rhythmic pounding of your own heartbeat.
@@ -709,10 +716,11 @@ Time loses meaning in the face of this newfound silence. You ponder how this wil
 <</if>>
 
 :: Take on Taciturn Turnaround [layer8]
-<<set $playerCurses.push($curse103)>><<set $corruption += $curse103.corr>><<set $HandicapLog.push($curse103)>>\
-[img[setup.ImagePath + $curse103.pic]]
+<<set _curse = new TaciturnTurnaround()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-<<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>\
+<<if $mc.hasCurse("Lingual Leviathan")>>\
 [[Lose your ability to speak|Taciturn Turnaround 2][$taciturnViolent = 0]]
 
 <<else>>
@@ -725,7 +733,7 @@ Would you like to have your tongue violently ripped out for an extra +25 corrupt
 <</if>>
 
 :: Taciturn Turnaround 2
-[img[setup.ImagePath + $curse103.pic]]
+[img[setup.ImagePath + setup.allCurses.TaciturnTurnaround.pic]]
 
 <<if $taciturnViolent == 0>>\
 A tangible tension hangs in the air as you journey further into the labyrinthine depths of the Abyss. The silence here is absolute - each footfall, each breath feels like an invasion of the Abyss's sacred, alien tranquility.
@@ -767,7 +775,9 @@ Fear wells up within you. As your hand presses against the cold, distorted walls
 <</if>>
 
 :: Take on Ampu-Q-tie [layer8]
-[img[setup.ImagePath + $curse104.pic]]
+<<set _curse = new AmpuQtie()>>\
+<<set $mc.addCurse(_curse)>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Ampu-Q-tie Customization">>
 
@@ -785,41 +795,45 @@ Fear wells up within you. As your hand presses against the cold, distorted walls
 <</if>>
 
 :: Ampu-Q-tie Customization
+<<set _curse = $mc.getCurse(AmpuQtie)>>
 Which limbs do you want to amputate?
 
-<<radiobutton "$curse104.variation" 'A' checked>> An arm
-<<if !$playerCurses.some(e => e.name === "Seafolk")>>\
-	<<radiobutton "$curse104.variation" 'L'>> A leg 
-	<<radiobutton "$curse104.variation" 'AL' >> An arm and a leg
-	<<radiobutton "$curse104.variation" 'LL' >> Both legs
-	<<radiobutton "$curse104.variation" 'ALL' >> An arm and both legs
+<<radiobutton "_curse.variation" 'A' checked>> An arm
+<<if !$mc.hasCurse("Seafolk")>>\
+	<<radiobutton "_curse.variation" 'L'>> A leg
+	<<radiobutton "_curse.variation" 'AL' >> An arm and a leg
+	<<radiobutton "_curse.variation" 'LL' >> Both legs
+	<<radiobutton "_curse.variation" 'ALL' >> An arm and both legs
 <</if>>\
 <<if !$BionicArm>>\
-	<<radiobutton "$curse104.variation" 'AA' >> Both arms
-	<<if !$playerCurses.some(e => e.name === "Seafolk")>>\
-		<<radiobutton "$curse104.variation" 'AAL' >> Both arms and a leg
-		<<radiobutton "$curse104.variation" 'AALL' >> Amputate all my limbs!
+	<<radiobutton "_curse.variation" 'AA' >> Both arms
+	<<if !$mc.hasCurse("Seafolk")>>\
+		<<radiobutton "_curse.variation" 'AAL' >> Both arms and a leg
+		<<radiobutton "_curse.variation" 'AALL' >> Amputate all my limbs!
 	<</if>>\
 <</if>>\
 
 :: Apply Stored Ampu-Q-tie Curse
+<<set $mc.addCurse(new AmpuQtie())>>
 <<include "Ampu-Q-tie Taken">>
 <<include "Ampu-Q-tie Retrieval">>
 
 [[Continue|Use Items and Relics]]
 
 :: Ampu-Q-tie Taken [nobr]
-<<set $playerCurses.push($curse104)>><<set $HandicapLog.push($curse104)>>
-<<set $corruption += $curse104.corr * $curse104.variation.length >>
+<<set _curse = $mc.getCurse(AmpuQtie)>>
+<<set _curse.corr = setup.allCurses.AmpuQtie.corr * (_curse.arms + _curse.legs)>>
+<<set $corruption += _curse.corr>>
 
 :: Ampu-Q-tie Retrieval [layer8]
 You lose your limbs, ouch. 
 
-You have successfully taken on the $curse104.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the setup.allCurses.AmpuQtie.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 :: Take on Nose Goes [layer8]
-<<set $playerCurses.push($curse105)>><<set $corruption += $curse105.corr>><<set $HandicapLog.push($curse105)>>\
-[img[setup.ImagePath + $curse105.pic]]
+<<set _curse = new NoseGoes()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you navigate through the maddening maze, your attention is abruptly stolen by an invisible force that grapples your senses. It's as if the very ether of the Abyss has decided to engage you in a novel way. The stark white walls around you begin to blur, and you find yourself in an uncanny silence. The architectural anomalies around you fade into the background as your reality narrows to a singular point of focus.
 
@@ -841,8 +855,9 @@ You rise, your body feeling strangely lighter, perhaps a phantom sensation of yo
 <</if>>
 
 :: Take on Arm Army [layer8]
-<<set $playerCurses.push($curse106)>><<set $corruption += $curse106.corr>><<set $HandicapLog.push($curse106)>>\
-[img[setup.ImagePath + $curse106.pic]]
+<<set _curse = new ArmArmy()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you wander through the endless corridors of the eighth layer, a gust of wind engulfs you, the energy of the Curse weaving its way into the fibers of your being.
 
@@ -871,15 +886,16 @@ You give a wry smile, looking down at your new arms. There's a certain allure to
 
 
 :: Take on A Little Extra [layer8]
-<<set $playerCurses.push($curse107)>><<set $corruption += $curse107.corr>><<set $GenderLog.push($curse107)>>\
-[img[setup.ImagePath + $curse107.pic]]
+<<set _curse = new ALittleExtra()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.sex != "futa">>
-	You have successfully taken on the $curse107.name Curse. Hopefully you are okay with accepting the permanent consequences.
+	You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 <<else>>
 	The miasma of the curse is swirling around both your genitals, you can focus it on either to duplicate them.
-	<<radiobutton "$curse107.variation" 'vagina' checked>> An extra vagina
-	<<radiobutton "$curse107.variation" 'penis'>> An extra penis 
+	<<radiobutton "_curse.genitals" 'vagina' checked>> An extra vagina
+	<<radiobutton "_curse.genitals" 'penis'>> An extra penis
 <</if>>
 
 [[Accept more Curses from the eighth layer|Layer8 Curses]]
@@ -890,13 +906,13 @@ You give a wry smile, looking down at your new arms. There's a certain allure to
 <</if>>
 
 :: Take on Null [layer8]
-
-[img[setup.ImagePath + $curse108.pic]]
+[img[setup.ImagePath + _curse.pic]]
 <<nobr>>
-	<<set $playerCurses.push($curse108)>><<set $corruption += $curse108.corr>><<set $GenderLog.push($curse108)>>
+    <<set _curse = new Null()>>
+	<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>
 	<<for _curseName range setup.cursesNegatedByNull>>
-		<<set _curse = setup.curse(_curseName)>>
-		<<if $playerCurses.some(e => e.name == _curseName)>>
+	    <<set _curse = $mc.hasCurse.getCurse(_curseName)>>
+		<<if _curse !== undefined>>
 			<<RemoveCurse _curseName>>
 			<<set $corruption -= _curse.corr>>
 			<br>You feel the _curseName Curse leaving your body.<br>
@@ -928,8 +944,9 @@ Yet, the Abyss calls to you, still, like an intoxicating siren song. Its beauty,
 <</if>>
 
 :: Take on Seafolk [layer8]
-<<set $playerCurses.push($curse109)>><<set $corruption += $curse109.corr>><<set $HandicapLog.push($curse109)>>\
-[img[setup.ImagePath + $curse109.pic]]
+<<set _curse = new Seafolk()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Accepting this Curse triggers an abrupt transformation. Your lower body ripples as if invisible waves crash against it, and your legs snap together with an unsettling force. The pressure intensifies, mercilessly compressing everything between your legs as they continue to merge. Your anus and genitals shift, settling into a new position on the front of your body. Fish scales emerge from your fused legs, the bones within shifting and reshaping. 
 
@@ -948,8 +965,9 @@ The implications of this transformation weigh heavily upon you. If you plan to s
 
 
 :: Take on Taken for Granite [layer8]
-<<set $playerCurses.push($curse110)>><<set $corruption += $curse110.corr>>\
-[img[setup.ImagePath + $curse110.pic]]
+<<set _curse = new TakenForGranite()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Your heart races, and your breath quickens as you surrender your desires. You can feel the heat of the arousal suffusing your body, a spark of life amidst the cold white Abyss surrounding you. The pleasure builds, a growing crescendo that sweeps over you until it reaches its zenith.
 
@@ -976,24 +994,27 @@ You look down at your body, flesh and blood once more, as you continue your jour
 
 
 :: Take on Double Trouble [layer8]
+<<set _curse = new DoubleTrouble()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 <<CarryAdjust>>
 What will be the name of your twin (press enter to continue)?
 
-<<textbox "$curse111.variation1" "Nono" "Take on Double Trouble 2">>
+<<textbox "_curse.twinName" "Nono" "Take on Double Trouble 2">>
 
 What biological sex do you want your twin to be?
 
-<<radiobutton "$curse111.variation2" "inverted" checked>> Give me an opposite original biological sex twin!
-<<radiobutton "$curse111.variation2"  "same" >> Give me a perfectly identical twin!
+<<radiobutton "_curse.twinType" "inverted" checked>> Give me an opposite original biological sex twin!
+<<radiobutton "_curse.twinType" "same" >> Give me a perfectly identical twin!
 
 :: Take on Double Trouble 2 [layer 8]
-<<set $playerCurses.push($curse111)>><<set $corruption += $curse111.corr>><<set $TwinVar1=random(0,1)>><<set $Twin_LastT = $time>>\
-[img[setup.ImagePath + $curse111.pic]]
+<<set _curse = $mc.getCurse(DoubleTrouble)>>
+<<set $TwinVar1=random(0,1)>><<set $Twin_LastT = $time>>\
+[img[setup.ImagePath + _curse.pic]]
 <<CloneSelf>><<CarryAdjust>>
 You feel dizzy and tumble forward. You manage to catch yourself before you hit the ground, but your backpack and all your equipment falls on the ground. As the dizziness increases, the world goes black.
 
 But then light and color slowly seems to return.
-<<if $curse111.variation2=="inverted">>\
+<<if _curse.twinType === "inverted">>\
 	As you feel the dizziness receding, you open your eyes only to look directly into the eyes of... yourself? Well, not exactly. Although your doppelganger looks a lot like you, it's more like you are staring at a version of yourself if you were born the opposite sex.
 <<else>>\
 	As you feel the dizziness receding, you open your eyes only to look directly into the eyes of... yourself? The resemblance is uncanny, it feels like you are looking in a mirror, but there is only air between you. The illusion is only broken by the fact that you mirror image doesn't perfectly copy your movements.
@@ -1017,7 +1038,7 @@ You both mumble at the same time. You stare at each other with a look of confusi
 <<say $mc>>Damn, this is going to be complicated.<</say>>
 You say to yourself. The pensive look on your new relative betrays that your twin is probably thinking something similar.
 
-You have successfully taken on the $curse111.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 /*<<link "Accept more Curses from the eighth layer" "Layer8 Curses">>
 	<<CloneSelf>>
@@ -1037,10 +1058,11 @@ You have successfully taken on the $curse111.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Conjoined [layer8]
-<<set $playerCurses.push($curse112)>><<set $corruption += $curse112.corr>><<set $HandicapLog.push($curse112)>>\
-[img[setup.ImagePath + $curse112.pic]]
+<<set _curse = new Conjoined()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse112.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 Note: Some effects of this Curse are not yet implemented.
 
@@ -1107,71 +1129,34 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp1 = random(0,11) + 96>>
 	<<set $temp2 = random(0,11) + 96>>
-	<<if ($temp1 !== $temp2) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 98 || $temp2 == 98) )>>
+	<<if ($temp1 !== $temp2) && !($mc.hasCurse("Shrunken Assets") && ($temp1 == 98 || $temp2 == 98) )>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<set _curse1 = setup.curseByNum($temp1)>>
+<<set _curse2 = setup.curseByNum($temp2)>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
 
 [[Continue on to the rest of the layer|Layer8 Hub]]
 
-<<nobr>>
-<<if $curses[$temp1].name == "Libido Reinforcement F" || $curses[$temp2].name == "Libido Reinforcement F">>
-	<<set $LibidoLog.push($curse97)>>
-<</if>>
-<<if $curses[$temp1].name == "Gender Reversal F" || $curses[$temp2].name == "Gender Reversal F" >>
-	<<set $GenderLog.push($curse98)>>
-<</if>>
-<<if $curses[$temp1].name == "Asset Robustness F" || $curses[$temp2].name == "Asset Robustness F" >>
-	<<set $GenderLog.push($curse99)>>
-<</if>>
-<<if $curses[$temp1].name == "Eye on the Prize" || $curses[$temp2].name == "Eye on the Prize" >>
-	<<set $HandicapLog.push($curse101)>>
-<</if>>
-<<if $curses[$temp1].name == "Deafening Silence" || $curses[$temp2].name == "Deafening Silence" >>
-	<<set $HandicapLog.push($curse102)>>
-<</if>>
-<<if $curses[$temp1].name == "Taciturn Turnaround" || $curses[$temp2].name == "Taciturn Turnaround" >>
-	<<set $HandicapLog.push($curse103)>>
-<</if>>
-<<if $curses[$temp1].name == "Ampu-Q-tie" || $curses[$temp2].name == "Ampu-Q-tie" >>
-	<<set $HandicapLog.push($curse104)>>
-<</if>>
-<<if $curses[$temp1].name == "Nose Goes" || $curses[$temp2].name == "Nose Goes" >>
-	<<set $HandicapLog.push($curse105)>>
-<</if>>
-<<if $curses[$temp1].name == "Arm Army" || $curses[$temp2].name == "Arm Army" >>
-	<<set $HandicapLog.push($curse106)>>
-<</if>>
-<<if $curses[$temp1].name == "A Little Extra" || $curses[$temp2].name == "A Little Extra" >>
-	<<set $GenderLog.push($curse107)>>
-<</if>>
-<<if $curses[$temp1].name == "Null" || $curses[$temp2].name == "Null" >>
-	<<set $GenderLog.push($curse108)>>
-<</if>>
-<<if $curses[$temp1].name == "Seafolk" || $curses[$temp2].name == "Seafolk" >>
-	<<set $HandicapLog.push($curse109)>>
-<</if>>
-<<if $curses[$temp1].name == "Conjoined" || $curses[$temp2].name == "Conjoined" >>
-	<<set $HandicapLog.push($curse112)>>
-<</if>>
-<</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
 	<<link "Reroll with Devil's Own" "Layer8 Cherry Curse">>
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp1]>>
+		<<set $corruption -= _curse1.corr>>
+		<<RemoveCurse _curse1>>
 		
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp2]>>
+		<<set $corruption -= _curse2.corr>>
+		<<RemoveCurse _curse2>>
 
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
@@ -1184,63 +1169,23 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<set $temp1 = random(0,11) + 84>>
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp2 = random(0,11) + 96>>
-	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 98 )>>
+	<<if !($mc.hasCurse("Shrunken Assets") && $temp2 == 98)>>
 		<<break>>
 	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
-<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<set _curse = setup.curseByNum($temp2)>>
+<<set $mc.addCurse(_curse)>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 1.5), 0))>>
+<<set $corruption += $_curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
 
 [[Continue on to the rest of the layer|Layer8 Hub]]
 
-<<nobr>>
-<<if  $curses[$temp2].name == "Libido Reinforcement F">>
-	<<set $LibidoLog.push($curse97)>>
-<</if>>
-<<if  $curses[$temp2].name == "Gender Reversal F" >>
-	<<set $GenderLog.push($curse98)>>
-<</if>>
-<<if $curses[$temp2].name == "Asset Robustness F" >>
-	<<set $GenderLog.push($curse99)>>
-<</if>>
-<<if  $curses[$temp2].name == "Eye on the Prize" >>
-	<<set $HandicapLog.push($curse101)>>
-<</if>>
-<<if  $curses[$temp2].name == "Deafening Silence" >>
-	<<set $HandicapLog.push($curse102)>>
-<</if>>
-<<if  $curses[$temp2].name == "Taciturn Turnaround" >>
-	<<set $HandicapLog.push($curse103)>>
-<</if>>
-<<if  $curses[$temp2].name == "Ampu-Q-tie" >>
-	<<set $HandicapLog.push($curse104)>>
-<</if>>
-<<if  $curses[$temp2].name == "Nose Goes" >>
-	<<set $HandicapLog.push($curse105)>>
-<</if>>
-<<if  $curses[$temp2].name == "Arm Army" >>
-	<<set $HandicapLog.push($curse106)>>
-<</if>>
-<<if  $curses[$temp2].name == "A Little Extra" >>
-	<<set $GenderLog.push($curse107)>>
-<</if>>
-<<if $curses[$temp2].name == "Null" >>
-	<<set $GenderLog.push($curse108)>>
-<</if>>
-<<if $curses[$temp2].name == "Seafolk" >>
-	<<set $HandicapLog.push($curse109)>>
-<</if>>
-<<if $curses[$temp2].name == "Conjoined" >>
-	<<set $HandicapLog.push($curse112)>>
-<</if>>
-<</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
@@ -1249,8 +1194,8 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp2]>>
+		<<set $corruption -= _curse.corr>>
+		<<RemoveCurse _curse>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
@@ -1398,7 +1343,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	Your slimy skin makes it harder for the mimics to grab on to you, letting you get out of sticky situations!<br>
 	<<set _curseBonus += 3>>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+<<if $mc.hasCurse("Massacre Manicure")>>
 	Your claw-like nails help you somewhat if you get into hand-to-hand combat.<br>
 	<<set _curseBonus += 2>>
 <</if>>
@@ -1452,7 +1397,7 @@ If you continue your descent in spite of everything, descending past this layer'
 		The bandit starts beating up dolls left and right, sometimes by playing dirty but mostly with her impressive physical strength and brawling experience.<br>
 		<<set _companionBonus += 10 * (1 + $companionBandit.HandicapThreat / 10)>>
 	<<else>>
-		Although, the bandit is kicking and pushing dolls out of the way as well as you can while bound, she is also constantly trying to force an escape. She is more of a hinderence then help this way.<br>
+		Although, the bandit is kicking and pushing dolls out of the way as well as you can while bound, she is also constantly trying to force an escape. She is more of a hindrance then help this way.<br>
 		<<set _companionBonus += -1 * (1 + $companionBandit.HandicapThreat / 10)>>
 	<</if>>
 <</if>>
@@ -1460,7 +1405,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
 	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 	<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
 	<<if _twinBonus > 7>>
 		Your twin fights off the doll-like copies of you with relative ease. It's a strange sight to see a copy of you fight other copies, but next to your twin, the mimics seem like cheap imitations.
@@ -1494,7 +1439,6 @@ If you continue your descent in spite of everything, descending past this layer'
 
 
 :: Layer 8 Threat 1a [layer8 nobr]
-<<Handicap>>
 <<set _random = random(0,1)>>
 <<if _random == 0>>
 	[img[setup.ImagePath+'Threats/inanisego.png']]<br>
@@ -1592,7 +1536,7 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _curseBonus += 3>>
 	<</if>>
 
-	<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+	<<if $mc.hasCurse("Massacre Manicure")>>
 		<<set _curseBonus += 2>>
 	<</if>>
 
@@ -1657,7 +1601,7 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _companionBonus += 10 * (1+$companionGolem.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 		<<set _twinBonus = 5 * (1+ $companionTwin.HandicapThreat/10) +_curseBonus>>
 		<<if _twinBonus > 7 >>
 		<<elseif _twinBonus > 5>>

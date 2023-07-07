@@ -42,7 +42,7 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 	As you venture deeper into the layer, the heat grows more intense, and the air becomes thick with the savory scent of smoke. You come across a small clearing, where the tentacles have given way to a bubbling, steaming hot spring. The water appears inviting, but upon closer inspection, you notice that it's filled with writhing tentacles, gently caressing and coiling around each other. Deciding it's not worth the risk, you continue on your way.<br><br>
 <<elseif $layerTemp == 3>>
 	As you wade through the sea of tentacles, you come across a peculiar sight: a lone tree, its branches swaying with the movements of the writhing tendrils below. The tree's bark is gnarled and blackened, as if it has been scorched by the intense heat, but it somehow still manages to stand tall amidst the chaos. You notice that the tentacles seem to avoid the tree, creating a small, temporary reprieve from the relentless groping.<br><br>
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse("Hijinks Ensue")>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -415,10 +415,11 @@ You have successfully taken the $relic72.name Relic. Hopefully you can make good
 
 
 :: Take on Submissiveness Rectification B [layer6]
-<<set $playerCurses.push($curse73)>><<set $corruption += $curse73.corr>><<set $LibidoLog.push($curse73)>>\
-[img[setup.ImagePath + $curse73.pic]]
+<<set _curse = new SubmissivenessRectificationB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A")>>\
+<<if $mc.hasCurse("Submissiveness Rectification A")>>\
 The heat of the Abyss’ sixth layer washes over you like a relentless wave, soaking your clothes through, making your skin glisten with a film of sweat in the otherworldly glow of multicolored flames. You breathe in the rich, smoky aroma, a scent that is strangely enticing, tickling your taste buds and making your stomach growl with a yearning you hadn't expected in this harsh environment.
 
 As you delve deeper, a shiver runs down your spine, a silent precursor to the change that has started coursing through you. The heat, once simply external, seeps into your very core, wrapping you in its embrace, a seductive pull that you find yourself unable to resist.
@@ -457,10 +458,11 @@ This may impact how your sexual encounters and conversations with your companion
 
 
 :: Take on Lactation Rejuvenation B [layer6]
-<<set $playerCurses.push($curse74)>><<set $corruption += $curse74.corr>>\
-[img[setup.ImagePath + $curse74.pic]]
+<<set _curse = new LactationRejuvenationB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-<<if $playerCurses.some(e => e.name === "Lactation Rejuvenation A")>>\
+<<if $mc.hasCurse("Lactation Rejuvenation A")>>\
 The sensation of constant lactation has become second nature to you, like the beating of your heart or the rhythm of your breath. But as you move deeper into the sixth layer, you sense a strange stirring within you, a wave of warmth that begins at your chest and diffuses throughout your body. It feels almost like a prickling under your skin, a discomforting tightness that rapidly escalates into an undeniable throbbing.
 
 Looking down, you see the front of your shirt clinging to your chest, utterly soaked. The fabric is heavy with a much larger amount of fluid than usual. With a touch, you wince as your fingers make contact with your nipples. The sensitivity is heightened, pulsing with an unfamiliar intensity. You quickly remove your armor and shirt, revealing your swollen chest that is visibly straining, droplets flowing freely down your torso, a river of life running down your body, pearlescent in the glow of the alien flames.
@@ -491,8 +493,9 @@ Beneath you, the tentacles wriggle and writhe, their rhythm echoing your heart's
 
 
 :: Take on Pleasure Respecification B [layer6]
-<<set $playerCurses.push($curse75)>><<set $corruption += $curse75.corr>>\
-[img[setup.ImagePath + $curse75.pic]]
+<<set _curse = new PleasureRespecificationB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 With the intoxicating scent of burning flesh in your nostrils, the heat bearing down on your skin, and the ever-present touch of the tentacles caressing you, you feel a sudden shift in the fabric of reality around you. It is as if some unseen hand has taken hold of the strings of your existence and twisted them into a new configuration.
 
@@ -509,10 +512,11 @@ A tentacle brushes against your thigh, curling around the skin. Its touch is as 
 
 
 :: Take on Age Reduction C [layer6]
-<<set $playerCurses.push($curse76)>><<set $corruption += $curse76.corr>><<set $AgeLog.push($curse76)>><<set $curse76.variation=$time>>\
-[img[setup.ImagePath + $curse76.pic]]
+<<set _curse = new AgeReductionC()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse76.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
 <<if $escBalDepl==0>>
@@ -524,7 +528,7 @@ You have successfully taken on the $curse76.name Curse. Hopefully you are okay w
 
 
 :: Take on Horny [layer6]
-[img[setup.ImagePath + $curse77.pic]]
+[img[setup.ImagePath + setup.allCurses.Horny.pic]]
 <<include "Horny Customization">>
 
 [[Confirm|Take on Horny pt2]]
@@ -550,7 +554,8 @@ What type of horn(s) would you like to gain?
 
 How many horns would you like to gain?
 
-<<radiobutton "$hornCount" 1 checked>> One <<radiobutton "$hornCount" 2 >> Two
+<<radiobutton "$hornCount" 1 checked>> One
+<<radiobutton "$hornCount" 2 >> Two
 
 Enter one or more descriptive adjectives (optional)
 
@@ -568,8 +573,10 @@ Example adjectives:
 
 
 :: Horny Taken [nobr]
-<<set $playerCurses.push($curse77)>>
-<<set $corruption += $curse77.corr * $hornCount >>
+<<set _curse = new Horny()>>\
+<<set $mc.addCurse(_curse)>>
+<<if $hornCount === 2>><<set $mc.addCurse(_curse)>><</if>>
+<<set $corruption += _curse.corr * $hornCount >>
 
 :: Horny Retrieval [layer6]
 Suddenly, you are struck with a splitting headache, in an almost literal sense as you can almost feel your skull splitting apart. Luckily, you aren't dying, but <<if $hornCount == 1>>a shape is<<else>>two shapes are<</if>> emerging from your skull, and <<if $hornCount == 1>>it seems<<else>>they seem<</if>> to be <<HornGrowthDesc $hornVariation $hornCount>>. The pain subsides as you feel the $hornAdjective horn<<if $hornCount > 1>>s<</if>> pushing out of your head, but sensations on the horn<<if $hornCount > 1>>s<</if>> still feel tender, as if <<if $hornCount == 1>>it<<else>>they<</if>> were an especially sensitive part of your body.
@@ -578,8 +585,9 @@ Naturally, you reach up to touch your new addition<<if $hornCount > 1>>s<</if>> 
 
 
 :: Take on Drawing Spades [layer6]
-<<set $playerCurses.push($curse78)>><<set $corruption += $curse78.corr>>\
-[img[setup.ImagePath + $curse78.pic]]
+<<set _curse = new DrawingSpades()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you continue your hoke through the hellish fields of tentacles, you pause to catch your breath, leaning against a heated rock that's worn smooth by the relentless press of the undulating tentacles. Suddenly, you feel a prickling sensation at the base of your spine. It's like a shiver, the kind that tingles down your spine when you find something excitingly forbidden, but more concentrated, more tangible.
 
@@ -602,10 +610,11 @@ You turn your attention back to the path ahead, a daunting yet enticing world of
 
 
 :: Take on Tattoo Tally [layer6]
-<<set $playerCurses.push($curse79)>><<set $corruption += $curse79.corr>>\
-[img[setup.ImagePath + $curse79.pic]]
+<<set _curse = new TattooTally()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse79.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
 <<if $escBalDepl==0>>
@@ -617,11 +626,12 @@ You have successfully taken on the $curse79.name Curse. Hopefully you are okay w
 
 :: Take on Leaky [layer6]
 <<nobr>>
-<<set $playerCurses.push($curse80)>><<set $corruption += $curse80.corr>>
+<<set _curse = new Leaky()>>
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>
 <</nobr>>\
-[img[setup.ImagePath + $curse80.pic]]
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse80.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 <<if $mc.penisCor > 0 && $mc.vagina>0 >>
 	As the Leaky Curse takes hold of you, the effects are more subtle than you might have expected.
 	
@@ -660,8 +670,9 @@ You have successfully taken on the $curse80.name Curse. Hopefully you are okay w
 
 
 :: Take on Wandering Hands [layer6]
-<<set $playerCurses.push($curse81)>><<set $corruption += $curse81.corr>>\
-[img[setup.ImagePath + $curse81.pic]]
+<<set _curse = new WanderingHands()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Suddenly, there is a jolt, a strange, metaphysical thump that echoes deep within your being. The world around you remains unchanged, yet something within you has shifted dramatically.
 
@@ -686,7 +697,9 @@ The answers are far from comforting, leaving you to face a future filled with un
 
 
 :: Take on Semen Demon [layer6]
-[img[setup.ImagePath + $curse82.pic]]
+<<set _curse = new SemenDemon()>>\
+<<set $mc.addCurse(_curse)>>\
+[img[setup.ImagePath + _curse.pic]]
 <<include "Semen Demon Customization">>
 
 [[Confirm|Take on Semen Demon pt2]]
@@ -703,22 +716,24 @@ The answers are far from comforting, leaving you to face a future filled with un
 <</if>>
 
 :: Semen Demon Customization
+<<set _curse = $mc.getCurse(SemenDemon)>>\
 What would be your preferred meal type.
 
-<<radiobutton "$curse82.variation" "sexual fluids" checked>> Any sexual fluids
-<<radiobutton "$curse82.variation" "semen">> Just semen
-<<radiobutton "$curse82.variation" "vaginal fluids">> Just vaginal fluids
+<<radiobutton "_curse.fluidType" "sexual fluids" checked>> Any sexual fluids
+<<radiobutton "_curse.fluidType" "semen">> Just semen
+<<radiobutton "_curse.fluidType" "vaginal fluids">> Just vaginal fluids
 
 How many levels of the curse would you like to gain?
 
 @@.alert2; Not having the correct equipment to supply yourself or taking more than one level will mean you have to find additional sources or you will die!@@<br><br>
 
-<<radiobutton "$curse82.variation1" 1 checked>> One
-<<radiobutton "$curse82.variation1" 2 >> Two
-<<radiobutton "$curse82.variation1" 3 >> Three
-<<radiobutton "$curse82.variation1" 4 >> Four
+<<radiobutton "_curse.amount" 1 checked>> One
+<<radiobutton "_curse.amount" 2 >> Two
+<<radiobutton "_curse.amount" 3 >> Three
+<<radiobutton "_curse.amount" 4 >> Four
 
 :: Apply Stored Semen Demon Curse
+<<set $mc.addCurse(new SemenDemon())>>
 <<include "Semen Demon Taken">>
 <<include "Semen Demon Retrieval">>
 
@@ -726,22 +741,23 @@ How many levels of the curse would you like to gain?
 
 
 :: Semen Demon Taken [nobr]
-<<set $playerCurses.push($curse82)>>
-<<set $LibidoLog.push($curse82)>>
-<<set $corruption += $curse82.corr * $curse82.variation1>>
-<<if $curse82.variation != "sexual fluids">>
+<<set _curse = $mc.getCurse(SemenDemon)>>
+<<set $corruption += _curse.corr * _curse.amount>>
+<<if _curse.fluidType !== "sexual fluids">>
 	<<set $corruption +=15>>
 <</if>>
 <<set $SemenDemonBalance = 0 >>
 
 :: Semen Demon Retrieval [layer6]
-You start to feel thirsty and then hungry. After a while you feel completely famished. You know what you need to still this hunger, you need $curse82.variation!
+<<set _curse = $mc.getCurse(SemenDemon)>>\
+You start to feel thirsty and then hungry. After a while you feel completely famished. You know what you need to still this hunger, you need _curse.fluidType!
 
 :: Take on Quota [layer6]
-<<set $playerCurses.push($curse83)>><<set $corruption += $curse83.corr>><<set $LibidoLog.push($curse83)>>\
-[img[setup.ImagePath + $curse83.pic]]
+<<set _curse = new Quota()>>
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse83.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
 <<if $escBalDepl==0>>
@@ -752,10 +768,11 @@ You have successfully taken on the $curse83.name Curse. Hopefully you are okay w
 
 
 :: Take on In the Limelight [layer6]
-<<set $playerCurses.push($curse84)>><<set $corruption += $curse84.corr>><<set $LibidoLog.push($curse84)>>\
-[img[setup.ImagePath + $curse84.pic]]
+<<set _curse = new InTheLimelight()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse84.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
 <<if $escBalDepl==0>>
@@ -766,7 +783,7 @@ You have successfully taken on the $curse84.name Curse. Hopefully you are okay w
 
 :: Layer6 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[6]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
@@ -821,41 +838,31 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<set _curse1 = setup.curseByNum($temp1))>>
+<<set _curse2 = setup.curseByNum($temp2))>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
 
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
 
 [[Continue on to the rest of the layer|Layer6 Hub]]
 
-<<nobr>>
-<<if $curses[$temp1].name == "Semen Demon" || $curses[$temp2].name == "Semen Demon">>
-	<<set $LibidoLog.push($curse82)>>
-<</if>>
-<<if $curses[$temp1].name == "Quota" || $curses[$temp2].name == "Quota">>
-	<<set $LibidoLog.push($curse83)>>
-<</if>>
-<<if $curses[$temp1].name == "Limelight" || $curses[$temp2].name == "Limelight">>
-	<<set $LibidoLog.push($curse84)>>
-<</if>>
-<<if $curses[$temp1].name == "Age Reduction C" || $curses[$temp2].name == "Age Reduction C">>
-	<<set $AgeLog.push($curse76)>><<set $curse76.variation=$time>>
-<</if>>
-<</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
 	<<link "Reroll with Devil's Own" "Layer6 Cherry Curse">>
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp1]>>
+		<<set $corruption -= _curse1.corr>>
+		<<RemoveCurse _curse1>>
 		
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp2]>>
+		<<set $corruption -= _curse2.corr>>
+		<<RemoveCurse _curse2>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
@@ -869,29 +876,16 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
-<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<set _curse = setup.curseByNum($temp2)>>
+<<set $mc.addCurse(_curse)>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 1.5), 0))>>
+<<set $corruption += _curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
 
 [[Continue on to the rest of the layer|Layer6 Hub]]
 
-<<nobr>>
-<<if $curses[$temp2].name =="Semen Demon">>
-	<<set $LibidoLog.push($curse82)>>
-<</if>>
-<<if $curses[$temp2].name == "Quota">>
-	<<set $LibidoLog.push($curse83)>>
-<</if>>
-<<if $curses[$temp2].name == "Limelight">>
-	<<set $LibidoLog.push($curse84)>>
-<</if>>
-<<if $curses[$temp2].name == "Age Reduction C">>
-	<<set $AgeLog.push($curse76)>><<set $curse76.variation=$time>>
-<</if>>
-<</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
@@ -900,8 +894,8 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp2]>>
+		<<set $corruption -= _curse.corr>>
+		<<RemoveCurse _curse>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
@@ -1065,14 +1059,14 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
 	<<link "Fight it off with a sword" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 10>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+		<<if $mc.hasCurse("Omnitool")>>
 			<<PregCheck>>
 		<</if>>
 	<</link>><br>
 	<<if $items[4].count > 4>>
 		<<link "Fight it off with a sword and use a medkit to cure the status" $returnPassage>>
 			<<set $items[4].count -= 1>>
-			<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<if $mc.hasCurse("Omnitool")>>
 				<<PregCheck>>
 			<</if>>
 		<</link>><br>
@@ -1082,14 +1076,14 @@ Relying on your own swordplay will allow you to put up a minimum amount of resis
 Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
 	<<link "Fight it off with Sunbeam" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 9>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+		<<if $mc.hasCurse("Omnitool")>>
 			<<PregCheck>>
 		<</if>>
 	<</link>><br>
 	<<if $items[4].count > 4>>
 		<<link "Fight it off with Sunbeam and use a medkit to cure the status" $returnPassage>>
 			<<set $items[4].count -= 1>>
-			<<if $playerCurses.some(e => e.name === "Omnitool")>>
+			<<if $mc.hasCurse("Omnitool")>>
 				<<PregCheck>>
 			<</if>>
 		<</link>><br>
@@ -1101,7 +1095,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<set $tentacleFucked = 2>>
 		<<set $khemiaFucked = 1 >>
 		<<set _temp = random(0,100)>>
-		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
 				<<set $pregKhemia = $time-14>>
 		<</if>>
 	<</link>><br>
@@ -1109,7 +1103,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<link "Have Khemia fight it off with a sword and use a medkit to cure his status" $returnPassage>>
 			<<set $items[4].count -= 1>>
 			<<set _temp = random(0,100)>>
-			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+			<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
 				<<set $pregKhemia = $time-14>>
 			<</if>>
 		<</link>><br>	
@@ -1121,7 +1115,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<set $tentacleFucked = 1>>
 		<<set $khemiaFucked = 1 >>
 		<<set _temp = random(0,100)>>
-		<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+		<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
 			<<set $pregKhemia = $time-14>>
 		<</if>>
 	<</link>><br>	
@@ -1129,7 +1123,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<link "Have Khemia fight it off with Sunbeam and use a medkit to cure his status" $returnPassage>>
 			<<set $items[4].count -= 1>>
 			<<set _temp = random(0,100)>>
-			<<if $companionKhemia.curses.some(e => e.name === "Omnitool") && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.curses.some(e => e.name === "Absolute Pregnancy")) && !$companionKhemia.curses.some(e => e.name === "Absolute Birth Control")>>
+			<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
 				<<set $pregKhemia = $time-14>>
 			<</if>>
 		<</link>><br>	
@@ -1142,11 +1136,12 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 <<link "Allow it to overpower you" "Layer6 Threat1 2">>
 	<<set $tentacleFucked = 12>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
+	<<if $mc.hasCurse("Omnitool")>>
 		<<PregCheck>>
 	<</if>>
 	<<MonsterPregCheckParty>>
-	<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
+	<<set _sdCurse = $mc.getCurse(SemenDemon)>>
+	<<if _sdCurse !== undefined && _sdCurse.fluidType !== "vaginal fluids" >>
 		<<set $SemenDemonBalance+=20>>
 	<</if>>
 <</link>><br>
@@ -1154,10 +1149,11 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 <<if $items[4].count > 4>>
 	<<link "Allow it to overpower you and use a medkit to cure the status" $returnPassage>>
 		<<set $items[4].count -= 1>>
-		<<if $playerCurses.some(e => e.name === "Omnitool")>>
+		<<if $mc.hasCurse("Omnitool")>>
 			<<PregCheck>>
 		<</if>>
-		<<if $playerCurses.some(e => e.name === "Semen Demon") &&  $curse82.variation!="vaginal fluids" >>
+	    <<set _sdCurse = $mc.getCurse(SemenDemon)>>
+		<<if _sdCurse !== undefined &&  _sdCurse.fluidType !== "vaginal fluids" >>
 			<<set $SemenDemonBalance+=20>>
 		<</if>>
 	<<MonsterPregCheckParty>>

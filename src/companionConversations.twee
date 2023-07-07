@@ -14,34 +14,34 @@
 <<if $currentLayer == 2 && $forageFood == 1 && $L2FoodConvo == 0>>
 	<<set _numConvos += 1>>[[Chat with Maru as you forage for food|Layer2 Forage Convo][$L2FoodConvo = 1]]
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionMaru.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionMaru.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Maru")>>
+<<if !$SemenDemonVec.some(e => e.name === "Maru") && $mc.curses.some(c => c instanceof SemenDemon && ((c.fluidType !== 'semen' || $companionMaru.vagina > 0) || (c.fluidType !== 'vaginal fluids' || $companionMaru.penis > 0)))>>
 	<<set _numConvos += 1>>[[Maybe Maru can help you with your appetite for sexual fluids|Maru Semen Demon]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Freckle Speckle") && $currentLayer == 1 && $convo.maruFreckleSpeckle == 0>>
+<<if $mc.hasCurse("Freckle Speckle") && $currentLayer == 1 && $convo.maruFreckleSpeckle == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Freckle Speckle]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Knife-ear") && $currentLayer == 1 && $convo.maruKnife == 0>>
+<<if $mc.hasCurse("Knife-ear") && $currentLayer == 1 && $convo.maruKnife == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Knife-ear]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Hair Removal") && $currentLayer == 1 && $convo.maruHairRemoval == 0>>
+<<if $mc.hasCurse("Hair Removal") && $currentLayer == 1 && $convo.maruHairRemoval == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Hair Removal]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Maximum Fluff") && $currentLayer == 2 && $convo.maruMaximumFluff == 0>>
+<<if $mc.hasCurse("Maximum Fluff") && $currentLayer == 2 && $convo.maruMaximumFluff == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Maximum Fluff]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Comic Relief") && $currentLayer == 3 && $convo.maruComicRelief == 0>>
+<<if $mc.hasCurse("Comic Relief") && $currentLayer == 3 && $convo.maruComicRelief == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Comic Relief]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Crossdress Your Heart") && $currentLayer == 4 && $mc.sex == "male" && $convo.maruCrossdressYourHeartMale == 0>>
+<<if $mc.hasCurse("Crossdress Your Heart") && $currentLayer == 4 && $mc.sex == "male" && $convo.maruCrossdressYourHeartMale == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Crossdress Your Heart Male]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Crossdress Your Heart") && $currentLayer == 4 && $mc.sex == "female" && $convo.maruCrossdressYourHeartFemale == 0>>
+<<if $mc.hasCurse("Crossdress Your Heart") && $currentLayer == 4 && $mc.sex == "female" && $convo.maruCrossdressYourHeartFemale == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Crossdress Your Heart Female]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Flower Power") && $currentLayer == 5 && $convo.maruFlowerPower == 0>>
+<<if $mc.hasCurse("Flower Power") && $currentLayer == 5 && $convo.maruFlowerPower == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Flower Power]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Horny") && $currentLayer == 6 && $convo.maruHorny == 0>>
+<<if $mc.hasCurse("Horny") && $currentLayer == 6 && $convo.maruHorny == 0>>
 	<<set _numConvos += 1>>[[Maru seems to be looking at you|Maru Horny]]<br>
 <</if>>
 <<if $Wetting && $WettingSolution == 0>>
@@ -53,9 +53,9 @@
 <<if $ownedRelics.some(e => e.name === "Pangea Shaker") && $convo.maruPangea == 0>>
 	<<set _numConvos += 1>>[[Maru is looking over at the Pangea Shaker|Maru Pangea Ask]]<br>
 <</if>>
-<<if $ownedRelics.some(e => e.name === "Firmament Pigment") && $convo.maruFirmament == 0 && $companionMaru.affec > 10 && $mc.penisCor > 0 && settings.MaleSceneToggleFilter>>
+<<if $ownedRelics.some(e => e.name === "Firmament Pigment") && $convo.maruFirmament == 0 && $companionMaru.affec > 10 && $mc.penis > 0 && settings.MaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Maru seems to be playing with the Firmament Pigment|Maru Firmament Sex Male]]<br>
-<<elseif $ownedRelics.some(e => e.name === "Firmament Pigment") && $convo.maruFirmament == 0 && $companionMaru.affec > 10 && $mc.penisCor > 0 && settings.MaleSceneToggleFilter>>
+<<elseif $ownedRelics.some(e => e.name === "Firmament Pigment") && $convo.maruFirmament == 0 && $companionMaru.affec > 10 && $mc.penis > 0 && settings.MaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Maru seems to be playing with the Firmament Pigment|Maru Firmament Sex Female]]<br>
 <</if>>
 
@@ -407,33 +407,33 @@ Grateful, you thank Maru once more and decide to carry on with your journey, now
 <<if  $companionLily.lactation>0 && !$LilyConvoLac && $LilyConvo2 && $hiredCompanions.some(e=> e.name === 'Lily')>>
 	<<set _numConvos += 1>>[[You see Lily sporting wet spots on her shirt|Lily ConvoLac]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionLily.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionLily.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Lily")>>
+<<if !$SemenDemonVec.some(e => e.name === "Lily") && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionLily.penis > 0) || (e.type !== 'vaginal fluids' || $companionLily.vagina > 0)))>>
 	<<set _numConvos += 1>>[[Maybe Lily can help you with your appetite for sexual fluids|Lily Semen Demon]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Knife-ear") && $currentLayer == 1 && $convo.lilyKnife == 0>>
+<<if $mc.hasCurse("Knife-ear") && $currentLayer == 1 && $convo.lilyKnife == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Knife-ear]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Blushing Virgin") && $currentLayer == 2 && $convo.lilyBlushingVirgin == 0>>
+<<if $mc.hasCurse("Blushing Virgin") && $currentLayer == 2 && $convo.lilyBlushingVirgin == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Blushing Virgin]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Sleep Tight") && $currentLayer == 4 && $convo.lilySleepTight == 0>>
+<<if $mc.hasCurse("Sleep Tight") && $currentLayer == 4 && $convo.lilySleepTight == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Sleep Tight]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Massacre Manicure") && $currentLayer == 5 && $convo.lilyMassacreManicure == 0>>
+<<if $mc.hasCurse("Massacre Manicure") && $currentLayer == 5 && $convo.lilyMassacreManicure == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Massacre Manicure]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Drawing Spades") && $currentLayer == 6 && $convo.lilyDrawingSpades == 0>>
+<<if $mc.hasCurse("Drawing Spades") && $currentLayer == 6 && $convo.lilyDrawingSpades == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Drawing Spades][$convo.lilyDrawingSpades = 1]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Creature of the Night") && $currentLayer == 7 && $convo.lilyCreatureOfTheNight == 0>>
+<<if $mc.hasCurse("Creature of the Night") && $currentLayer == 7 && $convo.lilyCreatureOfTheNight == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Creature of the Night]]<br>
 <</if>>
 <<if $convo.lilyDrawingSpades == 1 && $companionLily.affec> 6 && $convo.lilyTailRomance == 0>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at your tail with a hint of curiosity on her face|Lily Tail Romance 1]]<br>
 <</if>>
-<<if $companionLily.curses.some(e => e.name === "Power Dom") && $companionLily.affec> 6 && $mc.penisCor > 0 && $convo.lilyPowerDomHand == 0 && settings.FemaleSceneToggleFilter>>
+<<if $companionLily.hasCurse("Power Dom") && $companionLily.affec> 6 && $mc.penis > 0 && $convo.lilyPowerDomHand == 0 && settings.FemaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you, with a look of dominance on her face|Lily Power Dom Hand Male]]<br>
-<<elseif $companionLily.curses.some(e => e.name === "Power Dom") && $companionLily.affec> 6 && $mc.vagina > 0 && $convo.lilyPowerDomHand == 0 && settings.FemaleSceneToggleFilter>>
+<<elseif $companionLily.hasCurse("Power Dom") && $companionLily.affec> 6 && $mc.vagina > 0 && $convo.lilyPowerDomHand == 0 && settings.FemaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you, with a look of dominance on her face|Lily Power Dom Hand Female]]<br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Creator's Bolt") && $convo.lilyCreator == 0>>
@@ -959,7 +959,7 @@ Lily spends some time discussing the importance of respecting boundaries and app
 The moment she hears you speak, Lily makes a high pitched squeak and jumps up, startled. She then drops the World Stone she was holding.
 
 <<say $companionLily>>Don't sneak up on me like that!<</say>>
-<<set _fitCor = $mc.curses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>
+<<set _fitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>
 <<if _fitCor < 4>>\
 You chuckle a little at the fact that you made a woman who could easily outmatch you physically squeak like a little girl.
 <<elseif _fitCor <= 7>>\
@@ -1145,27 +1145,27 @@ She lets out a small giggle as she strokes your $mc.hair hair softly as you cont
 <<elseif $KhemiaConvoMostMasc==false && $mc.osex=="female" && $mc.sex=="male" && $mc.appGender<5>>
 	<<set _numConvos += 1>>[[Chat with Khemia|Khemia Most Masc][$KhemiaConvoMostMasc=true]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionKhemia.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionKhemia.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Khemia")>>
+<<if !$SemenDemonVec.some(e => e.name === "Khemia") && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionKhemia.penis > 0) || (e.type !== 'vaginal fluids' || $companionKhemia.vagina > 0)))>>
 	<<set _numConvos += 1>>[[Maybe Khemia can help you with your appetite for sexual fluids|Khemia Semen Demon]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Shrunken Assets") && $currentLayer == 1 && $convo.khemiaShrunkenAssets == 0>>
+<<if $mc.hasCurse("Shrunken Assets") && $currentLayer == 1 && $convo.khemiaShrunkenAssets == 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Shrunken Assets]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Sex Switcheroo") && $currentLayer == 2 && $mc.sex == "female" && $convo.khemiaSexSwitcheroo == 0>>
+<<if $mc.hasCurse("Sex Switcheroo") && $currentLayer == 2 && $mc.sex == "female" && $convo.khemiaSexSwitcheroo == 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Sex Switcheroo MtF]]<br>
-<<elseif $playerCurses.some(e => e.name === "Sex Switcheroo") && $currentLayer == 2 && $mc.sex == "male" && $convo.khemiaSexSwitcheroo == 0>>
+<<elseif $mc.hasCurse("Sex Switcheroo") && $currentLayer == 2 && $mc.sex == "male" && $convo.khemiaSexSwitcheroo == 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Sex Switcheroo FtM]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Gooey") && $currentLayer == 3 && $convo.khemiaGooey == 0>>
+<<if $mc.hasCurse("Gooey") && $currentLayer == 3 && $convo.khemiaGooey == 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Gooey]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Reptail") && $currentLayer == 4 && $convo.khemiaReptail == 0>>
+<<if $mc.hasCurse("Reptail") && $currentLayer == 4 && $convo.khemiaReptail == 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Reptail]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Pheromones") && $currentLayer == 5 && $convo.khemiaPheromones == 0>>
+<<if $mc.hasCurse("Pheromones") && $currentLayer == 5 && $convo.khemiaPheromones == 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Pheromones]]<br>
 <</if>>
-<<if $companionKhemia.curses.some(e => e.name === "Power Dom") && $companionKhemia.affec> 6 && $convo.khemiaPowerDomHand == 0  && settings.MaleSceneToggleFilter>>
+<<if $companionKhemia.hasCurse("Power Dom") && $companionKhemia.affec> 6 && $convo.khemiaPowerDomHand == 0  && settings.MaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you, with a look of dominance on his face|Khemia Power Dom Hand]]<br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Aegis Coffin") && $convo.khemiaAegis == 0>>
@@ -1741,36 +1741,36 @@ He flashes a wide grin, but the ensuing silence seems to dampen his enthusiasm.
 <<elseif $CherryConvo3==0 && $companionCherry.affec>20 && $mc.appGender<6 && $mc.subdom <= 0 && $CherryConvo2 >>
 	<<set _numConvos += 1>>[[Chat with Cherry|Cherry Convo3][$CherryConvo3=true]]<br>
 <</if>>
-<<if $mc.lactation > 0 && (($companionCherry.curses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat" ) || ( $companionCherry.curses.some(e => e.name === "Fluffy Tail") && $curse18.variation=="flowing cat" )) && !$CherryConvoLac && $companionCherry.affec>16>>
+<<if $mc.lactation > 0 && ($companionCherry.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat') || $companionCherry.curses.some(e => e.name === "Fluffy Tail" && e.tailType === 'flowing cat')) && !$CherryConvoLac && $companionCherry.affec>16>>
 	<<set _numConvos += 1>>[[While trying to milk your breasts you spot Cherry staring at you|Cherry ConvoLac]]<br>
 <</if>>
-<<if $CherryFluffy==false && ($playerCurses.some(e => e.name === "Fluffy Ears") || $playerCurses.some(e => e.name === "Fluffy Tail")) && !($companionCherry.curses.some(e => e.name === "Fluffy Ears") || $companionCherry.curses.some(e => e.name === "Fluffy Tail"))>>
+<<if $CherryFluffy === false && ($mc.hasCurse("Fluffy Ears") || $mc.hasCurse("Fluffy Tail")) && !($companionCherry.hasCurse("Fluffy Ears") || $companionCherry.hasCurse("Fluffy Tail"))>>
 	<<set _numConvos += 1>>[[Chat with Cherry|Cherry Fluffy][$CherryFluffy=true]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionCherry.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionCherry.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Cherry")>>
+<<if !$SemenDemonVec.some(e => e.name === "Cherry") && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionCherry.penis > 0) || (e.type !== 'vaginal fluids' || $companionCherry.vagina > 0)))>>
 	<<set _numConvos += 1>>[[Perhaps Cherry could help you with your appetite for sexual fluids?|Cherry Semen Demon]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Shrunken Assets") && $currentLayer == 1 && $convo.cherryShrunkenAssets == 0>>
+<<if $mc.hasCurse("Shrunken Assets") && $currentLayer == 1 && $convo.cherryShrunkenAssets == 0>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Shrunken Assets]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Double Pepperoni") && $currentLayer == 3 && $convo.cherryDoublePepperoni == 0>>
+<<if $mc.hasCurse("Double Pepperoni") && $currentLayer == 3 && $convo.cherryDoublePepperoni == 0>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Double Pepperoni]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Megadontia") && $currentLayer == 4 && $convo.cherryMegadontia == 0>>
+<<if $mc.hasCurse("Megadontia") && $currentLayer == 4 && $convo.cherryMegadontia == 0>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Megadontia]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "DoS") && $currentLayer == 5 && $convo.cherryDoS == 0>>
+<<if $mc.hasCurse("DoS") && $currentLayer == 5 && $convo.cherryDoS == 0>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry DoS]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Wandering Hands") && $currentLayer == 6 && $convo.cherryWanderingHands == 0>>
+<<if $mc.hasCurse("Wandering Hands") && $currentLayer == 6 && $convo.cherryWanderingHands == 0>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Wandering Hands]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Weakling") && $currentLayer == 7 && $convo.cherryWeakling == 0>>
+<<if $mc.hasCurse("Weakling") && $currentLayer == 7 && $convo.cherryWeakling == 0>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Weakling]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Power Dom") && $convo.cherryDomOral == 0 && $companionCherry.affec>6 && $mc.penisCor >0 && settings.FemaleSceneToggleFilter>>
+<<if $mc.hasCurse("Power Dom") && $convo.cherryDomOral == 0 && $companionCherry.affec > 6 && $mc.penis > 0 && settings.FemaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Dom Oral Male]]<br>
-<<elseif $playerCurses.some(e => e.name === "Power Dom") && $convo.cherryDomOral == 0 && $companionCherry.affec>6 && $mc.vagina >0 && settings.FemaleSceneToggleFilter>>
+<<elseif $mc.hasCurse("Power Dom") && $convo.cherryDomOral == 0 && $companionCherry.affec > 6 && $mc.vagina > 0 && settings.FemaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Cherry seems to be looking at you|Cherry Dom Oral Female]]<br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Lambent Spectre") && $convo.cherryLambent == 0>>
@@ -2045,10 +2045,10 @@ Double-click this passage to edit it.
 [[End your conversation|Party overview]]
 
 :: Cherry ConvoLac
-As you sensually milk your tender breast, your eyes catch a glimpse of Cherry's new <<if $companionCherry.curses.some(e => e.name === "Fluffy Ears")>>cat ears<<else>>cat tail<</if>> peeking out from <<if $companionCherry.curses.some(e => e.name === "Fluffy Ears")>>their<<else>>its<</if>> secretive hiding place.
+As you sensually milk your tender breast, your eyes catch a glimpse of Cherry's new <<if $companionCherry.hasCurse("Fluffy Ears")>>cat ears<<else>>cat tail<</if>> peeking out from <<if $companionCherry.hasCurse("Fluffy Ears")>>their<<else>>its<</if>> secretive hiding place.
 
 <<say $mc>>Cherry, is that you?<</say>>
-At the sound of her name, her <<if ($companionCherry.curses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat" )>>cat ears perk up<<else>>cat tail quivers<</if>> with anticipation. She shuffles into the open, her eyes downcast and shimmering with vulnerability.
+At the sound of her name, her <<if $companionCherry.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat')>>cat ears perk up<<else>>cat tail quivers<</if>> with anticipation. She shuffles into the open, her eyes downcast and shimmering with vulnerability.
 
 <<say $companionCherry>>Uh yeah... I wasn't, you know, spying on you or anything. I was just wondering...<</say>>
 <<say $mc>>Wondering about what?<</say>>
@@ -2090,7 +2090,7 @@ Her voice trails off, as if she can't bring herself to explain her desires to yo
 She looks down in silence. Her embarrassment has faded, leaving her with an empty expression, as if she's stopped caring about anything in the world.
 
 <<say $mc>>Cherry, that's...<</say>>
-<<say $companionCherry>> I know, I know. But, well, ever since I got <<if $companionCherry.curses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat" >>these ears<<else>>this tail<</if>> I've been somewhat...<</say>>
+<<say $companionCherry>> I know, I know. But, well, ever since I got <<if $companionCherry.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat') >>these ears<<else>>this tail<</if>> I've been somewhat...<</say>>
 <<say $companionCherry>> Happier...<</say>>
 She looks at you and gives you a weak smile. It isn't joyful, but it's something. Which really is saying something for someone like Cherry.
 
@@ -2124,7 +2124,7 @@ She walks off with a bright red face. That was awkward, but that's nothing unusu
 :: Cherry ConvoLac End
 <<set $companionCherry.affec-=(2-$hsswear)>>\
 <<say $mc>>Okay? Strange.<</say>>
-You mumble as the conversation ends. However,<<if $companionCherry.curses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat" >><<set $companionCherry.affec-=(2-$hsswear)>> her ears perk up at your words and she gives you a glance that shows she was clearly hurt. And if that wasn't enough,<</if>> your body language clearly betrays your rejection. It seems that she didn't take that well.
+You mumble as the conversation ends. However,<<if $companionCherry.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat') >><<set $companionCherry.affec-=(2-$hsswear)>> her ears perk up at your words and she gives you a glance that shows she was clearly hurt. And if that wasn't enough,<</if>> your body language clearly betrays your rejection. It seems that she didn't take that well.
 
 [[End your conversation|Party overview]]
 
@@ -2135,7 +2135,7 @@ Cherry's presence feels closer than usual, her proximity betraying a hesitation 
 <<say $companionCherry>>Um, well, I just wanted to say...<</say>>
 Her voice trails off, her uncertainty palpable.
 
-<<if $playerCurses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat" >>
+<<if $mc.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat') >>
 <<say $companionCherry>>I like your $mc.ears.<</say>>
 <<else>>
 <<say $companionCherry>>I like your fluffy tail.<</say>>
@@ -2154,10 +2154,10 @@ Her gaze falls to the ground, almost shyly.
 <<set $companionCherry.affec+=(2+$hsswear)>>\
 <<say $mc>>Sure, no problem.<</say>>
 <<say $companionCherry>>Thank you.<</say>>
-She approaches you, her hand trembling as it reaches for your new <<if $playerCurses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat">>ears<<else>>tail<</if>>. As her fingers brush against it, a small, fragile smile forms on her lips. Moments later, her hand retreats.
+She approaches you, her hand trembling as it reaches for your new <<if $mc.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat') >>ears<<else>>tail<</if>>. As her fingers brush against it, a small, fragile smile forms on her lips. Moments later, her hand retreats.
 
 <<say $companionCherry>>Thank you, that felt nice. I'm a little jealous, you know.<</say>>
-<<say $mc>>Oh, do you also want <<if $playerCurses.some(e => e.name === "Fluffy Ears") && $curse17.variation == "furry cat" >>animal ears<<else>>a tail<</if>>?<</say>>
+<<say $mc>>Oh, do you also want <<if $mc.curses.some(e => e.name === "Fluffy Ears" && e.earType === 'furry cat') >>animal ears<<else>>a tail<</if>>?<</say>>
 <<say $companionCherry>>To be honest, sometimes I wish I were an animal instead of a human altogether.<</say>>
 <<say $mc>>Do you like animals that much?<</say>>
 <<say $companionCherry>>I mainly hate being a human.<</say>>
@@ -2188,31 +2188,31 @@ Her eyes reveal a hint of disappointment, but she quickly scurries away.
 <<if $mc.lactation>0 && !$CloudConvoLac && $companionCloud.affec>16>>
 	<<set _numConvos += 1>>[[You notice Cloud is looking at your clothes, where wet spots have formed|Cloud ConvoLac]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionCloud.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionCloud.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Cloud")>>
+<<if !$SemenDemonVec.some(e => e.name === "Cloud") && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionCloud.penis > 0) || (e.type !== 'vaginal fluids' || $companionCloud.vagina > 0)))>>
 	<<set _numConvos += 1>>[[Maybe Cloud can help you with your appetite for sexual fluids|Cloud Semen Demon]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Perma-dye") && $currentLayer == 1 && $convo.cloudPerma == 0>>
+<<if $mc.hasCurse("Perma-dye") && $currentLayer == 1 && $convo.cloudPerma == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud Perma-dye]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Fluffy Tail") && $currentLayer == 2 && $convo.cloudFluffyTail == 0>>
+<<if $mc.hasCurse("Fluffy Tail") && $currentLayer == 2 && $convo.cloudFluffyTail == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud Fluffy Tail]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A") && $currentLayer == 3 && $convo.cloudSubmissivenessRectificationA == 0>>
+<<if $mc.hasCurse("Submissiveness Rectification A") && $currentLayer == 3 && $convo.cloudSubmissivenessRectificationA == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud Submissiveness Rectification A]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Lie Detector") && $currentLayer == 4 && $convo.cloudLieDetector == 0>>
+<<if $mc.hasCurse("Lie Detector") && $currentLayer == 4 && $convo.cloudLieDetector == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud Lie Detector]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "DoM") && $currentLayer == 5 && $convo.cloudDoM == 0>>
+<<if $mc.hasCurse("DoM") && $currentLayer == 5 && $convo.cloudDoM == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud DoM]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Submissiveness Rectification B") && $currentLayer == 6 && $convo.cloudSubmissivenessRectificationB == 0>>
+<<if $mc.hasCurse("Submissiveness Rectification B") && $currentLayer == 6 && $convo.cloudSubmissivenessRectificationB == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud Submissiveness Rectification B]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Barter System") && $currentLayer == 7 && $convo.cloudBarterSystem == 0>>
+<<if $mc.hasCurse("Barter System") && $currentLayer == 7 && $convo.cloudBarterSystem == 0>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you|Cloud Barter System]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Submissiveness Rectification A")  && $playerCurses.some(e => e.name === "Submissiveness Rectification B") && $companionCloud.affec > 6 && $convo.cloudSubKiss == 0 && settings.MaleSceneToggleFilter>>
+<<if $mc.hasCurse("Submissiveness Rectification A") && $mc.hasCurse("Submissiveness Rectification B") && $companionCloud.affec > 6 && $convo.cloudSubKiss == 0 && settings.MaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Cloud seems to be looking at you, with a firm look in his eye|Cloud Submissiveness Kiss]]<br>
 <</if>>
 <<if $convo.cloudSubKiss == 1 && $convo.cloudSubOral == 0 && !settings.MaleSceneToggleFilter>>
@@ -2556,43 +2556,43 @@ He relinquishes his hold on your breasts, delivers a playful slap to your buttoc
 <<elseif $SaekoConvo3==0 && $companionSaeko.affec>30 && $SaekoConvo2 >> 
 	<<set _numConvos += 1>>[[Chat with Saeko|Saeko Convo3][$SaekoConvo3=true]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Chlorophyll" || e.name === "Cellulose" || e.name === "Flower Power") && $SaekoConvoPlant==false >>
+<<if $mc.curses.some(e => e.name === "Chlorophyll" || e.name === "Cellulose" || e.name === "Flower Power") && $SaekoConvoPlant==false >>
 	<<set _numConvos += 1>>[[Ask Saeko why she's been hovering around you all the time recently|Saeko Plant][$SaekoConvoPlant=true]]<br>
 <</if>>
 <<if $Wetting && $WettingSolution == 0 >>
 	<<set _numConvos += 1>>[[Inquire Saeko why she was annoyed while you were waiting for everything to dry.|Saeko Wetting]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionSaeko.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionSaeko.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === "Saeko") >>
+<<if !$SemenDemonVec.some(e => e.name === "Saeko") && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionSaeko.penis > 0) || (e.type !== 'vaginal fluids' || $companionSaeko.vagina > 0)))>>
 	<<set _numConvos += 1>>[[Maybe Saeko can help you with your appetite for sexual fluids|Saeko Semen Demon]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Flower Power") && $currentLayer == 5 && $convo.saeko == 0>>
+<<if $mc.hasCurse("Flower Power") && $currentLayer == 5 && $convo.saeko == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Flower Power]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Carapacian") && $currentLayer == 5 && $convo.saekoCarapacian == 0>>
+<<if $mc.hasCurse("Carapacian") && $currentLayer == 5 && $convo.saekoCarapacian == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Carapacian]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Lingual Leviathan") && $currentLayer == 4 && $convo.saekoLingualLeviathan == 0>>
+<<if $mc.hasCurse("Lingual Leviathan") && $currentLayer == 4 && $convo.saekoLingualLeviathan == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Lingual Leviathan]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Cold Blooded") && $currentLayer == 4 && $convo.saekoColdBlooded == 0>>
+<<if $mc.hasCurse("Cold Blooded") && $currentLayer == 4 && $convo.saekoColdBlooded == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Cold Blooded]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Gooey") && $currentLayer == 3 && $convo.saekoGooey == 0>>
+<<if $mc.hasCurse("Gooey") && $currentLayer == 3 && $convo.saekoGooey == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Gooey]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "20/20000000") && $currentLayer == 3 && $convo.saeko20 == 0>>
+<<if $mc.hasCurse("20/20000000") && $currentLayer == 3 && $convo.saeko20 == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko 20/20000000]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Increased Sensitivity") && $currentLayer == 1 && $convo.saekoIncreasedSensitivity == 0>>
+<<if $mc.hasCurse("Increased Sensitivity") && $currentLayer == 1 && $convo.saekoIncreasedSensitivity == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Increased Sensitivity]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Leaky") && $currentLayer == 6 && $convo.saekoLeaky == 0>>
+<<if $mc.hasCurse("Leaky") && $currentLayer == 6 && $convo.saekoLeaky == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Leaky]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Minish-ish") && $currentLayer == 7 && $convo.saekoMinish == 0>>
+<<if $mc.hasCurse("Minish-ish") && $currentLayer == 7 && $convo.saekoMinish == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Minish-ish]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Colossal-able") && $currentLayer == 7 && $convo.saekoColossal == 0>>
+<<if $mc.hasCurse("Colossal-able") && $currentLayer == 7 && $convo.saekoColossal == 0>>
 	<<set _numConvos += 1>>[[Saeko seems to be looking at you|Saeko Colossal-able]]<br>
 <</if>>
 <<if $currentLayer == 4 && $convo.saekoL4 == 0>>
@@ -2959,10 +2959,10 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 
 :: Bandit Conversations [nobr]
 <<if $BanditConvo0 == 0 && $companionBandit.affec>-3 >>
-	<<set _numConvos += 1>>[[Take of her gag and talk to the Bandit|Bandit Convo0]]<br>
+	<<set _numConvos += 1>>[[Take off her gag and talk to the Bandit|Bandit Convo0]]<br>
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon") && (($companionBandit.penisCor>0 && $curse82.variation != "vaginal fluids")||($companionBandit.vagina>0 && $curse82.variation != "semen")) && !$SemenDemonVec.some(e => e.name === $companionBandit.name)>>
-	<<set _numConvos += 1>><<print "[["+$companionBandit.name+" can maybe help you with your appetite for sexual fluids|Bandit Semen Demon]]<br>">>
+<<if $mc.curses.some(e => e.name === "Semen Demon" && (($companionBandit.penis > 0 && e.fluidType !== 'vaginal fluids' || ($companionBandit.vagina > 0 && e.fluidType !== 'semen'))) && !$SemenDemonVec.some(e => e.name === $companionBandit.name)>>
+	<<set _numConvos += 1>><<print "[[Maybe "+$companionBandit.name+" can help you with your appetite for sexual fluids|Bandit Semen Demon]]<br>">>
 <</if>>
 
 :: Bandit Convo0 [nobr]
@@ -3206,14 +3206,13 @@ Double-click this passage to edit it.
 A familiar surge of arousal washes over you, and as you scan the room for a potential partner, your eyes lock with $companionTwin.name. <<if $companionTwin.sex=='male'>>He <<else>>She <</if>> looks away, a hint of embarrassment in their expression. Could it be that you're not the only one yearning for some intimate connection?
 
 [[Maybe, maybe not. But you're not getting it on with your twin, real or not|Party overview]]
-<<if !(($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") && $playerCurses.some(e => e.name === "Absolute Birth Control")) || ($companionTwin.curses.some(e => e.name === "Absolute Birth Control") && $playerCurses.some(e => e.name === "Absolute Pregnancy")))>>\
+<<if !(($companionTwin.hasCurse("Absolute Pregnancy") && $mc.hasCurse("Absolute Birth Control")) || ($companionTwin.hasCurse("Absolute Birth Control") && $mc.hasCurse("Absolute Pregnancy")))>>\
 <<ConversationChoices
 [[A proposition never hurt anyone|Twin Sex]]
 >>
 <</if>>
 
 :: Twin Sex
-<<AppearanceCorrect>>
 <<set _temp=false>>
 <<say $mc>> You know, I've been struggling with something lately, and I can't help but wonder if you're experiencing the same thing...<</say>>
 <<say $companionTwin>> Now that you mention it, I have been feeling quite... hot lately. My focus has been all over the place too. <</say>>
@@ -3274,7 +3273,7 @@ You take a deep breath, trying to regain your composure.
 
 :: Twin Sex Oral Receive[nobr]
 <<set _temp = random(0,100)>>
-<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
+<<if $companionTwin.hasCurse("Absolute Birth Control")>>
 	<<set _temp = 100>>
 <</if>>
 $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>kneels down to pleasure you.<br><br>
@@ -3284,7 +3283,7 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 	Your twin responds with a mischievous wink, and before long, you're writhing in ecstasy as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>brings you to a breathtaking climax.
 	<br><br>
 	<<elseif $mc.penisCor < 2>>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp < 20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp < 20 && ($companionTwin.extraWombs.includes('throat'))) >>
 	<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Hmm, it's a bit small, isn't it?<</say>><br>
@@ -3298,7 +3297,7 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 	Your twin replies with a mischievous wink, and soon, you're a trembling, moaning mess as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>guides you to an explosive orgasm.
 	<br><br>
 	<<elseif $mc.penisCor > 6>>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp < 20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp < 20 && ($companionTwin.extraWombs.includes('throat'))) >>
 	<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> You're quite the big boy, aren't you?<</say>><br>
@@ -3319,7 +3318,7 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 	<br><br>
 	<<say $companionTwin>> Okay...<</say>>
 	<<else>>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp < 20 && ($companionTwin.womb1=="throat" || $companionTwin.womb2=="throat")) >>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp < 20 && ($companionTwin.extraWombs.includes('throat'))) >>
 	<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Hello there.<</say>><br>
@@ -3332,7 +3331,7 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 [[End your 'conversation'|Party overview]]
 
 :: Twin Sex Oral Give[nobr]
-<<if $playerCurses.some(e => e.name === "Megadontia")>>
+<<if $mc.hasCurse("Megadontia")>>
 	As you part your lips seductively to begin, $companionTwin.name gazes at your dangerously sharp teeth.
 	<br><br>
 	<<say $companionTwin>> You know what, maybe this isn't the best idea.<</say>><br>
@@ -3342,14 +3341,14 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 	<br><br>
 	[[End your intimate moment|Party overview]]
 	<<else>>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $mc.womb>0 ) || $mc.womb1=="throat" || $mc.womb2=="throat">>
-		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $mc.womb>0 ) || $mc.extraWombs.includes('throat')>>
+		<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 			<<set $pregChance = 1>>
 		<</if>>
 		<<PregCheck>>
 	<</if>>
 	As you sensually open your mouth to begin, you draw your head closer to <<if $companionTwin.sex=='male'>>his throbbing member. As your warm, wet lips slide over his erect penis, he lets out a sultry moan. You expertly work his shaft with your eager mouth.<<else>>her moist, fragrant pussy. As your talented tongue caresses her sensitive lips, she shudders in delight.<</if>>
-	<<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>
+	<<if $mc.hasCurse("Lingual Leviathan")>>
 		The deeper and more passionately your tongue explores, the more $companionTwin.name moans in sheer ecstasy.
 		<br><br>
 		<<say $companionTwin>> Oh god, your tongue is absolutely divine.<</say>><br>
@@ -3370,8 +3369,8 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 :: Twin Sex DP Give
 
 :: Twin Sex Anal Receive[nobr]
-<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $mc.womb>0 ) || $mc.womb1=="anus" || $mc.womb2=="anus">>
-	<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+<<if ($mc.hasCurse("Absolute Pregnancy") && $mc.womb>0 ) || $mc.extraWombds.includes('anus')>>
+	<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 		<<set $pregChance = 1>>
 	<</if>>
 <<PregCheck>>
@@ -3384,13 +3383,13 @@ As the rhythm intensifies, your helpless whimpers evolve into sultry moans of ec
 
 :: Twin Sex Anal Give[nobr]
 <<set _temp = random(0,100)>>
-<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
+<<if $companionTwin.hasCurse("Absolute Birth Control")>>
 	<<set _temp = 100>>
 <</if>>
 As you both eagerly undress, you turn $companionTwin.name around and position yourself at <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>tempting entrance, teasingly pressing against it before plunging in.
 <br><br>
 <<if $mc.penisCor<= 4>>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.extraWombs.includes('anus')))>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> You don't have to be so gentle. Just push it all the way in.<</say>><br>
@@ -3402,7 +3401,7 @@ As you both eagerly undress, you turn $companionTwin.name around and position yo
 	Despite the slightly awkward beginning, you soon find a rhythm that elicits pleasurable moans from $companionTwin.name.
 	<br><br>
 <<elseif $mc.penisCor> 6 >>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.extraWombs.includes('anus')))>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Ow, ow, slow down. How much more is there?<</say>><br>
@@ -3412,7 +3411,7 @@ As you both eagerly undress, you turn $companionTwin.name around and position yo
 	Despite the awkward start, you soon find a rhythm that has $companionTwin.name moaning in ecstasy. After a few minutes, <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>clearly begins to enjoy your larger size.
 	<br><br>
 <<elseif $mc.penisCor> 9 >>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<2 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<2 && ($companionTwin.extraWombs.includes('anus')))>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Ow, ow, slow down. How much more is there?<</say>><br>
@@ -3422,7 +3421,7 @@ As you both eagerly undress, you turn $companionTwin.name around and position yo
 	$companionTwin.name sensuously strokes your throbbing member with <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>skilled hands. Although it's not quite what you initially expected, you soon find yourself lost in the pleasure of their touch.
 	<br><br>
 <<else>>
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.womb1=="anus" || $companionTwin.womb2=="anus"))>>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $companionTwin.womb > 0) || (_temp<20 && ($companionTwin.extraWombs.includes('anus')))>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Oh, that's perfect. Just push it all the way in.<</say>><br>
@@ -3436,8 +3435,8 @@ An entire half-hour later, you both lie entwined in each other's arms, utterly s
 [[End your 'conversation'|Party overview]]
 
 :: Twin Sex Regular Receive[nobr]
-<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
-<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+<<if !$companionTwin.hasCurse("Absolute Birth Control")>>
+<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 <<set $pregChance = 1>>
 <</if>>
 <<PregCheck>>
@@ -3449,13 +3448,13 @@ The tempo escalates, and your moans harmonize in a symphony of ecstasy. A half-h
 
 :: Twin Sex Regular Give[nobr]
 <<set _temp = random(0,100)>>
-<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
+<<if $companionTwin.hasCurse("Absolute Birth Control")>>
 	<<set _temp = 100>>
 <</if>>
 Both of you shed your garments with fervor, your desire for one another palpable. You ease $companionTwin.name's legs apart, revealing her glistening, welcoming pussy. With a mixture of anticipation and lust, you position yourself to enter her.
 <br><br>
 <<if $mc.penisCor<= 4>>
-	<<if (_temp < 20 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<if (_temp < 20 || $mc.hasCurse("Absolute Pregnancy")) && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Just push it all the way in. You don't need to be so gentle.<</say>><br>
@@ -3467,7 +3466,7 @@ Both of you shed your garments with fervor, your desire for one another palpable
 	Despite the slightly awkward beginning, you soon find your rhythm, fueled by $companionTwin.name's moans of pleasure.
 	<br><br>
 <<elseif $mc.penisCor> 6 >>
-	<<if (_temp < 20 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<if (_temp < 20 || $mc.hasCurse("Absolute Pregnancy")) && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Ow, ow, slow down. How much more is there?<</say>><br>
@@ -3484,7 +3483,7 @@ Both of you shed your garments with fervor, your desire for one another palpable
 	$companionTwin.name begins to sensually stroke your member with <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>skillful hands. Although it might not be what you initially expected, you quickly succumb to the pleasure, your body responding to every touch.
 	<br><br>
 <<else>>
-	<<if (_temp < 20 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<if (_temp < 20 || $mc.hasCurse("Absolute Pregnancy")) && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Ow, that's right, just push it all the way in.<</say>><br>
@@ -3516,8 +3515,8 @@ The air crackles with anticipation as both of you undress, desire blazing in you
 	Moments later, you find yourselves entwined in each other's arms, basking in the afterglow of your shared passion. This was the best idea you've had in a while.
 	<br><br>
 <</if>>
-<<if !$playerCurses.some(e => e.name === "Absolute Birth Control") || !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
-	<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+<<if !$mc.hasCurse("Absolute Birth Control") || !$companionTwin.hasCurse("Absolute Birth Control")>>
+	<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 		<<set $pregChance = 1>>
 	<</if>>
 <<PregCheck>>
@@ -3526,12 +3525,12 @@ The air crackles with anticipation as both of you undress, desire blazing in you
 
 :: Twin Sex Pull Out Give[nobr]
 <<set _temp = random(0,100)>>
-<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
+<<if $companionTwin.hasCurse("Absolute Birth Control")>>
 	<<set _temp = 100>>
 <</if>>
 As the last of your clothes fall to the floor, you can't help but admire the erotic sight of $companionTwin.name's naked body. You gently guide her down, parting her silky thighs before aligning your throbbing shaft with her slick entrance. A sensual moan escapes her lips as you slowly penetrate her, sending shivers down both of your spines.
 <br><br>
-<<if $playerCurses.some(e => e.name === "Increased Sensitivity") >>
+<<if $mc.hasCurse("Increased Sensitivity") >>
 	<<set _temp = _temp /10>>
 	<<set $companionTwin.affec -=(3-$hsswear)>>
 	As your arousal builds, the hypersensitivity curse makes it impossible to control your impending orgasm. Despite your best intentions, you release your hot seed deep inside her. $companionTwin.name moans loudly, her back arching with pleasure. After a few seconds, she pushes you away.
@@ -3551,7 +3550,7 @@ As the last of your clothes fall to the floor, you can't help but admire the ero
 
 [[End your 'conversation'|Party overview]]
 
-<<if _temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy") || $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+<<if _temp < 2 || $mc.hasCurse("Absolute Pregnancy") || $companionTwin.hasCurse("Absolute Pregnancy")>>
 	<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>\
 <</if>>
 
@@ -3570,7 +3569,7 @@ $companionTwin.name gazes at you with lust-filled eyes as <<if $companionTwin.se
 	<<say $companionTwin>> Yeah, you're right. What was I thinking?<</say>><br><br>
 	[[End your 'conversation'|Party overview]]
 <<elseif $mc.penisCor > 6>>
-	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>
+	<<if ($companionTwin.hasCurse("Absolute Pregnancy") || $mc.hasCurse("Absolute Pregnancy")) && $companionTwin.womb > 0>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> You're quite the big boy, aren't you?<</say>><br>
@@ -3582,7 +3581,7 @@ $companionTwin.name gazes at you with lust-filled eyes as <<if $companionTwin.se
 	<br><br>
 	[[End your 'conversation'|Party overview]]
 <<elseif $mc.penisCor > 9>>
-	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $companionTwin.womb > 0>>
+	<<if ($companionTwin.hasCurse("Absolute Pregnancy") || $mc.hasCurse("Absolute Pregnancy")) && $companionTwin.womb > 0>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Oh, wow. I'm glad that's going between my breasts and not somewhere else. What a monster...<</say>><br>
@@ -3594,7 +3593,7 @@ $companionTwin.name gazes at you with lust-filled eyes as <<if $companionTwin.se
 	<br><br>
 	[[End your 'conversation'|Party overview]]
 <<else>>
-	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name=== "Absolute Pregnancy")) && $companionTwin.womb > 0>>
+	<<if ($companionTwin.hasCurse("Absolute Pregnancy") || $mc.curses.some(e => e.name=== "Absolute Pregnancy")) && $companionTwin.womb > 0>>
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>
 	<</if>>
 	<<say $companionTwin>> Hello there.<</say>><br>
@@ -3624,8 +3623,8 @@ You shoot $companionTwin.name a smoldering gaze, slowly exposing your voluptuous
 	<br><br>
 	[[End your 'conversation'|Party overview]]
 	<<elseif $mc.breastsCor > 6>>
-	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $mc.womb > 0>>
-		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if ($companionTwin.hasCurse("Absolute Pregnancy") || $mc.hasCurse("Absolute Pregnancy")) && $mc.womb > 0>>
+		<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 			<<set $pregChance = 1>>
 		<</if>>
 		<<PregCheck>>
@@ -3640,8 +3639,8 @@ You shoot $companionTwin.name a smoldering gaze, slowly exposing your voluptuous
 	<br><br>
 	[[End your 'conversation'|Party overview]]
 <<elseif $mc.breastsCor > 9>>
-	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $mc.womb > 0>>
-		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if ($companionTwin.hasCurse("Absolute Pregnancy") || $mc.hasCurse("Absolute Pregnancy")) && $mc.womb > 0>>
+		<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 			<<set $pregChance = 1>>
 		<</if>>
 		<<PregCheck>>
@@ -3659,8 +3658,8 @@ You shoot $companionTwin.name a smoldering gaze, slowly exposing your voluptuous
 	<br><br>
 	[[End your 'conversation'|Party overview]]
 <<else>>
-	<<if ($companionTwin.curses.some(e => e.name === "Absolute Pregnancy") || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && $mc.womb > 0>>
-		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if ($companionTwin.hasCurse("Absolute Pregnancy") || $mc.hasCurse("Absolute Pregnancy")) && $mc.womb > 0>>
+		<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 			<<set $pregChance = 1>>
 		<</if>>
 		<<PregCheck>>
@@ -3676,7 +3675,7 @@ You shoot $companionTwin.name a smoldering gaze, slowly exposing your voluptuous
 
 :: Twin Sex Scissor [nobr]
 <<set _temp = random(0,100)>>
-<<if $companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>
+<<if $companionTwin.hasCurse("Absolute Birth Control")>>
 	<<set _temp = 100>>
 <</if>>
 $companionTwin.name lets out a sensual giggle after you propose the erotic act of tribbing.
@@ -3700,7 +3699,7 @@ You shudder as an explosive orgasm rolls through you, and as if triggered by you
 	<<say $companionTwin>>It's okay. You know, when you transform that little clit into a real one, we'll be perfect twins!<</say>><br>
 	<<if $companionTwin.sex=="male">>He<<else>>She<</if>> plants a soft, lingering kiss on your lips as she stands up and begins to clean <<if $companionTwin.sex=="male">>him<<else>>her<</if>>self.
 	<br><br>
-	<<if (_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy") || $companionTwin.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control")>>\
+	<<if (_temp < 2 || $mc.hasCurse("Absolute Pregnancy") || $companionTwin.hasCurse("Absolute Pregnancy")) && !$mc.hasCurse("Absolute Birth Control")>>\
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>\
 	<</if>>\
 <<elseif $companionTwin.penisCor > 0 && $mc.vagina > 0 && $mc.penisCor == 0>>
@@ -3714,8 +3713,8 @@ You shudder as an explosive orgasm rolls through you, and as if triggered by you
 	<<say $mc>>It's okay. You know, when we transform that little clit into a real one, we'll be perfect twins!<</say>><br>
 	You plant a soft, lingering kiss on <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>lips as you both stand up and begin to clean yourselves.
 	<br><br>
-	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
-		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if !$companionTwin.hasCurse("Absolute Birth Control")>>\
+		<<if $companionTwin.hasCurse("Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -3732,11 +3731,11 @@ You shudder as an explosive orgasm rolls through you, and as if triggered by you
 	<<say $companionTwin>>Yeah, good plan.<</say>><br>
 	You both stand up and start cleaning yourselves.
 	<br><br>
-	<<if $companionTwin.womb > 0 && ((_temp < 2 || $playerCurses.some(e => e.name === "Absolute Pregnancy")) && !$playerCurses.some(e => e.name === "Absolute Birth Control"))>>\
+	<<if $companionTwin.womb > 0 && ((_temp < 2 || $mc.hasCurse("Absolute Pregnancy")) && !$mc.hasCurse("Absolute Birth Control"))>>\
 		<<set setup.setConsideredPregnant($companionTwin)>><<set $pregTwinMC = true>>\
 	<</if>>
-	<<if !$companionTwin.curses.some(e => e.name === "Absolute Birth Control")>>\
-		<<if $companionTwin.curses.some(e => e.name === "Absolute Pregnancy") && $mc.womb> 0>>
+	<<if !$companionTwin.hasCurse("Absolute Birth Control")>>\
+		<<if $companionTwin.hasCurse("Absolute Pregnancy") && $mc.womb> 0>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
@@ -3827,8 +3826,8 @@ With a mutual understanding, you and your twin join forces once more, ready to t
 :: Pulse Bloom Forced
 <<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
 <<if _companion.name== "Bandit" && !$BanditConvo0>>Your eyes go over your captive as she is struggling helplessly against the ropes.<<else>>Silently, you approach _companion.name,  moving stealthily to catch them off guard. You aim to coax <<if _companion.sex=="male">>him<<else>>her<</if>> into a subdued state and wrestle <<if _companion.sex=="male">>him<<else>>her<</if>> into submission.<</if>>
-<<set _appFitCor = $playerCurses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>\
-<<set _companionFitCor = _companion.curses.some(e => e.name === "Weakling") ? 0 : _companion.fit>>\
+<<set _appFitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>\
+<<set _companionFitCor = _companion.hasCurse("Weakling") ? 0 : _companion.fit>>\
 <<if _companion.name== "Bandit" && !$BanditConvo0>>\
 The bound bandit is helpless to resist you!
 
@@ -3925,7 +3924,7 @@ You remove the makeshift gag of the bandit.
 
 <<say $mc>> I want to copy your appearance, but in order to do that I need to extract two liters of blood with this relic.<</say>>
 <<say $companionBandit>>Fuck you!<</say>>
-<<say $mc>> Okay, so I guess this is comming back on.<</say>>
+<<say $mc>> Okay, so I guess this is coming back on.<</say>>
 You gag of the bandit once again.<<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">>
 
 <<say $companionBandit>>Hmpf!<</say>>
@@ -3946,8 +3945,8 @@ You produce the unusual flower, the crimson hue glimmering in the light.
 	You ready the Pulse Bloom, your heart racing with anticipation.
 
 	<<link "Extract the blood to use the Pulse Bloom" "Pulse Bloom Transformation" >>
-		<<set _appFitCor = $playerCurses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>
-		<<set _companionFitCor = _companion.curses.some(e => e.name === "Weakling") ? 0 : _companion.fit>>
+		<<set _appFitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>
+		<<set _companionFitCor = _companion.hasCurse("Weakling") ? 0 : _companion.fit>>
 
 		<<set _companion.affec -= 2 - $hsswear>>
 		<<set $PulseBloomStorage.osex = $mc.osex>>
@@ -4632,7 +4631,7 @@ You start to pry out the Omoikane Circuit from your phone, causing it to immedia
 	<<say $mc>> Why?<</say>>
 	<<set $companionAI.imageIcon= "Icons/Ai_smirk.png">> <<say $companionAI>> Because when everybody inevitably leaves you, you can at least train your body more and haul back the Relics by yourself.<</say>>
 	<<say $mc>> Yeah, yeah, I get it. I'll end sad and lonely, you made your point.<</say>>
-	<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B") || $mc.appAge<12 >>\
+	<<if $mc.hasCurse("Urine Reamplification A") || $mc.hasCurse("Urine Reamplification B") || $mc.appAge < 12 >>\
 		<<say $companionAI>> And at this rate, you'll end up with wet pants as well. So maybe add the Event Horizon to that list as well.<</say>>
 		<<say $mc>> What do you mean I'll end...<</say>>
 		Suddenly it dawns on you that she is referring to the altered state of your body and how it increases the risk of you actually wetting yourself and you blush deeply.
@@ -4881,7 +4880,7 @@ You gulp.
 
 
 :: SemenDemonGeneral
-<<if  $playerCurses.some(e => e.name === "Megadontia")>>\
+<<if  $mc.hasCurse("Megadontia")>>\
 	As you part your lips to begin, _handle.name catches sight of your razor-sharp teeth.
 
 	<<say _handle>> You know what, maybe this isn't the best idea.<</say>>
@@ -4891,14 +4890,14 @@ You gulp.
 
 	[[End your 'conversation'|Party overview]]
 <<else>>\
-	<<if ($playerCurses.some(e => e.name === "Absolute Pregnancy") && $mc.womb>0 ) || $mc.womb1=="throat" || $mc.womb2=="throat">>\
-		<<if _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if ($mc.hasCurse("Absolute Pregnancy") && $mc.womb>0 ) || $mc.extraWombs.includes('throat')>>\
+		<<if _handle.hasCurse("Absolute Pregnancy")>>
 			<<set $pregChance = 1>>	
 		<</if>>
 		<<PregCheck>>\
 	<</if>>
 	Gently opening your mouth, you lean in closer to <<if _handle.sex=='male'>>his throbbing member. As your lips slide over his penis, he lets out a soft moan. You begin to work his shaft with your mouth.<<else>>her glistening folds. As your tongue brushes against her lips, she shudders slightly.<</if>>. 
-	<<if $playerCurses.some(e => e.name === "Lingual Leviathan")>>\
+	<<if $mc.hasCurse("Lingual Leviathan")>>\
 		As your talented tongue becomes more involved, _handle.name's moans of pleasure grow louder.
 
 		<<say _handle>> Good god, your tongue is out of this world<</say>>
@@ -5689,7 +5688,7 @@ You sit, back against the rough bark of a massive tree, your new fur-covered ski
 <<say $companionMaru>>You look... different, you know? Like a cute, fuzzy...um, creature!<</say>>
 Maru's wide eyes, reflecting the sunlight in a soft shine, look at you with a mixture of awe and curiosity. His small fingers reach out to touch your fur, hesitating slightly in the air.
 
-You nod, giving him a reassuring smile. The $curse19.variation fur on your body, soft and surprisingly warm, has become a part of your new existence in the Abyss.
+You nod, giving him a reassuring smile. The $mc.skinType fur on your body, soft and surprisingly warm, has become a part of your new existence in the Abyss.
 
 <<say $mc>>Feels strange, doesn't it?<</say>>
 You extend your arm towards him, inviting him to touch.
@@ -6266,13 +6265,13 @@ Her voice is still flat, her words laced with resignation, but the hint of conce
 
 The first layer of the Abyss was a marvel of serene twilight, an eerie yet captivating spectacle. Unearthly trees reached high towards the dim-lit sky, their leaves rustling in a whispering breeze, and the air was crisp with a touch of metallic chill. You and Cloud had taken a moment to rest, your recent transformation rendering you a bit disoriented.
 
-Your $curse7.variation colored hair, a stark contrast to the natural hues of this layer, added an exotic aura to your presence. The unique change was intriguing yet somewhat unsettling.
+Your $mc.hair colored hair, a stark contrast to the natural hues of this layer, added an exotic aura to your presence. The unique change was intriguing yet somewhat unsettling.
 
 <<say $companionCloud>>Well, well, aren't you a sight for sore eyes? I always knew you had a spark, but this... This is a full-blown flame.<</say>>
 Cloud reclined against an imposing tree, his eyes gleaming with a mix of mischief and admiration. He crossed his arms, his ruggedly handsome face lit by an easy grin, reflecting the playful twinkle in his eyes.
 
 <<say $mc>>It's certainly a change, isn't it? I'm still getting used to it.<</say>>
-You brushed your hand through your $curse7.variation colored hair, feeling the strands slide through your fingers, the visual reminder of the Abyss's peculiar influence.
+You brushed your hand through your $mc.hair colored hair, feeling the strands slide through your fingers, the visual reminder of the Abyss's peculiar influence.
 
 <<say $companionCloud>>Change, my dear, is the essence of life. And you... you've become a glorious representation of that philosophy. You carry it with poise, like an artist's brushstroke on a canvas.<</say>>
 Cloud's words resonated in the tranquil air, his voice rich with warmth. He moved to stand next to you, an embodiment of confidence against the backdrop of the Abyss, his eyes focused on the horizon but his thoughts, it seemed, were much closer.
@@ -6285,7 +6284,7 @@ He turned to look at you, a sincere glow in his eyes that mirrored the earnestne
 
 :: Cloud Fluffy Tail
 
-The canopy of the second layer stretched far above you, a dizzying array of greenery pierced by sharp shafts of sunlight. The air was thick with the smell of damp earth and the peculiar sweet aroma of unseen flowers. Your new tail, bushy and more akin to a $curse18.variation's than any other creature, twitched behind you. It was an unfamiliar feeling, the sensation of it brushing against your legs as you moved, a constant fluffy presence.
+The canopy of the second layer stretched far above you, a dizzying array of greenery pierced by sharp shafts of sunlight. The air was thick with the smell of damp earth and the peculiar sweet aroma of unseen flowers. Your new tail, bushy and more akin to a $mc.curses.filter(c => c instanceof FluffyTail)[0].tailType's than any other creature, twitched behind you. It was an unfamiliar feeling, the sensation of it brushing against your legs as you moved, a constant fluffy presence.
 
 <<say $companionCloud>>Well, if it isn't the cutest adventurer in all the Abyss.<</say>>
 Cloud's voice echoed from behind you, his tone playful yet laced with a hint of admiration.

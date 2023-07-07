@@ -43,63 +43,67 @@ This game is very NSFW, as it contains both sexual and potentially disturbing im
 Please describe yourself, though do keep in mind that some features may change as you delve deeper into the Abyss.
 
 Sex: You are currently <<print $mc.sex>>.
-[[Male|Start 3][$mc.sex = "male"]]
-[[Female|Start 3][$mc.sex = "female"]]
+[[Male|Start 3][$mc.mindSex = "male";$mc.osex = 'male';$mc.openis = $mc.obreasts * 2;$mc.obreasts = 0]]
+[[Female|Start 3][$mc.mindSex = "female";$mc.osex = 'female';$mc.obreasts = $mc.openis / 2;$mc.openis=0]]
 
 Name:
-<<textbox "$mc.name" "Nana">>
+<<textbox "$mc.name" $mc.name>>
 
 Body build (influences starting carrying capacity):
-<<radiobutton "$mc.fit" "2" >> Out of shape (-1.5 kg)
-<<radiobutton "$mc.fit" "5" checked>> Average (+0 kg)
-<<radiobutton "$mc.fit" "8" >> Well toned (+1.5 kg)
+<<radiobutton "$mc.fit" 2 autocheck>> Out of shape (-1.5 kg)
+<<radiobutton "$mc.fit" 5 autocheck>> Average (+0 kg)
+<<radiobutton "$mc.fit" 8 autocheck>> Well toned (+1.5 kg)
 
 Hair color:
-<<radiobutton "$mc.ohair" "black" checked>> Black
-<<radiobutton "$mc.ohair" "brown" >> Brown
-<<radiobutton "$mc.ohair" "blonde" >> Blonde
-<<radiobutton "$mc.ohair" "red" >> Red
-<<radiobutton "$mc.ohair" "gray" >> Gray
+<<radiobutton "$mc.ohair" "black" autocheck>> Black
+<<radiobutton "$mc.ohair" "brown" autocheck>> Brown
+<<radiobutton "$mc.ohair" "blonde" autocheck>> Blonde
+<<radiobutton "$mc.ohair" "red" autocheck>> Red
+<<radiobutton "$mc.ohair" "gray" autocheck>> Gray
 
 Eye color:
-<<radiobutton "$mc.oeyeColor" "blue" checked>> Blue
-<<radiobutton "$mc.oeyeColor" "brown" >> Brown
-<<radiobutton "$mc.oeyeColor" "gray" >> Gray
-<<radiobutton "$mc.oeyeColor" "green" >> Green
-<<radiobutton "$mc.oeyeColor" "hazel" >> Hazel
+<<radiobutton "$mc.oeyeColor" "blue" autocheck>> Blue
+<<radiobutton "$mc.oeyeColor" "brown" autocheck>> Brown
+<<radiobutton "$mc.oeyeColor" "gray" autocheck>> Gray
+<<radiobutton "$mc.oeyeColor" "green" autocheck>> Green
+<<radiobutton "$mc.oeyeColor" "hazel" autocheck>> Hazel
 
 Skin color:
-<<radiobutton "$mc.oskinColor" "pale" checked>> Pale
-<<radiobutton "$mc.oskinColor" "tanned" >> Tanned
-<<radiobutton "$mc.oskinColor" "olive" >> Olive
-<<radiobutton "$mc.oskinColor" "brown" >> Brown
-<<radiobutton "$mc.oskinColor" "dark brown" >> Dark Brown
+<<radiobutton "$mc.oskinColor" "pale" autocheck>> Pale
+<<radiobutton "$mc.oskinColor" "tanned" autocheck>> Tanned
+<<radiobutton "$mc.oskinColor" "olive" autocheck>> Olive
+<<radiobutton "$mc.oskinColor" "brown" autocheck>> Brown
+<<radiobutton "$mc.oskinColor" "dark brown" autocheck>> Dark Brown
 
 Height (to the nearest cm):
-<<textbox "$mc.oheight" "170">><<if $mc.sex == "female">>
+<<textbox "$mc.oheight" $mc.oheight>>\
 
+<<if $mc.osex == "female">>
 Breast size:
-<<radiobutton "$mc.breasts" 0 >> Flat (Masculine)
-<<radiobutton "$mc.breasts" 1 >> AA
-<<radiobutton "$mc.breasts" 2 >> A
-<<radiobutton "$mc.breasts" 3 checked>> B
-<<radiobutton "$mc.breasts" 4 >> C
-<<radiobutton "$mc.breasts" 5 >> D
-<<radiobutton "$mc.breasts" 6 >> DD<</if>><<if $mc.sex == "male">>
+<<radiobutton "$mc.obreasts" 0 autocheck>> Flat (Masculine)
+<<radiobutton "$mc.obreasts" 1 autocheck>> AA
+<<radiobutton "$mc.obreasts" 2 autocheck>> A
+<<radiobutton "$mc.obreasts" 3 autocheck>> B
+<<radiobutton "$mc.obreasts" 4 autocheck>> C
+<<radiobutton "$mc.obreasts" 5 autocheck>> D
+<<radiobutton "$mc.obreasts" 6 autocheck>> DD
+<</if>>\
 
+<<if $mc.osex == "male">>\
 Penis size:
-<<radiobutton "$mc.penis" 4 >> Small
-<<radiobutton "$mc.penis" 5 >> Slightly Below Average
-<<radiobutton "$mc.penis" 6 checked>> Average
-<<radiobutton "$mc.penis" 7 >> Large
-<<radiobutton "$mc.penis" 8 >> Huge<</if>>
+<<radiobutton "$mc.openis" 4 autocheck>> Small
+<<radiobutton "$mc.openis" 5 autocheck>> Slightly Below Average
+<<radiobutton "$mc.openis" 6 autocheck>> Average
+<<radiobutton "$mc.openis" 7 autocheck>> Large
+<<radiobutton "$mc.openis" 8 autocheck>> Huge
+<</if>>\
 
 Age:
-<<textbox "$mc.age" "25">>
+<<textbox "$mc.age" $mc.age>>
 
 Before proceeding, please estimate your carrying capacity (in kg) if you were in average shape. If you believe it's less than the human average of 20 kg, we typically recommend spending a few weeks training in Outset Town to reach that level before descending. With Outset Town's specialized training and medical professionals, almost anyone can achieve a 20 kg carrying capacity in no time! Keep in mind that your carrying capacity may change during your expedition due to Curses affecting your body and strength, or simply due to the exercise of exploring the Abyss.
 
-<<textbox "$ocarryWeight" "20">>
+<<textbox "$ocarryWeight" $ocarryWeight || 20>>
 
 [[Arrive at Outset Town|Start 4][$intro=true]]
 
@@ -107,39 +111,24 @@ Before proceeding, please estimate your carrying capacity (in kg) if you were in
 
 
 :: Start 4 [surface nobr]
-<<set $mc.penis = parseInt($mc.penis, 10)>>
-<<set $mc.breasts = parseInt($mc.breasts, 10)>>
-<<set $mc.oheight = parseInt($mc.oheight, 10)>>
-<<set $mc.age = parseInt($mc.age, 10)>>
-<<set $mc.fit = parseInt($mc.fit, 10)>>
 <<set $ocarryWeight = parseInt($ocarryWeight, 10)>>
-<<if $mc.sex == "male">>
+<<if $mc.osex == "male">>
 	<<if $mc.openis < 1>>
 		<<set $mc.openis = 1>>
 	<</if>>
-	<<set $mc.penis = $mc.openis>>
-	<<set $mc.gender = 1>>
 	<<set $mc.ogender = 1>>
-	<<set $mc.vagina = 0>>
-	<<set $mc.osex = "male">>
 <<else>>
-	<<set $mc.penis = 0>>
 	<<set $mc.openis = 0>>
-	<<set $mc.gender = 6>>
 	<<set $mc.ogender = 6>>
-	<<set $mc.vagina = 1>>
-	<<set $mc.womb = 1>>
 	<<set $mc.osex = "female">>
-	<<if $mc.breasts < 1>>
-		<<set $mc.breasts = 1>>
+	<<if $mc.obreasts < 1>>
+		<<set $mc.obreasts = 1>>
 	<</if>>
 	<<set $menCycleFlag = true>>
 	<<set $menFirstCycle = false>>
 	<<set $menCycleT_flag = true>>
 	<<set $heatCycleT_flag = true>>
 <</if>>
-<<set $mc.obreasts = $mc.breasts>>
-<<set $mc.breastsCor = $mc.obreasts>>
 <<set $carryWeight = $ocarryWeight>>
 <<set $totalCarry = $carryWeight>>
 
