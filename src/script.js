@@ -16,13 +16,6 @@ function backwardCompat(vars, version) {
 		// Remove the $app object.
 		delete vars.app;
 	}
-	if (!version || version < 2) {
-		// Ensure oimageIcon exists (although it might be wrong).
-		for (const companion of ['Maru', 'Lily', 'Khemia', 'Cherry', 'Cloud', 'Saeko', 'Twin', 'AI']) {
-			const companionVar = vars[`companion${companion}`];
-			companionVar.oimageIcon ??= companionVar.imageIcon;
-		}
-	}
 
 	// Prevent instant bad end from improperly set age.
 	if (vars.mc.age < 18) vars.mc.age = 18;
@@ -127,10 +120,10 @@ Config.navigation.override = function (destPassage) {
 		StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
 		return "Bandit Escape";
 	}
-	if (StoryVar.currentLayer == 0 && StoryVar.mc.imageIcon == "Icons/BanditIcon_released.jpg" &&  StoryVar.mc.inhuman<6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
+	if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/BanditIcon_released.jpg" &&
+		StoryVar.mc.inhuman < 6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
 		return "Bandit Arrested";
 	}
-	currentLayer
 	if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 3 && StoryVar.mc.age > 17) {
 		return "AgeEnd";
 	}
@@ -181,7 +174,7 @@ $(document).on(':passagestart', () => {
 
 	/* ---- Companion object identity ---- */
 
-	// Get names of twin and bandit so we don't have to look them up each time.
+	// Get names of twin and bandit, so we don't have to look them up each time.
 	const twinName = vars.companionTwin.name;
 	const banditName = vars.companionBandit.name;
 
@@ -197,7 +190,7 @@ $(document).on(':passagestart', () => {
 	// Restore object identity between elements of companion arrays and $companionName variables.
 	for (const companions of companionArrays) {
 		for (const [i, companion] of companions.entries()) {
-			const name = companion.name == twinName ? 'Twin' : companion.name == banditName ? 'Bandit' : companion.name;
+			const name = companion.name === twinName ? 'Twin' : companion.name === banditName ? 'Bandit' : companion.name;
 			const companionVar = vars[`companion${name}`];
 			if (companionVar) {
 				companions[i] = companionVar;
@@ -205,53 +198,6 @@ $(document).on(':passagestart', () => {
 				console.error(`Couldn't find named companion variable for companion with name ${companion.name}!`);
 			}
 		}
-	}
-
-	/* ---- Curse object identity ---- */
-
-	// Get all numbered curse variables.
-	const curseVars = Object.keys(vars).filter(key => /curse\d+/.test(key)).map(key => vars[key]);
-
-	// Get all the curse array variables.
-	const miscCurseArrays = [
-		'curses',
-		'playerCurses',
-		'StoredCurse',
-		'ManagedMisfortuneActive',
-	].map(varName => vars[varName]);
-	const companionCurseArrays = vars.companions.map(companion => companion.curses);
-	const curseArrays = miscCurseArrays.concat(companionCurseArrays);
-
-	// Restore object identity between elements of curse arrays and $curseN variables.
-	// Note: Change this if curses become instanced.
-	for (const curses of curseArrays) {
-		for (const [i, curse] of curses.entries()) {
-			const curseVar = curseVars.find(curseVar => curse.name === curseVar.name);
-			if (curseVar) {
-				curses[i] = curseVar;
-			} else {
-				console.error(`Couldn't find numbered curse variable for curse with name ${curse.name}!`);
-			}
-		}
-	}
-
-	// Restore object identity between curses in curse logs and $curseN variables.
-	const logNameSuffixes = ['', ...vars.companions.map(companion => companion.name), 'Bandit'];
-	for (const type of ['Height', 'Gender', 'Age', 'Libido', 'Handicap']) {
-		for (const suffix of logNameSuffixes) {
-			const events = vars[`${type}Log${suffix}`];
-			for (const [i, event] of events.entries()) {
-				const curseVar = curseVars.find(curseVar => event.name === curseVar.name);
-				if (curseVar) events[i] = curseVar;
-			}
-		}
-		// Restore object identity between twin curse logs and mc curse logs.
-		vars[`${type}LogTwin`] = vars[`${type}Log`];
-	}
-
-	// Restore object identity between $mc.curses, $companionTwin.curses and $playerCurses.
-	for (const target of ['mc', 'companionTwin']) {
-		vars[target].curses = vars.playerCurses;
 	}
 
 	/* ---- Relic object identity ---- */
@@ -426,11 +372,27 @@ Object.defineProperties(setup, {
 	},
 	// Get curse by name.
 	curse: {
-		value: name => findByName('curses', name),
+		value: name => {
+			for (const curse in setup.allCurses) {
+				if (curse.name === name) {
+					return Reflect.construct(curse.constructor, []);
+				}
+			}
+			return undefined;
+		},
 	},
 	// Get curses by names.
 	curses: {
-		value: names => findByNames('curses', names),
+		value: names => {
+			return names.map(name => {
+				for (const curse in setup.allCurses) {
+					if (curse.name === name) {
+						return Reflect.construct(curse.constructor, []);
+					}
+				}
+				return undefined
+			}).filter(c => c !== undefined);
+		},
 	},
 	// Get item by name.
 	item: {
@@ -470,7 +432,7 @@ Object.defineProperties(setup, {
 	},
 	// Count the number of instances of a Curse active on the main character.
 	activeCurseCount: {
-		value: name => variables().playerCurses.filter(curse => curse.name === name).length,
+		value: name => variables().mc.events.filter(curse => curse.name === name).length,
 	},
 	// Returns the weight of the carried items and relics.
 	carriedWeight: {
@@ -753,7 +715,7 @@ Object.defineProperties(setup, {
 				willingCurses.push('Sex Switcheroo');
 			}
 			// If sex switcheroo is not an option, they'd take futa too
-			if (State.variables.playerCurses.find(c => c.name === 'Sex Switcheroo') === undefined && wantsOtherGenitals) {
+			if (State.variables.mc.curses.find(c => c.name === 'Sex Switcheroo') === undefined && wantsOtherGenitals) {
 				willingCurses.push('Futa Fun');
 			}
 			// men do *not* want to get pregnant.

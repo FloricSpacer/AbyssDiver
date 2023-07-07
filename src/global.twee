@@ -1,7 +1,7 @@
 :: StoryMenu
 [[Appearance]]
 [[Inventory]]
-<<if $playerCurses.length> 0>>\
+<<if $mc.curses.length > 0>>\
 [[Curses]]
 <</if>>\
 <<if $hiredCompanions.length> 0>>\
@@ -10,10 +10,10 @@
 <<if setup.haveNotepad>>\
 [[Layer Notes]]
 <</if>>\
+[[Debug Menu]]
 <br>
 
 :: Curses [noreturn]
-<<AppearanceCorrect>>\
 <<nobr>>
 
 <<if $endSpectre > 0>>
@@ -26,9 +26,9 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 
 Your Curses are:<br>
 
-<<for _i = 0; _i < $playerCurses.length; _i++>>
+<<for _i = 0; _i < $mc.curses.length; _i++>>
 	<<capture _i>>
-		<<print "[[$playerCurses[_i].name|Curse Info][$temp = _i]]">><br>
+		<<print "[[$mc.curses[_i].name|Curse Info][$temp = _i]]">><br>
 	<</capture>>
 <</for>>
 <</nobr>>
@@ -36,12 +36,12 @@ Your Curses are:<br>
 
 :: Curse Info
 
-!<<print $playerCurses[$temp].name>>
-[img[setup.ImagePath+$playerCurses[$temp].pic]]
+!<<print $mc.curses[$temp].name>>
+[img[setup.ImagePath+$mc.curses[$temp].pic]]
 
-<<include `$playerCurses[$temp].name + " Description"`>>
+<<include `$mc.curses[$temp].name + " Description"`>>
 
-//Corruption value: $playerCurses[$temp].corr//
+//Corruption value: $mc.curses[$temp].corr//
 
 <<back>>
 
@@ -200,6 +200,7 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 [[Take on The Maxim]]
 [[Layer1 Bandits Won]]
 [[check values]]
+[[Sandbox]]
 <<back>>
 
 :: check values [noreturn]
@@ -239,8 +240,7 @@ eyeCount $mc.eyeCount
 armCount $mc.armCount
 legCount $mc.legCount
 womb $mc.womb
-womb1 $mc.womb1
-womb2 $mc.womb2
+extraWombs $mc.extraWombs
 desc $mc.desc
 blood $mc.blood
 age $mc.age
@@ -248,7 +248,6 @@ appAge $mc.appAge
 libido $mc.libido
 subdom $mc.subdom
 HandicapMovement $mc.HandicapMovement
-/* Set in <<UpdateAttributes>> */
 genderVoice $mc.genderVoice
 style $mc.style
 style1 $mc.style1
@@ -265,7 +264,7 @@ Curses added and removed on this page will not influence corruption.<br><br>
         <<for _cursename range _layer>>
             <<set _curse = $curses.find(c => c.name === _cursename)>>
             <<capture _cursename, _curse>>
-                <<if $playerCurses.find(c => c.name === _curse.name) !== undefined>>
+                <<if $mc.hasCurse(_curse.name)>>
                     <<set _linktext = "Remove " + _cursename>>
                     <<link _linktext "Adjust Curses">>
                         <<RemoveCurse _curse>>
@@ -273,10 +272,7 @@ Curses added and removed on this page will not influence corruption.<br><br>
                 <<else>>
                     <<set _linktext = "Take " + _cursename>>
                     <<link _linktext "Adjust Curses">>
-                        <<set $playerCurses.push(_curse)>>
-                        <<set _logName = _curse.type + "Log">>
-                        <<set _logVar = State.variables[_logName]>>
-                        <<if _logVar>><<set _logVar.push(_curse)>><</if>>
+                        <<set $mc.addCurse(_curse)>>
                     <</link>><br>
                 <</if>>
             <</capture>>
@@ -286,17 +282,14 @@ Curses added and removed on this page will not influence corruption.<br><br>
 <br>
 <<link "Take all curses" "Adjust Curses">>
     <<for _curse range $curses>>
-        <<if $playerCurses.find(c => c.name === _curse.name) === undefined>>
-            <<set $playerCurses.push(_curse)>>
-            <<set _logName = _curse.type + "Log">>
-            <<set _logVar = State.variables[_logName]>>
-            <<if _logVar>><<set _logVar.push(_curse)>><</if>>
+        <<if $mc.hasCurse(_curse.name) >>
+            <<set $mc.addCurse(_curse)>>
         <</if>>
     <</for>>
 <</link>> (including incompatible ones – use at your own risk)<br>
 <<link "Remove all curses" "Adjust Curses">>
     <<for _curse range $curses>>
-        <<if $playerCurses.find(c => c.name === _curse.name) !== undefined>>
+        <<if $mc.hasCurse(_curse.name) >>
             <<RemoveCurse _curse>>
         <</if>>
     <</for>>
@@ -482,7 +475,7 @@ Thanks again for playing!
 
 
 :: Appearance [noreturn nobr]
-<<CarryAdjust>><<AppearanceCorrect>><<Inhuman>>
+<<CarryAdjust>>
 Your name is $mc.name and you are a $mc.sex <<PerceivedRace $mc>>.<br><br>
 Your hair color is $mc.hair.<br>
 <<if $mc.eyeCount==0>>
@@ -500,9 +493,9 @@ which allows you to perceive the world even better than when you had both your n
 You have two normal, $mc.eyeColor eyes.<br>
 <</if>>
 
-You have $mc.skinColor colored $mc.skinType skin.<<if $mc.skinType.includes("furred") >> $curse19.appDesc <</if>><br>
+You have $mc.skinColor colored $mc.skinType skin.<<if $mc.skinType.includes("furred") >> <<print setup.allCurses.MaximumFluff.appDesc>><</if>><br>
 <<if $mc.armCount==1>>You only have one arm. <<if $BionicArm>>It is a pretty cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount>2>>You have more arms now than you started with. You're not used to it yet, so they still get in the way.<<if $BionicArm>>One of them is a bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount==2 &&  $BionicArm>>One of your arms has been replaced with a bionic arm with anti-gravity abilities.<</if>>
-<<if $mc.legCount==1>>You only have one leg. <<elseif $mc.legCount==0>> You don't have any legs anymore. <<if $playerCurses.some(e => e.name === "Seafolk")>> Instead you have a beautiful finned tail. Could you be considered a <<if $mc.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
+<<if $mc.legCount==1>>You only have one leg. <<elseif $mc.legCount==0>> You don't have any legs anymore. <<if $mc.hasCurse("Seafolk")>> Instead you have a beautiful finned tail. Could you be considered a <<if $mc.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
 <br>
 You are <<BodyHeightText>> tall.<br>
 You have $mc.ears ears.<br>
@@ -521,7 +514,7 @@ Submissiveness score: $mc.subdom<br><br>
 Dominance score: <<print -1 * $mc.subdom>><br><br>
 <</if>>
 
-<<if $playerCurses.some(e => e.name === "Horny")>>
+<<if $mc.hasCurse("Horny")>>
 	You have <<if $hornCount == 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
 	<<switch $hornVariation>>
 		<<case "rhino">>
@@ -577,9 +570,9 @@ You appear as a typical woman, with a feminine facial structure and a body profi
 <br>
 <</if>>
 <<if $mc.vagina == 1>>
-	<<if $playerCurses.some(e=> e.name === "Colossal-able")>>
+	<<if $mc.hasCurse("Colossal-able")>>
 		You have a cavernous pussy sitting between your legs, most of your lovers would be able to fit their entire body inside you without even filling you up.
-	<<elseif $playerCurses.some(e=> e.name === "Minish-ish")>>
+	<<elseif $mc.hasCurse("Minish-ish")>>
 		You have a miniscule pussy to match your size, making it very difficult to have sex with normal-sized people.
 	<<else>>
 		You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
@@ -590,11 +583,11 @@ You appear as a typical woman, with a feminine facial structure and a body profi
 You have a smooth and featureless doll-like groin.
 <br>
 <</if>>
-<<if ($mc.womb > 0 && $mc.sex=="male")||($mc.womb > 1 && $mc.sex!="male")>>
-<br>You have an extra womb in your $mc.womb1.
+<<if $mc.extraWombs.length > 0 >>
+<br>You have an extra womb in your $mc.extraWombs[0].
 <</if>>
-<<if ($mc.womb > 1 && $mc.sex=="male")||($mc.womb > 2 && $mc.sex!="male")>>
-<br>You have another extra womb in your $mc.womb2.
+<<if $mc.extraWombs.length > 1>>
+<br>You have another extra womb in your $mc.extraWombs[1].
 <</if>>
 
 <<if $mc.breastsCor < 1>>
@@ -668,14 +661,14 @@ They are a bit sore at the moment.
 <</if>>
 
 <<if $crumbleFluid > 0>>
-	Due to the consumption of crumbleweed from the fifth layer, your production of sexual fluids has increased by <<print $crumbleFluid>>%<<if $playerCurses.some(e => e.name === "Leaky")>>, and your overall production has even doubled due to your 'Leaky' curse<</if>>. <<if $crumbleFluid > 50>>Try not to get too dehydrated if you're especially sexually active.<</if>><<print " ">>
-<<elseif $playerCurses.some(e => e.name === "Leaky")>>
+	Due to the consumption of crumbleweed from the fifth layer, your production of sexual fluids has increased by <<print $crumbleFluid>>%<<if $mc.hasCurse("Leaky")>>, and your overall production has even doubled due to your 'Leaky' curse<</if>>. <<if $crumbleFluid > 50>>Try not to get too dehydrated if you're especially sexually active.<</if>><<print " ">>
+<<elseif $mc.hasCurse("Leaky")>>
 	Your overall production of sexual fluids has doubled due to your 'Leaky' curse.
 <</if>>
-<<if $playerCurses.some(e => e.name === "Semen Demon")>>
-	You must drink <<print ($curse82.variation1 * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($curse82.variation1 * 2)>> loads per day. 
-	<<if ($mc.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($mc.vagina > 0 && $curse82.variation!="semen") >>
-		<<if $playerCurses.some(e => e.name === "Leaky")>>
+<<if $mc.hasCurse("Semen Demon")>>
+	You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads per day.
+	<<if ($mc.curses.find(c => c instanceof SemenDemon && ((c.fluidType !== 'vaginal fluids' || $mc.vagina > 0) || (c.fluidType !== 'semen' || $mc.penis > 0)))) >>
+		<<if $mc.hasCurse("Leaky")>>
 			<<set _temp = Math.floor((1+$crumbleFluid/100)*2)>>
 		<<else>>
 			<<set _temp = Math.floor(1+$crumbleFluid/100)>>
@@ -694,11 +687,11 @@ They are a bit sore at the moment.
 <</if>>
 <<set _quotaCount = setup.activeCurseCount("Quota")>>
 <<if _quotaCount > 0>>
-	You need to directly bring other people to orgasm <<if $playerCurses.some(e => e.name === "Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<</if>><<print " ">>
+	You need to directly bring other people to orgasm <<if $mc.hasCurse("Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $mc.hasCurse("Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<</if>><<print " ">>
 <</if>>
 <<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
 <<if _limelightCount > 0>>
-	You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $playerCurses.some(e => e.name === "Semen Demon") || $playerCurses.some(e => e.name === "Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $playerCurses.some(e => e.name === "Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
+	You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the abyss are now streamed to quite a lot of people. This means <<if $mc.hasCurse("Semen Demon") || $mc.hasCurse("Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $mc.hasCurse("Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
 <</if>>
 <<if $bewitchBabies > 0>>
 	Due to your consumption of the contaminated rainwater of the second layer, your fertility has greatly increased. The average amount of  babies born from any pregnancy you're involved in is increased by <<print $bewitchBabies>>.<<print " ">>
@@ -707,7 +700,7 @@ They are a bit sore at the moment.
 	Your <<if $mc.sex == "male">>testicles are<<elseif $mc.sex == "female">>clitoris is<<else>>testicles and clitoris are<</if>> approximately <<print (10 * $algalSize)>>% larger than usual due to drinking contaminated melted snow from the fourth layer.<<print " ">>
 <</if>>
 
-<<if $playerCurses.some(e => e.name === "Weakling")>>
+<<if $mc.hasCurse("Weakling")>>
 	<<if $mc.fit > 8>>
 		Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. If it wasn't for your Curse, this would allow you to carry more weight and might have even marginally decreases your travel time.<br><br>
 	<<elseif $mc.fit > 6>>
@@ -765,11 +758,11 @@ You desire sex about as much as basic necessities as food and water, perhaps sli
 <<elseif $mc.libido >= 7>>
 You need sex constantly - having sex will only sate your hunger for a matter of minutes, and you will find little meaning in things that don't lead to you having more sex.
 <</if>>
-<<if $standardsLower>0 && $standardsLower<30>>
+<<if $mc.loweredStandards > 0 && $mc.loweredStandards < 30>>
 <br>You notice you're not as picky about who you find atractive as you used to be, or maybe everybody is just a bit more good-looking than they used to be.
-<<elseif $standardsLower>=30 && $standardsLower<60>>
+<<elseif $mc.loweredStandards >= 30 && $mc.loweredStandards < 60>>
 <br>You have had sexual fantasies about a lot more people than normal. Since when did the number of attractive people get so high?
-<<elseif $standardsLower>=60>>
+<<elseif $mc.loweredStandards >= 60>>
 <br>It's getting crazy how much more attractive everybody has become. Everybody basically looks like a knock-out hottie!
 <</if>>
 <<if $HeavyHeadwear>>
@@ -784,10 +777,10 @@ You need sex constantly - having sex will only sate your hunger for a matter of 
 <br>You feel like you have slowed down mentally compared to normal. It's not that you suddenly forgot everything you learned but it just feels like your head is tired all the time. Maybe a little less thinking will allow you to recover a bit.
 <</if>>
 
-<<if $playerCurses.length > 0>>
-	<<for _i = 0; _i < $playerCurses.length; _i++>>
-		<<print $playerCurses[_i].appDesc>>
-		<<if _i==$playerCurses.length-1>>
+<<if $mc.curses.length > 0>>
+	<<for _i = 0; _i < $mc.curses.length; _i++>>
+		<<print $mc.curses[_i].appDesc>>
+		<<if _i === $mc.curses.length-1>>
 			<br>
 		<</if>>
 	<</for>>
@@ -1077,12 +1070,12 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<</if>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye == false && $playerCurses.some(e => e.name === "Eye on the Prize")>>
+<<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye === false && $mc.hasCurse("Eye on the Prize")>>
 		<br>You are missing an eye, so it should be possible to install the Moonwatcher into the empty socket. However, due to your lack of surgical expertise and equipment, this will result in minor injuries increasing your next 2 travel times by 1 day each.<br>
 		[[Replace your missing eye with the Moonwatcher|Use Items and Relics][$light = 1, $BionicEye=true, $status.duration += 2, $status.penalty += 1]]<br>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Glory's Grasp") && $BionicArm == false && $playerCurses.some(e => e.name === "Ampu-Q-tie")>>
+<<if $ownedRelics.some(e => e.name === "Glory's Grasp") && $BionicArm == false && $mc.hasCurse("Ampu-Q-tie")>>
 		<br>You are missing a limb, so you have a perfect opportunity to install your Glory's Grasp into the place where your arm would be. However, due to your lack of surgical expertise and equipment, this will result in minor injuries increasing your next 2 travel times by 1 day each.<br>
 		[[Replace your missing limb with the Glory's Grasp|Use Items and Relics][$BionicArm=true, $status.duration += 2, $status.penalty += 1]]<br>
 <</if>>
@@ -1176,7 +1169,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
 	<<elseif $time > $LastEx + 1>>
 		You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body.
-		If you want to get <<if !$playerCurses.some(e => e.name === "Weakling")>>stronger and<</if>> more fit, using this Relic is the best way to do it.<br>
+		If you want to get <<if !$mc.hasCurse("Weakling")>>stronger and<</if>> more fit, using this Relic is the best way to do it.<br>
 		[[Work out with the World Stone|Use Items and Relics][$mc.fit += 1, $LastEx = $time, $fit_adjustLastT = $time]]<br>
 	<<else>>
 		Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
@@ -1435,96 +1428,87 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<capture _curse>>
 				<<if !$ManagedMisfortuneActive.some(c => c.name === _curse.name)>>
 					You have stored Curse _curse.name in this marble.<br>
-					<<if _curse.name == "Perma-dye" && !$curse7.variation>>
+					<<if _curse.name == "Perma-dye" && !_curse.skinColor>>
 						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within. The longer you look, the more the color of your hair seems to change in your reflection. After a few moments, your hair seems as if it had always been its new color. Now, what color do you see?<br>
-						Please enter your new hair color: <<textbox "$curse7.variation" "turquoise" "Use Items and Relics">><br>
-					<<elseif _curse.name == "Fluffy Ears" && !$curse17.variation>>
+						Please enter your new hair color: <<textbox "_curse.hairColor" "turquoise" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Fluffy Ears" && !_curse.earType>>
 						What type of ears would you like to gain?<br>
-						<<radiobutton "$curse17.variation" "furry cat" checked>> Cat<br>
-						<<radiobutton "$curse17.variation" "fluffy dog">> Dog<br>
-						<<radiobutton "$curse17.variation" "floppy cow">> Cow<br>
-						<<radiobutton "$curse17.variation" "furry monkey">> Monkey<br>
-						<<radiobutton "$curse17.variation" "furry rabbit">> Rabbit<br>
-						<<radiobutton "$curse17.variation" "furry fox">> Fox<br>
-						<<radiobutton "$curse17.variation" "furry mouse">> Mouse<br>
-						<<radiobutton "$curse17.variation" "pig">> Pig<br>
-						<<radiobutton "$curse17.variation" "furry horse">> Horse<br>
-					<<elseif _curse.name == "Fluffy Tail" && !$curse18.variation>>
+						<<radiobutton "_curse.earType" "furry cat" checked>> Cat<br>
+						<<radiobutton "_curse.earType" "fluffy dog">> Dog<br>
+						<<radiobutton "_curse.earType" "floppy cow">> Cow<br>
+						<<radiobutton "_curse.earType" "furry monkey">> Monkey<br>
+						<<radiobutton "_curse.earType" "furry rabbit">> Rabbit<br>
+						<<radiobutton "_curse.earType" "furry fox">> Fox<br>
+						<<radiobutton "_curse.earType" "furry mouse">> Mouse<br>
+						<<radiobutton "_curse.earType" "pig">> Pig<br>
+						<<radiobutton "_curse.earType" "furry horse">> Horse<br>
+					<<elseif _curse.name == "Fluffy Tail" && !_curse.tailType>>
 						What type of tail would you like to gain?<br>
-						<<radiobutton "$curse18.variation" "flowing cat" checked>> Cat<br>
-						<<radiobutton "$curse18.variation" "wagging dog">> Dog<br>
-						<<radiobutton "$curse18.variation" "lazy cow">> Cow<br>
-						<<radiobutton "$curse18.variation" "prehensile monkey">> Monkey<br>
-						<<radiobutton "$curse18.variation" "fluffy rabbit">> Rabbit<br>
-						<<radiobutton "$curse18.variation" "bushy fox">> Fox<br>
-						<<radiobutton "$curse18.variation" "long mouse">> Mouse<br>
-						<<radiobutton "$curse18.variation" "twisted pig">> Pig<br>
-						<<radiobutton "$curse18.variation" "swaying horse">> Horse<br>
-					<<elseif _curse.name == "Maximum Fluff" && !$curse19.variation>>
+						<<radiobutton "_curse.tailType" "flowing cat" checked>> Cat<br>
+						<<radiobutton "_curse.tailType" "wagging dog">> Dog<br>
+						<<radiobutton "_curse.tailType" "lazy cow">> Cow<br>
+						<<radiobutton "_curse.tailType" "prehensile monkey">> Monkey<br>
+						<<radiobutton "_curse.tailType" "fluffy rabbit">> Rabbit<br>
+						<<radiobutton "_curse.tailType" "bushy fox">> Fox<br>
+						<<radiobutton "_curse.tailType" "long mouse">> Mouse<br>
+						<<radiobutton "_curse.tailType" "twisted pig">> Pig<br>
+						<<radiobutton "_curse.tailType" "swaying horse">> Horse<br>
+					<<elseif _curse.name == "Maximum Fluff" && !_curse.furType>>
 						What type of fur would you like to gain?<br>
-						<<radiobutton "$curse19.variation" "cat-furred" checked>> Cat<br>
-						<<radiobutton "$curse19.variation" "dog-furred">> Dog<br>
-						<<radiobutton "$curse19.variation" "cow-furred">> Cow<br>
-						<<radiobutton "$curse19.variation" "monkey-furred">> Monkey<br>
-						<<radiobutton "$curse19.variation" "rabbit-furred">> Rabbit<br>
-						<<radiobutton "$curse19.variation" "fox-furred">> Fox<br>
-						<<radiobutton "$curse19.variation" "mouse-furred">> Mouse<br>
-						<<radiobutton "$curse19.variation" "pig-furred">> Pig<br>
-						<<radiobutton "$curse19.variation" "horse-furred">> Horse<br>
-					<<elseif _curse.name == "Wacky Wombs" && (!$curse35.variation1 || $playerCurses.some(e => e.name == "Wacky Wombs") && !$curse35.variation2)>>
+						<<radiobutton "_curse.furType" "cat-furred" checked>> Cat<br>
+						<<radiobutton "_curse.furType" "dog-furred">> Dog<br>
+						<<radiobutton "_curse.furType" "cow-furred">> Cow<br>
+						<<radiobutton "_curse.furType" "monkey-furred">> Monkey<br>
+						<<radiobutton "_curse.furType" "rabbit-furred">> Rabbit<br>
+						<<radiobutton "_curse.furType" "fox-furred">> Fox<br>
+						<<radiobutton "_curse.furType" "mouse-furred">> Mouse<br>
+						<<radiobutton "_curse.furType" "pig-furred">> Pig<br>
+						<<radiobutton "_curse.furType" "horse-furred">> Horse<br>
+					<<elseif _curse.name == "Wacky Wombs" && !_curse._wombLocation >>
 						What is the location of the womb you would like to add?<br>
-						<<if !$curse35.variation1>>
-							<<radiobutton "$curse35.variation1" "throat" checked>> Throat<br>
-							<<radiobutton "$curse35.variation1" "urethra">> Urethra<br>
-							<<radiobutton "$curse35.variation1" "anus">> Anus<br>
-							<<if $vagina > 0>>
-								<<radiobutton "$curse35.variation1" "vagina">> Vagina<br>
-							<</if>>
-						<<else>>
-							<<radiobutton "$curse35.variation2" "throat" checked>> Throat<br>
-							<<radiobutton "$curse35.variation2" "urethra">> Urethra<br>
-							<<radiobutton "$curse35.variation2" "anus">> Anus<br>
-							<<if $vagina > 0>>
-								<<radiobutton "$curse35.variation2" "vagina">> Vagina<br>
-							<</if>>
-						<</if>>
-					<<elseif _curse.name == "Rainbow Swirl" && !$curse39.variation>>
-						Please enter your new skin/eye color: <<textbox "$curse39.variation" "pink" "Use Items and Relics">><br>
-					<<elseif _curse.name == "Tipping the Scales" && !$curse54.variation>>
-						Please enter your new scale color and press enter: <<textbox "$curse54.variation" "green" "Use Items and Relics">><br>
-					<<elseif _curse.name == "Carapacian" && !$curse69.variation>>
-						Please enter your new exoskeleton color: <<textbox "$curse69.variation" "shiny black" "Use Items and Relics">><br>
+                        <<radiobutton "_curse._wombLocation" "throat" checked>> Throat<br>
+                        <<radiobutton "_curse._wombLocation" "urethra">> Urethra<br>
+                        <<radiobutton "_curse._wombLocation" "anus">> Anus<br>
+                        <<if $vagina > 0>>\
+                            <<radiobutton "_curse._wombLocation" "vagina">> Vagina<br>
+                        <</if>>
+					<<elseif _curse.name == "Rainbow Swirl" && !_curse.skinColor>>
+						Please enter your new skin color: <<textbox "_curse.skinColor" "pink" "Use Items and Relics">><br>
+						Please enter your new eye color: <<textbox "_curse.eyeColor" "pink" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Tipping the Scales" && !_curse.scaleColor>>
+						Please enter your new scale color and press enter: <<textbox "_curse.scaleColor" "green" "Use Items and Relics">><br>
+					<<elseif _curse.name == "Carapacian" && !_curse.skinColor>>
+						Please enter your new exoskeleton color: <<textbox "_curse.skinColor" "shiny black" "Use Items and Relics">><br>
 					<<elseif _curse.name == "Horny" && !$hornVariation>>
 						<<include "Horny Customization">><br>
-					<<elseif _curse.name == "Semen Demon" && !$curse82.variation>>
+					<<elseif _curse.name == "Semen Demon" && !_curse.fluidType>>
 						<<include "Semen Demon Customization">><br>
 					<<elseif _curse.name == "Eye on the Prize" && !$eyeRemove>>
 						<<include "Eye on the Prize Customization">><br>
-					<<elseif _curse.name == "Ampu-Q-tie" && !$curse104.variation>>
+					<<elseif _curse.name == "Ampu-Q-tie" && _curse.arms + _curse.legs === 0>>
 						<<include "Ampu-Q-tie Customization">><br>
-					<<elseif _curse.name == "Dizzying Heights" && !$HeightIncrease>>
+					<<elseif _curse.name == "Dizzying Heights" && !$mc.hasEvent(HeightDirectionEvent)>>
+					    <<set _heightDirEvent = new HeightDirectionEvent()>>
+					    <<set $mc.events.push(_heightDirEvent)>>
 						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within.<br>
 						You see your own reflection alternating between growing and shrinking. After a while you see the Curse has settle on a height...<br>
-						<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
-						<<radiobutton "$HeightIncrease" 1 >> Increase<br>
-					<<elseif _curse.name == "Hemospectrum" && !$curse70.variation>>
+						<<radiobutton "_heightDirEvent.heightDirection" -1 checked>> Decrease<br>
+						<<radiobutton "_heightDirEvent.heightDirection" 1 >> Increase<br>
+					<<elseif _curse.name == "Hemospectrum" && !_curse.bloodColor>>
 						What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?<br>
-						<<radiobutton "$curse70.variation" "blue" checked>> Blue<br>
-						<<radiobutton "$curse70.variation" "purple">> Purple<br>
-						<<radiobutton "$curse70.variation" "green">> Green<br>
-						<<radiobutton "$curse70.variation" "yellow">> Yellow<br>
-						<<radiobutton "$curse70.variation" "orange">> Orange<br>
-						<<radiobutton "$curse70.variation" "pink">> Pink<br>
-						<<radiobutton "$curse70.variation" "black">> Black<br>
-						<<radiobutton "$curse70.variation" "brown">> Brown<br>
-						<<radiobutton "$curse70.variation" "white">> White<br>
+						<<radiobutton "_curse.bloodColor" "blue" checked>> Blue<br>
+						<<radiobutton "_curse.bloodColor" "purple">> Purple<br>
+						<<radiobutton "_curse.bloodColor" "green">> Green<br>
+						<<radiobutton "_curse.bloodColor" "yellow">> Yellow<br>
+						<<radiobutton "_curse.bloodColor" "orange">> Orange<br>
+						<<radiobutton "_curse.bloodColor" "pink">> Pink<br>
+						<<radiobutton "_curse.bloodColor" "black">> Black<br>
+						<<radiobutton "_curse.bloodColor" "brown">> Brown<br>
+						<<radiobutton "_curse.bloodColor" "white">> White<br>
 					<</if>>
 					<<set _text = "Activate stored " + _curse.name + " Curse">>
 					<<link _text "Use Items and Relics">>
-						<<set $playerCurses.push(_curse)>>
-						<<set _logName = _curse.type + "Log">>
-						<<set _logVar = State.variables[_logName]>>
-						<<if _logVar>><<set _logVar.push(_curse)>><</if>>
+						<<set $mc.addCurse(_curse)>>
 						<<set $ManagedMisfortuneActive.push(_curse)>>
 					<</link>><br>
 				<<else>>
@@ -1756,31 +1740,19 @@ How many dubloons would you like to pay back?
 
 :: Curse removal widget [widget nobr]
 <<widget "RemoveCurse">>
-<<capture _i _j _logName _logVar _targetCurse>>
+<<capture _i _j _k _targetCurse>>
 
 <<set _targetCurse = _args[0]>>
-<<for _i = 0; _i < $playerCurses.length; ++_i>>
-	<<if $playerCurses[_i].name == _targetCurse.name>>
-		<<set _logName = _targetCurse.type + "Log">>
-		<<set _logVar = State.variables[_logName]>>
-		<<if _logVar>>
-			<<for _j = _logVar.length - 1; _j >= 0; --_j>>
-				<<if _logVar[_j].name == _targetCurse.name>><<break>><</if>>
-			<</for>>
-			<<if _j >= 0>>
-				<<set State.variables[_logName].deleteAt(_j)>>
-			<</if>>
-		<</if>>
-		<<set _j = $ManagedMisfortuneActive.findLastIndex(curse => curse.name == _targetCurse.name)>>
-		<<if _j != -1>>
-			<<set $ManagedMisfortuneActive.deleteAt(_j)>>
-			<<set _j = $StoredCurse.findLastIndex(curse => curse.name == _targetCurse.name)>>
-			<<set $StoredCurse.deleteAt(_j)>>
-		<</if>>
-		<<set $playerCurses.deleteAt(_i)>>
-		<<break>>
-	<</if>>
-<</for>>
+<<set _i = $mc.events.findLastIndex(c => c.name === _targetCurse.name)>>
+<<if _i !== -1>>
+    <<set $mc.events.deleteAt(_i)>>
+    <set _j = $ManagedMisfortuneActive.findLastIndex(curse => curse.name === _targetCurse.name)>>
+    <<if _j != -1>>
+        <<set $ManagedMisfortuneActive.deleteAt(_j)>>
+        <<set _k = $StoredCurse.findLastIndex(curse => curse.name === _targetCurse.name)>>
+        <<set $StoredCurse.deleteAt(_k)>>
+    <</if>>
+<</if>
 
 <</capture>>
 <</widget>>
@@ -1864,7 +1836,7 @@ How many dubloons would you like to pay back?
 			<<set _additiveModifier -= 1>>
 		<</if>>
 		/* Apply Chlorophyll curse penalty, if any. */
-		<<if $playerCurses.some(e => e.name === "Chlorophyll")>>
+		<<if $mc.hasCurse("Chlorophyll")>>
 			Now that you rely on light for your metabolism, the darkness in this layer is making you sluggish.<br>
 			<<set _additiveModifier += 1>>
 		<</if>>
@@ -1881,7 +1853,7 @@ How many dubloons would you like to pay back?
 					<<set $torchUse = 0>>
 				<</if>>
 			<</if>>
-		<<elseif $playerCurses.some(e => e.name === "Cold Blooded")>>
+		<<elseif $mc.hasCurse("Cold Blooded")>>
 			/* Apply Cold Blooded curse penalty. */
 			Now that you're cold blooded you're slowed down quite a bit by the freezing temperatures on this layer.<br>
 			<<set _additiveModifier += 2>>
@@ -1939,10 +1911,10 @@ How many dubloons would you like to pay back?
 		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
 		<</if>>
-		<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+		<<if $mc.hasCurse("Minish-ish")>>
 			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
 		<</if>>
-		<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.curses.some(e => e.name === "Minish-ish")>>
+		<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.hasCurse(Minishish)>>
 			<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
 		<<elseif $hiredCompanions.some(e => e.name === $companionBandit.name)>>
 			<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
@@ -2024,10 +1996,10 @@ How many dubloons would you like to pay back?
 <<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
 	<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions are nourished by the abyss). */
 <</if>>
-<<if $playerCurses.some(e => e.name === "Minish-ish")>>
+<<if $mc.hasCurse("Minish-ish")>>
 	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.curses.some(e => e.name === "Minish-ish")>>
+<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.hasCurse(Minishish)>>
 	<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
 <<elseif $hiredCompanions.some(e => e.name === $companionBandit.name)>>
 	<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
@@ -2050,8 +2022,8 @@ How many dubloons would you like to pay back?
 	<<set _state.weightedDayIndex = Math.round(_timeWeight * _state.expectedDays)>>
 	/* Check for wetting events. */
 	<<if $WettingSolution == 0>>
-		<<if $playerCurses.some(e => e.name === "Urine Reamplification A") || $playerCurses.some(e => e.name === "Urine Reamplification B")>>
-			<<if $playerCurses.some(e => e.name === "Urine Reamplification A") && $playerCurses.some(e => e.name === "Urine Reamplification B")>>
+		<<if $mc.curses.some(e => e.name === "Urine Reamplification A" || e.name === 'Urine Reamplification B') >>
+			<<if $mc.hasCurse("Urine Reamplification A") && $mc.hasCurse("Urine Reamplification B")>>
 				<<set _random = random(1, 3**_state.weightedDayIndex)>>
 				<<set _threshold = 3**_state.weightedDayIndex - 2**_state.weightedDayIndex>>
 			<<else>>
@@ -2064,7 +2036,7 @@ How many dubloons would you like to pay back?
 		<</if>>
 	<</if>>
 	/* Check for Semen Demon events. */
-	<<if $playerCurses.some(e => e.name === "Semen Demon")>>
+	<<if $mc.hasCurse("Semen Demon")>>
 		<<SemenDemonCalc _state.weightedDayIndex>>
 	<</if>>
 	/* Reset the weighted day index. */
@@ -2182,7 +2154,7 @@ How many dubloons would you like to pay back?
 			<<switch $currentLayer>>
 				<<case 1>>
 					<<set $foodL1 += 1>>
-					<<set $GenderLog.push($ForageFoodMajor)>> /* Blisshrooms without knowledge. */
+					<<set $mc.events.push(new GenderEvent('Blisshroom Major'))>>
 				<<case 2>>
 					<<set $foodL2 += 1>>
 					<<if $mudHunt>>
@@ -2191,22 +2163,22 @@ How many dubloons would you like to pay back?
 						<<elseif $items[13].count && $items[20].count >= 1>>
 							<<set $items[20].count -= 1>>
 						<<else>>
-							<<set $LibidoLog.push($ForageFoodMajor)>> /* Unripe flanberries */
+						    $mc.events.push(new LibidoEvent("Flanberry Major", 1);
 						<</if>>
 					<<else>>
-						<<set $LibidoLog.push($ForageFoodMajor)>> /* Unripe flanberries */
+                        $mc.events.push(new LibidoEvent("Flanberry Major", 1);
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>
-					<<set $AgeLog.push($ForageFoodMajor)>> /* Crystalline Confectionaries without knowledge */
+					<<set $mc.events.push(new AgeEvent("Crystalline Confectionery Major", {years: 1}))>>
 				<<case 4>>
 					<<if $slingshot>>
 						<<set $foodL4 += 1>>
-						<<set $HeightLog.push($ForageFoodMajor)>> /* Flairabou without knowledge */
+						<<set $mc.events.push(new HeightEvent("Flairabou Major", 3)>>
 					<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
 						<<set $foodL4 += 1>>
 						<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
-						<<set $HeightLog.push($ForageFoodMajor)>> /* Flairabou without knowledge */
+						<<set $mc.events.push(new HeightEvent("Flairabou Major", 3)>>
 					<<else>>
 						/* Cannot forage for food. */
 						<<if $items[1].count >= _consumptionPerDay>>
@@ -2250,7 +2222,7 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 8>>
 					<<set $foodL8 += 1>>
-					<<set $LibidoLog.push($ForageFoodMinor)>> /* Bedlam's Banquet */
+					<<set $mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1))>>
 			<</switch>>
 		<<else>>
 			<<switch $currentLayer>>
@@ -2271,15 +2243,15 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>
-					<<set $AgeLog.push($ForageFoodMinor)>> /* Crystalline Confectionaries with knowledge */
+					<<set $mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}))>>
 				<<case 4>>
 					<<if $slingshot>>
 						<<set $foodL4 += 1>>
-						<<set $HeightLog.push($ForageFoodMinor)>> /* Flairabou with knowledge */
+						<<set $mc.events.push(new HeightEvent("Flairabou Minor", 0.5)>>
 					<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
 						<<set $foodL4 += 1>>
 						<<set $items[20].count -= Math.max(2 - $bullRed, 1)>>
-						<<set $HeightLog.push($ForageFoodMinor)>> /* Flairabou with knowledge */
+						<<set $mc.events.push(new HeightEvent("Flairabou Minor", 0.5)>>
 					<<else>>
 						/* Cannot forage for food. */
 						<<if $items[1].count >= _consumptionPerDay>>
@@ -2323,7 +2295,7 @@ How many dubloons would you like to pay back?
 					<</if>>
 				<<case 8>>
 					<<set $foodL8 += 1>>
-					<<set $LibidoLog.push($ForageFoodMinor)>> /* Bedlam's Banquet */
+					<<set $mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1))>>
 			<</switch>>
 		<</if>>
 		<<if _ate>><<set $starving -= 1>><</if>>
@@ -2344,7 +2316,7 @@ How many dubloons would you like to pay back?
 			<<switch $currentLayer>>
 				<<case 1>>
 					<<set $waterL1 += 1>>
-					<<set $GenderLog.push($ForageWaterMajor)>> /* Cloudpools without knowledge */
+					<<set $mc.events.push(new AssetEvent("Cloudpool Major", 1))>>
 				<<case 2>>
 					<<set $waterL2 += 1>>
 					<<set $bewitchBabies += 1>>
@@ -2453,7 +2425,7 @@ How many dubloons would you like to pay back?
 		<<switch setup.flaskLabels[$flaskPref]>>
 			<<case 'Flask with heavily contaminated water from the first layer'>>
 				<<set $waterL1 += 1>>
-				<<set $GenderLog.push($ForageWaterMajor)>> /* Cloudpools without knowledge */
+				<<set $mc.events.push(new AssetEvent('Cloudpool Major', 1))>>
 			<<case 'Flask with heavily contaminated water from the second layer'>>
 				<<set $waterL2 += 1>>
 				<<set $bewitchBabies += 1>>
@@ -2547,11 +2519,10 @@ You will first drink:<br>
 
 :: Curse Descriptions
 <<nobr>>
-<<if $playerCurses.length>0>>
-	<<set $temp = random(0,$playerCurses.length - 1)>>
-	<<set $tempCurse = $playerCurses[$temp]>>
+<<if $mc.curses.length>0>>
+	<<set $temp = random(0, $mc.curses.length - 1)>>
+	<<set $tempCurse = $mc.curses[$temp]>>
 	<<CarryAdjust>>
-	<<AppearanceCorrect>>
 
 <<if $tempCurse.name == "Libido Reinforcement A" || $tempCurse.name == "Libido Reinforcement B" || $tempCurse.name == "Libido Reinforcement C" || $tempCurse.name == "Libido Reinforcement D" || $tempCurse.name == "Libido Reinforcement E">>
 	<<if $mc.libido == 3>>
@@ -2645,12 +2616,12 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Submissiveness Rectification A" || $tempCurse.name == "Submissiveness Rectification B" >>
-		<<if $playerCurses.filter(e => e.name === "Submissiveness Rectification A").length + $playerCurses.filter(e => e.name === "Submissiveness Rectification B").length == 1>>
+		<<if $mc.hasCurse("Submissiveness Rectification A") || $mc.hasCurse("Submissiveness Rectification B")>>
 			You're a nice person. You want to help people. Sometimes you're not sure what's best, even for yourself, so letting others take the lead makes total sense. <br><br>You want to be open to trying new things, and generally be a fun person to be around. However, there's little doubt in your mind that the Submissiveness Rectification Curse is amplifying this aspect of your personality somewhat, though you aren't quite sure how much. <br><br>Lately your dreams have been about getting tied up and letting strong dominant people do naughty things to you. Is this some idle fantasy, or a prediction for your future? The Curses in the Abyss can warp things in such strange ways that you're not sure.
 		<</if>>
 	<</if>>
 	<<if $tempCurse.name == "Clothing Restriction B">>
-		<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+		<<if $mc.hasCurse("Clothing Restriction C")>>
 			Oh gosh, you're perpetually naked now. No underwear, no clothes, no armor, just flashing everyone and everything all day long. If you're going to do anything but draw open-mouthed stares, you're going to have to get really good at using convincing body-paint, but even that won't work if anyone looks at you especially hard. Wherever you end up, this is going to have a big impact on your life. And there's no way to even unintentionally wear clothes, since the Curse makes them degrade immediately if you even attempt to get around it. <br><br>Maybe being naked isn't so bad, humans are the only creatures on the surface that wear clothes anyway. But when you think about everyone staring at your naked body, always, it conjures up a wild mix of emotions: embarrassment, fear, lust. If you live anywhere but a nudist colony, you're going to run afoul of a bunch of prudish people, or end up being followed by a bunch of horny people, let alone any laws you might be breaking!
 		<<else>>
 			Underwear is overrated, or at least that's what you'd been thinking when the Abyss bestowed this Clothing Restriction Curse on you. Your experience since then has slightly contradicted that. Your clothing really used to fit a lot better and stayed on more easily when the cloth of your undergarments was helping to hold it there. <br><br>Now you're worried that when you stretch awkwardly some of your clothes are just going to fall right off. Anyone looking on wouldn't just get a glimpse of your underwear, which before you'd have thought was embarrassing, they'd see your naked body. Going commando is generally thought of as pretty promiscuous behavior. Back on the surface, people are bound to notice that you're doing so eventually. If not from seeing a glimpse beneath your clothes, then surely someone will notice from the outline of your more sensitive parts if you happen to wear anything light during a hot summer day.
@@ -2682,10 +2653,10 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Wacky Wombs">>
-		<<if $mc.womb == 1>>
-			You feel a twinge of sensation from the area of your $mc.womb1 and wonder if you're pregnant. Could any sperm have found their way into it? You picture yourself with that region of your body swelling with new life, your organs rearranging to make room for it, your balance shifting, and culminating in a messy and painful birth many months from now. Was adding a womb to your $mc.womb1 really a smart idea? Smart or not, you're stuck with it now. Even if you're not pregnant yet, and that twinge is just a result of the shifting internal folds of your new organs, the Abyss is a strange, perverse, and risky place. How long until someone or something compatible gets the better of you and you end up pregnant? Things are harder to predict down here, and sperm can get into the strangest places... and then start swimming.
-		<<elseif $mc.womb == 2>>
-			You feel a twinge of sensation from two different spots near simultaneously. Your $mc.womb1 and $mc.womb2 both seem to clench in irritation and then relax. That's unnerving. You wonder, could you be pregnant in both of your added wombs? Could any sperm have found their way into those spots? You picture yourself with those regions of your body swelling with new life, your organs rearranging to make room for the pregnancies, your balance shifting, with it all culminating in messy and painful births many months from now. <br><br>Was adding two wombs to your $mc.womb1 and $mc.womb2 really a smart idea? Smart or not, you're stuck with it now. Even if you're not pregnant yet, and those twinges were just a result of the shifting internal folds of your new organs, the Abyss is a strange, perverse and risky place. How long until someone or something compatible gets the better of you and you end up pregnant? Things are harder to predict down here, and sperm can get into the strangest places... and then start swimming.
+		<<if $mc.extraWombs.length == 1>>
+			You feel a twinge of sensation from the area of your $mc.extraWombs[0] and wonder if you're pregnant. Could any sperm have found their way into it? You picture yourself with that region of your body swelling with new life, your organs rearranging to make room for it, your balance shifting, and culminating in a messy and painful birth many months from now. Was adding a womb to your $mc.extraWombs[0] really a smart idea? Smart or not, you're stuck with it now. Even if you're not pregnant yet, and that twinge is just a result of the shifting internal folds of your new organs, the Abyss is a strange, perverse, and risky place. How long until someone or something compatible gets the better of you and you end up pregnant? Things are harder to predict down here, and sperm can get into the strangest places... and then start swimming.
+		<<elseif $mc.extraWombs.length == 2>>
+			You feel a twinge of sensation from two different spots near simultaneously. Your $mc.extraWombs[0] and $mc.extraWombs[1] both seem to clench in irritation and then relax. That's unnerving. You wonder, could you be pregnant in both of your added wombs? Could any sperm have found their way into those spots? You picture yourself with those regions of your body swelling with new life, your organs rearranging to make room for the pregnancies, your balance shifting, with it all culminating in messy and painful births many months from now. <br><br>Was adding two wombs to your $mc.extraWombs[0] and $mc.extraWombs[1] really a smart idea? Smart or not, you're stuck with it now. Even if you're not pregnant yet, and those twinges were just a result of the shifting internal folds of your new organs, the Abyss is a strange, perverse and risky place. How long until someone or something compatible gets the better of you and you end up pregnant? Things are harder to predict down here, and sperm can get into the strangest places... and then start swimming.
 		<</if>>
 	<</if>>
 
@@ -2714,7 +2685,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Sleep Tight">>
-		<<if $playerCurses.some(e => e.name === "Sweet Dreams")>>
+		<<if $mc.hasCurse("Sweet Dreams")>>
 			Sleep calls to you once again. Soon you'll enter your dreams, where you'll be in the hands of those odd things the Abyss has conjured up. They'll do things to you. They'll warp and change your body to their desires. You'll be helpless before them, but they will satisfy both themselves and you. Their teeth, their claws, their tentacles and slime, their enormous barbed penises that spear into you again and again, their vaginas that suck you in and hold you there while they vibrate around you with malicious mirth... <br><br>You are their plaything, but even if they sometimes hurt you, it always feels sublime, and it's only a dream. The only real thing about them is the orgasms they'll rip from your body as you cry out during your slumber... or perhaps they're not as imaginary as you think. The Abyss can perform apparent miracles after all. Are these creatures just in your imagination, or is it an intrusion into your mind by creatures of the Abyss? You're not sure. <br><br>Somehow though, no matter how wicked and perverse the things they do to you, you always end up longing for more. You lick your lips and shiver in a mix of anticipation and fear as you close your eyes, and let a new journey begin tonight.
 		<<else>>
 			Warmth, softness, comfort, letting your mind lazily drift through thoughts and dreams. That's what half of every day is like for you now. You don't remember it clearly most of the time, but it's so nice, and preferable to being awake most of the time. However, you are still getting a lot done in your waking hours. Razor focus often comes upon you, and you feel that your getting close to your purpose for coming down here. Then sleep begins to call you again. You understand why cats sleep so much now; it is glorious to those who can appreciate the peace it offers.
@@ -2722,7 +2693,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Sweet Dreams">>
-		<<if $playerCurses.some(e => e.name === "Sleep Tight")>>
+		<<if $mc.hasCurse("Sleep Tight")>>
 			Sleep calls to you once again. Soon you'll enter your dreams, where you'll be in the hands of those odd things the Abyss has conjured up. They'll do things to you. They'll warp and change your body to their desires. You'll be helpless before them, but they will satisfy both themselves and you. Their teeth, their claws, their tentacles and slime, their enormous barbed penises that spear into you again and again, their vaginas that suck you in and hold you there while they vibrate around you with malicious mirth... <br><br>You are their plaything, but even if they sometimes hurt you, it always feels sublime, and it's only a dream. The only real thing about them is the orgasms they'll rip from your body as you cry out during your slumber... or perhaps they're not as imaginary as you think. The Abyss can perform apparent miracles after all. Are these creatures just in your imagination, or is it an intrusion into your mind by creatures of the Abyss? You're not sure. <br><br>Somehow though, no matter how wicked and perverse the things they do to you, you always end up longing for more. You lick your lips and shiver in a mix of anticipation and fear as you close your eyes, and let a new journey begin tonight.
 		<<else>>
 			You try to keep going, you don't want those things to get you again. They lurk in your thoughts as sinister laughs and prideful snarls. The things they do to you when you fall asleep... Sleep.... You need to sleep. The last two days you've only gotten 4 hours a night, both nights you woke up screaming while also cumming all over yourself. The mix of terror and ecstasy left you confused and exhausted. <br><br>You don't want to be at the mercy of those things again, and yet... part of you is loving the things they do to you. You were Cursed with Sweet Dreams, that has to be what's causing your strange nightmares, but... you're too tired. They're just dreams. You're a person. People can adapt. Part of you expects that you'll find a way to deal with this new reality the Curse has bestowed on you. <br><br>In truth, more than half your fear is of your own adaptation. What kind of person will you have to become to sleep peacefully through the night? Probably one who enjoys and accepts all the strange and bizarre ways that the creatures in your nightmares milk orgasms from you. You can't keep your eyes open any longer, you're just too tired. Maybe this time won't be so bad.
@@ -2750,7 +2721,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Tipping the Scales">>
-		You stretch out on a rock, and see the faint iridescence of your $curse54.variation scales. It's a big change from what your skin used to be like, and is a mark that some parts of your physical humanity have been consumed by the Abyss. There's no point mourning what is gone though, and your scales are magnificent. They make you feel tough and confident, plus they look quite attractive to anyone who is inclined towards them. They're only on the outside though, and the skin inside you is not armored like your exterior. The contrast draws even more of your focus onto anything that manages to get past your scaly armor.
+		You stretch out on a rock, and see the faint iridescence of your $tempCurse.scaleColor scales. It's a big change from what your skin used to be like, and is a mark that some parts of your physical humanity have been consumed by the Abyss. There's no point mourning what is gone though, and your scales are magnificent. They make you feel tough and confident, plus they look quite attractive to anyone who is inclined towards them. They're only on the outside though, and the skin inside you is not armored like your exterior. The contrast draws even more of your focus onto anything that manages to get past your scaly armor.
 	<</if>>
 
 	<<if $tempCurse.name == "Reptail">>
@@ -2762,7 +2733,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Pleasure Respecification A">>
-		<<if $playerCurses.some(e => e.name === "Pleasure Respecification B")>>
+		<<if $mc.hasCurse("Pleasure Respecification B")>>
 			Your ragged breathing is a sign of what the Abyss has done to you. You're so horny right now that you can't think. Every time you try to get yourself off, you get so close, so tantalizingly close, but you're never quite able to achieve orgasm. Every time you're fucking somebody else, the same thing happens. The feeling of need just keeps building, but there's never any relief. You calm down a little, but has anyone ever been this sexually frustrated? <br><br>The terrible truth is dawning on you. Only the Abyss can give you what you need. There are Curses that force you to have an orgasm, that circumvent all other rules and logic. Curses that will give you what you need. That's your only salvation now. Seek out those Curses and achieve release through the twisted and perverse whims of the Abyss. It's either that or stay this desperately horny and frustrated for the rest of your life.
 		<<else>>
 			Touching yourself feels amazing, but the pleasurable haze that clouds your mind only culminates in release when you're being touched by someone else... or fucking them. It's incredibly frustrating. The Abyss has done so many things to tempt you down the path of sex addiction, but with all of that, now you can't even obtain temporary relief on your own. You "need" to be with somebody else, or tat least hat's how you feel right now. The intensity of carnal relations with another person has only grown now that it's your only source of release. You need to be pressed against them, cumming your brains out. Nothing else will satisfy you, and you're just so horny!
@@ -2770,7 +2741,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Clothing Restriction C">>
-		<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
+		<<if $mc.hasCurse("Clothing Restriction B")>>
 			Oh gosh, you're perpetually naked now. No underwear, no clothes, no armor, just flashing everyone and everything all day long. If you're going to do anything but draw open-mouthed stares, you're going to have to get really good at using convincing body-paint, but even that won't work if anyone looks at you especially hard. Wherever you end up, this is going to have a big impact on your life. And there's no way to even unintentionally wear clothes, since the Curse makes them degrade immediately if you even attempt to get around it. <br><br>Maybe being naked isn't so bad, humans are the only creatures on the surface that wear clothes anyway. But when you think about everyone staring at your naked body, always, it conjures up a wild mix of emotions: embarrassment, fear, lust. If you live anywhere but a nudist colony, you're going to run afoul of a bunch of prudish people, or end up being followed by a bunch of horny people, let alone any laws you might be breaking!
 		<<else>>
 			Underwear is as much as you can ever wear now. You have a deep feeling in your gut that if you even tried to put on a swimsuit, the Curse you took would prevent it. No, your underwear needs to really be underwear, and everyone is able to see it all the time. How many situations is that going to be appropriate in? You can think of very few that aren't supposed to be intimate or private. <br><br>As you explore another layer of the Abyss, you look down at your underwear and feel very vulnerable. In this context, you look like you're either soliciting sexual interactions, or like you lost your clothes and are in a desperate situation. You're not sure which one is worse.
@@ -2813,7 +2784,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Hemospectrum">>
-		Changing the color of your blood for 35 free corruption points? What an easy decisions. Now though, as you look at that small scrape you got earlier, and see the $curse70.variation blood that has dried into a scab, you can't help but think about how this marks you as very different to any other human who sees you bleed. <br><br>It's subtly changed the coloring in your eyes, of the veins beneath your skin, you feel... less human. If they see you bleed, won't other humans see you as less human too? They might be afraid of you. Frequently people fear what they don't understand, right? When you set off into the Abyss, you knew you'd be changed, but these subtle reminders about how you keep changing are warping your identity. What are you now?
+		Changing the color of your blood for 35 free corruption points? What an easy decisions. Now though, as you look at that small scrape you got earlier, and see the $tempCurse.bloodColor blood that has dried into a scab, you can't help but think about how this marks you as very different to any other human who sees you bleed. <br><br>It's subtly changed the coloring in your eyes, of the veins beneath your skin, you feel... less human. If they see you bleed, won't other humans see you as less human too? They might be afraid of you. Frequently people fear what they don't understand, right? When you set off into the Abyss, you knew you'd be changed, but these subtle reminders about how you keep changing are warping your identity. What are you now?
 	<</if>>
 
 	<<if $tempCurse.name == "Wriggly Antennae">>
@@ -2825,7 +2796,7 @@ You will first drink:<br>
 	<</if>>
 */
 	<<if $tempCurse.name == "Pleasure Respecification B">>
-		<<if $playerCurses.some(e => e.name === "Pleasure Respecification A")>>
+		<<if $mc.hasCurse("Pleasure Respecification A")>>
 			Your ragged breathing is a sign of what the Abyss has done to you. You're so horny right now that you can't think. Every time you try to get yourself off, you get so close, so tantalizingly close, but you're never quite able to achieve orgasm. Every time you're fucking somebody else, the same thing happens. The feeling of need just keeps building, but there's never any relief. You calm down a little, but has anyone ever been this sexually frustrated? <br><br>The terrible truth is dawning on you. Only the Abyss can give you what you need. There are Curses that force you to have an orgasm, that circumvent all other rules and logic. Curses that will give you what you need. That's your only salvation now. Seek out those Curses and achieve release through the twisted and perverse whims of the Abyss. It's either that or stay this desperately horny and frustrated for the rest of your life.
 		<<else>>
 			Getting fucked feels amazing, but the pleasurable haze that clouds your mind only culminates in release when you're the one touching yourself. It's frustrating and a bit embarrassing when you can't finish with another person. In so many cultures masturbation is taboo, and while you're not ashamed of doing it, the fact that it's the only way you can get off now makes your cheeks burn hot. The Abyss has done so many things to tempt you down the path of sex addiction, but with all of that, now you can't even properly enjoy sex! When you took the Pleasure Respecification B Curse, you now realize that the Abyss was asking you "Hey, do you want to go fuck yourself?" and you responded with "oh yes, I want to be fucking myself all the time". Somehow, that thought has become more erotic than it once would have been. Tonight you'll slink off and masturbate alone, and it will feel so, so good.
@@ -2882,7 +2853,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Creature of the Night">>
-		<<if $playerCurses.some(e => e.name === "Clothing Restriction A") && $playerCurses.some(e => e.name === "Clothing Restriction C")>>
+		<<if $mc.hasCurse("Clothing Restriction A") && $mc.hasCurse("Clothing Restriction C")>>
 			You truly are a creature of the night now, not so much because vampires can't shelter from the sun while still being out in the day, but because you took this Curse in conjunction with multiple clothing restriction Curses. Some people say that vampires can turn into bats, that's not true, or at least you can't (you tried) but then you realized it hardly matters because you were already total dingbat to pick this combination of Curses. You're not just a vampire, you're "the" naked vampire. Going out exclusively in the dark is going to be very inconvenient, especially given your new thirst for blood and the fact that you can't enter anyone's home unless they give you permission. You absolutely have to drink blood now, but wherever you end up living you're probably going to have to reach some consensual arrangements to satisfy your thirst. You shiver at the prospect of what others might demand from you in exchange for both their blood and keeping your secret. Unless you're lucky enough to get some incredible combination of Relics that can turn you into a super-fast super-strong predator, consensual feeding is probably your only option to keep your thirst fulfilled.
 		<<else>>
 			When the Abyss gave you a Curse as straightforward as Creature of the Night, you were sure there had to be a catch. Become a vampire? That's rather straight forward, isn't it? Well, there sort of wasn't a catch, except that drinking blood feel amazing, and being without it for a long time is an agony that would drive you mad. Also you need to be very careful around the sun to make sure whatever clothing and accessories you have are adequately protecting you. Going forward, you think you have 2 options. You can either find some willing blood donors for you, which would put you in their debt and might put you in an awkward position, or you could become a transient, finding victims through surprise or guile getting a meal, and then moving on. Technically, you're not alive anymore, but semantics aside, it's up to you what kind of life you want to try to live.
@@ -2911,77 +2882,77 @@ You will first drink:<br>
 	<br><br>
 	<<if _selection == "Oral Dom">>
 	<<include "Hijinks Oral Dom">>
-	<<if !setup.isPregnant(_handle) && $mc.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && $mc.penisCor > 0 && _handle.extraWombs.includes('throat') && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Oral Sub">>
 	<<include "Hijinks Oral Sub">>
-	<<if ($mc.womb1 == "throat" || $mc.womb2 == "throat") && _handle.penisCor>0 >>
+	<<if $mc.extraWombs.includes('throat') && _handle.penisCor>0 >>
 		<<PregCheck>>
 	<</if>>
 	/*<<elseif _selection == "DP Sub">>
 
-	<<if !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !_handle.hasCurse("Absolute Birth Control")>>
 		<<PregCheck>>
 	<</if>>
-	<<if $mc.womb > 1 && ($mc.womb1 == "anus" || $mc.womb2 == "anus") && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.womb > 1 && $mc.extraWombs.includes('anus') && !_handle.hasCurse("Absolute Birth Control")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "DP Dom">>
 
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
-	<<if (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if _handle.extraWombs.includes('anus') && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Anal Sub">>
 
-	<<if ($mc.womb1 == "anus" || $mc.womb2 == "anus") && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.extraWombs.includes('anus') && !_handle.hasCurse("Absolute Birth Control")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Anal Dom">>
 
-	<<if !setup.isPregnant(_handle) && (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.extraWombs.includes('anus') && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Sub">>
 
-	<<if !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !_handle.hasCurse("Absolute Birth Control")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Regular Dom">>
 
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Alt Sub">>
 
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>	
 	<<elseif _selection == "Regular Alt Dom">>
 
-	<<if $mc.womb > 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.womb > 0 && !_handle.hasCurse("Absolute Birth Control")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Boobjob Dom">>
 
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && _handle.hasCurse("Absolute Pregnancy")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Boobjob Sub">>
 
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if $mc.hasCurse("Absolute Pregnancy")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Sex Scissor Sub/Dom">>
 
-	<<if _handle.penisCor> 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if _handle.penisCor> 0 && !_handle.hasCurse("Absolute Birth Control")>>
 		<<set $pregChance /= 10>>
 		<<PregCheck>>
 	<</if>>
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 2 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>*/
 	<</if>>
@@ -3027,25 +2998,27 @@ After a few awkward minutes, you both continue your journey. What a ludicrous th
 
 <br>You have summoned a spirit. What material would you like to use to shape the golem your summoned spirit will possess?<br><br>
 
+<<set _type = 'clay'>>
+<<set _sex = 'male'>>
 <<if $currentLayer == 4>>
-	<<radiobutton "$companionGolem.type" "snow" checked>> Craft a snowman here and see if it comes to life.<br>
+	<<radiobutton "_type" "snow" checked>> Craft a snowman here and see if it comes to life.<br>
 <<elseif $currentLayer == 8>>
-	<<radiobutton "$companionGolem.type" "doll" checked>> Utilize the lifeless doll-like figures that occasionally appear in the hallways.<br>
+	<<radiobutton "_type" "doll" checked>> Utilize the lifeless doll-like figures that occasionally appear in the hallways.<br>
 <<elseif $currentLayer == 9>>
-	<<radiobutton "$companionGolem.type" "water" checked>> Perhaps the surrounding water could be harnessed? You can certainly try.<br>
+	<<radiobutton "_type" "water" checked>> Perhaps the surrounding water could be harnessed? You can certainly try.<br>
 <<else>>
-	<<radiobutton "$companionGolem.type" "clay" checked>> Mold a golem from the available dirt, clay, and rocks.<br>
+	<<radiobutton "_type" "clay" checked>> Mold a golem from the available dirt, clay, and rocks.<br>
 <</if>>
 <<if setup.skeletonRemains.count > 0 >>
 	<<radiobutton "$companionGolem.type" "skeleton">> Fashion a golem from the skeletal remains in your possession.<br>
 <</if>>
 <br>
 Which gender will the soul you summon to inhabit the golem possess?<br>
-<<radiobutton "$companionGolem.osex" "male" checked>> Male<br>
-<<radiobutton "$companionGolem.osex" "female" >> Female<br>
+<<radiobutton "_sex" "male" checked>> Male<br>
+<<radiobutton "_sex" "female" >> Female<br>
 <br>
 <<link "Crafted your golem and let the summoned spirit bring it to life" "Use Items and Relics">>
-	<<createGolem>>
+	<<createGolem _sex _type>>
 <</link>>	
 
 :: Drop Items Menu [nobr noreturn]

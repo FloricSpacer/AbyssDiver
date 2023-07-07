@@ -1,5 +1,5 @@
 "use strict";
-/* global assert, AgeEvent */
+/* global assert, AgeEvent, Curse, DoubleTrouble */
 
 /* exported Character */
 class Character {
@@ -14,7 +14,6 @@ class Character {
      * @param {boolean} swap Whether the character has been body-swapped.
      * @param {string} image The path to the image of the character.
      * @param {string} imageIcon The path to the image of the character's icon.
-     * @param {[Curse]} curses The curses this character has taken.
      * @param {'male' | 'female'} mindSex The gender identity of this character.
      * @param {'male' | 'female'} osex The original sex of this character's body (as determined by its genitals).
      * @param {number} obreasts The original breast size of this character's body.
@@ -43,16 +42,16 @@ class Character {
      * @param {[CharEvent]} events The list of events that affected this character.
      */
     constructor({name, cost=-1, carry, affec=0, swap=false,
-                    image, imageIcon, curses=[], mindSex='male',
+                    image, imageIcon, mindSex='male',
                     osex=mindSex, obreasts, desiredBreasts=obreasts,
                     openis, ogender, fit, oheight,
-                    comfortableHeight, age, appDesc = '', fear,
+                    comfortableHeight = oheight, age, appDesc = '', fear,
                     ohair, oskinColor, oskinType='', oears='normal human', oeyeColor,
                     oblood='red', pregnantT=setup.never, due=setup.never,
                     lastBirth=setup.never, switched=false, events=[]}) {
         if ([name, carry, image, imageIcon, obreasts, openis, ogender, fit, oheight, comfortableHeight,
              age, appDesc, fear, ohair, oskinColor, oeyeColor].includes(undefined)) {
-            console.error(`Character constructor called without all required arguments.`);
+            console.error(`Character constructor called without all required arguments (${name || 'missing name'}).`);
         }
 
         assert(typeof name === 'string' && name.length > 0,
@@ -61,9 +60,9 @@ class Character {
         assert(typeof cost === 'number' && cost > -2,
                'cost must be a nonnegative number, or -1 for un-buyable companions');
         this.cost = cost;
-        assert(typeof carry === 'number' && carry > 0,
-               'carry must be a positive number');
-        this.carry = carry;
+        assert((typeof carry === 'number' || !isNaN(parseInt(carry))) && carry >= 0,
+               'carry must be a nonnegative number');
+        this.carry = parseInt(carry);
         assert(typeof affec === 'number' || affec === undefined,
                'affection must be a number');
         this.affec = affec;
@@ -76,9 +75,6 @@ class Character {
         assert( typeof imageIcon === 'string',
                 'imageIcon must be a string');
         this._imageIcon = imageIcon;
-        assert(Array.isArray(curses),
-               "curses must be an array of curses");
-        this.curses = curses;
         assert(['male', 'female'].includes(mindSex),
                'mindSex must be "male" or "female"');
         this.mindSex = mindSex;
@@ -97,25 +93,25 @@ class Character {
         assert(typeof ogender === 'number' && ogender >= 1 && ogender <= 6,
                'ogender must be a number between 1 and 6');
         this.ogender = ogender;
-        assert(typeof fit === 'number',
-               'fit must be a number between 0 and 10');
-        this.fit = fit;
-        assert(typeof oheight === 'number' && oheight > 0,
+        assert((typeof fit === 'number' || !isNaN(parseInt(fit))),
+               `[${name}] fit must be a number between 0 and 10`);
+        this.fit = parseInt(fit);
+        assert((typeof oheight === 'number' || !isNaN(parseInt(oheight))) && oheight > 0,
                'oheight must be a positive number');
-        this.oheight = oheight;
+        this.oheight = parseInt(oheight);
         assert(typeof comfortableHeight === 'number' && comfortableHeight > 0,
                'comfortableHeight must be a positive number');
         this.comfortableHeight = comfortableHeight;
-        assert(typeof age === 'number' && age > 0,
+        assert((typeof age === 'number' || !isNaN(parseInt(age))) && age > 0,
                'age must be a positive number');
-        this.age = age;
+        this.age = parseInt(age);
         assert(typeof appDesc === 'string',
                'appDesc must be a string');
         this.appDesc = appDesc;
         assert(['darkness', 'spiders', 'wolves', 'snakes', 'insects',
                 'slime', 'desperation', 'rot', 'unknown'].includes(fear),
-               "fear must be one of the implemented fears: 'darkness', 'spiders', 'wolves', 'snakes', 'insects', \
-        'slime', 'desperation', 'rot', 'unknown'");
+               `fear must be one of the implemented fears: 'darkness', 'spiders', 'wolves', 'snakes', 'insects', 
+        'slime', 'desperation', 'rot', 'unknown'`);
         this.fear = fear;
         assert(typeof ohair === 'string',
                'ohair must be a string');
@@ -183,7 +179,7 @@ class Character {
      * @returns {[]} The revivable JSON.
      */
     toJSON() {
-        return JSON.reviveWrapper(`new Character($ReviveData$)`, this.internalState())
+        return JSON.reviveWrapper(`new Character($ReviveData$)`, this._internalState())
     }
 
     /**
@@ -246,6 +242,72 @@ class Character {
         return Math.max(this.dueDate - State.variables.time, 0);
     }
 
+    get curses() {
+        return this.events.filter(e => e instanceof Curse);
+    }
+
+    /**
+     * Removes a curse from this character.
+     * @param {Class | string} curse The name or class of the curse to remove.
+     * @param {boolean} all Iff all is true, removes all copies of the curse, not just the last.
+     */
+    removeCurse(curse, all = false) {
+        let predicate = typeof curse === 'string' ? e => e.name === curse : e => e instanceof curse;
+        if (all) {
+            this.events = this.events.filter(predicate);
+        } else {
+            // noinspection JSUnresolvedReference -- findLastIndex exists, I'm not sure why my linter claims it doesn't.
+            let i = this.events.findLastIndex(e => typeof curse === 'string' ? e.name === curse : e instanceof curse);
+            if (i >= 0) this.events.deleteAt(i);
+        }
+    }
+
+    /**
+     * Adds a curse to this character. Does not change corruption.
+     * Curses on the main character should always be added this way to ensure the twin gets it too, not inserted
+     * into events manually.
+     * @param {Curse} curse The curse to add.
+     */
+    addCurse(curse) {
+        if (curse.time !== State.variables.time) {
+            console.warn('Curse added to character at a date differing from the present. This is most likely a bug.')
+        }
+        this.events.push(curse);
+        if (this === State.variables.mc && this.hasCurse(DoubleTrouble)) {
+            State.variables.companionTwin.addCurse(curse);
+        }
+    }
+
+    /**
+     * Returns the most recently added copy of the given event, or undefined if this character does not have the given event.
+     * @param {string | Class} event The name of the event to get as a string, or its class.
+     * @returns {CharEvent | undefined} The event in question or undefined if none was found.
+     */
+    getEvent(event) {
+        let curseIndex = this.events.findLastIndex(typeof event === 'string' ? e => e.name === event : e => e instanceof event);
+        if (curseIndex < 0) return undefined;
+        return this.events[curseIndex];
+    }
+
+    /**
+     * Returns the most recently taken copy of the given curse, or undefined if this character does not have the given curse.
+     * @param {string | Class} curse The name of the curse to get as a string, or its class.
+     * @returns {Curse | undefined} The curse in question or undefined if none was found.
+     */
+    getCurse(curse) {
+        // noinspection JSValidateTypes -- if the parameter is a curse name or class, the event we find is always a curse.
+        return this.getEvent(curse);
+    }
+
+    /**
+     *
+     * @param curse
+     * @returns {boolean}
+     */
+    hasCurse(curse) {
+        return this.events.some(typeof curse === 'string' ? e => e.name === curse : e => e instanceof curse);
+    }
+
     /**
      * Returns the character's current age as it would be without age-reducing curses.
      * Includes time spent in the abyss and the effects of the fountain of youth.
@@ -266,6 +328,7 @@ class Character {
      * @returns {number} The character's apparent age, including age-reducing effects.
      */
     get appAge() {
+        // This code could be simplified a lot if we make eternal youth an event.
         let eternalYouthTime = State.variables.eternalYouth * AgeEvent.aDay;
         let curAge = this.age * AgeEvent.aYear;
         let unitsElapsed = 0;
@@ -277,7 +340,9 @@ class Character {
             curAge = event.age(curAge);
             unitsElapsed = event.time * AgeEvent.aDay;
         }
-        curAge = Math.max(curAge, settings.appAgeControl * AgeEvent.aYear);
+        let timeSinceLastEvent = 0;
+        if (unitsElapsed < eternalYouthTime) timeSinceLastEvent = Math.min(State.variables.time * AgeEvent.aDay, eternalYouthTime) - unitsElapsed;
+        curAge = Math.max(curAge + timeSinceLastEvent, settings.appAgeControl * AgeEvent.aYear);
         return curAge / AgeEvent.aYear;
     }
 
@@ -325,7 +390,7 @@ class Character {
         for (let event of this.events) {
             assetChange = event.growAsset(assetChange);
         }
-        return penis + assetChange;
+        return penis + assetChange * 2;
     }
 
     /**
@@ -685,7 +750,7 @@ class Character {
                 libido += 2;
             }
             if (this.curses.some(c => c.name === 'The Maxim')) {
-                let activity = Math.random() * 2; // TODO: this should be tested daily, not on every use I think
+                let activity = Math.random() * 2;
                 if (libido < 2 && activity > 1) {
                     libido += 3;
                 }
@@ -715,6 +780,7 @@ class Character {
      */
     get subdom() {
         let subdom = 0;
+        if (this.name === 'Golem') subdom = 10;
         for (let event of this.events) {
             subdom = event.changeSubDom(subdom);
         }
@@ -1292,3 +1358,4 @@ class Character {
         return this.events.reduce((v, e) => e.removeLeg(v), 2);
     }
 }
+window.Character = Character;

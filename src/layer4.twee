@@ -61,7 +61,7 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 	A sudden flurry of Miasma-driven hail pelts down on you, each icy stone biting into your exposed skin. You take shelter behind a nearby glacier, watching as the hailstorm intensifies. Just as you're about to leave your hiding place, you notice a small, crystalline creature darting in and out of the hailstones, seemingly unaffected by the storm. Its delicate, ice-like body refracts the Miasma's light, creating a mesmerizing dance of colors. Once the hailstorm subsides, the creature disappears into the snowy landscape.<br><br>
 <<elseif $layerTemp == 3>>
 	As you trudge through the thick snow, you notice a cluster of frostbitten flowers, their petals a haunting shade of deep blue. As you lean in to inspect them, you feel a strange warmth emanating from them. Curious, you cautiously touch one of the petals, and your fingertips are met with a tantalizing heat, a stark contrast to the surrounding cold.<<if $abyssKnow == 1>> Upon closer inspection, you find that these flowers are a rare species known as Heatblooms, which generate warmth to survive in the harsh conditions. Unfortunately, they aren't useful for warming people, as they will only generate warmth in the harsh cold of the storm. Once you bring them close to your body, they'll become as inert as any other flower.<</if>><br><br>
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse(HijinksEnsue)>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -154,11 +154,14 @@ How would you like to use Cherry's chaotic luck ability?
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-foraging.png']]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
-<<if !$HeightIncrease && $forageFood == 1>>
+<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
+<<if _heightDirEvent === undefined && $forageFood == 1>>
+<<set _heightDirEvent = new HeightDirEvent()>>
+<<set $mc.events.push(_heightDirEvent)>>
 Would you like to increase or decrease your height due to eating flairabou meat?
 
-<<radiobutton "$HeightIncrease" -1 checked>> Decrease
-<<radiobutton "$HeightIncrease" 1 >> Increase
+<<radiobutton "_heightDirEvent.heightDirection" -1 checked>> Decrease
+<<radiobutton "_heightDirEvent.heightDirection" 1 >> Increase
 
 <</if>>
 <<nobr>>
@@ -269,8 +272,9 @@ The air seems to get drier as you proceed further down. You might want to stockp
 
 
 :: Take on Libido Reinforcement C [layer4]
-<<set $playerCurses.push($curse41)>><<set $corruption += $curse41.corr>><<set $LibidoLog.push($curse41)>>\
-[img[setup.ImagePath + $curse41.pic]]
+<<set _curse = new LibidoReinforcementC()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Libido Curse">>
 
@@ -283,8 +287,9 @@ The air seems to get drier as you proceed further down. You might want to stockp
 
 
 :: Take on Lactation Rejuvenation A [layer4]
-<<set $playerCurses.push($curse42)>><<set $corruption += $curse42.corr>>\
-[img[setup.ImagePath + $curse42.pic]]
+<<set _curse = new LactationRejuvenationA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you wander through the fourth layer, a sudden warmth blooms from within, a soothing counterpoint to the icy realm you are immersed in. The Curse takes hold, its presence as unexpected as it is unsettling. Lactation. A personal, intimate change that seems incongruous with the harsh Abyss you navigate.
 
@@ -303,9 +308,10 @@ As you continue your descent into the frost-bitten depths, you ponder your situa
 
 
 :: Take on Asset Robustness D [layer4]
-<<set $playerCurses.push($curse43)>><<set $corruption += $curse43.corr>><<set $GenderLog.push($curse43)>>\
+<<set _curse = new AssetRobustnessD()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 <<CarryAdjust>>\
-[img[setup.ImagePath + $curse4.pic]]
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
 	The intensity of this curse is stronger than you were expecting. Your penis springs to full erection, and then bulges ever larger. The base, the shaft, the tip start swelling to an alarming degree. Drops of precum start oozing out of the tip, but the growing doesn't stop. Then, finally, the curse releases its grip, but you stare slack-jawed as you realize you're now sporting a $mc.penisCor inch long dong. The erection lasts for a little while longer, but dealing with a member this large without it tripping up your legs is going to require some practice. You grimace at a slight pinching sensation as you hobble forward
@@ -328,10 +334,11 @@ As you continue your descent into the frost-bitten depths, you ponder your situa
 
 
 :: Take on Age Reduction B [layer4]
-<<set $playerCurses.push($curse44)>><<set $corruption += $curse44.corr>><<set $AgeLog.push($curse44)>><<set $curse44.variation=$time>>\
-[img[setup.ImagePath + $curse44.pic]]
+<<set _curse = new AgeReductionB()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse44.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
 <<if $escBalDepl==0>>
@@ -342,8 +349,9 @@ You have successfully taken on the $curse44.name Curse. Hopefully you are okay w
 
 
 :: Take on Sleep Tight [layer4]
-<<set $playerCurses.push($curse45)>><<set $corruption += $curse45.corr>>\
-[img[setup.ImagePath + $curse45.pic]]
+<<set _curse = new SleepTight()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you venture through the fourth layer, you suddenly feel a strange sensation taking over your body. It starts as a slight drowsiness, your eyelids feeling heavier with every passing moment. It's a strange sensation to experience in the midst of the piercing cold and icy winds. Your mind briefly wonders if it's the effect of the Miasma, but there's something different about this fatigue, something more permanent.
 
@@ -362,8 +370,9 @@ You know that this Curse could make your journey through the Abyss more challeng
 
 
 :: Take on Sweet Dreams [layer4]
-<<set $playerCurses.push($curse46)>><<set $corruption += $curse46.corr>>\
-[img[setup.ImagePath + $curse46.pic]]
+<<set _curse = new SweetDreams()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As night descends upon the Abyss, you prepare yourself for the restless slumber that awaits you. Despite the layers of insulating clothing you wear, the chilling cold still manages to touch your skin, but your thoughts are consumed by the anticipation of the vivid, erotic nightmares that are now part of your reality.
 
@@ -394,8 +403,9 @@ You jolt awake, your body slick with sweat and your own fluids, and your heart r
 
 
 :: Take on Hypno Happytime [layer4]
-<<set $playerCurses.push($curse47)>><<set $corruption += $curse47.corr>>\
-[img[setup.ImagePath + $curse47.pic]]
+<<set _curse = new HypnoHappytime()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 You zone out for a moment, stopping in your tracks as a haze passes through your mind. It lasts for only a few moments, but leaves a permanent effect on your mind.
 
@@ -412,8 +422,9 @@ You know that from now on you are much more easily influenced and are particular
 
 
 :: Take on Crossdress Your Heart [layer4]
-<<set $playerCurses.push($curse48)>><<set $corruption += $curse48.corr>>\
-[img[setup.ImagePath + $curse48.pic]]
+<<set _curse = new CrossdressYourHeart()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.vagina > 0>>\
 	As you trudge deeper into the frostbitten expanse of the fourth layer of the Abyss, an invisible force suddenly strikes you. Your heart skips a beat, and an unnatural chill races through your body. An overwhelming compulsion to remove your feminine attire floods overwhelms you, and your mind is plagued with a deep, visceral aversion to them.
@@ -442,8 +453,9 @@ You know that from now on you are much more easily influenced and are particular
 
 
 :: Take on Lie Detector [layer4]
-<<set $playerCurses.push($curse49)>><<set $corruption += $curse49.corr>>\
-[img[setup.ImagePath + $curse49.pic]]
+<<set _curse = new LieDetector()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you traverse the desolate terrain of the fourth layer, you suddenly feel an odd sensation in your mind, as if an invisible force is wrapping around your thoughts. The sensation grows more intense, and you struggle to maintain your footing on the slippery ground. You pause, your breath coming out in misty puffs, as you attempt to comprehend this strange feeling.
 
@@ -462,8 +474,9 @@ As you continue your exploration, you can't help but contemplate how this Curse 
 
 
 :: Take on Megadontia [layer4]
-<<set $playerCurses.push($curse50)>><<set $corruption += $curse50.corr>>\
-[img[setup.ImagePath + $curse50.pic]]
+<<set _curse = new Megadontia()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you continue to explore the fourth layer of the Abyss, you become increasingly aware of a growing sensation in your mouth. A tingling sensation, at first subtle but steadily growing more intense, draws your focus inward. The biting cold of the miasma-charged winds whipping against your body fades into the background, as your attention is fully captured by the changes occurring within you.
 
@@ -484,8 +497,9 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 
 
 :: Take on Softie [layer4]
-<<set $playerCurses.push($curse51)>><<set $corruption += $curse51.corr>><<CarryAdjust>>\
-[img[setup.ImagePath + $curse51.pic]]
+<<set _curse = new Softie()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
 	As you take the Curse, wave of dull energy creeps up from the ground, numbing and weighing down your legs. It reaches for your defenseless penis, and suddenly, there's a void where sensation once was. Your penis is more than flaccid; it's inert. 
@@ -522,8 +536,9 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 
 
 :: Take on Hard Mode [layer4]
-<<set $playerCurses.push($curse52)>><<set $corruption += $curse52.corr>><<CarryAdjust>>\
-[img[setup.ImagePath + $curse52.pic]]
+<<set _curse = new HardMode()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
 	A wave of energy creeps up from the ground, causing your legs to tingle. Your anticipation heightens as it approaches your vulnerable penis. 
@@ -567,8 +582,9 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 
 
 :: Take on Lingual Leviathan [layer4]
-<<set $playerCurses.push($curse53)>><<set $corruption += $curse53.corr>>\
-[img[setup.ImagePath + $curse53.pic]]
+<<set _curse = new LingualLeviathan()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Suddenly, your mouth feels unbearably full, making it difficult to breathe. Overwhelmed by the sensation, as if a foreign object is lodged in your throat, you instinctively reach for your mouth, desperate to alleviate the pressure. Upon touching it, you're struck by a mix of shock and fascination – your tongue has grown to an astonishing 30 centimeters in length.
 
@@ -589,8 +605,9 @@ After the initial shock subsides, you become intrigued by the potential of this 
 
 
 :: Take on Tipping the Scales [layer4]
-<<set $playerCurses.push($curse54)>><<set $corruption += $curse54.corr>>\
-[img[setup.ImagePath + $curse54.pic]]
+<<set _curse = new TippingTheScales()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 You're hiking through the snowy landscape of the fourth layer, then, abruptly, your surroundings become a blur. The bitter cold intensifies, and a wave of energy surges through you, threatening to pull you apart and knit you back together. You instinctively clamp your eyes shut, bracing against the pain, the unease, the fear. The icy winds whistling past your ears seem to fade into the background.
 
@@ -608,12 +625,13 @@ You ponder your newfound form, the feel of the scales against the bitter, frosty
 
 Please enter your new scale color and press enter:
 
-<<textbox "$curse54.variation" "green" "Layer4 Curses">>
+<<textbox "_curse.scaleColor" "green" "Layer4 Curses">>
 
 
 :: Take on Reptail [layer4]
-<<set $playerCurses.push($curse55)>><<set $corruption += $curse55.corr>>\
-[img[setup.ImagePath + $curse55.pic]]
+<<set _curse = new Reptail()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you trudge onward, the Curse begins to take effect. Your back starts to itch and tingle, the sensation growing increasingly intense until it's impossible to ignore. You reach back, attempting to soothe the itch, but your fingers find something unfamiliar. Your heart races, anxiety mounting as the sensation persists.
 
@@ -621,7 +639,7 @@ The skin on your lower back starts to stretch, pulled taut as something begins t
 
 The tail is large, thick, and covered in scales that feel smooth and cool to the touch. Its spiky protrusions, reminiscent of miniature mountains, run the length of the tail, culminating in a menacing, spiked tip. The tail's weight poses a new challenge to your movements, causing you to struggle for balance as it swings and sways with each step.
 
-As you continue to traverse the icy landscape, you discover that the Reptail Curse impacts your daily life in unexpected ways. Your once-agile movements are now hindered by the tail's weight and size, making it difficult to navigate the narrow paths and crevices of the Abyss. The tail's spiky protrusions snag on clothing, tearing the fabric and leaving you increasingly vulnerable to the frigid air. <<if $playerCurses.some(e => e.name === "Tipping the Scales")>>You also notice that the cold affects your tail more than the rest of your body, the reptilian scales offering little insulation against the biting chill.<</if>>
+As you continue to traverse the icy landscape, you discover that the Reptail Curse impacts your daily life in unexpected ways. Your once-agile movements are now hindered by the tail's weight and size, making it difficult to navigate the narrow paths and crevices of the Abyss. The tail's spiky protrusions snag on clothing, tearing the fabric and leaving you increasingly vulnerable to the frigid air. <<if $mc.hasCurse("Tipping the Scales")>>You also notice that the cold affects your tail more than the rest of your body, the reptilian scales offering little insulation against the biting chill.<</if>>
 
 Though the Reptail Curse may seem like a burden, you find that it has its advantages. The tail can serve as a weapon, its spiky protrusions effective for repelling aggressive creatures that inhabit the Abyss, though perhaps not anything that would pose a serious threat to you. The tail also acts as a counterbalance once you're used to it, aiding you in maintaining your footing on the treacherous, icy terrain.
 
@@ -636,8 +654,9 @@ Despite these benefits, you can't shake the feeling of alienation brought on by 
 
 
 :: Take on Cold Blooded [layer4]
-<<set $playerCurses.push($curse56)>><<set $corruption += $curse56.corr>>\
-[img[setup.ImagePath + $curse56.pic]]
+<<set _curse = new ColdBlooded()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you venture further, the cold intensifies, penetrating even the thickest layers of your protective clothing. You rub your arms in a futile attempt to generate warmth, but it does nothing to dispel the icy tendrils that seem to have burrowed into your very core.
 
@@ -704,7 +723,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 	You do not have enough dubloons for an offering.
 <<else>>
 	<<for _companion range $hiredCompanions>>
-		<<for _index, _curse range $playerCurses>>
+		<<for _index, _curse range $mc.curses>>
 			<<set _flag = false>>
 			<<set _tempName = _companion.name>>
 
@@ -718,7 +737,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 					<<set _flag = setup.willingCurses(_companion).includes(_curse.name)>>
 					<<if _flag>>
 						/* Check whether companion already has this curse (e.g. from this shrine). */
-						<<set _flag = !_companion.curses.some(companionCurse => companionCurse.name == _curse.name)>>
+						<<set _flag = !_companion.hasCurse(_curse.name)>>
 					<</if>>
 			<</switch>>
 
@@ -727,11 +746,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 				<<capture _companion _curse _tempName>>
 					&nbsp; _curse.name
 					<<link "Choose" "Layer4 Steady1a">>
-						<<set _companion.curses.push(_curse)>>
-
-						<<set _logName = _curse.type + "Log" + _tempName>>
-						<<set _log = State.variables[_logName]>>
-						<<if _log>><<set _log.push(_curse)>><</if>>
+						<<set _companion.addCurse(_curse.copy())>>
 
 						<<set $corruption += Math.round(_curse.corr / 2)>>
 						/* The CYOA states that the cost counter is shared between shrines. */
@@ -773,9 +788,9 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 <<if $dubloons < ($skewedUsed * 5)>>
 	You do not have enough dubloons for an offering.
 <<else>>
-	<<for _i, _curse range $playerCurses>>
+	<<for _i, _curse range $mc.curses>>
 		<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' &&
-			!$hiredCompanions.every(companion => companion === $companionGolem || companion.curses.some(curse => curse.name == _curse.name))
+			!$hiredCompanions.every(companion => companion === $companionGolem || companion.hasCurse(_curse.name))
 		>>
 			<<capture _i>>
 				[[_curse.name|Layer4 Steady2b][$temp = _i]]<br>
@@ -820,12 +835,12 @@ You can burn down the dead purity tree and bathe in the raw cleansing smoke to g
 :: Layer4 Steady2b [layer4]
 [img[setup.ImagePath+'Wonders/steadyshrine.png']]
 
-Which companion would you like to forcibly copy the Curse of $playerCurses[$temp].name onto?
+Which companion would you like to forcibly copy the Curse of $mc.curses[$temp].name onto?
 
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
-<<set _curse = $playerCurses[$temp]>>
+<<set _curse = $mc.curses[$temp]>>
 <<for _i, _companion range $hiredCompanions>>
 	<<set _flag = false>>
 	<<set _tempName = _companion.name>>
@@ -837,20 +852,16 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 			You can't copy Curses to your Golem.<br>
 		<<default>>
 			/* Check whether companion already has this curse (e.g. from this shrine). */
-			<<set _flag = !_companion.curses.some(companionCurse => companionCurse.name == _curse.name)>>
+			<<set _flag = !_companion.hasCurse(_curse.name)>>
 			<<if !_flag>>_companion.name already has this Curse!<br><</if>>
 	<</switch>>
 
 	<<if _flag>>
 		<<if _companion === $companionBandit>><<set _tempName = "Bandit">><</if>>
 		<<capture _companion _i _tempName>>
-			<<set _choiceText = "Transfer to " + _tempName>>
+			<<set _choiceText = "Copy to " + _tempName>>
 			<<link _choiceText "Layer4 Steady Apply">>
-				<<set _companion.curses.push(_curse)>>
-
-				<<set _logName = _curse.type + "Log" + _tempName>>
-				<<set _log = State.variables[_logName]>>
-				<<if _log>><<set _log.push(_curse)>><</if>>
+				<<set _companion.addCurse(_curse.copy())>>
 
 				<<set $corruption += Math.round(_curse.corr / 2)>>
 				/* The CYOA states that the cost counter is shared between shrines. */
@@ -1271,40 +1282,33 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp1 = random(0,15) + 40>>
 	<<set $temp2 = random(0,15) + 40>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && ($temp1 == 42 || $temp2 == 42) ) )>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($mc.hasCurse(ShrunkenAssets) && ($temp1 === 42 || $temp2 === 42)))>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
-<<if $temp1==43 || $temp2==43>>
-	<<set $AgeLog.push($curse44)>><<set $curse44.variation=$time>>
-<</if>>
+
+<<set _curse1 = _handle.hasCurse($temp1)>>
+<<set _curse2 = _handle.hasCurse($temp2)>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
-<<if $curses[$temp1].name ==  "Tipping the Scales" || $curses[$temp2].name ==  "Tipping the Scales">>
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
+<<set _hasScales = (_scaleCurse = _curse1).name === "Tipping the Scales" || (_scaleCurse = _curse2).name === "Tipping the Scales">>\
+<<if _hasScales>>
 
 Please enter your new scale color:
 
-<<textbox "$curse54.variation" "green" "Layer4 Hub">>
+<<textbox "_scaleCurse.scaleColor" "green" "Layer4 Spectre">>
 
 <<else>>
-
 [[Continue on to the rest of the layer|Layer4 Spectre]]
-
-<</if>>
-<<nobr>>
-<<if $curses[$temp1].name ==  "Asset Robustness D" || $curses[$temp2].name ==  "Asset Robustness D">>
-	<<set $GenderLog.push($curse43)>>
 <</if>>
 
-<<if $curses[$temp1].name ==  "Libido Reinforcement C" || $curses[$temp2].name ==  "Asset Robustness D">>
-	<<set $LibidoLog.push($curse41)>>
-<</if>>
-<</nobr>>
 
 :: Layer4 Cherry Mix [layer4]
 <<nobr>>
@@ -1312,23 +1316,22 @@ Please enter your new scale color:
 <<set $temp2 = random(0,15) + 40>>
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp2 = random(0,15) + 40>>
-	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  $temp2 == 42 )>>
+	<<if !($mc.hasCurse(ShrunkenAssets) && $temp2 === 42)>>
 		<<break>>
 	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
-<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
-<<if $temp2==43>>
-	<<set $AgeLog.push($curse44)>><<set $curse44.variation=$time>>
-<</if>>
+<<set _curse = _handle.hasCurse($temp2)>>
+<<set $mc.addCurse(_curse)>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 1.5), 0))>>
+<<set $corruption += _curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.<<if $playerCurses.some(e => e.name === "Tipping the Scales")>>
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
 
+<<if $mc.hasCurse("Tipping the Scales")>>\
 Please enter your new scale color:
 
 <<textbox "$mc.skinColor" "green" "Layer4 Hub">>
@@ -1338,18 +1341,11 @@ Please enter your new scale color:
 [[Continue on to the rest of the layer|Layer4 Spectre]]
 
 <</if>>
-<<nobr>><<if $playerCurses.some(e => e.name === "Asset Robustness D")>>
-	<<set $GenderLog.push($curse43)>>
-<</if>>
 
-<<if $playerCurses.some(e => e.name === "Libido Reinforcement C")>>
-	<<set $LibidoLog.push($curse41)>>
-<</if>>
-<</nobr>>
 
 :: Layer4 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[4]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>

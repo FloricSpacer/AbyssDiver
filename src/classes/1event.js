@@ -9,7 +9,8 @@ class CharEvent {
     /**
      * Creates a new event.
      * @param {string} name The name of the event.
-     * @param {'age' | 'asset' | 'lactation' | 'height' | 'heightdir' | 'libido' | 'standards' | 'lewdness' | 'none' | 'other'} type The type of the event.
+     * @param {'age' | 'asset' | 'lactation' | 'height' | 'heightdir' | 'libido' | 'standards' | 'lewdness' | 'none' |
+     *     'other'} type The type of the event.
      */
     constructor(name, type='none') {
         if (this.constructor.name === 'CharEvent') console.error('Raw CharEvent created');
@@ -28,9 +29,11 @@ class CharEvent {
     }
 
     /**
-     * Initialises this CharEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this CharEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {string} name
-     * @param {'age' | 'asset' | 'lactation' | 'height' | 'heightdir' | 'libido' | 'standards' | 'lewdness' | 'none' | 'other'} type
+     * @param {'age' | 'asset' | 'lactation' | 'height' | 'heightdir' | 'libido' | 'standards' | 'lewdness' | 'none' |
+     *     'other'} type
      * @param {number} time
      * @returns {CharEvent} This object
      * @protected
@@ -182,6 +185,45 @@ class CharEvent {
         return prevHandicap;
     }
 }
+window.CharEvent = CharEvent;
+
+/* exported GenderEvent */
+class GenderEvent extends CharEvent {
+    /**
+     * Creates a new gender reversal event.
+     * @param {string} name The name of the event.
+     */
+    constructor(name) {
+        super(name, 'age');
+    }
+
+    /**
+     * Returns the internal state of this event, from which another event can be built.
+     * @returns {any} The internal state of this event.
+     * @protected
+     */
+    _internalState() {
+        return {superState: super._internalState()};
+    }
+
+    /**
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
+     * @param {any} superState
+     * @param {number} byTime
+     * @returns {GenderEvent} This object
+     * @protected
+     */
+    _init({superState}) {
+        super._init(superState);
+        return this;
+    }
+
+    changeGender(character, prevGender) {
+        return prevGender + character.osex === 'male' ? 1 : -1;
+    }
+}
+window.GenderEvent = GenderEvent;
 
 /* exported AgeEvent */
 class AgeEvent extends CharEvent {
@@ -207,7 +249,8 @@ class AgeEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} byTime
      * @returns {AgeEvent} This object
@@ -223,6 +266,7 @@ class AgeEvent extends CharEvent {
         return prevAge - this.byTime;
     }
 }
+window.AgeEvent = AgeEvent;
 // Poor man's class variables
 /* The Gregorian calendar has 97 leap years in every 400-year cycle. Thus, the average length of a year is */
 /* 365 + 97 / 400 = 365.2425 days, and the average length of a month is 365.2425 / 12 = 30.436875 days. By */
@@ -247,7 +291,8 @@ class DollTransformation extends AgeEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @returns {DollTransformation} This object
      * @protected
@@ -261,6 +306,7 @@ class DollTransformation extends AgeEvent {
         return Math.min(17 * AgeEvent.aYear, prevAge - 2 * AgeEvent.aYear)
     }
 }
+window.DollTransformation = DollTransformation
 
 /* exported AssetEvent */
 class AssetEvent extends CharEvent {
@@ -285,7 +331,8 @@ class AssetEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} sizes
      * @returns {AssetEvent} This object
@@ -301,6 +348,7 @@ class AssetEvent extends CharEvent {
         return prevAsset + this.sizes;
     }
 }
+window.AssetEvent = AssetEvent;
 
 /* exported LactationEvent */
 class LactationEvent extends CharEvent {
@@ -324,7 +372,8 @@ class LactationEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} amount
      * @returns {LactationEvent} This object
@@ -340,16 +389,16 @@ class LactationEvent extends CharEvent {
         return prevLactation + this.amount;
     }
 }
+window.LactationEvent = LactationEvent;
 
 /* exported HeightDirectionEvent */
 class HeightDirectionEvent extends CharEvent {
     /**
      * Creates a new height-change direction event.
-     * @param {string} name The name of the event.
      * @param {1 | -1} direction The direction of future height changes.
      */
-    constructor(name, direction) {
-        super(name, 'heightdir');
+    constructor(direction = -1) {
+        super('Height Direction Change', 'heightdir');
         this.heightdir = direction;
     }
 
@@ -363,7 +412,8 @@ class HeightDirectionEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} heightdir
      * @returns {HeightDirectionEvent} This object
@@ -382,6 +432,7 @@ class HeightDirectionEvent extends CharEvent {
         return this.heightdir;
     }
 }
+window.HeightDirectionEvent = HeightDirectionEvent;
 
 /* exported HeightEvent */
 class HeightEvent extends CharEvent {
@@ -405,7 +456,8 @@ class HeightEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} amount
      * @returns {HeightEvent} This object
@@ -429,6 +481,7 @@ class HeightEvent extends CharEvent {
         return prevHeight + direction * this.amount;
     }
 }
+window.HeightEvent = HeightEvent;
 
 /* exported LibidoEvent */
 class LibidoEvent extends CharEvent {
@@ -452,7 +505,8 @@ class LibidoEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} amount
      * @returns {LibidoEvent} This object
@@ -468,6 +522,7 @@ class LibidoEvent extends CharEvent {
         return prevLibido + this.amount;
     }
 }
+window.LibidoEvent = LibidoEvent;
 
 /* exported StandardsEvent */
 class StandardsEvent extends CharEvent {
@@ -491,7 +546,8 @@ class StandardsEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} amount
      * @returns {StandardsEvent} This object
@@ -507,6 +563,7 @@ class StandardsEvent extends CharEvent {
         return prevStandards + this.amount;
     }
 }
+window.StandardsEvent = StandardsEvent;
 
 /* exported BodyChangeEvent */
 class BodyChangeEvent extends CharEvent {
@@ -532,7 +589,8 @@ class BodyChangeEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {Character} previous
      * @param {Character} next
@@ -550,7 +608,12 @@ class BodyChangeEvent extends CharEvent {
     changeImageIcon(prevIcon) {
         return this.next._imageIcon;
     }
+
+    changeDesc(prevDesc) {
+        return prevDesc + this.next.appDesc;
+    }
 }
+window.BodyChangeEvent = BodyChangeEvent;
 
 /* exported LewdnessEvent */
 class LewdnessEvent extends CharEvent {
@@ -558,7 +621,8 @@ class LewdnessEvent extends CharEvent {
      * Creates a new lewdness-enhancing event.
      * @param {string} name The name of the event.
      * @param {number} amount The number of stages by which to increase the character's lewdness.
-     * @param {boolean} preventedByLuminousGear Whether the effects of this event can be prevented or mitigated by the luminous gear.
+     * @param {boolean} preventedByLuminousGear Whether the effects of this event can be prevented or mitigated by the
+     *     luminous gear.
      */
     constructor(name, amount, preventedByLuminousGear=false) {
         super(name, 'lewdness');
@@ -576,7 +640,8 @@ class LewdnessEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while cloning.
+     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * cloning.
      * @param {any} superState
      * @param {number} amount
      * @param {boolean} preventable
@@ -596,3 +661,4 @@ class LewdnessEvent extends CharEvent {
         return prevLewdness + this.amount;
     }
 }
+window.LewdnessEvent = LewdnessEvent;

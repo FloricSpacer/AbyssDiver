@@ -1,8 +1,18 @@
 /* global CharEvent, AgeEvent */
 
 /**
- * @typedef {question: string, answerType: "string" | 'number' | string[], answerField: string} curseQuestion
+ * @typedef SugarCubeSetupObject
+ * @extends SugarCubeSetupObject
+ * @property allCurses
+ * @property curseArray
+ * @property curseByNum
  */
+setup.allCurses = {}
+setup.curseArray = []
+setup.curseByNum = num => {
+    return Reflect.construct(setup.curseArray[num], []);
+}
+
 
 /* exported Curse */
 class Curse extends CharEvent {
@@ -21,7 +31,7 @@ class Curse extends CharEvent {
         if (this.constructor.name === 'Curse') console.error('Raw Curse constructed');
         this.corruption = corruption;
         this.pic = pic;
-        this.appDesc = appDesc;
+        this._appDesc = appDesc;
     }
 
     /**
@@ -38,8 +48,18 @@ class Curse extends CharEvent {
      * @returns {Curse} A copy of this curse.
      */
     clone() {
-        return Reflect.construct(this.constructor, [this.name, this.corruption, this.pic, this.type, this.appDesc])
+        return Reflect.construct(this.constructor, this._customisationOptions())
             ._init(this._internalState());
+    }
+
+    /**
+     * Creates a copy of this curse. Unlike clone(), this makes a new curse, not the same curse, so e.g., if it is added to
+     * a character, it will be added at the current time, not at the time this curse was created.
+     * The new curse has the same customisation options chosen as this curse.
+     * @returns {Curse} A copy of this curse.
+     */
+    copy() {
+        return Reflect.construct(this.constructor, this._customisationOptions());
     }
 
     /**
@@ -53,20 +73,33 @@ class Curse extends CharEvent {
         );
     }
 
-    // /**
-    //  * Returns the set of customisation questions which the player must answer for this curse.
-    //  * Each question has a `question`, the text of the question, an `answerType` which is 'string' if the answer is a
-    //  * string,
-    //  * 'number' if the answer is a number or a list of strings if it's a multiple-choice question, and an `answerField`
-    //  * which is the name of the field on the curse which should be set to the answer.
-    //  * @returns {curseQuestion[]}
-    //  */
-    // get questions() {
-    //     return []
-    // }
+    get appDesc() {
+        return this._appDesc;
+    }
+
+    set appDesc(value) {
+        this._appDesc = value;
+    }
 
     get variantPassage() {
         return `${this.name} Variant`;
+    }
+
+    /**
+     * Returns the list of curses this curse is incompatible with. This curse may not be taken if any of the curses in
+     * this array have been taken before or are stored in managed misfortune.
+     * @returns {[string]} The list of incompatible curses.
+     */
+    get incompatibilities() {
+        return []
+    }
+
+    /**
+     * Returns the maximum number of times this curse can be taken.
+     * @returns {number} The number of times this curse can be taken.
+     */
+    get maximum() {
+        return 1;
     }
 }
 
@@ -79,7 +112,10 @@ class LibidoReinforcementA extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse1 = new LibidoReinforcementA();
+setup.allCurses.LibidoReinforcementA = new LibidoReinforcementA()
+State.variables.curse1 = setup.allCurses.LibidoReinforcementA
+window.LibidoReinforcementA = LibidoReinforcementA
+setup.curseArray.push(LibidoReinforcementA)
 
 class GenderReversalA extends Curse {
     constructor() {
@@ -90,18 +126,28 @@ class GenderReversalA extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse2 = new GenderReversalA();
+setup.allCurses.GenderReversalA = new GenderReversalA()
+State.variables.curse2 = setup.allCurses.GenderReversalA
+window.GenderReversalA = GenderReversalA
+setup.curseArray.push(GenderReversalA)
 
 class AssetRobustnessA extends Curse {
     constructor() {
         super('Asset Robustness A', 10, 'Curses/assetrobustnessA.png', 'gender');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**0; // 1 cup size / 2cm
     }
 }
-State.variables.curse3 = new AssetRobustnessA();
+setup.allCurses.AssetRobustnessA = new AssetRobustnessA()
+State.variables.curse3 = setup.allCurses.AssetRobustnessA
+window.AssetRobustnessA = AssetRobustnessA
+setup.curseArray.push(AssetRobustnessA)
 
 class ClothingRestrictionA extends Curse {
     constructor() {
@@ -109,11 +155,18 @@ class ClothingRestrictionA extends Curse {
               'You cannot bring yourself to wear any accessories anywhere on your body. ');
     }
 }
-State.variables.curse4 = new ClothingRestrictionA();
+setup.allCurses.ClothingRestrictionA = new ClothingRestrictionA()
+State.variables.curse4 = setup.allCurses.ClothingRestrictionA
+window.ClothingRestrictionA = ClothingRestrictionA
+setup.curseArray.push(ClothingRestrictionA)
 
 class ShrunkenAssets extends Curse {
     constructor() {
         super('Shrunken Assets', 75, 'Curses/shrunkenassets.png', 'gender');
+    }
+
+    get incompatibilities() {
+        return ['Asset Robustness A', 'Asset Robustness B', 'Asset Robustness C', 'Asset Robustness D', 'Asset Robustness E', 'Asset Robustness F', 'Asset Robustness G'];
     }
 
     changeBreasts(prevBreasts) {
@@ -124,12 +177,15 @@ class ShrunkenAssets extends Curse {
         return Math.max(prevPenis, 1);
     }
 }
-State.variables.curse5 = new ShrunkenAssets();
+setup.allCurses.ShrunkenAssets = new ShrunkenAssets()
+State.variables.curse5 = setup.allCurses.ShrunkenAssets
+window.ShrunkenAssets = ShrunkenAssets
+setup.curseArray.push(ShrunkenAssets)
 
 class HairRemoval extends Curse {
     constructor() {
         super('Hair Removal', 5, 'Curses/hairremoval.png', 'none',
-              '<<if !$playerCurses.some(e => e.name === "Maximum Fluff")>>Your entire body below your nose is completely hairless and smooth. Your eyebrows also look like they have been carefully trimmed. <</if>>');
+              '<<if !$mc.hasCurse("Maximum Fluff")>>Your entire body below your nose is completely hairless and smooth. Your eyebrows also look like they have been carefully trimmed. <</if>>');
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -142,7 +198,10 @@ class HairRemoval extends Curse {
         return 'hairless, smooth';
     }
 }
-State.variables.curse6 = new HairRemoval();
+setup.allCurses.HairRemoval = new HairRemoval()
+State.variables.curse6 = setup.allCurses.HairRemoval
+window.HairRemoval = HairRemoval
+setup.curseArray.push(HairRemoval)
 
 class PermaDye extends Curse {
     constructor(hairColor='turquoise') {
@@ -173,13 +232,11 @@ class PermaDye extends Curse {
     changeHair(prevHair) {
         return this.hairColor;
     }
-
-    // get questions() {
-    //     return [{question: 'What hair color do you prefer?', answer: 'string', answerField: 'hairColor'}]
-    // }
-
 }
-State.variables.curse7 = new PermaDye();
+setup.allCurses.PermaDye = new PermaDye()
+State.variables.curse7 = setup.allCurses.PermaDye
+window.PermaDye = PermaDye
+setup.curseArray.push(PermaDye)
 
 class FreckleSpeckle extends Curse {
     constructor() {
@@ -187,7 +244,10 @@ class FreckleSpeckle extends Curse {
               'An assortment of freckles are spread over your body. ');
     }
 }
-State.variables.curse8 = new FreckleSpeckle();
+setup.allCurses.FreckleSpeckle = new FreckleSpeckle()
+State.variables.curse8 = setup.allCurses.FreckleSpeckle
+window.FreckleSpeckle = FreckleSpeckle
+setup.curseArray.push(FreckleSpeckle)
 
 class KnifeEar extends Curse {
     constructor() {
@@ -199,7 +259,10 @@ class KnifeEar extends Curse {
         return 'pointed, elfish';
     }
 }
-State.variables.curse9 = new KnifeEar();
+setup.allCurses.KnifeEar = new KnifeEar()
+State.variables.curse9 = setup.allCurses.KnifeEar
+window.KnifeEar = KnifeEar
+setup.curseArray.push(KnifeEar)
 
 class DizzyingHeights extends Curse {
     constructor() {
@@ -217,8 +280,16 @@ class DizzyingHeights extends Curse {
     changeHeight(prevHeight, direction) {
         return prevHeight + 5 * direction;
     }
+
+
+    get maximum() {
+        return 5;
+    }
 }
-State.variables.curse10 = new DizzyingHeights();
+setup.allCurses.DizzyingHeights = new DizzyingHeights()
+State.variables.curse10 = setup.allCurses.DizzyingHeights
+window.DizzyingHeights = DizzyingHeights
+setup.curseArray.push(DizzyingHeights)
 
 class IncreasedSensitivity extends Curse {
     constructor() {
@@ -231,7 +302,10 @@ class IncreasedSensitivity extends Curse {
         return prevLewdness + 1;
     }
 }
-State.variables.curse11 = new IncreasedSensitivity();
+setup.allCurses.IncreasedSensitivity = new IncreasedSensitivity()
+State.variables.curse11 = setup.allCurses.IncreasedSensitivity
+window.IncreasedSensitivity = IncreasedSensitivity
+setup.curseArray.push(IncreasedSensitivity)
 
 class RefractoryRefactorization extends Curse {
     constructor() {
@@ -244,7 +318,10 @@ class RefractoryRefactorization extends Curse {
         return prevLewdness + 1;
     }
 }
-State.variables.curse12 = new RefractoryRefactorization();
+setup.allCurses.RefractoryRefactorization = new RefractoryRefactorization()
+State.variables.curse12 = setup.allCurses.RefractoryRefactorization
+window.RefractoryRefactorization = RefractoryRefactorization
+setup.curseArray.push(RefractoryRefactorization)
 
 class LibidoReinforcementB extends Curse {
     constructor() {
@@ -255,7 +332,10 @@ class LibidoReinforcementB extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse13 = new LibidoReinforcementB();
+setup.allCurses.LibidoReinforcementB = new LibidoReinforcementB()
+State.variables.curse13 = setup.allCurses.LibidoReinforcementB
+window.LibidoReinforcementB = LibidoReinforcementB
+setup.curseArray.push(LibidoReinforcementB)
 
 class GenderReversalB extends Curse {
     constructor() {
@@ -266,18 +346,28 @@ class GenderReversalB extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse14 = new GenderReversalB();
+setup.allCurses.GenderReversalB = new GenderReversalB()
+State.variables.curse14 = setup.allCurses.GenderReversalB
+window.GenderReversalB = GenderReversalB
+setup.curseArray.push(GenderReversalB)
 
 class AssetRobustnessB extends Curse {
     constructor() {
         super('Asset Robustness B', 15, 'Curses/assetrobustnessB.png', 'none');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**1;
     }
 }
-State.variables.curse15 = new AssetRobustnessB();
+setup.allCurses.AssetRobustnessB = new AssetRobustnessB()
+State.variables.curse15 = setup.allCurses.AssetRobustnessB
+window.AssetRobustnessB = AssetRobustnessB
+setup.curseArray.push(AssetRobustnessB)
 
 class AgeReductionA extends Curse {
     constructor() {
@@ -293,7 +383,10 @@ class AgeReductionA extends Curse {
         return Math.min(20 * AgeEvent.aYear, prevAge - 2 * AgeEvent.aYear);
     }
 }
-State.variables.curse16 = new AgeReductionA();
+setup.allCurses.AgeReductionA = new AgeReductionA()
+State.variables.curse16 = setup.allCurses.AgeReductionA
+window.AgeReductionA = AgeReductionA
+setup.curseArray.push(AgeReductionA)
 
 class FluffyEars extends Curse {
     constructor(earType='furry cat') {
@@ -324,28 +417,11 @@ class FluffyEars extends Curse {
     changeEars(prevEars) {
         return this.earType;
     }
-
-    // get questions() {
-    //     return [{question: 'What type of ears would you like to gain?',
-    //         answer: Object.keys(FluffyEars.ears),
-    //         // answer: ['Cat', 'Dog', 'Cow', 'Monkey', 'Rabbit', 'Fox', 'Mouse', 'Pig', 'Horse'],
-    //         answerField: 'earType'}]
-    // }
-
-    // set earType(value) {
-    //     if (FluffyEars.ears[value] === undefined) {
-    //         console.error(`Fluffy Ears set to invalid ear type ${value}.`);
-    //         this._earType = 'furry cat';
-    //     } else {
-    //         this._earType = FluffyEars.ears[value]
-    //     }
-    // }
 }
-// FluffyEars.ears = {
-//     'Cat': 'furry cat', 'Dog': 'furry dog', 'Cow': 'furry cow', 'Monkey': 'furry monkey', 'Rabbit': 'furry rabbit',
-//     'Fox': 'furry fox', 'Mouse': 'furry mouse', 'Pig': 'pig', 'Horse': 'furry horse',
-// };
-State.variables.curse17 = new FluffyEars();
+setup.allCurses.FluffyEars = new FluffyEars()
+State.variables.curse17 = setup.allCurses.FluffyEars
+window.FluffyEars = FluffyEars
+setup.curseArray.push(FluffyEars)
 
 class FluffyTail extends Curse {
     constructor(tailType='flowing cat') {
@@ -375,26 +451,11 @@ class FluffyTail extends Curse {
         this.tailType = value;
     }
 
-    // get questions() {
-    //     return [{question: 'What type of tail would you like to gain?',
-    //         answer: Object.keys(FluffyTail.tails),
-    //         answerField: 'tailType'}]
-    // }
-    //
-    // set tailType(value) {
-    //     if (FluffyTail.tails[value] === undefined) {
-    //         console.error(`Fluffy Tail set to invalid tail type ${value}.`);
-    //         this._earType = 'flowing cat';
-    //     } else {
-    //         this._earType = FluffyTail.tails[value]
-    //     }
-    // }
 }
-// FluffyTail.tails = {
-//     'Cat': 'flowing cat', 'Dog': 'wagging dog', 'Cow': 'lazy cow', 'Monkey': 'prehensile monkey',
-//     'Rabbit': 'fluffy rabbit', 'Fox': 'bushy fox', 'Mouse': 'long mouse', 'Pig': 'twisted pig', 'Horse': 'swaying horse'
-// }
-State.variables.curse18 = new FluffyTail();
+setup.allCurses.FluffyTail = new FluffyTail()
+State.variables.curse18 = setup.allCurses.FluffyTail
+window.FluffyTail = FluffyTail
+setup.curseArray.push(FluffyTail)
 
 class MaximumFluff extends Curse {
     constructor(hairType='cat-furred') {
@@ -416,8 +477,9 @@ class MaximumFluff extends Curse {
         return 2;
     }
 
+    // eslint-disable-next-line no-unused-vars
     changeSkinType(prevSkinType) {
-        return super.changeSkinType(prevSkinType);
+        return this.furType;
     }
 
     get variation() {
@@ -429,33 +491,12 @@ class MaximumFluff extends Curse {
         this.furType = value;
     }
 
-    // get questions() {
-    //     return [{question: 'What type of fur would you like to gain?',
-    //         answer: Object.keys(MaximumFluff.furs),
-    //         answerField: 'furType'}]
-    // }
-    //
-    // set furType(value) {
-    //     if (MaximumFluff.furs[value] === undefined) {
-    //         console.error(`Maximum fluff set to invalid fur type ${value}.`);
-    //         this._furType = 'cat-furred';
-    //     } else {
-    //         this._furType = FluffyTail.furs[value]
-    //     }
-    // }
+    get appDesc() {
+        return 'Your fluffy fur coat might keep you a little warmer when it gets cold. '
+    }
 }
-// MaximumFluff.furs = {
-//     'Cat': 'cat-furred',
-//     'Dog': 'dog-furred',
-//     'Cow': 'cow-furred',
-//     'Monkey': 'monkey-furred',
-//     'Rabbit': 'rabbit-furred',
-//     'Fox': 'fox-furred',
-//     'Mouse': 'mouse-furred',
-//     'Pig': 'pig-furred',
-//     'Horse': 'horse-furred',
-// }
-State.variables.curse19 = new MaximumFluff();
+setup.allCurses.MaximumFluff = new MaximumFluff();
+State.variables.curse19 = setup.allCurses;
 
 class HeatRut extends Curse {
     constructor() {
@@ -466,7 +507,10 @@ class HeatRut extends Curse {
     // global variables and only applies to the main character.
     // We might want to change that.
 }
-State.variables.curse20 = new HeatRut();
+setup.allCurses.HeatRut = new HeatRut()
+State.variables.curse20 = setup.allCurses.HeatRut
+window.HeatRut = HeatRut
+setup.curseArray.push(HeatRut)
 
 class Lightweight extends Curse {
     constructor() {
@@ -474,11 +518,18 @@ class Lightweight extends Curse {
               'Just a little bit of alcohol turns you into a drunk mess. You\'d better not go out partying without trusted friends nearby. Behavior altering substances in general also have a much stronger effect on you. ');
     }
 }
-State.variables.curse21 = new Lightweight();
+setup.allCurses.Lightweight = new Lightweight()
+State.variables.curse21 = setup.allCurses.Lightweight
+window.Lightweight = Lightweight
+setup.curseArray.push(Lightweight)
 
 class SexSwitcheroo extends Curse {
     constructor() {
         super('Sex Switcheroo', 30, 'Curses/sexswitcheroo.png', 'gender');
+    }
+
+    get incompatibilities() {
+        return ['Futa Fun']
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -510,11 +561,18 @@ class SexSwitcheroo extends Curse {
         }
     }
 }
-State.variables.curse22 = new SexSwitcheroo();
+setup.allCurses.SexSwitcheroo = new SexSwitcheroo()
+State.variables.curse22 = setup.allCurses.SexSwitcheroo
+window.SexSwitcheroo = SexSwitcheroo
+setup.curseArray.push(SexSwitcheroo)
 
 class FutaFun extends Curse {
     constructor() {
         super('Futa Fun', 35, 'Curses/futafun.png', 'gender');
+    }
+
+    get incompatibilities() {
+        return ['Sex Switcheroo']
     }
 
     changePenis(character, prevPenis) {
@@ -539,7 +597,10 @@ class FutaFun extends Curse {
         }
     }
 }
-State.variables.curse23 = new FutaFun();
+setup.allCurses.FutaFun = new FutaFun()
+State.variables.curse23 = setup.allCurses.FutaFun
+window.FutaFun = FutaFun
+setup.curseArray.push(FutaFun)
 
 class BlushingVirgin extends Curse {
     constructor() {
@@ -552,18 +613,28 @@ class BlushingVirgin extends Curse {
         return prevLewdness - 1;
     }
 }
-State.variables.curse24 = new BlushingVirgin();
+setup.allCurses.BlushingVirgin = new BlushingVirgin()
+State.variables.curse24 = setup.allCurses.BlushingVirgin
+window.BlushingVirgin = BlushingVirgin
+setup.curseArray.push(BlushingVirgin)
 
 class SubmissivenessRectificationA extends Curse {
     constructor() {
         super('Submissiveness Rectification A', 20, 'Curses/subrectificationA.png', 'libido');
     }
 
+    get incompatibilities() {
+        return ['Power Dom']
+    }
+
     changeSubDom(prevSubDom) {
         return prevSubDom + 1;
     }
 }
-State.variables.curse25 = new SubmissivenessRectificationA();
+setup.allCurses.SubmissivenessRectificationA = new SubmissivenessRectificationA()
+State.variables.curse25 = setup.allCurses.SubmissivenessRectificationA
+window.SubmissivenessRectificationA = SubmissivenessRectificationA
+setup.curseArray.push(SubmissivenessRectificationA)
 
 class GenderReversalC extends Curse {
     constructor() {
@@ -574,18 +645,28 @@ class GenderReversalC extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse26 = new GenderReversalC();
+setup.allCurses.GenderReversalC = new GenderReversalC()
+State.variables.curse26 = setup.allCurses.GenderReversalC
+window.GenderReversalC = GenderReversalC
+setup.curseArray.push(GenderReversalC)
 
 class AssetRobustnessC extends Curse {
     constructor() {
         super('Asset Robustness C', 25, 'Curses/assetrobustnessC.png', 'gender');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**2; // 4 cup sizes / 8cm
     }
 }
-State.variables.curse27 = new AssetRobustnessC();
+setup.allCurses.AssetRobustnessC = new AssetRobustnessC()
+State.variables.curse27 = setup.allCurses.AssetRobustnessC
+window.AssetRobustnessC = AssetRobustnessC
+setup.curseArray.push(AssetRobustnessC)
 
 class ClothingRestrictionB extends Curse {
     constructor() {
@@ -593,12 +674,19 @@ class ClothingRestrictionB extends Curse {
               'You cannot bring yourself to wear any underwear whatsoever. ');
     }
 
+    get incompatibilities() {
+        return ['Crossdress Your Heart'];
+    }
+
     // eslint-disable-next-line no-unused-vars
     changeLewdness(prevLewdness, character) {
         return prevLewdness + 1;
     }
 }
-State.variables.curse28 = new ClothingRestrictionB();
+setup.allCurses.ClothingRestrictionB = new ClothingRestrictionB()
+State.variables.curse28 = setup.allCurses.ClothingRestrictionB
+window.ClothingRestrictionB = ClothingRestrictionB
+setup.curseArray.push(ClothingRestrictionB)
 
 class PowerDom extends Curse {
     constructor() {
@@ -606,11 +694,18 @@ class PowerDom extends Curse {
               'You are never able to sit back and let someone else take charge, neither in life nor in sex. ');
     }
 
+    get incompatibilities() {
+        return ['Submissiveness Rectification A', 'Submissiveness Rectification B']
+    }
+
     changeSubDom(prevSubDom) {
         return prevSubDom - 1;
     }
 }
-State.variables.curse29 = new PowerDom();
+setup.allCurses.PowerDom = new PowerDom()
+State.variables.curse29 = setup.allCurses.PowerDom
+window.PowerDom = PowerDom
+setup.curseArray.push(PowerDom)
 
 class Curse2020 extends Curse {
     constructor() {
@@ -619,7 +714,10 @@ class Curse2020 extends Curse {
     }
 
 }
-State.variables.curse30 = new Curse2020();
+setup.allCurses.Curse2020 = new Curse2020()
+State.variables.curse30 = setup.allCurses.Curse2020
+window.Curse2020 = Curse2020
+setup.curseArray.push(Curse2020)
 
 class ComicRelief extends Curse {
     constructor() {
@@ -627,7 +725,10 @@ class ComicRelief extends Curse {
               'No one ever seems to take you seriously. You get patronized and talked down to pretty often. ');
     }
 }
-State.variables.curse31 = new ComicRelief();
+setup.allCurses.ComicRelief = new ComicRelief()
+State.variables.curse31 = setup.allCurses.ComicRelief
+window.ComicRelief = ComicRelief
+setup.curseArray.push(ComicRelief)
 
 class EqualOpportunity extends Curse {
     constructor() {
@@ -635,23 +736,40 @@ class EqualOpportunity extends Curse {
               'Gender is really not an issue for you when selecting sexual partners. ');
     }
 }
-State.variables.curse32 = new EqualOpportunity();
+setup.allCurses.EqualOpportunity = new EqualOpportunity()
+State.variables.curse32 = setup.allCurses.EqualOpportunity
+window.EqualOpportunity = EqualOpportunity
+setup.curseArray.push(EqualOpportunity)
 
 class AbsolutePregnancy extends Curse {
     constructor() {
         super('Absolute Pregnancy', 35, 'Curses/absolutepregnancy.png', 'none',
               'Any and all sex you engage in results in pregnancy. ');
     }
+
+    get incompatibilities() {
+        return ['Absolute Birth Control'];
+    }
 }
-State.variables.curse33 = new AbsolutePregnancy();
+setup.allCurses.AbsolutePregnancy = new AbsolutePregnancy()
+State.variables.curse33 = setup.allCurses.AbsolutePregnancy
+window.AbsolutePregnancy = AbsolutePregnancy
+setup.curseArray.push(AbsolutePregnancy)
 
 class AbsoluteBirthControl extends Curse {
     constructor() {
         super('Absolute Birth Control', 40, 'Curses/absolutebirthcontrol.png', 'none',
               'You are completely sterile and cannot have children. ');
     }
+
+    get incompatibilities() {
+        return ['Absolute Pregnancy', 'Wacky Wombs', 'Omnitool', ];
+    }
 }
-State.variables.curse34 = new AbsoluteBirthControl();
+setup.allCurses.AbsoluteBirthControl = new AbsoluteBirthControl()
+State.variables.curse34 = setup.allCurses.AbsoluteBirthControl
+window.AbsoluteBirthControl = AbsoluteBirthControl
+setup.curseArray.push(AbsoluteBirthControl)
 
 class WackyWombs extends Curse {
     constructor(wombLocation='throat') {
@@ -668,6 +786,14 @@ class WackyWombs extends Curse {
         return [this._wombLocation];
     }
 
+    get incompatibilities() {
+        return ['Absolute Birth Control'];
+    }
+
+    get maximum() {
+        return 2;
+    }
+
     changeWomb(character, prevWomb, extraWombLocations) {
         let location = this._wombLocation;
         if (this._wombLocation === 'vagina' && character.vagina < 1) {
@@ -680,29 +806,42 @@ class WackyWombs extends Curse {
         return [prevWomb + 1, extraWombLocations.concat([location])];
     }
 
-    get variation() {
+    get variation1() {
         return this._wombLocation;
     }
 
-    set variation(value) {
+    set variation1(value) {
         console.error('Deprecated variation field used.')
         this._wombLocation = value;
     }
 
-    // get questions() {
-    //     return [{question: 'What is the location of the womb you would like to add?',
-    //         answer: ['throat', 'urethra', 'anus', 'vagina'],
-    //         answerField: '_wombLocation'}]
-    // }
+    get variation2() {
+        return this._wombLocation;
+    }
+
+    set variation2(value) {
+        console.error('Deprecated variation field used.')
+        this._wombLocation = value;
+    }
 }
-State.variables.curse35 = new WackyWombs();
+setup.allCurses.WackyWombs = new WackyWombs()
+State.variables.curse35 = setup.allCurses.WackyWombs
+window.WackyWombs = WackyWombs
+setup.curseArray.push(WackyWombs)
 
 class Omnitool extends Curse {
     constructor() {
         super('Omnitool', 25, 'Curses/omnitool.png', 'none');
     }
+
+    get incompatibilities() {
+        return ['Absolute Birth Control'];
+    }
 }
-State.variables.curse36 = new Omnitool();
+setup.allCurses.Omnitool = new Omnitool()
+State.variables.curse36 = setup.allCurses.Omnitool
+window.Omnitool = Omnitool
+setup.curseArray.push(Omnitool)
 
 class Gooey extends Curse {
     constructor() {
@@ -719,7 +858,10 @@ class Gooey extends Curse {
         return 0;
     }
 }
-State.variables.curse37 = new Gooey();
+setup.allCurses.Gooey = new Gooey()
+State.variables.curse37 = setup.allCurses.Gooey
+window.Gooey = Gooey
+setup.curseArray.push(Gooey)
 
 class RainbowSwirl extends Curse {
     constructor(skinColor='pink', eyeColor='pink') {
@@ -765,7 +907,10 @@ class RainbowSwirl extends Curse {
         return this.eyeColor;
     }
 }
-State.variables.curse38 = new RainbowSwirl();
+setup.allCurses.RainbowSwirl = new RainbowSwirl()
+State.variables.curse38 = setup.allCurses.RainbowSwirl
+window.RainbowSwirl = RainbowSwirl
+setup.curseArray.push(RainbowSwirl)
 
 class DoublePepperoni extends Curse {
     constructor() {
@@ -775,7 +920,10 @@ class DoublePepperoni extends Curse {
 
     // correcting minimum breast size is done in character.js (breastCor()) because it has to happen last.
 }
-State.variables.curse39 = new DoublePepperoni();
+setup.allCurses.DoublePepperoni = new DoublePepperoni()
+State.variables.curse39 = setup.allCurses.DoublePepperoni
+window.DoublePepperoni = DoublePepperoni
+setup.curseArray.push(DoublePepperoni)
 
 class LiteralBlushingVirgin extends Curse {
     constructor() {
@@ -788,7 +936,10 @@ class LiteralBlushingVirgin extends Curse {
         return prevLewdness - 2;
     }
 }
-State.variables.curse40 = new LiteralBlushingVirgin();
+setup.allCurses.LiteralBlushingVirgin = new LiteralBlushingVirgin()
+State.variables.curse40 = setup.allCurses.LiteralBlushingVirgin
+window.LiteralBlushingVirgin = LiteralBlushingVirgin
+setup.curseArray.push(LiteralBlushingVirgin)
 
 class LibidoReinforcementC extends Curse {
     constructor() {
@@ -799,7 +950,10 @@ class LibidoReinforcementC extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse41 = new LibidoReinforcementC();
+setup.allCurses.LibidoReinforcementC = new LibidoReinforcementC()
+State.variables.curse41 = setup.allCurses.LibidoReinforcementC
+window.LibidoReinforcementC = LibidoReinforcementC
+setup.curseArray.push(LibidoReinforcementC)
 
 class LactationRejuvenationA extends Curse {
     constructor() {
@@ -810,18 +964,28 @@ class LactationRejuvenationA extends Curse {
         return prevLactation + 1;
     }
 }
-State.variables.curse42 = new LactationRejuvenationA();
+setup.allCurses.LactationRejuvenationA = new LactationRejuvenationA()
+State.variables.curse42 = setup.allCurses.LactationRejuvenationA
+window.LactationRejuvenationA = LactationRejuvenationA
+setup.curseArray.push(LactationRejuvenationA)
 
 class AssetRobustnessD extends Curse {
     constructor() {
         super('Asset Robustness D', 30, 'Curses/assetrobustnessD.png', 'gender');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**3;
     }
 }
-State.variables.curse43 = new AssetRobustnessD();
+setup.allCurses.AssetRobustnessD = new AssetRobustnessD()
+State.variables.curse43 = setup.allCurses.AssetRobustnessD
+window.AssetRobustnessD = AssetRobustnessD
+setup.curseArray.push(AssetRobustnessD)
 
 class AgeReductionB extends Curse {
     constructor() {
@@ -837,7 +1001,10 @@ class AgeReductionB extends Curse {
         return Math.min(20 * AgeEvent.aYear, prevAge - 3 * AgeEvent.aYear);
     }
 }
-State.variables.curse44 = new AgeReductionB();
+setup.allCurses.AgeReductionB = new AgeReductionB()
+State.variables.curse44 = setup.allCurses.AgeReductionB
+window.AgeReductionB = AgeReductionB
+setup.curseArray.push(AgeReductionB)
 
 class SleepTight extends Curse {
     constructor() {
@@ -845,7 +1012,10 @@ class SleepTight extends Curse {
               'You need 12 hours of sleep each night, but at least sleeping is very comforting and pleasurable. you also feel a bit more energized during your waking hours. ');
     }
 }
-State.variables.curse45 = new SleepTight();
+setup.allCurses.SleepTight = new SleepTight()
+State.variables.curse45 = setup.allCurses.SleepTight
+window.SleepTight = SleepTight
+setup.curseArray.push(SleepTight)
 
 class SweetDreams extends Curse {
     constructor() {
@@ -853,7 +1023,10 @@ class SweetDreams extends Curse {
               'Every night you have horrifyingly sexy and sexily horrifying wet nightmares, and wake up shaking in fear in a puddle of your own juices. ');
     }
 }
-State.variables.curse46 = new SweetDreams();
+setup.allCurses.SweetDreams = new SweetDreams()
+State.variables.curse46 = setup.allCurses.SweetDreams
+window.SweetDreams = SweetDreams
+setup.curseArray.push(SweetDreams)
 
 class HypnoHappytime extends Curse {
     constructor() {
@@ -865,15 +1038,25 @@ class HypnoHappytime extends Curse {
         return prevAsset + 2**0;
     }
 }
-State.variables.curse47 = new HypnoHappytime();
+setup.allCurses.HypnoHappytime = new HypnoHappytime()
+State.variables.curse47 = setup.allCurses.HypnoHappytime
+window.HypnoHappytime = HypnoHappytime
+setup.curseArray.push(HypnoHappytime)
 
 class CrossdressYourHeart extends Curse {
     constructor() {
         super('Crossdress Your Heart', 35, 'Curses/crossdressyourheart.png', 'none',
               'You can only bring yourself to wear clothing associated with the opposite sex. ');
     }
+
+    get incompatibilities() {
+        return ['Futa Fun', 'Clothing Restriction C', 'Clothing Restriction B'];
+    }
 }
-State.variables.curse48 = new CrossdressYourHeart();
+setup.allCurses.CrossdressYourHeart = new CrossdressYourHeart()
+State.variables.curse48 = setup.allCurses.CrossdressYourHeart
+window.CrossdressYourHeart = CrossdressYourHeart
+setup.curseArray.push(CrossdressYourHeart)
 
 class LieDetector extends Curse {
     constructor() {
@@ -881,7 +1064,10 @@ class LieDetector extends Curse {
               'No matter how convincing a lie you craft, everyone can tell when you are not being truthful. Others are aware even when you are just omitting information. ');
     }
 }
-State.variables.curse49 = new LieDetector();
+setup.allCurses.LieDetector = new LieDetector()
+State.variables.curse49 = setup.allCurses.LieDetector
+window.LieDetector = LieDetector
+setup.curseArray.push(LieDetector)
 
 class Megadontia extends Curse {
     constructor() {
@@ -893,11 +1079,18 @@ class Megadontia extends Curse {
         return prevInhumanity + 1;
     }
 }
-State.variables.curse50 = new Megadontia();
+setup.allCurses.Megadontia = new Megadontia()
+State.variables.curse50 = setup.allCurses.Megadontia
+window.Megadontia = Megadontia
+setup.curseArray.push(Megadontia)
 
 class Softie extends Curse {
     constructor() {
         super('Softie', 35, 'Curses/softie.png', 'none');
+    }
+
+    get incompatibilities() {
+        return ['Hard Mode'];
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -905,11 +1098,18 @@ class Softie extends Curse {
         return prevLewdness - 1;
     }
 }
-State.variables.curse51 = new Softie();
+setup.allCurses.Softie = new Softie()
+State.variables.curse51 = setup.allCurses.Softie
+window.Softie = Softie
+setup.curseArray.push(Softie)
 
 class HardMode extends Curse {
     constructor() {
         super('Hard Mode', 35, 'Curses/hardmode.png', 'none');
+    }
+
+    get incompatibilities() {
+        return ['Softie'];
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -917,7 +1117,10 @@ class HardMode extends Curse {
         return prevLewdness + 1;
     }
 }
-State.variables.curse52 = new HardMode();
+setup.allCurses.HardMode = new HardMode()
+State.variables.curse52 = setup.allCurses.HardMode
+window.HardMode = HardMode
+setup.curseArray.push(HardMode)
 
 class LingualLeviathan extends Curse {
     constructor() {
@@ -929,7 +1132,10 @@ class LingualLeviathan extends Curse {
         return prevInhumanity + 1;
     }
 }
-State.variables.curse53 = new LingualLeviathan();
+setup.allCurses.LingualLeviathan = new LingualLeviathan()
+State.variables.curse53 = setup.allCurses.LingualLeviathan
+window.LingualLeviathan = LingualLeviathan
+setup.curseArray.push(LingualLeviathan)
 
 class TippingTheScales extends Curse {
     constructor(scaleColor='green') {
@@ -970,7 +1176,10 @@ class TippingTheScales extends Curse {
         return this.scaleColor;
     }
 }
-State.variables.curse54 = new TippingTheScales();
+setup.allCurses.TippingTheScales = new TippingTheScales()
+State.variables.curse54 = setup.allCurses.TippingTheScales
+window.TippingTheScales = TippingTheScales
+setup.curseArray.push(TippingTheScales)
 
 class Reptail extends Curse {
     constructor() {
@@ -981,7 +1190,10 @@ class Reptail extends Curse {
         return prevTails.concat(['large, spiked, scaled reptile'])
     }
 }
-State.variables.curse55 = new Reptail();
+setup.allCurses.Reptail = new Reptail()
+State.variables.curse55 = setup.allCurses.Reptail
+window.Reptail = Reptail
+setup.curseArray.push(Reptail)
 
 class ColdBlooded extends Curse {
     constructor() {
@@ -989,7 +1201,10 @@ class ColdBlooded extends Curse {
               'You no longer produce heat on your own, and need external heat sources. Your nights lately involve a lot of cuddling. ');
     }
 }
-State.variables.curse56 = new ColdBlooded();
+setup.allCurses.ColdBlooded = new ColdBlooded()
+State.variables.curse56 = setup.allCurses.ColdBlooded
+window.ColdBlooded = ColdBlooded
+setup.curseArray.push(ColdBlooded)
 
 class LibidoReinforcementD extends Curse {
     constructor() {
@@ -1000,7 +1215,10 @@ class LibidoReinforcementD extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse57 = new LibidoReinforcementD();
+setup.allCurses.LibidoReinforcementD = new LibidoReinforcementD()
+State.variables.curse57 = setup.allCurses.LibidoReinforcementD
+window.LibidoReinforcementD = LibidoReinforcementD
+setup.curseArray.push(LibidoReinforcementD)
 
 class GenderReversalD extends Curse {
     constructor() {
@@ -1011,7 +1229,10 @@ class GenderReversalD extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse58 = new GenderReversalD();
+setup.allCurses.GenderReversalD = new GenderReversalD()
+State.variables.curse58 = setup.allCurses.GenderReversalD
+window.GenderReversalD = GenderReversalD
+setup.curseArray.push(GenderReversalD)
 
 class PleasureRespecificationA extends Curse {
     constructor() {
@@ -1019,7 +1240,10 @@ class PleasureRespecificationA extends Curse {
               'You can no longer orgasm from masturbation. you can still feel pleasure and work your way towards the edge, but you will always need someone else\'s help to climax. ');
     }
 }
-State.variables.curse59 = new PleasureRespecificationA();
+setup.allCurses.PleasureRespecificationA = new PleasureRespecificationA()
+State.variables.curse59 = setup.allCurses.PleasureRespecificationA
+window.PleasureRespecificationA = PleasureRespecificationA
+setup.curseArray.push(PleasureRespecificationA)
 
 class ClothingRestrictionC extends Curse {
     constructor() {
@@ -1027,12 +1251,19 @@ class ClothingRestrictionC extends Curse {
               'You can no longer wear any clothing besides underwear, or clothes skimpy enough that others would consider them underwear. ');
     }
 
+    get incompatibilities() {
+        return ['Crossdress Your Heart'];
+    }
+
     // eslint-disable-next-line no-unused-vars
     changeLewdness(prevLewdness, character) {
         return prevLewdness + 2;
     }
 }
-State.variables.curse60 = new ClothingRestrictionC();
+setup.allCurses.ClothingRestrictionC = new ClothingRestrictionC()
+State.variables.curse60 = setup.allCurses.ClothingRestrictionC
+window.ClothingRestrictionC = ClothingRestrictionC
+setup.curseArray.push(ClothingRestrictionC)
 
 class MassacreManicure extends Curse {
     constructor() {
@@ -1044,7 +1275,10 @@ class MassacreManicure extends Curse {
         return prevInhumanity + 1;
     }
 }
-State.variables.curse61 = new MassacreManicure();
+setup.allCurses.MassacreManicure = new MassacreManicure()
+State.variables.curse61 = setup.allCurses.MassacreManicure
+window.MassacreManicure = MassacreManicure
+setup.curseArray.push(MassacreManicure)
 
 class DoS extends Curse {
     constructor() {
@@ -1056,7 +1290,10 @@ class DoS extends Curse {
         return prevSubDom - 1;
     }
 }
-State.variables.curse62 = new DoS();
+setup.allCurses.DoS = new DoS()
+State.variables.curse62 = setup.allCurses.DoS
+window.DoS = DoS
+setup.curseArray.push(DoS)
 
 class DoM extends Curse {
     constructor() {
@@ -1068,7 +1305,10 @@ class DoM extends Curse {
         return prevSubDom + 1;
     }
 }
-State.variables.curse63 = new DoM();
+setup.allCurses.DoM = new DoM()
+State.variables.curse63 = setup.allCurses.DoM
+window.DoM = DoM
+setup.curseArray.push(DoM)
 
 class HijinksEnsue extends Curse {
     constructor() {
@@ -1081,7 +1321,10 @@ class HijinksEnsue extends Curse {
         return prevLewdness + 1;
     }
 }
-State.variables.curse64 = new HijinksEnsue();
+setup.allCurses.HijinksEnsue = new HijinksEnsue()
+State.variables.curse64 = setup.allCurses.HijinksEnsue
+window.HijinksEnsue = HijinksEnsue
+setup.curseArray.push(HijinksEnsue)
 
 class FlowerPower extends Curse {
     constructor() {
@@ -1092,7 +1335,10 @@ class FlowerPower extends Curse {
         return prevInhumanity + 4;
     }
 }
-State.variables.curse65 = new FlowerPower();
+setup.allCurses.FlowerPower = new FlowerPower()
+State.variables.curse65 = setup.allCurses.FlowerPower
+window.FlowerPower = FlowerPower
+setup.curseArray.push(FlowerPower)
 
 class Cellulose extends Curse {
     constructor() {
@@ -1109,7 +1355,10 @@ class Cellulose extends Curse {
         return 0;
     }
 }
-State.variables.curse66 = new Cellulose();
+setup.allCurses.Cellulose = new Cellulose()
+State.variables.curse66 = setup.allCurses.Cellulose
+window.Cellulose = Cellulose
+setup.curseArray.push(Cellulose)
 
 class Chlorophyll extends Curse {
     constructor() {
@@ -1124,7 +1373,10 @@ class Chlorophyll extends Curse {
         return 'green';
     }
 }
-State.variables.curse67 = new Chlorophyll();
+setup.allCurses.Chlorophyll = new Chlorophyll()
+State.variables.curse67 = setup.allCurses.Chlorophyll
+window.Chlorophyll = Chlorophyll
+setup.curseArray.push(Chlorophyll)
 
 class Pheromones extends Curse {
     constructor() {
@@ -1132,7 +1384,10 @@ class Pheromones extends Curse {
               'You are constantly emitting pheromones that make other people more aroused, especially towards you. Thankfully, it does not cloud their judgment any more than natural arousal. ');
     }
 }
-State.variables.curse68 = new Pheromones();
+setup.allCurses.Pheromones = new Pheromones()
+State.variables.curse68 = setup.allCurses.Pheromones
+window.Pheromones = Pheromones
+setup.curseArray.push(Pheromones)
 
 class Carapacian extends Curse {
     constructor(skinColor='shiny black') {
@@ -1173,7 +1428,10 @@ class Carapacian extends Curse {
         return this.skinColor;
     }
 }
-State.variables.curse69 = new Carapacian();
+setup.allCurses.Carapacian = new Carapacian()
+State.variables.curse69 = setup.allCurses.Carapacian
+window.Carapacian = Carapacian
+setup.curseArray.push(Carapacian)
 
 class Hemospectrum extends Curse {
     constructor(bloodColor='blue') {
@@ -1208,7 +1466,10 @@ class Hemospectrum extends Curse {
         return prevDesc + `Your blood is now ${this.bloodColor} colored, not a typical color for humans. `
     }
 }
-State.variables.curse70 = new Hemospectrum();
+setup.allCurses.Hemospectrum = new Hemospectrum()
+State.variables.curse70 = setup.allCurses.Hemospectrum
+window.Hemospectrum = Hemospectrum
+setup.curseArray.push(Hemospectrum)
 
 class WrigglyAntennae extends Curse {
     constructor() {
@@ -1219,7 +1480,10 @@ class WrigglyAntennae extends Curse {
         return prevInhumanity + 2;
     }
 }
-State.variables.curse71 = new WrigglyAntennae();
+setup.allCurses.WrigglyAntennae = new WrigglyAntennae()
+State.variables.curse71 = setup.allCurses.WrigglyAntennae
+window.WrigglyAntennae = WrigglyAntennae
+setup.curseArray.push(WrigglyAntennae)
 
 class Eggxellent extends Curse {
     constructor() {
@@ -1240,18 +1504,28 @@ class Eggxellent extends Curse {
         return [wombs, locations];
     }
 }
-State.variables.curse72 = new Eggxellent();
+setup.allCurses.Eggxellent = new Eggxellent()
+State.variables.curse72 = setup.allCurses.Eggxellent
+window.Eggxellent = Eggxellent
+setup.curseArray.push(Eggxellent)
 
 class SubmissivenessRectificationB extends Curse {
     constructor() {
         super('Submissiveness Rectification B', 35, 'Curses/submissivenessrectificationB.png', 'libido');
     }
 
+    get incompatibilities() {
+        return ['Power Dom']
+    }
+
     changeSubDom(prevSubDom) {
         return prevSubDom + 1;
     }
 }
-State.variables.curse73 = new SubmissivenessRectificationB();
+setup.allCurses.SubmissivenessRectificationB = new SubmissivenessRectificationB()
+State.variables.curse73 = setup.allCurses.SubmissivenessRectificationB
+window.SubmissivenessRectificationB = SubmissivenessRectificationB
+setup.curseArray.push(SubmissivenessRectificationB)
 
 class LactationRejuvenationB extends Curse {
     constructor() {
@@ -1262,7 +1536,10 @@ class LactationRejuvenationB extends Curse {
         return prevLactation + 1;
     }
 }
-State.variables.curse74 = new LactationRejuvenationB();
+setup.allCurses.LactationRejuvenationB = new LactationRejuvenationB()
+State.variables.curse74 = setup.allCurses.LactationRejuvenationB
+window.LactationRejuvenationB = LactationRejuvenationB
+setup.curseArray.push(LactationRejuvenationB)
 
 class PleasureRespecificationB extends Curse {
     constructor() {
@@ -1270,7 +1547,10 @@ class PleasureRespecificationB extends Curse {
               'You can no longer orgasm from sex with another person, and need to spend some time masturbating after the act to reach climax. ');
     }
 }
-State.variables.curse75 = new PleasureRespecificationB();
+setup.allCurses.PleasureRespecificationB = new PleasureRespecificationB()
+State.variables.curse75 = setup.allCurses.PleasureRespecificationB
+window.PleasureRespecificationB = PleasureRespecificationB
+setup.curseArray.push(PleasureRespecificationB)
 
 class AgeReductionC extends Curse {
     constructor() {
@@ -1286,7 +1566,10 @@ class AgeReductionC extends Curse {
         return Math.min(20 * AgeEvent.aYear, prevAge - 4 * AgeEvent.aYear);
     }
 }
-State.variables.curse76 = new AgeReductionC();
+setup.allCurses.AgeReductionC = new AgeReductionC()
+State.variables.curse76 = setup.allCurses.AgeReductionC
+window.AgeReductionC = AgeReductionC
+setup.curseArray.push(AgeReductionC)
 
 class Horny extends Curse {
     constructor() {
@@ -1301,7 +1584,10 @@ class Horny extends Curse {
         return prevHorns + 1;
     }
 }
-State.variables.curse77 = new Horny();
+setup.allCurses.Horny = new Horny()
+State.variables.curse77 = setup.allCurses.Horny
+window.Horny = Horny
+setup.curseArray.push(Horny)
 
 class DrawingSpades extends Curse {
     constructor() {
@@ -1312,7 +1598,10 @@ class DrawingSpades extends Curse {
         return prevTails.concat(['cute, spade-tipped demon']);
     }
 }
-State.variables.curse78 = new DrawingSpades();
+setup.allCurses.DrawingSpades = new DrawingSpades()
+State.variables.curse78 = setup.allCurses.DrawingSpades
+window.DrawingSpades = DrawingSpades
+setup.curseArray.push(DrawingSpades)
 
 class TattooTally extends Curse {
     constructor() {
@@ -1320,27 +1609,11 @@ class TattooTally extends Curse {
               'You have several small runic tattoos throughout your body, and a larger heart shaped one above your crotch. Everyone who looks at them instinctively knows the full extent of your sexual history. ');
     }
 }
-State.variables.curse79 = new TattooTally();
+setup.allCurses.TattooTally = new TattooTally()
+State.variables.curse79 = setup.allCurses.TattooTally
+window.TattooTally = TattooTally
+setup.curseArray.push(TattooTally)
 
-//<<if _handle.vagina > 0 && _handle.penis > 0>>
-//	<<set $curse80.appDesc = 'Your pussy is always glistening with lubrication and your penis is always leaking precum, so it only takes a little motivation to get a real stream going down there.'>>
-//<<elseif _handle.vagina > 0>>
-//	<<set $curse80.appDesc = 'Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.'>>
-//<<elseif _handle.penis > 0>>
-//	<<set $curse80.appDesc = 'Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.'>>
-//<<else>>
-//	<<set $curse80.appDesc = ''>>
-//<</if>>
-
-/*
-<<nobr>>
-<<set _vagina = $mc.vagina > 0>>
-<<set _penis = $mc.penis > 0>>
-<<if _vagina || _penis>>
-Your <<if _vagina>>pussy is always glistening with lubrication<</if>><<if _vagina && _penis>> and your <</if>><<if _penis>>cock is always leaking precum<</if>>, <<if vagina && penis>>so<<else>>and<</if>> it only takes a little motivation to get a real stream going down there.
-<</if>><</nobr>>
-
-* */
 class Leaky extends Curse {
     constructor() {
         super('Leaky', 55, 'Curses/leaky.png', 'none',
@@ -1360,7 +1633,10 @@ Your <<if _vagina>>pussy is always glistening with lubrication<</if>><<if _vagin
         return prevLewdness + 2
     }
 }
-State.variables.curse80 = new Leaky();
+setup.allCurses.Leaky = new Leaky()
+State.variables.curse80 = setup.allCurses.Leaky
+window.Leaky = Leaky
+setup.curseArray.push(Leaky)
 
 class WanderingHands extends Curse {
     constructor() {
@@ -1373,12 +1649,20 @@ class WanderingHands extends Curse {
         return prevLewdness + 2;
     }
 }
-State.variables.curse81 = new WanderingHands();
+setup.allCurses.WanderingHands = new WanderingHands()
+State.variables.curse81 = setup.allCurses.WanderingHands
+window.WanderingHands = WanderingHands
+setup.curseArray.push(WanderingHands)
 
 class SemenDemon extends Curse {
-    constructor(type = 'sexual fluids', amount = 1) {
+    /**
+     * Creates a new Semen Demon curse.
+     * @param {'semen' | 'sexual fluids' | 'vaginal fluids'} fluidType The type of fluids the cursed character is required to consume.
+     * @param {number} amount The number of times this curse has been taken.
+     */
+    constructor(fluidType = 'sexual fluids', amount = 1) {
         super('Semen Demon', 20, 'Curses/semendemon.png', 'libido');
-        this.type = type;
+        this.fluidType = fluidType;
         this.amount = amount;
     }
 
@@ -1388,16 +1672,16 @@ class SemenDemon extends Curse {
      * @protected
      */
     _customisationOptions() {
-        return [this.type, this.amount];
+        return [this.fluidType, this.amount];
     }
 
     get variation() {
-        return this.type;
+        return this.fluidType;
     }
 
     set variation(value) {
         console.error('Deprecated variation field used.')
-        this.type = value;
+        this.fluidType = value;
     }
 
     get variation1() {
@@ -1413,29 +1697,46 @@ class SemenDemon extends Curse {
         return prevLewdness + this.amount;
     }
 }
-State.variables.curse82 = new SemenDemon();
+setup.allCurses.SemenDemon = new SemenDemon();
+State.variables.curse82 = setup.allCurses.SemenDemon;
+window.SemenDemon = SemenDemon
+setup.curseArray.push(SemenDemon)
 
 class Quota extends Curse {
     constructor() {
         super('Quota', 20, 'Curses/quota.png', 'libido');
     }
 
+    get maximum() {
+        return 4;
+    }
+
     changeLewdness(prevLewdness) {
         return prevLewdness + 1;
     }
 }
-State.variables.curse83 = new Quota();
+setup.allCurses.Quota = new Quota()
+State.variables.curse83 = setup.allCurses.Quota
+window.Quota = Quota
+setup.curseArray.push(Quota)
 
 class InTheLimelight extends Curse {
     constructor() {
         super('In the Limelight', 20, 'Curses/inthelimelight.png', 'libido');
     }
 
+    get maximum() {
+        return 4;
+    }
+
     changeLewdness(prevLewdness) {
         return prevLewdness + 1;
     }
 }
-State.variables.curse84 = new InTheLimelight();
+setup.allCurses.InTheLimelight = new InTheLimelight()
+State.variables.curse84 = setup.allCurses.InTheLimelight
+window.InTheLimelight = InTheLimelight
+setup.curseArray.push(InTheLimelight)
 
 class LibidoReinforcementE extends Curse {
     constructor() {
@@ -1446,7 +1747,10 @@ class LibidoReinforcementE extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse85 = new LibidoReinforcementE();
+setup.allCurses.LibidoReinforcementE = new LibidoReinforcementE()
+State.variables.curse85 = setup.allCurses.LibidoReinforcementE
+window.LibidoReinforcementE = LibidoReinforcementE
+setup.curseArray.push(LibidoReinforcementE)
 
 class GenderReversalE extends Curse {
     constructor() {
@@ -1457,18 +1761,28 @@ class GenderReversalE extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse86 = new GenderReversalE();
+setup.allCurses.GenderReversalE = new GenderReversalE()
+State.variables.curse86 = setup.allCurses.GenderReversalE
+window.GenderReversalE = GenderReversalE
+setup.curseArray.push(GenderReversalE)
 
 class AssetRobustnessE extends Curse {
     constructor() {
         super('Asset Robustness E', 50, 'Curses/assetrobustnessE.png', 'gender');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**4; // 16 cups or 32cm
     }
 }
-State.variables.curse87 = new AssetRobustnessE();
+setup.allCurses.AssetRobustnessE = new AssetRobustnessE()
+State.variables.curse87 = setup.allCurses.AssetRobustnessE
+window.AssetRobustnessE = AssetRobustnessE
+setup.curseArray.push(AssetRobustnessE)
 
 class UrineReamplificationA extends Curse {
     constructor() {
@@ -1476,7 +1790,10 @@ class UrineReamplificationA extends Curse {
               'Your bladder capacity has been significantly reduced, you need to be careful to make sure you don\'t have any accidents. ');
     }
 }
-State.variables.curse88 = new UrineReamplificationA();
+setup.allCurses.UrineReamplificationA = new UrineReamplificationA()
+State.variables.curse88 = setup.allCurses.UrineReamplificationA
+window.UrineReamplificationA = UrineReamplificationA
+setup.curseArray.push(UrineReamplificationA)
 
 class BarterSystem extends Curse {
     constructor() {
@@ -1484,7 +1801,10 @@ class BarterSystem extends Curse {
               'You are unable to process currency, so one of your companions or friends will need to perform any transactions on your behalf, except for when a merchant is willing to trade you an item in exchange for a sexual favor. ');
     }
 }
-State.variables.curse89 = new BarterSystem();
+setup.allCurses.BarterSystem = new BarterSystem()
+State.variables.curse89 = setup.allCurses.BarterSystem
+window.BarterSystem = BarterSystem
+setup.curseArray.push(BarterSystem)
 
 class SharedSpace extends Curse {
     constructor() {
@@ -1496,7 +1816,10 @@ class SharedSpace extends Curse {
         return prevAsset + 2**0;
     }
 }
-State.variables.curse90 = new SharedSpace();
+setup.allCurses.SharedSpace = new SharedSpace()
+State.variables.curse90 = setup.allCurses.SharedSpace
+window.SharedSpace = SharedSpace
+setup.curseArray.push(SharedSpace)
 
 class Weakling extends Curse {
     constructor() {
@@ -1505,15 +1828,21 @@ class Weakling extends Curse {
 
     // handicaps implemented as special-purpose code in Character because it needs to come last.
 }
-State.variables.curse91 = new Weakling();
+setup.allCurses.Weakling = new Weakling()
+State.variables.curse91 = setup.allCurses.Weakling
+window.Weakling = Weakling
+setup.curseArray.push(Weakling)
 
 class RandomOrgasms extends Curse {
     constructor() {
         super('Random Orgasms', 65, 'Curses/randomorgasms.png', 'none',
-              '<<set $randomOrgasms = $playerCurses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") == 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
+              '<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") == 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
     }
 }
-State.variables.curse92 = new RandomOrgasms();
+setup.allCurses.RandomOrgasms = new RandomOrgasms()
+State.variables.curse92 = setup.allCurses.RandomOrgasms
+window.RandomOrgasms = RandomOrgasms
+setup.curseArray.push(RandomOrgasms)
 
 class Beastly extends Curse {
     constructor() {
@@ -1523,7 +1852,10 @@ class Beastly extends Curse {
 
     // conversation handicap implemented as special-purpose code in Character
 }
-State.variables.curse93 = new Beastly();
+setup.allCurses.Beastly = new Beastly()
+State.variables.curse93 = setup.allCurses.Beastly
+window.Beastly = Beastly
+setup.curseArray.push(Beastly)
 
 class CreatureOfTheNight extends Curse {
     constructor() {
@@ -1531,11 +1863,18 @@ class CreatureOfTheNight extends Curse {
               'You no longer have a pulse and sunlight causes you discomfort, similar to mythological vampires. You also need to drink a small amount of blood to survive, in addition to normal food. ');
     }
 }
-State.variables.curse94 = new CreatureOfTheNight();
+setup.allCurses.CreatureOfTheNight = new CreatureOfTheNight()
+State.variables.curse94 = setup.allCurses.CreatureOfTheNight
+window.CreatureOfTheNight = CreatureOfTheNight
+setup.curseArray.push(CreatureOfTheNight)
 
 class Minishish extends Curse {
     constructor() {
         super('Minish-ish', 75, 'Curses/minish-ish.png', 'height');
+    }
+
+    get incompatibilities() {
+        return ['Colossal-able'];
     }
 
     miniOrGigantify(prevHeight) {
@@ -1547,11 +1886,18 @@ class Minishish extends Curse {
         return State.variables.hiredCompanions.length === 0 || prevHandicap;
     }
 }
-State.variables.curse95 = new Minishish();
+setup.allCurses.Minishish = new Minishish()
+State.variables.curse95 = setup.allCurses.Minishish
+window.Minishish = Minishish
+setup.curseArray.push(Minishish)
 
 class Colossalable extends Curse {
     constructor() {
         super('Colossal-able', 75, 'Curses/colossal-able.png', 'height');
+    }
+
+    get incompatibilities() {
+        return ['Minish-ish'];
     }
 
     miniOrGigantify(prevHeight) {
@@ -1563,7 +1909,10 @@ class Colossalable extends Curse {
         return true;
     }
 }
-State.variables.curse96 = new Colossalable();
+setup.allCurses.Colossalable = new Colossalable()
+State.variables.curse96 = setup.allCurses.Colossalable
+window.Colossalable = Colossalable
+setup.curseArray.push(Colossalable)
 
 class LibidoReinforcementF extends Curse {
     constructor() {
@@ -1574,7 +1923,10 @@ class LibidoReinforcementF extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse97 = new LibidoReinforcementF();
+setup.allCurses.LibidoReinforcementF = new LibidoReinforcementF()
+State.variables.curse97 = setup.allCurses.LibidoReinforcementF
+window.LibidoReinforcementF = LibidoReinforcementF
+setup.curseArray.push(LibidoReinforcementF)
 
 class GenderReversalF extends Curse {
     constructor() {
@@ -1585,25 +1937,38 @@ class GenderReversalF extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse98 = new GenderReversalF();
+setup.allCurses.GenderReversalF = new GenderReversalF()
+State.variables.curse98 = setup.allCurses.GenderReversalF
+window.GenderReversalF = GenderReversalF
+setup.curseArray.push(GenderReversalF)
 
 class AssetRobustnessF extends Curse {
     constructor() {
         super('Asset Robustness F', 60, 'Curses/assetrobustnessF.png', 'gender');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**5; // 32 cups or 64cm
     }
 }
-State.variables.curse99 = new AssetRobustnessF();
+setup.allCurses.AssetRobustnessF = new AssetRobustnessF()
+State.variables.curse99 = setup.allCurses.AssetRobustnessF
+window.AssetRobustnessF = AssetRobustnessF
+setup.curseArray.push(AssetRobustnessF)
 
 class UrineReamplificationB extends Curse {
     constructor() {
         super('Urine Reamplification B', 55, 'Curses/urinereamplificationB.png', 'none');
     }
 }
-State.variables.curse100 = new UrineReamplificationB();
+setup.allCurses.UrineReamplificationB = new UrineReamplificationB()
+State.variables.curse100 = setup.allCurses.UrineReamplificationB
+window.UrineReamplificationB = UrineReamplificationB
+setup.curseArray.push(UrineReamplificationB)
 
 class EyeOnThePrize extends Curse {
     constructor() {
@@ -1614,7 +1979,10 @@ class EyeOnThePrize extends Curse {
         return prevEyes - 1;
     }
 }
-State.variables.curse101 = new EyeOnThePrize();
+setup.allCurses.EyeOnThePrize = new EyeOnThePrize()
+State.variables.curse101 = setup.allCurses.EyeOnThePrize
+window.EyeOnThePrize = EyeOnThePrize
+setup.curseArray.push(EyeOnThePrize)
 
 class DeafeningSilence extends Curse {
     constructor() {
@@ -1627,7 +1995,10 @@ class DeafeningSilence extends Curse {
 
     // conversation handicap handled by special-purpose code in Character
 }
-State.variables.curse102 = new DeafeningSilence();
+setup.allCurses.DeafeningSilence = new DeafeningSilence()
+State.variables.curse102 = setup.allCurses.DeafeningSilence
+window.DeafeningSilence = DeafeningSilence
+setup.curseArray.push(DeafeningSilence)
 
 class TaciturnTurnaround extends Curse {
     constructor() {
@@ -1640,10 +2011,13 @@ class TaciturnTurnaround extends Curse {
 
     // conversation handicap handled by special-purpose code in Character
 }
-State.variables.curse103 = new TaciturnTurnaround();
+setup.allCurses.TaciturnTurnaround = new TaciturnTurnaround()
+State.variables.curse103 = setup.allCurses.TaciturnTurnaround
+window.TaciturnTurnaround = TaciturnTurnaround
+setup.curseArray.push(TaciturnTurnaround)
 
 class AmpuQtie extends Curse {
-    constructor(arms = 1, legs = 0) {
+    constructor(arms = 0, legs = 0) {
         super('Ampu-Q-tie', 45, 'Curses/ampu-Q-tie.png', 'none');
         if (typeof arms === 'string') {
             this.arms = arms.count('A');
@@ -1661,6 +2035,10 @@ class AmpuQtie extends Curse {
      */
     _customisationOptions() {
         return [this.arms, this.legs];
+    }
+
+    get incompatibilities() {
+        return ['Arm Army'];
     }
 
     get variation() {
@@ -1684,7 +2062,10 @@ class AmpuQtie extends Curse {
         return prevArms - this.arms;
     }
 }
-State.variables.curse104 = new AmpuQtie();
+setup.allCurses.AmpuQtie = new AmpuQtie()
+State.variables.curse104 = setup.allCurses.AmpuQtie
+window.AmpuQtie = AmpuQtie
+setup.curseArray.push(AmpuQtie)
 
 class NoseGoes extends Curse {
     constructor() {
@@ -1695,23 +2076,41 @@ class NoseGoes extends Curse {
         return prevHandicap - 3;
     }
 }
-State.variables.curse105 = new NoseGoes();
+setup.allCurses.NoseGoes = new NoseGoes()
+State.variables.curse105 = setup.allCurses.NoseGoes
+window.NoseGoes = NoseGoes
+setup.curseArray.push(NoseGoes)
 
 class ArmArmy extends Curse {
     constructor() {
         super('Arm Army', 15, 'Curses/armarmy.png', 'none');
     }
 
+    get incompatibilities() {
+        return ['Ampu-Q-tie'];
+    }
+
+    get maximum() {
+        return 6;
+    }
+
     removeArm(prevArms) {
         return prevArms + 2;
     }
 }
-State.variables.curse106 = new ArmArmy();
+setup.allCurses.ArmArmy = new ArmArmy()
+State.variables.curse106 = setup.allCurses.ArmArmy
+window.ArmArmy = ArmArmy
+setup.curseArray.push(ArmArmy)
 
 class ALittleExtra extends Curse {
     constructor(genital = '') {
         super('A Little Extra', 35, 'Curses/alittleextra.png', 'none');
         this.genitals = genital;
+    }
+
+    get incompatibilities() {
+        return ['Null'];
     }
 
     /**
@@ -1750,11 +2149,18 @@ class ALittleExtra extends Curse {
         return [prevWomb, extraWombLocations];
     }
 }
-State.variables.curse107 = new ALittleExtra();
+setup.allCurses.ALittleExtra = new ALittleExtra()
+State.variables.curse107 = setup.allCurses.ALittleExtra
+window.ALittleExtra = ALittleExtra
+setup.curseArray.push(ALittleExtra)
 
 class Null extends Curse {
     constructor() {
         super('Null', 80, 'Curses/null.png', 'gender');
+    }
+
+    get incompatibilities() {
+        return ['A Little Extra'];
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -1772,7 +2178,10 @@ class Null extends Curse {
         return false;
     }
 }
-State.variables.curse108 = new Null();
+setup.allCurses.Null = new Null()
+State.variables.curse108 = setup.allCurses.Null
+window.Null = Null
+setup.curseArray.push(Null)
 
 class Seafolk extends Curse {
     constructor() {
@@ -1787,21 +2196,55 @@ class Seafolk extends Curse {
         return prevLegs - 2;
     }
 }
-State.variables.curse109 = new Seafolk();
+setup.allCurses.Seafolk = new Seafolk()
+State.variables.curse109 = setup.allCurses.Seafolk
+window.Seafolk = Seafolk
+setup.curseArray.push(Seafolk)
 
 class TakenForGranite extends Curse {
     constructor() {
         super('Taken for Granite', 75, 'Curses/takenforgranite.png', 'none');
     }
 }
-State.variables.curse110 = new TakenForGranite();
+setup.allCurses.TakenForGranite = new TakenForGranite()
+State.variables.curse110 = setup.allCurses.TakenForGranite
+window.TakenForGranite = TakenForGranite
+setup.curseArray.push(TakenForGranite)
 
 class DoubleTrouble extends Curse {
-    constructor() {
+    /**
+     *
+     * @param {string} twinName
+     * @param {'inverted' | 'same'} twinType
+     */
+    constructor(twinName = 'Nono', twinType = 'same') {
         super('Double Trouble', 60, 'Curses/doubletrouble.png', 'none');
+        this.twinName = twinName;
+        this.twinType = twinType;
+    }
+
+    get variation() {
+        return this.twinName;
+    }
+
+    set variation(value) {
+        console.error('Deprecated variation field used.')
+        this.twinName = value;
+    }
+
+    get variation2() {
+        return this.twinType;
+    }
+
+    set variation2(value) {
+        console.error('Deprecated variation field used.')
+        this.twinType = value;
     }
 }
-State.variables.curse111 = new DoubleTrouble();
+setup.allCurses.DoubleTrouble = new DoubleTrouble()
+State.variables.curse111 = setup.allCurses.DoubleTrouble
+window.DoubleTrouble = DoubleTrouble
+setup.curseArray.push(DoubleTrouble)
 
 class Conjoined extends Curse {
     constructor() {
@@ -1820,7 +2263,10 @@ class Conjoined extends Curse {
         return prevHandicap - 2;
     }
 }
-State.variables.curse112 = new Conjoined();
+setup.allCurses.Conjoined = new Conjoined()
+State.variables.curse112 = setup.allCurses.Conjoined
+window.Conjoined = Conjoined
+setup.curseArray.push(Conjoined)
 
 class LibidoReinforcementG extends Curse {
     constructor() {
@@ -1831,7 +2277,10 @@ class LibidoReinforcementG extends Curse {
         return prevLibido + 1;
     }
 }
-State.variables.curse113 = new LibidoReinforcementG();
+setup.allCurses.LibidoReinforcementG = new LibidoReinforcementG()
+State.variables.curse113 = setup.allCurses.LibidoReinforcementG
+window.LibidoReinforcementG = LibidoReinforcementG
+setup.curseArray.push(LibidoReinforcementG)
 
 class GenderReversalG extends Curse {
     constructor() {
@@ -1842,41 +2291,70 @@ class GenderReversalG extends Curse {
         return prevGender + character.osex === 'male' ? 1 : -1;
     }
 }
-State.variables.curse114 = new GenderReversalG();
+setup.allCurses.GenderReversalG = new GenderReversalG()
+State.variables.curse114 = setup.allCurses.GenderReversalG
+window.GenderReversalG = GenderReversalG
+setup.curseArray.push(GenderReversalG)
 
 class AssetRobustnessG extends Curse {
     constructor() {
         super('Asset Robustness G', 80, 'Curses/assetrobustnessG.png', 'gender');
     }
 
+    get incompatibilities() {
+        return ['Shrunken Assets']
+    }
+
     growAsset(prevAsset) {
         return prevAsset + 2**6; // 64 cups or 128cm
     }
 }
-State.variables.curse115 = new AssetRobustnessG();
+setup.allCurses.AssetRobustnessG = new AssetRobustnessG()
+State.variables.curse115 = setup.allCurses.AssetRobustnessG
+window.AssetRobustnessG = AssetRobustnessG
+setup.curseArray.push(AssetRobustnessG)
 
 class Literalization extends Curse {
     constructor() {
         super('Literalization', 140, 'Curses/literalization.png', 'none');
     }
 }
-State.variables.curse116 = new Literalization();
+setup.allCurses.Literalization = new Literalization()
+State.variables.curse116 = setup.allCurses.Literalization
+window.Literalization = Literalization
+setup.curseArray.push(Literalization)
 
 class ConsentDissent extends Curse {
     constructor() {
         super('Consent Dissent', 120, 'Curses/consentdissent.png', 'none');
     }
 }
-State.variables.curse117 = new ConsentDissent();
+setup.allCurses.ConsentDissent = new ConsentDissent()
+State.variables.curse117 = setup.allCurses.ConsentDissent
+window.ConsentDissent = ConsentDissent
+setup.curseArray.push(ConsentDissent)
 
 class TheMaxim extends Curse {
-    constructor() {
+    constructor(location = 'anus') {
         super('The Maxim', 110, 'Curses/themaxim.png', 'none');
+        this.location = location;
+    }
+
+    get variation() {
+        return this.location;
+    }
+
+    set variation(value) {
+        console.error('Deprecated variation field used.')
+        this.location = value;
     }
 
     // libido changes implemented by special-purpose code in Character
 }
-State.variables.curse118 = new TheMaxim();
+setup.allCurses.TheMaxim = new TheMaxim()
+State.variables.curse118 = setup.allCurses.TheMaxim
+window.TheMaxim = TheMaxim
+setup.curseArray.push(TheMaxim)
 
 class AdversePossession extends Curse {
     constructor() {
@@ -1884,46 +2362,79 @@ class AdversePossession extends Curse {
     }
 
 }
-State.variables.curse119 = new AdversePossession();
+setup.allCurses.AdversePossession = new AdversePossession()
+State.variables.curse119 = setup.allCurses.AdversePossession
+window.AdversePossession = AdversePossession
+setup.curseArray.push(AdversePossession)
 
 class Erased extends Curse {
     constructor() {
         super('Erased', 100, 'Curses/erased.png', 'none');
     }
 }
-State.variables.curse120 = new Erased();
+setup.allCurses.Erased = new Erased()
+State.variables.curse120 = setup.allCurses.Erased
+window.Erased = Erased
+setup.curseArray.push(Erased)
 
 class TicklyTentacles extends Curse {
     constructor() {
         super('Tickly Tentacles', 10, 'Curses/ticklytentacles.png', 'none');
     }
+
+    get maximum() {
+        return 10;
+    }
 }
-State.variables.curse121 = new TicklyTentacles();
+setup.allCurses.TicklyTentacles = new TicklyTentacles()
+State.variables.curse121 = setup.allCurses.TicklyTentacles
+window.TicklyTentacles = TicklyTentacles
+setup.curseArray.push(TicklyTentacles)
 
 class Eyescream extends Curse {
     constructor() {
         super('Eye-scream', 5, 'Curses/eye-scream.png', 'none');
     }
+
+    get maximum() {
+        return 20;
+    }
 }
-State.variables.curse122 = new Eyescream();
+setup.allCurses.Eyescream = new Eyescream()
+State.variables.curse122 = setup.allCurses.Eyescream
+window.Eyescream = Eyescream
+setup.curseArray.push(Eyescream)
 
 class AMouthful extends Curse {
     constructor() {
         super('A Mouthful', 20, 'Curses/datmouf.png', 'none');
     }
+
+    get maximum() {
+        return 5;
+    }
 }
-State.variables.curse123 = new AMouthful();
+setup.allCurses.AMouthful = new AMouthful()
+State.variables.curse123 = setup.allCurses.AMouthful
+window.AMouthful = AMouthful
+setup.curseArray.push(AMouthful)
 
 class BelowTheVeil extends Curse {
     constructor() {
         super('Below the Veil', 200, 'Curses/belowtheveil.png', 'none');
     }
 }
-State.variables.curse124 = new BelowTheVeil();
+setup.allCurses.BelowTheVeil = new BelowTheVeil()
+State.variables.curse124 = setup.allCurses.BelowTheVeil
+window.BelowTheVeil = BelowTheVeil
+setup.curseArray.push(BelowTheVeil)
 
 class PrincessProtocol extends Curse {
     constructor() {
         super('Princess Protocol', 25, 'Curses/princessprotocol.png', 'none');
     }
 }
-State.variables.curse125 = new PrincessProtocol();
+setup.allCurses.PrincessProtocol = new PrincessProtocol()
+State.variables.curse125 = setup.allCurses.PrincessProtocol
+window.PrincessProtocol = PrincessProtocol
+setup.curseArray.push(PrincessProtocol)

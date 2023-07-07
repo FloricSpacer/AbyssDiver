@@ -1,647 +1,23 @@
 :: UpdateAttributes [widget nobr]
 <<widget "UpdateAttributes">>
-<<capture
-	_aDay
-	_aMonth
-	_aYear
-	_assetMod
-	_boxShadowColor
-	_boxShadowOpacity
-	_eternalYouthTime
-	_event
-	_eventAge
-	_eventVariation
-	_fullyGrownAge
-	_genderlvl
-	_handle
-	_lastBirth
-	_logName
-	_name
-	_newTime
-	_oldTime
-	_pulseBloomInUse
-	_robustBreasts
-	_wombEvents
->>
-	<<for _handle range $hiredCompanions.concat($mc)>>
-		<<set _name = _handle === $companionTwin ? 'Twin' : _handle === $companionBandit ? 'Bandit' : _handle.name>>
-		<<set _logName = _handle === $mc ? 'Log' : `Log${_name}`>>
-
-		/* ------------------------------------ Compute age (real and apparent) ------------------------------------- */
-
-		<<print `<<set _log = $Age${_logName}>>`>>
-
-		/* The Gregorian calendar has 97 leap years in every 400 year cycle. Thus the average length of a year is */
-		/* 365 + 97 / 400 = 365.2425 days, and the average length of a month is 365.2425 / 12 = 30.436875 days. By */
-		/* dividing each year into 1600 * 365.2425 = 12 * 48699 = 584388 units, we can avoid floating point errors. */
-		<<set _aDay = 1600, _aMonth = 48699, _aYear = 584388>>
-		<<set _eternalYouthTime = $eternalYouth * _aDay>>
-
-		<<set _oldTime = 0>>
-		<<set _eventAge = _handle.age * _aYear>>
-		<<for _event range _log>>
-			/* If this is an age event with a recorded time, add the elapsed time to the subject's age. */
-			<<if _event.variation>>
-				<<set _newTime = _event.variation * _aDay>>
-				/* If we're adjusting the mc who has eternal youth, only age them until they drank from the fountain. */
-				<<if _handle === $mc && _newTime > _eternalYouthTime>>
-					<<set _newTime = _eternalYouthTime>>
-				<</if>>
-				<<if _oldTime < _newTime>>
-					<<set _eventAge += _newTime - _oldTime>>
-				<</if>>
-				<<set _oldTime = _event.variation * _aDay>>
-			<</if>>
-			/* Now apply the effect of the age event. */
-			<<switch _event.name>>
-				<<case 'Age Reduction A'>>
-					<<set _eventAge = Math.min(20 * _aYear, _eventAge - 2 * _aYear)>>
-				<<case 'Age Reduction B'>>
-					<<set _eventAge = Math.min(20 * _aYear, _eventAge - 3 * _aYear)>>
-				<<case 'Age Reduction C'>>
-					<<set _eventAge = Math.min(20 * _aYear, _eventAge - 4 * _aYear)>>
-				<<case 'Doll Transformation'>>
-					<<set _eventAge = Math.min(17 * _aYear, _eventAge - 2 * _aYear)>>
-				<<case '1 Day Food Forage Minor Impact'>> /* Layer 3 Crystalline Confectionaries with knowledge */
-					<<set _eventAge -= _aMonth>>
-				<<case '1 Day Food Forage Major Impact'>> /* Layer 3 Crystalline Confectionaries without knowledge */
-					<<set _eventAge -= _aYear>>
-			<</switch>>
-		<</for>>
-
-		/* Add any additional elapsed time to the subject's age. */
-		<<set _newTime = $time * _aDay>>
-		/* If we're adjusting the mc who has eternal youth, only age them until they drank from the fountain. */
-		<<if _handle === $mc && _newTime > _eternalYouthTime>>
-			<<set _newTime = _eternalYouthTime>>
-		<</if>>
-		<<if _oldTime < _newTime>>
-			<<set _eventAge += _newTime - _oldTime>>
-		<</if>>
-
-		/* Update the subject's apparent age. */
-		<<set _handle.appAge = _eventAge / _aYear>>
-
-		/* Apply settings override (if any). */
-		<<if settings.appAgeControl > 3 && _handle.appAge < settings.appAgeControl>>
-			<<set _handle.appAge = settings.appAgeControl>>
-		<</if>>
-
-		/* Also set the subject's real age depending on the elapsed time. */
-		<<set _handle.realAge = (_handle.age * _aYear + _newTime) / _aYear>>
-
-		/* ----------------------------------- Compute apparent gender and assets ----------------------------------- */
-
-		<<print `<<set _log = $Gender${_logName}>>`>>
-
-		/* Set sex and asset size depending on original sex and sex changing curses. */
-		<<set _robustBreasts = false>>
-		<<if _log.some(event => event.name == 'Null')>>
-			<<if _log.some(event => event.name == 'Futa Fun')>>
-				<<if _handle.osex == 'male'>>
-					<<set _handle.breasts = _handle.openis / 2>>
-				<<else>>
-					<<set _handle.breasts = _handle.obreasts>>
-				<</if>>
-				/* No penis and maybe no breasts, but asset expansion goes to breasts. */
-				<<set _robustBreasts = true>>
-			<<elseif _log.some(event => event.name == 'Sex Switcheroo')>>
-				<<if _handle.osex == 'male'>>
-					<<set _handle.breasts = _handle.openis / 2>>
-				<<else>>
-					<<set _handle.breasts = 0>>
-					/* No penis or breasts, but asset expansion goes to breasts. */
-					<<set _robustBreasts = true>>
-				<</if>>
-			<<else>>
-				<<if _handle.osex == 'male'>>
-					<<set _handle.breasts = 0>>
-					/* No penis or breasts, but asset expansion goes to breasts. */
-					<<set _robustBreasts = true>>
-				<<else>>
-					<<set _handle.breasts = _handle.obreasts>>
-				<</if>>
-			<</if>>
-			<<set _handle.penis = 0, _handle.vagina = 0>>
-			<<set _handle.sex = 'doll-like'>>
-		<<elseif _log.some(event => event.name == 'Futa Fun')>>
-			<<if _handle.osex == 'male'>>
-				<<set _handle.breasts = _handle.openis / 2>>
-				<<set _handle.penis = _handle.openis>>
-			<<else>>
-				<<set _handle.breasts = _handle.obreasts>>
-				<<set _handle.penis = Math.max(_handle.obreasts * 2, 1)>>
-			<</if>>
-			<<set _handle.vagina = 1>>
-			<<set _handle.sex = 'futa'>>
-		<<elseif _log.some(event => event.name == 'Sex Switcheroo')>>
-			<<if _handle.osex == 'male'>>
-				<<set _handle.breasts = _handle.openis / 2>>
-				<<set _handle.penis = 0>>
-				<<set _handle.vagina = 1>>
-				<<set _handle.sex = 'female'>>
-			<<else>>
-				<<set _handle.breasts = 0>>
-				<<set _handle.penis = Math.max(_handle.obreasts * 2, 1)>>
-				<<set _handle.vagina = 0>>
-				<<set _handle.sex = 'male'>>
-			<</if>>
-		<<else>>
-			<<if _handle.osex == 'male'>>
-				<<set _handle.breasts = 0>>
-				<<set _handle.penis = _handle.openis>>
-				<<set _handle.vagina = 0>>
-				<<set _handle.sex = 'male'>>
-			<<else>>
-				<<set _handle.breasts = _handle.obreasts>>
-				<<set _handle.penis = 0>>
-				<<set _handle.vagina = 1>>
-				<<set _handle.sex = 'female'>>
-			<</if>>
-		<</if>>
-
-		/* Number of wombs initially matches number of vaginas. */
-		<<set _handle.womb = _handle.vagina>>
-
-		/* At most one penis initially and no additional wombs. */
-		<<set _handle.doublePenis = false>>
-		<<set _handle.womb1 = '', _handle.womb2 = ''>>
-
-		/* Set gender based on original gender and gender reversal curses. */
-		/* Note: Not purely psychological as it has a minor effect on age-based adjustments. */
-		<<set _handle.gender = _handle.ogender>>
-		<<for _event range _log>>
-			<<switch _event.name>>
-				<<case
-					'Gender Reversal A' 'Gender Reversal B' 'Gender Reversal C' 'Gender Reversal D'
-					'Gender Reversal E' 'Gender Reversal F' 'Gender Reversal G'
-					'1 Day Food Forage Major Impact' /* Layer 1 Blisshrooms without knowledge. */
-				>>
-					<<set _handle.gender += _handle.osex == 'male' ? 1 : -1>>
-				<<case 'Doll Transformation'>>
-					/* Note: Event can take place multiple times. */
-					<<set _handle.gender += 1>>
-			<</switch>>
-		<</for>>
-
-		/* Make pregnant characters more feminine. */
-		<<if setup.daysConsideredPregnant(_handle) >= 90 && setup.daysUntilDue(_handle) > 0>>
-			<<set _handle.gender += 1>>
-		<</if>>
-
-		/* Clamp gender between 1 (= fully masculine) and 6 (= fully feminine). */
-		<<set _handle.gender = Math.clamp(_handle.gender, 1, 6)>>
-		<<set _genderlvl = _handle.gender - 1>>
-
-		/* For younger characters, compute breast size reduction according to age. */
-		/* Note: Asset robustness does not affect breasts if _handle.breastsCor == 0 unless _robustBreasts == true. */
-		<<set _handle.breastsCor = _handle.breasts>>
-		<<set _fullyGrownAge = 18 - _genderlvl / 5>> /* 1 year lower for fully feminine characters. */
-		<<if _handle.appAge < _fullyGrownAge>>
-			<<set _handle.breastsCor = _handle.breasts * Math.max(1 - (_fullyGrownAge - _handle.appAge) / 10, 0)>>
-		<</if>>
-
-		/* Get all the extra womb events since it can be taken multiple times with different variations. */
-		<<set _wombEvents = _log.filter(event => event.name == 'Wacky Wombs')>>
-
-		<<for _event range _log>>
-			<<switch _event.name>>
-				<<case 'Shrunken Assets'>>
-					/* Note: Handled in the main loop because doll transformation is sensitive to ordering. */
-					<<if _handle.penis > 1>><<set _handle.penis = 1>><</if>>
-					<<if _handle.breasts > 1>><<set _handle.breasts = 1>><</if>>
-				<<case
-					'Asset Robustness A' 'Asset Robustness B' 'Asset Robustness C' 'Asset Robustness D'
-					'Asset Robustness E' 'Asset Robustness F' 'Asset Robustness G'
-				>>
-					/* 'A'.codePointAt(0) - 65 == 0, 'B'.codePointAt(0) - 65 == 1 etc. */
-					<<set _assetMod = 2**(_event.name.at(-1).codePointAt(0) - 65)>>
-					<<if _handle.penis > 0>><<set _handle.penis += _assetMod>><</if>>
-					<<if _handle.breastsCor > 0 || _robustBreasts>><<set _handle.breasts += _assetMod>><</if>>
-				<<case 'A Little Extra'>>
-					/* Check what to double. */
-					<<if _handle.vagina > 0 && _handle.penis > 0>>
-						/* Character has both, so check curse variation. */
-						<<if _event.variation == 'vagina'>>
-							<<set _handle.vagina += 1>>
-							<<set _handle.womb += 1>>
-						<<elseif _event.variation == 'penis'>>
-							<<set _handle.doublePenis = true>>
-						<</if>>
-					<<else>>
-						/* Double the genitals that the character actually has. */
-						<<if _handle.vagina > 0>>
-							<<set _handle.vagina += 1>>
-							<<set _handle.womb += 1>>
-						<<elseif _handle.penis > 0>>
-							<<set _handle.doublePenis = true>>
-						<</if>>
-					<</if>>
-				<<case 'Wacky Wombs'>>
-					/* Curse may be taken multiple times, so check the index to get the right variation. */
-					<<set _eventVariation = _event[`variation${_wombEvents.indexOf(_event) + 1}`]>>
-					<<if !_handle.womb1>>
-						<<if _handle.sex == 'doll-like'>>
-							<<set _handle.womb1 = ['vagina', 'urethra'].includes(_eventVariation) ? 'anus' : _eventVariation>>
-						<<elseif _handle.vagina < 1>>
-							<<set _handle.womb1 = _eventVariation == 'vagina' ? 'anus' : _eventVariation>>
-						<<else>>
-							<<set _handle.womb1 = _eventVariation>>
-						<</if>>
-						<<set _handle.womb += 1>>
-					<<elseif !_handle.womb2>>
-						<<if _handle.sex == 'doll-like'>>
-							<<set _handle.womb2 = ['vagina', 'urethra'].includes(_eventVariation) ? 'anus' : _eventVariation>>
-						<<elseif _handle.vagina < 1>>
-							<<set _handle.womb2 = _eventVariation == 'vagina' ? 'anus' : _eventVariation>>
-						<<else>>
-							<<set _handle.womb2 = _eventVariation>>
-						<</if>>
-						<<set _handle.womb += 1>>
-					<</if>>
-				<<case '1 Day Water Forage Major Impact'>> /* Layer 1 Cloudpools without knowledge */
-					<<if _handle.penis > 0>><<set _handle.penis += 1>><</if>>
-					<<if _handle.breastsCor > 0 || _robustBreasts>><<set _handle.breasts += 1>><</if>>
-				<<case 'Doll Transformation'>>
-					/* Note: Event can take place multiple times. */
-					<<if _handle.doublePenis>>
-						<<set _handle.doublePenis = false>>
-					<<elseif _handle.penis > 0>>
-						<<set _handle.penis -= 1>>
-						<<if _handle.penis < 1>>
-							<<if _handle.vagina < 1>>
-								<<if _handle.womb1 == 'urethra'>><<set _handle.womb1 = 'anus'>><</if>>
-								<<if _handle.womb2 == 'urethra'>><<set _handle.womb2 = 'anus'>><</if>>
-								<<set _handle.sex = 'doll-like'>>
-							<<else>>
-								<<set _handle.sex = 'female'>>
-							<</if>>
-						<</if>>
-					<<elseif _handle.vagina > 0>>
-						<<if _handle.appAge < 10>>
-							<<set _handle.vagina -= 1>>
-							<<set _handle.womb -= 1>>
-							<<if _handle.vagina < 1>>
-								<<if ['vagina', 'urethra'].includes(_handle.womb1)>><<set _handle.womb1 = 'anus'>><</if>>
-								<<if ['vagina', 'urethra'].includes(_handle.womb2)>><<set _handle.womb2 = 'anus'>><</if>>
-								<<set _handle.sex = 'doll-like'>>
-							<</if>>
-						<</if>>
-					<</if>>
-			<</switch>>
-		<</for>>
-
-		<<if _handle.womb < 1 && setup.isPregnant(_handle)>> 
-			<<set setup.setNotPregnant(_handle)>> /* Can't be pregnant without a womb. */
-		<</if>>
-
-		<<if _handle.curses.some(e => e.name === 'Eggxellent')>>
-			/* If character has a penis and no urethral wombs, add one. */
-			<<if _handle.penis > 0 && !_wombEvents.some((event, i) => event[`variation${i + 1}`] == 'urethra')>>
-				<<if !_handle.womb1>>
-					<<set _handle.womb1 = 'urethra'>>
-				<<elseif !_handle.womb2>>
-					<<set _handle.womb2 = 'urethra'>>
-				<</if>>
-				<<set _handle.womb += 1>>
-			<</if>>
-		<</if>>
-
-		/* Set menstruation cycle flags for mc. */
-		<<if _handle === $mc>>
-			<<set $menCycleFlag = _handle.womb >= 1 && !setup.isPregnant(_handle)>>
-			<<if $menCycleFlag && !$menCycleT_flag>>
-				<<set $menCycleT = $time - 7>>
-				<<set $menCycleT_flag = true>>
-				/* If mc has the Heat/Rut curse, makes the heat cycle and menstruation cycle align. */
-				<<set $heatCycleT = $menCycleT>>
-				<<set $heatCycleT_flag = true>>
-			<</if>>
-		<</if>>
-
-		/* Update Leaky curse description. */
-		<<if _handle.curses.some(e => e.name === 'Leaky')>>
-			<<if _handle.vagina > 0 && _handle.penis > 0>>
-				<<set $curse80.appDesc = 'Your pussy is always glistening with lubrication and your penis is always leaking precum, so it only takes a little motivation to get a real stream going down there.'>>
-			<<elseif _handle.vagina > 0>>
-				<<set $curse80.appDesc = 'Your pussy is always glistening with lubrication and it only takes a little motivation to get a real stream going down there.'>>
-			<<elseif _handle.penis > 0>>
-				<<set $curse80.appDesc = 'Your cock is always leaking precum and it only takes a little motivation to get a real stream going down there.'>>
-			<<else>>
-				<<set $curse80.appDesc = ''>>
-			<</if>>
-		<</if>>
-
-		/* ------------------------------- Compute corrected breast size and lactation ------------------------------ */
-
-		<<set _handle.lactation = 0>>
-		<<set _handle.breastsCor = _handle.breasts>>
-
-		/* For younger characters, compute breast size reduction according to age. */
-		<<set _fullyGrownAge = 18 - _genderlvl / 5>> /* 1 year lower for fully feminine characters. */
-		<<if _handle.appAge < _fullyGrownAge>>
-			<<set _handle.breastsCor = _handle.breasts * Math.max(1 - (_fullyGrownAge - _handle.appAge) / 10, 0)>>
-		<</if>>
-
-		/* Boost lactation for each curse. */
-		<<if _handle.curses.some(e => e.name === 'Lactation Rejuvenation A')>><<set _handle.lactation += 1>><</if>>
-		<<if _handle.curses.some(e => e.name === 'Lactation Rejuvenation B')>><<set _handle.lactation += 1>><</if>>
-
-		<<if setup.isPregnant(_handle)>>
-			/* Boost breast size during pregnancy. */
-			<<if 90 <= setup.daysConsideredPregnant(_handle) && setup.daysConsideredPregnant(_handle) < 120>>
-				<<set _handle.breastsCor += 0.5>>
-			<<elseif setup.daysConsideredPregnant(_handle) >= 120 && setup.daysUntilDue(_handle) > 0>>
-				<<set _handle.breastsCor += 1>>
-			<</if>>
-			/* Boost lactation in the last stages of pregnancy. */
-			<<if 240 <= setup.daysConsideredPregnant(_handle) && setup.daysConsideredPregnant(_handle) < 270>>
-				<<set _handle.lactation += 1>>
-			<<elseif setup.daysConsideredPregnant(_handle) >= 270 && setup.daysUntilDue(_handle) > 0>>
-				<<set _handle.lactation += 2>>
-			<</if>>
-		<<elseif _handle === $mc>>
-			<<if $menCycleFlag>>
-				/* Boost breast size after day 20 of the menstruation cycle. */
-				<<if $time - $menCycleT - $menCycleVar > 20>>
-					<<set _handle.breastsCor += 0.5>>
-				<</if>>
-				/* Boost lactation and breast size after giving birth until the next menstruation cycle. */
-				<<if $menCycleT - $time > 30>>
-					<<set _handle.breastsCor += 1>>
-					<<set _handle.lactation += 2>>
-				<<elseif $menCycleT - $time > 0>>
-					<<set _handle.breastsCor += 0.5>>
-					<<set _handle.lactation += 1>>
-				<</if>>
-			<</if>>
-		<<else>>
-			<<print `<<set _lastBirth = $lastBirth${_name}>>`>>
-			<<if _lastBirth <= $time>>
-				/* Boost lactation and breast size for a while after giving birth. */
-				<<if $time - _lastBirth < 30>>
-					<<set _handle.breastsCor += 1>>
-					<<set _handle.lactation += 2>>
-				<<elseif $time - _lastBirth < 60>>
-					<<set _handle.breastsCor += 0.5>>
-					<<set _handle.lactation += 1>>
-				<</if>>
-			<</if>>
-		<</if>>
-
-		/* Maximize Lily's lactation if you're breastfeeding from her. */
-		<<if _handle === $companionLily && $LilyConvoLac>>
-			<<set _handle.lactation += 2>> 
-		<</if>>
-
-		<<if _handle.sex == 'doll-like'>>
-			<<set _handle.lactation = 0>> /* Can't lactate without nipples! */
-		<<elseif _handle.lactation > 2>>
-			<<set _handle.lactation = 2>> /* Cap lactation at +2. */
-		<</if>>
-
-		/* Boost breast size in accordance with lactation. */
-		<<set _handle.breastsCor += _handle.lactation>>
-
-		<<if _handle.curses.some(e => e.name === 'Double Pepperoni') && _handle.breastsCor < 1>>
-			<<set _handle.breastsCor += 1>> /* You can't look entirely flat with such puffy nipples. */
-		<</if>>
-
-		/* Now set the label depending on the corrected breast size. */
-		<<if _handle.breastsCor < 1>>
-			<<set _handle.breastsLabel = 'flat'>>
-		<<elseif _handle.breastsCor < 2>>
-			<<set _handle.breastsLabel = 'AA'>>
-		<<elseif _handle.breastsCor >= 20>>
-			<<set _handle.breastsLabel = 'S'>> /* Max supported label. */
-		<<elseif !isFinite(_handle.breastsCor)>>
-			/* Shouldn't happen, but prevent it from causing problems. */
-			<<set _handle.breastsLabel = 'immeasurable'>>
-		<<else>>
-			/* String.fromCodePoint(63 + 2) == 'A', String.fromCodePoint(63 + 3) == 'B' etc. */
-			<<set _handle.breastsLabel = String.fromCodePoint(63 + Math.floor(_handle.breastsCor))>>
-		<</if>>
-
-		/* -------------------------------------- Compute corrected penis size -------------------------------------- */
-
-		<<set _handle.penisCor = _handle.penis>>
-		<<if _handle.penis > 0>>
-			/* For younger characters, compute penis size reduction according to age. */
-			<<set _fullyGrownAge = 16 - _genderlvl / 5>> /* 1 year lower for fully feminine characters. */
-			<<if _handle.appAge < _fullyGrownAge>>
-				<<set _handle.penisCor = _handle.penis * Math.max(1 - (_fullyGrownAge - _handle.appAge) / 12, 1)>>
-			<</if>>
-
-			<<if _handle.curses.some(e => e.name === 'Colossal-able')>>
-				<<set _handle.penisCor *= 70>>
-			<</if>>
-
-			<<if _handle.curses.some(e => e.name === 'Minish-ish')>>
-				<<set _handle.penisCor /= 10>>
-			<</if>>
-		<</if>>
-
-		/* ---------------------------------------- Compute corrected height ---------------------------------------- */
-
-		<<print `<<set _log = $Height${_logName}>>`>>
-
-		<<set _height_change = 0>>
-		<<for _event range _log>>
-			<<switch _event.name>>
-				<<case 'Dizzying Heights'>>
-					<<set _height_change += 5 * $HeightIncrease>>
-				<<case '1 Day Food Forage Major Impact'>> /* Layer 4 Flairabou without knowledge */
-					<<set _height_change += 3 * $HeightIncrease>>
-				<<case '1 Day Food Forage Minor Impact'>> /* Layer 4 Flairabou with knowledge */
-					<<set _height_change += 0.5 * $HeightIncrease>>
-			<</switch>>
-		<</for>>
-
-		<<if _log.some(e => e.name === 'Colossal-able')>>
-			<<set _height_change = _handle.oheight * 70 - _handle.oheight>>
-			<<set $SizeHandicap = 1>>
-		<<elseif _log.some(e => e.name === 'Minish-ish')>>
-			<<set _height_change = _handle.oheight / 10 - _handle.oheight>>
-			<<set $SizeHandicap = $hiredCompanions.length < 1 ? 1 : 0>>
-		<</if>>
-
-		/* Change in height with genderlevel changes and height increases/decreases; it is modeled such that */
-		/* 5 cm is always 5 cm with respect to your starting height and irrespective of starting gender.     */
-		<<set _height_adult = 
-			_handle.oheight * (1 - 0.01525 * (_genderlvl - (_handle.osex == 'female' ? 5 : 0))) +
-			_height_change  * (1 - 0.01525 * (_handle.osex == 'female' ? 5 : 0))
-		>>
-
-		<<set _x = 18 - _handle.appAge>>
-
-		<<if _x <= 0.2 * _genderlvl>>
-			<<set _handle.heightCor = _height_adult>>
-		<<elseif 0.2 * _genderlvl < _x && _x <= 6>>
-			/* Puberty phase: It shifts for females as theirs ends earlier; for simplicity */
-			/* I assumed the start is the same regardless although this is not entirely    */
-			/* correct. I used a polynomial here to simulate the 'reverse growth spurt'.   */
-			<<set _x_rel = _x - 0.2 * _genderlvl>>
-			<<set _handle.heightCor = _height_adult * (1 -
-				( 4.70611e-3 - 8.1433e-4 * _genderlvl) * _x_rel -
-				( 1.1049e-4  - 1.140e-5  * _genderlvl) * _x_rel**2 -
-				( 1.6698e-3  - 1.3722e-4 * _genderlvl) * _x_rel**3 -
-				(-1.7701e-4  + 2.114e-5  * _genderlvl) * _x_rel**4
-			)>>
-		<<elseif 6 < _x && _x <= 15>>
-			/* The second phase of linear growth or decline, it's a decent approximation without making things too     */
-			/* complicated. It ends at age 3 (originally 4, but changed it to not break the rest of the code). The     */
-			/* calculation for the puberty growth spurt is in here to provide a starting point for the linear decline. */
-			<<set _x_rel = 6 - 0.2 * _genderlvl>>
-			<<set _handle.heightCor = _height_adult * (1 -
-				( 4.70611e-3 - 8.1433e-4 * _genderlvl) * _x_rel -
-				( 1.1049e-4  - 1.140e-5  * _genderlvl) * _x_rel**2 -
-				( 1.6698e-3  - 1.3722e-4 * _genderlvl) * _x_rel**3 -
-				(-1.7701e-4  + 2.114e-5  * _genderlvl) * _x_rel**4 -
-				(0.033 + 0.0009 * _genderlvl) * (_x - 6)
-			)>>
-		<</if>>
-
-		/* ---------------------------------------- Compute corrected libido ---------------------------------------- */
-
-		<<print `<<set _log = $Libido${_logName}>>`>>
-
-		/* Initialize libido and sub/dom leaning. */
-		<<set _handle.libido = 2, _handle.subdom = 0>>
-
-		/* Reset lowered standards. */
-		<<if _handle === $mc>><<set $standardsLower = 0>><</if>>
-
-		<<for _event range _log>>
-			<<switch _event.name>>
-				<<case
-					'Libido Reinforcement A' 'Libido Reinforcement B' 'Libido Reinforcement C' 'Libido Reinforcement D'
-					'Libido Reinforcement E' 'Libido Reinforcement F' 'Libido Reinforcement G'
-					'1 Day Food Forage Major Impact' /* Layer 2 unripe flanberries */
-				>>
-					<<set _handle.libido += 1>>
-				<<case '1 Day Food Forage Minor Impact'>> /* Layer 8 Bedlam's Banquet */
-					<<if _handle === $mc>>
-						<<set $standardsLower += 1>>
-					<</if>>
-				<<case 'DoM' 'Submissiveness Rectification A' 'Submissiveness Rectification B'>>
-					<<set _handle.subdom += 1>>
-				<<case 'DoS' 'Power Dom'>>
-					<<set _handle.subdom -= 1>>
-			<</switch>>
-		<</for>>
-		
-		/* Apply player specific effects. */
-		<<if _handle === $mc>>
-			/* Boost libido if ripe flanberries from layer 2 were eaten within the last day. */
-			<<if $lastFlan !== undefined && $time < $lastFlan + 1>><<set _handle.libido += 1>><</if>>
-
-			<<if $menCycleFlag>>
-				/* Libido boost around 14 days into the cycle. */
-				<<if 13 <= $time - $menCycleT && $time - $menCycleT <= 15>><<set $mc.libido += 1>><</if>>
-				/* Libido penalty around 22 days into the cycle. */
-				<<if 20 <= $time - $menCycleT && $time - $menCycleT <= 24>><<set $mc.libido -= 1>><</if>>
-			<</if>>
-
-			<<if $playerCurses.some(e => e.name === 'Heat/Rut')>>
-				<<if !$heatCycleT_flag>>
-					<<set $heatCycleT = $time - 7>>
-					<<set $heatCycleT_flag = true>>
-				<</if>>
-
-				/* Libido boost on day 14 of the cycle (coincides with day 14 of menstruation cycle if active). */
-				<<if $time - $heatCycleT == 14>><<set $mc.libido += 2>><</if>>
-			<</if>>
-
-			<<if $playerCurses.some(e => e.name === 'The Maxim')>>
-				<<if !$MaximCycleT_flag>>
-					<<set $MaximCycleT = $time>>
-					<<set $MaximCycleT_flag = true>>
-				<</if>>
-				<<set _temp = random(0,2)>>
-				<<if $mc.libido < 2 && _temp < 2>>
-					<<set $mc.libido += 3>> @@.alert1; Your parasite is restlessly worming around inside you. It's touching you in a lot of sensitive places, which greatly increases your arousal!/*xxx*/<br>
-				<<elseif $mc.libido < 4 && _temp < 1>>
-					<<set $mc.libido += 2>>  @@.alert1; Your parasite is restlessly worming around inside you. It's touching you in a lot of sensitive places, which increases your arousal!<br>
-				<</if>>
-			<</if>>
-		<</if>>
-
-		/* ----------------------------------------- Compute apparent gender ---------------------------------------- */
-
-		/* Undo effects of Colossal-able and Minish-ish on penis size for the calculation below. */
-		<<set _penisCorTemp = _handle.penisCor>>
-		<<if _handle.curses.some(e => e.name === 'Colossal-able')>><<set _penisCorTemp /= 70>><</if>>
-		<<if _handle.curses.some(e => e.name === 'Minish-ish')>><<set _penisCorTemp *= 10>><</if>>
-
-		/* Set appGender. Note 1: Companions also have this. */
-		/* Note 2: Uses *apparent* fitness, so ignores the Weakling curse. */
-		<<set _handle.appGender = 0
-			+ 2 * _genderlvl
-			- 0.25 * (_penisCorTemp - 4)
-			+ 0.5 * (_handle.breastsCor - 3)
-			- (_handle.fit > 7)
-		>>
-		<<if _handle === $mc>>
-			/* Apply adjustments from Chain of Lorelei, Seafoam scent and Solace Lace. */
-			<<set _handle.appGender += 0.5 * $colwear + 0.25 * $scent + 0.5 * $slwear>>
-			/* mc looks more feminine if wearing the Creepy Doll's tattered pink dress. */
-			<<if $dollevent2>><<set _handle.appGender += 1>><</if>>
-		<</if>>
-	<</for>>
-
-	/* ------------------------------------------- Update mc dialog styles ------------------------------------------ */
-
-	<<if $mc.appAge > 18>>
-		<<set _boxShadowOpacity = 1.0>>
-	<<elseif $mc.appAge > 15>>
-		<<set _boxShadowOpacity = 0.8>>
-	<<elseif $mc.appAge > 12>>
-		<<set _boxShadowOpacity = 0.6>>
-	<<elseif $mc.appAge > 9>>
-		<<set _boxShadowOpacity = 0.4>>
-	<<else>>
-		<<set _boxShadowOpacity = 0.2>>
-	<</if>>
-
-	<<switch $mc.gender>>
-		<<case 1>><<set _boxShadowColor = [ 40,  40, 255]>>
-		<<case 2>><<set _boxShadowColor = [ 80,  80, 240]>>
-		<<case 3>><<set _boxShadowColor = [120, 100, 230]>>
-		<<case 4>><<set _boxShadowColor = [165, 120, 220]>>
-		<<case 5>><<set _boxShadowColor = [210, 140, 210]>>
-		<<case 6>><<set _boxShadowColor = [255, 160, 200]>>
-	<</switch>>
-
-	<<set $mc.genderVoice = $colwear ? 99 : $mc.gender>>
-	<<set $mc.style = "border: 2px solid rgb(1, 0, 0);">>
-	<<set $mc.style1 = [
-			`box-shadow: 0 0 10px 2px rgba(${_boxShadowColor.concat(_boxShadowOpacity).join(', ')})`,
-			'background-color: black',
-		].join(';')>>
-
-	/* $PulseBloomUse used to be initialized as an array, so check carefully. */
-	<<set _pulseBloomInUse = $PulseBloomUse !== "" && !Array.isArray($PulseBloomUse)>>
-
-	<<if _pulseBloomInUse>>
-		<<print `<<set _handle = $companion${$PulseBloomUse}>>`>>
-		<<if _handle === $companionBandit>>
-			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">>/* Note: Exception for the bandit who has 2 icons */
-		<<else>>
-			<<set $mc.imageIcon = _handle.imageIcon>> /* Note: Use the *current* image icon. */
-		<</if>>
-	<<elseif $mc.switch>>
-		<<print `<<set _handle = $companion${$companionSwitched}>>`>>
-		<<if _handle === $companionBandit>>
-			<<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">>/* Note: Exception for the bandit who has 2 icons */
-		<<else>>
-			<<set $mc.imageIcon = _handle.oimageIcon>> /* Note: Use the *original* image icon. */
-		<</if>>
-	<<elseif $mc.appGender <= 5>>
-		<<set $mc.imageIcon = 'Player Icons/playerM.png'>>
-	<<else>>
-		<<set $mc.imageIcon = 'Player Icons/playerF.png'>>
-	<</if>>
-<</capture>>
+<<set $menCycleFlag = $mc.womb >= 1 && !$mc.isPregnant>
+<<if $menCycleFlag && !$menCycleT_flag>>
+    <<set $menCycleT = $time - 7>>
+    <<set $menCycleT_flag = true>>
+    /* If mc has the Heat/Rut curse, makes the heat cycle and menstruation cycle align. */
+    <<set $heatCycleT = $menCycleT>>
+    <<set $heatCycleT_flag = true>>
+<</if>>
+<<if $mc.hasCurse('Heat/Rut') && !$heatCycleT_flag>>
+    <<set $heatCycleT = $time - 7>>
+    <<set $heatCycleT_flag = true>>
+<</if>>
+<<if $mc.hasCurse('The Maxim')>>
+    <<if !$MaximCycleT_flag>>
+        <<set $MaximCycleT = $time>>
+        <<set $MaximCycleT_flag = true>>
+    <</if>>
+<</if>>
 <</widget>>
 
 :: Appearance widgets [widget nobr]
@@ -656,27 +32,30 @@
 
 :: Semen Demon Widget [widget nobr]
 <<widget "SemenDemonCalc">>
-<<set _contributions =0>>
+<<set _sdcurse = $mc.getCurse(SemenDemon)>>
+<<set _sdTotal = $mc.events.filter(e => e instanceof SemenDemon).reduce((v, e) => v + e.amount)>>
+<<if _sdcurse !== undefined>>
+    <<set _contributions = 0>>
+    <<if ($mc.penisCor > 0 && _sdcurse.fluidType !== "vaginal fluids") || ($mc.vagina > 0 && _sdcurse.fluidType !== "semen") >>
+            <<if $mc.hasCurse("Leaky")>>
+                <<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
+            <<else>>
+                <<set _contributions += Math.floor(1+$crumbleFluid/100)>>
+            <</if>>
+    <</if>>
 
-<<if ($mc.penisCor > 0 && $curse82.variation!="vaginal fluids") || ($mc.vagina > 0 && $curse82.variation!="semen") >>
-		<<if $playerCurses.some(e => e.name === "Leaky")>>
-			<<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
-		<<else>>
-			<<set _contributions += Math.floor(1+$crumbleFluid/100)>>
-		<</if>>
-<</if>>
+    <<for _i=0; _i<$SemenDemonVec.length; _i++ >>
+        <<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
+            <<set _contributions +=1>>
+        <</if>>
+    <</for>>
 
-<<for _i=0; _i<$SemenDemonVec.length; _i++ >>
-	<<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
-		<<set _contributions +=1>>
-	<</if>>
-<</for>>
-
-<<set $SemenDemonBalance += (_contributions-$curse82.variation1)*_args[0]>>/* */
-<<if $SemenDemonBalance < -14>>
-	<<set $gameOver=true>>
-<<elseif $SemenDemonBalance > 14>>
-	<<set $SemenDemonBalance = 14>>
+    <<set $SemenDemonBalance += (_contributions - _sdTotal) * _args[0]>>/* */
+    <<if $SemenDemonBalance < -14>>
+        <<set $gameOver=true>>
+    <<elseif $SemenDemonBalance > 14>>
+        <<set $SemenDemonBalance = 14>>
+    <</if>>
 <</if>>
 <</widget>>
 
@@ -825,410 +204,6 @@
 <</if>>
 <</widget>>
 
-
-:: Lewdness function [widget nobr]
-<<widget "Lewdness">>
-	<<set _semenCount = $curse82.variation1>>
-	<<set _quotaCount = setup.activeCurseCount("Quota")>>
-	<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
-	<<set $lewdness = ($mc.libido - 2 + _quotaCount + _semenCount + _limelightCount) * 3 + $crumbleFluid / 10 + $algalSize + $standardsLower + $foodL6>>
-
-	<<if !$LuminousWear>>
-		<<if $mc.breastsCor>5>>
-			<<set $lewdness +=1>>
-		<<elseif $mc.breastsCor>7>>
-			<<set $lewdness +=2>>
-		<<elseif $mc.breastsCor>9>>
-			<<set $lewdness +=3>>
-		<</if>>
-
-		<<if $mc.penis>6>>
-			<<set $lewdness +=1>>
-		<<elseif $mc.penis>10>>
-			<<set $lewdness +=2>>
-		<</if>>
-
-		<<if $playerCurses.some(e => e.name === "Clothing Restriction B")>>
-			<<set $lewdness +=1>>
-		<</if>>
-
-		<<if $playerCurses.some(e => e.name === "Clothing Restriction C")>>
-			<<set $lewdness +=2>>
-		<</if>>
-
-		<<if $playerCurses.some(e => e.name === "Leaky")>>
-			<<set $lewdness +=2>>
-		<</if>>
-
-		<<if $playerCurses.some(e => e.name === "Hard Mode")>>
-			<<set $lewdness +=1>>
-		<</if>>
-
-		<<if $playerCurses.some(e => e.name === "Softie")>>
-			<<set $lewdness -=1>>
-		<</if>>
-
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Heat/Rut")>>
-		<<set $lewdness +=1>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Hijinks Ensue")>>
-		<<set $lewdness +=1>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Wandering Hands")>>
-		<<set $lewdness +=2>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Blushing Virgin")>>
-		<<set $lewdness -=1>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Literal Blushing Virgin")>>
-		<<set $lewdness -=2>>
-	<</if>>
-
-	<<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
-		<<set $lewdness +=1>>
-	<</if>>
-	<<if $playerCurses.some(e => e.name === "Refractory Refactorization")>>
-		<<set $lewdness +=1>>
-	<</if>>
-	<<if $playerCurses.some(e => e.name === "Increased Sensitivity") && $playerCurses.some(e => e.name === "Refractory Refactorization")>>
-			<<set $lewdness +=4>>
-	<</if>>
-<</widget>>
-
-
-:: Inhuman function [widget nobr]
-<<widget "Inhuman">>
-<<for _i=0; _i<=$hiredCompanions.length; _i++>>
-	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $mc>>
-	<<else>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name >>
-			<<set _name = "Twin">>
-		<<elseif $hiredCompanions[_i].name == $companionBandit.name>>
-			<<set _name = "Bandit">>
-		<<else>>
-			<<set _name = $hiredCompanions[_i].name>>
-		<</if>>
-		<<print "<<set _handle  = $companion"+ _name +" >>">>
-	<</if>>
-	<<set _handle.inhuman =0>>
-	<<if _handle.ears != "normal human">>
-		<<set _handle.inhuman +=1>>
-	<</if>>
-
-	<<if !["pale", "tanned", "olive", "brown", "dark brown"].includes(_handle.skinColor) >>
-		<<set _handle.inhuman +=4>>
-	<</if>>
-
-	<<if _handle.eyeColor !=  "blue" && _handle.eyeColor !=  "brown" && _handle.eyeColor !=  "gray" && _handle.eyeColor !=  "green" && _handle.eyeColor !=  "hazel"  >>
-		<<set _handle.inhuman +=1>>
-	<</if>>
-
-	<<if _handle.skinType.length > 0 && _handle.skinType!="hairless, smooth">>
-		<<set _handle.inhuman +=4>>
-	<</if>>
-
-	<<if _handle.blood !="red">>
-		<<set _handle.inhuman +=2>>
-	<</if>>
-
-	<<set _hornyCount = setup.activeCurseCount("Horny")>>
-	<<if _hornyCount == 1 && _handle.curses.some(c=> c.name === "Horny") >>
-		<<set _handle.inhuman +=2>>
-	<<elseif _hornyCount == 2 && _handle.curses.some(c=> c.name === "Horny") >>
-		<<set _handle.inhuman +=3>>
-	<</if>>
-
-	<<if _handle.tail.length > 0>>
-		<<for _j = 0; _j < _handle.tail.length; _j++>>
-			<<set _handle.inhuman +=2>>
-		<</for>>
-	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Megadontia")>>
-		<<set _handle.inhuman +=1>>
-	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Lingual Leviathan")>>
-		<<set _handle.inhuman +=1>>
-	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Massacre Manicure")>>
-		<<set _handle.inhuman +=1>>
-	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Flower Power")>>
-		<<set _handle.inhuman +=4>>
-	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Wriggly Antennae")>>
-		<<set _handle.inhuman +=2>>
-	<</if>>
-
-	<<if _handle.curses.some(e => e.name === "Seafolk")>>
-		<<set _handle.inhuman +=4>>
-	<</if>>
-
-	<<if _i==$hiredCompanions.length && $LuminousWear>>
-		<<set _handle.inhuman /=4>>
-	<</if>>
-<</for>>
-<</widget>>
-
-:: Handicap function [widget nobr]
-<<widget "Handicap">>
-<<for _i=0; _i<=$hiredCompanions.length; _i++>>
-	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $mc>>
-		<<set _HandicapLog = $HandicapLog>>
-		<<set $ConvoHandicapSmall = false>>
-		<<set $ConvoHandicapLarge = false>>
-		<<set $ConvoHandicapFood = false>>
-	<<else>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name >>
-			<<set _name = "Twin">>
-		<<elseif $hiredCompanions[_i].name == $companionBandit.name>>
-			<<set _name = "Bandit">>
-		<<else>>
-			<<set _name = $hiredCompanions[_i].name>>
-		<</if>>
-		<<print "<<set _handle  = $companion"+ _name +" >>">>
-		<<print "<<set _HandicapLog  = $HandicapLog"+ _name +" >>">>
-	<</if>>
-
-	<<set _handle.HandicapThreat =0>>
-	<<set _handle.HandicapMovement =0>>
-	<<set _handle.HandicapCarry =0>>
-	<<set _handle.eyeCount =2>>
-	<<set _handle.armCount =2>>
-	<<set _handle.legCount =2>>
-
-	<<for _HandicapEvent range _HandicapLog>>
-
-		<<if _HandicapEvent.name == "Eye on the Prize" >>
-			<<set _handle.eyeCount -=  $eyeRemove>>
-			<<if _i==$hiredCompanions.length>>
-				<<if !$BionicEye>>
-					<<if _handle.eyeCount<2>>
-					<<set _handle.HandicapThreat -=3>>
-					<<set _handle.HandicapMovement -=1>>
-						<<if $BDwear>>
-							<<set _handle.HandicapThreat +=1>>
-						<</if>>
-					<</if>>
-					<<if _handle.eyeCount<1>>
-					<<set _handle.HandicapThreat -=5>>
-					<<set _handle.HandicapMovement -=4>>
-						<<if $BDwear>>
-							<<set _handle.HandicapThreat +=3>>
-							<<set _handle.HandicapMovement +=3>>
-						<</if>>
-					<</if>>
-				<</if>>
-			<</if>>
-		<</if>>
-
-		<<if _HandicapEvent.name == "Deafening Silence">>
-			<<set _handle.HandicapThreat-=3>>
-			<<if _i==$hiredCompanions.length>>
-				<<set $ConvoHandicapSmall = true>>
-				<<set $ConvoHandicapLarge = true>>
-				<<set $ConvoHandicapFood = true>>
-			<</if>>
-		<</if>>
-
-		<<if (_HandicapEvent.name == "Beastly" || _HandicapEvent.name == "Taciturn Turnaround") && _i==$hiredCompanions.length>>
-			<<set $ConvoHandicapSmall = true>>
-			<<set $ConvoHandicapFood = true>>
-		<</if>>
-		
-		<<if _HandicapEvent.name == "Nose Goes">>
-			<<set _handle.HandicapThreat-=3>>
-			<<if _i==$hiredCompanions.length>>
-				<<set $ConvoHandicapFood = true>>
-			<</if>>
-		<</if>>
-
-		<<if _HandicapEvent.name == "Ampu-Q-tie">>
-			<<if $curse104.variation=='A'>>
-				<<set _handle.armCount -=1>>
-			<<elseif $curse104.variation=='L'>>
-				<<set _handle.legCount -=1>>
-			<<elseif $curse104.variation=='AA'>>
-				<<set _handle.armCount -=2>>
-			<<elseif $curse104.variation=='AL'>>
-				<<set _handle.armCount -=1>>
-				<<set _handle.legCount -=1>>
-			<<elseif $curse104.variation=='LL'>>
-				<<set _handle.legCount -=2>>
-			<<elseif $curse104.variation=='ALL'>>
-				<<set _handle.armCount -=1>>
-				<<set _handle.legCount -=2>>
-			<<elseif $curse104.variation=='AAL'>>
-				<<set _handle.armCount -=2>>
-				<<set _handle.legCount -=1>>
-			<<elseif $curse104.variation=='AALL'>>
-				<<set _handle.armCount -=2>>
-				<<set _handle.legCount -=2>>
-			<</if>>
-		<</if>>
-
-		<<if _HandicapEvent.name == "Arm Army">>
-			<<set _handle.armCount +=2>>
-		<</if>>
-
-		<<if _HandicapEvent.name == "Seafolk">>
-			<<set _handle.legCount -=2>>
-			<<set $scuba = 1>>
-		<</if>>
-
-		<<if _HandicapEvent.name == "Conjoined">>
-			<<set _handle.HandicapThreat -=6>>
-			<<set _handle.HandicapMovement -=6>>
-			<<set _handle.HandicapCarry -=2>>
-		<</if>>
-		
-	<</for>>
-
-	<<if _handle.heightCor > 185>>
-		<<set _handle.HandicapThreat += Math.min(Math.floor(((_handle.heightCor - 170) / 170 - 1) * 10), 7)>>
-	<<elseif _handle.heightCor < 155>>
-		<<set _handle.HandicapThreat += Math.max(Math.floor(((_handle.heightCor - 170) / _handle.heightCor - 1) * 10), -7)>>
-	<</if>>
-
-	<<if _handle.name=="Khemia">>
-		<<if $convo.khemiaAegis == 1>>
-			<<set _handle.HandicapThreat +=5>>
-		<</if>>
-	<</if>>
-
-	<<if _i==$hiredCompanions.length>>
-		<<if $BDwear>>
-			<<set _handle.HandicapThreat +=1>>
-		<</if>>
-
-		<<if $BionicEye>>
-			<<if $mc.eyeCount<2>>
-				<<set $mc.eyeCount +=1>>
-			<</if>>
-		<</if>>
-
-		<<if $BionicArm>>
-			<<set _handle.HandicapCarry +=100>>
-			<<set _handle.HandicapThreat +=8>>
-			<<set _handle.HandicapMovement +=3>>
-			<<if _handle.armCount<2>>
-				<<set _handle.armCount +=1>>
-			<</if>>
-		<</if>>
-
-		<<if $AegisWear>>
-			<<set _handle.HandicapThreat +=5>>
-		<</if>>
-		
-	<</if>>
-
-	<<set _fitCor = _handle.curses.some(e => e.name === "Weakling") ? 0 : _handle.fit>>
-	<<set _handle.HandicapThreat += _fitCor / 4 - 1.25>>
-	<<set _handle.HandicapMovement += _fitCor / 4 - 1.25>>
-
-	<<if _handle.armCount == 1 && (_handle.legCount >1 || $DaedalusEquip)>>
-		<<set _handle.HandicapThreat -=2>>
-		<<set _handle.HandicapMovement -=1>>
-		<<set _handle.HandicapCarry -=2>>
-	<<elseif _handle.armCount == 0 && (_handle.legCount >1 || $DaedalusEquip)>>
-		<<set _handle.HandicapThreat -=7>>
-		<<set _handle.HandicapMovement -=3>>
-		<<set _handle.HandicapCarry -=7>>
-	<<elseif _handle.armCount > 1 && _handle.legCount == 1>>
-		<<set _handle.HandicapThreat -=3>>
-		<<set _handle.HandicapMovement -=5>>
-		<<set _handle.HandicapCarry -=3>>
-	<<elseif _handle.armCount == 1 && _handle.legCount == 1>>
-		<<set _handle.HandicapThreat -=7>>
-		<<set _handle.HandicapMovement -=8>>
-		<<set _handle.HandicapCarry -=7>>
-	<<elseif _handle.armCount > 1 && _handle.legCount == 0>>
-		<<set _handle.HandicapThreat -=7>>
-		<<set _handle.HandicapMovement -=9>>
-		<<set _handle.HandicapCarry -=7>>
-	<<elseif _handle.armCount == 1 && _handle.legCount == 0>>
-		<<set _handle.HandicapThreat -=8>>
-		<<set _handle.HandicapMovement -=10>>
-		<<set _handle.HandicapCarry -=9>>
-	<<elseif _handle.armCount == 0 && _handle.legCount ==1>>
-		<<set _handle.HandicapThreat -=9>>
-		<<set _handle.HandicapMovement -=9>>
-		<<set _handle.HandicapCarry -=10>>
-	<<elseif _handle.armCount == 0 && _handle.legCount == 0>>
-		<<set _handle.HandicapThreat -=10>>
-		<<set _handle.HandicapMovement -=10>>
-		<<set _handle.HandicapCarry -=10>>
-	<</if>>
-	
-	<<if _handle.armCount >2 >>
-		<<set _handle.HandicapThreat -= 2*($mc.armCount-2)>>
-		<<set _handle.HandicapMovement += 1*($mc.armCount-2)>>
-		<<set _handle.HandicapCarry += ($mc.armCount-2)>>
-	<</if>>
-
-	<<if _i==$hiredCompanions.length>>
-		<<if $menstruating == true>>
-			<<set _handle.HandicapThreat -= 2>>
-		<</if>>
-
-		<<if 35 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 45>>
-			<<set _handle.HandicapMovement -= 2>>
-		<<elseif 45 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 90>>
-			<<set _handle.HandicapThreat -= 2>>
-			<<set _handle.HandicapMovement -= 4>>
-			<<set _handle.HandicapCarry -= 3>>
-		<<elseif (120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180) >>
-			<<set _handle.HandicapThreat -= 1>>
-			<<set _handle.HandicapMovement -= 2>>
-			<<set _handle.HandicapCarry -= 2>>
-		<<elseif 180 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 240>>
-			<<set _handle.HandicapThreat -= 2>>
-			<<set _handle.HandicapMovement -= 3>>
-			<<set _handle.HandicapCarry -= 3>>
-		<<elseif setup.daysConsideredPregnant($mc) >= 240 && setup.daysUntilDue($mc) > 0>>
-			<<set _handle.HandicapThreat -= 4>>
-			<<set _handle.HandicapMovement -= 5>>
-			<<set _handle.HandicapCarry -= 5>>
-		<</if>>
-
-		<<if $MaximCycleT-$time>=14 && $MaximCycleT-$time<28 && $MaximCycleT_flag>>
-			<<set _handle.HandicapThreat -= 1>>
-			<<set _handle.HandicapMovement -= 2>>
-			<<set _handle.HandicapCarry -= 2>>
-		<<elseif $MaximCycleT-$time>=28 && $MaximCycleT_flag>>
-			<<set _handle.HandicapThreat -= 2>>
-			<<set _handle.HandicapMovement -= 3>>
-			<<set _handle.HandicapCarry -= 3>>
-		<</if>>
-
-		<<if $DaedalusEquip == true && _handle.HandicapMovement < 0>>
-			<<set _handle.HandicapMovement = 0 >>
-		<</if>>
-	<</if>>
-	<<if _handle.HandicapThreat <-10>>
-		<<set _handle.HandicapThreat =-10>>
-	<</if>>
-	<<if _handle.HandicapMovement < -10>>
-		<<set _handle.HandicapMovement = -10>>
-	<</if>>
-	<<if _handle.HandicapCarry < -10>>
-		<<set _handle.HandicapCarry = -10>>
-	<</if>>
-<</for>>
-<</widget>>
-
 :: Miscellaneous stat updates [nobr widget]
 <<widget "Update_Misc_Stat">>
 <<set $sellAdd=0>>
@@ -1285,449 +260,156 @@
 
 :: Doll transformation [widget nobr]
 <<widget "dollTF">>
-<<if $creepydoll.affec == 0>>
-	<<set $DollTF.variation = $time>>
-<</if>>
-<<set $AgeLog.push($DollTF)>>
-<<set $GenderLog.push($DollTF)>>
+<<set $mc.events.push(new DollTransformation())>>
 <<set $creepydoll.affec += 1>>
 <</widget>>
 
 :: Cloning Self for Double Trouble [widget nobr]
 <<widget "CloneSelf">>
-<<if $curse111.variation2=='inverted'>>
-	<<set $companionTwin = {
-		name: $curse111.variation1,
-		carry: $carryWeight,
-		affec: 3,
-		swap: false,
-		image: "Curses/doubletrouble.png",
-		oimageIcon: "Player Icons/playerF.png",
-		imageIcon: "Player Icons/playerF.png",
-		curses: $playerCurses,
-		mindSex: '',
-		osex: "",
-		obreasts: $mc.openis,
-		breastsLabel: "flat",
-		openis: $mc.obreasts,
-		ogender: 6 - $mc.ogender,
-		genderVoice: 0,
-		fit: $mc.fit,
-		oheight: $mc.oheight,
-		age: $mc.age,
-		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
-		style: "border: 2px solid rgb(1,0,0);",
-		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: $fear,
-		sex: "",
-		ohair: $mc.ohair,
-		hair: $mc.ohair,
-		penis: $mc.openis,
-		penisCor: $mc.openis,
-		doublePenis: false,
-		vagina: 0,
-		gender: 6 - $mc.ogender,
-		switch: false,
-		breasts: $mc.obreasts,
-		breastsCor: $mc.obreasts,
-		lactation: 0,
-		pregnantT: $mc.pregnantT,
-		due: setup.dueDate($mc),
-		ears: "normal human",
-		modheight: 0,
-		bodyHair: 1,
-		skinType: "",
-		oskinColor: $mc.oskinColor,
-		skinColor: $mc.oskinColor,
-		oeyeColor: $mc.oeyeColor,
-		eyeColor: $mc.oeyeColor,
-		eyeCount: 2,
-		armCount: 2,
-		legCount: 2,
-		tail: [],
-		womb: 0,
-		womb1: "",
-		womb2: "",
-		desc: "",
-		blood: "red",
-		appAge: $mc.age,
-		libido: 2,
-		subdom: 0
-		}>>
-	
 
-	<<if $mc.osex == "male">>
-		<<set $companionTwin.osex = "female">>
-		<<set $companionTwin.ogender = 6>>
-		<<set $companionTwin.oheight = $mc.oheight * (1 - 0.01525 * 5)>>
-	<<else>>
-		<<set $companionTwin.osex = "male">>
-		<<set $companionTwin.ogender = 1>>
-		<<set $companionTwin.oheight = $mc.oheight * (1 + 0.01525 * 5)>>
-	<</if>>
-	<<if $mc.sex=="male">>
-		<<set $companionTwin.sex = "female">>
-	<<elseif $mc.sex=="female">>
-		<<set $companionTwin.sex = "male">>
-	<<else>>
-		<<set $companionTwin.sex = "doll-like">>
-	<</if>>
-	<<set $companionTwin.mindSex = $mc.mindSex == 'male' ? 'female' : 'male' >>
-
-	<<if $mc.appGender<=5 >>
-		<<set $companionTwin.imageIcon="Player Icons/playerF.png">>
-	<<else>>
-		<<set $companionTwin.imageIcon="Player Icons/playerM.png">>
-	<</if>>
-<<else>>
-	<<set $companionTwin = {
-		name: $curse111.variation1,
-		carry: $carryWeight,
-		affec: 3,
-		swap: false,
-		image: "Curses/doubletrouble.png",
-		imageIcon: "",
-		curses: $playerCurses,
-		mindSex: $mc.mindSex,
-		osex: $mc.osex,
-		obreasts: $mc.obreasts,
-		breastsLabel: "flat",
-		openis: $mc.openis,
-		ogender: $mc.ogender,
-		genderVoice: 0,
-		fit: $mc.fit,
-		oheight: $mc.oheight,
-		age: $mc.age,
-		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
-		style: "border: 2px solid rgb(1,0,0);",
-		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: $fear,
-		sex: "",
-		ohair: $mc.ohair,
-		hair: $mc.ohair,
-		penis: $mc.openis,
-		penisCor: $mc.openis,
-		doublePenis: false,
-		vagina: 0,
-		gender: $mc.ogender,
-		switch: false,
-		breasts: $mc.obreasts,
-		breastsCor: $mc.obreasts,
-		lactation: 0,
-		pregnantT: $mc.pregnantT,
-		due: setup.dueDate($mc),
-		ears: "normal human",
-		modheight: 0,
-		bodyHair: 1,
-		skinType: "",
-		oskinColor: $mc.oskinColor,
-		skinColor: $mc.oskinColor,
-		oeyeColor: $mc.oeyeColor,
-		eyeColor: $mc.oeyeColor,
-		eyeCount: 2,
-		armCount: 2,
-		legCount: 2,
-		tail: [],
-		womb: 0,
-		womb1: "",
-		womb2: "",
-		desc: "",
-		blood: "red",
-		appAge: $mc.age,
-		libido: 2,
-		subdom: 0
-		}>>
-
-	<<if $mc.osex=="male">>
-		<<set $companionTwin.osex = "male">>
-		<<set $companionTwin.ogender = 1>>
-	<<else>>
-		<<set $companionTwin.osex = "female">>
-		<<set $companionTwin.ogender = 6>>
-	<</if>>
-
-	<<if $mc.appGender<=5 >>
-		<<set $companionTwin.imageIcon="Player Icons/playerM.png">>
-	<<else>>
-		<<set $companionTwin.imageIcon="Player Icons/playerF.png">>
-	<</if>>
+<<set _twinCurse = $mc.getCurse(DoubleTrouble)>>
+<<set _inverted = _twinCurse.twinType>>
+<<set _desiredBreasts = $mc.desiredBreasts>>
+<<if _inverted && $mc.desiredBreasts > 0>> <<set _desiredBreasts = 0>> <</if>>
+/* body swaps can change these, so this isn't perfect, but it's the best we can do */
+<<if _inverted && $mc.desiredBreasts === 0>> <<set _desiredBreasts = $mc.openis || $mc.obreasts>> <</if>>
+<<set _oheight = $mc.oheight>>
+<<if _inverted && $mc.osex === 'male'>> <<set _oheight = $mc.oheight * (1 - 0.01525 * 5)>> <</if>>
+<<if _inverted && $mc.osex === 'female'>> <<set _oheight = $mc.oheight * (1 + 0.01525 * 5)>> <</if>>
+<<set $companionTwin = new Character({
+                  name: _twinCurse.twinName,
+                  carry: $carryWeight,
+                  affec: 3,
+                  swap: false,
+                  image: "curses/doubletrouble.png",
+                  imageIcon: 'Player Icons/playerF.png' /* The twin and MC's image icon is changed on demand */,
+                  mindSex: $mc.mindSex === 'male' ^ _inverted ? 'male' : 'female',
+                  osex: $mc.osex,
+                  desiredBreasts: _desiredBreasts,
+                  openis: $mc.openis > 0 ^ _inverted ? $mc.openis : $mc.obreasts,
+                  ogender: _inverted ? 6 - $mc.gender : $mc.gender,
+                  fit: $mc.fit,
+                  oheight: _inverted ? $mc.oheight,
+                  comfortableHeight: $mc.comfortableHeight,
+                  age: $mc.age,
+                  appDesc: _inverted ? "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always..." : 'You basically feel the same as always.',
+                  fear: $mc.fear,
+                  ohair: $mc.ohair,
+                  oskinColor: $mc.oskinColor,
+                  oskinType: $mc.oskinType,
+                  oears: $mc.oears,
+                  oeyeColor: $mc.oeyeColor,
+                  oblood: $mc.oblood,
+                  pregnantT: $mc.pregnantT,
+                  due: $mc.due,
+                  lastBirth: $mc.lastBirth,
+                  switched: false,
+                  events: $mc.events.map(e => e.clone())
+              })>>
+<<if $companionTwin.womb === 0>>
+    <<set $companionTwin.setNotPregnant()>>
 <</if>>
-
-<<set $companionTwin.genderVoice = 7 - $mc.gender>>
-
-<<set $companionTwin.name = $curse111.variation1>>
 <<set $hiredCompanions.push($companionTwin)>>
 <<CarryAdjust>>
 <</widget>>
 
 :: Creating a Golem with Lambent Specter [widget nobr]
 <<widget "createGolem">>
-<<set _temp = $companionGolem.type>>
-<<if $companionGolem.osex=="male">>
-	<<set $companionGolem = {
-		type: _temp,
-		name: "Golem",
-		carry: 30,
-		affec: 0,
-		swap: false,
-		image: "",
-		imageIcon: "",
-		curses: [],
-		mindSex: 'male',
-		osex: "male",
-		obreasts: 0,
-		breastsLabel: "flat",
-		openis: 6,
-		ogender: 1,
-		genderVoice: 0,
-		fit: 10,
-		oheight: 170,
-		age: 25,
-		appDesc: "",
-		style: "border: 2px solid rgb(1,0,0);",
-		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: "",
+<<set _sex = args[0]>>
+<<set _type = _args[1]>>
+<<set _golem = {}>>
 
-		sex: "male",
-		ohair: "",
-		hair: "",
-		penis: 6,
-		penisCor: 6,
-		doublePenis: false,
-		vagina: 0,
-		gender: 1,
-		switch: false,
-		breasts: 0,
-		breastsCor: 0,
-		lactation: 0,
-		pregnantT: setup.never,
-		due: setup.never,
-		ears: "",
-		modheight: 0,
-		bodyHair: 1,
-		skinType: "",
-		oskinColor: "",
-		skinColor: "",
-		oeyeColor: "",
-		eyeColor: "",
-		eyeCount: 2,
-		armCount: 2,
-		legCount: 2,
-		tail: [],
-		womb: 0,
-		womb1: "",
-		womb2: "",
-		desc: "",
-		blood: "",
-		appAge: 25,
-		libido: 2,
-		subdom: 10
-		}>>
-	
-
-	<<if _temp=="clay">>
-		<<set $companionGolem.image= "Icons/maleClayGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a sturdy clay golem. ">>
-		<<set $companionGolem.ohair= "textured, earthy brown">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "clay-crafted human-like ears">>
-		<<set $companionGolem.skinType= "clay and soil">>
-		<<set $companionGolem.skinColor= "rich, earthy brown">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "deep brown">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "thick, muddy sludge">>
-	<<elseif _temp=="snow">>
-		<<set $companionGolem.image= "Icons/maleSnowGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a frosty snow golem. ">>
-		<<set $companionGolem.ohair= "glistening, ice-blue">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "carved ice depressions">>
-		<<set $companionGolem.skinType= "packed snow">>
-		<<set $companionGolem.skinColor= "pristine white">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "glacial blue">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "chilled, clear water">>
-	<<elseif _temp=="doll">>
-		<<set $companionGolem.image= "Icons/maleDollGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a life-like doll golem">>
-		<<set $companionGolem.ohair= $mc.ohair>>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "perfect human replica">>
-		<<set $companionGolem.skinType= "smooth, synthetic">>
-		<<set $companionGolem.skinColor= $mc.skinColor>>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "glassy, vacant white">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "bright red">>
-	<<elseif _temp=="water">>
-		<<set $companionGolem.image= "Icons/maleWaterGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a water golem">>
-		<<set $companionGolem.ohair= "dark blue">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "fluid human-like ears">>
-		<<set $companionGolem.skinType= "water">>
-		<<set $companionGolem.skinColor= "translucent blue">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "grey">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "water">>
-	<<elseif _temp=="skeleton">>
-		<<set $companionGolem.image= "Icons/maleSkeletonGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a skeletal golem">>
-		<<set $companionGolem.ohair= "white">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "holes">>
-		<<set $companionGolem.skinType= "bone">>
-		<<set $companionGolem.skinColor= "pale white">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "nonexistent">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "nonexistent">>
-	<</if>>
+<<if _type === 'clay'>>
+    <<set _golem = {
+        image: `Icons/${_sex}ClayGolem.png`,
+        imageIcon: `Icons/${_sex}ClayGolem.png`,
+        appDesc: "You are a sturdy clay golem. ",
+        ohair: "textured, earthy brown",
+        oears: "clay-crafted human-like ears",
+        oskinType: "clay and soil",
+        oskinColor: "rich, earthy brown",
+        oeyeColor: "deep brown",
+        oblood: "thick, muddy sludge",
+    }>>
+<<elseif_type === 'snow'>>
+    <<set _golem = {
+        image: `Icons/${_sex}SnowGolem.png`,
+        imageIcon: `Icons/${_sex}SnowGolem.png`,
+        appDesc: "You are a frosty snow golem. ",
+        ohair: "glistening, ice-blue",
+        oears: "carved ice depressions",
+        oskinType: "packed snow",
+        oskinColor: "pristine white",
+        oeyeColor: "glacial blue",
+        oblood: "chilled, clear water",
+    }>>
+<<elseif_type === 'doll'>>
+    <<set _golem = {
+        image: `Icons/${_sex}DollGolem.png`,
+        imageIcon: `Icons/${_sex}DollGolem.png`,
+        appDesc: "You are a life-like doll golem. ",
+        ohair: $mc.ohair,
+        oears: "perfect human replica",
+        oskinType: "smooth, synthetic",
+        oskinColor: $mc.skinColor,
+        oeyeColor: "glassy, vacant white",
+        oblood: "bright red",
+    }>>
+<<elseif_type === 'water'>>
+    <<set _golem = {
+        image: `Icons/${_sex}WaterGolem.png`,
+        imageIcon: `Icons/${_sex}WaterGolem.png`,
+        appDesc: "You are a water golem. ",
+        ohair: 'dark blue',
+        oears: "fluid human-like ears",
+        oskinType: "water",
+        oskinColor: 'translucent blue',
+        oeyeColor: "grey",
+        oblood: "water",
+    }>>
+<<elseif_type === 'skeleton'>>
+    <<set _golem = {
+        image: `Icons/${_sex}SkeletonGolem.png`,
+        imageIcon: `Icons/${_sex}SkeletonGolem.png`,
+        appDesc: "You are a skeletal golem. ",
+        ohair: 'white',
+        oears: "holes",
+        oskinType: "bone",
+        oskinColor: 'pale white',
+        oeyeColor: "nonexistent",
+        oblood: "nonexistent",
+    }>>
 <<else>>
-	<<set $companionGolem = {
-		type: _temp,
-		name: "Golem",
-		carry: 30,
-		affec: 0,
-		swap: false,
-		image: "",
-		imageIcon: "",
-		curses: [],
-		mindSex: 'female',
-		osex: "female",
-		obreasts: 3,
-		breastsLabel: "B",
-		openis: 0,
-		ogender: 6,
-		fit: 10,
-		genderVoice: 5,
-		oheight: 163,
-		age: 25,
-		appDesc: "",
-		style: "border: 2px solid rgb(1,0,0);",
-		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: "",
-
-		sex: "female",
-		ohair: "",
-		hair: "",
-		penis: 0,
-		penisCor: 0,
-		doublePenis: false,
-		vagina: 1,
-		gender: 6,
-		switch: false,
-		breasts: 3,
-		breastsCor: 3,
-		lactation: 0,
-		pregnantT: setup.never,
-		due: setup.never,
-		ears: "",
-		modheight: 0,
-		bodyHair: 0,
-		skinType: "",
-		oskinColor: "",
-		skinColor: "",
-		oeyeColor: "",
-		eyeColor: "",
-		eyeCount: 2,
-		armCount: 2,
-		legCount: 2,
-		tail: [],
-		womb: 1,
-		womb1: "",
-		womb2: "",
-		desc: "",
-		blood: "",
-		appAge: 25,
-		libido: 2,
-		subdom: 10
-		}>>
-	
-
-	<<if _temp=="clay">>
-		<<set $companionGolem.image= "Icons/femaleClayGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a sturdy clay golem. ">>
-		<<set $companionGolem.ohair= "textured, earthy brown">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "clay-crafted human-like ears">>
-		<<set $companionGolem.skinType= "clay and soil">>
-		<<set $companionGolem.skinColor= "rich, earthy brown">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "deep brown">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "thick, muddy sludge">>
-	<<elseif _temp=="snow">>
-		<<set $companionGolem.image= "Icons/femaleSnowGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a frosty snow golem. ">>
-		<<set $companionGolem.ohair= "glistening, ice-blue">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "carved ice depressions">>
-		<<set $companionGolem.skinType= "packed snow">>
-		<<set $companionGolem.skinColor= "pristine white">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "glacial blue">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "chilled, clear water">>
-	<<elseif _temp=="doll">>
-		<<set $companionGolem.image= "Icons/femaleDollGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a life-like doll golem">>
-		<<set $companionGolem.ohair= $mc.ohair>>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "perfect human replica">>
-		<<set $companionGolem.skinType= "smooth, synthetic">>
-		<<set $companionGolem.skinColor= $mc.skinColor>>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "glassy, vacant white">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "bright red">>
-	<<elseif _temp=="water">>
-		<<set $companionGolem.image= "Icons/femaleWaterGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a water golem">>
-		<<set $companionGolem.ohair= "dark blue">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "fluid human-like ears">>
-		<<set $companionGolem.skinType= "water">>
-		<<set $companionGolem.skinColor= "translucent blue">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "grey">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "water">>
-	<<elseif _temp=="skeleton">>
-		<<set $companionGolem.image= "Icons/femaleSkeletonGolem.png">>
-		<<set $companionGolem.imageIcon= $companionGolem.image>>
-		<<set $companionGolem.appDesc= "You are a skeletal golem">>
-		<<set $companionGolem.ohair= "white">>
-		<<set $companionGolem.hair= $companionGolem.ohair>>
-		<<set $companionGolem.ears= "holes">>
-		<<set $companionGolem.skinType= "bone">>
-		<<set $companionGolem.skinColor= "pale white">>
-		<<set $companionGolem.oskinColor= $companionGolem.skinColor>>
-		<<set $companionGolem.eyeColor= "nonexistent">>
-		<<set $companionGolem.oeyeColor= $companionGolem.eyeColor>>
-		<<set $companionGolem.blood= "nonexistent">>
-	<</if>>
-
+    <<set console.error(`created golem of invalid type ${_type}`)>>
+    <<set _golem = {
+        image: `Icons/${_sex}ClayGolem.png`,
+        imageIcon: `Icons/${_sex}ClayGolem.png`,
+        appDesc: "You are a sturdy clay golem. ",
+        ohair: "textured, earthy brown",
+        oears: "clay-crafted human-like ears",
+        oskinType: "clay and soil",
+        oskinColor: "rich, earthy brown",
+        oeyeColor: "deep brown",
+        oblood: "thick, muddy sludge",
+    }>>
+    <<set _type = 'clay'>>
 <</if>>
 
-<<set $AgeLogGolem = []>>
-<<set $GenderLogGolem = []>>
-<<set $HeightLogGolem = []>>
-<<set $LibidoLogGolem = []>>
-<<set $HandicapLogGolem = []>>
+<<set Object.assign(_golem, {
+    type: _type,
+    name: "Golem",
+    carry: 30,
+    mindSex: _sex,
+    obreasts: _sex === 'male' ? 0 : 3,
+    openis: _sex === 'male' ? 6 : 0,
+    ogender: _sex === 'male' ? 1 : 6,
+    fit: 10,
+    oheight: _sex === 'male' ? 170 : 163,
+    age: 25,
+    fear: 'unknown',
+})>>
 
+<<set $companionGolem = new Character(_golem)>>
 <<set $hiredCompanions.push($companionGolem)>>
 <</widget>>
 
@@ -1821,7 +503,7 @@
 	<<if $time-$menCycleT-$menCycleVar>27 >>
 		<<set $menCycleT=$time>>
 		<<set $menCycleVar = random(-4,4)>>
-		<<if $playerCurses.some(e => e.name === "Eggxellent")>>
+		<<if $mc.hasCurse("Eggxellent")>>
 
 			<<set _eggs = ($bewitchBabies+1)*($mc.womb)>>
 
@@ -1856,7 +538,7 @@
 			<<if $menFirstCycle == true>>
 				<<if $EventHorizonWear== false>>
 					<<set $menFirstCycle = false>>
-					<<if $mc.womb1 == "throat" || $mc.womb2 == "throat">>
+					<<if $mc.extraWombs.includes('throat')>>
 						@@.alert1; When you start coughing up $mc.blood blood, panic sets in as you fear the worst – some Abyssal lung disease. But as you examine the substance, you realize it's not normal blood, and your lungs feel fine. The truth dawns on you suddenly: you're experiencing your first period. With a uterus now residing in your throat, you feel completely overwhelmed and on the verge of tears. <br><br>
 					<<else>>
 						@@.alert1; The sight of $mc.blood bloodstains in your underwear confirms your suspicion – you're having your first period. With a new uterus, you feel overwhelmed and on the verge of tears.<br><br>
@@ -1889,10 +571,10 @@
 		<<set $menstruating == false>>
 		<<set $pregChance = 0>>	
 	<</if>>
-	<<if $playerCurses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.hasCurse("Absolute Birth Control")>>
 		<<set $pregChance = 0>>	
 	<</if>>
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if $mc.hasCurse("Absolute Pregnancy")>>
 		<<set $pregChance = 10>>	
 	<</if>>	
 <</if>>
@@ -1931,7 +613,7 @@
 	<</if>>
 <</if>>
 
-<<if $playerCurses.some(e => e.name === "Heat/rut")>>
+<<if $mc.hasCurse("Heat/rut")>>
 	<<if $menCycleFlag == true>>
 		<<if $time-$heatCycleT-$menCycleVar>27 >>
 			<<set $heatCycleT=$time>>
@@ -2031,7 +713,7 @@
 <<set _temp = random(0,100)>>
 
 <<if _temp <= 100 * $pregChance && !setup.isPregnant($mc) && $menCycleFlag>>
-	<<if $playerCurses.some(e => e.name === "Eggxellent")>>
+	<<if $mc.hasCurse("Eggxellent")>>
 		<<set $EggsFertilized = true>>
 	<<else>>
 		<<set setup.setConsideredPregnant($mc)>>
@@ -2045,7 +727,7 @@
 <<widget "MonsterPregCheckParty">>
 <<for _i=0; _i<$hiredCompanions.length; _i++ >>
 	<<set _temp = random(0,100)>>
-	<<if $hiredCompanions[_i].curses.some(e => e.name === "Omnitool") && $hiredCompanions[_i].womb > 0 && (_temp < 20 || $hiredCompanions[_i].curses.some(e => e.name === "Absolute Pregnancy")) && !$hiredCompanions[_i].curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $hiredCompanions[_i].hasCurse("Omnitool") && $hiredCompanions[_i].womb > 0 && (_temp < 20 || $hiredCompanions[_i].hasCurse("Absolute Pregnancy")) && !$hiredCompanions[_i].hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant($hiredCompanions[_i])>>
 	<</if>>
 <</for>>
@@ -2054,15 +736,15 @@
 :: Carry adjustment widget [widget nobr]
 <<widget "CarryAdjust">>
 <<Equipment>>
-<<Handicap>>
+<<if $mc.hasCurse(Seafolk)>><<set $scuba = 1>><</if>>
 <<UpdateAttributes>>
 <<Update_Misc_Stat>>
 
-<<if $playerCurses.some(e => e.name === "Weakling")>>
+<<if $mc.hasCurse("Weakling")>>
 	<<set $ocarryWeight = 7.5>>
 <</if>>
 
-<<set _fitCor = $mc.curses.some(e => e.name === "Weakling") ? 0 : $mc.fit>>
+<<set _fitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>
 <<if $mc.osex == 'male'>>
 	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 1))>>
 <<else>>
@@ -2115,116 +797,11 @@
 	<<set $totalCarry += $companionGolem.carry>>
 <</if>>
 
-<<if $playerCurses.some(e => e.name === "Double Trouble")>>
+<<if $mc.hasCurse("Double Trouble")>>
 	/*<<set $totalCarry += $companionTwin.carry>>*/
 	<<set $totalCarry +=$carryWeight>>
 <</if>>
 
-<</widget>>
-
-:: Miscellaneous appearance adjustment widget [widget nobr]
-<<widget "AppearanceCorrect">>
-<<for _i=0; _i<=$hiredCompanions.length; _i++>>
-	<<if _i==$hiredCompanions.length>>
-		<<set _handle = $mc>>
-	<<else>>
-		<<if $hiredCompanions[_i].name == $companionTwin.name >>
-			<<set _name = "Twin">>
-		<<elseif $hiredCompanions[_i].name == $companionBandit.name>>
-			<<set _name = "Bandit">>
-		<<else>>
-			<<set _name = $hiredCompanions[_i].name>>
-		<</if>>
-		<<print "<<set _handle  = $companion"+ _name +" >>">>
-	<</if>>
-	<<set _handle.hair = _handle.ohair>> 
-	<<if _name != "Golem">>
-		<<set _handle.ears= "normal human">>
-	<</if>>
-
-	<<set _handle.bodyHair= 1>>
-	<<set _handle.skinType= "">>
-	<<set _handle.skinColor= _handle.oskinColor>>
-	<<set _handle.eyeColor= _handle.oeyeColor>>
-	<<set _handle.tail= []>>
-
-	<<set _handle.desc= "">>
-	<<set _handle.blood="red">>
-
-	<<for _appearEvent range _handle.curses>>
-		<<if _appearEvent.name == "Hair Removal">>
-			<<set _handle.skinType = "hairless, smooth">>
-			<<set _handle.bodyhair = 0>>
-		<</if>>
-
-		<<if _appearEvent.name == "Knife-ear">>
-			<<set _handle.ears = "pointed, elfish">>
-		<</if>>
-
-		<<if _appearEvent.name == "Perma-dye">>
-			<<set _handle.hair = $curse7.variation>>
-		<</if>>
-
-		<<if _appearEvent.name == "Fluffy Ears">>
-			<<set _handle.ears = $curse17.variation>>
-		<</if>>
-
-		<<if _appearEvent.name == "Fluffy Tail">>
-			<<set _handle.tail.push($curse18.variation)>>
-		<</if>>
-
-		<<if _appearEvent.name == "Maximum Fluff">>
-			<<set _handle.skinType = $curse19.variation>>
-			<<set _handle.bodyhair = 1>>
-		<</if>>
-
-		<<if _appearEvent.name == "Gooey">>
-			<<set _handle.skinType = "sticky, slimy">>
-			<<set _handle.bodyhair = 0>>
-		<</if>>
-
-		<<if _appearEvent.name == "Rainbow Swirl">>
-			<<set _handle.skinColor= $curse38.variation>>
-			<<set _handle.eyeColor= $curse38.variation2>>
-		<</if>>
-
-		<<if _appearEvent.name == "Tipping the Scales">>
-			<<set _handle.skinType = "reptilian scaled">>
-			<<set _handle.bodyhair = 0>>
-			<<set _handle.skinColor = $curse54.variation>>
-		<</if>>	
-		
-		<<if _appearEvent.name == "Reptail">>
-			<<set _handle.tail.push("large, spiked, scaled reptile")>>
-		<</if>>
-		
-		<<if _appearEvent.name == "Cellulose">>
-			<<set _handle.skinType = "smooth, slightly rigid, plant-like">>
-			<<set _handle.bodyhair = 0>>
-		<</if>>
-
-		<<if _appearEvent.name == "Chlorophyll">>
-			<<set _handle.skinType = "Green">>
-		<</if>>
-
-		<<if _appearEvent.name == "Carapacian">>
-			<<set _handle.skinType = "hard, shiny, chitin-exoskeleton">>
-			<<set _handle.skinColor = $curse69.variation >>
-			<<set _handle.bodyhair = 0>>
-		<</if>>
-
-		<<if _appearEvent.name == "Hemospectrum">>
-			<<set _handle.blood = $curse70.variation>>
-			<<set _handle.desc += "Your blood is now $mc.blood colored, not a typical color for humans. ">>
-		<</if>>	
-
-		<<if _appearEvent.name == "Drawing Spades">>
-			<<set _handle.tail.push("cute, spade-tipped demon")>>
-		<</if>>	
-
-	<</for>>
-
-<</for>>
 <</widget>>
 
 :: Flask Selecting first in order[widget nobr]
@@ -2312,11 +889,11 @@
 <<widget "randomSexSelect">>
 <<set _elligbleCompanions=[]>>
 <<set _tempflag=false>>
-<<if $playerCurses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control")  >>
+<<if $mc.curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control")  >>
 	<<set _tempflag=true>>
 <</if>>
 
-<<if settings.MaleSceneToggleFilter || $playerCurses.some(e => e.name === "Equal Opportunity")>>
+<<if settings.MaleSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "male")>>
 	<<for _i=0; _i< _temp.length; _i++>>
 		<<if _temp.name != "Golem" && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
@@ -2324,7 +901,7 @@
 		<</if>>
 	<</for>>
 <</if>>
-<<if settings.FemaleSceneToggleFilter || $playerCurses.some(e => e.name === "Equal Opportunity")>>
+<<if settings.FemaleSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "female")>>
 	<<for _i=0; _i< _temp.length; _i++>>
 		<<if _temp.name != "Golem" && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
@@ -2332,7 +909,7 @@
 		<</if>>	
 	<</for>>
 <</if>>
-<<if settings.OtherSceneToggleFilter || $playerCurses.some(e => e.name === "Equal Opportunity")>>
+<<if settings.OtherSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "futa" || e.sex === "doll-like" )>>
 	<<for _i=0; _i< _temp.length; _i++>>
 		<<if _temp.name != "Golem" && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
@@ -2353,7 +930,7 @@
 	/* 
 	<<for _i=0; _i<1; _i++>>
 		<<set _randCompanion = random(0,$hiredCompanions.length-1)>>
-		<<if ($hiredCompanions[_randCompanion].curses.some(e => e.name === "Absolute Pregnancy") && $playerCurses.some(e => e.name === "Absolute Birth Control")) || ($hiredCompanions[_randCompanion].curses.some(e => e.name === "Absolute Birth Control") && $playerCurses.some(e => e.name === "Absolute Pregnancy"))>>
+		<<if ($hiredCompanions[_randCompanion].hasCurse("Absolute Pregnancy") && $mc.hasCurse("Absolute Birth Control")) || ($hiredCompanions[_randCompanion].hasCurse("Absolute Birth Control") && $mc.hasCurse("Absolute Pregnancy"))>>
 			<<set _i -=1>>
 		<</if>>
 	<</for>>
