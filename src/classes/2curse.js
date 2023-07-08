@@ -187,12 +187,12 @@ class ShrunkenAssets extends Curse {
         return ['Asset Robustness A', 'Asset Robustness B', 'Asset Robustness C', 'Asset Robustness D', 'Asset Robustness E', 'Asset Robustness F', 'Asset Robustness G'];
     }
 
-    changeBreasts(prevBreasts) {
-        return Math.max(prevBreasts, 1);
+    changeBreasts(character, prevBreasts) {
+        return Math.min(prevBreasts, 1);
     }
 
-    changePenis(prevPenis) {
-        return Math.max(prevPenis, 1);
+    changePenis(character, prevPenis) {
+        return Math.min(prevPenis, 1);
     }
 }
 setup.allCurses.ShrunkenAssets = new ShrunkenAssets()
