@@ -261,7 +261,7 @@ Curses added and removed on this page will not influence corruption.<br><br>
     <<if _i > 0>>
         Layer _i:<br>
         <<for _cursename range _layer>>
-            <<set _curse = $curses.find(c => c.name === _cursename)>>
+            <<set _curse = setup.findCurseBy(c => c.name === _cursename)>>
             <<capture _cursename, _curse>>
                 <<if $mc.hasCurse(_curse.name)>>
                     <<set _linktext = "Remove " + _cursename>>
@@ -280,17 +280,15 @@ Curses added and removed on this page will not influence corruption.<br><br>
 <</for>>
 <br>
 <<link "Take all curses" "Adjust Curses">>
-    <<for _curse range $curses>>
-        <<if $mc.hasCurse(_curse.name) >>
-            <<set $mc.addCurse(_curse)>>
+    <<for _curse range Object.values(setup.allCurses)>>
+        <<if !$mc.hasCurse(_curse.name) >>
+            <<set $mc.addCurse(_curse.copy())>>
         <</if>>
     <</for>>
 <</link>> (including incompatible ones – use at your own risk)<br>
 <<link "Remove all curses" "Adjust Curses">>
-    <<for _curse range $curses>>
-        <<if $mc.hasCurse(_curse.name) >>
-            <<RemoveCurse _curse>>
-        <</if>>
+    <<for _curse range $mc.curses>>
+        <<RemoveCurse _curse>>
     <</for>>
 <</link>><br>
 [[Return|Adjustments]]

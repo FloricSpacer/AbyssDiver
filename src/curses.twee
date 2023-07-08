@@ -717,24 +717,24 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 <</widget>>
 
 :: Curse Limits [nobr]
-    <<set _curseLimitation = false>>
-    <<if $mc.events.map(e => e.name).includesAny(_curse.incompatibilies)>>
+<<set _curseLimitation = false>>
+<<if $mc.events.map(e => e.name).includesAny(_curse.incompatibilities)>>
+    <<set _curseLimitation = true>>
+<</if>>
+
+<<if _curse.name === "Seafolk">>
+    <<if $mc.curses.some(e => e.name === "Ampu-Q-tie" && e.legs > 0) || $StoredCurse.some(e => e.name === "Ampu-Q-tie" && e.legs > 0)>>
         <<set _curseLimitation = true>>
     <</if>>
+<</if>>
 
-    <<if _curse.name === "Seafolk">>
-        <<if $mc.curses.some(e => e.name === "Ampu-Q-tie" && e.legs > 0) || $StoredCurse.some(e => e.name === "Ampu-Q-tie" && e.legs > 0)>>
-            <<set _curseLimitation=true>>
-        <</if>>
-    <</if>>
-
-    <<set _maxCurses = _curse.maximum>>
+<<set _maxCurses = _curse.maximum>>
 
 
 :: Curse Randomizer [nobr]
 <<set _validNames = []>>
 <<for _name range _tempCurses>>
-    <<set _curse = $curses.find(c => c.name === _name)>>
+    <<set _curse = setup.findCurseBy(c => c.name === _name)>>
     <<include "Curse Limits">>
     <<if !_curseLimitation && (_totalCurses.filter(e => e.name === _name).length + $StoredCurse.filter(e => e.name === _name).length) < _maxCurses>>
         <<set _validNames.push(_name)>>
