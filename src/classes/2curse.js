@@ -85,6 +85,10 @@ class Curse extends CharEvent {
         return `${this.name} Variant`;
     }
 
+    get descriptionPassage() {
+        return `${this.name} Description`
+    }
+
     /**
      * Returns the list of curses this curse is incompatible with. This curse may not be taken if any of the curses in
      * this array have been taken before or are stored in managed misfortune.

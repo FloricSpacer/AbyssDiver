@@ -1152,6 +1152,14 @@ class Character {
     }
 
     /**
+     * Returns the penalty to the threat of this character.
+     * @returns {number} The penalty or bonus to this character's threat.
+     */
+    get HandicapThreat() {
+        return this.threatHandicap;
+    }
+
+    /**
      * Returns the penalty to the movement of this character.
      * @returns {number} The penalty or bonus to this character's movement.
      */
@@ -1249,6 +1257,14 @@ class Character {
             }
         }
         return Math.max(-10, handicap);
+    }
+
+    /**
+     * Returns the penalty to the movement of this character.
+     * @returns {number} The penalty or bonus to this character's movement.
+     */
+    get HandicapMovement() {
+        return this.movementHandicap;
     }
 
     /**
