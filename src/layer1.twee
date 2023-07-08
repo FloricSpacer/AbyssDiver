@@ -390,10 +390,10 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<set _curse2 = setup.curseByNum(_temp2)>>
 <<set $mc.addCurse(_curse1)>>
 <<set $mc.addCurse(_curse2)>>
-<<set _curse1.corr = Math.round(Math.max(_curse1.corr * 1.5), 0))>>
-<<set _curse2.corr = Math.round(Math.max(_curse2.corr * 1.5), 0))>>
-<<set $corruption += curse1.corr>>
-<<set $corruption += curse2.corr>>
+<<set _curse1.corr = Math.round(Math.max(_curse1.corr * 1.5), 0)>>
+<<set _curse2.corr = Math.round(Math.max(_curse2.corr * 1.5), 0)>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
 
 <</nobr>>
 
@@ -406,7 +406,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 <</if>>
 <<if _temp1==9 || _temp2==9>>
 	<<set $dizzyCount +=1>>
-	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent>>
+	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
 	<<if _heightDirEvent === undefined>>
 	    <<set _heightDirEvent = new HeightDirectionEvent()>>
 	    <<set $mc.events.push(_heightDirEvent)>>
@@ -438,8 +438,8 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set _curse = setup.curseByNum($temp2)
-<<set _curse.corr = Math.round(Math.max(_curse.corr * 1.5), 0))>>
+<<set _curse = setup.curseByNum($temp2)>>
+<<set _curse.corr = Math.round(Math.max(_curse.corr * 1.5), 0)>>
 <<set $mc.addCurse(_curse)>>
 <<set $corruption += _curse.corr>>
 <</nobr>>
@@ -448,7 +448,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 <br>
 <<if $temp2==9>>
 	<<set $dizzyCount +=1>>
-	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent>>
+	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
 	<<if _heightDirEvent === undefined>>
         <<set _heightDirEvent = new HeightDirectionEvent()>>
         <<set $mc.events.push(_heightDirEvent)>>
@@ -869,7 +869,7 @@ Please enter your new hair color and press enter:
 <<textbox "_curse.hairColor" "turquoise" "Layer1 Curses">>
 
 :: Take on Freckle Speckle [layer1]
-<<set _curse = new FreckleSpackle()>>\
+<<set _curse = new FreckleSpeckle()>>\
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
