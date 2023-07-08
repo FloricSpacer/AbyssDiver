@@ -515,6 +515,8 @@ class MaximumFluff extends Curse {
 }
 setup.allCurses.MaximumFluff = new MaximumFluff();
 State.variables.curse19 = setup.allCurses;
+window.MaximumFluff = MaximumFluff
+setup.curseArray.push(MaximumFluff)
 
 class HeatRut extends Curse {
     constructor() {
@@ -532,7 +534,7 @@ setup.curseArray.push(HeatRut)
 
 class Lightweight extends Curse {
     constructor() {
-        super('Lightweight', 0, 'Curses/lightweight.png', 'none',
+        super('Lightweight', 15, 'Curses/lightweight.png', 'none',
               'Just a little bit of alcohol turns you into a drunk mess. You\'d better not go out partying without trusted friends nearby. Behavior altering substances in general also have a much stronger effect on you. ');
     }
 }
