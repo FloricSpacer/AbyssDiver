@@ -645,7 +645,7 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 <div class="cards-grid">
 <<for _name range _args[0]>>
     <div>
-    <<set _curse = $curses.find(c => c.name === _name)>>
+    <<set _curse = setup.findCurseBy(c => c.name === _name)>>
     [img[ setup.ImagePath + _curse.pic ]]
     <h2>_name</h2>
     <p class="benefit">
@@ -655,19 +655,19 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
     <p>
     <<if (_totalCurses.filter(e => e.name === _name).length + $StoredCurse.filter(e => e.name === _name).length) >= _maxCurses >>
         @@.unreachable; Already taken 
-    <<elseif _curseLimitation==true>>  
+    <<elseif _curseLimitation === true>>
         @@.unreachable; This Curse can not be taken in combination with the other Curses you have already taken
     <<else>>
         <<print "[[Take on " + _name + "]]">>
         <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>\
         <br><br>
-            <<if $ManagedMisfortuneActive.length>=$ManagedMisfortuneMax >>\
+            <<if $ManagedMisfortuneActive.length >= $ManagedMisfortuneMax >>\
                 @@.unreachable; You can not store a new Curse while you are still affected by all the Curses in Managed Misfortune.       
             <<else>>\
-                <<for _i=0; _i<$ManagedMisfortuneMax && _i<=$StoredCurse.length; _i++ >>
+                <<for _i=0; _i < $ManagedMisfortuneMax && _i <= $StoredCurse.length; _i++ >>
                     <<capture _i>>
                     <<capture _curse>>
-                    <<if _i<$StoredCurse.length>>
+                    <<if _i < $StoredCurse.length>>
                         <<if !$ManagedMisfortuneActive.some(e => e.name === $StoredCurse[_i].name)>>
                             <<print "[[Switch out "+ $StoredCurse[_i].name +" for " + _name +" in the Managed Misfortune's marble|Layer"+ $currentLayer +" Curses][$StoredCurse.deleteAt(_i), $StoredCurse.push(_curse)]]">>
                         <</if>>      
@@ -706,9 +706,9 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
   <<set _base = _args[0].slice(0, -1)>>
   <<set _level = $mc.curses.countWith(e => e.name.startsWith(_base))>>
   <<if _base === "Libido Reinforcement ">>
-    <<set _level = $mc.events.reduce((v, e) => e.changeLibido(v))>>
+    <<set _level = $mc.events.reduce((v, e) => e.changeLibido(v), 2)>>
   <<elseif _base === "Gender Reversal ">>
-    <<set _level = $mc.events.reduce((v, e) => e.changeGender($mc, v))>>
+    <<set _level = $mc.events.reduce((v, e) => e.changeGender($mc, v), $mc.ogender)>>
   <</if>>
   <<if !$mc.hasCurse(_args[0])>>
     <<set _level += 1>>

@@ -6,11 +6,18 @@
  * @property allCurses
  * @property curseArray
  * @property curseByNum
+ * @property findCurseBy
  */
 setup.allCurses = {}
 setup.curseArray = []
 setup.curseByNum = num => {
     return Reflect.construct(setup.curseArray[num], []);
+}
+setup.findCurseBy = predicate => {
+    let curse = Object.values(setup.allCurses).find(predicate);
+    if (curse === undefined) return undefined;
+
+    return Reflect.construct(curse.constructor, []);
 }
 
 
@@ -68,9 +75,16 @@ class Curse extends CharEvent {
      */
     toJSON() {
         return JSON.reviveWrapper(
-            `new ${this.constructor.name}(${this._customisationOptions().map(v => JSON.stringify(v)).join(', ')})._init($ReviveWrapper$)`,
+            `new ${this.constructor.name}(${this._customisationOptions().map(v => JSON.stringify(v)).join(', ')})._init($ReviveData$)`,
             this._internalState()
         );
+    }
+
+    get corr() {
+        return this.corruption;
+    }
+    set corr(value) {
+        this.corruption = value;
     }
 
     get appDesc() {
