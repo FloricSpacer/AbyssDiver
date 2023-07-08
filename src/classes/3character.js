@@ -424,24 +424,7 @@ class Character {
         for (let event of this.events) {
             penis = event.changePenis(this, penis);
         }
-        // if (this.events.find(e => e.name === 'Sex Switcheroo') !== undefined) {
-        //     if (this.osex === 'male') {
-        //         penis = 0;
-        //     } else {
-        //         penis = Math.max(_handle.obreasts * 2, 1);
-        //     }
-        // }
-        // if (this.events.find(e => e.name === 'Futa Fun') && this.osex === 'female') {
-        //     penis = Math.max(_handle.obreasts * 2, 1);
-        // }
-        // if (this.events.find(e => e.name === 'Null') !== undefined) {
-        //     penis = 0;
-        // }
-        let assetChange = 0;
-        for (let event of this.events) {
-            assetChange = event.growAsset(assetChange);
-        }
-        return penis + assetChange * 2;
+        return penis;
     }
 
     /**
@@ -451,6 +434,12 @@ class Character {
     get penisCor() {
         let penis = this.penis;
         if (penis > 0) {
+            let assetChange = 0;
+            for (let event of this.events) {
+                assetChange = event.growAsset(assetChange);
+            }
+            penis += assetChange * 2;
+
             let fullyGrownAge = 18 - (this.gender - 1) / 5; /* 1 year lower for fully feminine characters. */
             if (this.appAge < fullyGrownAge) {
                 penis = Math.max(penis * (1 - (fullyGrownAge - this.appAge) / 12), 1);
@@ -562,7 +551,7 @@ class Character {
     get lactation() {
         let lactation = 0;
         for (let event of this.events) {
-            lactation = event.changeLactation(this, lactation);
+            lactation = event.changeLactation(lactation);
         }
 
         /* Boost lactation in the last stages of pregnancy. */
