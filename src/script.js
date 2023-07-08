@@ -221,6 +221,7 @@ $(document).on(':passagestart', () => {
             if (relicVar) {
                 relics[i] = relicVar;
             } else {
+                // Purity tree plank doesn't have a relic variable
                 console.error(`Couldn't find numbered relic variable for relic with name ${relic.name}!`);
             }
         }
