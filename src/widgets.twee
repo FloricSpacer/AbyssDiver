@@ -266,29 +266,34 @@
 <<widget "CloneSelf">>
 
 <<set _twinCurse = $mc.getCurse(DoubleTrouble)>>
-<<set _inverted = _twinCurse.twinType>>
+<<set _inverted = _twinCurse.twinType === 'inverted'>>
 <<set _desiredBreasts = $mc.desiredBreasts>>
 <<if _inverted && $mc.desiredBreasts > 0>> <<set _desiredBreasts = 0>> <</if>>
 /* body swaps can change these, so this isn't perfect, but it's the best we can do */
-<<if _inverted && $mc.desiredBreasts === 0>> <<set _desiredBreasts = $mc.openis || $mc.obreasts>> <</if>>
+<<if _inverted && $mc.desiredBreasts === 0>> <<set _desiredBreasts = $mc.openis / 2 || $mc.obreasts>> <</if>>
 <<set _oheight = $mc.oheight>>
 <<if _inverted && $mc.osex === 'male'>> <<set _oheight = $mc.oheight * (1 - 0.01525 * 5)>> <</if>>
 <<if _inverted && $mc.osex === 'female'>> <<set _oheight = $mc.oheight * (1 + 0.01525 * 5)>> <</if>>
+<<set _openis = $mc.openis>>
+<<if _inverted && $mc.openis > 0>> <<set _openis = 0>> <</if>>
+/* body swaps can change these, so this isn't perfect, but it's the best we can do */
+<<if _inverted && $mc.openis === 0>> <<set _openis = $mc.obreasts * 2 || $mc.openis>> <</if>>
 <<set $companionTwin = new Character({
                   id: setup.companionIds.twin,
                   name: _twinCurse.twinName,
-                  carry: $carryWeight,
+                  carry: $mc.carry,
                   affec: 3,
                   swap: false,
                   image: "curses/doubletrouble.png",
-                  imageIcon: 'Player Icons/playerF.png' /* The twin and MC's image icon is changed on demand */,
-                  mindSex: $mc.mindSex === 'male' ^ _inverted ? 'male' : 'female',
-                  osex: $mc.osex,
+                  imageIcon: 'Player Icons/playerF.png',
+                  mindSex: ($mc.mindSex === 'male') ^ _inverted ? 'male' : 'female',
+                  osex: ($mc.osex === 'male') ^ _inverted ? 'male' : 'female',
+                  obreasts: _inverted ? $mc.openis / 2 : $mc.obreasts,
                   desiredBreasts: _desiredBreasts,
-                  openis: $mc.openis > 0 ^ _inverted ? $mc.openis : $mc.obreasts,
-                  ogender: _inverted ? 6 - $mc.gender : $mc.gender,
+                  openis: _openis,
+                  ogender: _inverted ? 7 - $mc.gender : $mc.gender,
                   fit: $mc.fit,
-                  oheight: _inverted ? $mc.oheight,
+                  oheight: $mc.oheight,
                   comfortableHeight: $mc.comfortableHeight,
                   age: $mc.age,
                   appDesc: _inverted ? "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always..." : 'You basically feel the same as always.',
@@ -314,7 +319,7 @@
 
 :: Creating a Golem with Lambent Specter [widget nobr]
 <<widget "createGolem">>
-<<set _sex = args[0]>>
+<<set _sex = _args[0]>>
 <<set _type = _args[1]>>
 <<set _golem = {}>>
 
@@ -330,7 +335,7 @@
         oeyeColor: "deep brown",
         oblood: "thick, muddy sludge",
     }>>
-<<elseif_type === 'snow'>>
+<<elseif _type === 'snow'>>
     <<set _golem = {
         image: `Icons/${_sex}SnowGolem.png`,
         imageIcon: `Icons/${_sex}SnowGolem.png`,
@@ -342,7 +347,7 @@
         oeyeColor: "glacial blue",
         oblood: "chilled, clear water",
     }>>
-<<elseif_type === 'doll'>>
+<<elseif _type === 'doll'>>
     <<set _golem = {
         image: `Icons/${_sex}DollGolem.png`,
         imageIcon: `Icons/${_sex}DollGolem.png`,
@@ -354,7 +359,7 @@
         oeyeColor: "glassy, vacant white",
         oblood: "bright red",
     }>>
-<<elseif_type === 'water'>>
+<<elseif _type === 'water'>>
     <<set _golem = {
         image: `Icons/${_sex}WaterGolem.png`,
         imageIcon: `Icons/${_sex}WaterGolem.png`,
@@ -366,7 +371,7 @@
         oeyeColor: "grey",
         oblood: "water",
     }>>
-<<elseif_type === 'skeleton'>>
+<<elseif _type === 'skeleton'>>
     <<set _golem = {
         image: `Icons/${_sex}SkeletonGolem.png`,
         imageIcon: `Icons/${_sex}SkeletonGolem.png`,
@@ -395,6 +400,7 @@
 <</if>>
 
 <<set Object.assign(_golem, {
+    id: setup.companionIds.golem,
     type: _type,
     name: "Golem",
     carry: 30,

@@ -63,7 +63,7 @@ class CharEvent {
                 'console.error("Raw CharEvent deserialised"), new CharEvent()._init($ReviveData$)',
                 this._internalState())
         } else {
-            return JSON.reviveWrapper(`new ${this.constructor.name}().init($ReviveData$)`, this._internalState());
+            return JSON.reviveWrapper(`new ${this.constructor.name}()._init($ReviveData$)`, this._internalState());
         }
     }
 
@@ -234,7 +234,7 @@ class AgeEvent extends CharEvent {
      * @param {number} months The number of months by which this event de-aged the character.
      * @param {number} days The number of days by which this event de-aged the character.
      */
-    constructor(name, {years=0, months=0, days=0}) {
+    constructor(name, {years=0, months=0, days=0}={years:0,months:0,days:0}) {
         super(name, 'age');
         this.byTime = years * AgeEvent.aYear + months * AgeEvent.aMonth + days * AgeEvent.aDay;
     }
@@ -456,7 +456,7 @@ class HeightEvent extends CharEvent {
     }
 
     /**
-     * Initialises this AgeEvent with the given internal state. Intended to be used only on new, empty objects while
+     * Initialises this HeightEvent with the given internal state. Intended to be used only on new, empty objects while
      * cloning.
      * @param {any} superState
      * @param {number} amount

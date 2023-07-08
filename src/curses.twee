@@ -706,9 +706,9 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
   <<set _base = _args[0].slice(0, -1)>>
   <<set _level = $mc.curses.countWith(e => e.name.startsWith(_base))>>
   <<if _base === "Libido Reinforcement ">>
-    <<set _level = $mc.events.reduce((v, e) => e.changeLibido(v), 2)>>
+    <<set _level = $mc.events.reduce((v, e) => e.changeLibido(v), 0)>>
   <<elseif _base === "Gender Reversal ">>
-    <<set _level = $mc.events.reduce((v, e) => e.changeGender($mc, v), $mc.ogender)>>
+    <<set _level = Math.abs($mc.events.reduce((v, e) => e.changeGender($mc, v), 0))>>
   <</if>>
   <<if !$mc.hasCurse(_args[0])>>
     <<set _level += 1>>
