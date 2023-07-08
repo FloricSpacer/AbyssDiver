@@ -212,7 +212,7 @@
 <<set $bullRed=0>>
 <<set $corRed=0>>
 
-<<if $hiredCompanions.some(e => e.name === "Lily")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 	<<set $sellAdd += 10>>
 	<<if $LilyConvo2>>
 		<<set $sellAdd += 5>>
@@ -221,25 +221,25 @@
 		<<set $sellAdd += 2>>
 	<</if>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	<<set $timeRed += 2>>
 	<<if $grimoireKhemia == 1>>
 		<<set $timeRed += 2>>
 	<</if>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<set $statRed += 1>>
 	<<if $grimoireCherry == 1>>
 		<<set $statRed += 1>>
 	<</if>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 	<<set $bullRed += 2>>
 	<<if $grimoireCloud == 1>>
 		<<set $bullRed += 2>>
 	<</if>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 	<<set $corRed += 5>>
 	<<if $grimoireSaeko == 1>>
 		<<set $corRed += 5>>
@@ -250,7 +250,7 @@
 	<<set $statRed +=1>>
 <</if>>
 <<if $LightningWear>>
-	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 		<<set $bullRed +=1>>
 	<<else>>
 		<<set $bullRed +=2>>
@@ -277,6 +277,7 @@
 <<if _inverted && $mc.osex === 'male'>> <<set _oheight = $mc.oheight * (1 - 0.01525 * 5)>> <</if>>
 <<if _inverted && $mc.osex === 'female'>> <<set _oheight = $mc.oheight * (1 + 0.01525 * 5)>> <</if>>
 <<set $companionTwin = new Character({
+                  id: setup.companionIds.twin,
                   name: _twinCurse.twinName,
                   carry: $carryWeight,
                   affec: 3,
@@ -630,7 +631,7 @@
 	<<set _rejoinD = $companionsDepartT>>
 	<<if $currentLayer< $companionsDepartL >>
 		<<for _i = $currentLayer; _i < $companionsDepartL; _i++>>
-			<<if $DesertedCompanions.some(e => e.name === "Khemia")>>
+			<<if $DesertedCompanions.some(e => e.id === setup.companionIds.khemia)>>
 				<<set _temp = $UpTravelDays[_i]-2>>
 				<<set _rejoinD +=  Math.max(0,_temp)>>
 			<<else>>
@@ -648,7 +649,7 @@
 		<</if>>
 		<<set _temp=$DesertedCompanions.length-1>>
 		<<for _i = _temp; _i >-1; _i-->>
-			/*<<if $DesertedCompanions[_i].name=="Khemia">>
+			/*<<if $DesertedCompanions[_i].id === setup.companionIds.khemia>>
 				<<set $timeRed+=2>>
 			<</if>>*/
 			<<set $hiredCompanions.push($DesertedCompanions[_i])>>
@@ -658,28 +659,28 @@
 
 	<<if $companionsDepartT<$time-7>>
 		<<for _i = 0; _i < $DesertedCompanions.length; _i++>>
-			<<if $DesertedCompanions[_i].name == 'Maru'>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.maru>>
 				<<set $companionMaru.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == 'Lily'>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.lily>>
 				<<set $companionLily.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == 'Khemia'>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.khemia>>
 				<<set $companionKhemia.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == 'Cherry'>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.cherry>>
 				<<set $companionCherry.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == 'Cloud'>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.cloud>>
 				<<set $companionCloud.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == 'Saeko'>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.saeko>>
 				<<set $companionSaeko.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == $companionBandit.name>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.bandit>>
 				<<set $companionSaeko.affec -= 1>>
 			<</if>>
-			<<if $DesertedCompanions[_i].name == $companionTwin.name>>
+			<<if $DesertedCompanions[_i].id === setup.companionIds.twin>>
 				<<set $companionTwin.affec -= 1>>
 			<</if>>
 		<</for>>
@@ -766,34 +767,34 @@
 
 <<set $totalCarry = $carryWeight>>
 
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 	<<set $totalCarry += $companionMaru.carry>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Lily")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 	<<set $totalCarry += $companionLily.carry>>
 	<<if $LilyConvo1>>
 		<<set $totalCarry += 5>>
 	<</if>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	<<set $totalCarry += $companionKhemia.carry>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<set $totalCarry += $companionCherry.carry>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 	<<set $totalCarry += $companionCloud.carry>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 	<<set $totalCarry += $companionSaeko.carry>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Golem")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 	<<set $totalCarry += $companionGolem.carry>>
 <</if>>
 
@@ -896,7 +897,7 @@
 <<if settings.MaleSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "male")>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<if _temp.name != "Golem" && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+		<<if _temp.name !== setup.companionIds.golem && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
 			<<set _elligbleCompanions.push(_temp[_i])>>
 		<</if>>
 	<</for>>
@@ -904,7 +905,7 @@
 <<if settings.FemaleSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "female")>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<if _temp.name != "Golem" && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+		<<if _temp.name !== setup.companionIds.golem && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
 			<<set _elligbleCompanions.push(_temp[_i])>>
 		<</if>>	
 	<</for>>
@@ -912,16 +913,16 @@
 <<if settings.OtherSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "futa" || e.sex === "doll-like" )>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<if _temp.name != "Golem" && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+		<<if _temp.id !== setup.companionIds.golem && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
 			<<set _elligbleCompanions.push(_temp[_i])>>
 		<</if>>
 	<</for>>
 <</if>>
 <<if _elligbleCompanions.length> 0>>
 	<<set _temp = random(0, _elligbleCompanions.length-1)>>
-	<<if _elligbleCompanions[_temp].name==$companionTwin.name>>
+	<<if _elligbleCompanions[_temp].id === setup.companionIds.twin>>
 		<<set _handle = $companionTwin>>
-	<<elseif _elligbleCompanions[_temp].name == $companionBandit.name>>
+	<<elseif _elligbleCompanions[_temp].id === setup.companionIds.bandit>>
 			<<set _name = "Bandit">>
 	<<else>>
 		<<print "<<set _handle = $companion" + _elligbleCompanions[_temp].name + " >>">>
@@ -1116,40 +1117,19 @@
 <</if>>
 
 <<if !$ownedRelics.some(e => e.name === "Lambent Specter")>>
-	<<set _i = $hiredCompanions.findIndex(e => e.name === "Golem")>>
+	<<set _i = $hiredCompanions.findIndex(e => e.id === setup.companionIds.golem)>>
 	<<for _i !== -1>>
 		<<set $hiredCompanions.deleteAt(_i)>>
-		<<set _i = $hiredCompanions.findIndex(e => e.name === "Golem")>>
+		<<set _i = $hiredCompanions.findIndex(e => e.id === setup.companionIds.golem)>>
 	<</for>>
 <</if>>
 
 <<if $abyssKnowCheatoff>>
 	<<set $abyssKnow = 0>>
-<<elseif $items[5].count > 0 || setup.haveSmartphone || $hiredCompanions.some(c => c.name === "Saeko")>>
+<<elseif $items[5].count > 0 || setup.haveSmartphone || $hiredCompanions.some(c => c.id === setup.companionIds.saeko)>>
 	<<set $abyssKnow = 1>>
 <<else>>
 	<<set $abyssKnow = 0>>
 <</if>>
 
-<</widget>>
-
-:: Affection widget [widget nobr]
-<<widget "AffectionChange">>
-<<if _args[0] == $companionTwin.name>>
-	<<set $companionTwin.affec += _args[1] + $hsswear>>
-<<elseif _args[0] == "Maru">>
-	<<set $companionMaru.affec += _args[1] + $hsswear>>
-<<elseif _args[0] == "Lily">>
-	<<set $companionLily.affec += _args[1] + $hsswear>>
-<<elseif _args[0] == "Khemia">>
-	<<set $companionKhemia.affec += _args[1] + $hsswear>>
-<<elseif _args[0] == "Cherry">>
-	<<set $companionCherry.affec += _args[1] + $hsswear>>
-<<elseif _args[0] == "Cloud">>
-	<<set $companionCloud.affec += _args[1] + $hsswear>>
-<<elseif _args[0] == "Saeko">>
-	<<set $companionSaeko.affec += _args[1] + $hsswear>>
-<<elseif _args[0] ==  $companionBandit.name>>
-	<<set $companionBandit.affec += _args[1] + $hsswear>>
-<</if>>
 <</widget>>

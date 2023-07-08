@@ -1,5 +1,6 @@
 :: Init Companions
 <<set $companionMaru = new Character({
+    id: setup.companionIds.maru,
     name: "Maru",
     cost: 30,
     carry: 5,
@@ -20,6 +21,7 @@
 })>>
 
 <<set $companionLily = new Character({
+    id: setup.companionIds.lily,
     name: "Lily",
     cost: 60,
     carry: 25,
@@ -40,6 +42,7 @@
 })>>
 
 <<set $companionKhemia = new Character({
+    id: setup.companionIds.khemia,
     name: "Khemia",
     cost: 170,
     carry: 35,
@@ -60,6 +63,7 @@
 })>>
 
 <<set $companionCherry = new Character({
+    id: setup.companionIds.cherry,
     name: "Cherry",
     cost: 50,
     carry: 15,
@@ -80,6 +84,7 @@
 })>>
 
 <<set $companionCloud = new Character({
+    id: setup.companionIds.cloud,
     name: "Cloud",
     cost: 80,
     carry: 20,
@@ -100,6 +105,7 @@
 })>>
 
 <<set $companionSaeko = new Character({
+    id: setup.companionIds.saeko,
     name: "Saeko",
     cost: 170,
     carry: 12,
@@ -120,6 +126,7 @@
 })>>
 
 <<set $companionBandit = new Character({
+    id: setup.companionIds.bandit,
     name: "The bandit",
     carry: 0,
     affec: -20,
@@ -140,7 +147,8 @@
 })>>
 
 <<set $companionAI = new Character({
-    name: "Ai",
+    id: setup.companionIds.ai,
+    name: 'Ai',
     carry: 0,
     image: "Surface/Ai_neutral_happy_full.png",
     imageIcon: "Icons/Ai_neutral_happy.png",
@@ -160,6 +168,7 @@
 })>>
 
 <<set $companionGolem = new Character({
+    id: setup.companionIds.golem,
     name: "Golem",
     image: `Icons/femaleClayGolem.png`,
     imageIcon: `Icons/femaleClayGolem.png`,
@@ -184,6 +193,7 @@
 })>>
 
 <<set $companionTwin = new Character({
+    id: setup.companionIds.twin,
     name: "Twin",
     carry: $carryWeight,
     affec: 3,
@@ -286,7 +296,7 @@
 
 <<set $companionsDepartT = 0>>
 <<set $companionsDepartL = 0>>
-<<set $companionLabor = "">>
+<<set $companionLabor = 0>>
 <<set $SemenDemonVec = []>>
 
 :: Companion Info [noreturn companion]
@@ -297,7 +307,7 @@
 <<if $hiredCompanions[$temp].name != $companionTwin.name && $hiredCompanions[$temp].name != $companionBandit.name>>
 	<<include `$hiredCompanions[$temp].name + " Introduction"`>>
 	<<nobr>>
-	<<if $hiredCompanions[$temp].name == "Cloud">>
+	<<if $hiredCompanions[$temp].id === setup.companionIds.cloud>>
 	<<include "Cloud Ability">>
 	<</if>>
 	<<if $hiredCompanions[$temp].curses.length > 0>>
@@ -306,12 +316,12 @@
 				<<print $hiredCompanions[$temp].curses[$i].name>><br>
 		<</for>><br>
 	<</if>>
-	<<if $hiredCompanions[$temp].name == $companionSwitched>>
+	<<if $hiredCompanions[$temp].id === $companionSwitched>>
 		$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
 	<</if>>
 	<</nobr>>
 	<<back>>
-<<elseif  $hiredCompanions[$temp].name == $companionTwin.name >>
+<<elseif  $hiredCompanions[$temp].id === setup.companionIds.twin >>
 	<<include "Twin Introduction">>
 	<<nobr>>
 	<<if $companionTwin.curses.length > 0>>
@@ -320,12 +330,12 @@
 				<<print $companionTwin.curses[$i].name>><br>
 		<</for>><br>
 	<</if>>
-	<<if $companionSwitched == "Twin">>
+	<<if $companionSwitched === setup.companionIds.twin>>
 		$companionTwin.name is in your original body after your bodies were swapped by the Fate-crossing Star!<<if $mc.sex === $companionTwin.sex>>Not that it makes much of a difference... Fortunately for you, it just means you got some free corruption out of it.<</if>><br><br>
 	<</if>>
 	<</nobr>>
 	<<back>>
-<<else  $hiredCompanions[$temp].name == $companionBandit.name >>
+<<else  $hiredCompanions[$temp].id === setup.companionIds.bandit >>
 	<<include "Bandit Introduction">>
 	<<nobr>>
 	<<if $companionBandit.curses.length > 0>>
@@ -334,7 +344,7 @@
 				<<print $companionBandit.curses[$i].name>><br>
 		<</for>><br>
 	<</if>>
-	<<if $companionSwitched == "Bandit">>
+	<<if $companionSwitched === setup.companionIds.bandit>>
 		$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
 	<</if>>
 	<</nobr>>
@@ -485,7 +495,7 @@ One can only imagine what she'll do if she manages to break free.
 
 :: CompanionDescription
 <<nobr>>
-<<if _companion.name=="Golem">>The golem, which is controlled by your summoned specter,<<else>>_companion.name<</if>> is a _companion.sex <<PerceivedRace _companion>>.
+<<if _companion.id === setup.companionIds.golem>>The golem, which is controlled by your summoned specter,<<else>>_companion.name<</if>> is a _companion.sex <<PerceivedRace _companion>>.
 <<if _companion.sex=="male">>He<<else>>She<</if>> is <<set _meters = (_companion.heightCor > 100)>><<print (Math.round(_companion.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>> tall 
 and <<ShowAge _companion.realAge>> old<<if Math.round(12 * _companion.realAge) != Math.round(12 * _companion.appAge)>>, but <<if _companion.sex=="male">>he<<else>>she<</if>> appears to be <<ShowAge _companion.appAge>> old<</if>>.
 
@@ -755,7 +765,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 			<<if  _boolean>>
 				<<set _convoOptions.push("lac")>>
 			<</if>>
-			<<if $WettingSolution==1 && ($hiredCompanions[_temp1].name == "Lily" || $hiredCompanions[_temp1].name == "Khemia")>>
+			<<if $WettingSolution==1 && ($hiredCompanions[_temp1].id === setup.companionIds.lily || $hiredCompanions[_temp1].id === setup.companionIds.khemia)>>
 				<<set _temp3 = random(0,1)>>
 				<<if _temp3 == 0>>
 					<<set _convoOptions.push("wet")>>
@@ -764,9 +774,9 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 				<</if>>
 			<<elseif $WettingSolution==1>>
 				<<set _convoOptions.push("wetDoll")>>
-			<<elseif $WettingSolution==2 && ($hiredCompanions[_temp1].name == "Maru" || $hiredCompanions[_temp1].name == "Lily" || $hiredCompanions[_temp1].name == "Khemia")>>
+			<<elseif $WettingSolution==2 && ($hiredCompanions[_temp1].id === setup.companionIds.maru || $hiredCompanions[_temp1].id === setup.companionIds.lily || $hiredCompanions[_temp1].id === setup.companionIds.khemia)>>
 				<<set _convoOptions.push("wet")>>
-			<<elseif $WettingSolution==3 && $hiredCompanions[_temp1].name == "Saeko">>
+			<<elseif $WettingSolution==3 && $hiredCompanions[_temp1].id === setup.companionIds.saeko>>
 				<<set _convoOptions.push("wet")>>
 			<</if>>
 
@@ -776,10 +786,10 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 			<<elseif "lac"==_convoOptions[_temp2]>>
 				<<include `$hiredCompanions[_temp1].name + "ConvoLac Rep"`>>
 			<<elseif "wet"==_convoOptions[_temp2]>>
-				<<if $hiredCompanions[_temp1].name == "Saeko">>
+				<<if $hiredCompanions[_temp1].id === setup.companionIds.saeko>>
 					<<set _temp3 = random(1,4)>>
 					<<include `$hiredCompanions[_temp1].name + " Schedule " + _temp3`>>
-				<<elseif $hiredCompanions[_temp1].name == "Khemia">>
+				<<elseif $hiredCompanions[_temp1].id === setup.companionIds.khemia>>
 					<<if $khmeiaWettingFlag>>
 						<<include `$hiredCompanions[_temp1].name + " Diapered 2"`>>
 					<<else>>

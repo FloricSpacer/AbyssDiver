@@ -444,7 +444,7 @@ It emits of a bright flash of light that forces you to close your eyes, and you 
 <<elseif $hiredCompanions.length==1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. $hiredCompanions[0].name helps you a lot and after a few days you start walking around a little bit again.
 	It takes 4 days until you feel fit enough to begin your journey once again.
-	<<if $hiredCompanions[0].name == "Cherry">>
+	<<if $hiredCompanions[0].id === setup.companionIds.cherry>>
 		Cherry has taken great care of you and ensured you were able to properly recover from the ordeal, so you have no movement penalty after the initial recovery period.
 	<<else>>
 		Your weakened condition will increase your next 3 travel times by 1 day each.
@@ -455,7 +455,7 @@ It emits of a bright flash of light that forces you to close your eyes, and you 
 <<elseif $hiredCompanions.length>1>>\
 	You spend the next few days with $hiredCompanions[0].name at your side recovering, both emotionally as well as physically. Your companions help you a lot and after a few days you start walking around a little bit again.
 	It takes 4 days until you feel fit enough to begin your journey once again.
-	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 		Cherry has taken great care of you and ensured you were able to properly recover from the ordeal, so you have no movement penalty after the initial recovery period.
 	<<else>>
 		Your weakened condition will increase your next 3 travel times by 1 day each.
@@ -472,13 +472,13 @@ It emits of a bright flash of light that forces you to close your eyes, and you 
 <<nobr>>
 <<set _temp = 13*$BabysBirthed + 3567 + $time>>
 <<for _i = 0; _i < $hiredCompanions.length; _i++>>
-<<if $hiredCompanions[_i].name == $companionLabor>>
+<<if $hiredCompanions[_i].id === $companionLabor>>
 <<set _temp1 = _i>>
 <</if>>
 <</for>>
 <<set setup.setNotPregnant($hiredCompanions[_temp1])>>
 <</nobr>>
-As you walk together, $companionLabor begins to lag slightly behind. Suddenly, you hear a soft moan. Turning around, you find $companionLabor hunched over, her face twisted in pain.
+As you walk together, <<print setup.id2name($companionLabor)>> begins to lag slightly behind. Suddenly, you hear a soft moan. Turning around, you find $companionLabor hunched over, her face twisted in pain.
 
 <<say $mc>>What's wrong?<</say>>
 <<say $hiredCompanions[_temp1]>> I don't know, my stomach just cramped up really badly. Maybe it's starting?<</say>>
@@ -512,7 +512,7 @@ With incredible speed and surprising gentleness for such a colossal machine, one
 A bright flash of light forces you to close your eyes. When you open them, both the robot and the baby are gone.
 
 $hiredCompanions[_temp1].name spends the next few days recovering, with you at her side offering emotional and physical support. Gradually, she starts walking around a little again.
-<<if $hiredCompanions[_temp1].name != "Cherry" && $hiredCompanions.some(e => e.name === "Cherry")>>
+<<if $hiredCompanions[_temp1].id !== setup.companionIds.cherry && $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her recovery. In the end, you don't truly resume your travels in earnest until after 4 days.
 <<set _waitTime = 4>>
 <<else>>

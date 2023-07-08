@@ -159,7 +159,7 @@ Click this if you have found something that can be used for swimming underwater,
 
 <<if $abyssKnow == 1>>Click this if you'd like to disable the use of your abyssal knowledge from the encyclopedia, smartphone or Saeko (This will result in more side effects from foraging):
 	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]
-<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || setup.haveSmartphone)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>Click this if you'd like to enable the use of your abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]
 <</if>>
 If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
@@ -501,11 +501,7 @@ You have $mc.ears ears.<br>
 You are <<ShowAge $mc.realAge>> old<<if Math.round(12 * $mc.realAge) != Math.round(12 * $mc.appAge)>>, but you appear to be <<ShowAge $mc.appAge>> old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.
 <br><br>
 <<if $DaedalusEquip==true>> You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br><br><</if>>
-<<if $companionSwitched == 'Twin'>>
-	You are in the body originally belonging to $companionTwin.name and $companionTwin.name is in your old body.<br><br>
-<<elseif $companionSwitched>>
-	You are in the body originally belonging to $companionSwitched and $companionSwitched is in your old body.<br><br>
-<</if>>
+You are in the body originally belonging to <<print setup.id2name($companionSwitched)>> and <<print setup.id2name($companionSwitched)>> is in your old body.<br><br>
 
 <<if $mc.subdom > 0>>
 Submissiveness score: $mc.subdom<br><br>
@@ -1046,7 +1042,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <<if $abyssKnow == 1>>
 	<br>You currently have abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
 	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]<br>
-<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.name === "Saeko") || $items[5].count > 0 || setup.haveSmartphone)>>
+<<elseif $abyssKnow == 0 && ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>
 	<br>You currently have abyssal knowledge by the encyclopedia, smartphone or Saeko, but you are not using it. You can choose to enable it if you would like less side effects from foraging:<br>
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]<br>
 <</if>>
@@ -1259,12 +1255,12 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Lambent Specter")>>
-	<<if $hiredCompanions.some(e => e.name === "Golem")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 		<br>A golem, animated by a soul harnessed through the Lambent Specter's power, loyally follows you. <br>
 		<br>
 		<<link "Dispel the Golem by extinguishing its flame" "Use Items and Relics">>
 		<<for _i = 0; _i < $hiredCompanions.length; _i++>>
-			<<if $hiredCompanions[_i].name == 'Golem'>>
+			<<if $hiredCompanions[_i].id === setup.companionIds.golem>>
 				<<set $hiredCompanions.deleteAt(_i)>>
 			<</if>>
 		<</for>>
@@ -1278,7 +1274,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $ownedRelics.some(e => e.name === "Memory Reign") && $hiredCompanions.length > 0>>
 	<br>Do you wish to use the Memory Reign to erase the memories of one of your companions? This will reset affection to 0, like when you first met them, and will remove their memory of all of your past conversations.<br>
-	<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 		<<link "Maru" "Use Items and Relics">>
 			<<set $MaruConvo0 = false>>
 			<<set $MaruConvo1 = false>>
@@ -1287,7 +1283,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $companionMaru.affec=0>>			
 		<</link>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.name === "Lily")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 		<<link "Lily" "Use Items and Relics">>
 			<<set $LilyConvo0 = false>>
 			<<set $LilyConvo1 = false>>
@@ -1298,7 +1294,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $companionLily.affec=0>>			
 		<</link>><br>
 	<</if>>
-		<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 		<<link "Khemia" "Use Items and Relics">>
 			<<set $KhemiaConvo0 = false>>
 			<<set $KhemiaConvo1 = false>>
@@ -1312,7 +1308,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $companionKhemia.affec=0>>			
 		<</link>><br>
 	<</if>>
-		<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 		<<link "Cherry" "Use Items and Relics">>
 			<<set $CherryConvo0 = false>>
 			<<set $CherryConvo1 = false>>
@@ -1323,7 +1319,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $companionCherry.affec=0>>			
 		<</link>><br>
 	<</if>>
-		<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 		<<link "Cloud" "Use Items and Relics">>
 			<<set $CloudConvo0 = false>>
 			<<set $CloudConvo1 = false>>
@@ -1334,7 +1330,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $companionCloud.affec=0>>			
 		<</link>><br>
 	<</if>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 		<<link "Saeko" "Use Items and Relics">>
 			<<set $SaekoConvo0 = false>>
 			<<set $SaekoConvo1 = false>>
@@ -1344,7 +1340,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $companionSaeko.affec=0>>			
 		<</link>><br>
 	<</if>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 		<<link "Your twin" "Use Items and Relics">>
 			<<set $TwinConvo1 = false>>
 			<<set $TwinConvo2 = false>>
@@ -1697,7 +1693,7 @@ You can send a request to the Outset Town Administration. There seem to be a num
 For a small fee of 10 dubloons, you can change your legal name from $mc.name to whatever you wish.
 [[Change your name|Balloon Name]]
 
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
 [[Borrow more money|Balloon debt1]]
 <</if>>
@@ -1907,15 +1903,15 @@ How many dubloons would you like to pay back?
 	<<if $useEnergyrations>>
 		/* Calculate the number of energy rations consumed per day. */
 		<<set _consumptionPerDay = 1>>
-		<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 			<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions get the effect for free). */
 		<</if>>
 		<<if $mc.hasCurse("Minish-ish")>>
 			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
 		<</if>>
-		<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.hasCurse(Minishish)>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && $companionBandit.hasCurse(Minishish)>>
 			<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
-		<<elseif $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+		<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
 			<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
 		<</if>>
 		/* Using energy rations halves the travel time, so we need at most half the time worth. */
@@ -1992,15 +1988,15 @@ How many dubloons would you like to pay back?
 
 /* Calculate the amount of food and drink that needs to be consumed per day. */
 <<set _consumptionPerDay = 1>>
-<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 	<<set _consumptionPerDay *= 2>> /* Two mouths to feed (other companions are nourished by the abyss). */
 <</if>>
 <<if $mc.hasCurse("Minish-ish")>>
 	<<set _consumptionPerDay /= 4>> /* You eat and drink a lot less than normal (your twin shares your curses). */
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $companionBandit.name) && $companionBandit.hasCurse(Minishish)>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && $companionBandit.hasCurse(Minishish)>>
 	<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
-<<elseif $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
 	<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
 <</if>>
 /* Set time weight to 1/2 if the Aeonglass with Endless Time relic is active. */
@@ -2328,7 +2324,7 @@ How many dubloons would you like to pay back?
 					<<include "Drinking code">>
 				<<case 6>>
 					<<set $waterL6 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
+					<<if !($hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
@@ -2351,14 +2347,14 @@ How many dubloons would you like to pay back?
 					<<include "Drinking code">>
 				<<case 6>>
 					<<set $waterL6 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
+					<<if !($hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone)>>
 						<<set $hexflame += 1>>
 					<</if>>
 				<<case 7>>
 					<<include "Drinking code">>
 				<<case 8>>
 					<<set $waterL8 += 1>>
-					<<if !($hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone)>>
+					<<if !($hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone)>>
 						<<set $IQdrop += 0.5>>
 					<<else>>
 						<<set $IQdrop += 0.05>>
@@ -2771,7 +2767,7 @@ You will first drink:<br>
 	<</if>>
 
 	<<if $tempCurse.name == "Chlorophyll">>
-	As the miasmal light shines against your skin, you feel rejuvenated. The Chlorophyll Curse changed you in some pretty fundamental ways. You now have chloroplasts within your cells, like a plant. Some biologist would surely love to examine what happened more closely, but this is just who you are now. <<if $hiredCompanions.some(e => e.name === "Saeko")>>Perhaps Saeko may want to examine you? She doesn't have her equipment, but you've noticed she has been looking at your more closely since your change. <</if>>Your skin has taken on a greenish hue. Even your dreams are filled with visions of standing naked in sunny fields as a gentle wind rustles the grasses at your feet. <br><br>As long as you have light, water, and air, you feel profound peace suffusing you. The people and animals you once found so normal now seem just a bit strange to you. They just seem so agitated as they buzz about. You can still act like them, but there's now a part of you that asks if it wouldn't be nicer to slow down and bask in the light.
+	As the miasmal light shines against your skin, you feel rejuvenated. The Chlorophyll Curse changed you in some pretty fundamental ways. You now have chloroplasts within your cells, like a plant. Some biologist would surely love to examine what happened more closely, but this is just who you are now. <<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>Perhaps Saeko may want to examine you? She doesn't have her equipment, but you've noticed she has been looking at your more closely since your change. <</if>>Your skin has taken on a greenish hue. Even your dreams are filled with visions of standing naked in sunny fields as a gentle wind rustles the grasses at your feet. <br><br>As long as you have light, water, and air, you feel profound peace suffusing you. The people and animals you once found so normal now seem just a bit strange to you. They just seem so agitated as they buzz about. You can still act like them, but there's now a part of you that asks if it wouldn't be nicer to slow down and bask in the light.
 	<</if>>
 
 	<<if $tempCurse.name == "Pheromones">>
@@ -3169,10 +3165,10 @@ You look over at your companion, sleeping soundly at your camp. You've shared co
 	<<capture _i>>
 	<<set _string1 = "Force the use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
 	<<set _string2 = "Ask to use the Pulse Bloom on " + $hiredCompanions[_i].name>>
-	<<if $hiredCompanions[_i].name == $companionTwin.name>>
+	<<if $hiredCompanions[_i].id === setup.companionIds.twin>>
 		[[_string1| Pulse Bloom Forced][$PulseBloomUse = "Twin"]]<br>
 		[[_string2| Pulse Bloom Asked][$PulseBloomUse = "Twin"]]<br>
-	<<elseif $hiredCompanions[_i].name!="Golem">>
+	<<elseif $hiredCompanions[_i].id !== setup.companionIds.golem>>
 		[[_string1| Pulse Bloom Forced][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
 		[[_string2| Pulse Bloom Asked][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
 	<</if>>

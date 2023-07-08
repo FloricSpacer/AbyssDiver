@@ -17,7 +17,7 @@ This layer is enveloped in a bitter, piercing cold, strengthened by Miasma to ef
 <<nobr>>
 <<if $visitL4 == 0>>
 [[Walk through the fourth layer of the Abyss|Layer4 Spectre]]<br>
-	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 		<br><<print "[[Use Cherry's chaotic luck|Layer4 Cherry]]">>
 	<</if>>
 <<else>>
@@ -726,11 +726,12 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 		<<for _index, _curse range $mc.curses>>
 			<<set _flag = false>>
 			<<set _tempName = _companion.name>>
+			<<set _companionId = _companion.id>>
 
-			<<switch _tempName>>
-				<<case $companionTwin.name>>
+			<<switch _companionId>>
+				<<case setup.companionIds.twin>>
 					<<if _index < 1>>Your twin already shares all of your Curses.<br><</if>>
-				<<case "Golem">>
+				<<case setup.companionIds.twin>>
 					<<if _index < 1>>You can't copy Curses to your Golem.<br><</if>>
 				<<default>>
 					<<if _index < 1>><br> _companion.name doesn't mind taking:<br><</if>>
@@ -844,11 +845,12 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<for _i, _companion range $hiredCompanions>>
 	<<set _flag = false>>
 	<<set _tempName = _companion.name>>
+	<<set _companionId = _companion.id>>
 
-	<<switch _tempName>>
-		<<case $companionTwin.name>>
+	<<switch _companionId>>
+		<<case setup.companionIds.twin>>
 			Your twin already shares all of your Curses.<br>
-		<<case "Golem">>
+		<<case setup.companionIds.golem>>
 			You can't copy Curses to your Golem.<br>
 		<<default>>
 			/* Check whether companion already has this curse (e.g. from this shrine). */
@@ -881,7 +883,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 
 <<nobr>>
 <<set $skewedForced += 1>>
-<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _companionId = $hiredCompanions[$temp2].id>>
 <<set _affectionPenalty = 5 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
@@ -1440,11 +1442,11 @@ How do you want to deal with the creature descending upon you?
 
 
 <<nobr>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured in the process, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
 	[[Have Khemia fight it off with a sword|$returnPassage][$status.duration += (6 - $statRed), $status.penalty += 1]]<br><br>
 <</if>>
-<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With a powerful Relic sword in hand, Khemia can defeat the Drifting Swallower without any major issues after an intense battle.<br>
 	[[Allow Khemia to defeat it with his Relic blade|$returnPassage]]<br><br>
 <</if>>
@@ -1463,7 +1465,7 @@ How do you want to deal with the creature descending upon you?
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistent light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration += 99, $status.penalty += 1]]
 
-<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
+<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.golem) && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
 	<br>As the creature descends, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
 
 	<<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>
