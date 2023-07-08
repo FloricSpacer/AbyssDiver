@@ -1,10 +1,60 @@
 "use strict";
 /* global assert, AgeEvent, Curse, DoubleTrouble */
 
+/**
+ * @typedef SugarCubeSetupObject
+ * @extends SugarCubeSetupObject
+ * @property companionIds
+ * @property id2name
+ */
+setup.companionIds = {
+    mc: 0,
+    maru: 1,
+    lily: 2,
+    khemia: 3,
+    cherry: 4,
+    cloud: 5,
+    saeko: 6,
+    twin: 7,
+    golem: 8,
+    bandit: 9,
+    ai: 10,
+}
+setup.id2name = id => {
+    switch (id) {
+        case setup.companionIds.mc:
+            return State.variables.mc.name;
+        case setup.companionIds.maru:
+            return State.variables.companionMaru.name;
+        case setup.companionIds.lily:
+            return State.variables.companionLily.name;
+        case setup.companionIds.khemia:
+            return State.variables.companionKhemia.name;
+        case setup.companionIds.cherry:
+            return State.variables.companionCherry.name;
+        case setup.companionIds.cloud:
+            return State.variables.companionCloud.name;
+        case setup.companionIds.saeko:
+            return State.variables.companionSaeko.name;
+        case setup.companionIds.twin:
+            return State.variables.companionTwin.name;
+        case setup.companionIds.golem:
+            return State.variables.companionGolem.name;
+        case setup.companionIds.bandit:
+            return State.variables.companionBandit.name;
+        case setup.companionIds.ai:
+            return State.variables.companionAi.name;
+        default:
+            console.error(`attempted to get name of invalid id ${id}`)
+            return '[unknown person (please report this bug to the developers)]'
+    }
+}
+
 /* exported Character */
 class Character {
     /**
      * Creates a new Character object.
+     * @param {number} id The character's id. Associated IDs can be found in setup.companionIds.
      * @param {string} name The character's name.
      * @param {number} cost The cost to recruit the character, or -1 for unrecruitable characters (like the main
      *     characters and the golem).
@@ -41,7 +91,7 @@ class Character {
      * @param {boolean} switched Whether this character has switched bodies.
      * @param {[CharEvent]} events The list of events that affected this character.
      */
-    constructor({name, cost=-1, carry, affec=0, swap=false,
+    constructor({id, name, cost=-1, carry, affec=0, swap=false,
                     image, imageIcon, mindSex='male',
                     osex=mindSex, obreasts, desiredBreasts=obreasts,
                     openis, ogender, fit, oheight,
@@ -54,6 +104,9 @@ class Character {
             console.error(`Character constructor called without all required arguments (${name || 'missing name'}).`);
         }
 
+        assert(typeof id === 'number' && id.length >= 0,
+               'id must be a non-negative number');
+        this.id = id;
         assert(typeof name === 'string' && name.length > 0,
                'name must be a non-empty string');
         this.name = name;
@@ -150,12 +203,12 @@ class Character {
 
     /**
      * Returns the internal state of this Character, from which another character can be built.
-     * @returns {{mindSex: ("male"|"female"), oears: string, fit: number, comfortableHeight: number, imageIcon: string, oheight: number, ohair: string, pregnantT: number, events: CharEvent[], fear: ("darkness"|"spiders"|"wolves"|"snakes"|"insects"|"slime"|"desperation"|"rot"|"unknown"), image: string, cost: number, osex: ("male"|"female"), swap: boolean, ogender: number, oblood: string, lastBirth: number, oskinColor: string, oeyeColor: string, desiredBreasts: number, due: number, curses: Curse[], openis: number, appDesc: string, oskinType: string, name: string, affec: (number|undefined), switched: boolean, carry: number, obreasts: number, age: number}}
+     * @returns {{mindSex: ("male"|"female"), oears: string, fit: number, comfortableHeight: number, imageIcon: string, oheight: number, id: number, ohair: string, pregnantT: number, events: CharEvent[], fear: ("darkness"|"spiders"|"wolves"|"snakes"|"insects"|"slime"|"desperation"|"rot"|"unknown"), image: string, cost: number, osex: ("male"|"female"), swap: boolean, ogender: number, oblood: string, lastBirth: number, oskinColor: string, oeyeColor: string, desiredBreasts: number, due: number, openis: number, appDesc: string, oskinType: string, name: string, affec: (number|undefined), switched: boolean, carry: number, obreasts: number, age: number}}
      */
     _internalState() {
         return {
-            name: this.name, cost: this.cost, carry: this.carry, affec: this.affec, swap: this.swap,
-            image: this.image, imageIcon: this._imageIcon, curses: this.curses.map(c => c),
+            id: this.id, name: this.name, cost: this.cost, carry: this.carry, affec: this.affec, swap: this.swap,
+            image: this.image, imageIcon: this._imageIcon,
             mindSex: this.mindSex, osex: this.osex, obreasts: this.obreasts,
             desiredBreasts: this.desiredBreasts, openis: this.openis, ogender: this.ogender,
             fit: this.fit, oheight: this.oheight, comfortableHeight: this.comfortableHeight,
@@ -199,7 +252,7 @@ class Character {
      * Makes this character pregnant from two weeks ago.
      */
     setConsideredPregnant() {
-        if (this.womn === 0) {
+        if (this.womb === 0) {
             console.error('Can\'t make a character without wombs pregnant.');
             return;
         }
@@ -273,7 +326,7 @@ class Character {
             console.warn('Curse added to character at a date differing from the present. This is most likely a bug.')
         }
         this.events.push(curse);
-        if (this === State.variables.mc && this.hasCurse(DoubleTrouble)) {
+        if (this.id === setup.companionIds.mc && this.hasCurse(DoubleTrouble)) {
             State.variables.companionTwin.addCurse(curse);
         }
     }
@@ -315,9 +368,7 @@ class Character {
      */
     get realAge() {
         let daysElapsed = State.variables.time;
-        // Not fond of relying on object identity given twine's propensity for copying objects, but we don't have another
-        // identifying feature (name does not work because user could choose a name already used by a companion)
-        if (this === State.variables.mc && State.variables.eternalYouth < State.variables.time) {
+        if (this.id === setup.companionIds.mc && State.variables.eternalYouth < State.variables.time) {
             daysElapsed = State.variables.eternalYouth;
         }
         return (this.age * AgeEvent.aYear + daysElapsed * AgeEvent.aDay) / AgeEvent.aYear;
@@ -518,7 +569,7 @@ class Character {
         if (this.isPregnant) {
             if (this.daysConsideredPregnant > 240) lactation += 1
             if (this.daysConsideredPregnant > 270) lactation += 1
-        } else if (this === State.variables.mc) {
+        } else if (this.id === setup.companionIds.mc) {
             /* Boost lactation after giving birth until the next menstruation cycle. */
             if (State.variables.menCycleFlag && State.variables.menCycleT - State.variables.time > 0) {
                 lactation += 1;
@@ -537,7 +588,7 @@ class Character {
         }
 
         /* Maximize Lily's lactation if you're breastfeeding from her. */
-        if (this === State.variables.companionLily && State.variables.LilyConvoLac) {
+        if (this.id === setup.companionIds.lily && State.variables.LilyConvoLac) {
             lactation += 2;
         }
 
@@ -589,9 +640,7 @@ class Character {
         if (this.daysConsideredPregnant >= 90) breastSize += 0.5;
         if (this.daysConsideredPregnant >= 120) breastSize += 0.5;
 
-        // Not fond of relying on object identity given twine's propensity for copying objects, but we don't have another
-        // identifying feature (name does not work because user could choose a name already used by a companion)
-        if (this === State.variables.mc && !this.isPregnant) {
+        if (this.id === setup.companionIds.mc && !this.isPregnant) {
             if(State.variables.menCycleFlag) {
                 /* Boost breast size after day 20 of the menstruation cycle. */
                 if (State.variables.time - State.variables.menCycleT - State.variables.menCycleVar > 20) {
@@ -726,9 +775,7 @@ class Character {
             libido = event.changeLibido(libido);
         }
 
-        // Not fond of relying on object identity given twine's propensity for copying objects, but we don't have another
-        // identifying feature (name does not work because user could choose a name already used by a companion)
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (State.variables.lastFlan !== undefined &&
                 State.variables.time === State.variables.lastFlan) {
                 libido++;
@@ -780,7 +827,7 @@ class Character {
      */
     get subdom() {
         let subdom = 0;
-        if (this.name === 'Golem') subdom = 10;
+        if (this.id === setup.companionIds.golem) subdom = 10;
         for (let event of this.events) {
             subdom = event.changeSubDom(subdom);
         }
@@ -799,7 +846,7 @@ class Character {
                         - 0.25 * (unscaledPenis - 4)
                         + 0.5 * (this.breastsCor - 3)
                         - (this.fit > 7 ? 1 : 0);
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             appGender += 0.5 * State.variables.colwear + 0.25 * State.variables.scent + 0.5 * State.variables.slwear
             if (State.variables.dollevent2) appGender++;
         }
@@ -892,7 +939,7 @@ class Character {
      * @returns {number} The pitch of this character's voice.
      */
     get genderVoice() {
-        if (this === State.variables.mc && State.variables.colwear) {
+        if (this.id === setup.companionIds.mc && State.variables.colwear) {
             return 99;
         }
         return this.gender;
@@ -969,7 +1016,7 @@ class Character {
         let transformed = this.events.reduce((v, e) => e.changeImageIcon(v), '');
         if (transformed !== '') return transformed;
 
-        if (this === State.variables.mc || this === State.variables.companionTwin) {
+        if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
             let image = this.appGender <= 5 ? 'M' : 'F';
             return `Player Icons/player${image}.png`;
         }
@@ -983,7 +1030,7 @@ class Character {
     get lewdness() {
         let lewdness = (this.libido - 2) * 3 + this.loweredStandards;
         let hasLuminous = false;
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             hasLuminous = State.variables.luminousWear;
             lewdness += State.variables.crumbleFluid / 10;
             lewdness += State.variables.algalSize;
@@ -1020,7 +1067,7 @@ class Character {
         if (this.horns > 1) inhuman += 1;
         inhuman += this.tail.length * 2;
         inhuman = this.events.reduce((v, e) => e.inhumanise(v), inhuman);
-        if (this === State.variables.mc && State.variables.LuminousWear) inhuman /= 4;
+        if (this.id === setup.companionIds.mc && State.variables.LuminousWear) inhuman /= 4;
         return inhuman;
     }
 
@@ -1047,17 +1094,17 @@ class Character {
         let handicap = 0;
         let eyes = this.eyeCount;
         if (eyes < 2) {
-            if (this !== State.variables.mc || !State.variables.BionicEye) {
+            if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
                 handicap -= 3;
-                if (this === State.variables.mc && State.variables.BDwear) {
+                if (this.id === setup.companionIds.mc && State.variables.BDwear) {
                     handicap += 1;
                 }
             }
         }
         if (eyes < 1) {
-            if (this !== State.variables.mc || !State.variables.BionicEye) {
+            if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
                 handicap -= 5;
-                if (this === State.variables.mc && State.variables.BDwear) {
+                if (this.id === setup.companionIds.mc && State.variables.BDwear) {
                     handicap += 3;
                 }
             }
@@ -1071,9 +1118,9 @@ class Character {
             handicap += Math.max(Math.floor(((height - 170) / height - 1) * 10), -7);
         }
 
-        if (this.name === 'Khemia' && State.variables.convo.khemiaAegis === 1) handicap += 5;
+        if (this.id === setup.companionIds.khemia && State.variables.convo.khemiaAegis === 1) handicap += 5;
 
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (State.variables.BDwear) handicap += 1;
             if (State.variables.BionicArm) handicap += 8;
             if (State.variables.AegisWear) handicap += 5;
@@ -1087,7 +1134,7 @@ class Character {
         let armsLegsLost = ''
         if (arms < 2) armsLegsLost += 'A';
         if (arms < 1) armsLegsLost += 'A';
-        if (this !== State.variables.mc || !State.variables.DaedalusEquip) {
+        if (this.id !== setup.companionIds.mc || !State.variables.DaedalusEquip) {
             if (legs < 2) armsLegsLost += 'L';
             if (legs < 1) armsLegsLost += 'L';
         }
@@ -1122,7 +1169,7 @@ class Character {
         }
         if (arms > 2) handicap -= 2 * (arms - 2);
 
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (State.variables.menstruating) {
                 handicap -= 2;
             }
@@ -1167,21 +1214,21 @@ class Character {
         let handicap = 0;
         let eyes = this.eyeCount;
         if (eyes < 2) {
-            if (this !== State.variables.mc || !State.variables.BionicEye) {
+            if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
                 handicap -= 1;
             }
         }
         if (eyes < 1) {
-            if (this !== State.variables.mc || !State.variables.BionicEye) {
+            if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
                 handicap -= 4;
-                if (this === State.variables.mc && State.variables.BDwear) {
+                if (this.id === setup.companionIds.mc && State.variables.BDwear) {
                     handicap += 3;
                 }
             }
         }
         handicap = this.events.reduce((v, e) => e.changeMovementHandicap(v), handicap)
 
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (State.variables.BionicArm) handicap += 3;
         }
 
@@ -1193,7 +1240,7 @@ class Character {
         let armsLegsLost = ''
         if (arms < 2) armsLegsLost += 'A';
         if (arms < 1) armsLegsLost += 'A';
-        if (this !== State.variables.mc || !State.variables.DaedalusEquip) {
+        if (this.id !== setup.companionIds.mc || !State.variables.DaedalusEquip) {
             if (legs < 2) armsLegsLost += 'L';
             if (legs < 1) armsLegsLost += 'L';
         }
@@ -1228,7 +1275,7 @@ class Character {
         }
         if (arms > 2) handicap -= (arms - 2);
 
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (this.isPregnant) {
                 if (this.daysConsideredPregnant >= 240) {
                     handicap -= 5;
@@ -1275,7 +1322,7 @@ class Character {
         let handicap = 0;
         handicap = this.events.reduce((v, e) => e.changeCarryHandicap(v), handicap)
 
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (State.variables.BionicArm) handicap += 100;
         }
 
@@ -1284,7 +1331,7 @@ class Character {
         let armsLegsLost = ''
         if (arms < 2) armsLegsLost += 'A';
         if (arms < 1) armsLegsLost += 'A';
-        if (this !== State.variables.mc || !State.variables.DaedalusEquip) {
+        if (this.id !== setup.companionIds.mc || !State.variables.DaedalusEquip) {
             if (legs < 2) armsLegsLost += 'L';
             if (legs < 1) armsLegsLost += 'L';
         }
@@ -1319,7 +1366,7 @@ class Character {
         }
         if (arms > 2) handicap -= (arms - 2);
 
-        if (this === State.variables.mc) {
+        if (this.id === setup.companionIds.mc) {
             if (this.isPregnant) {
                 if (this.daysConsideredPregnant >= 240) {
                     handicap -= 5;
@@ -1352,7 +1399,7 @@ class Character {
      */
     get eyeCount() {
         let eyes = this.events.reduce((v, e) => e.removeEye(v), 2);
-        if (this === State.variables.mc && State.variables.BionicEye && eyes < 2) eyes++;
+        if (this.id === setup.companionIds.mc && State.variables.BionicEye && eyes < 2) eyes++;
         return eyes;
     }
 
@@ -1362,7 +1409,7 @@ class Character {
      */
     get armCount() {
         let arms = this.events.reduce((v, e) => e.removeArm(v), 2);
-        if (this === State.variables.mc && State.variables.BionicArm && arms < 2) arms++;
+        if (this.id === setup.companionIds.mc && State.variables.BionicArm && arms < 2) arms++;
         return arms;
     }
 

@@ -17,7 +17,7 @@ The miasma produces no light in this layer, and these dark, twisted caverns are 
 
 The Abyss has various bioluminescent moss, mushrooms, and so on scattered about, so exploring these caves without a source of light isn't so impossible or as much of suicide mission as exploring caves on the surface without a light source would be - though doing so would still be quite difficult down here.
 
-[[Walk through the third layer of the Abyss|Layer3 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+[[Walk through the third layer of the Abyss|Layer3 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<if $visitL3 == 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer3 Cherry]]">><br><</if>>
 <</if>><</nobr>>
@@ -350,11 +350,12 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 		<<for _index, _curse range $mc.curses>>
 			<<set _flag = false>>
 			<<set _tempName = _companion.name>>
+			<<set _companionId = _companion.id>>
 
 			<<switch _tempName>>
-				<<case $companionTwin.name>>
+				<<case setup.companionIds.twin>>
 					<<if _index < 1>>Your twin already shares all of your Curses.<br><</if>>
-				<<case "Golem">>
+				<<case setup.companionIds.golem>>
 					<<if _index < 1>>You can't transfer Curses to your Golem.<br><</if>>
 				<<default>>
 					<<if _index < 1>><br>_companion.name doesn't mind taking:<br><</if>>
@@ -864,11 +865,12 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 <<for _i, _companion range $hiredCompanions>>
 	<<set _flag = false>>
 	<<set _tempName = _companion.name>>
+	<<set _companionId = _companion.id>>
 
-	<<switch _tempName>>
-		<<case $companionTwin.name>>
+	<<switch _companionId>>
+		<<case setup.companionIds.twin>>
 			Your twin already shares all of your Curses.<br>
-		<<case "Golem">>
+		<<case setup.companionIds.golem>>
 			You can't transfer Curses to your Golem.<br>
 		<<default>>
 			/* Check whether companion already has this curse (e.g. from the layer 4 shrine). */
@@ -900,7 +902,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 
 <<nobr>>
 <<set $skewedForced += 1>>
-<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _companionId = $hiredCompanions[$temp2].id>>
 <<set _affectionPenalty = 6 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
@@ -1429,7 +1431,7 @@ How do you want to deal with the tentacle beast moving in on you?
 	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
 	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
 <</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
 	[[Have Khemia fight it off with a sword|$returnPassage]]<br><br>
 <</if>>
@@ -1452,7 +1454,7 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 <</link>><br>
 <br>
 
-<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
+<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.golem) && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
 <br><br>As the tentacle beast closes in on you, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
 
 <<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>

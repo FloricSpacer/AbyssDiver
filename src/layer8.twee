@@ -26,7 +26,7 @@ Space itself becomes your enemy in this layer, and navigation is incredibly diff
 
 Getting back up out of this terrible prison and back to layer 7 will take a staggering 40 days, and cost 100 corruption.
 
-[[Wander through the eighth layer of the Abyss|Layer8 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+[[Wander through the eighth layer of the Abyss|Layer8 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<if $visitL8 == 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer8 Cherry]]">><</if>>
 <</if>><</nobr>>
@@ -309,7 +309,7 @@ If you decide to start foraging for food or water, it means that you will not co
 	<<if $items[2].count > 0>>
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
-		<<if $hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone>>
 			<<set $flaskMatrix[5]+=1>>
 		<<else>>
 			<<set $flaskMatrix[6]+=1>>
@@ -322,7 +322,7 @@ If you decide to start foraging for food or water, it means that you will not co
 <</nobr>>
 [img[setup.ImagePath+'Foraging/lethetaps.png']]
 
-<<if $hiredCompanions.some(e => e.name === "Saeko") && setup.haveSmartphone>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone>>
 In an incredible collaboration with colleagues on the surface, Saeko managed to develop some incredibly innovative water filtration techniques. The water purified from Lethe Taps using this technique is much safer to drink, though still hazardous. It's probably only 1/10th as dangerous as it would normally be, though you'll still be on a quick path to <<if $mc.sex == "male">>himbo<<else>>bimbo<</if>>ification if you drink too much.
 <<else>>
 There is a very easily accessible source of water on this layer, the Lethe Taps, that are freely available everywhere and taste surprisingly like the tap water from the surface. Unfortunately, it also leaves you feeling a little hazy after a drink, and that is not simply a temporary effect. Each day of water you drink from these taps decreases you IQ by about half a point, leaving your mind in a subtly creeping fog that will leave you a <<if $mc.sex == "male">>himbo<<else>>bimbo<</if>> in no time at all.
@@ -341,7 +341,7 @@ There is a very easily accessible source of water on this layer, the Lethe Taps,
 		<<radiobutton "$ammoStrat" 1 >> Use your ammo only when absolutely necessary <br>
 		<<radiobutton "$ammoStrat" 2 >> Use your ammo when tactically useful <br>
 		<<radiobutton "$ammoStrat" 4 >> Shoot at anything that moves <br>
-		<<if $slingshot && !$hiredCompanions.some(e => e.name === "Cloud")>>
+		<<if $slingshot && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 			<<radiobutton "$ammoStrat" 4 >> Just use the modified Brave Vector as much as you can, so you can shoot without having to use any bullets  <br>
 		<<elseif $slingshot>>
 			<<radiobutton "$cloudStrat" 1>> Just use the modified Brave Vector as much as you can, while you ask Cloud to use the gun sparingly.  <br>
@@ -1224,8 +1224,8 @@ Ready? Getting back up out of this terrible prison and back to layer 7 will take
 		if ($L8loopLim || !state) return false;
 		return $timeL8T2a == 4 || state.unweightedDayIndex === Math.floor(state.expectedDays / 2);
 	},
-	dementialAberrations2a: () => $timeL8T2a >= ($hiredCompanions.some(e => e.name === "Maru") ?  8 :  7),
-	dementialAberrations2b: () => $timeL8T2b >= ($hiredCompanions.some(e => e.name === "Maru") ? 24 : 21),
+	dementialAberrations2a: () => $timeL8T2a >= ($hiredCompanions.some(e => e.id === setup.companionIds.maru) ?  8 :  7),
+	dementialAberrations2b: () => $timeL8T2b >= ($hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 24 : 21),
 }>>
 
 <<PassTime _triggers>>
@@ -1351,15 +1351,15 @@ If you continue your descent in spite of everything, descending past this layer'
 <<set _companionBonus = 0>>
 <<set _equipmentBonus = 0>>
 
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 	Maru seems scared, but he is still willing to do what he can in a fight.<br>
 	<<set _companionBonus += 2 * (1 + $companionMaru.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Lily")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 	Lily puffs her chest, lets out something of a battle cry, and charges headfirst into the puppets as she beats them left and right.<br>
 	<<set _companionBonus += 8 * (1 + $companionLily.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia assumes a fighting stance, dispatching any mimics that finds itself near him. 
 	<<set _companionBonus += 15 * (1 + $companionKhemia.HandicapThreat / 10)>>
 	<<if setup.haveCuttingTool>>
@@ -1371,11 +1371,11 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 	<br>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
 	<<set _companionBonus += 1 * (1 + $companionCherry.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 	Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
 	<<set _companionBonus += 10 * (1 + $companionCloud.HandicapThreat / 10)>>
 	<<if $slingshot && $cloudStrat == 0>>
@@ -1388,11 +1388,11 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 	<br>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 	Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
 	<<set _companionBonus += 5 * (1 + $companionSaeko.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
 	<<if $BanditConvo0>>
 		The bandit starts beating up dolls left and right, sometimes by playing dirty but mostly with her impressive physical strength and brawling experience.<br>
 		<<set _companionBonus += 10 * (1 + $companionBandit.HandicapThreat / 10)>>
@@ -1401,11 +1401,11 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _companionBonus += -1 * (1 + $companionBandit.HandicapThreat / 10)>>
 	<</if>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Golem")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 	Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
 	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 	<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
 	<<if _twinBonus > 7>>
 		Your twin fights off the doll-like copies of you with relative ease. It's a strange sight to see a copy of you fight other copies, but next to your twin, the mimics seem like cheap imitations.
@@ -1424,7 +1424,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	You're glad you brought along a sword to defend yourself.<br>
 	<<set _equipmentBonus += 7>>
 <</if>>
-<<if $items[20].count > 0 && $items[13].count > 0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+<<if $items[20].count > 0 && $items[13].count > 0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
 	Your gun is an important asset if you want to survive this horde.<br>
 	<<set _equipmentBonus += 5 * $ammoStrat>>
 <</if>>
@@ -1540,15 +1540,15 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _curseBonus += 2>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Maru")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 		<<set _companionBonus += 2* (1+ $companionMaru.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Lily")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 		<<set _companionBonus += 8* (1+ $companionLily.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 		<<set _companionBonus += 15* (1+ $companionKhemia.HandicapThreat/10)>>
 		<<if setup.haveCuttingTool>>
 			<<set _companionBonus += 8* (1+ $companionKhemia.HandicapThreat/10)>>
@@ -1559,11 +1559,11 @@ If you continue your descent in spite of everything, descending past this layer'
 		<br>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 		<<set _companionBonus += 1* (1+ $companionCherry.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 		<<set _companionBonus += 10* (1+ $companionCloud.HandicapThreat/10)>>
 		<<if $slingshot && $cloudStrat==0>>
 			<<set _companionBonus += 5* (1+ $companionCloud.HandicapThreat/10)>>
@@ -1585,11 +1585,11 @@ If you continue your descent in spite of everything, descending past this layer'
 		<br>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 		<<set _companionBonus += 5 * (1+ $companionSaeko.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 		<<if $BanditConvo0>>
 			<<set _companionBonus += 10 * (1 + $companionBandit.HandicapThreat / 10)>>
 		<<else>>
@@ -1597,11 +1597,11 @@ If you continue your descent in spite of everything, descending past this layer'
 		<</if>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === "Golem")>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 		<<set _companionBonus += 10 * (1+$companionGolem.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.name === $companionTwin.name)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 		<<set _twinBonus = 5 * (1+ $companionTwin.HandicapThreat/10) +_curseBonus>>
 		<<if _twinBonus > 7 >>
 		<<elseif _twinBonus > 5>>
@@ -1615,7 +1615,7 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _equipmentBonus += 7>>
 	<</if>>
 
-		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
 			<<set _equipmentBonus += 5*$ammoStrat>>
 			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * _ammo * 3 - $bullRed, 1)>>
 			<<if $items[20].count <= _bulletsUsed>>
@@ -1628,7 +1628,7 @@ If you continue your descent in spite of everything, descending past this layer'
 			<</if>>
 		<</if>>
 
-	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.name === "Cloud") && !$slingshot>>
+	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
 	<</if>>
 
 	<<set _L8T1_threshold = ($L8T1_difficulty + $timeL8T1 / 100) * $timeL8T1>>
@@ -1672,7 +1672,7 @@ If you continue your descent in spite of everything, descending past this layer'
 :: Layer 8 Threat 2a
 
 <<nobr>>
-<<set $timeL8T2a -= $hiredCompanions.some(e => e.name === "Maru") ?  8 :  7>>
+<<set $timeL8T2a -= $hiredCompanions.some(e => e.id === setup.companionIds.maru) ?  8 :  7>>
 <<set $totalFears = []>>
 <<set $totalFears.push($fear)>>
 <<for _companion range $hiredCompanions>>
@@ -1917,8 +1917,8 @@ You're not sure. Still, that sound in the dark... some part of you can't complet
 :: Layer 8 Threat 2b
 
 <<nobr>>
-<<set $timeL8T2a -= $hiredCompanions.some(e => e.name === "Maru") ?  8 :  7>>
-<<set $timeL8T2b -= $hiredCompanions.some(e => e.name === "Maru") ? 24 : 21>>
+<<set $timeL8T2a -= $hiredCompanions.some(e => e.id === setup.companionIds.maru) ?  8 :  7>>
+<<set $timeL8T2b -= $hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 24 : 21>>
 <<set $totalFears = []>>
 <<set $totalFears.push($fear)>>
 <<for _companion range $hiredCompanions>>
