@@ -104,8 +104,8 @@ class Character {
             console.error(`Character constructor called without all required arguments (${name || 'missing name'}).`);
         }
 
-        assert(typeof id === 'number' && id.length >= 0,
-               'id must be a non-negative number');
+        assert(typeof id === 'number' && id >= 0,
+               `id must be a non-negative number, got ${id} (${name})`);
         this.id = id;
         assert(typeof name === 'string' && name.length > 0,
                'name must be a non-empty string');
