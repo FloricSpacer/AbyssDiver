@@ -663,7 +663,12 @@ They are a bit sore at the moment.
 <</if>>
 <<if $mc.hasCurse("Semen Demon")>>
 	You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads per day.
-	<<if ($mc.curses.find(c => c instanceof SemenDemon && ((c.fluidType !== 'vaginal fluids' || $mc.vagina > 0) || (c.fluidType !== 'semen' || $mc.penis > 0)))) >>
+	<<if $mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($mc.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($mc.vagina > 0 && e.fluidType != 'semen')
+		))
+	>>
 		<<if $mc.hasCurse("Leaky")>>
 			<<set _temp = Math.floor((1+$crumbleFluid/100)*2)>>
 		<<else>>
@@ -1477,7 +1482,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 						Please enter your new exoskeleton color: <<textbox "_curse.skinColor" "shiny black" "Use Items and Relics">><br>
 					<<elseif _curse.name == "Horny" && !$hornVariation>>
 						<<include "Horny Customization">><br>
-					<<elseif _curse.name == "Semen Demon" && !_curse.fluidType>>
+					<<elseif _curse instanceof SemenDemon && !_curse.fluidType>>
 						<<include "Semen Demon Customization">><br>
 					<<elseif _curse.name == "Eye on the Prize" && !$eyeRemove>>
 						<<include "Eye on the Prize Customization">><br>
