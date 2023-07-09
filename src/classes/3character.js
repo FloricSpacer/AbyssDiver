@@ -301,9 +301,9 @@ class Character {
     }
 
     /**
-     * Removes a curse from this character.
-     * @param {Class | string} curse The name or class of the curse to remove.
-     * @param {boolean} all Iff all is true, removes all copies of the curse, not just the last.
+     * Removes a Curse from this character.
+     * @param {Class | string} curse The name or class of the Curse to remove.
+     * @param {boolean} all Iff all is true, removes all copies of the Curse, not just the last.
      */
     removeCurse(curse, all = false) {
         let predicate = typeof curse === 'string' ? e => e.name === curse : e => e instanceof curse;
@@ -317,10 +317,10 @@ class Character {
     }
 
     /**
-     * Adds a curse to this character. Does not change corruption.
+     * Adds a Curse to this character. Does not change corruption.
      * Curses on the main character should always be added this way to ensure the twin gets it too, not inserted
      * into events manually.
-     * @param {Curse} curse The curse to add.
+     * @param {Curse} curse The Curse to add.
      */
     addCurse(curse) {
         if (curse.time !== State.variables.time) {
@@ -344,12 +344,12 @@ class Character {
     }
 
     /**
-     * Returns the most recently taken copy of the given curse, or undefined if this character does not have the given curse.
-     * @param {string | Class} curse The name of the curse to get as a string, or its class.
-     * @returns {Curse | undefined} The curse in question or undefined if none was found.
+     * Returns the most recently taken copy of the given Curse, or undefined if this character does not have the given curse.
+     * @param {string | Class} curse The name of the Curse to get as a string, or its class.
+     * @returns {Curse | undefined} The Curse in question or undefined if none was found.
      */
     getCurse(curse) {
-        // noinspection JSValidateTypes -- if the parameter is a curse name or class, the event we find is always a curse.
+        // noinspection JSValidateTypes -- if the parameter is a Curse name or class, the event we find is always a curse.
         return this.getEvent(curse);
     }
 
@@ -363,8 +363,8 @@ class Character {
     }
 
     /**
-     * Returns the character's current age as it would be without age-reducing curses.
-     * Includes time spent in the abyss and the effects of the fountain of youth.
+     * Returns the character's current age as it would be without age-reducing Curses.
+     * Includes time spent in the Abyss and the effects of the fountain of youth.
      * @returns {number} The character's biological age.
      */
     get realAge() {
