@@ -78,7 +78,7 @@ class CharEvent {
         return prevAsset;
     }
     changePenis(character, prevPenis) {
-        // used by curses that add/remove genitals
+        // used by Curses that add/remove genitals
         return prevPenis;
     }
     doublePenis(character, prevDoubled) {
@@ -86,18 +86,18 @@ class CharEvent {
         return prevDoubled;
     }
     changeVagina(character, prevVagina) {
-        // used by curses that add/remove genitals
+        // used by Curses that add/remove genitals
         return prevVagina;
     }
     changeBreasts(character, prevBreasts) {
-        // used by curses that add/remove breasts
+        // used by Curses that add/remove breasts
         return prevBreasts;
     }
     changeLactation(prevLactation) {
         return prevLactation;
     }
     changeWomb(character, prevWomb, extraWombLocations) {
-        // used by curses that add/remove genitals
+        // used by Curses that add/remove genitals
         return [prevWomb, extraWombLocations];
     }
     changeHeightDirection(prevDir) {
