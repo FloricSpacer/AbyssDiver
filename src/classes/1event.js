@@ -230,9 +230,10 @@ class AgeEvent extends CharEvent {
     /**
      * Creates a new age reversal event.
      * @param {string} name The name of the event.
-     * @param {number} years The number of years by which this event de-aged the character.
-     * @param {number} months The number of months by which this event de-aged the character.
-     * @param {number} days The number of days by which this event de-aged the character.
+     * @param {Object} o
+     * @param {number} o.years The number of years by which this event de-aged the character.
+     * @param {number} o.months The number of months by which this event de-aged the character.
+     * @param {number} o.days The number of days by which this event de-aged the character.
      */
     constructor(name, {years=0, months=0, days=0}={years:0,months:0,days:0}) {
         super(name, 'age');
