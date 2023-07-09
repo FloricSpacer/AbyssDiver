@@ -54,8 +54,7 @@ setup.id2name = id => {
 class Character {
     /**
      * Creates a new Character object.
-     *
-     * @param {Object} o The character's initial properties.
+     * @param {Object} o
      * @param {number} o.id The character's id. Associated IDs can be found in setup.companionIds.
      * @param {string} o.name The character's name.
      * @param {number} o.cost The cost to recruit the character, or -1 for unrecruitable characters (like the main
@@ -91,7 +90,7 @@ class Character {
      * @param {number} o.due The day in which this character's pregnancy is due.
      * @param {number} o.lastBirth The day on which this character's last birth occurred.
      * @param {boolean} o.switched Whether this character has switched bodies.
-     * @param {Array.<CharEvent>} o.events The list of events that affected this character.
+     * @param {CharEvent[]} o.events The list of events that affected this character.
      */
     constructor({id, name, cost=-1, carry, affec=0, swap=false,
                     image, imageIcon, mindSex='male',
