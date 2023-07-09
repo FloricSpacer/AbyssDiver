@@ -17,7 +17,7 @@ The miasma produces no light in this layer, and these dark, twisted caverns are 
 
 The Abyss has various bioluminescent moss, mushrooms, and so on scattered about, so exploring these caves without a source of light isn't so impossible or as much of suicide mission as exploring caves on the surface without a light source would be - though doing so would still be quite difficult down here.
 
-[[Walk through the third layer of the Abyss|Layer3 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+[[Walk through the third layer of the Abyss|Layer3 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<if $visitL3 == 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer3 Cherry]]">><br><</if>>
 <</if>><</nobr>>
@@ -51,7 +51,7 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 	In the distance, you spot a faint, pulsating light source that seems to call out to you. As you get closer, you realize it's a cluster of bioluminescent crystals embedded in the cave wall. The crystals emit a mesmerizing, rhythmic pattern of light, almost as if they're breathing. The sound of your footsteps is muffled by the soft, velvety moss that covers the floor of the cave, creating an eerie, serene atmosphere.<br><br>
 <<elseif $layerTemp == 5>>
 	The sound of water dripping from the cave ceiling fills the air around you, creating an almost melodic pattern. Following the sounds, you stumble upon a small chamber filled with stalactites and stalagmites, their glistening surfaces reflecting the dim light of the bioluminescent moss. You can't help but notice that some of these formations are quite phallic in shape. The air is cool and damp, causing a slight shiver to run down your spine. You brush off the strange thoughts that come to mind and continue on your way.<br><br>
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse(HijinksEnsue)>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -347,21 +347,22 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 	You do not have enough dubloons for an offering.
 <<else>>
 	<<for _companion range $hiredCompanions>>
-		<<for _index, _curse range $playerCurses>>
+		<<for _index, _curse range $mc.curses>>
 			<<set _flag = false>>
 			<<set _tempName = _companion.name>>
+			<<set _companionId = _companion.id>>
 
 			<<switch _tempName>>
-				<<case $companionTwin.name>>
+				<<case setup.companionIds.twin>>
 					<<if _index < 1>>Your twin already shares all of your Curses.<br><</if>>
-				<<case "Golem">>
+				<<case setup.companionIds.golem>>
 					<<if _index < 1>>You can't transfer Curses to your Golem.<br><</if>>
 				<<default>>
 					<<if _index < 1>><br>_companion.name doesn't mind taking:<br><</if>>
 					<<set _flag = setup.willingCurses(_companion).includes(_curse.name)>>
 					<<if _flag>>
 						/* Check whether companion already has this curse (e.g. from the layer 4 shrine). */
-						<<set _flag = !_companion.curses.some(companionCurse => companionCurse.name == _curse.name)>>
+						<<set _flag = !_companion.hasCurse(_curse.name)>>
 					<</if>>
 			<</switch>>
 
@@ -370,11 +371,7 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 				<<capture _companion _curse _tempName>>
 					&nbsp; _curse.name
 					<<link "Choose" "Layer3 Skewed1a">>
-						<<set _companion.curses.push(_curse)>>
-
-						<<set _logName = _curse.type + "Log" + _tempName>>
-						<<set _log = State.variables[_logName]>>
-						<<if _log>><<set _log.push(_curse)>><</if>>
+						<<set _companion.addCurse(_curse.copy())>>
 
 						<<RemoveCurse _curse>>
 						<<set $dubloons -= ($skewedUsed * 5)>>
@@ -411,14 +408,14 @@ Which Curse would you like to force upon your unwilling companion?
 <<if $dubloons < ($skewedUsed * 5)>>
 	You do not have enough dubloons for an offering.
 <<else>>
-	<<for _i, _curse range $playerCurses>>
-		<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' && _curse.name != 'The Maxim' &&
-			!$hiredCompanions.every(companion => companion === $companionGolem || companion.curses.some(curse => curse.name == _curse.name))
+	<<for _i, _curse range $mc.curses>>
+		<<if _curse.name !== 'Double Trouble' && _curse.name !== 'Conjoined' && _curse.name !== 'The Maxim' &&
+			!$hiredCompanions.every(companion => companion === $companionGolem || companion.hasCurse(_curse.name))
 		>>
 			<<capture _i>>
 				[[_curse.name|Layer3 Skewed2b][$temp = _i]]<br>
 			<</capture>>
-		<<elseif _curse.name == 'The Maxim'>>
+		<<elseif _curse.name === 'The Maxim'>>
 			[[_curse.name|Maxim Bad End]] @@.alert1; You're stomach starts to hurt from the thrashing parasite when you're considering this option./*xxx*/<br>
 		<</if>>
 	<</for>>
@@ -430,8 +427,9 @@ Which Curse would you like to force upon your unwilling companion?
 
 
 :: Take on Submissiveness Rectification A [layer3]
-<<set $playerCurses.push($curse25)>><<set $corruption += $curse25.corr>><<set $LibidoLog.push($curse25)>>\
-[img[setup.ImagePath + $curse25.pic]]
+<<set _curse = new SubmissivenessRectificationA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you round a particularly tight bend in the endless caverns of this layer, you suddenly feel a wave of intense, warm energy wash over you. Your body shudders, and for a brief moment, it feels as though every inch of your skin is tingling with an electrifying sensation. Just as quickly as it arrived, the sensation vanishes, leaving you feeling lightheaded and disoriented.
 
@@ -456,9 +454,10 @@ This may impact how your sexual encounters and conversations with your companion
 
 
 :: Take on Asset Robustness C [layer3]
-<<set $playerCurses.push($curse27)>><<set $corruption += $curse27.corr>><<set $GenderLog.push($curse27)>>\
+<<set _curse = new AssetRobustnessC()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 <<CarryAdjust>>\
-[img[setup.ImagePath + $curse27.pic]]
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
 	The instant the curse takes hold, you feel it. Your penis springs to full erection, and then continues to grow relentlessly. The base, the shaft, and the tip all swell larger than they've ever been before, until you're sporting a $mc.penisCor inch long dong.
@@ -484,8 +483,9 @@ This may impact how your sexual encounters and conversations with your companion
 
 
 :: Take on Clothing Restriction B [layer3]
-<<if $mc.breasts > 4>><<set $curse28.appDesc += "A shame, because you'd really appreciate the support for your breasts. ">><</if>><<set $playerCurses.push($curse28)>><<set $corruption += $curse28.corr>>\
-[img[setup.ImagePath + $curse28.pic]]
+<<set _curse = new ClothingRestrictionB()>>\
+<<if $mc.breasts > 4>><<set _curse.appDesc += "A shame, because you'd really appreciate the support for your breasts. ">><</if>><<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Navigating the complex network of tunnels in the Abyss's third layer, you suddenly find yourself gripped by an inexplicable urge. A tingling sensation spreads throughout your body, centering on your most intimate areas. Your breathing becomes heavy, and you can feel your heart pounding in your chest.
 
@@ -504,8 +504,9 @@ Determined to continue your journey through the Abyss, you press forward, acutel
 
 
 :: Take on Power Dom [layer3]
-<<set $playerCurses.push($curse29)>><<set $corruption += $curse29.corr>><<set $LibidoLog.push($curse29)>>\
-[img[setup.ImagePath + $curse29.pic]]
+<<set _curse = new PowerDom()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you navigate the shadows, a sudden, intense energy envelops you – it feels like an electric charge, igniting your nerves and setting your senses ablaze. You stop in your tracks, feeling the sensation course through your body, every muscle tensing with anticipation.
 
@@ -526,8 +527,9 @@ This may impact how your sexual encounters and conversations with your companion
 
 
 :: Take on 20/20000000 [layer3]
-<<set $playerCurses.push($curse30)>><<set $corruption += $curse30.corr>>\
-[img[setup.ImagePath + $curse30.pic]]
+<<set _curse = new Curse2020()>>
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 The miasma hangs heavy in the air, and you can't help but feel a sense of foreboding as you venture further into the depths. Suddenly, an unnerving sensation washes over you, as if a dark presence has set its sights on you. Before you can even react, you're struck by an invisible force of miasma.
 
@@ -548,8 +550,9 @@ The thought of a lifetime wearing these cumbersome glasses and struggling with c
 
 
 :: Take on Comic Relief [layer3]
-<<if $playerCurses.some(e => e.name === "Power Dom")>><<set $curse31.appDesc += "It's especially annoying, because no one ever lets you take charge! ">><</if>><<set $playerCurses.push($curse31)>><<set $corruption += $curse31.corr>>\
-[img[setup.ImagePath + $curse31.pic]]
+<<set _curse = new ComicRelief()>>\
+<<if $mc.hasCurse(PowerDom)>><<set _curse.appDesc += "It's especially annoying, because no one ever lets you take charge! ">><</if>><<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 You feel a shiver run down your spine, an inexplicable sensation of foreboding that leaves you uneasy. It's as if the air around you has become charged with anticipation, and you can't shake the feeling that something is about to happen. Your heart races as you cautiously inch forward, every step sending a tremor of dread through your body.
 
@@ -570,8 +573,9 @@ With each step you take deeper into the Abyss, the Curse's grip on you grows str
 
 
 :: Take on Equal Opportunity [layer3]
-<<set $playerCurses.push($curse32)>><<set $corruption += $curse32.corr>>\
-[img[setup.ImagePath + $curse32.pic]]
+<<set _curse = new EqualOpportunity()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Suddenly, a wave of miasma seems to wash over you and pass through your body. As you regain your composure, an eerie sensation creeps over you, like a shiver down your spine. Your heart races, and your palms grow clammy with sweat as an unknown force suddenly engulfs you.
 
@@ -592,8 +596,9 @@ You shake your head, forcing yourself to focus on the task at hand: continuing y
 
 
 :: Take on Absolute Pregnancy [layer3]
-<<if $mc.vagina == 0 || $mc.womb == 0>><<set $curse33.appDesc += "Hope you're happy with paying child support! ">><<else>><<set $curse33.appDesc += "Hope you're happy with constant pregnancy! ">><</if>><<set $playerCurses.push($curse33)>><<set $corruption += $curse33.corr>>\
-[img[setup.ImagePath + $curse33.pic]]
+<<set _curse = new AbsolutePregnancy()>>\
+<<if $mc.vagina == 0 || $mc.womb == 0>><<set _curse.appDesc += "Hope you're happy with paying child support! ">><<else>><<set _curse.appDesc += "Hope you're happy with constant pregnancy! ">><</if>><<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you wander through the caverns, suddenly, deep within your <<if $mc.sex == "male">>groin<<else>>abdomen<</if>>, an intense warmth burgeons, spreading outward like molten lava seeping through cracks. It's a strange sensation, foreign yet not unwelcome, discomforting yet empowering.
 
@@ -614,8 +619,9 @@ Pregnancy may impair you in your difficult journey through the Abyss, so be care
 
 
 :: Take on Absolute Birth Control [layer3]
-<<set $playerCurses.push($curse34)>><<set $corruption += $curse34.corr>>\
-[img[setup.ImagePath + $curse34.pic]]
+<<set _curse = new AbsoluteBirthControl()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 The rocks underfoot are rough, the moss slick and damp. Alien fungi illuminate the path with a cold, ethereal light, their spores dancing in the air like a rain of falling stars. The atmosphere is thick, a heady mix of damp earth and the musty, sweet aroma of exotic fungi. Despite the absolute darkness that looms ahead, the Abyss feels strangely alive, a world humming with unseen energy.
 
@@ -642,27 +648,19 @@ Yet, as you stand in the depths of the Abyss, a single figure in the glow of oth
 
 
 :: Take on Wacky Wombs [layer3]
-<<set $playerCurses.push($curse35)>><<set $corruption += $curse35.corr>><<set $GenderLog.push($curse35)>>\
-[img[setup.ImagePath + $curse35.pic]]
+<<set _curse = new WackyWombs()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse35.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 What is the location of the womb you would like to add?
-<<if $curse35.variation1=="">> 
-	<<radiobutton "$curse35.variation1" "throat" checked>> Throat
-	<<radiobutton "$curse35.variation1" "urethra" >> Urethra
-	<<radiobutton "$curse35.variation1" "anus" >> Anus
-	<<if $mc.vagina > 0 >>
-		<<radiobutton "$curse35.variation1" "vagina" >> Vagina
-	<</if>>
-<<else>>
-	<<radiobutton "$curse35.variation2" "throat" checked>> Throat
-	<<radiobutton "$curse35.variation2" "urethra" >> Urethra
-	<<radiobutton "$curse35.variation2" "anus" >> Anus
-	<<if $mc.vagina > 0 >>
-		<<radiobutton "$curse35.variation2" "vagina" >> Vagina
-	<</if>>
-<</if>>
+<<radiobutton "_curse._wombLocation" "throat" checked>> Throat
+<<radiobutton "_curse._wombLocation" "urethra" >> Urethra
+<<radiobutton "_curse._wombLocation" "anus" >> Anus
+<<if $mc.vagina > 0 >>\
+    <<radiobutton "_curse._wombLocation" "vagina" >> Vagina
+<</if>>\
 
 
 [[Accept more Curses from the third layer|Layer3 Curses]]
@@ -674,8 +672,9 @@ What is the location of the womb you would like to add?
 
 
 :: Take on Omnitool [layer3]
-<<if $mc.vagina == 1 || $mc.womb > 0>><<set $curse36.appDesc += "You can get pregnant even from having sex with monsters and animals. ">><<else>><<set $curse36.appDesc += "You can even impregnate monsters and animals. ">><</if>><<set $playerCurses.push($curse36)>><<set $corruption += $curse36.corr>>\
-[img[setup.ImagePath + $curse36.pic]]
+<<set _curse = new Omnitool()>>\
+<<if $mc.vagina == 1 || $mc.womb > 0>><<set _curse.appDesc += "You can get pregnant even from having sex with monsters and animals. ">><<else>><<set _curse.appDesc += "You can even impregnate monsters and animals. ">><</if>><<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A sudden wave of dizziness washes over you, causing your knees to buckle. An intense heat surges through your body, more alluring than any you have experienced before.
 
@@ -704,8 +703,9 @@ Pregnancy may impair you in your difficult journey through the Abyss, so be care
 
 
 :: Take on Gooey [layer3]
-<<set $playerCurses.push($curse37)>><<set $corruption += $curse37.corr>>\
-[img[setup.ImagePath + $curse37.pic]]
+<<set _curse = new Gooey()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A sudden wave of nausea washes over your entire body, as if your stomach was turning inside out inside of you. You heave to vomit, but nothing comes out, instead the feeling of nausea increases.
 
@@ -726,21 +726,23 @@ Despite the drastic change, you don't have much time to ponder it as you do need
 
 
 :: Take on Rainbow Swirl [layer3]
-<<set $playerCurses.push($curse38)>><<set $corruption += $curse38.corr>>\
-[img[setup.ImagePath + $curse38.pic]]
+<<set _curse = new RainbowSwirl()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse38.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 Please enter your new skin color:
-<<textbox "$curse38.variation" "pink">>
+<<textbox "_curse.skinColor" "pink">>
 
 Please enter a new eye color:
-<<textbox "$curse38.variation2" "pink">>
+<<textbox "_curse.eyeColor" "pink">>
 
 [[Confirm your choices|Rainbow Swirl Event]]
 
 
 :: Rainbow Swirl Event
+<<set _curse = $mc.getCurse(RainbowSwirl)>>
 
 In this layer of the Abyss, the darkness feels absolute, a tangible presence that envelops you, swallows you. However, you find respite in the occasional glimmers of light from bioluminescent moss and fungi. They paint fleeting specters of indigo and neon green on the rough cave walls, an ethereal light show in the otherwise impenetrable black.
 
@@ -750,9 +752,9 @@ It is abrupt, unexpected, a shock that echoes through your very core. Your heart
 
 Your skin prickles, your nerves firing like miniature stars beneath the surface. It starts as a mild tingle, a soft tickle, but quickly escalates into a maddening itch that races across your entire body. You gasp, a strangled sound, as the sensation intensifies. It isn't painful, exactly, but disconcerting, like a million ants crawling just beneath your skin.
 
-Instinctively, you look at your hands. The skin is changing color, shifting, shimmering like a chameleon's scales. Your breath hitches in your throat as you watch in disbelief. Your skin is $curse38.variation colored, an unusual sight when you look down at yourself, and it is not a subtle transformation. Your eyes, too, feel different, and when you will later check your reflection, you will see they are now $curse38.variation2.
+Instinctively, you look at your hands. The skin is changing color, shifting, shimmering like a chameleon's scales. Your breath hitches in your throat as you watch in disbelief. Your skin is _curse.skinColor colored, an unusual sight when you look down at yourself, and it is not a subtle transformation. Your eyes, too, feel different, and when you will later check your reflection, you will see they are now _curse.eyeColor.
 
-A shiver runs down your spine at the thought of looking so different than you did before, a mixture of dread and anticipation. But for now, all you can do is continue forward, into the depths, your body a beacon of $curse38.variation color in the darkness.
+A shiver runs down your spine at the thought of looking so different than you did before, a mixture of dread and anticipation. But for now, all you can do is continue forward, into the depths, your body a beacon of _curse.skinColor color in the darkness.
 
 [[Accept more Curses from the third layer|Layer3 Curses]]
 <<if $escBalDepl==0>>
@@ -763,8 +765,9 @@ A shiver runs down your spine at the thought of looking so different than you di
 
 
 :: Take on Double Pepperoni [layer3]
-<<set $playerCurses.push($curse39)>><<set $corruption += $curse39.corr>>\
-[img[setup.ImagePath + $curse39.pic]]
+<<set _curse = new DoublePepperoni()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A mysterious energy from the Abyss grips your nipples, sending shivers down your spine as tingling sensations wash over them in rhythmic waves. The intensity of the feeling grows, oscillating between the very tips of your nipples and the outer edges of your areolae. Each wave of energy extends the sensation's reach ever so slightly, transforming the surrounding skin into the pliable and sensitive texture of areolar tissue. The waves ebb and flow, leaving a subtle increase in mass at the tips of your nipples each time they recede.
 
@@ -785,8 +788,9 @@ The Curse's effects are more distracting than you initially anticipated.
 
 
 :: Take on Literal Blushing Virgin [layer3]
-<<set $playerCurses.push($curse40)>><<set $corruption += $curse40.corr>>\
-[img[setup.ImagePath + $curse40.pic]]
+<<set _curse = new LiteralBlushingVirgin()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 In this shadowy, claustrophobic environment, you notice a small alcove off to the side. The walls of this secluded space are lined with an unusually vibrant patch of the bioluminescent moss, and it seems like a good place to rest your weary body for a moment. As you settle in, you run your fingers across the soft, luminescent growth, marveling at its otherworldly beauty.
 
@@ -809,8 +813,9 @@ On the other hand, the idea of each encounter feeling like your first time holds
 
 
 :: Take on Gender Reversal C [layer3]
-<<set $playerCurses.push($curse26)>><<set $corruption += $curse26.corr>><<set $GenderLog.push($curse26)>>\
-[img[setup.ImagePath + $curse26.pic]]
+<<set _curse = new GenderReversalC()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Gender Curse">>
 
@@ -851,24 +856,25 @@ As predicted, the water is pure and you can drink it without side effects!
 :: Layer3 Skewed2b [layer3]
 [img[setup.ImagePath+'Wonders/slantedshrine.png']]
 
-Which companion would you like to force the Curse of $playerCurses[$temp].name upon?
+Which companion would you like to force the Curse of $mc.curses[$temp].name upon?
 
 The magic of the shrine wisps through the air menacingly as your victim struggles helplessly.
 
 <<nobr>>
-<<set _curse = $playerCurses[$temp]>>
+<<set _curse = $mc.curses[$temp]>>
 <<for _i, _companion range $hiredCompanions>>
 	<<set _flag = false>>
 	<<set _tempName = _companion.name>>
+	<<set _companionId = _companion.id>>
 
-	<<switch _tempName>>
-		<<case $companionTwin.name>>
+	<<switch _companionId>>
+		<<case setup.companionIds.twin>>
 			Your twin already shares all of your Curses.<br>
-		<<case "Golem">>
+		<<case setup.companionIds.golem>>
 			You can't transfer Curses to your Golem.<br>
 		<<default>>
 			/* Check whether companion already has this curse (e.g. from the layer 4 shrine). */
-			<<set _flag = !_companion.curses.some(companionCurse => companionCurse.name == _curse.name)>>
+			<<set _flag = !_companion.hasCurse(_curse.name)>>
 			<<if !_flag>>_companion.name already has this Curse!<br><</if>>
 	<</switch>>
 
@@ -877,11 +883,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 		<<capture _companion _i _tempName>>
 			<<set _choiceText = "Transfer to " + _tempName>>
 			<<link _choiceText "Layer3 Skewed Apply">>
-				<<set _companion.curses.push(_curse)>>
-
-				<<set _logName = _curse.type + "Log" + _tempName>>
-				<<set _log = State.variables[_logName]>>
-				<<if _log>><<set _log.push(_curse)>><</if>>
+				<<set _companion.addCurse(_curse.copy())>>
 
 				<<RemoveCurse _curse>>
 				<<set $dubloons -= ($skewedUsed * 5)>>
@@ -900,7 +902,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 
 <<nobr>>
 <<set $skewedForced += 1>>
-<<set _companionName = $hiredCompanions[$temp2].name>>
+<<set _companionId = $hiredCompanions[$temp2].id>>
 <<set _affectionPenalty = 6 - $hsswear>>
 <<include "Companion Mistreatment Reaction">>
 <</nobr>>
@@ -948,44 +950,38 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[_temp1].name an
 <<for _i = 0; _i < 1; _i>>
 	<<set _temp1 = random(0,15) + 24>>
 	<<set _temp2 = random(0,15) + 24>>
-	<<if (_temp1 !== _temp2) && (_temp1 + _temp2 !== 52 && (Math.abs(_temp1 - _temp2) !== 65))&& (_temp1 + _temp2 !== 6 && (Math.abs(_temp1 - _temp2) !== 1) && !($playerCurses.some(e => e.name === "Shrunken Assets") && (_temp1 == 26 || _temp2 == 26) ))>>
+	<<if (_temp1 !== _temp2) && (_temp1 + _temp2 !== 52 && (Math.abs(_temp1 - _temp2) !== 65))&& (_temp1 + _temp2 !== 6 && (Math.abs(_temp1 - _temp2) !== 1) && !($mc.hasCurse("Shrunken Assets") && (_temp1 == 26 || _temp2 == 26) ))>>
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[_temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[_temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[_temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[_temp2].corr * 3 / 2), 0))>>
+<<set _curse1 = setup.curseByNum(_temp1)>>
+<<set _curse2 = setup.curseByNum(_temp2)>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name and $curses[_temp2].name for a cost of <<print Math.round(Math.max(($curses[_temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[_temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
-<<if $curses[_temp1].name ==  "Wacky Wombs" || $curses[_temp2].name ==  "Wacky Wombs">>
-	<<set $GenderLog.push($curse35)>>
-	<<if $mc.womb==0>> 
-		<<radiobutton "$curse35.variation1" "throat" checked>> Throat
-		<<radiobutton "$curse35.variation1" "urethra" >> Urethra
-		<<radiobutton "$curse35.variation1" "anus" >> Anus
-		<<if $vagina > 0 >>
-			<<radiobutton "$curse35.variation1" "vagina" >> Vagina
-		<</if>>
-	<<else>>
-		<<radiobutton "$curse35.variation2" "throat" checked>> Throat
-		<<radiobutton "$curse35.variation2" "urethra" >> Urethra
-		<<radiobutton "$curse35.variation2" "anus" >> Anus
-		<<if $vagina > 0 >>
-			<<radiobutton "$curse35.variation2" "vagina" >> Vagina
-		<</if>>
-	<</if>>
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
+<<set _hasww = (_wwcurse = _curse1).name ===  "Wacky Wombs" || (_wwcurse = _curse2).name ===  "Wacky Wombs">>\
+<<if _hasww>>
+    <<radiobutton "_wwcurse._wombLocation" "throat" checked>> Throat
+    <<radiobutton "_wwcurse._wombLocation" "urethra" >> Urethra
+    <<radiobutton "_wwcurse._wombLocation" "anus" >> Anus
+    <<if $mc.vagina > 0 >>\
+        <<radiobutton "_wwcurse._wombLocation" "vagina" >> Vagina
+    <</if>>\
 <</if>>
-<<if $curses[_temp1].name ==  "Rainbow Swirl" || $curses[_temp2].name ==  "Rainbow Swirl" >>
+<<set _hasrs = (_rscurse = _curse1).name === "Rainbow Swirl" || (_rscurse = _curse2).name === "Rainbow Swirl">>\
+<<if _hasrs >>
 
 Please enter your new skin/eye color:
 
 Please enter your new skin color:
-<<textbox "$curse38.variation" "pink">>
+<<textbox "_rscurse.skinColor" "pink">>
 
 Please enter a new eye color:
-<<textbox "$curse38.variation2" "pink">>
+<<textbox "_rscurse.eyeColor" "pink">>
 
 [[Confirm your choices|Rainbow Swirl Event]]
 
@@ -993,67 +989,44 @@ Please enter a new eye color:
 
 [[Continue on to the rest of the layer|Layer3 Hub]]<</if>>
 
-<<nobr>>
-<<if $curses[_temp1].name ==  "Submissiveness Rectification A" || $curses[_temp2].name ==  "Submissiveness Rectification A">>
-	<<set $LibidoLog.push($curse25)>>
-<</if>>
-<<if $curses[_temp1].name ==  "Gender Reversal C" || $curses[_temp2].name == "Gender Reversal C"  >>
-	<<set $GenderLog.push($curse26)>>
-<</if>>
-<<if $curses[_temp1].name ==  "Asset Robustness C" || $curses[_temp2].name ==  "Asset Robustness C">>
-	<<set $GenderLog.push($curse27)>>
-<</if>>
-<<if $curses[_temp1].name == "Power Dom" || $curses[_temp2].name ==  "Power Dom">>
-	<<set $LibidoLog.push($curse29)>>
-<</if>>
-
-<</nobr>>
 
 :: Layer3 Cherry Mix [layer3]
 <<nobr>>
 <<set _temp1 = random(0,11) + 21>>
 <<for _i = 0; _i < 1; _i >>
 	<<set _temp2 = random(0,15) + 24>>
-	<<if !($playerCurses.some(e => e.name === "Shrunken Assets") &&  _temp2 == 26 )>>
+	<<if !($mc.hasCurse(ShrunkenAssets) && _temp2 == 26 )>>
 		<<break>>
 	<</if>>
 <</for>>
 <<set $ownedRelics.push($relics[_temp1])>>
 
+<<set _curse = setup.curseByNum(_temp2)>>
 <<set $corruption -= Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[_temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[_temp2].corr * 3 / 2), 0))>>
+<<set $mc.addCurse(_curse)>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 3 / 2), 0))>>
+<<set $corruption += _curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[_temp1].name for a cost of <<print Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[_temp2].name for a gain of <<print Math.round(Math.max(($curses[_temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+With Cherry's Chaotic Luck you have found the Relic $relics[_temp1].name for a cost of <<print Math.floor(Math.max(($relics[_temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
 
-<<if $curses[_temp2].name == "Wacky Wombs">>
-	<<set $GenderLog.push($curse35)>>
+<<if _curse.name == "Wacky Wombs">>
 	What is the location of the womb you would like to add?
-	<<if $mc.womb==0>> 
-		<<radiobutton "$curse35.variation1" "throat" checked>> Throat
-		<<radiobutton "$curse35.variation1" "urethra" >> Urethra
-		<<radiobutton "$curse35.variation1" "anus" >> Anus
-		<<if $vagina > 0 >>
-			<<radiobutton "$curse35.variation1" "vagina" >> Vagina
-		<</if>>
-	<<else>>
-		<<radiobutton "$curse35.variation2" "throat" checked>> Throat
-		<<radiobutton "$curse35.variation2" "urethra" >> Urethra
-		<<radiobutton "$curse35.variation2" "anus" >> Anus
-		<<if $vagina > 0 >>
-			<<radiobutton "$curse35.variation2" "vagina" >> Vagina
-		<</if>>
-	<</if>>
+    <<radiobutton "_curse._wombLocation" "throat" checked>> Throat
+    <<radiobutton "_curse._wombLocation" "urethra" >> Urethra
+    <<radiobutton "_curse._wombLocation" "anus" >> Anus
+    <<if $vagina > 0 >>\
+        <<radiobutton "_curse._wombLocation" "vagina" >> Vagina
+    <</if>>\
 <</if>>
 
-<<if $curses[_temp2].name =="Rainbow Swirl">>
+<<if _curse.name =="Rainbow Swirl">>
 
 Please enter your new skin color:
-<<textbox "$curse38.variation" "pink">>
+<<textbox "_curse.skinColor" "pink">>
 
 Please enter a new eye color:
-<<textbox "$curse38.variation2" "pink">>
+<<textbox "_curse.eyeColor" "pink">>
 
 [[Confirm your choices|Rainbow Swirl Event]]
 
@@ -1061,21 +1034,6 @@ Please enter a new eye color:
 
 [[Continue on to the rest of the layer|Layer3 Hub]]<</if>>
 
-<<nobr>>
-<<if $curses[_temp2].name == "Submissiveness Rectification A">>
-	<<set $LibidoLog.push($curse25)>>
-<</if>>
-<<if $curses[_temp2].name == "Gender Reversal C">>
-	<<set $GenderLog.push($curse26)>>
-<</if>>
-<<if $curses[_temp2].name == "Asset Robustness C">>
-	<<set $GenderLog.push($curse27)>>
-<</if>>
-<<if $curses[_temp2].name == "Power Dom">>
-	<<set $LibidoLog.push($curse29)>>
-<</if>>
-
-<</nobr>>
 
 :: Layer3 Exit2 [layer3]
 <<PassTimeWithEvents>>\
@@ -1363,7 +1321,7 @@ This Relic can be used to avoid future traps you may encounter in the Abyss.
 
 :: Layer3 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[3]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
@@ -1473,7 +1431,7 @@ How do you want to deal with the tentacle beast moving in on you?
 	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
 	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
 <</if>>
-<<if $items[14].count > 0 && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
 	[[Have Khemia fight it off with a sword|$returnPassage]]<br><br>
 <</if>>
@@ -1489,14 +1447,14 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 <<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
 	<<set $status.duration += (3 - $statRed)>>
 	<<set $status.penalty += 2>>
-	<<if $playerCurses.some(e => e.name === "Omnitool")>>
+	<<if $mc.hasCurse(Omnitool)>>
 		<<PregCheck>>
 	<</if>>
 	<<MonsterPregCheckParty>>
 <</link>><br>
 <br>
 
-<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.name === "Golem") && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
+<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.golem) && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
 <br><br>As the tentacle beast closes in on you, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
 
 <<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>
@@ -1586,13 +1544,13 @@ But even as you gather yourself and prepare to move forward, you can't help but 
 <<set _forageFood = $forageFood, _forageWater = $forageWater>>
 <<set _forageFood = 0, _forageWater = 0>>
 /* Pass time until no longer held. */
-<<set _waitTime = $playerCurses.some(e => e.name === "Gooey") ? 1 : 2>>
+<<set _waitTime = $mc.hasCurse(Gooey) ? 1 : 2>>
 <<silently>><<PassTime _waitTime>><</silently>>
 /* Restore foraging settings. */
 <<set $forageFood = _forageFood, $forageWater = _forageWater>>
 <</nobr>>
 [img[setup.ImagePath+'Threats/slackslime.png']]
-<<if $playerCurses.some(e => e.name === "Gooey")>>
+<<if $mc.hasCurse(Gooey)>>
 As the paralysis takes hold, you are left at the mercy of the Slackslime, your body immobile and completely vulnerable. The creature is initially cautious, examining your gooey form with a mix of curiosity and suspicion. As it realizes the similarity between your $slimeColor body and its own, a sense of camaraderie seems to form between you and the organism.
 
 Despite this newfound bond, the Slackslime still feels the need to feed on the protein from your sexual fluids. Its tendrils glide over your exposed flesh, tracing the contours of your body with eerie precision. The stimulation sends unexpected jolts of pleasure through your immobilized form, blurring the line between fear and desire.
