@@ -15,7 +15,7 @@
 
 For an area that otherwise bears such a strong resemblance to a surface desert, this layer is positively brimming with beautiful, colorful foliage, the petals of which chaotically dance in the wind, painting a shower of color against the backdrop of he ever-shifting dunes, and filling your nose with the scents of the world's best-stocked flower shop. Even the living flowers are astonishingly dry and fragrant, having long abandoned water and instead adapted to survive entirely on Miasma. Dotted about the layer, ruins carved from sandstone hide ancient secrets, telling the story of a long-gone civilization in a long-dead language.
 
-[[Walk through the fifth layer of the Abyss|Layer5 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+[[Walk through the fifth layer of the Abyss|Layer5 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<if $visitL5 == 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer5 Cherry]]">><</if>>
 <</if>><</nobr>>
@@ -48,7 +48,7 @@ For an area that otherwise bears such a strong resemblance to a surface desert, 
 	<<else>>
 		As you walk, you stumble upon a half-buried sandstone ruin adorned with intricate carvings. Taking a closer look, you find that the carvings depict a variety of explicit scenes. One particularly striking scene features a woman sitting upon a throne, a man kneeling before her with his head bowed in submission. The woman is adorned in exquisite jewelry, and her hand rests possessively on the man's head, guiding him in an intimate act. The carvings are incredibly detailed, showcasing the power dynamics and emotions at play. The combination of ancient artistry and eroticism creates a strange, captivating atmosphere. Curious but cautious, you choose not to linger and continue on your journey.<br><br>
 	<</if>>
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse("Hijinks Ensue")>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -119,77 +119,77 @@ How would you like to use Cherry's chaotic luck ability?
 	As the aphrodisiacs permeate the air, a primal urge seizes you, igniting an intense heat deep within. Overwhelmed by a desire more powerful than anything you've ever experienced, your senses are heightened and your body craves satisfaction. Intoxicated by this tidal wave of passion, your thoughts blur, and your memories of the day meld together into a tapestry of sensual encounters.<br><br>
 	<<if _selection == "Oral Dom">>
 	At one point, you recall _handle.name's <<if _handle.sex=="male">>his<<else>>her<</if>> lips <<if $mc.penisCor > 2 && $mc.vagina == 0>>encircling your throbbing cock, the moist warmth enveloping you entirely. It wasn't long before you released your pent-up desires, filling _handle.name's throat with your essence.<<elseif $mc.penisCor <= 2 && $mc.vagina > 0>>pressed firmly against your quivering pussy, their tongue working relentlessly, driving you to an earth-shattering climax that left you weak in the knees.<<else>>wrapped tightly around your cock, then shifting lower to lavish attention on your pulsating pussy. You lost count of your orgasms, but one particularly intense wave left _handle.name eagerly swallowing your release.<</if>>
-	<<if !setup.isPregnant(_handle) && $mc.penisCor >0 && (_handle.womb1 == "throat" || _handle.womb2 == "throat") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && $mc.penis > 0 && _handle.extraWombs.includes('throat') && (_temp < 20 || _handle.hasCurse(AbsolutePregnancy)) && !_handle.hasCurse(AbsoluteBirthControl) && !$mc.hasCurse(AbsoluteBirthControl)>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Oral Sub">>
 	At one point, you remember your lips <<if _handle.penisCor > 2 && _handle.vagina == 0>>wrapped around _handle.name's throbbing cock, taking it deep into your throat as the salty tip occasionally rewarded your efforts with a burst of flavor.<<elseif _handle.penisCor <= 2 && _handle.vagina > 0>>pressed against _handle.name's slick pussy, your tongue exploring <<if _handle.sex=="male">>his<<else>>her<</if>> warm folds with fervor.<<else>>wrapped around _handle.name's cock, swallowing it to the hilt before switching to lavish attention on <<if _handle.sex=="male">>his<<else>>her<</if>> dripping pussy.<</if>>
-	<<if ($mc.womb1 == "throat" || $mc.womb2 == "throat") && _handle.penisCor>0 >>
+	<<if $mc.extraWombs.includes('throat') && _handle.penisCor>0 >>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "DP Sub">>
 	Fragments of memories emerge, but one stands out vividly: both your holes being filled by _handle.name's twin phalluses. The simultaneous sensation of both cocks pumping in and out of you was an unrivaled erotic experience.
-	<<if !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !_handle.hasCurse(AbsoluteBirthControl)>>
 		<<PregCheck>>
 	<</if>>
-	<<if $mc.womb > 1 && ($mc.womb1 == "anus" || $mc.womb2 == "anus") && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.womb > 1 && $mc.extraWombs.includes('anus') && !_handle.hasCurse(AbsoluteBirthControl)>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "DP Dom">>
 	Some memories flicker more clearly than others, but you're certain that at one point both your penises were simultaneously filling _handle.name's eager holes. The unique sensation of two cocks being stimulated at the same time was exhilarating, and the shared orgasm that followed was a transcendent experience unlike any other.
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.hasCurse(AbsolutePregnancy)) && !_handle.hasCurse(AbsoluteBirthControl) && !$mc.hasCurse(AbsoluteBirthControl)>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
-	<<if (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if _handle.extraWombs.includes('anus') && (_temp < 20 || _handle.hasCurse(AbsolutePregnancy)) && !_handle.hasCurse(AbsoluteBirthControl) && !$mc.hasCurse(AbsoluteBirthControl)>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Anal Sub">>
 	Your memory is filled with the sultry sound of your own moans, as _handle.name's throbbing penis penetrated your tight, quivering ass. You can't quite remember the exact duration of the relentless pounding, but the aftermath left you breathless and drooling, utterly sated.
-	<<if ($mc.womb1 == "anus" || $mc.womb2 == "anus") && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.extraWombs.includes('anus') && !_handle.hasCurse(AbsoluteBirthControl)>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Anal Dom">>
 	The vivid recollection of _handle.name's desperate moans rings in your ears, as your rock-hard dick relentlessly pounded <<if _handle.sex=="male">>his<<else>>her<</if>> inviting ass. The memory of how long you dominated _handle.name's behind is hazy, but one thing is clear: <<if _handle.sex=="male">>he<<else>>she<</if>> was left a panting, drooling mess in the aftermath.
-	<<if !setup.isPregnant(_handle) && (_handle.womb1 == "anus" || _handle.womb2 == "anus") && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.extraWombs.includes('anus') && (_temp < 20 || _handle.hasCurse(AbsolutePregnancy)) && !_handle.hasCurse(AbsoluteBirthControl) && !$mc.hasCurse(AbsoluteBirthControl)>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Sub">>
 	Your memories are filled with the warmth and comfort of being embraced by _handle.name. The tender cuddling gradually evolved into passionate kisses and caresses until <<if _handle.sex=="male">>he<<else>>she<</if>> was lying naked on top of you. Your ecstatic screams filled the air as <<if _handle.sex=="male">>he<<else>>she<</if>> filled you with their essence, your legs locked around their waist, trapping them in your loving embrace.
-	<<if !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !_handle.hasCurse(AbsoluteBirthControl)>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Regular Dom">>
 	The memory of gently cuddling _handle.name soon turned into a passionate session of intimate hugs and feverish kisses. Before long, <<if _handle.sex=="male">>he<<else>>she<</if>> was naked beneath you, trembling with anticipation. As you penetrated <<if _handle.sex=="male">>him<<else>>her<</if>>, _handle.name's cries of ecstasy filled the room, their legs locked around your waist, while you released your passion deep inside of <<if _handle.sex=="male">>him<<else>>her<</if>>.
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.hasCurse(AbsolutePregnancy)) && !_handle.hasCurse(AbsoluteBirthControl) && !$mc.hasCurse(AbsoluteBirthControl)>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Regular Alt Sub">>
 	You recall the moment when _handle.name tenderly took your hand and guided you down to lie beside <<if _handle.sex=="male">>him<<else>>her<</if>>. As your lips met in a passionate embrace, <<if _handle.sex=="male">>he<<else>>she<</if>> eagerly undressed you. Your arousal was evident as both of you became naked, and _handle.name couldn't help but notice. <<if _handle.sex=="male">>He<<else>>She<</if>> climbed on top of you, sensually riding you until you both reached shuddering, toe-curling climaxes.
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 20 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>	
 	<<elseif _selection == "Regular Alt Dom">>
 	You remember taking _handle.name's hand and drawing <<if _handle.sex=="male">>him<<else>>her<</if>> close to lie beside you. As your lips collided in fervent kisses, you eagerly undressed <<if _handle.sex=="male">>him<<else>>her<</if>>. _handle.name was visibly aroused by the time you were both naked, a fact you delighted in. You straddled _handle.name and rode <<if _handle.sex=="male">>him<<else>>her<</if>> passionately, the intensity building until you both succumbed to electrifying, toe-curling orgasms.
-	<<if $mc.womb > 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if $mc.womb > 0 && !_handle.hasCurse("Absolute Birth Control")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Boobjob Dom">>
 	You remember accidentally brushing against _handle.name's breast, which surprisingly elicited a flirtatious giggle. Within moments, <<if _handle.sex=="male">>his<<else>>her<</if>> breasts were exposed and you were caressing them with fervor. Unable to control yourself any longer, you pushed <<if _handle.sex=="male">>him<<else>>her<</if>> down and unveiled your throbbing arousal. Then, you reveled in the sensation of _handle.name enveloping your shaft with <<if _handle.sex=="male">>his<<else>>her<</if>> ample cleavage, working it expertly until you reached a climactic release, showering <<if _handle.sex=="male">>him<<else>>her<</if>> with your essence.
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && _handle.curses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && _handle.hasCurse("Absolute Pregnancy")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Boobjob Sub">>
 	You remember _handle.name accidentally brushing against your breast, evoking a wicked giggle that you couldn't suppress. Soon, your breasts were bared, and <<if _handle.sex=="male">>he<<else>>she<</if>> was eagerly fondling them. Unable to contain <<if _handle.sex=="male">>himself<<else>>herself<</if>> any longer, _handle.name pushed you down and revealed <<if _handle.sex=="male">>his<<else>>her<</if>> throbbing arousal. Then, you felt _handle.name nestle <<if _handle.sex=="male">>his<<else>>her<</if>> shaft between your enticing cleavage, and you eagerly worked it with equal enthusiasm. The pleasure built until <<if _handle.sex=="male">>he<<else>>she<</if>> reached a powerful climax, drenching you in <<if _handle.sex=="male">>his<<else>>her<</if>> hot, sticky release.
-	<<if $playerCurses.some(e => e.name === "Absolute Pregnancy")>>
+	<<if $mc.hasCurse("Absolute Pregnancy")>>
 		<<PregCheck>>
 	<</if>>
 	<<elseif _selection == "Sex Scissor Sub/Dom">>
 	The memory of the intense heat suffusing your body is still vivid in your mind. Both you and _handle.name decided it was best to get undressed, and as your eyes met, an electric current seemed to flow between you. The moment <<if _handle.sex=="male">>he<<else>>she<</if>> touched your skin, an irresistible desire to embrace each other consumed you. Your bodies pressed tightly together, your groins grinding against one another, the friction creating a delicious sensation that left you both gasping for breath. It was evident that _handle.name was enjoying this as much as you were. In what seemed like mere minutes, <<if _handle.sex=="male">>he<<else>>she<</if>> arched her back and reached a shuddering climax<<if _handle.penisCor>0>>, coating your groin with hot, sticky cum<</if>>. The sight and sensation pushed you over the edge, and you too experienced a powerful orgasm<<if $mc.penisCor>0>>, drenching both of your groins with cum<</if>>.
-	<<if _handle.penisCor> 0 && !_handle.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if _handle.penisCor> 0 && !_handle.hasCurse("Absolute Birth Control")>>
 		<<set $pregChance /= 10>>
 		<<PregCheck>>
 	<</if>>
-	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 2 || _handle.curses.some(e => e.name === "Absolute Pregnancy")) && !_handle.curses.some(e => e.name === "Absolute Birth Control") && !$mc.curses.some(e => e.name === "Absolute Birth Control")>>
+	<<if !setup.isPregnant(_handle) && _handle.womb > 0 && (_temp < 2 || _handle.hasCurse("Absolute Pregnancy")) && !_handle.hasCurse("Absolute Birth Control") && !$mc.hasCurse("Absolute Birth Control")>>
 		<<set setup.setConsideredPregnant(_handle)>>
 	<</if>>
 	<<elseif _selection == "Self">>
@@ -677,8 +677,9 @@ You have successfully taken the $relic60.name Relic. Hopefully you can make good
 
 
 :: Take on Libido Reinforcement D [layer5]
-<<set $playerCurses.push($curse57)>><<set $corruption += $curse57.corr>><<set $LibidoLog.push($curse57)>>\
-[img[setup.ImagePath + $curse57.pic]]
+<<set _curse = new LibidoReinforcementD()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Libido Curse">>
 
@@ -691,8 +692,9 @@ You have successfully taken the $relic60.name Relic. Hopefully you can make good
 
 
 :: Take on Gender Reversal D [layer5]
-<<set $playerCurses.push($curse58)>><<set $corruption += $curse58.corr>><<set $GenderLog.push($curse58)>>\
-[img[setup.ImagePath + $curse58.pic]]
+<<set _curse = new GenderReversalD()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Gender Curse">>
 
@@ -706,8 +708,9 @@ You have successfully taken the $relic60.name Relic. Hopefully you can make good
 
 
 :: Take on Pleasure Respecification A [layer5]
-<<set $playerCurses.push($curse59)>><<set $corruption += $curse59.corr>>\
-[img[setup.ImagePath + $curse59.pic]]
+<<set _curse = new PleasureRespecificationA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 All of a sudden, you feel a change, a sensation almost as delicate as the petals dancing around you. An unseen energy reaches out and caresses you, the feeling akin to a lover's caress, a sensation both delicate and overwhelming.
 
@@ -730,8 +733,9 @@ The thought sends a shiver down your spine, leaving you with a sense of forebodi
 
 
 :: Take on Clothing Restriction C [layer5]
-<<set $playerCurses.push($curse60)>><<set $corruption += $curse60.corr>>\
-[img[setup.ImagePath + $curse60.pic]]
+<<set _curse = new ClothingRestrictionC()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 There is a palpable pulse in the air – a pregnant pause before the storm hits. And then, it does. Not a gust of wind or a flurry of sand, but a raw force, something primeval that strikes you like a crack of thunder.
 
@@ -752,8 +756,9 @@ You are naked now, save for the intimate pieces that, by some divine grace, the 
 
 
 :: Take on Massacre Manicure [layer5]
-<<set $playerCurses.push($curse61)>><<set $corruption += $curse61.corr>>\
-[img[setup.ImagePath + $curse61.pic]]
+<<set _curse = new MassacreManicure()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A wave of heat courses through your fingers, spreading through your entire body. You look down to see your nails beginning to transform. Before your eyes, they elongate, becoming sharp, deadly claws. You can retract them somewhat, but they remain dangerously prominent.
 
@@ -770,8 +775,9 @@ Your thoughts race as you try to wrap your head around the implications of this 
 
 
 :: Take on DoS [layer5]
-<<set $playerCurses.push($curse62)>><<set $corruption += $curse62.corr>><<set $LibidoLog.push($curse62)>>\
-[img[setup.ImagePath + $curse62.pic]]
+<<set _curse = new DoS()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>>>\
+[img[setup.ImagePath + _curse.pic]]
 
 The wind howls, a storm's lullaby echoing around you, twirling with unseen fury, raising a maelstrom of sand from the endless dunes around you. Yet in this savage dance of nature, there is an unexpected beauty. Colors - crimsons and purples, golds and blues, verdant greens - bloom like a kaleidoscope as the wind tosses about vibrant petals from the surrounding foliage. Their dry, fragrant scent is intoxicating.
 
@@ -800,8 +806,9 @@ This may impact how your sexual encounters and conversations with your companion
 
 
 :: Take on DoM [layer5]
-<<set $playerCurses.push($curse63)>><<set $corruption += $curse63.corr>><<set $LibidoLog.push($curse63)>>\
-[img[setup.ImagePath + $curse63.pic]]
+<<set _curse = new DoM()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 This part of the Abyss is as beautiful as it is relentless, a desert not of arid emptiness, but of vibrant life, its flora blooming amidst the shifting sands, their heady fragrance filling the air.
 
@@ -832,8 +839,9 @@ This may impact how your sexual encounters and conversations with your companion
 
 
 :: Take on Hijinks Ensue [layer5]
-<<set $playerCurses.push($curse64)>><<set $corruption += $curse64.corr>>\
-[img[setup.ImagePath + $curse64.pic]]
+<<set _curse = new HijinksEnsue()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 The relentless howl of the Abyssal wind is a symphony, setting the scene of the vast, sandy desert that stretches as far as your eye can see. Petals of cerulean, vermilion, and shimmering gold twirl in the tempest, swept away from their native flora to engage in a mesmerizing, riotous dance. Their unique, sweet aroma fills your nostrils, an intoxicating blend that speaks of wild untamed life, thriving in a landscape that should otherwise be barren. The desert's odd charm grows on you, even as the erratic gusts whip against your attire, struggling to steal it away.
 
@@ -858,8 +866,9 @@ As you button up the last of your shirt, you chuckle again, shaking your head at
 
 
 :: Take on Flower Power [layer5]
-<<set $playerCurses.push($curse65)>><<set $corruption += $curse65.corr>>\
-[img[setup.ImagePath + $curse65.pic]]
+<<set _curse = new FlowerPower()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A sudden silence falls around you, drowning out the howling wind and the sandy cyclones swirling about the vast desert of the Abyss. You squint, feeling an alien sensation prickling along your skin, the hot sand against your boots suddenly replaced by the cooling touch of dew-laden petals. Looking down, you find the ground at your feet bursting with life, vibrant flowers of all shapes and sizes swaying back and forth, seeming to rise from the sand itself.
 
@@ -888,8 +897,9 @@ You lift your vine-laden arms, looking at your transformed body in the harsh lig
 
 
 :: Take on Cellulose [layer5]
-<<set $playerCurses.push($curse66)>><<set $corruption += $curse66.corr>>\
-[img[setup.ImagePath + $curse66.pic]]
+<<set _curse = new Cellulose()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 The wind whistled ominously, carrying a bouquet of floral scents that seemed too delicate for the harsh environment of the Abyss. Each gust felt like a lover's caress, a soft touch that set your skin aflame with goosebumps. The sand beneath your feet felt warm, a comforting solidity against the endless expanse of empty space beneath. The shimmering dunes stretched out in every direction, a sea of gold against a cerulean abyssal sky.
 
@@ -915,8 +925,9 @@ Your skin may be susceptible to flames now, but you found yourself not fearing t
 
 
 :: Take on Carapacian [layer5]
-<<set $playerCurses.push($curse69)>><<set $corruption += $curse69.corr>>\
-[img[setup.ImagePath + $curse69.pic]]
+<<set _curse = new Carapacian()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you venture through the fifth layer, there's a sudden chill, a moment of anticipation before an unseen force invades your being. It feels like the worst static shock you've ever experienced, only it doesn't recede. Instead, it builds, intensifying to the point of unbearable pain.
 
@@ -932,39 +943,40 @@ Your eyes travel downwards, catching sight of your legs, now coated in the same 
 
 Please enter your new exoskeleton color:
 
-<<textbox "$curse69.variation" "shiny black" "Layer5 Curses">>
+<<textbox "_curse.skinColor" "shiny black" "Layer5 Curses">>
 
 
 :: Take on Hemospectrum [layer5]
-<<set $playerCurses.push($curse70)>><<set $corruption += $curse70.corr>>\
-[img[setup.ImagePath + $curse70.pic]]
+<<set _curse = new Hemospectrum()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse70.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 What would you like your new blood (or maybe hemolymph, depending on how human you are) color to be?
 
-<<radiobutton "$curse70.variation" "blue" checked>> Blue
-<<radiobutton "$curse70.variation" "purple" >> Purple
-<<radiobutton "$curse70.variation" "green" >> Green
-<<radiobutton "$curse70.variation" "yellow" >> Yellow
-<<radiobutton "$curse70.variation" "orange" >> Orange
-<<radiobutton "$curse70.variation" "pink" >> Pink
-<<radiobutton "$curse70.variation" "black" >> Black
-<<radiobutton "$curse70.variation" "brown" >> Brown
-<<radiobutton "$curse70.variation" "white" >> White
+<<radiobutton "_curse.bloodColor" "blue" checked>> Blue
+<<radiobutton "_curse.bloodColor" "purple" >> Purple
+<<radiobutton "_curse.bloodColor" "green" >> Green
+<<radiobutton "_curse.bloodColor" "yellow" >> Yellow
+<<radiobutton "_curse.bloodColor" "orange" >> Orange
+<<radiobutton "_curse.bloodColor" "pink" >> Pink
+<<radiobutton "_curse.bloodColor" "black" >> Black
+<<radiobutton "_curse.bloodColor" "brown" >> Brown
+<<radiobutton "_curse.bloodColor" "white" >> White
 
 [[Continue|Hemospectrum 2]]
 
 
 :: Hemospectrum 2
-
+<<set _curse = $mc.getCurse(Hemospectrum)>>
 You stand there, in the heart of this unexpected maelstrom, buffeted by winds that seem to have taken on a life of their own, swirling around you with an intensity that tugs at the edges of your consciousness. The roar of the wind is like a physical entity, echoing around you with such force that you can feel the grains of sand scraping against your skin.
 
 But within this tumultuous storm, there is a subtle charm. Your eyes wander, a kaleidoscope of color blooming in front of your gaze as the flora defiantly fights against the harsh environment. Petals, like fragments of a shattered rainbow, whip and spin around you in a vibrant, intoxicating dance. The aromatic scent of the flowers, thick and intoxicating, overpowers the dry air, as if attempting to mask the harshness of this otherwise barren wasteland.
 
 Your senses are overwhelmed, but not so much that you fail to notice the sudden sharp pain. It's a sting in your arm, a burning sensation that forces a gasp to escape your lips. Looking down, you see the telltale dark droplets welling up where a thorn has grazed your skin. Your heart hammers as the droplet grows, forming a bead that is... certainly not red.
 
-You see $curse70.variation.
+You see _curse.bloodColor.
 
 That's the color of your blood now, glimmering and shining in stark contrast to the tan of your skin. It's a color unnatural to any human, and the sight of it sends a cold shiver down your spine.
 
@@ -983,8 +995,9 @@ And most profound of all, perhaps you're no longer quite human, not in the stric
 
 
 :: Take on Wriggly Antennae [layer5]
-<<set $playerCurses.push($curse71)>><<set $corruption += $curse71.corr>>\
-[img[setup.ImagePath + $curse71.pic]]
+<<set _curse = new WrigglyAntennae()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Suddenly, a wave of peculiar sensation surges through you, a heat that covers your whole body, but then focuses on your forehead. You pause, squinting against the grit and sand as a dizzying warmth expands from your forehead. The texture of your skin there feels different, oddly chitinous, as if an unknown entity takes root within your skull.
 
@@ -1005,8 +1018,9 @@ You're suddenly hit by this new reality - these wriggly antennae will completely
 
 
 :: Take on Eggxellent [layer5]
-<<set $playerCurses.push($curse72)>><<set $corruption += $curse72.corr>>\
-[img[setup.ImagePath + $curse72.pic]]
+<<set _curse = new Eggxellent()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.penisCor > 0>>\
 The air is filled with the potent fragrance of the flowers. The wind, unrelenting and harsh, casts flurries of petals around you, their brilliant hues softened by the sandstorm's beige haze. You close your eyes, focusing on abates strange sensation originating from your loins.
@@ -1046,15 +1060,16 @@ Resolutely, you pull your belt back on, the pressure on your hips a stark remind
 
 :: Layer5 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[5]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
 <<include "Curse Randomizer">>
 
 :: Take on Chlorophyll [layer5]
-<<set $playerCurses.push($curse67)>><<set $corruption += $curse67.corr>>\
-[img[setup.ImagePath + $curse67.pic]]
+<<set _curse = new Chlorophyll()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you hike through the sandy dunes, suddenly, a strong gust of wind cuts through the swirling maelstrom of petals, and one particularly verdant leaf detaches itself from a nearby plant, twirling in the wind and sticking to your exposed forearm. There's a tingle, not unpleasant, just unexpected, like the first touch of a lover. You try to remove it, but as you do, it dissolves into your skin, a cascade of tiny green particles that disperse with an almost electric sensation.
 
@@ -1077,8 +1092,9 @@ There's no visible sign of your new dependency on the sun, but you know, deep do
 
 
 :: Take on Pheromones [layer5]
-<<set $playerCurses.push($curse68)>><<set $corruption += $curse68.corr>>\
-[img[setup.ImagePath + $curse68.pic]]
+<<set _curse = new Pheromones()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 All of a sudden, you feel a rush, a pulsing wave that surges from the core of your being, a warm and subtle energy that spreads outwards. You don't understand it initially, but then the realization dawns upon you.
 
@@ -1147,68 +1163,57 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[$temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp1].corr * 3 / 2), 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[$temp2].corr * 3 / 2), 0))>>
+<<set _curse1 = setup.curseByNum($temp1)>>
+<<set _curse2 = $curses[$temp2>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[$temp1].name and $curses[$temp2].name for a cost of <<print Math.round(Math.max(($curses[$temp1].corr * 3 / 2) - $corRed, 0))>> and <<print Math.round(Math.max(($curses[$temp2].corr * 3 / 2) - $corRed, 0))>> corruption respectively.
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
 
-<<if $curses[$temp1].name ==  "Hemospectrum" || $curses[$temp2].name == "Hemospectrum">>
+<<set _hasHemospectrum = (_hemoCurse = _curse1).name == "Hemospectrum" || (_hemoCurse = _curse2).name == "Hemospectrum">>
+<<if _hasHemoSpectrum>>
 
 What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
 
-<<radiobutton "$curse70.variation" "blue" checked>> Blue
-<<radiobutton "$curse70.variation" "purple" >> Purple
-<<radiobutton "$curse70.variation" "green" >> Green
-<<radiobutton "$curse70.variation" "yellow" >> Yellow
-<<radiobutton "$curse70.variation" "orange" >> Orange
-<<radiobutton "$curse70.variation" "pink" >> Pink
-<<radiobutton "$curse70.variation" "black" >> Black
-<<radiobutton "$curse70.variation" "brown" >> Brown
-<<radiobutton "$curse70.variation" "white" >> White
+<<radiobutton "_hemoCurse.bloodColor" "blue" checked>> Blue
+<<radiobutton "_hemoCurse.bloodColor" "purple" >> Purple
+<<radiobutton "_hemoCurse.bloodColor" "green" >> Green
+<<radiobutton "_hemoCurse.bloodColor" "yellow" >> Yellow
+<<radiobutton "_hemoCurse.bloodColor" "orange" >> Orange
+<<radiobutton "_hemoCurse.bloodColor" "pink" >> Pink
+<<radiobutton "_hemoCurse.bloodColor" "black" >> Black
+<<radiobutton "_hemoCurse.bloodColor" "brown" >> Brown
+<<radiobutton "_hemoCurse.bloodColor" "white" >> White
 
 [[Continue on to the rest of the layer|Layer5 Hub]]
 
 <</if>>
 
-<<if $curses[$temp1].name ==  "Carapacian" || $curses[$temp2].name ==  "Carapacian">>
+<<set _hasCarapace = (_carapaceCurse = _curse1).name ==  "Carapacian" || (_carapaceCurse = _curse2).name ==  "Carapacian">>\
+<<if _hasCarapace>>
 
 Please enter your new exoskeleton color:
 
-<<textbox "$curse69.variation" "shiny black" "Layer5 Hub">>
+<<textbox "_carapaceCurse.skinColor" "shiny black" "Layer5 Hub">>
 
-<<else>>
-
-/*<<if !($curses[$temp1].name ==  "Hemospectrum" || $curses[$temp2].name ==  "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<</if>>
-*/
 <</if>>
 [[Continue on to the rest of the layer|Layer5 Hub]]
-<<nobr>>
-<<if $curses[$temp1].name == "Gender Reversal D" || $curses[$temp2].name == "Gender Reversal D">>
-	<<set $GenderLog.push($curse58)>>
-<</if>>
-<<if $curses[$temp1].name == "Libido Reinforcement D" || $curses[$temp2].name == "Libido Reinforcement D" >>
-	<<set $LibidoLog.push($curse57)>>
-<</if>>
-<<if $curses[$temp1].name == "DoS" || $curses[$temp2].name == "DoS">>
-	<<set $LibidoLog.push($curse62)>>
-<</if>>
-<<if $curses[$temp1].name == "DoM" || $curses[$temp2].name == "DoM">>
-	<<set $LibidoLog.push($curse63)>>
-<</if>>
-<</nobr>>
+
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
 	<<link "Reroll with Devil's Own" "Layer5 Cherry Curse">>
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp1]>>
+		<<set $corruption -= _curse1.corr>>
+		<<RemoveCurse _curse1>>
 		
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp2]>>
+		<<set $corruption -= _curse2.corr>>
+		<<RemoveCurse _curse2>>
 
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
@@ -1223,58 +1228,41 @@ Please enter your new exoskeleton color:
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
-<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<set _curse = setup.curseByNum($temp2)>>
+<<set $mc.addCurse(_curse)>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 1.5), 0))>>
+<<set $corruption += _curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
 
-<<if $curses[$temp2].name == "Hemospectrum">>
+<<if _curse.name == "Hemospectrum">>
 
 What would you like your new blood (or maybe hemolymph, depending on how human you still are) color to be?
 
-<<radiobutton "$curse70.variation" "blue" checked>> Blue
-<<radiobutton "$curse70.variation" "purple" >> Purple
-<<radiobutton "$curse70.variation" "green" >> Green
-<<radiobutton "$curse70.variation" "yellow" >> Yellow
-<<radiobutton "$curse70.variation" "orange" >> Orange
-<<radiobutton "$curse70.variation" "pink" >> Pink
-<<radiobutton "$curse70.variation" "black" >> Black
-<<radiobutton "$curse70.variation" "brown" >> Brown
-<<radiobutton "$curse70.variation" "white" >> White
+<<radiobutton "_curse.bloodColor" "blue" checked>> Blue
+<<radiobutton "_curse.bloodColor" "purple" >> Purple
+<<radiobutton "_curse.bloodColor" "green" >> Green
+<<radiobutton "_curse.bloodColor" "yellow" >> Yellow
+<<radiobutton "_curse.bloodColor" "orange" >> Orange
+<<radiobutton "_curse.bloodColor" "pink" >> Pink
+<<radiobutton "_curse.bloodColor" "black" >> Black
+<<radiobutton "_curse.bloodColor" "brown" >> Brown
+<<radiobutton "_curse.bloodColor" "white" >> White
 
 [[Continue on to the rest of the layer|Layer5 Hub]]
 
 <</if>>
 
-<<if $curses[$temp2].name == "Carapacian">>
+<<if _curse.name == "Carapacian">>
 
 Please enter your new exoskeleton color:
 
-<<textbox "$curse69.variation" "shiny black" "Layer5 Hub">>
-
-<<else>>
-
-/*<<if !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<<elseif !$playerCurses.some(e => e.name === "Carapacian") && !$playerCurses.some(e => e.name === "Hemospectrum")>>[[Continue on to the rest of the layer|Layer5 Hub]]<</if>>*/
+<<textbox "_curse.skinColor" "shiny black" "Layer5 Hub">>
 
 <</if>>
 [[Continue on to the rest of the layer|Layer5 Hub]]
-<<nobr>>
-<<if $curses[$temp2].name == "Gender Reversal D">>
-	<<set $GenderLog.push($curse58)>>
-<</if>>
-<<if $curses[$temp2].name == "Libido Reinforcement D">>
-	<<set $LibidoLog.push($curse57)>>
-<</if>>
-<<if $curses[$temp2].name == "DoS">>
-	<<set $LibidoLog.push($curse62)>>
-<</if>>
-<<if $curses[$temp2].name == "DoM">>
-	<<set $LibidoLog.push($curse63)>>
-<</if>>
 
-<</nobr>>
 <<if $ownedRelics.some(e => e.name === "Devil's Own")>>
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
@@ -1283,8 +1271,8 @@ Please enter your new exoskeleton color:
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
-		<<set $corruption -= $playerCurses[$playerCurses.length - 1].corr>>
-		<<RemoveCurse $curses[$temp2]>>
+		<<set $corruption -= _curse.corr>>
+		<<RemoveCurse _curse>>
 		<<set setup.loseRelic("Devil's Own")>>
 	<</link>>
 
@@ -1560,11 +1548,11 @@ Your instincts scream at you to run, but you know that simply running is futile 
 How will you deal with the monstrous worm approaching you?
 
 <<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With Khemia's exceptional swordsmanship and the power of the Sunbeam Relic, he can fend off the beast. However, the struggle will leave him injured, requiring a day to recuperate.<br>
 	<<link 'Have Khemia fight it off with Sunbeam' `$returnPassage`>><<PassTime 1>><</link>><br><br>
 <</if>>
-<<if $joyousSword && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $joyousSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Wielding the formidable Joyous Sunder, an expert swordsman like Khemia can effortlessly vanquish the creature without sustaining any injuries.<br>
 	[[Have Khemia fight it off with Joyous Sunder|$returnPassage]]<br><br>
 <</if>>

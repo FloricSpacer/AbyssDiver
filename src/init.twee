@@ -152,7 +152,6 @@ document.documentElement.setAttribute("lang", "en");
 <<set $totalFears = []>>
 <<set $inanisTime = 0>>
 <<set $IQdrop = 0>>
-<<set $standardsLower = 0>>
 <<set $returnPassage = "">>
 <<set $interruptReturn = "">>
 <<set $spaceRelic = "">>
@@ -184,13 +183,12 @@ document.documentElement.setAttribute("lang", "en");
 <<set $escBalDepl = 0>>
 <<set $convoStart = 1>>
 <<set $endloop = false>>
-<<set $LastEx =0>>
+<<set $LastEx = 0>>
 <<set $SizeHandicap = 0>>
 <<set $SibylBuff = 0 >>
 <<set $slingshot = 0>>
 <<set $joyousSword = 0>>
 <<set $scent = 0 >>
-<<set $HeightIncrease = 0>>
 <<set $ManagedMisfortuneActive = []>>
 <<set $ManagedMisfortuneMax = 2>>
 <<set $PulseBloomUse = "">>
@@ -241,59 +239,25 @@ document.documentElement.setAttribute("lang", "en");
 <<set $LightningWear = false>>
 <<set $LuminousWear = false>>
 
-<<set $mc = {
-name: "Nana",
-sex: "male",
-mindSex: 'male',
-osex: "male",
-ohair: "black",
-hair: "black",
-penis: 6,
-openis: 6,
-doublePenis: false,
-penisCor: 6,
-vagina: 0,
-gender: 1,
-ogender: 1,
-switch: false,
-breasts: 0,
-obreasts: 0,
-breastsCor: 0,
-breastsLabel: "flat",
-lactation: 0,
-pregnantT: setup.never,
-due: setup.never,
-ears: "normal human",
-oheight: 170,
-fit: 0,
-modheight: 0,
-bodyHair: 1,
-skinType: "",
-oskinColor: "pale",
-skinColor: "pale",
-oeyeColor: "blue",
-eyeColor: "blue",
-eyeCount: 2,
-armCount: 2,
-legCount: 2,
-tail: [],
-womb: 0,
-womb1: "",
-womb2: "",
-desc: "",
-blood: "red",
-age: 25,
-appAge: 25,
-libido: 2,
-subdom: 0,
-curses:[],
-HandicapMovement: 0,
-/* Set in <<UpdateAttributes>> */
-genderVoice: NaN,
-style: "border: 2px solid rgb(1, 0, 0);",
-style1: "",
-imageIcon: "",
-}>>
+<<set $mc = new Character({
+    id: setup.companionIds.mc,
+    name: "Nana",
+    image: '',
+    imageIcon: "",
+    carry: 20,
+    obreasts: 0,
+    openis: 6,
+    ogender: 1,
+    fit: 5,
+    oheight: 170,
+    age: 25,
+    fear: 'unknown',
+    ohair: "black",
+    oskinColor: "pale",
+    oears: "normal human",
+    oeyeColor: "blue",
+    oblood: "red",
+})>>
 
 <<set $PulseBloomStorage = {
 osex: "",
@@ -457,8 +421,6 @@ imageIcon: "Icons/Banditleader.png",
 osex: "female",
 genderVoice: 5,
 style: "border: 2px solid rgb(1,0,0);",
-style1: "box-shadow: 0px 0px 10px 2px rgba(0, 0, 0,1);background-color: red;",
-style: "border: 2px solid rgb(1,0,0);",
 style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;"
 }>>
 
@@ -467,8 +429,6 @@ name: "Male diver",
 imageIcon: "Icons/npcM.png",
 osex: "male",
 genderVoice: 1,
-style: "border: 2px solid rgb(1,0,0);",
-style1: "box-shadow: 0px 0px 10px 2px rgba(0, 0, 0,1);background-color: red;",
 style: "border: 2px solid rgb(1,0,0);",
 style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;"
 }>>
@@ -479,8 +439,6 @@ imageIcon: "Icons/grizzleddiver.png",
 osex: "male",
 genderVoice: 1,
 style: "border: 2px solid rgb(1,0,0);",
-style1: "box-shadow: 0px 0px 10px 2px rgba(0, 0, 0,1);background-color: red;",
-style: "border: 2px solid rgb(1,0,0);",
 style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;"
 }>>
 
@@ -489,8 +447,6 @@ name: "Relic Buyer",
 imageIcon: "Icons/relicbuyer.jpeg",
 osex: "male",
 genderVoice: 1,
-style: "border: 2px solid rgb(1,0,0);",
-style1: "box-shadow: 0px 0px 10px 2px rgba(0, 0, 0,1);background-color: red;",
 style: "border: 2px solid rgb(1,0,0);",
 style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;"
 }>>
@@ -526,74 +482,4 @@ pic: "Wonders/puritytree.png"
 <<include "Init Relics">>
 <<include "Init Curses">>
 <<include "Init Wonders">>
-
-
-<<set $ForageFoodMajor = {name: "1 Day Food Forage Major Impact"}>>
-<<set $ForageFoodMinor = {name: "1 Day Food Forage Minor Impact"}>>
-<<set $ForageWaterMajor = {name: "1 Day Water Forage Major Impact"}>>
-<<set $ForageWaterMinor = {name: "1 Day Water Forage Minor Impact"}>>
-<<set $DollTF = {name: "Doll Transformation",variation:""}>>
-<<set $AgeLog = []>>
-<<set $GenderLog = []>>
-<<set $HeightLog = []>>
-<<set $LibidoLog = []>>
-<<set $HandicapLog = []>>
 <</nobr>>
-
-<<set $companionTwin = {
-		name: $curse111.variation1,
-		carry: $carryWeight,
-		affec: 3,
-		swap: false,
-		image: "Curses/doubletrouble.png",
-		oimageIcon: "Player Icons/playerF.png",
-		imageIcon: "Player Icons/playerF.png",
-		curses: $playerCurses,
-		mindSex: $mc.mindSex,
-		osex: "",
-		obreasts: $mc.openis,
-		openis: $mc.obreasts,
-		ogender: 6 - $mc.ogender,
-		genderVoice: 0,
-		fit: $mc.fit,
-		oheight: $mc.oheight,
-		age: $mc.age,
-		appDesc: "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always...",
-		style: "border: 2px solid rgb(1,0,0);",
-		style1: "box-shadow: 0px 0px 10px 2px rgba(255, 225, 225,1);background-color: black;",
-		fear: $fear,
-		sex: "",
-		ohair: $mc.ohair,
-		hair: $mc.ohair,
-		penis: $mc.openis,
-		penisCor: $mc.openis,
-		doublePenis: false,
-		vagina: 0,
-		gender: 6 - $mc.ogender,
-		switch: false,
-		breasts: $mc.obreasts,
-		breastsCor: $mc.obreasts,
-		lactation: 0,
-		pregnantT: setup.never,
-		due: setup.never,
-		ears: "normal human",
-		modheight: 0,
-		bodyHair: 1,
-		skinType: "",
-		oskinColor: $mc.oskinColor,
-		skinColor: $mc.oskinColor,
-		oeyeColor: $mc.oeyeColor,
-		eyeColor: $mc.oeyeColor,
-		eyeCount: 2,
-		armCount: 2,
-		legCount: 2,
-		tail: [],
-		womb: 0,
-		womb1: "",
-		womb2: "",
-		desc: "",
-		blood: "red",
-		appAge: $mc.age,
-		libido: 2,
-		subdom: 0
-		}>>

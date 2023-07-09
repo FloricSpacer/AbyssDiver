@@ -18,7 +18,7 @@
 Traveling back to the surface from here will take 1 day, and will cost 10 corruption. Leaving the Abyss also requires that you don't have any negative corruption points even if you plan to come back.
 
 [[Walk through the first layer of the Abyss|Layer1 Hub]]
-<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<if $visitL1 == 0>>
 	<<print "[[Use Cherry's chaotic luck|Layer1 Cherry]]">><br><</if>>
 <</if>><</nobr>>
@@ -49,12 +49,12 @@ You spot an unusual caterpillar as it crawls up a tree. Its peculiar shape resem
 In the distance you can hear some people yelling about something, but you can't quite make it out. When you get a bit closer, you can't seem to find any people, but you do see some spare clothes on the ground and some rustling in the bush nearby. Rather than waiting for the people to return, you choose to move on.<br><br>
 <<elseif $layerTemp == 3>>
 Near the top of the layer, you notice a completely normal woman carrying a full pack trying to approach the surface, but she seems to be having a great difficulty moving forward. "Why can't I just leave?" She calls out in exasperation to no one in particular. It seems the Abyss itself is impeding her, so you couldn't help her even if you tried.<br><br>
-<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 Khemia turns towards you smugly
 <br><br>
 <<say $companionKhemia>> You know $mc.name, this whole layer is a breeze if you've been around a few times. I think we could probably clear out anything worth doing in less than a day if we took the right shortcuts. This is barely even a speed bump on our path to the bottom of the Abyss for the right people. And who do you think knows the shortcuts?<</say>><br>
 He grins broadly and puffs out his chest, pointing to himself with his thumb before guiding you down the most efficient route towards your goal.<br><br>
-<<elseif $layerTemp == 5 && $hiredCompanions.some(e => e.name === "Saeko")>>
+<<elseif $layerTemp == 5 && $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 Saeko crouches beside an odd-looking tree stump, overgrown with mold, scribbling in her notebook. She glances up at you.
 <br><br>
 <<say $companionSaeko>>This isn't a tree stump, you know. It's a fungus that's taken the shape of a dead tree – a fascinating example of mimicry.<</say>><br>
@@ -62,7 +62,7 @@ She digs into the earth near the stump's base, revealing a gray texture oozing a
 <br><br>
 <<say $companionSaeko>>I wonder what purpose this serves? The ecology here is so bizarre, despite its proximity to the surface...<</say>><br>
 Her thoughts trail off, and after a moment, she stands and resumes the journey with you towards your destination.<br><br>
-<<elseif $layerTemp == 6 && $hiredCompanions.some(e => e.name === $companionBandit.name) && $BanditConvo0>>
+<<elseif $layerTemp == 6 && $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && $BanditConvo0>>
 As you walk through the layer the bridge were you once captured your former bandit companion looms in the distance. She stops walking for a second to look in the direction of the bridge<br><br>
 <<say $mc>>A trip down memory lane?<</say>><br>
 She seems to snap back from her thoughts.<br><br>
@@ -71,11 +71,11 @@ She seems to snap back from her thoughts.<br><br>
 <<say $companionBandit>>No, this adventure has grown on me. I guess I needed something different in life.<</say>><br>
 <<say $mc>>Glad to hear that!<</say>><br>
 <<say $companionBandit>>Sometimes I do think what I would do or say if our leader would stand right in front of me again. I don't know if, even after all this time, I would really be able to say "no" to her.<</say>><br>
-<<say $mc>>Ow, how come?<</say>><br>
+<<say $mc>>Oh, how come?<</say>><br>
 <<say $companionBandit>>I don't know, it's this aura of domminance she radiates. On the other hand, she is a huge bitch and I would like nothing more than to kick her in the gut for all she said to me.<</say>><br>
 She shows a bit of wry smile.<br><br>
 <<say $mc>>Don't worry. If it comes to that I'll help you!<</say>><br>
-<<elseif $layerTemp == 7 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 7 && $mc.hasCurse(HijinksEnsue)>>
 <<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 <<include "Companion Layer Interaction">>
@@ -179,7 +179,7 @@ If you decide to start foraging for food or water, it means that you will not co
 	<<print "[[Stop foraging for water|Layer1 Forage][$forageWater = 0]]">><br>
 <</if>>
 <<if $forageFood == 0>>
-	<<if $hiredCompanions.some(e => e.name === "Maru") && $L1FoodConvo == 0>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L1FoodConvo == 0>>
 		<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage Convo][$forageFood = 1, $L1FoodConvo = 1]]">><br>
 	<<else>>	
 		<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage][$forageFood = 1]]">><br>
@@ -225,7 +225,7 @@ Maru starts walking once again and gestures for you to follow him. After a few m
 Maru quickly makes off with the honey, and you follow him, eager to escape an area where you might accidentally breathe in an Abyssal bee. He smiles at you and shows you the haul from the trip.
 
 <<say $companionMaru>>I think I got enough to flavor the meal! I hope this turns out really tasty!<</say>>
-After some more hiking, you finally make it back to the camp, where you can enjoy the fruits of your labor. <<if $hiredCompanions.some(e => e.name === "Khemia")>>But when you arrive back at camp, you notice that Khemia is furious.
+After some more hiking, you finally make it back to the camp, where you can enjoy the fruits of your labor. <<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>But when you arrive back at camp, you notice that Khemia is furious.
 
 <<say $companionKhemia>>What were you doing? You two shouldn't go off on your own like that without me. Even though this is only the first layer, there are bandits here! How am I supposed to do my job and protect you if you wander off without me?<</say>>
 He seems to be projecting a cold fury and a hint of fear, quite unlike his typical casual confidence.
@@ -284,36 +284,36 @@ Unlike Relics, their effects come from a complex interaction between them and th
 
 	<<if $corruption >= 0 && $debt <= 0>>
 		Note: This ending is simply a possible future for you, assuming you go with the flow for the rest of your life. If you want to avoid them using the Companions, Relics, and Curses you have obtained, then you will be able to, as long as they are within the bounds of the habitation option you have selected.<br><br>
-		<<CarryAdjust>><<Lewdness>> <<Inhuman>>
-	<<if $lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+		<<CarryAdjust>>
+	<<if $mc.lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew LInhum HAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew LInhum HAge LDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew LInhum LAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew LInhum LAge LDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew HInhum HAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew HInhum HAge LDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew HInhum LAge HDub]]
-	<<elseif $lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness<$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 LLew HInhum LAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew LInhum HAge HDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew LInhum HAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew LInhum LAge HDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman<$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew LInhum LAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew HInhum HAge HDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge>$AgeCrit && ($dubloons + $total_value_relics)<=$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew HInhum HAge LDub]]
-	<<elseif $lewdness>=$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
+	<<elseif $mc.lewdness>=$lewdCrit && $mc.inhuman>=$inhumanCrit && $mc.appAge<=$AgeCrit && ($dubloons + $total_value_relics)>$DubCrit >>
 		[[Choose to settle in Outcast village|L1 HLew HInhum LAge HDub]]
 	<<else>>
 		[[Choose to settle in Outcast village|L1 HLew HInhum LAge LDub]]
@@ -386,39 +386,36 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<break>>
 	<</if>>
 <</for>>
-<<set $playerCurses.push($curses[_temp1])>>
-<<set $corruption += Math.round(Math.max(($curses[_temp1].corr * 1.5), 0))>>
-<<set $playerCurses.push($curses[_temp2])>>
-<<set $corruption += Math.round(Math.max(($curses[_temp2].corr * 1.5), 0))>>
+<<set _curse1 = setup.curseByNum(_temp1)>>
+<<set _curse2 = setup.curseByNum(_temp2)>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
+<<set _curse1.corr = Math.round(Math.max(_curse1.corr * 1.5), 0)>>
+<<set _curse2.corr = Math.round(Math.max(_curse2.corr * 1.5), 0)>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
 
 <</nobr>>
 
-The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name and $curses[_temp2].name for a gain of <<print Math.round(Math.max(($curses[_temp1].corr * 1.5), 0))>> and <<print Math.round(Math.max(($curses[_temp2].corr * 1.5), 0))>> corruption respectively.
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a gain of _curse1.corr and _curse2.corr corruption respectively.
 <<nobr>>
-
-<<if _temp1==0 || _temp2==0>>
-	<<set $LibidoLog.push($curse1)>>
-<</if>>
-<<if _temp1==1 || _temp2==1>>
-	<<set $GenderLog.push($curse2)>>
-<</if>>
-<<if _temp1==2 || _temp2==2>>
-	<<set $GenderLog.push($curse3)>>
-<</if>>
-<<if _temp1==4 || _temp2==4>>
-	<<set $GenderLog.push($curse5)>>
-<</if>>
-<<if $curses[_temp1].name=='Perma-dye' || $curses[_temp2].name=='Perma-dye'>>
+<<set _hasdye = (_dyeCurse = _curse1 instanceof PermaDye) || (_dyeCurse = _curse2 instanceof PermaDye)>>
+<<if _hasDye>>
 	<br>What hair color do you prefer?<br>
-	<<textbox "$curse7.variation" "turquoise">><br>
+	<<textbox "_dyeCurse.hairColor" "turquoise">><br>
 <</if>>
 <<if _temp1==9 || _temp2==9>>
 	<<set $dizzyCount +=1>>
-	<<if !$HeightIncrease>>
+	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
+	<<if _heightDirEvent === undefined>>
+	    <<set _heightDirEvent = new HeightDirectionEvent()>>
+	    <<set $mc.events.push(_heightDirEvent)>>
 		<br>Would you like to increase or decrease your height?<br>
-		<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
-		<<radiobutton "$HeightIncrease" 1 >> Increase<br>
-	<<elseif $HeightIncrease == 1>>
+		<<capture _heightDirEvent>>
+		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
+		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
+		<</capture>>
+	<<elseif _heightDirEvent.heightdir == 1>>
 		You feel yourself growing even more.<br>
 	<<else>>
 		You feel yourself shrinking even more.<br>
@@ -427,7 +424,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name
 <br>
 <<link "Continue on to the rest of the layer" "Layer1 Hub">>
 	<<if _temp1==9 || _temp2==9>>
-		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
+		<<set $mc.addCurse(new DizzyingHeights())>>
 	<</if>>
 <</link>>
 
@@ -441,42 +438,36 @@ The Curses you have obtained with Cherry's Chaotic Luck are $curses[_temp1].name
 <<set $ownedRelics.push($relics[$temp1])>>
 
 <<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
-<<set $playerCurses.push($curses[$temp2])>>
-<<set $playerCurses[$playerCurses.length - 1].corr = Math.round(Math.max(($curses[$temp2].corr * 1.5), 0))>>
-<<set $corruption += $playerCurses[$playerCurses.length - 1].corr>>
+<<set _curse = setup.curseByNum($temp2)>>
+<<set _curse.corr = Math.round(Math.max(_curse.corr * 1.5), 0)>>
+<<set $mc.addCurse(_curse)>>
+<<set $corruption += _curse.corr>>
 <</nobr>>
 
-With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse $curses[$temp2].name for a gain of <<print Math.round(Math.max(($curses[$temp2].corr * 1), 0))>> corruption respectively.<<nobr>>
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.<<nobr>>
 <br>
-<<if $temp2==0>>
-	<<set $LibidoLog.push($curse1)>>
-<<elseif $temp2==1>>
-	<<set $GenderLog.push($curse2)>>[[Continue on to the rest of the layer|Layer1 Hub]]
-<<elseif $temp2==2>>
-	<<set $GenderLog.push($curse3)>>[[Continue on to the rest of the layer|Layer1 Hub]]
-<<elseif $temp2==4>>
-	<<set $GenderLog.push($curse5)>>[[Continue on to the rest of the layer|Layer1 Hub]]
-<<elseif $temp2==9>>
+<<if $temp2==9>>
 	<<set $dizzyCount +=1>>
-	<<if !$HeightIncrease>>
-		Would you like to increase or decrease your height?<br>
-		<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
-		<<radiobutton "$HeightIncrease" 1 >> Increase<br>
-	<<elseif $HeightIncrease == 1>>
-		You feel yourself growing even more.<br>
-	<<else>>
-		You feel yourself shrinking even more.<br>
-	<</if>>
+	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
+	<<if _heightDirEvent === undefined>>
+        <<set _heightDirEvent = new HeightDirectionEvent()>>
+        <<set $mc.events.push(_heightDirEvent)>>
+        <br>Would you like to increase or decrease your height?<br>
+        <<capture _heightDirEvent>>
+        <<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
+        <<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
+        <</capture>>
+    <<elseif _heightDirEvent.heightdir == 1>>
+        You feel yourself growing even more.<br>
+    <<else>>
+        You feel yourself shrinking even more.<br>
+    <</if>>
 
 	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
-		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
+		<<set $mc.addCurse(new DizzyingHeights())>>
 	<</link>>
 <<else>>
 [[Continue on to the rest of the layer|Layer1 Hub]]
-<</if>>
-
-<<if $playerCurses.some(e => e.name === "Libido Reinforcement A")>>
-	<<set $LibidoLog.push($curse1)>>
 <</if>>
 <</nobr>>
 
@@ -491,7 +482,7 @@ As you meander through the lush, verdant slopes of the first layer of the Abyss,
 The maiden's hands are extended gently, offering an invitation to touch them. As you hesitantly reach out and make contact with the cool, smooth marble, you feel a surge of warmth spreading through your body. \
 <<if $iconUsed>>\
 However, it's not nearly as strong as the first time. You won't be able to remove any more Curses.
-<<elseif $playerCurses.length == 0>>\
+<<elseif $mc.curses.length == 0>>\
 If you were plagued by a Curse, the Icon of Mercy could offer relief. Until then, there is nothing for you to do here.
 <<else>>\
 It's as if the Icon of Mercy is acknowledging the weight of your choices and offering you a chance for redemption.
@@ -500,8 +491,8 @@ A sudden realization dawns upon you: by touching the statue, you can remove one 
 
 Choose the Curse you wish to remove:
 <<nobr>>
-<<for _i, _curse range $playerCurses>>
-	<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' && _curse.name != 'The Maxim'>>
+<<for _i, _curse range $mc.curses>>
+	<<if _curse.name !== 'Double Trouble' && _curse.name !== 'Conjoined' && _curse.name !== 'The Maxim'>>
 		<<capture _i>>
 			&nbsp; [[_curse.name|Icon Removal][$temp = _i]]<br>
 		<</capture>>
@@ -556,7 +547,7 @@ While they aren't useful on their own, perhaps you can take these stones back to
 <<CollectRelic $relic3>>\
 <<if !setup.passingTime()>>
 
-<<if $mc.appAge > 13>><<if $hiredCompanions.some(e => e.name === "Maru")>>
+<<if $mc.appAge > 13>><<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 As you and Maru search for an interesting doll you've heard about, you come across the decaying husk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
 
 You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. Maru notices your discovery, but looks worried and comments, "Why isn't the table rotting? I feel like something's wrong here..." his voice trails off, letting the comment hang for a moment more than you're both comfortable with.
@@ -566,7 +557,7 @@ You try to comfort Maru, but he insists he isn't afraid of the doll. "It reminds
 "I don't think we should take it." Maru crosses his arms, but after a few more words of encouragement from you, he accepts your decision. It can't really cause many problems, it's just a doll, right?
 
 Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was.
-<<elseif $hiredCompanions.some(e => e.name === "Saeko")>>
+<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 As you and Saeko search for an interesting doll you've heard about, you come across the decaying husk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
 
 You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. Saeko notices your discovery, and eagerly inspects the find commenting, "Very curious, the table seems to be perfectly intact. I wonder if the Relic has some influence on how the miasma or environment is decaying the structure here. Perhaps we aren't the only ones who feel an aversion to it?" She ponders the possibility for a moment, but doesn't come to any solid conclusion.
@@ -580,7 +571,7 @@ As you search for an interesting doll you've heard about, you come across the de
 You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you had as a child, except you know you definitely didn't have a doll like this one. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
 
 Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was.
-<</if>><<else>><<if $hiredCompanions.some(e => e.name === "Maru")>>
+<</if>><<else>><<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 As you and Maru search for an interesting doll you've heard about, you come across the decaying husk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
 
 You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you would play with now, except you know you definitely don't have a doll like this one. It really makes you feel like a child when you look at it, as if you want to play with it and are repulsed by it at the same time. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
@@ -592,7 +583,7 @@ You try to comfort Maru, but he insists he isn't afraid of the doll. "It reminds
 "I don't think we should take it." Maru crosses his arms, but after a few more words of encouragement from you, he accepts your decision. It can't really cause many problems, it's just a doll, right?
 
 Recognizing the doll's mysterious properties and potential value, you overcome your aversion and take it with you. As you pick it up, you catch a glimpse of the doll smiling, but when you look at it more closely you can tell that its sewn mouth is as static as it ever was. As you place it in your bag, you almost get a sense that maybe you could make use of the tea table to complete the tea party with the doll, but you shake off the thought, despite looking like a child.
-<<elseif $hiredCompanions.some(e => e.name === "Saeko")>>
+<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 As you and Saeko search for an interesting doll you've heard about, you come across the decaying husk of a house. It looks as if someone once lived here, but it has been long since abandoned to be degraded by the forces of the Abyss.
 
 You enter the ruined home, and after exploring each of the rooms, you happen to come across a perfectly preserved tea table, with a strange looking doll sitting in a chair. You get shivers in your spine and it almost seems like the doll is staring at you while you stare at it. In fact, it seems almost exactly like a doll you would play with now, except you know you definitely don't have a doll like this one. It really makes you feel like a child when you look at it, as if you want to play with it and are repulsed by it at the same time. It fits right into the uncanny zone of feeling familiar, yet intensely alien in a way that makes you feel strong discomfort just from looking at it.
@@ -742,8 +733,9 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 
 
 :: Take on Libido Reinforcement A [layer1]
-<<set $playerCurses.push($curse1)>><<set $corruption += $curse1.corr>><<set $LibidoLog.push($curse1)>>\
-[img[setup.ImagePath + $curse1.pic]]
+<<set _curse = new LibidoReinforcementA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Libido Curse">>
 
@@ -755,8 +747,9 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 <</if>>
 
 :: Take on Gender Reversal A [layer1]
-<<set $playerCurses.push($curse2)>><<set $corruption += $curse2.corr>><<set $GenderLog.push($curse2)>>\
-[img[setup.ImagePath + $curse2.pic]]
+<<set _curse = new GenderReversalA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<include "Gender Curse">>
 
@@ -769,8 +762,9 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 
 
 :: Take on Asset Robustness A [layer1]
-<<set $playerCurses.push($curse3)>><<set $corruption += $curse3.corr>><<set $GenderLog.push($curse3)>>\
-[img[setup.ImagePath + $curse3.pic]]
+<<set _curse = new AssetRobustnessA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 <<CarryAdjust>>\
 <<if $mc.penisCor>0 && $mc.breastsCor==0 >>
 	The moment the curse grips you, you feel a surge of sensation. Your penis springs to full erection, and then just keeps growing. The base, the shaft, and the tip continue swelling larger than they've ever been before, until you're sporting a $mc.penisCor inch long dong.
@@ -795,8 +789,9 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 
 
 :: Take on Clothing Restriction A [layer1]
-<<set $playerCurses.push($curse4)>><<set $corruption += $curse4.corr>>\
-[img[setup.ImagePath + $curse4.pic]]
+<<set _curse = new ClothingRestrictionA()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A sudden compulsion washes over you, you need to get of your accessories, immediately. It's like they have suddenly become an unbearably uncomfortable burden on your mind. Whether it is a hat, a necklace, or a ring, you cannot accept keeping it on your body for any longer.
 
@@ -811,8 +806,9 @@ While it doesn't cause you any physical pain or anything like that, you do feel 
 
 
 :: Take on Shrunken Assets [layer1]
-<<set $playerCurses.push($curse5)>><<set $corruption += $curse5.corr>><<set $GenderLog.push($curse5)>>\
-[img[setup.ImagePath + $curse5.pic]]
+<<set _curse = new ShrunkenAssets()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<nobr>>
 <<if $mc.sex == "male">>
@@ -844,8 +840,9 @@ Instinctively, your hands move up to your chest in response to the strange sensa
 
 
 :: Take on Hair Removal [layer1]
-<<set $playerCurses.push($curse6)>><<set $corruption += $curse6.corr>>\
-[img[setup.ImagePath + $curse6.pic]]
+<<set _curse = new HairRemoval()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 You suddenly feel a tingling sensation over your whole body below your scalp, which suddenly becomes very itchy as each of the hair follicles on your body expels any hair they held within them and then shrivels up forever. A cursory feel of your body reveals that your skin is much smoother, aside from any existing marks or scars you have. It feels as if your whole body has been waxed, but even more than that in some way, as you know none of the hair will ever return, nor could you create a facsimile of hair anywhere on your body.
 
@@ -859,8 +856,9 @@ You shiver at the sensation, but it quickly passes. You're left with shaking the
 <</if>>
 
 :: Take on Perma-dye [layer1]
-<<set $playerCurses.push($curse7)>><<set $corruption += $curse7.corr>>\
-[img[setup.ImagePath + $curse7.pic]]
+<<set _curse = new PermaDye()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A shiver-inducing sensation crawls across your scalp, like icy tendrils weaving through the roots of your hair. It doesn't cause you any pain, but the intensity of the feeling reaches deep into your core. 
 
@@ -868,11 +866,12 @@ Gradually, the tingling spreads, enveloping every hair follicle and strand in a 
 
 Please enter your new hair color and press enter:
 
-<<textbox "$curse7.variation" "turquoise" "Layer1 Curses">>
+<<textbox "_curse.hairColor" "turquoise" "Layer1 Curses">>
 
 :: Take on Freckle Speckle [layer1]
-<<set $playerCurses.push($curse8)>><<set $corruption += $curse8.corr>>\
-[img[setup.ImagePath + $curse8.pic]]
+<<set _curse = new FreckleSpeckle()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 As you venture deeper into the Abyss, a tingling sensation suddenly spreads across your body. The air around you feels heavy, and the scent of damp earth permeates your senses. Your heartbeat quickens, and you pause to investigate the source of the tingling.
 
@@ -891,8 +890,9 @@ The tingling sensation of the freckles appearing on your body is both strange an
 
 
 :: Take on Knife-ear [layer1]
-<<set $playerCurses.push($curse9)>><<set $corruption += $curse9.corr>>\
-[img[setup.ImagePath + $curse9.pic]]
+<<set _curse = new KnifeEar()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 Your ears suddenly have an incredible itching on their tip, and as you reach upwards to feel what's going on, you feel the flesh reshaping itself into a new form. Your flesh flows outward, extending the itching sensation, as your ears become longer and gain a pointed tip. The itching fades, but your ears still feel a little more sensitive than they did before.
 
@@ -906,15 +906,19 @@ It seems that you now look like either an elf out of a storybook or someone who 
 <</if>>
 
 :: Take on Dizzying Heights [layer1]
-<<set $corruption += $curse10.corr>><<set $dizzyCount +=1>>\
-[img[setup.ImagePath + $curse10.pic]]
+<<set _curse = new DizzyingHeights()>>\
+<<set $corruption += _curse.corr>><<set $dizzyCount +=1>>\
+[img[setup.ImagePath + _curse.pic]]
 
 <<nobr>>
-<<if !$HeightIncrease>>
+<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
+<<if _heightDirEvent === undefined>>
+    <<set _heightDirEvent = new HeightDirectionEvent()>>
+    <<set $mc.events.push(_heightDirEvent)>>
 	Would you like to increase or decrease your height?<br>
-	<<radiobutton "$HeightIncrease" -1 checked>> Decrease<br>
-	<<radiobutton "$HeightIncrease" 1 >> Increase<br>
-<<elseif $HeightIncrease == 1>>
+	<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
+	<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
+<<elseif _heightDirEvent.heightDir === 1>>
 	In the first moments after the Curse sets in, you hardly notice anything amiss. However, a growing discomfort seizes your body, leaving you feeling sore and aching. You sit down, trying to alleviate the pain as dizziness overwhelms you. The sensation feels familiar, reminiscent of something from long ago... growing pains.<br><br>
 
 	You shake your head, attempting to clear your foggy thoughts. Glancing at your legs, you could almost swear they're lengthening right before your eyes. The change is subtle and slow, making it difficult to discern with your hazy concentration. After a few minutes, the aches mostly subside, and you carefully rise to your feet.<br><br>
@@ -927,26 +931,22 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 	Your bizarre, malodorous dance lasts for several minutes, though it feels like an eternity. At its conclusion, you find your feet landing differently than you expect. The world around you appears subtly larger – you've become 5 cm (2 inches) shorter, altering your perception more than you would have thought possible.<br><br>
 <</if>>
+/* Needs to be added after the height direction event */
+<<set $mc.addCurse(_curse)>>
 <</nobr>>
 
-<<link "Accept more Curses from the first layer" "Layer1 Curses">>
-	<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
-<</link>>
-
+[[Accept more Curses from the first layer|Layer1 Curses]]
 <<if $escBalDepl==0>>
-	<<link "Return to exploring layer 1" "Layer1 Hub">>
-		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
-	<</link>>
+	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
-	<<link "Return to your balloon" "Escape Balloon L1">>
-		<<set $playerCurses.push($curse10)>><<set $HeightLog.push($curse10)>>
-	<</link>>
+	[[Return to your balloon|Escape Balloon L1]]
 <</if>>
 
 
 :: Take on Increased Sensitivity [layer1]
-<<set $playerCurses.push($curse11)>><<set $corruption += $curse11.corr>>\
-[img[setup.ImagePath + $curse11.pic]]
+<<set _curse = new IncreasedSensitivity()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 A brief tingle passes between your legs<<if $mc.breasts > 0>> and your breasts<</if>>, causing you to immediately come to attention at the momentary sensitivity. You have to stop as you are instantly made aware of the sensation of your underwear touching your skin, and your own movements have become distracting.
 
@@ -964,13 +964,14 @@ You pause for a moment to catch your breath and wait for the sensation to pass, 
 
 :: Take on Refractory Refactorization [layer1]
 <<nobr>>
-<<if $playerCurses.some(e => e.name === "Increased Sensitivity")>>
-<<set $curse12.appDesc = "You do not have a refractory period, and can orgasm several times in a row. Sex is like a long sequence of orgasms for you. ">>
+<<set _curse = new RefractoryRefactorization()>>\
+<<if $mc.hasCurse(IncreasedSensitivity)>>
+<<set _curse.appDesc = "You do not have a refractory period, and can orgasm several times in a row. Sex is like a long sequence of orgasms for you. ">>
 <<else>>
-<<set $curse12.appDesc = "You do not have a refractory period, and can orgasm several times in a row. ">>
+<<set _curse.appDesc = "You do not have a refractory period, and can orgasm several times in a row. ">>
 <</if>>
-<</nobr>><<set $playerCurses.push($curse12)>><<set $corruption += $curse12.corr>>\
-[img[setup.ImagePath + $curse12.pic]]
+<</nobr>><<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
 The energy of the Abyss seeps into your loins, burrowing deep into the core of your desires. A fleeting shiver courses through your genitals as an unexplainable shift occurs within you. 
 
@@ -987,7 +988,7 @@ But gradually, a newfound certainty washes over you - the realization that your 
 
 
 :: Icon Removal [layer1 nobr]
-<<set _curse = $playerCurses[$temp]>>
+<<set _curse = $mc.curses[$temp]>>
 <<set $iconUsed = true>>
 <<set $corruption -= _curse.corr>>
 <<RemoveCurse _curse>>
@@ -1079,7 +1080,7 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 
 :: Layer1 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[1]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
@@ -1091,7 +1092,7 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <br><br>
 How are you going to deal with the bandits encircling you?<br><br>
 
-<<if setup.haveCuttingTool && $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if setup.haveCuttingTool && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.<br>
 	[[Let Khemia and his sword deal with these jokers|Layer1 Bandits Won]]<br><br>
 <</if>>
@@ -1107,8 +1108,8 @@ How are you going to deal with the bandits encircling you?<br><br>
 	With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
 	[[Wield Glory's Grasp to command the situation|Layer1 Bandits Won]]<br><br>
 <</if>>
-<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.name === "Khemia")) && $mc.subdom<1>>/*xxx */
-	Your not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
+<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)) && $mc.subdom<1>>/*xxx */
+	You're not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
 	[[Brawl it out with them|Layer1 Bandits Fight]]<br><br>
 <</if>>
 Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?<br>
@@ -1141,45 +1142,45 @@ Use the following option only if you have specifically considered your inventory
 	<<set _relicBonus += 10>>
 <</if>>
 
-<<if $playerCurses.some(e => e.name === "Massacre Manicure")>>
+<<if $mc.hasCurse(MassacreManicure)>>
 	Your claw-like nails help you somewhat if you get into hand-to-hand combat.<br>
 	<<set _curseBonus += 2>>
 <</if>>
 
-<<if $hiredCompanions.some(e => e.name === "Maru")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 	Maru seems scared, but he is still willing to do what he can in the fight.<br>
 	<<set _companionBonus += 2 * (1 + $companionMaru.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Lily")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 	Lily puffs her chest, lets out something of a battle cry, and charges headfirst towards the leader! She is certainly giving her a run for her money!<br>
 	<<set _companionBonus += 8 * (1 + $companionLily.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Khemia")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia assumes a fighting stance, disarming and knocking out bandits that come near him. 
 	<<set _companionBonus += 15 * (1 + $companionKhemia.HandicapThreat / 10)>>
 	<br>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Cherry")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	Cherry seems frozen in fear, it's as if she can't bring herself to move against your foes. She does provide a distraction for them, at least.<br>
 	<<set _companionBonus += 1 * (1 + $companionCherry.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Cloud")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 	Cloud steels his resolve before the fight. When you glance over to him, you can feel the amount of experience he has in battle.
 	<<set _companionBonus += 10 * (1 + $companionCloud.HandicapThreat / 10)>>
 	<br>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Saeko")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 	Saeko sticks close to you. It's obvious she's scared, but she tries to hide it while she gives you as many strategic tips as she can.<br>
 	<<set _companionBonus += 5 * (1 + $companionSaeko.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === "Golem")>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 	Your loyal golem will defend you without question, fighting off enemies without the physical limitation of a normal human.<br>
 	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $companionBandit.name)>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
 	<<if $BanditConvo0>>/*xxx */
 		Your captured bandit turned loyal companion shows her true colors... by actually helping you fight off her former gangmembers!<br><br>
-		 
+
 		<<say $Banditleader>>tsk, you worthless piece of shit. I never liked you, you know<</say>><br>
 
 		<<say $companionBandit>>Trust me when I say the feeling is mutual, you greedy selfish pig<</say>><br>
@@ -1189,7 +1190,7 @@ Use the following option only if you have specifically considered your inventory
 		<<set _companionBonus -= 5 >>
 	<</if>>
 <</if>>
-<<if $hiredCompanions.some(e => e.name === $curse111.variation1)>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 	<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
 	<<if _twinBonus > 7>>
 		Your twin fights seems to be fighting 2 bandits at the same time, and winning! 
@@ -1226,8 +1227,8 @@ With that she also collapses from excertion and injuries.
 
 [[Continue on your journey|Layer1 Hub]]
 
-<<if setup.haveRope && !$hiredCompanions.some(c=>c.name===$companionBandit.name)>>
-	<<link "Capture one of the bandits and bring them allong" "Bandit Captured">>
+<<if setup.haveRope && !$hiredCompanions.some(c=>c.id === setup.companionIds.bandit)>>
+	<<link "Capture one of the bandits and bring them along" "Bandit Captured">>
 		<<set $hiredCompanions.push($companionBandit)>>
 		<<set $escapeT = $time + 7 + random(0,7)>>
 		<<set $companionBandit.image = "Companions/Bandit.jpg">>
@@ -1245,8 +1246,8 @@ With that she also collapses from excertion and injuries.
 Congratulations?.. you managed to take a captive on you journey! The captured bandit will function as a companion but with a few twists. 
 
 First of all, she doesn't have the purity gene, which means you need to keep her fed and hydrated during the trip.
-Second of all, as long as she is bound its not wise to put any important equipment let alone relics within her reach. This means she has affectivly no carry capacity.
-Finally, at the moment she hates you and will do everything in her power to escape and return to her own band. She might even take some trophies home if you're not carefull!
+Second of all, as long as she is bound its not wise to put any important equipment let alone relics within her reach. This means she has effectively no carry capacity.
+Finally, at the moment she hates you and will do everything in her power to escape and return to her own band. She might even take some trophies home if you aren't careful!
 
 [[Continue on your journey|Layer1 Hub]]
 
@@ -1254,7 +1255,7 @@ Finally, at the moment she hates you and will do everything in her power to esca
 /*xxx */
 You try to hold your own but <<if $hiredCompanions.length>0>> before long your entire party is whipped out and you're the only on left standing<<else>>the entire group proves to much to handle for you by yourself<</if>>.
 As you lock eyes with the bandit leader to anticipate her next move you get hit on the back of your head with some heavy item from one of the other bandits again. You fall to your knees.
-<<if $hiredCompanions.some(c=>c.name===$companionBandit.name)>>\
+<<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit)>>\
 	<<if $BanditConvo0>>\
 
 		<<say $Banditleader>>What a pathic bunch.<</say>>
@@ -1289,7 +1290,7 @@ As you lock eyes with the bandit leader to anticipate her next move you get hit 
 <<say $Banditleader>> I was only going to collect a modest fee for crossing this bridge, but now I think I'm going to pick you clean of everthing valuable<</say>>
 Defiantly you spit some blood from your mouth at her feet.
 
-<<say $Banditleader>>Tsk, annoying untill the last moment. Night Night<</say>>
+<<say $Banditleader>>Tsk, annoying until the last moment. Night Night<</say>>
 You hardly register what happens next, but it feels like your face hits a brick wall and soon afterwards everything goes black.
 
 <<nobr>>
@@ -1299,14 +1300,14 @@ You hardly register what happens next, but it feels like your face hits a brick 
 	<</for>>
 	/*<<set $ownedRelics=[]>>*/
 <</nobr>>
-When you wake up you find that all of your relics are gone<<if $hiredCompanions.some(c=>c.name===$companionBandit.name) && !$BanditConvo0>> along with the bandit you captured<</if>>. Damn those bandits!
+When you wake up you find that all of your relics are gone<<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit) && !$BanditConvo0>> along with the bandit you captured<</if>>. Damn those bandits!
 [[Continue on your journey|Layer1 Hub]]
 
 :: Relic Surrender [layer1]
 <<CarryAdjust>>\
 [img[setup.ImagePath+'Threats/opportunisticbandits.png']]
 
-<<if $hiredCompanions.some(c=>c.name===$companionBandit.name)>>\
+<<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit)>>\
 	<<say $Banditleader>>How about you start by returning us what is rightfully ours? Vesper over there.<</say>>
 	She points to the bandit you captured and brought along.
 

@@ -26,7 +26,7 @@ Hopefully you'll be able to get used to it.
 
 [[Version End]]
 /*
-[[Walk through the ninth layer of the Abyss|Layer9 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.name === "Cherry")>>
+[[Walk through the ninth layer of the Abyss|Layer9 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 <<if $visitL9 == 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer9 Cherry]]">><</if>>
 <</if>><</nobr>>
@@ -54,7 +54,7 @@ Hopefully you'll be able to get used to it.
 	xxx PLACEHOLDER LAYER DESCRIPTION/EVENT2
 <<elseif $layerTemp == 3>>
 	xxx PLACEHOLDER LAYER DESCRIPTION/EVENT3
-<<elseif $layerTemp == 6 && $playerCurses.some(e => e.name === "Hijinks Ensue")>>
+<<elseif $layerTemp == 6 && $mc.hasCurse("Hijinks Ensue")>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -73,9 +73,6 @@ Hopefully you'll be able to get used to it.
 	<<print "You are currently foraging for your daily food on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
-<<if !isPlaying("layer9")>>
-	<<masteraudio stop>><<audio "layer9" volume 0.2 play loop>>
-<</if>>
 <br>What do you want to do while you're here?<br>
 <br>
 [[Use Items and Relics]]<br>
@@ -259,10 +256,11 @@ You have successfully taken the $relic108.name Relic. Hopefully you can make goo
 
 
 :: Take on Libido Reinforcement G [layer9]
-<<set $playerCurses.push($curse113)>><<set $corruption += $curse113.corr>><<set $LibidoLog.push($curse113)>>\
-[img[setup.ImagePath + $curse113.pic]]
+<<set _curse = new LibidoReinforcementG()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse113.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -272,10 +270,11 @@ You have successfully taken on the $curse113.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Gender Reversal G [layer9]
-<<set $playerCurses.push($curse114)>><<set $corruption += $curse114.corr>><<set $GenderLog.push($curse114)>>\
-[img[setup.ImagePath + $curse114.pic]]
+<<set _curse = new GenderReversalG()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse114.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -285,10 +284,11 @@ You have successfully taken on the $curse114.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Asset Robustness G [layer9]
-<<set $playerCurses.push($curse115)>><<set $corruption += $curse115.corr>><<set $GenderLog.push($curse115)>>\
-[img[setup.ImagePath + $curse115.pic]]
+<<set _curse = new AssetRobustnessG()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse115.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -298,10 +298,11 @@ You have successfully taken on the $curse115.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Literalization [layer9]
-<<set $playerCurses.push($curse116)>><<set $corruption += $curse116.corr>>\
-[img[setup.ImagePath + $curse116.pic]]
+<<set _curse = new Literalization()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse116.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -311,10 +312,11 @@ You have successfully taken on the $curse116.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Consent Dissent [layer9]
-<<set $playerCurses.push($curse117)>><<set $corruption += $curse117.corr>>\
-[img[setup.ImagePath + $curse117.pic]]
+<<set _curse = new ConsentDissent()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse117.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -324,17 +326,18 @@ You have successfully taken on the $curse117.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on The Maxim [layer9]
-<<set $playerCurses.push($curse118)>><<set $corruption += $curse118.corr>>\
-[img[setup.ImagePath + $curse118.pic]]
+<<set _curse = new TheMaxim()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse118.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 Where would you like the parasite to invade your body?
 
-<<radiobutton "$curse118.variation" "anus" checked>> Anus
-<<radiobutton "$curse118.variation" "urethra" >> Urethra
+<<radiobutton "_curse.location" "anus" checked>> Anus
+<<radiobutton "_curse.location" "urethra" >> Urethra
 <<if $mc.vagina > 0 >>
-	<<radiobutton "$curse35.variation" "vagina" >> Vagina
+	<<radiobutton "_curse.location" "vagina" >> Vagina
 <</if>>
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
@@ -345,10 +348,11 @@ Where would you like the parasite to invade your body?
 <</if>>
 
 :: Take on Adverse Possession [layer9]
-<<set $playerCurses.push($curse119)>><<set $corruption += $curse119.corr>>\
-[img[setup.ImagePath + $curse119.pic]]
+<<set _curse = new AdversePossession()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse119.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -358,10 +362,11 @@ You have successfully taken on the $curse119.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Erased [layer9]
-<<set $playerCurses.push($curse120)>><<set $corruption += $curse120.corr>>\
-[img[setup.ImagePath + $curse120.pic]]
+<<set _curse = new Erased()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse120.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -371,10 +376,11 @@ You have successfully taken on the $curse120.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Tickly Tentacles [layer9]
-<<set $playerCurses.push($curse121)>><<set $corruption += $curse121.corr>>\
-[img[setup.ImagePath + $curse121.pic]]
+<<set _curse = new TicklyTentacles()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse121.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -384,10 +390,11 @@ You have successfully taken on the $curse121.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Eye-scream [layer9]
-<<set $playerCurses.push($curse122)>><<set $corruption += $curse122.corr>>\
-[img[setup.ImagePath + $curse122.pic]]
+<<set _curse = new Eyescream()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse122.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -397,10 +404,11 @@ You have successfully taken on the $curse122.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on A Mouthful [layer9]
-<<set $playerCurses.push($curse123)>><<set $corruption += $curse123.corr>>\
-[img[setup.ImagePath + $curse123.pic]]
+<<set _curse = new AMouthful()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse123.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -410,10 +418,11 @@ You have successfully taken on the $curse123.name Curse. Hopefully you are okay 
 <</if>>
 
 :: Take on Below the Veil [layer9]
-<<set $playerCurses.push($curse124)>><<set $corruption += $curse124.corr>>\
-[img[setup.ImagePath + $curse124.pic]]
+<<set _curse = new BelowTheVeil()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the $curse124.name Curse. Hopefully you are okay with accepting the permanent consequences.
+You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the ninth layer|Layer9 Curses]]
 <<if $escBalDepl==0>>
@@ -424,7 +433,7 @@ You have successfully taken on the $curse124.name Curse. Hopefully you are okay 
 
 :: Layer9 Curses Random [nobr]
 <<set _tempCurses = setup.cursesOnLayer[9]>>
-<<set _totalCurses = $playerCurses>>
+<<set _totalCurses = $mc.curses>>
 <<for _i=0; _i< $hiredCompanions.length; _i++>>
     <<set _totalCurses = _totalCurses.concat($hiredCompanions[_i].curses)>>
 <</for>>
