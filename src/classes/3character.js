@@ -54,42 +54,44 @@ setup.id2name = id => {
 class Character {
     /**
      * Creates a new Character object.
-     * @param {number} id The character's id. Associated IDs can be found in setup.companionIds.
-     * @param {string} name The character's name.
-     * @param {number} cost The cost to recruit the character, or -1 for unrecruitable characters (like the main
+     *
+     * @param {Object} o The character's initial properties.
+     * @param {number} o.id The character's id. Associated IDs can be found in setup.companionIds.
+     * @param {string} o.name The character's name.
+     * @param {number} o.cost The cost to recruit the character, or -1 for unrecruitable characters (like the main
      *     characters and the golem).
-     * @param {number} carry The carry capacity of the character.
-     * @param {number|undefined} affec The affection of the character towards the main character. Only required for
+     * @param {number} o.carry The carry capacity of the character.
+     * @param {number|undefined} o.affec The affection of the character towards the main character. Only required for
      *     companions.
-     * @param {boolean} swap Whether the character has been body-swapped.
-     * @param {string} image The path to the image of the character.
-     * @param {string} imageIcon The path to the image of the character's icon.
-     * @param {'male' | 'female'} mindSex The gender identity of this character.
-     * @param {'male' | 'female'} osex The original sex of this character's body (as determined by its genitals).
-     * @param {number} obreasts The original breast size of this character's body.
-     * @param {number} desiredBreasts The breast size this character would like most.
-     * @param {number} openis The original size of this character's body's penis, or 0 if it has no penis.
-     * @param {number} ogender The original apparent gender of this body, as a number between 1 (completely male
-     * expression) and 6 (completely female expression).
-     * @param {number} fit How fit this character is, as a number from 0 (weakling) to 10 (peak human performance).
-     * @param {number} oheight The original height of this character's body, in cm.
-     * @param {number} comfortableHeight The height at which this character feels most comfortable.
-     * @param {number} age The chronological age of this character at the beginning of the game.
-     * @param {string} appDesc A description of what makes this character's body special. Used when MC gains a
-     * companion's body to determine how it affects them (narratively).
-     * @param {'darkness'|'spiders'|'wolves'|'snakes'|'insects'|'slime'|'desperation'|'rot'|'unknown'} fear What this
-     * character fears most. 'unknown' is an unknown fear, although its event also fits with fear of the unknown.
-     * @param {string} ohair The original color of this character's body's hair.
-     * @param {string} oskinColor The original color of this character's body's skin.
-     * @param {string} oskinType The original texture of this character's body's skin.
-     * @param {string} oears The original shape of this character's body's ears.
-     * @param {string} oeyeColor The original color of this character's body's eyes.
-     * @param {string} oblood The original color of this character's blood.
-     * @param {number} pregnantT The day in which this character has been impregnated.
-     * @param {number} due The day in which this character's pregnancy is due.
-     * @param {number} lastBirth The day on which this character's last birth occurred.
-     * @param {boolean} switched Whether this character has switched bodies.
-     * @param {[CharEvent]} events The list of events that affected this character.
+     * @param {boolean} o.swap Whether the character has been body-swapped.
+     * @param {string} o.image The path to the image of the character.
+     * @param {string} o.imageIcon The path to the image of the character's icon.
+     * @param {'male' | 'female'} o.mindSex The gender identity of this character.
+     * @param {'male' | 'female'} o.osex The original sex of this character's body (as determined by its genitals).
+     * @param {number} o.obreasts The original breast size of this character's body.
+     * @param {number} o.desiredBreasts The breast size this character would like most.
+     * @param {number} o.openis The original size of this character's body's penis, or 0 if it has no penis.
+     * @param {number} o.ogender The original apparent gender of this body, as a number between 1 (completely male
+     *     expression) and 6 (completely female expression).
+     * @param {number} o.fit How fit this character is, as a number from 0 (weakling) to 10 (peak human performance).
+     * @param {number} o.oheight The original height of this character's body, in cm.
+     * @param {number} o.comfortableHeight The height at which this character feels most comfortable.
+     * @param {number} o.age The chronological age of this character at the beginning of the game.
+     * @param {string} o.appDesc A description of what makes this character's body special. Used when MC gains a
+     *     companion's body to determine how it affects them (narratively).
+     * @param {'darkness'|'spiders'|'wolves'|'snakes'|'insects'|'slime'|'desperation'|'rot'|'unknown'} o.fear What this
+     *     character fears most. 'unknown' is an unknown fear, although its event also fits with fear of the unknown.
+     * @param {string} o.ohair The original color of this character's body's hair.
+     * @param {string} o.oskinColor The original color of this character's body's skin.
+     * @param {string} o.oskinType The original texture of this character's body's skin.
+     * @param {string} o.oears The original shape of this character's body's ears.
+     * @param {string} o.oeyeColor The original color of this character's body's eyes.
+     * @param {string} o.oblood The original color of this character's blood.
+     * @param {number} o.pregnantT The day in which this character has been impregnated.
+     * @param {number} o.due The day in which this character's pregnancy is due.
+     * @param {number} o.lastBirth The day on which this character's last birth occurred.
+     * @param {boolean} o.switched Whether this character has switched bodies.
+     * @param {Array.<CharEvent>} o.events The list of events that affected this character.
      */
     constructor({id, name, cost=-1, carry, affec=0, swap=false,
                     image, imageIcon, mindSex='male',
