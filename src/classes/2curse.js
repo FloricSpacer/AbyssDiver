@@ -28,10 +28,10 @@ class Curse extends CharEvent {
      * @param {string} name The name of the curse.
      * @param {number} corruption The corruption gain of the curse.
      * @param {string} pic The picture of the curse.
-     * @param {string} type The type of events this curse creates.
+     * @param {string} type The type of events this Curse creates.
      * @param {string} appDesc The description that gets added to the player's appearance when they take this curse.
-     * 'none' if the curse has no mechanical impact and 'other' if the event is curse-specific,
-     * meaning no other events have similar effects (for example the double penis curse).
+     * 'none' if the Curse has no mechanical impact and 'other' if the event is Curse-specific,
+     * meaning no other events have similar effects (for example the double penis Curse).
      */
     constructor(name, corruption, pic, type = 'none', appDesc = '') {
         super(name, type)
@@ -42,7 +42,7 @@ class Curse extends CharEvent {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {*[]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -60,9 +60,9 @@ class Curse extends CharEvent {
     }
 
     /**
-     * Creates a copy of this curse. Unlike clone(), this makes a new curse, not the same curse, so e.g., if it is added to
-     * a character, it will be added at the current time, not at the time this curse was created.
-     * The new curse has the same customisation options chosen as this curse.
+     * Creates a copy of this curse. Unlike clone(), this makes a new Curse, not the same Curse, so e.g., if it is added to
+     * a character, it will be added at the current time, not at the time this Curse was created.
+     * The new Curse has the same customisation options chosen as this curse.
      * @returns {Curse} A copy of this curse.
      */
     copy() {
@@ -70,7 +70,7 @@ class Curse extends CharEvent {
     }
 
     /**
-     * Creates a sugarcube revivable json object from which this curse can be revived.
+     * Creates a sugarcube revivable json object from which this Curse can be revived.
      * @returns {[]} The revivable JSON.
      */
     toJSON() {
@@ -104,17 +104,17 @@ class Curse extends CharEvent {
     }
 
     /**
-     * Returns the list of curses this curse is incompatible with. This curse may not be taken if any of the curses in
+     * Returns the list of Curses this Curse is incompatible with. This Curse may not be taken if any of the Curses in
      * this array have been taken before or are stored in managed misfortune.
-     * @returns {[string]} The list of incompatible curses.
+     * @returns {[string]} The list of incompatible Curses.
      */
     get incompatibilities() {
         return []
     }
 
     /**
-     * Returns the maximum number of times this curse can be taken.
-     * @returns {number} The number of times this curse can be taken.
+     * Returns the maximum number of times this Curse can be taken.
+     * @returns {number} The number of times this Curse can be taken.
      */
     get maximum() {
         return 1;
@@ -229,7 +229,7 @@ class PermaDye extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -315,7 +315,7 @@ class IncreasedSensitivity extends Curse {
     }
 
     changeLewdness(prevLewdness, character) {
-        // both curses increase by 1 if alone, by 3 if together, making for a total of +6 when you have both
+        // both Curses increase by 1 if alone, by 3 if together, making for a total of +6 when you have both
         if (character.curses.some(c => c instanceof RefractoryRefactorization)) return prevLewdness + 3
         return prevLewdness + 1;
     }
@@ -331,7 +331,7 @@ class RefractoryRefactorization extends Curse {
     }
 
     changeLewdness(prevLewdness, character) {
-        // both curses increase by 1 if alone, by 3 if together, making for a total of +6 when you have both
+        // both Curses increase by 1 if alone, by 3 if together, making for a total of +6 when you have both
         if (character.curses.some(c => c instanceof IncreasedSensitivity)) return prevLewdness + 3
         return prevLewdness + 1;
     }
@@ -414,7 +414,7 @@ class FluffyEars extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -448,7 +448,7 @@ class FluffyTail extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -482,7 +482,7 @@ class MaximumFluff extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -798,7 +798,7 @@ class WackyWombs extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -891,7 +891,7 @@ class RainbowSwirl extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string, string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -1164,7 +1164,7 @@ class TippingTheScales extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -1416,7 +1416,7 @@ class Carapacian extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -1460,7 +1460,7 @@ class Hemospectrum extends Curse {
     }
 
     /**
-     * Returns the customisation options chosen for this curse, if any.
+     * Returns the customisation options chosen for this Curse, if any.
      * @returns {[string]} The customisation options, in the same order they are used in the constructor.
      * @protected
      */
@@ -1596,9 +1596,7 @@ class Horny extends Curse {
         super('Horny', 20, 'Curses/horny.png', 'none');
     }
 
-    inhumanise(prevInhumanity) {
-        return prevInhumanity + 2;
-    }
+    /* horn inhumanisation handled by code in Character */
 
     addHorns(prevHorns) {
         return prevHorns + 1;
