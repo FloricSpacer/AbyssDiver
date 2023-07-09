@@ -258,25 +258,25 @@ imageIcon $mc.imageIcon
 Curses added and removed on this page will not influence corruption.<br><br>
 
 <<for _i, _layer range setup.cursesOnLayer>>
-    <<if _i > 0>>
-        Layer _i:<br>
-        <<for _cursename range _layer>>
-            <<set _curse = setup.findCurseBy(c => c.name === _cursename)>>
-            <<capture _cursename, _curse>>
-                <<if $mc.hasCurse(_curse.name)>>
-                    <<set _linktext = "Remove " + _cursename>>
-                    <<link _linktext "Adjust Curses">>
-                        <<RemoveCurse _curse>>
-                    <</link>><br>
-                <<else>>
-                    <<set _linktext = "Take " + _cursename>>
-                    <<link _linktext "Adjust Curses">>
-                        <<set $mc.addCurse(_curse)>>
-                    <</link>><br>
-                <</if>>
-            <</capture>>
-        <</for>>
-    <</if>>
+	<<if _i > 0>>
+		Layer _i:<br>
+		<<for _cursename range _layer>>
+			<<set _curse = setup.findCurseBy(c => c.name === _cursename)>>
+			<<capture _cursename, _curse>>
+				<<if $mc.hasCurse(_curse.name)>>
+					<<set _linktext = "Remove " + _cursename>>
+					<<link _linktext "Adjust Curses">>
+						<<RemoveCurse _curse>>
+					<</link>><br>
+				<<else>>
+					<<set _linktext = "Take " + _cursename>>
+					<<link _linktext "Adjust Curses">>
+						<<set $mc.addCurse(_curse)>>
+					<</link>><br>
+				<</if>>
+			<</capture>>
+		<</for>>
+	<</if>>
 <</for>>
 <br>
 <<link "Take all Curses" "Adjust Curses">>
@@ -299,24 +299,24 @@ Relics removed this way are returned to the Abyss, not sold or thrown away, so y
 Relics are removed and added one at a time. To remove all copies of a given Curse, keep removing it until there are none left.<br>
 
 <<for _i, _layer range setup.relicsOnLayer>>
-    <<if _i > 0>>
-        Layer _i:<br>
-        <<for _relicname range _layer>>
-            <<set _relic = $relics.find(r => r.name === _relicname)>>
-            <<capture _relicname, _relic>>
-                <<if $ownedRelics.find(r => r.name === _relic.name) !== undefined>>
-                    <<set _linktext = "Remove " + _relicname>>
-                    <<link _linktext "Adjust Relics">>
-                        <<set setup.returnRelic(_relic)>>
-                    <</link>><br>
-                <</if>>
-                <<set _linktext = "Add " + _relicname>>
-                <<link _linktext "Adjust Relics">>
-                    <<set $ownedRelics.push(_relic)>>
-                <</link>><br>
-            <</capture>>
-        <</for>>
-    <</if>>
+	<<if _i > 0>>
+		Layer _i:<br>
+		<<for _relicname range _layer>>
+			<<set _relic = $relics.find(r => r.name === _relicname)>>
+			<<capture _relicname, _relic>>
+				<<if $ownedRelics.find(r => r.name === _relic.name) !== undefined>>
+					<<set _linktext = "Remove " + _relicname>>
+					<<link _linktext "Adjust Relics">>
+							<<set setup.returnRelic(_relic)>>
+					<</link>><br>
+				<</if>>
+				<<set _linktext = "Add " + _relicname>>
+				<<link _linktext "Adjust Relics">>
+					<<set $ownedRelics.push(_relic)>>
+				<</link>><br>
+			<</capture>>
+		<</for>>
+	<</if>>
 <</for>>
 <br>
 <<link "Take one of each Relic" "Adjust Relics">>
@@ -663,7 +663,12 @@ They are a bit sore at the moment.
 <</if>>
 <<if $mc.hasCurse("Semen Demon")>>
 	You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads per day.
-	<<if ($mc.curses.find(c => c instanceof SemenDemon && ((c.fluidType !== 'vaginal fluids' || $mc.vagina > 0) || (c.fluidType !== 'semen' || $mc.penis > 0)))) >>
+	<<if $mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($mc.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($mc.vagina > 0 && e.fluidType != 'semen')
+		))
+	>>
 		<<if $mc.hasCurse("Leaky")>>
 			<<set _temp = Math.floor((1+$crumbleFluid/100)*2)>>
 		<<else>>
@@ -1177,7 +1182,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>Currently your voice is different than the one you were used to. Right now you have a feminine voice that sounds like its coming from someone with a natural talent for singing, as if you could be the central figure in an angelic chorus or make a career in music with only minimal training.<br>
 		[[Take the Chain of Lorelei off|Use Items and Relics][$colwear=0]]<br>
 	<<else>>
-	    <br>You have a fairly normal <<GenderPronoun>> voice, but perhaps you sound different if you took advantage of one of your Relics?<br>
+		<br>You have a fairly normal <<GenderPronoun>> voice, but perhaps you sound different if you took advantage of one of your Relics?<br>
 		[[Wear the Chain of Lorelei|Use Items and Relics][$colwear=1]]<br>
 	<</if>>
 <</if>>
@@ -1193,7 +1198,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>
 		[[Take the Blind Divine off|Use Items and Relics][$BDwear=false]]<br>
 	<<else>>
-	    <br>You have the Blind Divine, would you like to wear it to obtain to power of blindsight?<br>
+		<br>You have the Blind Divine, would you like to wear it to obtain to power of blindsight?<br>
 		[[Wear the Blind Divine|Use Items and Relics][$BDwear=true]]<br>
 	<</if>>
 <</if>>
@@ -1204,7 +1209,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>
 		[[Take the Heavy is the Head off|Use Items and Relics][$HeavyHeadwear=false,$IQdrop+=999]]<br>
 	<<else>>
-	    <br>You have the Heavy is the Head, would you like to wear it and enhance your intelligence?<br>
+		<br>You have the Heavy is the Head, would you like to wear it and enhance your intelligence?<br>
 		[[Wear the Heavy is the Head|Use Items and Relics][$HeavyHeadwear=true,$IQdrop-=999]]<br>
 	<</if>>
 <</if>>
@@ -1214,7 +1219,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>After resting in the Aegis Coffin, your bones have been transformed into an orichalcum skeleton. You have no further use for this powerful Relic.
 		<br>
 	<<else>>
-	    <br>You possess the Aegis Coffin. Would you like to slumber within it to replace your current skeleton with a superior orichalcum one?<br>
+		<br>You possess the Aegis Coffin. Would you like to slumber within it to replace your current skeleton with a superior orichalcum one?<br>
 		[[Sleep in the Aegis Coffin|Use Items and Relics][$AegisWear=true, setup.skeletonRemains.weight= 9.3*$mc.heightCor/170, setup.skeletonRemains.count+=1,$items.push(setup.skeletonRemains)]]<br>
 	<</if>>
 <</if>>
@@ -1225,7 +1230,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>
 		[[Put the Lightning Rook away|Use Items and Relics][$LightningWear=false]]<br>
 	<<else>>
-	    <br>By grasping the Lightning Rook, time slows to a crawl, making battles significantly easier, especially when you're armed with a firearm. You can bring it close so that you're always ready to use its power.<br>
+		<br>By grasping the Lightning Rook, time slows to a crawl, making battles significantly easier, especially when you're armed with a firearm. You can bring it close so that you're always ready to use its power.<br>
 		[[Keep the Lightning Rook close and ready to use at a moment's notice|Use Items and Relics][$LightningWear=true]]<br>
 	<</if>>
 <</if>>
@@ -1250,7 +1255,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>
 		[[Put the Luminous Phantasmagoria away|Use Items and Relics][$LuminousWear=false]]<br>
 	<<else>>
-	    <br>By wearing the Luminous Phantasmagoria people would view you as more normal and innocent.<br>
+		<br>By wearing the Luminous Phantasmagoria people would view you as more normal and innocent.<br>
 		[[Hold the Luminous Phantasmagoria over your head and wear it|Use Items and Relics][$LuminousWear=true]]<br>
 	<</if>>
 <</if>>
@@ -1462,12 +1467,12 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 						<<radiobutton "_curse.furType" "horse-furred">> Horse<br>
 					<<elseif _curse.name == "Wacky Wombs" && !_curse._wombLocation >>
 						What is the location of the womb you would like to add?<br>
-                        <<radiobutton "_curse._wombLocation" "throat" checked>> Throat<br>
-                        <<radiobutton "_curse._wombLocation" "urethra">> Urethra<br>
-                        <<radiobutton "_curse._wombLocation" "anus">> Anus<br>
-                        <<if $vagina > 0>>\
-                            <<radiobutton "_curse._wombLocation" "vagina">> Vagina<br>
-                        <</if>>
+						<<radiobutton "_curse._wombLocation" "throat" checked>> Throat<br>
+						<<radiobutton "_curse._wombLocation" "urethra">> Urethra<br>
+						<<radiobutton "_curse._wombLocation" "anus">> Anus<br>
+						<<if $vagina > 0>>\
+							<<radiobutton "_curse._wombLocation" "vagina">> Vagina<br>
+						<</if>>
 					<<elseif _curse.name == "Rainbow Swirl" && !_curse.skinColor>>
 						Please enter your new skin color: <<textbox "_curse.skinColor" "pink" "Use Items and Relics">><br>
 						Please enter your new eye color: <<textbox "_curse.eyeColor" "pink" "Use Items and Relics">><br>
@@ -1477,15 +1482,15 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 						Please enter your new exoskeleton color: <<textbox "_curse.skinColor" "shiny black" "Use Items and Relics">><br>
 					<<elseif _curse.name == "Horny" && !$hornVariation>>
 						<<include "Horny Customization">><br>
-					<<elseif _curse.name == "Semen Demon" && !_curse.fluidType>>
+					<<elseif _curse instanceof SemenDemon && !_curse.fluidType>>
 						<<include "Semen Demon Customization">><br>
 					<<elseif _curse.name == "Eye on the Prize" && !$eyeRemove>>
 						<<include "Eye on the Prize Customization">><br>
 					<<elseif _curse.name == "Ampu-Q-tie" && _curse.arms + _curse.legs === 0>>
 						<<include "Ampu-Q-tie Customization">><br>
 					<<elseif _curse.name == "Dizzying Heights" && !$mc.hasEvent(HeightDirectionEvent)>>
-					    <<set _heightDirEvent = new HeightDirectionEvent()>>
-					    <<set $mc.events.push(_heightDirEvent)>>
+						<<set _heightDirEvent = new HeightDirectionEvent()>>
+						<<set $mc.events.push(_heightDirEvent)>>
 						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within.<br>
 						You see your own reflection alternating between growing and shrinking. After a while you see the Curse has settle on a height...<br>
 						<<radiobutton "_heightDirEvent.heightDirection" -1 checked>> Decrease<br>
@@ -1741,13 +1746,13 @@ How many dubloons would you like to pay back?
 <<set _targetCurse = _args[0]>>
 <<set _i = $mc.events.findLastIndex(c => c.name === _targetCurse.name)>>
 <<if _i !== -1>>
-    <<set $mc.events.deleteAt(_i)>>
-    <set _j = $ManagedMisfortuneActive.findLastIndex(curse => curse.name === _targetCurse.name)>>
-    <<if _j != -1>>
-        <<set $ManagedMisfortuneActive.deleteAt(_j)>>
-        <<set _k = $StoredCurse.findLastIndex(curse => curse.name === _targetCurse.name)>>
-        <<set $StoredCurse.deleteAt(_k)>>
-    <</if>>
+	<<set $mc.events.deleteAt(_i)>>
+	<set _j = $ManagedMisfortuneActive.findLastIndex(curse => curse.name === _targetCurse.name)>>
+	<<if _j != -1>>
+		<<set $ManagedMisfortuneActive.deleteAt(_j)>>
+		<<set _k = $StoredCurse.findLastIndex(curse => curse.name === _targetCurse.name)>>
+		<<set $StoredCurse.deleteAt(_k)>>
+	<</if>>
 <</if>>
 
 <</capture>>
@@ -2159,10 +2164,10 @@ How many dubloons would you like to pay back?
 						<<elseif $items[13].count && $items[20].count >= 1>>
 							<<set $items[20].count -= 1>>
 						<<else>>
-						    $mc.events.push(new LibidoEvent("Flanberry Major", 1);
+							$mc.events.push(new LibidoEvent("Flanberry Major", 1);
 						<</if>>
 					<<else>>
-                        $mc.events.push(new LibidoEvent("Flanberry Major", 1);
+						$mc.events.push(new LibidoEvent("Flanberry Major", 1);
 					<</if>>
 				<<case 3>>
 					<<set $foodL3 += 1>>

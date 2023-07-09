@@ -14,7 +14,15 @@
 <<if $currentLayer == 2 && $forageFood == 1 && $L2FoodConvo == 0>>
 	<<set _numConvos += 1>>[[Chat with Maru as you forage for food|Layer2 Forage Convo][$L2FoodConvo = 1]]
 <</if>>
-<<if !$SemenDemonVec.some(e => e.id === setup.companionIds.maru) && $mc.curses.some(c => c instanceof SemenDemon && ((c.fluidType !== 'semen' || $companionMaru.vagina > 0) || (c.fluidType !== 'vaginal fluids' || $companionMaru.penis > 0)))>>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.maru) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionMaru.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionMaru.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
 	<<set _numConvos += 1>>[[Maybe Maru can help you with your appetite for sexual fluids|Maru Semen Demon]]<br>
 <</if>>
 <<if $mc.hasCurse("Freckle Speckle") && $currentLayer == 1 && $convo.maruFreckleSpeckle == 0>>
@@ -407,7 +415,15 @@ Grateful, you thank Maru once more and decide to carry on with your journey, now
 <<if  $companionLily.lactation>0 && !$LilyConvoLac && $LilyConvo2 && $hiredCompanions.some(e=> e.id === setup.companionIds.lily)>>
 	<<set _numConvos += 1>>[[You see Lily sporting wet spots on her shirt|Lily ConvoLac]]<br>
 <</if>>
-<<if !$SemenDemonVec.some(e => e.id === setup.companionIds.lily) && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionLily.penis > 0) || (e.type !== 'vaginal fluids' || $companionLily.vagina > 0)))>>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.lily) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionLily.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionLily.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
 	<<set _numConvos += 1>>[[Maybe Lily can help you with your appetite for sexual fluids|Lily Semen Demon]]<br>
 <</if>>
 <<if $mc.hasCurse("Knife-ear") && $currentLayer == 1 && $convo.lilyKnife == 0>>
@@ -1145,7 +1161,15 @@ She lets out a small giggle as she strokes your $mc.hair hair softly as you cont
 <<elseif $KhemiaConvoMostMasc==false && $mc.osex=="female" && $mc.sex=="male" && $mc.appGender<5>>
 	<<set _numConvos += 1>>[[Chat with Khemia|Khemia Most Masc][$KhemiaConvoMostMasc=true]]<br>
 <</if>>
-<<if !$SemenDemonVec.some(e => e.id === setup.companionIds.khemia) && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionKhemia.penis > 0) || (e.type !== 'vaginal fluids' || $companionKhemia.vagina > 0)))>>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.khemia) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionKhemia.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionKhemia.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
 	<<set _numConvos += 1>>[[Maybe Khemia can help you with your appetite for sexual fluids|Khemia Semen Demon]]<br>
 <</if>>
 <<if $mc.hasCurse("Shrunken Assets") && $currentLayer == 1 && $convo.khemiaShrunkenAssets == 0>>
@@ -1747,7 +1771,15 @@ He flashes a wide grin, but the ensuing silence seems to dampen his enthusiasm.
 <<if $CherryFluffy === false && ($mc.hasCurse("Fluffy Ears") || $mc.hasCurse("Fluffy Tail")) && !($companionCherry.hasCurse("Fluffy Ears") || $companionCherry.hasCurse("Fluffy Tail"))>>
 	<<set _numConvos += 1>>[[Chat with Cherry|Cherry Fluffy][$CherryFluffy=true]]<br>
 <</if>>
-<<if !$SemenDemonVec.some(e => e.id === setup.companionIds.cherry) && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionCherry.penis > 0) || (e.type !== 'vaginal fluids' || $companionCherry.vagina > 0)))>>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.cherry) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionCherry.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionCherry.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
 	<<set _numConvos += 1>>[[Perhaps Cherry could help you with your appetite for sexual fluids?|Cherry Semen Demon]]<br>
 <</if>>
 <<if $mc.hasCurse("Shrunken Assets") && $currentLayer == 1 && $convo.cherryShrunkenAssets == 0>>
@@ -2188,7 +2220,15 @@ Her eyes reveal a hint of disappointment, but she quickly scurries away.
 <<if $mc.lactation>0 && !$CloudConvoLac && $companionCloud.affec>16>>
 	<<set _numConvos += 1>>[[You notice Cloud is looking at your clothes, where wet spots have formed|Cloud ConvoLac]]<br>
 <</if>>
-<<if !$SemenDemonVec.some(e => e.id === setup.companionIds.cloud) && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionCloud.penis > 0) || (e.type !== 'vaginal fluids' || $companionCloud.vagina > 0)))>>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.cloud) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionCloud.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionCloud.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
 	<<set _numConvos += 1>>[[Maybe Cloud can help you with your appetite for sexual fluids|Cloud Semen Demon]]<br>
 <</if>>
 <<if $mc.hasCurse("Perma-dye") && $currentLayer == 1 && $convo.cloudPerma == 0>>
@@ -2562,7 +2602,15 @@ He relinquishes his hold on your breasts, delivers a playful slap to your buttoc
 <<if $Wetting && $WettingSolution == 0 >>
 	<<set _numConvos += 1>>[[Inquire Saeko why she was annoyed while you were waiting for everything to dry.|Saeko Wetting]]<br>
 <</if>>
-<<if !$SemenDemonVec.some(e => e.id === setup.companionIds.saeko) && $mc.curses.some(e => e.name === "Semen Demon" && ((e.type !== 'semen' || $companionSaeko.penis > 0) || (e.type !== 'vaginal fluids' || $companionSaeko.vagina > 0)))>>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.saeko) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionSaeko.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionSaeko.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
 	<<set _numConvos += 1>>[[Maybe Saeko can help you with your appetite for sexual fluids|Saeko Semen Demon]]<br>
 <</if>>
 <<if $mc.hasCurse("Flower Power") && $currentLayer == 5 && $convo.saeko == 0>>
@@ -2961,8 +3009,16 @@ Saeko meticulously guides you through a comprehensive timetable, detailing every
 <<if $BanditConvo0 == 0 && $companionBandit.affec>-3 >>
 	<<set _numConvos += 1>>[[Take off her gag and talk to the Bandit|Bandit Convo0]]<br>
 <</if>>
-<<if $mc.curses.some(e => e.name === "Semen Demon" && (($companionBandit.penis > 0 && e.fluidType !== 'vaginal fluids' || ($companionBandit.vagina > 0 && e.fluidType !== 'semen'))) && !$SemenDemonVec.some(e => e.id === setup.companionIds.bandit)>>
-	<<set _numConvos += 1>><<print "[[Maybe "+$companionBandit.name+" can help you with your appetite for sexual fluids|Bandit Semen Demon]]<br>">>
+<<if
+	!$SemenDemonVec.some(e => e.id === setup.companionIds.bandit) &&
+	$mc.curses.some(e =>
+		e instanceof SemenDemon && (
+			($companionBandit.penis > 0 && e.fluidType != 'vaginal fluids') ||
+			($companionBandit.vagina > 0 && e.fluidType != 'semen')
+		)
+	)
+>>
+	<<set _numConvos += 1>>[[Maybe $companionBandit.name can help you with your appetite for sexual fluids|Bandit Semen Demon]]<br>
 <</if>>
 
 :: Bandit Convo0 [nobr]
@@ -3292,7 +3348,7 @@ $companionTwin.name casts a smoldering glance your way as <<if $companionTwin.se
 	<br><br>
 	<<say $companionTwin>> It's fine, I can work wonders even with less.<</say>><br>
 	You glance at her, puzzled, only to receive a sly grin in return. <<if $companionTwin.sex=='male'>>He <<else>>She <</if>>envelops your petite member with <<if $companionTwin.sex=='male'>>his <<else>>her <</if>>warm mouth, the sensation of a tender tongue caressing your skin overwhelming you. You close your eyes, surrendering to the tantalizing feelings coursing through your body. Suddenly, $companionTwin.name delivers a teasing suckle to your sensitive head, surprising you.
-    <br><br>
+	<br><br>
 	<<say $mc>>God, that feels amazing<</say>><br>
 	Your twin replies with a mischievous wink, and soon, you're a trembling, moaning mess as <<if $companionTwin.sex=='male'>>he <<else>>she <</if>>guides you to an explosive orgasm.
 	<br><br>
