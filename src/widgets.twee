@@ -2,19 +2,19 @@
 <<widget "UpdateAttributes">>
 <<set $menCycleFlag = $mc.womb >= 1 && !$mc.isPregnant>>
 <<if $menCycleFlag && !$menCycleT_flag>>
-    <<set $menCycleT = $time - 7>>
-    <<set $menCycleT_flag = true>>
-    /* If mc has the Heat/Rut Curse, makes the heat cycle and menstruation cycle align. */
-    <<set $heatCycleT = $menCycleT>>
-    <<set $heatCycleT_flag = true>>
+	<<set $menCycleT = $time - 7>>
+	<<set $menCycleT_flag = true>>
+	/* If mc has the Heat/Rut Curse, makes the heat cycle and menstruation cycle align. */
+	<<set $heatCycleT = $menCycleT>>
+	<<set $heatCycleT_flag = true>>
 <</if>>
 <<if $mc.hasCurse('Heat/Rut') && !$heatCycleT_flag>>
-    <<set $heatCycleT = $time - 7>>
-    <<set $heatCycleT_flag = true>>
+	<<set $heatCycleT = $time - 7>>
+	<<set $heatCycleT_flag = true>>
 <</if>>
 <<if $mc.hasCurse('The Maxim') && !$MaximCycleT_flag>>
-    <<set $MaximCycleT = $time>>
-    <<set $MaximCycleT_flag = true>>
+	<<set $MaximCycleT = $time>>
+	<<set $MaximCycleT_flag = true>>
 <</if>>
 <</widget>>
 
@@ -33,27 +33,30 @@
 <<set _sdcurse = $mc.getCurse(SemenDemon)>>
 <<set _sdTotal = $mc.events.filter(e => e instanceof SemenDemon).reduce((v, e) => v + e.amount)>>
 <<if _sdcurse !== undefined>>
-    <<set _contributions = 0>>
-    <<if ($mc.penisCor > 0 && _sdcurse.fluidType !== "vaginal fluids") || ($mc.vagina > 0 && _sdcurse.fluidType !== "semen") >>
-            <<if $mc.hasCurse("Leaky")>>
-                <<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
-            <<else>>
-                <<set _contributions += Math.floor(1+$crumbleFluid/100)>>
-            <</if>>
-    <</if>>
+	<<set _contributions = 0>>
+	<<if
+		($mc.penis > 0 && _sdcurse.fluidType != 'vaginal fluids') ||
+		($mc.vagina > 0 && _sdcurse.fluidType != 'semen')
+	>>
+		<<if $mc.hasCurse("Leaky")>>
+			<<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
+		<<else>>
+			<<set _contributions += Math.floor(1+$crumbleFluid/100)>>
+		<</if>>
+	<</if>>
 
-    <<for _i=0; _i<$SemenDemonVec.length; _i++ >>
-        <<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
-            <<set _contributions +=1>>
-        <</if>>
-    <</for>>
+	<<for _i=0; _i<$SemenDemonVec.length; _i++ >>
+		<<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
+			<<set _contributions +=1>>
+		<</if>>
+	<</for>>
 
-    <<set $SemenDemonBalance += (_contributions - _sdTotal) * _args[0]>>/* */
-    <<if $SemenDemonBalance < -14>>
-        <<set $gameOver=true>>
-    <<elseif $SemenDemonBalance > 14>>
-        <<set $SemenDemonBalance = 14>>
-    <</if>>
+	<<set $SemenDemonBalance += (_contributions - _sdTotal) * _args[0]>>/* */
+	<<if $SemenDemonBalance < -14>>
+		<<set $gameOver=true>>
+	<<elseif $SemenDemonBalance > 14>>
+		<<set $SemenDemonBalance = 14>>
+	<</if>>
 <</if>>
 <</widget>>
 
@@ -279,39 +282,39 @@
 /* body swaps can change these, so this isn't perfect, but it's the best we can do */
 <<if _inverted && $mc.openis === 0>> <<set _openis = $mc.obreasts * 2 || $mc.openis>> <</if>>
 <<set $companionTwin = new Character({
-                  id: setup.companionIds.twin,
-                  name: _twinCurse.twinName,
-                  carry: $mc.carry,
-                  affec: 3,
-                  swap: false,
-                  image: "curses/doubletrouble.png",
-                  imageIcon: 'Player Icons/playerF.png',
-                  mindSex: ($mc.mindSex === 'male') ^ _inverted ? 'male' : 'female',
-                  osex: ($mc.osex === 'male') ^ _inverted ? 'male' : 'female',
-                  obreasts: _inverted ? $mc.openis / 2 : $mc.obreasts,
-                  desiredBreasts: _desiredBreasts,
-                  openis: _openis,
-                  ogender: _inverted ? 7 - $mc.gender : $mc.gender,
-                  fit: $mc.fit,
-                  oheight: $mc.oheight,
-                  comfortableHeight: $mc.comfortableHeight,
-                  age: $mc.age,
-                  appDesc: _inverted ? "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always..." : 'You basically feel the same as always.',
-                  fear: $mc.fear,
-                  ohair: $mc.ohair,
-                  oskinColor: $mc.oskinColor,
-                  oskinType: $mc.oskinType,
-                  oears: $mc.oears,
-                  oeyeColor: $mc.oeyeColor,
-                  oblood: $mc.oblood,
-                  pregnantT: $mc.pregnantT,
-                  due: $mc.due,
-                  lastBirth: $mc.lastBirth,
-                  switched: false,
-                  events: $mc.events.map(e => e.clone())
-              })>>
+	id: setup.companionIds.twin,
+	name: _twinCurse.twinName,
+	carry: $mc.carry,
+	affec: 3,
+	swap: false,
+	image: "curses/doubletrouble.png",
+	imageIcon: 'Player Icons/playerF.png',
+	mindSex: ($mc.mindSex === 'male') ^ _inverted ? 'male' : 'female',
+	osex: ($mc.osex === 'male') ^ _inverted ? 'male' : 'female',
+	obreasts: _inverted ? $mc.openis / 2 : $mc.obreasts,
+	desiredBreasts: _desiredBreasts,
+	openis: _openis,
+	ogender: _inverted ? 7 - $mc.gender : $mc.gender,
+	fit: $mc.fit,
+	oheight: $mc.oheight,
+	comfortableHeight: $mc.comfortableHeight,
+	age: $mc.age,
+	appDesc: _inverted ? "You basically feel the same as always, only your gender is different. Well maybe you don't feel the same as always..." : 'You basically feel the same as always.',
+	fear: $mc.fear,
+	ohair: $mc.ohair,
+	oskinColor: $mc.oskinColor,
+	oskinType: $mc.oskinType,
+	oears: $mc.oears,
+	oeyeColor: $mc.oeyeColor,
+	oblood: $mc.oblood,
+	pregnantT: $mc.pregnantT,
+	due: $mc.due,
+	lastBirth: $mc.lastBirth,
+	switched: false,
+	events: $mc.events.map(e => e.clone())
+})>>
 <<if $companionTwin.womb === 0>>
-    <<set $companionTwin.setNotPregnant()>>
+		<<set $companionTwin.setNotPregnant()>>
 <</if>>
 <<set $hiredCompanions.push($companionTwin)>>
 <<CarryAdjust>>
@@ -324,94 +327,94 @@
 <<set _golem = {}>>
 
 <<if _type === 'clay'>>
-    <<set _golem = {
-        image: `Icons/${_sex}ClayGolem.png`,
-        imageIcon: `Icons/${_sex}ClayGolem.png`,
-        appDesc: "You are a sturdy clay golem. ",
-        ohair: "textured, earthy brown",
-        oears: "clay-crafted human-like ears",
-        oskinType: "clay and soil",
-        oskinColor: "rich, earthy brown",
-        oeyeColor: "deep brown",
-        oblood: "thick, muddy sludge",
-    }>>
+	<<set _golem = {
+		image: `Icons/${_sex}ClayGolem.png`,
+		imageIcon: `Icons/${_sex}ClayGolem.png`,
+		appDesc: "You are a sturdy clay golem. ",
+		ohair: "textured, earthy brown",
+		oears: "clay-crafted human-like ears",
+		oskinType: "clay and soil",
+		oskinColor: "rich, earthy brown",
+		oeyeColor: "deep brown",
+		oblood: "thick, muddy sludge",
+	}>>
 <<elseif _type === 'snow'>>
-    <<set _golem = {
-        image: `Icons/${_sex}SnowGolem.png`,
-        imageIcon: `Icons/${_sex}SnowGolem.png`,
-        appDesc: "You are a frosty snow golem. ",
-        ohair: "glistening, ice-blue",
-        oears: "carved ice depressions",
-        oskinType: "packed snow",
-        oskinColor: "pristine white",
-        oeyeColor: "glacial blue",
-        oblood: "chilled, clear water",
-    }>>
+	<<set _golem = {
+		image: `Icons/${_sex}SnowGolem.png`,
+		imageIcon: `Icons/${_sex}SnowGolem.png`,
+		appDesc: "You are a frosty snow golem. ",
+		ohair: "glistening, ice-blue",
+		oears: "carved ice depressions",
+		oskinType: "packed snow",
+		oskinColor: "pristine white",
+		oeyeColor: "glacial blue",
+		oblood: "chilled, clear water",
+	}>>
 <<elseif _type === 'doll'>>
-    <<set _golem = {
-        image: `Icons/${_sex}DollGolem.png`,
-        imageIcon: `Icons/${_sex}DollGolem.png`,
-        appDesc: "You are a life-like doll golem. ",
-        ohair: $mc.ohair,
-        oears: "perfect human replica",
-        oskinType: "smooth, synthetic",
-        oskinColor: $mc.skinColor,
-        oeyeColor: "glassy, vacant white",
-        oblood: "bright red",
-    }>>
+	<<set _golem = {
+		image: `Icons/${_sex}DollGolem.png`,
+		imageIcon: `Icons/${_sex}DollGolem.png`,
+		appDesc: "You are a life-like doll golem. ",
+		ohair: $mc.ohair,
+		oears: "perfect human replica",
+		oskinType: "smooth, synthetic",
+		oskinColor: $mc.skinColor,
+		oeyeColor: "glassy, vacant white",
+		oblood: "bright red",
+	}>>
 <<elseif _type === 'water'>>
-    <<set _golem = {
-        image: `Icons/${_sex}WaterGolem.png`,
-        imageIcon: `Icons/${_sex}WaterGolem.png`,
-        appDesc: "You are a water golem. ",
-        ohair: 'dark blue',
-        oears: "fluid human-like ears",
-        oskinType: "water",
-        oskinColor: 'translucent blue',
-        oeyeColor: "grey",
-        oblood: "water",
-    }>>
+	<<set _golem = {
+		image: `Icons/${_sex}WaterGolem.png`,
+		imageIcon: `Icons/${_sex}WaterGolem.png`,
+		appDesc: "You are a water golem. ",
+		ohair: 'dark blue',
+		oears: "fluid human-like ears",
+		oskinType: "water",
+		oskinColor: 'translucent blue',
+		oeyeColor: "grey",
+		oblood: "water",
+	}>>
 <<elseif _type === 'skeleton'>>
-    <<set _golem = {
-        image: `Icons/${_sex}SkeletonGolem.png`,
-        imageIcon: `Icons/${_sex}SkeletonGolem.png`,
-        appDesc: "You are a skeletal golem. ",
-        ohair: 'white',
-        oears: "holes",
-        oskinType: "bone",
-        oskinColor: 'pale white',
-        oeyeColor: "nonexistent",
-        oblood: "nonexistent",
-    }>>
+	<<set _golem = {
+		image: `Icons/${_sex}SkeletonGolem.png`,
+		imageIcon: `Icons/${_sex}SkeletonGolem.png`,
+		appDesc: "You are a skeletal golem. ",
+		ohair: 'white',
+		oears: "holes",
+		oskinType: "bone",
+		oskinColor: 'pale white',
+		oeyeColor: "nonexistent",
+		oblood: "nonexistent",
+	}>>
 <<else>>
-    <<set console.error(`created golem of invalid type ${_type}`)>>
-    <<set _golem = {
-        image: `Icons/${_sex}ClayGolem.png`,
-        imageIcon: `Icons/${_sex}ClayGolem.png`,
-        appDesc: "You are a sturdy clay golem. ",
-        ohair: "textured, earthy brown",
-        oears: "clay-crafted human-like ears",
-        oskinType: "clay and soil",
-        oskinColor: "rich, earthy brown",
-        oeyeColor: "deep brown",
-        oblood: "thick, muddy sludge",
-    }>>
-    <<set _type = 'clay'>>
+	<<set console.error(`created golem of invalid type ${_type}`)>>
+	<<set _golem = {
+		image: `Icons/${_sex}ClayGolem.png`,
+		imageIcon: `Icons/${_sex}ClayGolem.png`,
+		appDesc: "You are a sturdy clay golem. ",
+		ohair: "textured, earthy brown",
+		oears: "clay-crafted human-like ears",
+		oskinType: "clay and soil",
+		oskinColor: "rich, earthy brown",
+		oeyeColor: "deep brown",
+		oblood: "thick, muddy sludge",
+	}>>
+	<<set _type = 'clay'>>
 <</if>>
 
 <<set Object.assign(_golem, {
-    id: setup.companionIds.golem,
-    type: _type,
-    name: "Golem",
-    carry: 30,
-    mindSex: _sex,
-    obreasts: _sex === 'male' ? 0 : 3,
-    openis: _sex === 'male' ? 6 : 0,
-    ogender: _sex === 'male' ? 1 : 6,
-    fit: 10,
-    oheight: _sex === 'male' ? 170 : 163,
-    age: 25,
-    fear: 'unknown',
+	id: setup.companionIds.golem,
+	type: _type,
+	name: "Golem",
+	carry: 30,
+	mindSex: _sex,
+	obreasts: _sex === 'male' ? 0 : 3,
+	openis: _sex === 'male' ? 6 : 0,
+	ogender: _sex === 'male' ? 1 : 6,
+	fit: 10,
+	oheight: _sex === 'male' ? 170 : 163,
+	age: 25,
+	fear: 'unknown',
 })>>
 
 <<set $companionGolem = new Character(_golem)>>
