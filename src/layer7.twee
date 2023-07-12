@@ -17,7 +17,7 @@ Yet for a city so large, it remains eerily quiet, the only sound being the quiet
 This layer seems to be quite a bit smaller than the last few, and its paved roads are much easier to traverse. Ascending back into hell - that is, layer 6 - will take 7 days and cost 80 corruption.
 
 [[Walk through the seventh layer of the Abyss|Layer7 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-	<<if $visitL7 == 0>>
+	<<if $visitL7 === 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer7 Cherry]]">><</if>>
 <</if>><</nobr>>
 
@@ -79,24 +79,24 @@ Threats:
 	<<audio "layer7" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-<<if $visitL7 == 0>>
+<<if $visitL7 === 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL7 = 1>>
-<<elseif $secondVisitL7 == 0>>
+<<elseif $secondVisitL7 === 0>>
 	<<set $secondVisitL7 = 1>>
 	<<set $layerTemp = 18>>
 <<else>>
 	<<set $layerTemp = random(0,20)>>
 <</if>>
-<<if $layerTemp == 1>>
+<<if $layerTemp === 1>>
 	As you continue exploring the city, you come across a small park filled with artificial plants and metallic benches. Despite the lifeless appearance, the park emits a sense of tranquility, as the robotic flowers gently sway in the breeze, and the artificial trees provide shade from the neon lights above. You decide to rest here for a moment, allowing your mind to process the bizarre surroundings and gather your strength before continuing your journey.<br><br>
-<<elseif $layerTemp == 2>>
+<<elseif $layerTemp === 2>>
 	You notice movement in the distance, and as you approach, you see a group of small, spider-like robots working together to repair a damaged section of a building. Their movements are precise and efficient, but they don't seem to pay any attention to you. It's fascinating to watch them at work, but you remember that you're in a foreign and potentially dangerous environment, so you continue on your way, trying to remain as inconspicuous as possible.<br><br>
-<<elseif $layerTemp == 3>>
+<<elseif $layerTemp === 3>>
 	As you cautiously navigate the metallic cityscape, you stumble upon a seemingly abandoned workshop, its doors left ajar. Inside, you find a collection of old robotic parts and tools scattered across the floor. You can't help but feel a sense of sadness for the broken-down machines, as if they were once a part of this robotic society, now discarded and forgotten. As you investigate further, a sudden movement catches your attention. A security robot appears at the entrance, its red eyes scanning the area. Realizing that you're trespassing, you hastily make your exit, trying to avoid drawing any more attention to yourself.<br><br>
-<<elseif $layerTemp == 4>>
+<<elseif $layerTemp === 4>>
 	As you navigate the metallic streets, you come across a small, boxy robot diligently scrubbing the ground. It seems to be preoccupied with its cleaning task, and pays you no mind. Although its appearance is somewhat endearing, you decide not to disturb its work and continue onward.<br><br>
-<<elseif $layerTemp == 6 && $mc.hasCurse("Hijinks Ensue")>>
+<<elseif $layerTemp === 6 && $mc.hasCurse("Hijinks Ensue")>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -109,10 +109,10 @@ You walk through an enormous city coated in chrome and neon. On each side of the
 	@@.alert2; You only have $dubloons dubloons left. Make sure you keep enough money on you to pay the tax drones! @@<br><br>
 <</if>>
 
-<<if $forageWater == 0>>
+<<if $forageWater === 0>>
 	<<print "You are not able to forage for daily water on this layer, due to the nature of the water source.">><br>
 	<</if>>
-<<if $forageFood == 0>>
+<<if $forageFood === 0>>
 	<<print "You are not able to forage for daily food on this layer, due to the nature of the food source.">><br>
 	<</if>>
 <<if !isPlaying("layer7")>>
@@ -181,7 +181,7 @@ It is recommended that you get creative with your Relics and think of more effic
 :: Layer7 Curses [layer7 cards nobr]
 <p><<CarryAdjust>></p>
 
-<<if $escBalDepl==0>>\
+<<if $escBalDepl===0>>\
 	<p>[[Return to exploring layer 7|Layer7 Hub]]</p>
 <<else>>\
 	<p>[[Return to your balloon|Escape Balloon L7]]</p>
@@ -189,7 +189,7 @@ It is recommended that you get creative with your Relics and think of more effic
 
 <<CurseGrid `setup.cursesOnLayer[7]`>>
 
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	<p>[[Return to exploring layer 7|Layer7 Hub]]</p>
 <<else>>
 	<p>[[Return to your balloon|Escape Balloon L7]]</p>
@@ -223,8 +223,8 @@ It is recommended that you get creative with your Relics and think of more effic
 :: Layer7 Ascend 1 [layer7]
 This layer seems to be a bit smaller than the last few, and its paved roads are much easier to traverse. Ascending back into hell - that is, layer 6 - will take 7 days of walking, and cost 80 corruption.
 
-<<if $DaedalusEquip==true >>\
-	<<if $DaedalusFly==false>>\
+<<if $DaedalusEquip>>\
+	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
 		[[Flap your wings and prepare to fly to the next layer|Layer7 Ascend 1][$DaedalusFly=true]]
 	<<else>>\
@@ -429,14 +429,14 @@ If you choose to place 2 Relics in the Clockwork Forge, along with 4 dubloons, y
 ]>>
 <div>
 [img[setup.ImagePath + _item.image]]
-<h2><<print _item.name == "Empty Flask" ? "Flask" : _item.name>></h2>
+<h2><<print _item.name === "Empty Flask" ? "Flask" : _item.name>></h2>
 <p>
-<<button `"Buy for " + _item.cost + (_item.cost == 1 ? " dubloon" : " dubloons")` `"Layer7 " + _item.name`>><</button>>
+<<button `"Buy for " + _item.cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Layer7 " + _item.name`>><</button>>
 </p>
 <p>
 <<if _item.desc>><<print _item.desc>><<else>><<include `_item.name + " Description"`>><</if>>
 <<if _item.weight>><br><br><<print _item.weight>> kg<</if>>
-<<if _item.name == "Empty Flask">> empty, $item4.weight kg full<</if>>
+<<if _item.name === "Empty Flask">> empty, $item4.weight kg full<</if>>
 </p>
 </div>
 <</for>>
@@ -614,7 +614,7 @@ You can use the Afar Wanderer on the cart to make the load significantly easier 
 
 You can mark 10 of the objects with the Return to Sender Relic, allowing you to recall all of them to your position. Unfortunately, this will reach the maximum distance for Return to Sender, but it will let you very quickly complete 10 loads in a single day.<</if>><<if $ownedRelics.some(e => e.name === "Superpositional Skewer")>>
 
-You can use the Superpositional Skewer to touch the load with one end, then walk to the desired location, then tap yourself with the other end. This will result in you being transported back to the location of the loads and the load being transported to the destination. This effectively means you don't need to carry any heavy weights and only need to walk half the distance. This dramatically improves the efficiency of this job, allowing you to move up to 20 loads per day on your own!<</if>><<if $ownedRelics.some(r => r.name == "Pocket Hoard" && r.active == 1)>>
+You can use the Superpositional Skewer to touch the load with one end, then walk to the desired location, then tap yourself with the other end. This will result in you being transported back to the location of the loads and the load being transported to the destination. This effectively means you don't need to carry any heavy weights and only need to walk half the distance. This dramatically improves the efficiency of this job, allowing you to move up to 20 loads per day on your own!<</if>><<if $ownedRelics.some(r => r.name === "Pocket Hoard" && r.active === 1)>>
 
 You can use the Pocket Hoard to load as many loads into it as you can fit. This dramatically improves the efficiency of this job, allowing you to move all 80 loads in one day on your own!<</if>>
 
@@ -741,7 +741,7 @@ Dubloons:
 <<include "Libido Curse">>
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -756,7 +756,7 @@ Dubloons:
 <<include "Gender Curse">>
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -768,7 +768,7 @@ Dubloons:
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<CarryAdjust>><<if $mc.penisCor>0 && $mc.breastsCor==0 >>
+<<CarryAdjust>><<if $mc.penisCor>0 && $mc.breastsCor===0 >>
 	The strength of this Curse takes you by surprise. Your penis surges to full erection and continues to grow in size. The base, shaft, and tip swell at a disconcerting rate. Drops of precum ooze from the tip like thick honey, yet the growth doesn't cease.
 
 	Finally, the Curse releases its grip, but your jaw drops in disbelief as you realize you now possess a $mc.penisCor inch long member. The erection lingers for a while longer, and adapting to such a massive endowment without it hindering your movement will surely demand practice. You wince from a pinching sensation as you awkwardly hobble forward.
@@ -784,7 +784,7 @@ Dubloons:
 	You stare slack-jawed down at yourself as you realize you're now sporting a $mc.penisCor inch long dong, which is throbbing in sync with your pulse, between your two heaving $mc.breastsLabel cup breasts. This is a pretty dramatic change to your body. You just lie there on the ground for a minute coming to grips with what has just happened to you.
 <</if>>
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -808,7 +808,7 @@ The once innocuous routine of your body, the handling and disposal of waste, has
 A heavy shudder courses through your frame, laced with an odd sort of excitement and apprehension. You feel the heightened immediacy of the urge, the need to relieve this pressure, the demand for an outlet. The vulnerability of it all has your heart pounding against your ribcage, the anticipation making the fine hairs at the nape of your neck stand on end.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -823,7 +823,7 @@ A heavy shudder courses through your frame, laced with an odd sort of excitement
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -838,7 +838,7 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -857,7 +857,7 @@ As your muscles dissolve before your eyes, your skin tightens, molding itself sm
 Bereft of your former strength, you find yourself vulnerable and reliant on others. If you don't have somebody around to help you carry your things, you're going to be in real trouble from here on out. You'd better focus on making and keeping close friends.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -872,7 +872,7 @@ Bereft of your former strength, you find yourself vulnerable and reliant on othe
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<if setup.activeCurseCount("Random Orgasms") == 1>>\
+<<if setup.activeCurseCount("Random Orgasms") === 1>>\
 	<<if !$mc.hasCurse("Refractory Refactorization")>>\
 		You briefly feel the touch of the Abyss on you, and then nothing. Minutes later, the first random orgasm seizes you. Your body tightens as a surge of pleasure envelops you, making your skin tingle as the Abyss's power pulls you into ecstasy. 
 		
@@ -903,7 +903,7 @@ Bereft of your former strength, you find yourself vulnerable and reliant on othe
 <</if>>\
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -934,7 +934,7 @@ While your intelligence remains untouched, the fear of being perceived as less i
 A certain beauty accompanies this Curse, a sensual rawness that straddles the line between human and beast. There's an allure in the primal instincts, a seductive freedom that accompanies the abandonment of human civility. And while the challenges are daunting, they are not insurmountable.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -961,7 +961,7 @@ Despite the circumstances, a thought dawns on you. You're no longer bound by the
 Yet the disadvantages nag at you. The inability to enter private domains without express permission, the continued need for normal sustenance despite the additional requirement of blood, the visible absence of life in you - they all compound into a strange mixture of freedom and limitation.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -988,7 +988,7 @@ As you ponder the implications of your newfound size, you feel a rush of adrenal
 Yet, even with the terrifying prospect of surviving in this sprawling city at your new size, there is a thrill. A new challenge, a new perspective.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -1017,7 +1017,7 @@ With newfound consciousness of your mass, you slowly lift a hand to examine it. 
 Navigating the Abyss in this colossal form will be challenging, the once wide streets now narrow alleyways. Even though you now tower above the silent buildings, the drone pathways are far too small for your enormous figure. You will need to find new routes, perhaps forging your own through the labyrinthine city.
 
 [[Accept more Curses from the seventh layer|Layer7 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 7|Layer7 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L7]]
@@ -1091,7 +1091,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp1 = random(0,11) + 84>>
 	<<set $temp2 = random(0,11) + 84>>
-	<<if ($temp1 !== $temp2) && !($mc.hasCurse("Shrunken Assets") && ($temp1 == 86 || $temp2 == 86) )>>
+	<<if ($temp1 !== $temp2) && !($mc.hasCurse("Shrunken Assets") && ($temp1 === 86 || $temp2 === 86) )>>
 		<<break>>
 	<</if>>
 <</for>>
@@ -1177,7 +1177,7 @@ Choose the first Relic you would like to swap:<br><br>
 Choose the second Relic you would like to swap:<br><br>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
-		<<if $i != $temp1>><<print "[[$ownedRelics[$i].name|Layer7 Forge2][$temp2 = $i]]">><br><</if>>
+		<<if $i !== $temp1>><<print "[[$ownedRelics[$i].name|Layer7 Forge2][$temp2 = $i]]">><br><</if>>
 	<</capture>>
 <</for>>
 <<else>>
@@ -1266,7 +1266,7 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 	When you reach the pinnacle of the layer, you once again approach the series of barricades holding back the sea of tentacles and flames from reaching the pristine city, but this time you are exiting back to the hellish landscape of the sixth layer.
 
 	<<include "Curse Descriptions">>
-	<<if $TwinFly == true>>
+	<<if $TwinFly>>
 		<<include "Twin rejoin">>
 	<</if>>
 	[[Return to the sixth layer|Layer6 Hub]]
@@ -1399,11 +1399,11 @@ You have worked $temp1 days and brought robots to artificial orgasm $temp2 times
 
 <<nobr>>
 <<set _random = random(1,4)>>
-<<if _random == 1>>
+<<if _random === 1>>
 [img[setup.ImagePath+'Environments/Layer7Landscape1.png']]
-<<elseif _random == 2>>
+<<elseif _random === 2>>
 [img[setup.ImagePath+'Environments/Layer7Landscape2.png']]
-<<elseif _random == 3>>
+<<elseif _random === 3>>
 [img[setup.ImagePath+'Environments/Layer7Landscape3.png']]
 <<else>>
 [img[setup.ImagePath+'Environments/Layer7Landscape4.png']]
@@ -1436,7 +1436,7 @@ You have worked $temp1 days and brought robots to artificial orgasm $temp2 times
 
 	[[Return to traversing the city|$returnPassage]]
 
-<<elseif $mc.hasCurse("Hypno Happytime") && $layer7Hypno == 5>>
+<<elseif $mc.hasCurse("Hypno Happytime") && $layer7Hypno === 5>>
 	Once again, you're pulled into the security robot and subjected to familiar tales about being a productive member of society. This time, the arguments resonate deeply.
 	
 	The arguments they are making actually make perfect sense, they seem to precisely match your own thoughts actually. As if they were molded to you (or the other way around.)
