@@ -1845,7 +1845,7 @@ setup.curseArray.push(Weakling)
 class RandomOrgasms extends Curse {
 	constructor() {
 		super('Random Orgasms', 65, 'Curses/randomorgasms.png', 'none',
-			  '<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") == 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
+			  '<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") === 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
 	}
 }
 setup.allCurses.RandomOrgasms = new RandomOrgasms()

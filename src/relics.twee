@@ -1024,9 +1024,9 @@ pic: "Relics/starlitconquest.png"
 //Weight: $ownedRelics[$temp].weight kg//
 //Value: $ownedRelics[$temp].value dubloons//
 //Corruption cost: $ownedRelics[$temp].corr//
-<<if $spaceRelic == $ownedRelics[$temp].name>>
+<<if $spaceRelic === $ownedRelics[$temp].name>>
 You have broken the spatial limits of this Relic, allowing you to alter its range to between 1x and 100x its initial value.
-<</if>><<if $timeRelic == $ownedRelics[$temp].name>>
+<</if>><<if $timeRelic === $ownedRelics[$temp].name>>
 You have broken the temporal limits of this Relic, allowing you to lower any time value listed in seconds, minutes, days, weeks, or months between the default and 1% of the default.
 <</if>>
 <<back>>
@@ -1655,23 +1655,23 @@ placeholder xxx
 <<for _name range _args[0]>>
 	<div>
 	<<set _relic = $relics.find(r => r.name === _name)>>
-	<<set _corr = Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+	<<set _corr = Math.max(_relic.corr - $corRed + ($currentLayer !== 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
 	<<PreviewTravelTime '_time' _relic.time `-$SibylBuff` 1>>
 	<<set _corrStyle = _corr > _relic.corr ? "@@color:red;" : _corr < _relic.corr ? "@@color:green;" : "">>
 	<<set _timeStyle = _time > _relic.time ? "@@color:red;" : _time < _relic.time ? "@@color:green;" : "">>
 	[img[setup.ImagePath + _relic.pic]]
 	<h2>_name<<if setup.functionalRelics.contains(_name)>> ☸<</if>></h2>
 	<p class="cost">
-		<<if _corr != _relic.corr || _time != _relic.time>><s>
+		<<if _corr !== _relic.corr || _time !== _relic.time>><s>
 			<<if _relic.corr > 0 || _relic.time > 0>>Cost:<<else>>Free!<</if>>
 			<<if _relic.corr > 0>><<print _relic.corr + " corruption">><</if>>
 			<<if _relic.corr > 0 && _relic.time > 0>> and <</if>>
-			<<if _relic.time > 0>><<print _relic.time + (_relic.time == 1 ? " day" : " days")>><</if>>
+			<<if _relic.time > 0>><<print _relic.time + (_relic.time === 1 ? " day" : " days")>><</if>>
 		</s><br><</if>>
 		<<if _corr > 0 || _time > 0>>Cost:<<else>>@@color:green;Free!@@<</if>>
 		<<if _corr > 0>><<print _corrStyle + _corr + " corruption" + (_corrStyle ? "@@" : "")>><</if>>
 		<<if _corr > 0 && _time > 0>> and <</if>>
-		<<if _time > 0>><<print _timeStyle + _time + (_time == 1 ? " day" : " days") + (_timeStyle ? "@@" : "")>><</if>>
+		<<if _time > 0>><<print _timeStyle + _time + (_time === 1 ? " day" : " days") + (_timeStyle ? "@@" : "")>><</if>>
 	</p>
 	<p>
 	<<if _totalRelics.some(e => e.name === _name)>>
@@ -1684,7 +1684,7 @@ placeholder xxx
 		@@.unreachable;Located on top of a large vertical shaft with no footholds. You cannot reach this Relic without some kind of climbing gear, like a rope.@@
 	<<elseif _name === "Acrobatic Accord" && !setup.haveScubaGear >>
 		@@.unreachable;Located in an underwater tunnel (with murky, undrinkable water.) Requires scuba gear to retrieve.@@
-	<<elseif _name === "Gilded Prison" && !setup.haveCuttingTool && $torchUse == 0>>
+	<<elseif _name === "Gilded Prison" && !setup.haveCuttingTool && $torchUse === 0>>
 		@@.unreachable;The entrance to the cave this Relic's located in is completely covered with hard icicles. You can either slash them away with a cutting tool, or spend 1 extra day melting them with a source of heat (doesn't use up an extra torch if you used one reaching the Relic.)@@
 	<<elseif _name === "Omoikane Circuit" && setup.haveSmartphoneAI>>
 		Already taken
