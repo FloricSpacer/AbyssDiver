@@ -19,7 +19,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 
 [[Walk through the first layer of the Abyss|Layer1 Hub]]
 <<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-	<<if $visitL1 == 0>>
+	<<if $visitL1 === 0>>
 	<<print "[[Use Cherry's chaotic luck|Layer1 Cherry]]">><br><</if>>
 <</if>><</nobr>>
 
@@ -34,27 +34,27 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <<CarryAdjust>><<checkTime>>
 
 You find yourself amidst the slightly-off natural splendor of the first layer.<br><br> 
-<<if $visitL1 == 0>>
+<<if $visitL1 === 0>>
 	<<set $visitL1 = 1>>
 	<<set $layerTemp = 8>>
-<<elseif $secondVisitL1 == 0>>
+<<elseif $secondVisitL1 === 0>>
 	<<set $secondVisitL1 = 1>>
 	<<set $layerTemp = 18>>
 <<else>>
 	<<set $layerTemp = random(0,20)>>
 <</if>>
-<<if $layerTemp == 1>>
+<<if $layerTemp === 1>>
 You spot an unusual caterpillar as it crawls up a tree. Its peculiar shape resembles a detached human phallus, but instead of soft hair, menacing spines cover its body. The sight is unsettling, and you can't help but shudder at the thought of anyone putting this creature near their most intimate areas.<br><br>
-<<elseif $layerTemp == 2>>
+<<elseif $layerTemp === 2>>
 In the distance you can hear some people yelling about something, but you can't quite make it out. When you get a bit closer, you can't seem to find any people, but you do see some spare clothes on the ground and some rustling in the bush nearby. Rather than waiting for the people to return, you choose to move on.<br><br>
-<<elseif $layerTemp == 3>>
+<<elseif $layerTemp === 3>>
 Near the top of the layer, you notice a completely normal woman carrying a full pack trying to approach the surface, but she seems to be having a great difficulty moving forward. "Why can't I just leave?" She calls out in exasperation to no one in particular. It seems the Abyss itself is impeding her, so you couldn't help her even if you tried.<br><br>
-<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+<<elseif $layerTemp === 4 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 Khemia turns towards you smugly
 <br><br>
 <<say $companionKhemia>> You know $mc.name, this whole layer is a breeze if you've been around a few times. I think we could probably clear out anything worth doing in less than a day if we took the right shortcuts. This is barely even a speed bump on our path to the bottom of the Abyss for the right people. And who do you think knows the shortcuts?<</say>><br>
 He grins broadly and puffs out his chest, pointing to himself with his thumb before guiding you down the most efficient route towards your goal.<br><br>
-<<elseif $layerTemp == 5 && $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
+<<elseif $layerTemp === 5 && $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 Saeko crouches beside an odd-looking tree stump, overgrown with mold, scribbling in her notebook. She glances up at you.
 <br><br>
 <<say $companionSaeko>>This isn't a tree stump, you know. It's a fungus that's taken the shape of a dead tree – a fascinating example of mimicry.<</say>><br>
@@ -62,7 +62,7 @@ She digs into the earth near the stump's base, revealing a gray texture oozing a
 <br><br>
 <<say $companionSaeko>>I wonder what purpose this serves? The ecology here is so bizarre, despite its proximity to the surface...<</say>><br>
 Her thoughts trail off, and after a moment, she stands and resumes the journey with you towards your destination.<br><br>
-<<elseif $layerTemp == 6 && $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && $BanditConvo0>>
+<<elseif $layerTemp === 6 && $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && $BanditConvo0>>
 As you walk through the layer the bridge were you once captured your former bandit companion looms in the distance. She stops walking for a second to look in the direction of the bridge<br><br>
 <<say $mc>>A trip down memory lane?<</say>><br>
 She seems to snap back from her thoughts.<br><br>
@@ -75,7 +75,7 @@ She seems to snap back from her thoughts.<br><br>
 <<say $companionBandit>>I don't know, it's this aura of domminance she radiates. On the other hand, she is a huge bitch and I would like nothing more than to kick her in the gut for all she said to me.<</say>><br>
 She shows a bit of wry smile.<br><br>
 <<say $mc>>Don't worry. If it comes to that I'll help you!<</say>><br>
-<<elseif $layerTemp == 7 && $mc.hasCurse(HijinksEnsue)>>
+<<elseif $layerTemp === 7 && $mc.hasCurse(HijinksEnsue)>>
 <<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 <<include "Companion Layer Interaction">>
@@ -87,11 +87,11 @@ She shows a bit of wry smile.<br><br>
 	<<masteraudio stop>><<audio "layer1" volume 0.2 play loop>>
 <</if>>
 
-<<if $forageWater == 1>>
+<<if $forageWater === 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily water on this layer">><br><</if>>
-<<if $forageFood == 1>>
+<<if $forageFood === 1>>
 	<<print "You are currently foraging for your daily food on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
@@ -152,7 +152,7 @@ At such an early area of the Abyss, the Curses you may be afflicted with here ar
 If a Curse has '(max x)' in its description, that means you can take it up to x times, multiplying the corruption points and its original effect by that number. All other Curse options can only be taken once. Curses describing multiple levels will have their level increased by taking similar Curses on multiple layers, but the Curse specifically named 'Libido Reinforcement A' can only be taken once, for example. You don't to take them in order, i.e. B without A is fine.
 </p>
 
-<<if $escBalDepl==0>>\
+<<if $escBalDepl===0>>\
 	<p>[[Return to exploring layer 1|Layer1 Hub]]</p>
 <<else>>\
 	<p>[[Return to your balloon|Escape Balloon L1]]</p>
@@ -160,7 +160,7 @@ If a Curse has '(max x)' in its description, that means you can take it up to x 
 
 <<CurseGrid `setup.cursesOnLayer[1]`>>
 
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	<p>[[Return to exploring layer 1|Layer1 Hub]]</p>
 <<else>>
 	<p>[[Return to your balloon|Escape Balloon L1]]</p>
@@ -173,13 +173,13 @@ If a Curse has '(max x)' in its description, that means you can take it up to x 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
 <<nobr>>
-<<if $forageWater == 0>>
+<<if $forageWater === 0>>
 	<<print "[[Start foraging for water in Cloudpools|Layer1 Forage][$forageWater = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for water|Layer1 Forage][$forageWater = 0]]">><br>
 <</if>>
-<<if $forageFood == 0>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L1FoodConvo == 0>>
+<<if $forageFood === 0>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L1FoodConvo === 0>>
 		<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage Convo][$forageFood = 1, $L1FoodConvo = 1]]">><br>
 	<<else>>	
 		<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage][$forageFood = 1]]">><br>
@@ -190,6 +190,9 @@ If you decide to start foraging for food or water, it means that you will not co
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from the layer|Layer1 Flasks]]<br>
 <</if>>
+<br>
+[[Consume food from sporulating Blisshrooms|Layer1 Forage][$mc.events.push(new GenderEvent('Blisshroom Major'));$foodL1 += 1]]<br>
+[[Consume water from pools|Layer1 Forage][$mc.events.push(new AssetEvent("Cloudpool Major", 1));$waterL1 += 1]]<br>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer1 Hub]]
@@ -211,7 +214,7 @@ Arriving at your destination, you find that Maru's memory was spot on – there'
 Maru then smiles and points excitedly at a softly glowing purple lump at the edge of the cave.
 
 <<say $companionMaru>>You were right, there are mushrooms here!<</say>>
-He moves swiftly yet gracefully to collect a number of mushrooms, enough to feed your party. <<if $abyssKnow == 1>>However, you notice he's taking the ones that are releasing spores, evident by the slight pink dust coming off of them. Before he can add those to his collection, you stop him. It's best to avoid those due to their side effects, and with your help, you pick out only the healthiest of Blisshrooms.<</if>>
+He moves swiftly yet gracefully to collect a number of mushrooms, enough to feed your party. <<if $abyssKnow === 1>>However, you notice he's taking the ones that are releasing spores, evident by the slight pink dust coming off of them. Before he can add those to his collection, you stop him. It's best to avoid those due to their side effects, and with your help, you pick out only the healthiest of Blisshrooms.<</if>>
 
 <<say $companionMaru>>Alright! I think I have an idea for what we can make with these when we get back to camp.<</say>>
 You hike back towards camp, glancing back at the cave, a hint of apprehension that perhaps the giant creature might not take kindly to your trespassing. But fortunately, any anxiety is unfounded, and you walk out of sight of the cave with no disruptions, just a pleasant stroll through the bountiful nature of the first layer of the Abyss. But before you make it back to camp, Maru stops you and silently places a finger over his mouth, shushing you.
@@ -404,7 +407,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 	<br>What hair color do you prefer?<br>
 	<<textbox "_dyeCurse.hairColor" "turquoise">><br>
 <</if>>
-<<if _temp1==9 || _temp2==9>>
+<<if _temp1===9 || _temp2===9>>
 	<<set $dizzyCount +=1>>
 	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
 	<<if _heightDirEvent === undefined>>
@@ -415,7 +418,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
 		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
 		<</capture>>
-	<<elseif _heightDirEvent.heightdir == 1>>
+	<<elseif _heightDirEvent.heightdir === 1>>
 		You feel yourself growing even more.<br>
 	<<else>>
 		You feel yourself shrinking even more.<br>
@@ -423,7 +426,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 <</if>>
 <br>
 <<link "Continue on to the rest of the layer" "Layer1 Hub">>
-	<<if _temp1==9 || _temp2==9>>
+	<<if _temp1===9 || _temp2===9>>
 		<<set $mc.addCurse(new DizzyingHeights())>>
 	<</if>>
 <</link>>
@@ -446,7 +449,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 
 With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.<<nobr>>
 <br>
-<<if $temp2==9>>
+<<if $temp2===9>>
 	<<set $dizzyCount +=1>>
 	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
 	<<if _heightDirEvent === undefined>>
@@ -457,7 +460,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
 		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
 		<</capture>>
-	<<elseif _heightDirEvent.heightdir == 1>>
+	<<elseif _heightDirEvent.heightdir === 1>>
 			You feel yourself growing even more.<br>
 	<<else>>
 			You feel yourself shrinking even more.<br>
@@ -482,7 +485,7 @@ As you meander through the lush, verdant slopes of the first layer of the Abyss,
 The maiden's hands are extended gently, offering an invitation to touch them. As you hesitantly reach out and make contact with the cool, smooth marble, you feel a surge of warmth spreading through your body. \
 <<if $iconUsed>>\
 However, it's not nearly as strong as the first time. You won't be able to remove any more Curses.
-<<elseif $mc.curses.length == 0>>\
+<<elseif $mc.curses.length === 0>>\
 If you were plagued by a Curse, the Icon of Mercy could offer relief. Until then, there is nothing for you to do here.
 <<else>>\
 It's as if the Icon of Mercy is acknowledging the weight of your choices and offering you a chance for redemption.
@@ -496,7 +499,7 @@ Choose the Curse you wish to remove:
 		<<capture _i>>
 			&nbsp; [[_curse.name|Icon Removal][$temp = _i]]<br>
 		<</capture>>
-	<<elseif _curse.name == 'The Maxim'>>
+	<<elseif _curse.name === 'The Maxim'>>
 		&nbsp; [[_curse.name|Maxim Bad End]] @@.alert1; You're stomach starts to hurt from the thrashing parasite when you're considering this option./*xxx*/<br>
 	<</if>>
 <</for>>
@@ -740,7 +743,7 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 <<include "Libido Curse">>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -754,7 +757,7 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 <<include "Gender Curse">>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -766,11 +769,11 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 <<CarryAdjust>>\
-<<if $mc.penisCor>0 && $mc.breastsCor==0 >>
+<<if $mc.penisCor>0 && $mc.breastsCor===0 >>
 	The moment the Curse grips you, you feel a surge of sensation. Your penis springs to full erection, and then just keeps growing. The base, the shaft, and the tip continue swelling larger than they've ever been before, until you're sporting a $mc.penisCor inch long dong.
 
 	As the erection gradually subsides, you find yourself shifting awkwardly, trying to find a way to accommodate your member that insists on staying at a larger size than you're used to. As your penis brushes against your thigh, you experience a whirlwind of emotions. It might be a Curse, but it might also be a blessing.
-<<elseif $mc.penisCor==0 && $mc.breastsCor>0>>
+<<elseif $mc.penisCor===0 && $mc.breastsCor>0>>
 	The moment the Curse grips you, you feel it. Your nipples jut out like pencil erasers as a pressure and a stretching sensation fills your breasts. Your boobs strain against your skin, plumper than they've ever been, but the skin expands to accommodate the growing mass within.
 
 	Flickering sensations and a gut feeling about the Abyss' intentions make you certain that this isn't just fat either. Your milk ducts are expanding with your breasts, and the intricate network of functional and nervous tissues tingles as the swelling finally subsides. You glance down at your new $mc.breastsLabel cup breasts, and the motion sends a subtle jiggle through them. You think some additional support might soon be necessary with these girls jutting out of your chest.
@@ -781,7 +784,7 @@ You realize the fabric is in fact some kind of long glove. You stick your hand i
 <</if>>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -798,7 +801,7 @@ A sudden compulsion washes over you, you need to get of your accessories, immedi
 While it doesn't cause you any physical pain or anything like that, you do feel a fixation on removing it as soon as possible, as if you had a form of selective OCD that made your remove all of your accessories. And you know that from now on, you won't be wearing any accessories in the future, at least not of your own free will.
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -811,15 +814,15 @@ While it doesn't cause you any physical pain or anything like that, you do feel 
 [img[setup.ImagePath + _curse.pic]]
 
 <<nobr>>
-<<if $mc.sex == "male">>
+<<if $mc.sex === "male">>
 You feel an intense squeezing sensation between your legs, as if something was squeezing your cock extremely tightly, but not in a pleasurable way. It isn't quite painful either, almost like someone had their hand gripped around your girth and squeezed as hard as they could all around it, but without any movement or sensations of rubbing the surface, just the squeezing. And it just keeps squeezing as if the pressure was resisting your current size and was pushing part of you back into your body.<br><br>
 
 After a few moments of this sensation, it fades, leaving you to deal with the aftermath. When you check yourself, it looks like your penis has almost entirely disappeared, leaving only a small nub, more reminiscent of a clitoris than your previous size. A quick mental estimation tells you that it is now only 1cm (0.5in) long, with a proportional width. This is quite a dramatic change, hopefully you can come to accept your new body.
-<<elseif $mc.sex == "female">>
+<<elseif $mc.sex === "female">>
 You feel an intense squeezing sensation on your breasts, but it isn't like someone's hand squeezing them in a pleasurable way. It feels like a pressure evenly distributed across them, like if you're deep underwater, but only on your chest. After a moment, the pressure increases, feeling like it is pushing your flesh into your abdomen, even if there's nowhere for it to go.<br><br>
 
 Instinctively, your hands move up to your chest in response to the strange sensation, and you feel your flesh squirming and pulsing under your fingers. It feels like your body is trying to burst out of some imaginary constraint, but is failing, and each attempt is more feeble than the last. And after a few more attempts, your body succumbs and the sensation fades, leaving you with much smaller assets than you had before. A quick evaluation tells you that you seem to have AA cup breasts now, with no way to increase that size.
-<<elseif $mc.sex == "futa">>
+<<elseif $mc.sex === "futa">>
 You feel an intense squeezing sensation between your legs, as if something was squeezing your cock extremely tightly, but not in a pleasurable way. It isn't quite painful either, almost like someone had their hand gripped around your girth and squeezed as hard as they could all around it, but without any movement or sensations of rubbing the surface, just the squeezing. And it just keeps squeezing as if the pressure was resisting your current size and was pushing part of you back into your body.<br><br>
 
 After a few moments of this sensation, it fades, leaving you to deal with the aftermath. When you check yourself, it looks like your penis has almost entirely disappeared, leaving only a small nub, more reminiscent of a clitoris than your previous size. A quick mental estimation tells you that it is now only 1cm (0.5in) long, with a proportional width.<br><br>
@@ -832,7 +835,7 @@ Instinctively, your hands move up to your chest in response to the strange sensa
 <</nobr>>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -849,7 +852,7 @@ You suddenly feel a tingling sensation over your whole body below your scalp, wh
 You shiver at the sensation, but it quickly passes. You're left with shaking the remaining residue out of your clothes so that it doesn't cause you to get itchy later on your journey.
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -882,7 +885,7 @@ Curious, you pull out a small mirror to examine your face. As you might expect, 
 The tingling sensation of the freckles appearing on your body is both strange and fascinating, creating an almost fizzy feeling on your skin. The sensation eventually settles down as the changes slow, and you're left with the end result: freckles all over your body.
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -899,7 +902,7 @@ Your ears suddenly have an incredible itching on their tip, and as you reach upw
 It seems that you now look like either an elf out of a storybook or someone who really wants to look like a elf, for whatever reason. Hopefully you don't mind the occasional odd look if you return to the surface like this.
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -936,7 +939,7 @@ It seems that you now look like either an elf out of a storybook or someone who 
 <</nobr>>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -950,12 +953,12 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 A brief tingle passes between your legs<<if $mc.breasts > 0>> and your breasts<</if>>, causing you to immediately come to attention at the momentary sensitivity. You have to stop as you are instantly made aware of the sensation of your underwear touching your skin, and your own movements have become distracting.
 
-<<if $mc.sex == "female">>You can feel yourself moisten under your panties, causing you to fidget slightly with your legs, causing you to once again feel the touch of the fabric against yourself, exacerbating the issue.<<else>>You can feel yourself harden in your pants, causing you to rub against them even harder, creating a cycle that results in you being as erect as you have ever been in your life.<</if>>
+<<if $mc.sex === "female">>You can feel yourself moisten under your panties, causing you to fidget slightly with your legs, causing you to once again feel the touch of the fabric against yourself, exacerbating the issue.<<else>>You can feel yourself harden in your pants, causing you to rub against them even harder, creating a cycle that results in you being as erect as you have ever been in your life.<</if>>
 
 You pause for a moment to catch your breath and wait for the sensation to pass, but it never does. It seems this is your new baseline of sensitivity from now on. You won't be going back to the way things were before, you'll just need to learn to deal with the new stimulation of any touch between your legs. It should be very pleasant when you're intentionally taking advantage of your newly increased sensitivity though.
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -980,7 +983,7 @@ For a moment, nothing else happens, leaving you puzzled by the bizarre experienc
 But gradually, a newfound certainty washes over you - the realization that your next sexual encounter will be different.
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 1|Layer1 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L1]]
@@ -1001,8 +1004,8 @@ The Curse, _curse.name, has been successfully removed and your corruption has be
 Traveling back to the surface from here will take 1 day, and will cost 10 corruption. Leaving the Abyss also requires that you don't have any negative corruption points even if you plan to come back.
 
 <<if $corruption >= (10 - $corRed)>>\
-	<<if $DaedalusEquip==true >>\
-		<<if $DaedalusFly==false>>\
+	<<if $DaedalusEquip >>\
+		<<if !$DaedalusFly>>\
 			You are currently committed to simply walking to the surface, though it is only a one day walk.
 			[[Flap your wings and prepare to fly to the surface|Layer1 Ascend 1][$DaedalusFly=true]]
 		<<else>>\
@@ -1044,7 +1047,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 	You continue your hike and eventually you see the edge of the Abyss, then eventually the buildings you recall from Outset Town come back into view and welcome you back to the surface world.
 
 	<<include "Curse Descriptions">>
-	<<if $TwinFly == true>>
+	<<if $TwinFly>>
 		<<include "Twin rejoin">>
 	<</if>>
 	[[Return to Outset Town|Surface Hub]]
@@ -1057,7 +1060,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 	<<if $items[2].count > 0>>
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
-		<<if $abyssKnow==1>>
+		<<if $abyssKnow===1>>
 			<<set $flaskMatrix[0]+=1>>
 		<<else>>
 			<<set $flaskMatrix[1]+=1>>
@@ -1071,7 +1074,7 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 
 [img[setup.ImagePath+'Foraging/cloudpools.png']]
 
-<<if $abyssKnow == 0>>
+<<if $abyssKnow === 0>>
 You dip each of your flasks into the miasma-contaminated water in some of the lower cloudpools where it has collected. As you take a test-sip of the water you feel a subtle pulsing through your body, as if your body were trying to expand as quickly as it could. Despite this side-effect, you need the water, so you continue to fill your flasks for your future travels.
 <<else>>
 Using your knowledge of the Abyss, you specifically look to make sure you can get some good water directly from the clouds. You spot a couple easy pools where you could easily get a drink, but avoid the tainted water in favor of the pure water from a gentle waterfall you come across along your path. A taste test confirms that the water is indeed pure and you fill all of your empty flasks in preparation of continuing your journey.
@@ -1100,7 +1103,7 @@ How are you going to deal with the bandits encircling you?<br><br>
 	These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.<br>
 	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br><br>
 <</if>>
-<<if $slingshot == 1>>
+<<if $slingshot === 1>>
 	Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.<br>
 	[[Scare them off with the Brave Vector|Layer1 Hub]]<br><br>
 <</if>>
@@ -1283,7 +1286,7 @@ As you lock eyes with the bandit leader to anticipate her next move you get hit 
 		<<say $companionBandit>>This piece of shit is all yours, Boss<</say>>
 		<<nobr>>
 		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
-		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+		<<if _i !== -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
 		<</nobr>>
 	<</if>>\
 <</if>>\
@@ -1333,7 +1336,7 @@ When you wake up you find that all of your Relics are gone<<if $hiredCompanions.
 	<</if>>\
 	<<nobr>>
 		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
-		<<if _i != -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
+		<<if _i !== -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
 	<</nobr>>
 <</if>>\
 Nervously, you begin going trough your bag, attempting to decide which Relics to surrender and which to keep.

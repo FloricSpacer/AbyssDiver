@@ -35,8 +35,8 @@
 <<if _sdcurse !== undefined>>
 	<<set _contributions = 0>>
 	<<if
-		($mc.penis > 0 && _sdcurse.fluidType != 'vaginal fluids') ||
-		($mc.vagina > 0 && _sdcurse.fluidType != 'semen')
+		($mc.penis > 0 && _sdcurse.fluidType !== 'vaginal fluids') ||
+		($mc.vagina > 0 && _sdcurse.fluidType !== 'semen')
 	>>
 		<<if $mc.hasCurse("Leaky")>>
 			<<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
@@ -218,31 +218,31 @@
 	<<if $LilyConvo2>>
 		<<set $sellAdd += 5>>
 	<</if>>
-	<<if $grimoireLily == 1>>
+	<<if $grimoireLily === 1>>
 		<<set $sellAdd += 2>>
 	<</if>>
 <</if>>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	<<set $timeRed += 2>>
-	<<if $grimoireKhemia == 1>>
+	<<if $grimoireKhemia === 1>>
 		<<set $timeRed += 2>>
 	<</if>>
 <</if>>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	<<set $statRed += 1>>
-	<<if $grimoireCherry == 1>>
+	<<if $grimoireCherry === 1>>
 		<<set $statRed += 1>>
 	<</if>>
 <</if>>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 	<<set $bullRed += 2>>
-	<<if $grimoireCloud == 1>>
+	<<if $grimoireCloud === 1>>
 		<<set $bullRed += 2>>
 	<</if>>
 <</if>>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
 	<<set $corRed += 5>>
-	<<if $grimoireSaeko == 1>>
+	<<if $grimoireSaeko === 1>>
 		<<set $corRed += 5>>
 	<</if>>
 /*Abyss knowledge bonus moved to the item equipment widget */
@@ -439,7 +439,7 @@
 <<if $time > $Maru_LastT + 7>>
 	<<set $companionMaru.affec+=(1+$hsswear + $maruPangea)>>
 	<<set $Maru_LastT = $time>>
-	<<if $MaruConvo1 && $forageFood == 0>>
+	<<if $MaruConvo1 && $forageFood === 0>>
 		<<set $items[1].count += 1>>
 		@@.alert1; Maru cooked an especially delicious meal granting you an extra day worth of food!<br><br>
 	<</if>>
@@ -465,11 +465,11 @@
 	<<set $Cloud_LastT = $time>>
 	<<set $altCloud = random(0,3)>>
 	<<if $CloudConvo1>>
-		<<if $altCloud == 1>>
+		<<if $altCloud === 1>>
 		<<set $temp = random(2,3) >>
 		<<set $items[20].count += $temp >>
 		@@.alert1; Cloud seems to have been able to scavenge some ammunition somehow. You aren't quite sure whether he found it or made it himself, but either way you've gained $temp bullets.<br><br>
-		<<elseif $altCloud == 2>>
+		<<elseif $altCloud === 2>>
 		<<set $temp = random(2,5) >>
 		<<set $dubloons += $temp >>
 		@@.alert1; Cloud somehow managed to scavenge a bit of cash, perhaps left behind by a previous diver? It's not like dubloons would be down here for any other reason. You've gained $temp dubloons.<br><br>
@@ -507,7 +507,7 @@
 	<<set $menCycleT=$time>>
 <</if>>
 
-<<if $menCycleFlag == true && $mc.appAge > 13>>
+<<if $menCycleFlag && $mc.appAge > 13>>
 	<<if $time-$menCycleT-$menCycleVar>27 >>
 		<<set $menCycleT=$time>>
 		<<set $menCycleVar = random(-4,4)>>
@@ -516,7 +516,7 @@
 			<<set _eggs = ($bewitchBabies+1)*($mc.womb)>>
 
 			<<if !settings.MenCycleToggleFilter>>Today, you're plagued by a pervasive sense of discomfort. Your lower abdomen cramps incessantly, your breasts feel tender and sore, and a relentless headache pounds at your temples.<</if>> As the day progresses, you become increasingly aware of a compelling need to expel something using your pelvic muscles.
-			<<if $EggsFertilized == true>>
+			<<if $EggsFertilized>>
 				With considerable effort and concentration, you manage to push out _eggs fertilized egg<<if _eggs>1>>s<</if>>.
 			<<else>>
 				With considerable effort and concentration, you manage to push out _eggs unfertilized egg<<if _eggs>1>>s<</if>>.
@@ -526,11 +526,11 @@
 			<<PassTime 1>>
 		<<else>>
 			<<if !settings.MenCycleToggleFilter>>
-				<<if $menFirstCycle == true>>
+				<<if $menFirstCycle>>
 					@@.alert1; Today, you're beset by an unbearable combination of lower abdominal cramps and a pounding headache. Perhaps it was something you ate? You consider taking a day to recuperate and let this pass.<br><br>
 				<<else>>
 					Today, you're in the throes of your cycle – your lower abdomen cramps mercilessly, your breasts feel tender and sore, and the headache is all-consuming. You hope for relief soon.
-					<<if $EventHorizonWear== true>>
+					<<if $EventHorizonWear>>
 						Fortunately, the Event Horizon saves you from having to deal with the menstrual flow, so you have a much easier experience than you might otherwise have to deal with.
 					<</if>>
 					<br><br>
@@ -539,12 +539,12 @@
 			<<set $menstruating = true>>
 		<</if>>
 		<<set $pregChance = 0>>
-	<<elseif $menFirstCycle == false && $time-$menCycleT>28 >>
+	<<elseif !$menFirstCycle && $time-$menCycleT>28 >>
 		@@.alert1; You expected your cycle to have started by now, but it hasn't. Still, there's no need to worry – periods can be late, right?<br><br>
-	<<elseif $time-$menCycleT<5 && $time-$menCycleT>0 && $menstruating == true>>
+	<<elseif $time-$menCycleT<5 && $time-$menCycleT>0 && $menstruating>>
 		<<if !settings.MenCycleToggleFilter>>
-			<<if $menFirstCycle == true>>
-				<<if $EventHorizonWear== false>>
+			<<if $menFirstCycle>>
+				<<if !$EventHorizonWear>>
 					<<set $menFirstCycle = false>>
 					<<if $mc.extraWombs.includes('throat')>>
 						@@.alert1; When you start coughing up $mc.blood blood, panic sets in as you fear the worst – some Abyssal lung disease. But as you examine the substance, you realize it's not normal blood, and your lungs feel fine. The truth dawns on you suddenly: you're experiencing your first period. With a uterus now residing in your throat, you feel completely overwhelmed and on the verge of tears. <br><br>
@@ -556,7 +556,7 @@
 				<</if>>
 			<<else>>
 				You're in the midst of your period, and although it's not the best time with the constant headache, you're no stranger to this experience. While you'll continue to push forward, you allow yourself to take it a bit easier when the opportunity arises. <br><br>
-				<<if $EventHorizonWear== true>>
+				<<if $EventHorizonWear>>
 					Fortunately, the Event Horizon saves you from having to deal with the menstrual flow, so you have a much easier experience than you might otherwise have to deal with.
 				<</if>>
 				<br><br>
@@ -564,19 +564,19 @@
 		<</if>>
 		<<set $pregChance = 0>>
 	<<elseif $time-$menCycleT<9 && $time-$menCycleT>=5>>
-		<<set $menstruating == false>>
+		<<set $menstruating = false>>
 		<<set $pregChance = 0>>
 	<<elseif $time-$menCycleT<13 && $time-$menCycleT>=9>>
-		<<set $menstruating == false>>
+		<<set $menstruating = false>>
 		<<set $pregChance = ($time-$menCycleT-8)*0.06>>
 	<<elseif $time-$menCycleT<16 && $time-$menCycleT>=13>>
-		<<set $menstruating == false>>
+		<<set $menstruating = false>>
 		<<set $pregChance = 0.3>>
 	<<elseif $time-$menCycleT<18 && $time-$menCycleT>=16>>
-		<<set $menstruating == false>>
+		<<set $menstruating = false>>
 		<<set $pregChance = 0.3-($time-$menCycleT-15)*0.1>>
 	<<else>>	
-		<<set $menstruating == false>>
+		<<set $menstruating = false>>
 		<<set $pregChance = 0>>	
 	<</if>>
 	<<if $mc.hasCurse("Absolute Birth Control")>>
@@ -589,7 +589,7 @@
 
 <<if setup.daysConsideredPregnant($mc) >= 14>>
 	/* Show symptoms alert once every 3 times, unless it's early in the pregnancy and mc was expecting to start her cycle. */
-	<<if $random == 0 || (!$menFirstCycle && setup.daysConsideredPregnant($mc) < 45)>>
+	<<if $random === 0 || (!$menFirstCycle && setup.daysConsideredPregnant($mc) < 45)>>
 		<<if 28 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 35 && !$menFirstCycle>>
 		@@.alert1; You expected your cycle to have started by now, but it hasn't. Still, there's no need to worry – periods can be late, right?<br><br>
 		<<elseif 35 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 45 && !$menFirstCycle>>
@@ -607,7 +607,7 @@
 			<<if !$menFirstCycle>>
 				@@.alert1; Your pregnant belly is now round and prominent. You occasionally feel a gentle kick from within, but your growing belly begins to hinder your travels more and more.<br><br>
 			<<else>>
-				@@.alert1; You've gained considerable weight, especially around your belly, which sometimes experiences a peculiar tickling sensation. Your butt, thighs, and <<if $mc.breastsCor<3 && $mc.sex=="male">>pecs<<else>>breasts<</if>> have also accumulated some fat. This extra weight will slow you down during your travels.<br><br>
+				@@.alert1; You've gained considerable weight, especially around your belly, which sometimes experiences a peculiar tickling sensation. Your butt, thighs, and <<if $mc.breastsCor<3 && $mc.sex==="male">>pecs<<else>>breasts<</if>> have also accumulated some fat. This extra weight will slow you down during your travels.<br><br>
 			<</if>>
 		<<elseif 180 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 240>>
 			<<if !$menFirstCycle>>
@@ -622,7 +622,7 @@
 <</if>>
 
 <<if $mc.hasCurse("Heat/rut")>>
-	<<if $menCycleFlag == true>>
+	<<if $menCycleFlag>>
 		<<if $time-$heatCycleT-$menCycleVar>27 >>
 			<<set $heatCycleT=$time>>
 		<</if>>
@@ -645,7 +645,7 @@
 				<<set _rejoinD +=  $UpTravelDays[_i]>>
 			<</if>>
 		<</for>>
-	/*<<elseif $currentLayer== $companionsDepartL>>
+	/*<<elseif $currentLayer=== $companionsDepartL>>
 		<<set _rejoinD +=  $UpTravelDays[$currentLayer-1]>>*/
 	<</if>>
 	<<if _rejoinD<=$time>>
@@ -753,7 +753,7 @@
 <</if>>
 
 <<set _fitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>
-<<if $mc.osex == 'male'>>
+<<if $mc.osex === 'male'>>
 	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 1))>>
 <<else>>
 	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 6))>>
@@ -761,12 +761,12 @@
 
 <<set $carryWeight = $carryWeight*(1+ $mc.carryHandicap/10)>>
 
-<<if $DaedalusFly==true>>
+<<if $DaedalusFly>>
 	<<set $carryWeight = Math.ceil($carryWeight/2)>>
 <</if>>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
-	<<if $ownedRelics[$i].name == "Pocket Hoard">>
-		<<if $ownedRelics[$i].active == 1>>
+	<<if $ownedRelics[$i].name === "Pocket Hoard">>
+		<<if $ownedRelics[$i].active === 1>>
 			<<set $carryWeight += 9999>>
 		<</if>>
 	<</if>>
@@ -817,7 +817,7 @@
 <<set $flaskMatrix[8] = $items[0].count>>
 <<set _j=0 >>
 
-<<if $flaskPref == -1>>
+<<if $flaskPref === -1>>
 	<<for _i=0; _i < $flaskMatrix.length; _i++ >>
 		<<if $flaskMatrix[_i] > 0  >>
 			<<set $flaskPref=_i>>
@@ -831,7 +831,7 @@
 	<<set _temp2=99>>
 	<<set _temp0 = $flaskMatrixOrderAvailable.length+1>>
 		<<for _j=0; _j<_temp0; _j++>>
-			<<if $flaskMatrixOrderAvailable.length !==_j && _temp2==99>> /*checks if element is a new index or not*/
+			<<if $flaskMatrixOrderAvailable.length !==_j && _temp2===99>> /*checks if element is a new index or not*/
 				<<set _temp= $flaskMatrixOrderAvailable[_j]>>
 				<<if $flaskMatrixOrder[_temp] < $flaskMatrixOrder[_i]  >> /* check whether new weight should be in position of already present flask type*/
 					<<set _temp2=_j>> /*if yes remember index where new flask type should be filled into available array */
@@ -874,7 +874,7 @@
 
 :: Text output widgets [widget nobr]
 <<widget "HornGrowthDesc">>
-	<<if _args[1] == 1>>a<<else>>two<</if>>
+	<<if _args[1] === 1>>a<<else>>two<</if>>
 	<<switch _args[0]>>
 		<<case "demonic" "draconic">>
 			_args[0]-looking
@@ -888,7 +888,7 @@
 	<<if _args.length < 3>>
 		<<set _args[2] = "">>
 	<</if>>
-	<<if _args[0] == 1>>_args[1]<<else>>_args[2]<</if>>\
+	<<if _args[0] === 1>>_args[1]<<else>>_args[2]<</if>>\
 <</widget>>
 
 <<widget "PluralS">><<if _args[0] > 1>>s<</if>><</widget>>
@@ -904,7 +904,7 @@
 <<if settings.MaleSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "male")>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<if _temp.name !== setup.companionIds.golem && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+		<<if _temp.name !== setup.companionIds.golem && !(_tempflag && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
 			<<set _elligbleCompanions.push(_temp[_i])>>
 		<</if>>
 	<</for>>
@@ -912,7 +912,7 @@
 <<if settings.FemaleSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "female")>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<if _temp.name !== setup.companionIds.golem && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+		<<if _temp.name !== setup.companionIds.golem && !(_tempflag && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
 			<<set _elligbleCompanions.push(_temp[_i])>>
 		<</if>>	
 	<</for>>
@@ -920,7 +920,7 @@
 <<if settings.OtherSceneToggleFilter || $mc.hasCurse("Equal Opportunity")>>
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "futa" || e.sex === "doll-like" )>>
 	<<for _i=0; _i< _temp.length; _i++>>
-		<<if _temp.id !== setup.companionIds.golem && !(_tempflag==true && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
+		<<if _temp.id !== setup.companionIds.golem && !(_tempflag && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
 			<<set _elligbleCompanions.push(_temp[_i])>>
 		<</if>>
 	<</for>>
@@ -967,7 +967,7 @@
 			<</if>>
 		<</for>>
 
-	<<elseif _temp == 0>>
+	<<elseif _temp === 0>>
 
 		<<for _i=0; _i<1; _i++>>
 		<<set _j = random(0, _sexOptions.length-1)>>
@@ -987,16 +987,16 @@
 
 :: SexAvailable [nobr]
 <<set _sexOptions = []>>
-<<if _handle.sex != "doll-like" >>
+<<if _handle.sex !== "doll-like" >>
 	<<set _sexOptions.push("Oral Dom")>>
 <</if>>
-<<if $mc.sex != "doll-like" >>
+<<if $mc.sex !== "doll-like" >>
 	<<set _sexOptions.push("Oral Sub")>>
 <</if>>
-<<if _handle.doublePenis == true && $mc.vagina > 0 >>
+<<if _handle.doublePenis && $mc.vagina > 0 >>
 	<<set _sexOptions.push("DP Sub")>>
 <</if>>
-<<if $mc.doublePenis == true && _handle.vagina > 0 >>
+<<if $mc.doublePenis && _handle.vagina > 0 >>
 	<<set _sexOptions.push("DP Dom")>>
 <</if>>
 <<if _handle.penisCor>=2>>
@@ -1046,7 +1046,7 @@
 	<<PassTimeWithEvents>>
 	<<if !setup.passingTime()>>
 		<<set $ownedRelics.push(_relic)>>
-		<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer != 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
+		<<set $corruption -= Math.max(_relic.corr - $corRed + ($currentLayer !== 6 ? 5 * Math.trunc($hexflame / 10) : 0), 0)>>
 		<<if _relic.pic>>
 			[img[setup.ImagePath + _relic.pic]]<br>
 		<</if>>
