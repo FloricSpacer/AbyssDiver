@@ -17,7 +17,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 
 [[Walk through the second layer of the Abyss|Layer2 Hub]]
 <<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-	<<if $visitL2 == 0>>
+	<<if $visitL2 === 0>>
 	<<print "[[Use Cherry's chaotic luck|Layer2 Cherry]]">><br><</if>>
 <</if>><</nobr>>
 
@@ -30,20 +30,20 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 	<<audio "layer2" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-<<if $visitL2 == 0>>
+<<if $visitL2 === 0>>
 	<<set $visitL2 = 1>>
 	<<set $layerTemp = 8>>
-<<elseif $secondVisitL2 == 0>>
+<<elseif $secondVisitL2 === 0>>
 	<<set $secondVisitL2 = 1>>
 	<<set $layerTemp = 18>>
 <<else>>
 	<<set $layerTemp = random(0,20)>>
 <</if>>
-<<if $layerTemp == 1>>
+<<if $layerTemp === 1>>
 	Above you, a blood-curdling screech fills the air. Freezing in fear, a bird seems to fly from the canopy above you, paying no mind to you on the ground. Strangely, it looks almost like a hawk, but as if its mouth were turned sideways and it's wings were a bit too sharp-edged to match any bird you've seen before. However, you don't get a chance to get a good look at it before it flaps it's wings and and leaves you once again with only the sound of the dripping rain. <br><br>
-<<elseif $layerTemp == 2>>
+<<elseif $layerTemp === 2>>
 	At one point along your path, you spot a tangle of vines that seem to rustle slightly, but upon further inspection there is nothing inside them. After spending a minute watching them, you realize the sound comes from the speed at which the vines are growing, which seems to be a few centimeters a minute. You also hear a crunch, which seems to originate from the long-dead skeleton of a small mammal being crushed by the vines. Wisely, you decide to move on and conclude this would not be a good place to make camp. <br><br>
-<<elseif $layerTemp == 3 && $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
+<<elseif $layerTemp === 3 && $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
 	You hear a loud hissing sound in one of the bushes nearby, and suddenly Saeko stops your group from moving forward.
 	<br><br>
 	<<say $companionSaeko>>Wait, we have to go around here. I'm not sure what would make a sound like that here, but I suspect it's not a good idea to find out.<</say>><br>
@@ -54,14 +54,14 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 	<br><br>
 	<<say $companionSaeko>>I believe I heard of a certain diver who thought similarly, but he was lost a few years ago. Better not to fall prey to some unknown venomous creature here.<</say>><br>
 	Lily hesitates, but eventually agrees and your group ends up going around the potential threat.<br><br>
-<<elseif $layerTemp == 4 && $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
+<<elseif $layerTemp === 4 && $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 	A small feline-looking creature approaches you and gives a little mewling sound. As you hesitate with how to react, Cherry bends down and rubs it behind one of its furry ears. Her expression is blank and she sighs as the feline mews, whispering under her breath.
 	
 	<<say $companionCherry>>I remember this being fun. Why isn't this fun anymore?<</say>>
 	She stands up and steps back, giving you a chance to touch the feline, feeling that it feels much softer than you'd expect, as if it were a sack of blubber rather than a cat. But after a few minutes, it gets tired of your touches and tightens up as it scampers away. Cherry is staring at the sky, letting the rain run down her face with no resistance. <<if $hiredCompanions.some(c => c.id === setup.companionId.maru)>>Maru walks over to her and gives her a big, warm hug, but despite reaching her arms around him, her expression never changes.<</if>><br><br>
-<<elseif $layerTemp == 5>>
+<<elseif $layerTemp === 5>>
 	You stumble upon a tranquil, crystal-clear pond, with bioluminescent plants casting a soft, otherworldly glow upon its surface. The gentle hum of insects creates a soothing melody, accompanied by the occasional splash of leaping fish as they break the water's surface. As you draw closer, you notice that the fish are adorned with vivid, iridescent scales, shimmering like living gemstones under the luminescent light. You are momentarily entranced by this serene oasis, a welcome reprieve from the dangers you've faced thus far. However, you remind yourself to remain vigilant and continue on your journey, with the memory of the pond's enchanting beauty etched in your mind. <br><br>
-<<elseif $layerTemp == 6 && $mc.hasCurse(HijinksEnsue)>>
+<<elseif $layerTemp === 6 && $mc.hasCurse(HijinksEnsue)>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -73,14 +73,14 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 	This layer is filled with a vey dense growth of vines, bushes, and other plant life that impedes you and makes movement very time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
 <</if>>
 <br><br>
-<<if $forageWater == 1>>
+<<if $forageWater === 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily water on this layer">><br>
 <</if>>
-<<if $forageFood == 1 && $mudHunt == 1>>
+<<if $forageFood === 1 && $mudHunt === 1>>
 	<<print "You are currently foraging for your daily food on this layer by spending 1 bullet each day to hunt mudgrazers">><br>
-	<<elseif $forageFood == 1>>
+	<<elseif $forageFood === 1>>
 	<<print "You are currently foraging for your daily food on this layer by finding flanberries to eat.">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily food on this layer">><br>
@@ -131,13 +131,13 @@ If you decide to start foraging for food or water, it means that you will not co
 Note: If you try to forage for meat, but run out of bullets or don't have a gun (or suitable replacement), you will forage for some flanberries instead, with any side effects that may entail.
 
 <<nobr>>
-<<if $forageWater == 0>>
+<<if $forageWater === 0>>
 	<<print "[[Start foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 0]]">><br>
 <</if>>
-<<if $forageFood == 0>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo == 0>>
+<<if $forageFood === 0>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0>>
 		<<print "[[Start foraging for flanberries for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 0, $L2FoodConvo = 1]]">><br>
 		<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 1, $L2FoodConvo = 1]]">><br>
 	<<else>>	
@@ -150,13 +150,17 @@ Note: If you try to forage for meat, but run out of bullets or don't have a gun 
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from the layer|Layer2 Flasks]]<br>
 <</if>>
+<br>
+[[Consume food from unripe Flanberries|Layer2 Forage][$mc.events.push(new LibidoEvent("Flanberry Major", 1));$foodL2 += 1]]<br>
+<<if $abyssKnow>>[[Consume food from ripe Flanberries|Layer2 Forage][$lastFlan = $time;$foodL2 += 1]]<br><</if>>
+[[Consume rainwater|Layer2 Forage][$bewitchBabies += 1;$waterL2 += 1]]<br>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer2 Hub]]
 
 :: Layer2 Forage Convo
 
-<<if $mudHunt == 1>>You and Maru wander through the dripping rainforest of the second layer, on the hunt for Mudgrazers. Maru had mentioned that their meat would make a delicious dish, so you accompanied him on this quest. <<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>Khemia tags along, ensuring your safety from any lurking threats in the forest.<</if>>
+<<if $mudHunt === 1>>You and Maru wander through the dripping rainforest of the second layer, on the hunt for Mudgrazers. Maru had mentioned that their meat would make a delicious dish, so you accompanied him on this quest. <<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>Khemia tags along, ensuring your safety from any lurking threats in the forest.<</if>>
 
 Maru crouches through some ferns and, gesturing at large indentations in the mud, you follow.
 
@@ -198,7 +202,7 @@ Maru giggles and smiles at you.
 Maru leads you to a managed glade, where the Flanberries are guarded by people who appear to own the land. After a brief conversation with the guards, Maru returns to you.
 
 <<say $companionMaru>>The berries here are owned by some big guy in the nearby village, but he said it's okay if we take just enough for us since we're divers and we won't be here too long anyway. And he said that maybe you could even move here and enjoy his generosity as a permanent resident. I told him not to have any expectations about that though.<</say>>
-Maru starts picking shiny, red berries, occasionally plucking unripe, unsafe ones.<<if $abyssKnow == 1>>Luckily, your knowledge allows you to remove them from the bundle before anyone eats them. Who knows what would have happened if you weren't here.<</if>>
+Maru starts picking shiny, red berries, occasionally plucking unripe, unsafe ones.<<if $abyssKnow === 1>>Luckily, your knowledge allows you to remove them from the bundle before anyone eats them. Who knows what would have happened if you weren't here.<</if>>
 
 After collecting enough berries, you head back to camp with Maru. He mashes the berries into a paste, adding a few herbs he gathered along the way. The result is a delicious, nutty, red pudding with whole berries mixed in for texture. You and your companions share the scrumptious dessert, delighting in its unique flavor as you relax in the camp.
 <</if>>
@@ -229,7 +233,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 
 <p><<CarryAdjust>></p>
 
-<<if $escBalDepl==0>>\
+<<if $escBalDepl===0>>\
 	<p>[[Return to exploring layer 2|Layer2 Hub]]</p>
 <<else>>\
 	<p>[[Return to your balloon|Escape Balloon L2]]</p>
@@ -237,7 +241,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 
 <<CurseGrid `setup.cursesOnLayer[2]`>>
 
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	<p>[[Return to exploring layer 2|Layer2 Hub]]</p>
 <<else>>
 	<p>[[Return to your balloon|Escape Balloon L2]]</p>
@@ -278,8 +282,8 @@ By default, your companions' reward for coming down here with you is the dubloon
 :: Layer2 Ascend 1 [layer2]
 Returning to the first layer will take 4 days, and cost 15 corruption.
 
-<<if $DaedalusEquip==true >>\
-	<<if $DaedalusFly==false>>\
+<<if $DaedalusEquip>>\
+	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
 		[[Flap your wings and prepare to fly to the next layer|Layer2 Ascend 1][$DaedalusFly=true]]
 	<<else>>\
@@ -330,7 +334,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 <<for $i = 0; $i < 1; $i>>
 	<<set $temp1 = random(0,11) + 12>>
 	<<set $temp2 = random(0,11) + 12>>
-	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($mc.hasCurse(ShrunkenAssets) && ($temp1 == 14 || $temp2 == 14) ) )>>
+	<<if ($temp1 !== $temp2) && ($temp1 + $temp2 !== 43 && (Math.abs($temp1 - $temp2) !== 1) && !($mc.hasCurse(ShrunkenAssets) && ($temp1 === 14 || $temp2 === 14) ) )>>
 		<<break>>
 	<</if>>
 <</for>>
@@ -468,7 +472,7 @@ What type of fur would you like to gain?
 
 You press forward through the second layer as your search from the Empty-handed Broker, and as you do, the dewdrops from above accumulate, each one adding to the symphony of droplets cascading down from the treetops. The once gentle drizzle intensifies into a monsoon, pounding against the soil and leaves, filling the air with the deafening roar of water.
 
-<<if $visitL3 != 0 || $brokerUsed>>\
+<<if $visitL3 !== 0 || $brokerUsed>>\
 Through the deluge, you catch a glimpse of a small worn down shrine. As you approach, you find a pile of rubble in its center, where once was a statue. There is nothing more for you to do here.
 <<else>>\
 Through the deluge, you catch a glimpse of something unusual nestled in the tangled undergrowth. As you approach, the sinister visage of the Broker reveals itself. The alabaster statue stands before you, an eerie contrast to the vibrant, chaotic jungle surrounding it. The twisted horns and chipped robe give the figure a sense of ancient malevolence, as if the statue is an echo of a time long past.
@@ -517,7 +521,7 @@ Would you like to swim in the pond of the Fate-crossing Star?
 
 	[[Continue exploring the second layer|Layer2 Hub]]
 
-<<elseif $hiredCompanions.length == 0>>
+<<elseif $hiredCompanions.length === 0>>
 	You must have companions before if you wish to swap bodies with someone using the Fate-Crossing Star. You swim through the cool lakewater and appreciate the jungle scenery, but nothing abnormal happens.
 	
 	Body swapping doesn't quite work with only one person, does it?
@@ -627,7 +631,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 	Her usual cheerfulness gone, she points at you with a finger trembling in disbelief, a finger which used to be your own.<br><br>
 	<<say $mc>> I'm sorry, Lily. Trust me, this is for the best of our expedition in the long run.<</say>><br>
 	She glances down and realizes the dramatic change.<br><br>
-	<<if $companionLily.sex=='male'>>
+	<<if $companionLily.sex==='male'>>
 		<<say $companionLily>> What? I've... become a man?! My face, my...<</say>><br>
 		Overwhelmed, she spirals into an emotional frenzy, bumbling incoherently.<br><br>
 		<<say $mc>>Lily! Snap out of it! There are worse things than...<</say>><br>
@@ -656,7 +660,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 	Only then does he seem to comprehend the switch, visibly startled by his own reflection.<br><br>
 	<<say $companionKhemia>> What in the Abyss?<</say>><br>
 	Realizing he's now stuck in your body, his expression hardens.<br><br>
-	<<if $companionKhemia.sex=='female'>>
+	<<if $companionKhemia.sex==='female'>>
 		<<say $companionKhemia>> You asshole! You switched our bodies? Do you know how long I've trained that body you stole from me?!<</say>><br>
 		Storming towards you, his newfound feminine stature belies the intimidating rage in his eyes.<br><br>
 		<<say $mc>> Wait! Let's talk about this!<</say>><br>
@@ -753,12 +757,12 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 		<<set $companionBandit.affec -= (7-$hsswear)>>
 		<<set _j=0>>
 		<<for _i=0; _j<1; _i++>>
-			<<if $hiredCompanions[_i].name != $companionBandit.name>>
+			<<if $hiredCompanions[_i].name !== $companionBandit.name>>
 				<<set _j=1>>
 				<<set _companion = $hiredCompanions[_i]>>
 			<</if>>
 		<</for>>
-		You were smart enough to instruct _companion.name to bound you in your sleep and untie the bandit in the morning. At the the time <<if _companion.sex == "male">>he<<else>>she<</if>> seemed puzzled. When you wake up you panic a little as you are still tied down.<br><br>
+		You were smart enough to instruct _companion.name to bound you in your sleep and untie the bandit in the morning. At the the time <<if _companion.sex === "male">>he<<else>>she<</if>> seemed puzzled. When you wake up you panic a little as you are still tied down.<br><br>
 		<<set $mc.imageIcon = "Icons/BanditIcon.jpg">>
 		<<say $mc>>Hmpf!<</say>><<set $mc.imageIcon = "Icons/BanditIcon_released.jpg">><br>
 		Upon hearing your noises _companion.name releases you and you explain the whole thing to them. After you're done you walk over to the bandit who is now trapped in both ropes and your old body.<br><br>
@@ -768,8 +772,8 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 	<</if>>
 <<elseif _companionSwapHandle.id === setup.companionIds.twin>>
 	<<say $companionTwin>> Hmm? What something feels off. Wait a second...<</say>><br>
-	<<if $companionTwin.osex=="male">>He <<else>>She <</if>>looks at you intensely.<br><br>
-	<<if $companionTwin.osex==$mc.osex>>
+	<<if $companionTwin.osex==="male">>He <<else>>She <</if>>looks at you intensely.<br><br>
+	<<if $companionTwin.osex===$mc.osex>>
 		<<say $companionTwin>> Well well well, clever <<PerceivedGender $mc>>. You know I had the same idea, but you actually went ahead and did it.<</say>><br>
 		<<say $mc>> What do you mean?<</say>><br>
 		<<say $companionTwin>> Come on now, you should know that I'm the only one with whom this coy act doesn't fly. You switched our nearly identical bodies in the pond for the free corruption.<</say>><br>
@@ -835,7 +839,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 <<include "Libido Curse">>
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -850,7 +854,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 <<include "Gender Curse">>
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -863,7 +867,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 <<CarryAdjust>>
-<<if $mc.penisCor>0 && $mc.breastsCor==0 >>
+<<if $mc.penisCor>0 && $mc.breastsCor===0 >>
 	The moment the Curse grips you, you feel an intense sensation. Your penis springs to full erection, and then continues to grow. The base, the shaft, and the tip swell larger than they've ever been before, until you're sporting a $mc.penisCor inch long dong.
 
 	As the erection gradually subsides, you find yourself shifting awkwardly, seeking a comfortable position to accommodate your member, which insists on staying at a larger size than you're used to. The feeling of your penis brushing against your thigh elicits a mix of emotions. It might be a Curse, but it could also be a blessing.
@@ -877,7 +881,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 	You can feel your milk ducts expanding with your breasts, and as the swelling finally subsides, you can look down at your new $mc.breastsLabel cup breasts. As the moment passes and you start to become accustomed to your transformed body, you are certain that for a while you'll be distracted by the added mass swinging between your legs and the extra jiggle on your chest.
 <</if>>
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -893,7 +897,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -921,7 +925,7 @@ What type of ears would you like to gain?
 <<radiobutton "_curse.earType" "furry horse" >> Horse
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -950,7 +954,7 @@ What type of tail did you gain?
 <<radiobutton "_curse.tailType" "swaying horse" >> Horse
 
 [[Accept more Curses from the second layer|Layer2 Curses][$mc.tail.push($tail)]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub][$mc.tail.push($tail)]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2][$mc.tail.push($tail)]]
@@ -982,7 +986,7 @@ What type of fur would you like to gain?
 <<radiobutton "_curse.furType" "horse-furred" >> Horse
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1001,7 +1005,7 @@ As the realization dawns, you acknowledge the irresistible force of nature that 
 How does it feel to know what awaits you? Your quickened breaths betray your inner turmoil, revealing the truth about your deepest desires.
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1020,7 +1024,7 @@ As the Curse takes hold, your senses are further heightened. The scent of the da
 You'll need to be particularly careful with alcohol, or any other similar substance, in the future.
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1032,7 +1036,7 @@ You'll need to be particularly careful with alcohol, or any other similar substa
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<if $mc.osex == "male">>\
+<<if $mc.osex === "male">>\
 Suddenly, an unexpected warmth washes through your abdomen, spreading outward in pulses. It's not painful, but it's not entirely pleasant either. You glance down, your eyes widening as you notice the changes. Your penis is retreating inwards, morphing, transforming. The sensation is bizarre, a strange hollow feeling enveloping you as you watch it disappear, only to be replaced by the soft, sensitive folds of a vagina.
 
 Your hands instinctively move to explore this new part of you, a gasp escaping your lips as you feel the delicate tissues, the warmth, the moistness. It feels strange but not foreign, a part of you, a new and exciting sensation that sends shivers down your spine. The sensitivity is heightened, each brush of your fingers sending waves of unexpected pleasure through you.
@@ -1057,7 +1061,7 @@ Standing tall, you brace yourself for the journey ahead. The Abyss has changed y
 <</if>>\
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1070,7 +1074,7 @@ Standing tall, you brace yourself for the journey ahead. The Abyss has changed y
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<if $mc.osex == "male">>\
+<<if $mc.osex === "male">>\
 In the midst of your journey through the second layer, a peculiar sensation seizes you; it starts as a dull ache in your lower belly and quickly escalates into a throbbing, almost unbearable pain. It's as if something within you is trying to escape, to burst forth into existence. Sweat pours down your face, dripping onto your chest.
 
 Simultaneously, a pressure builds in your chest. Looking down, you see your flat pecs swelling, stretching, and forming into round $mc.breastsLabel breasts. The size is proportionate to your endowment, each pulse of the Curse adding more to their fullness. Your fingers trace the curves, the sensation of the soft flesh and the erect nipples sending another jolt through your body. You're simultaneously awed and terrified by the sudden transformation.
@@ -1099,7 +1103,7 @@ But you're a survivor. You've always been one. And if this new challenge is what
 <</if>>\
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1120,7 +1124,7 @@ As you continue your journey through the Abyss, you can't help but ponder how th
 Despite the anxiety and uncertainty that grips you, you press on, trying to focus on the task at hand - exploring the mysteries of the Abyss. Yet the Curse remains ever-present, a constant reminder of your altered state, the flush of your cheeks a testament to your newfound vulnerability.
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1149,7 +1153,7 @@ Your mind races. How will you navigate the Abyss in this newfound state? And mos
 Shivering under the relentless torrent, you pick yourself up, aided by an oddly formed root. As you make your way deeper into the forest, you can't help but shiver, not from cold, but anticipation, a strange excitement tickling your heart. You're Cursed, yet somehow the word feels more like a thrill.
 
 [[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 2|Layer2 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L2]]
@@ -1436,7 +1440,7 @@ You can use this Relic to see into your future and see what awaits you on the la
 	<<if $items[2].count > 0>>
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
-		<<if $abyssKnow==1>>
+		<<if $abyssKnow===1>>
 			<<set $flaskMatrix[0]+=1>>
 		<<else>>
 			<<set $flaskMatrix[2]+=1>>
@@ -1449,7 +1453,7 @@ You can use this Relic to see into your future and see what awaits you on the la
 
 [img[setup.ImagePath+'Foraging/bewitcherplants.png']]
 
-<<if $abyssKnow == 0>>
+<<if $abyssKnow === 0>>
 You dip each of your flasks into the miasma-contaminated rainwater dripping all around you. You know that this will likely increase the size of your future family, but you need the water. Better to become a little bit more corrupted than to die of dehydration, right?
 <<else>>
 Using your knowledge of the Abyss, you look around briefly before finding the Bewitcher Plants you were looking for. Carefully, you extract water from the flowers, checking it to make sure it's pure before giving it a taste.
@@ -1492,11 +1496,11 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 	<<CarryAdjust>>
 	<<Threat1Criterion>>
 	<<include "Curse Descriptions">>
-	<<if $TwinFly == true>>
+	<<if $TwinFly>>
 		<<include "Twin rejoin">>
 	<</if>>
 	<</nobr>>
-	<<if $threat1Crit == 1>>
+	<<if $threat1Crit === 1>>
 		<br>Worn down by the long trek up through the dense jungle of the previous layer, you're relieved when you finally reach the bridge to the Outcast Village. However, upon approaching the bridge a figure appears from behind a column.
 
 		<<say $Banditleader>> Well now, what do we have here?<</say>>
@@ -1507,9 +1511,9 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 			<<say $Banditleader>>You've got balls, I'll give you that. But if you think you can kidnap one of us and stroll right through here again you've got something else coming!<</say>>
 		<<elseif $hiredCompanions.length < 1>>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> all by <<ObjectivePronoun>>self, with an awful lot of valuable stuff for 1 person. How about we take that stuff of your hands so you don't have to worry about it anymore, hmm?<</say>>
-		<<elseif $hiredCompanions.length == 1 && $mc.appAge>13 >>
+		<<elseif $hiredCompanions.length === 1 && $mc.appAge>13 >>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> on date with <<PossesivePronoun>> love. You seem to be carrying more than you need for your date, hmm? How about we take some of that stuff off your hands, so you don't have to worry about it anymore?<</say>>
-		<<elseif $hiredCompanions.length == 1 && $mc.appAge<=13 >>
+		<<elseif $hiredCompanions.length === 1 && $mc.appAge<=13 >>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> on a stroll with <<PossesivePronoun>> babysitter. It seems you're carrying a lot of adult stuff that you don't really need. How about we take that stuff of your hands, so you don't have to worry about it anymore, hmm?<</say>> <br><br>
 		<<else>>
 			<<say $Banditleader>> It looks like a <<PerceivedStature $mc>> <<PerceivedGender $mc>> with <<PossesivePronoun>> merry band of losers. Don't worry, we wont bite. As long as you do as we ask, we're very friendly. How about we take that stuff off your hands, so you don't have to worry about keeping it safe anymore, hmm?<</say>><br><br>
@@ -1696,19 +1700,19 @@ After a while you finally make it back to your boss. "Gerard, I finally got them
 <<set $timeL2T1 -= 4>>
 [img[setup.ImagePath+'Threats/bayinggourmet.png']]
 <<set _temp = random(0,1)>><<set $variation = random(0,1)>>
-<<if $variation == 0>>\
+<<if $variation === 0>>\
 	As you carefully navigate through the dense foliage of the second layer, the air is thick with humidity, and the damp, earthy scent of the jungle permeates your senses. The sound of water droplets falling from the intertwining vines above and splattering onto the ground creates a soft, rhythmic backdrop to your journey. With every step, the lush undergrowth brushes against your legs, the wet leaves leaving a trail of moisture on your skin.
 
 	Suddenly, the air is filled with a low, guttural growl, echoing through the thicket, and you feel a shiver of anticipation run down your spine. The Baying Gourmet emerges from the shadows, its powerful legs and muscular body rippling with every movement. It sniffs the air, its flaring nostrils detecting the scent of your food rations. The beast's eyes lock onto yours, a primal hunger gleaming within them that makes your heart race.
 
-	As the creature slowly approaches, its large nostrils flare with every breath, inhaling your scent and the aroma of your food. Its hot breath caresses your skin, a contrast to the cool droplets of water still dripping from the canopy above. You can hear the Baying Gourmet's rhythmic panting, and it sends shivers down your spine, a mix of fear and an inexplicable, overwhelming desire. You catch a glimpse of its body and notice that the beast seems to be <<if _temp==0>>male<<else>>female<</if>>.<<if _temp==0>> You may be at risk of impregnation if you have the proper body type and Curses to be compatible with it.<</if>>
+	As the creature slowly approaches, its large nostrils flare with every breath, inhaling your scent and the aroma of your food. Its hot breath caresses your skin, a contrast to the cool droplets of water still dripping from the canopy above. You can hear the Baying Gourmet's rhythmic panting, and it sends shivers down your spine, a mix of fear and an inexplicable, overwhelming desire. You catch a glimpse of its body and notice that the beast seems to be <<if _temp===0>>male<<else>>female<</if>>.<<if _temp===0>> You may be at risk of impregnation if you have the proper body type and Curses to be compatible with it.<</if>>
 
-<<elseif $variation == 1>>\
+<<elseif $variation === 1>>\
 	As you cautiously continue through the dense foliage of the second layer, the air is heavy with humidity, and the rich, earthy aroma of the jungle fills your nostrils. The soft pitter-patter of water droplets falling from the entwined vines above and splashing onto the ground creates a gentle, rhythmic soundtrack to your adventure. With each step, the moist undergrowth caresses your legs, the damp leaves leaving a cool, wet trail on your skin.
 
 	Suddenly, the air is charged with a chorus of deep, throaty growls that resonate through the thicket, sending a shiver of anticipation down your spine. A group of Baying Gourmets, creatures known for their prowess and strength, emerge from the shadows, their sinewy legs and muscular bodies undulating with every graceful stride. They sniff the air, their flaring nostrils detecting the enticing aroma of your food rations. The beasts' eyes meet yours, a primal hunger gleaming within them that makes your pulse quicken.
 
-	As the creatures gradually approach, their wide nostrils flare with each breath, savoring your scent and the fragrance of your food. Their warm breaths brush against your skin, a stark contrast to the cool droplets of water still falling from the canopy above. You can hear the Baying Gourmets' steady panting, and it sends shivers down your spine, a blend of trepidation and an unexplainable, powerful yearning. You catch fleeting glimpses of their bodies and notice that the beasts appear to be a mix of <<if _temp==0>>males<<else>>females<</if>>.<<if _temp==0>> You may be at risk of impregnation if you possess the suitable body type and Curses to be compatible with them.<</if>>
+	As the creatures gradually approach, their wide nostrils flare with each breath, savoring your scent and the fragrance of your food. Their warm breaths brush against your skin, a stark contrast to the cool droplets of water still falling from the canopy above. You can hear the Baying Gourmets' steady panting, and it sends shivers down your spine, a blend of trepidation and an unexplainable, powerful yearning. You catch fleeting glimpses of their bodies and notice that the beasts appear to be a mix of <<if _temp===0>>males<<else>>females<</if>>.<<if _temp===0>> You may be at risk of impregnation if you possess the suitable body type and Curses to be compatible with them.<</if>>
 <</if>>
 <<nobr>>
 <<if $mc.libido < 6>>
@@ -1727,7 +1731,7 @@ After a while you finally make it back to your boss. "Gerard, I finally got them
 	<<if $hiredCompanions.length > 3>>
 		[[Scare it off with your impressive group of companions|$returnPassage]]<br>
 	<</if>>
-	<<if $slingshot == 1>>
+	<<if $slingshot === 1>>
 		The Brave Vector slingshot, as powerful as a firearm, can subdue the beast with a series of precise shots.<br>
 		[[Overcome the creature with the Brave Vector|$returnPassage]]<br><br>
 	<</if>>
@@ -1740,13 +1744,13 @@ allow the beast to dominate you. While it won't consume you, recognizing you're 
 <<link "Allow the beast to overpower you" "Layer2 Gourmet Ravage">>
 	<<set $status.duration += (4 - $statRed)>>
 	<<set $status.penalty += 1>>
-	<<if $mc.hasCurse(Omnitool) && _temp==0>>
+	<<if $mc.hasCurse(Omnitool) && _temp===0>>
 		<<PregCheck>>
 	<</if>>
 	<<if $mc.events.some(e =>
 		e instanceof SemenDemon && (
-			(_temp === 0 && e.fluidType != 'vaginal fluids') ||
-			(_temp === 1 && e.fluidType != 'semen')
+			(_temp === 0 && e.fluidType !== 'vaginal fluids') ||
+			(_temp === 1 && e.fluidType !== 'semen')
 		))
 	>>
 		<<set $SemenDemonBalance+=10>>
@@ -1773,7 +1777,7 @@ Use the following option only if you have specifically considered your inventory
 :: Layer2 Gourmet Ravage
 [img[setup.ImagePath+'Threats/bayinggourmet.png']]
 
-<<if $variation == 0>>\
+<<if $variation === 0>>\
 	A primal urge surges through you as you stand before the Baying Gourmet, and you decide to surrender to its animalistic desires. As the beast nears, its rough tongue licks your exposed skin, sending a wave of goosebumps and shivers coursing through your body. The sensation is both frightening and exhilarating, and your heart races with a mixture of fear and arousal.
 
 	The creature's strong paws grip your body, the rough pads pressing against your flesh with a firm, yet surprisingly gentle touch. The Baying Gourmet's powerful, musky scent fills your nostrils as it begins to explore your body with its nose, mouth, and tongue.
@@ -1784,7 +1788,7 @@ Use the following option only if you have specifically considered your inventory
 
 	Eventually, the Baying Gourmet releases you, having had its fill of you. Your body aches and trembles from the passionate encounter, and a mild limp reminds you of the wild beast that had its way with you. But deep down, a part of you craves the primal passion of the encounter and the raw, unbridled pleasure you experienced in the arms of the Baying Gourmet.
 
-<<elseif $variation == 1>>\
+<<elseif $variation === 1>>\
 	As you find yourself surrounded by the multiple Baying Gourmet creatures, a primal urge surges through you, and you make the daring decision to surrender to their animalistic desires. The air is heavy with the musky scent of the beasts, and you feel both frightened and exhilarated.
 
 	As the creatures draw nearer, their rough tongues eagerly lick your exposed skin, each stroke sending a wave of goosebumps and shivers coursing through your body. The sensation is a potent mix of fear and arousal, causing your heart to race and your breath to hitch in anticipation.
@@ -1806,9 +1810,9 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 
 <<nobr>>
 <<set _random = random(1,3)>>
-<<if _random == 1>>
+<<if _random === 1>>
 [img[setup.ImagePath+'Environments/Layer2Landscape1.png']]
-<<elseif _random == 2>>
+<<elseif _random === 2>>
 [img[setup.ImagePath+'Environments/Layer2Tree.png']]
 <<else>>
 [img[setup.ImagePath+'Environments/Layer2WaterTree.png']]
