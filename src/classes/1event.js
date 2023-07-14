@@ -187,6 +187,12 @@ class CharEvent {
 		return prevLewdness;
 	}
 
+	// eslint-disable-next-line no-unused-vars
+	lewdnessMult(prevLewdness, character) {
+		// multiplicative lewdness change. In a separate function because it needs to happen after additive change.
+		return prevLewdness;
+	}
+
 	addHorns(prevHorns) {
 		return prevHorns;
 	}
