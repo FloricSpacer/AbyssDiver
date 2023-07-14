@@ -314,10 +314,9 @@ class IncreasedSensitivity extends Curse {
 		super('Increased Sensitivity', 10, 'Curses/increasedsensitivity.png', 'libido');
 	}
 
+	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		// both Curses increase by 1 if alone, by 3 if together, making for a total of +6 when you have both
-		if (character.curses.some(c => c instanceof RefractoryRefactorization)) return prevLewdness + 3
-		return prevLewdness + 1;
+		return prevLewdness + 2;
 	}
 }
 setup.allCurses.IncreasedSensitivity = new IncreasedSensitivity()
@@ -331,8 +330,7 @@ class RefractoryRefactorization extends Curse {
 	}
 
 	changeLewdness(prevLewdness, character) {
-		// both Curses increase by 1 if alone, by 3 if together, making for a total of +6 when you have both
-		if (character.curses.some(c => c instanceof IncreasedSensitivity)) return prevLewdness + 3
+		if (character.hasCurse(IncreasedSensitivity)) return prevLewdness + 4
 		return prevLewdness + 1;
 	}
 }
@@ -526,6 +524,14 @@ class HeatRut extends Curse {
 	// libido change is implemented as special-purpose code in Character.libido because it requires accessing
 	// global variables and only applies to the main character.
 	// We might want to change that.
+
+	changeLewdness(prevLewdness, character) {
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness;
+		}
+		return prevLewdness + 2;
+	}
 }
 setup.allCurses.HeatRut = new HeatRut()
 State.variables.curse20 = setup.allCurses.HeatRut
@@ -630,7 +636,7 @@ class BlushingVirgin extends Curse {
 
 	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness - 1;
+		return prevLewdness - 8;
 	}
 }
 setup.allCurses.BlushingVirgin = new BlushingVirgin()
@@ -698,9 +704,12 @@ class ClothingRestrictionB extends Curse {
 		return ['Crossdress Your Heart'];
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness + 1;
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness;
+		}
+		return prevLewdness + 4;
 	}
 }
 setup.allCurses.ClothingRestrictionB = new ClothingRestrictionB()
@@ -953,7 +962,7 @@ class LiteralBlushingVirgin extends Curse {
 
 	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness - 2;
+		return prevLewdness - 16;
 	}
 }
 setup.allCurses.LiteralBlushingVirgin = new LiteralBlushingVirgin()
@@ -1115,7 +1124,7 @@ class Softie extends Curse {
 
 	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness - 1;
+		return prevLewdness - 2;
 	}
 }
 setup.allCurses.Softie = new Softie()
@@ -1132,9 +1141,12 @@ class HardMode extends Curse {
 		return ['Softie'];
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness + 1;
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness;
+		}
+		return prevLewdness + 2;
 	}
 }
 setup.allCurses.HardMode = new HardMode()
@@ -1275,9 +1287,20 @@ class ClothingRestrictionC extends Curse {
 		return ['Crossdress Your Heart'];
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness + 2;
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness;
+		}
+		return prevLewdness + 4;
+	}
+
+	lewdnessMult(prevLewdness, character) {
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness * 1.25;
+		}
+		return prevLewdness * 1.5;
 	}
 }
 setup.allCurses.ClothingRestrictionC = new ClothingRestrictionC()
@@ -1336,9 +1359,12 @@ class HijinksEnsue extends Curse {
 			  'You get involved in embarrassing sexual situations more often than it is reasonable. You are constantly getting caught in compromising positions, stumbling into other people having sex, suffering wardrobe malfunctions... ');
 	}
 
-	// eslint-disable-next-line no-unused-vars
-	changeLewdness(prevLewdness, character) {
-		return prevLewdness + 1;
+	lewdnessMult(prevLewdness, character) {
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness * 1.25;
+		}
+		return prevLewdness * 1.5;
 	}
 }
 setup.allCurses.HijinksEnsue = new HijinksEnsue()
@@ -1641,9 +1667,15 @@ Your <<if _vagina>>pussy is always glistening with lubrication<</if>><<if _vagin
 <</if>><</nobr>>`);
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness + 2
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness;
+		}
+		if (character.hasCurse(ClothingRestrictionB) || character.hasCurse(ClothingRestrictionC)) {
+			return prevLewdness + 2
+		}
+		return prevLewdness;
 	}
 }
 setup.allCurses.Leaky = new Leaky()
@@ -1657,9 +1689,12 @@ class WanderingHands extends Curse {
 			  'Whenever you aren\'t paying attention, your hands start rubbing your crotch. ');
 	}
 
-	// eslint-disable-next-line no-unused-vars
 	changeLewdness(prevLewdness, character) {
-		return prevLewdness + 2;
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness + 4;
+		}
+		return prevLewdness + 8;
 	}
 }
 setup.allCurses.WanderingHands = new WanderingHands()
@@ -1706,8 +1741,23 @@ class SemenDemon extends Curse {
 		this.amount = value;
 	}
 
-	changeLewdness(prevLewdness) {
-		return prevLewdness + this.amount;
+	changeLewdness(prevLewdness, character) {
+		let safeConsumption = 0;
+		// can supply themselves
+		if (character.penis > 0 && this.fluidType !== "vaginal fluids") safeConsumption += 2 * character.fluids / 100;
+		if (character.vagina > 0 && this.fluidType !== "semen") safeConsumption += 2 * character.fluids / 100;
+		if (character.id === setup.companionIds.mc) {
+			// supplied by companions
+			safeConsumption += State.variables.hiredCompanions.reduce((v, c) => c.affec >= 15 &&
+																		   ((c.penis > 0 && this.fluidType !== 'vaginal fluids') ||
+																			(c.vagina > 0 && this.fluidType !== 'semen')
+																		   ) ? v + 2 * c.fluids / 100
+																			 : v,
+																	  safeConsumption);
+		}
+		if (safeConsumption >= this.amount * 2) return prevLewdness;
+		// The case in which the character finds somebody else to help them regularly still isn't covered, but we can't do that mechanically.
+		return prevLewdness + this.amount * 3;
 	}
 }
 setup.allCurses.SemenDemon = new SemenDemon();
@@ -1724,8 +1774,11 @@ class Quota extends Curse {
 		return 4;
 	}
 
-	changeLewdness(prevLewdness) {
-		return prevLewdness + 1;
+	changeLewdness(prevLewdness, character) {
+		if (character.hasCurse(DoubleTrouble)) return prevLewdness;
+		if (character.id === setup.companionIds.mc && State.variables.hiredCompanions.some(c => c.affec >= 15)) return prevLewdness;
+		// The case in which the character finds somebody else to help them regularly still isn't covered, but we can't do that mechanically.
+		return prevLewdness + 3;
 	}
 }
 setup.allCurses.Quota = new Quota()
@@ -1742,9 +1795,19 @@ class InTheLimelight extends Curse {
 		return 4;
 	}
 
-	changeLewdness(prevLewdness) {
-		return prevLewdness + 1;
+	changeLewdness(prevLewdness, character) {
+		if (character.id === setup.companionIds.mc &&
+			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+			return prevLewdness + 2;
+		}
+		return prevLewdness + 4;
 	}
+
+	// limelight mult is in special-purpose code in Character, because the curse can be taken multiple times, but the
+	// multiplier should only apply once
+	// lewdnessMult(prevLewdness, character) {
+	// 	return prevLewdness * 2;
+	// }
 }
 setup.allCurses.InTheLimelight = new InTheLimelight()
 State.variables.curse84 = setup.allCurses.InTheLimelight
@@ -2359,6 +2422,11 @@ class TheMaxim extends Curse {
 	}
 
 	// libido changes implemented by special-purpose code in Character
+
+	// eslint-disable-next-line no-unused-vars
+	changeLewdness(prevLewdness, character) {
+		return prevLewdness + 4;
+	}
 }
 setup.allCurses.TheMaxim = new TheMaxim()
 State.variables.curse118 = setup.allCurses.TheMaxim
