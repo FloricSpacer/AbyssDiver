@@ -1,5 +1,5 @@
 "use strict";
-/* global assert, AgeEvent, Curse, DoubleTrouble, ShrunkenAssets */
+/* global assert, AgeEvent, Curse, DoubleTrouble, ShrunkenAssets, Leaky, HardMode, InTheLimelight */
 
 /**
  * @typedef SugarCubeSetupObject
@@ -758,14 +758,23 @@ class Character {
 	}
 
 	/**
+	 * Returns the base libido of this character, only including permanent effects and excluding the 2 ground libido.
+	 * @returns {number} The strength of this character's base libido.
+	 */
+	get baseLibido() {
+		let libido = 0;
+		for (let event of this.events) {
+			libido = event.changeLibido(libido);
+		}
+		return libido;
+	}
+
+	/**
 	 * Returns the strength of the character's libido.
 	 * @returns {number} The strength of this character's libido.
 	 */
 	get libido() {
-		let libido = 2;
-		for (let event of this.events) {
-			libido = event.changeLibido(libido);
-		}
+		let libido = this.baseLibido + 2;
 
 		if (this.id === setup.companionIds.mc) {
 			if (State.variables.lastFlan !== undefined &&
@@ -774,12 +783,12 @@ class Character {
 			}
 			if (State.variables.menCycleFlag) {
 				/* Libido boost around 14 days into the cycle. */
-				if (13 <= State.variables.timetime - State.variables.menCycleT
+				if (13 <= State.variables.time - State.variables.menCycleT
 					&& State.variables.time - State.variables.menCycleT <= 15) {
 					libido++;
 				}
 				/* Libido penalty around 22 days into the cycle. */
-				if (20 <= State.variables.timetime - State.variables.menCycleT
+				if (20 <= State.variables.time - State.variables.menCycleT
 					&& State.variables.time - State.variables.menCycleT <= 24) {
 					libido--;
 				}
@@ -1016,26 +1025,62 @@ class Character {
 	}
 
 	/**
+	 * Returns the sexual fluid production of this character, as a percentage of baseline human.
+	 * @returns {number} The % of the original sexual fluid production of this character.
+	 */
+	get fluids() {
+		let fluids = 100;
+
+		if (this.id === setup.companionIds.mc) {
+			// We should turn this into an event sooner or later
+			fluids += State.variables.crumbleFluid;
+		}
+
+		if (this.hasCurse(Leaky)) {
+			fluids *= 2;
+		}
+
+		return fluids;
+	}
+
+	/**
 	 * Returns the lewdness of this character. Only meaningful for the main character.
 	 * @returns {number} The lewdness of this character.
 	 */
 	get lewdness() {
-		let lewdness = (this.libido - 2) * 3 + this.loweredStandards;
+		let lewdness = this.baseLibido * 8;
+		let mult = 1;
 		let hasLuminous = false;
 		if (this.id === setup.companionIds.mc) {
 			hasLuminous = State.variables.luminousWear;
-			lewdness += State.variables.crumbleFluid / 10;
+
 			lewdness += State.variables.algalSize;
-			lewdness += State.variables.foodL6;
+			if (State.variables.algalSize > 30) lewdness += 2;
+			if (State.variables.algalSize > 60) lewdness += 4;
+			if (State.variables.algalSize > 120) lewdness += 8;
+			if (State.variables.foodL6 > 11) lewdness += 2;
+			if (State.variables.foodL6 > 30) lewdness += 4;
+			if (State.variables.foodL6 > 60) {
+				lewdness += 4;
+				mult *= 2;
+			}
 		}
+
 		if (!hasLuminous) {
-			if (this.breastsCor > 5) lewdness++;
-			if (this.breastsCor > 7) lewdness++;
-			if (this.breastsCor > 9) lewdness++;
-			if (this.penis > 6) lewdness++;
-			if (this.penis > 10) lewdness++;
+			if (this.fluids > 400) lewdness += 2;
+			if (this.breastsCor > 5) lewdness += 2;
+			if (this.breastsCor > 8) lewdness += 4;
+			if (this.breastsCor > 12) lewdness += 6;
+			let penisMult = this.hasCurse(HardMode) ? 2 : 1
+			if (this.penis > 16) lewdness += 2 * penisMult;
+			if (this.penis > 30) lewdness += 4 * penisMult;
+			if (this.penis > 50) lewdness += 8 * penisMult;
 		}
-		return this.events.reduce((v, e) => e.changeLewdness(v, this), lewdness);
+
+		mult = this.events.reduce((v, e) => e.lewdnessMult(v, this), mult)
+		if (this.hasCurse(InTheLimelight)) mult *= hasLuminous ? 1.5 : 2;
+
+		return this.events.reduce((v, e) => e.changeLewdness(v, this), lewdness) * mult;
 	}
 
 	/**
