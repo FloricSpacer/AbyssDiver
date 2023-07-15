@@ -119,6 +119,15 @@ class Curse extends CharEvent {
 	get maximum() {
 		return 1;
 	}
+
+	get isWatersports() {
+		// despite the seeming senselessness this comparison is necessary to prevent coercion
+		return this.constructor.iswatersports === true;
+	}
+	get isAmputation() {
+		// despite the seeming senselessness this comparison is necessary to prevent coercion
+		return this.constructor.isamputation === true;
+	}
 }
 
 class LibidoReinforcementA extends Curse {
@@ -1861,6 +1870,7 @@ window.AssetRobustnessE = AssetRobustnessE
 setup.curseArray.push(AssetRobustnessE)
 
 class UrineReamplificationA extends Curse {
+	static iswatersports = true;
 	constructor() {
 		super('Urine Reamplification A', 55, 'Curses/urinereamplificationA.png', 'none',
 			  'Your bladder capacity has been significantly reduced, you need to be careful to make sure you don\'t have any accidents. ');
@@ -2033,6 +2043,7 @@ window.AssetRobustnessF = AssetRobustnessF
 setup.curseArray.push(AssetRobustnessF)
 
 class UrineReamplificationB extends Curse {
+	static iswatersports = true;
 	constructor() {
 		super('Urine Reamplification B', 55, 'Curses/urinereamplificationB.png', 'none');
 	}
@@ -2043,6 +2054,7 @@ window.UrineReamplificationB = UrineReamplificationB
 setup.curseArray.push(UrineReamplificationB)
 
 class EyeOnThePrize extends Curse {
+	static isamputation = true;
 	constructor() {
 		super('Eye on the Prize', 70, 'Curses/eyeontheprize.png', 'handicap');
 	}
@@ -2057,6 +2069,7 @@ window.EyeOnThePrize = EyeOnThePrize
 setup.curseArray.push(EyeOnThePrize)
 
 class DeafeningSilence extends Curse {
+	static isamputation = true;
 	constructor() {
 		super('Deafening Silence', 90, 'Curses/deafeningsilence.png', 'handicap');
 	}
@@ -2073,6 +2086,7 @@ window.DeafeningSilence = DeafeningSilence
 setup.curseArray.push(DeafeningSilence)
 
 class TaciturnTurnaround extends Curse {
+	static isamputation = true;
 	constructor() {
 		super('Taciturn Turnaround', 90, 'Curses/taciturnturnaround.png', 'handicap');
 	}
@@ -2089,6 +2103,7 @@ window.TaciturnTurnaround = TaciturnTurnaround
 setup.curseArray.push(TaciturnTurnaround)
 
 class AmpuQtie extends Curse {
+	static isamputation = true;
 	constructor(arms = 0, legs = 0) {
 		super('Ampu-Q-tie', 45, 'Curses/ampu-Q-tie.png', 'none');
 		if (typeof arms === 'string') {
@@ -2140,6 +2155,7 @@ window.AmpuQtie = AmpuQtie
 setup.curseArray.push(AmpuQtie)
 
 class NoseGoes extends Curse {
+	static isamputation = true;
 	constructor() {
 		super('Nose Goes', 65, 'Curses/nosegoes.png', 'handicap');
 	}
