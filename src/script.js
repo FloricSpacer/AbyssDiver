@@ -281,6 +281,16 @@ Setting.addToggle("MenCycleToggleFilter", {
     default  : true,
 });
 
+Setting.addToggle("WSHidden", {
+    label : "Hide content involving watersports",
+    default  : false,
+});
+
+Setting.addToggle("amputationHidden", {
+    label : "Hide content involving amputation. This includes non-physical crippling such as removing ability to hear or speak",
+    default  : false,
+});
+
 Setting.addRange("appAgeControl", {
     label    : "Minimum age your physical body can regress to (3-18):",
     min      : 3,
