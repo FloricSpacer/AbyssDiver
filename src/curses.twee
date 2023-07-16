@@ -646,7 +646,15 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 <<for _name range _args[0]>>
 	<div>
 	<<set _curse = setup.findCurseBy(c => c.name === _name)>>
-	[img[ setup.ImagePath + _curse.pic ]]
+	<<set _isfiltered = false>>
+	<<if _curse.isWatersports && settings.WSHidden>><<set _isfiltered = true>><</if>>
+	<<if _curse.isAmputation && settings.amputationHidden>><<set _isfiltered = true>><</if>>
+
+	<<if !_isfiltered>>
+		[img[ setup.ImagePath + _curse.pic ]]
+	<<else>>
+		[img[setup.ImagePath + 'curses/censored.png']]
+	<</if>>
 	<h2>_name</h2>
 	<p class="benefit">
 	+ <<print _curse.corr>> corruption </p>
@@ -683,10 +691,15 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 	<</if>>
 	</p>
 	<p>
-	<<if _curse.name.startsWith("Libido Reinforcement ") || _curse.name.startsWith("Gender Reversal ")>>
-		<<LeveledCurseDescription `_curse.name`>>
+	<<if _isfiltered>>
+		This curse has been hidden by your content filters. Note that if you choose to take it anyway, its effects
+	    will not be hidden.
 	<<else>>
-		<<include `_curse.name + " Description"`>>
+		<<if _curse.name.startsWith("Libido Reinforcement ") || _curse.name.startsWith("Gender Reversal ")>>
+			<<LeveledCurseDescription `_curse.name`>>
+		<<else>>
+			<<include `_curse.name + " Description"`>>
+		<</if>>
 	<</if>>
 	</p>
 	</div>
@@ -736,7 +749,8 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 <<for _name range _tempCurses>>
 	<<set _curse = setup.findCurseBy(c => c.name === _name)>>
 	<<include "Curse Limits">>
-	<<if !_curseLimitation && (_totalCurses.filter(e => e.name === _name).length + $StoredCurse.filter(e => e.name === _name).length) < _maxCurses>>
+	<<if !_curseLimitation && (_totalCurses.filter(e => e.name === _name).length + $StoredCurse.filter(e => e.name === _name).length) < _maxCurses &&
+	     (!_curse.isWatersports || !settings.WDHidden) && (!curse.isAmputation || !settings.amputationHidden)>>
 		<<set _validNames.push(_name)>>
 	<</if>>
 <</for>>
