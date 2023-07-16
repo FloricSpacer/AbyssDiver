@@ -1715,7 +1715,7 @@ class SemenDemon extends Curse {
 	/**
 	 * Creates a new Semen Demon curse.
 	 * @param {'semen' | 'sexual fluids' | 'vaginal fluids'} fluidType The type of fluids the cursed character is required to consume.
-	 * @param {number} amount The number of times this curse has been taken.
+	 * @param {number} amount The number of times this Curse has been taken.
 	 */
 	constructor(fluidType = 'sexual fluids', amount = 1) {
 		super('Semen Demon', 20, 'Curses/semendemon.png', 'libido');
