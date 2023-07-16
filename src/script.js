@@ -36,10 +36,10 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
         return "BrokerEnd";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && StoryVar.dollevent2===false){
+    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2){
         return "DollWarning";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2 === true){
+    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
         return "DollEnd";
     }
     if (StoryVar.boundBanditEnding) {
@@ -425,7 +425,7 @@ Object.defineProperties(setup, {
     // The actual change may depend on owned or equipped relics and items.
     modAffection: {
         value(nameOrCompanion, change) {
-            const companion = typeof nameOrCompanion == 'string' ? setup.companion(nameOrCompanion) : nameOrCompanion;
+            const companion = typeof nameOrCompanion === 'string' ? setup.companion(nameOrCompanion) : nameOrCompanion;
             companion.affec += change + variables().hsswear;
         },
     },
@@ -560,14 +560,14 @@ Object.defineProperties(setup, {
     // Checks whether the given character is pregnant.
     isPregnant: {
         value(character) {
-            const characterVar = typeof character != 'string' ? character : setup.companion(character);
+            const characterVar = typeof character !== 'string' ? character : setup.companion(character);
             return characterVar.pregnantT <= variables().time;
         }
     },
     // Sets the given character as pregnant (fertilized) from two weeks ago.
     setConsideredPregnant: {
         value(character) {
-            const characterVar = typeof character != 'string' ? character : setup.companion(character);
+            const characterVar = typeof character !== 'string' ? character : setup.companion(character);
             characterVar.pregnantT = variables().time - 14;
             characterVar.due = characterVar.pregnantT + 280 + random(-7, 7);
         },
@@ -575,7 +575,7 @@ Object.defineProperties(setup, {
     // Sets the given character as not pregnant.
     setNotPregnant: {
         value(character) {
-            const characterVar = typeof character != 'string' ? character : setup.companion(character);
+            const characterVar = typeof character !== 'string' ? character : setup.companion(character);
             characterVar.pregnantT = setup.never;
             characterVar.due = setup.never;
         },
@@ -583,10 +583,10 @@ Object.defineProperties(setup, {
     // Gets (or sets) the due date for the given character if they're pregnant (max value otherwise).
     dueDate: {
         value(character) {
-            const characterVar = typeof character != 'string' ? character : setup.companion(character);
+            const characterVar = typeof character !== 'string' ? character : setup.companion(character);
             if (!setup.isPregnant(characterVar)) {
                 characterVar.due = setup.never;
-            } else if (typeof characterVar.due == 'undefined') {
+            } else if (typeof characterVar.due === 'undefined') {
                 characterVar.due = characterVar.pregnantT + 280 + random(-7, 7);
             }
             return characterVar.due;
@@ -595,7 +595,7 @@ Object.defineProperties(setup, {
     // Gets the number of days that the given character has been pregnant.
     daysConsideredPregnant: {
         value(character) {
-            const characterVar = typeof character != 'string' ? character : setup.companion(character);
+            const characterVar = typeof character !== 'string' ? character : setup.companion(character);
             return Math.max(variables().time - characterVar.pregnantT, 0);
         },
     },
