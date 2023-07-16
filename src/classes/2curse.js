@@ -1008,7 +1008,7 @@ class AssetRobustnessD extends Curse {
 	}
 
 	growAsset(prevAsset) {
-		return prevAsset + 2**3;
+		return prevAsset + 6; // 6 cup sizes or 12cm
 	}
 }
 setup.allCurses.AssetRobustnessD = new AssetRobustnessD()
@@ -1852,7 +1852,7 @@ class AssetRobustnessE extends Curse {
 	}
 
 	growAsset(prevAsset) {
-		return prevAsset + 2**4; // 16 cups or 32cm
+		return prevAsset + 2**3; // 8 cups or 16cm
 	}
 }
 setup.allCurses.AssetRobustnessE = new AssetRobustnessE()
@@ -2024,7 +2024,7 @@ class AssetRobustnessF extends Curse {
 	}
 
 	growAsset(prevAsset) {
-		return prevAsset + 2**5; // 32 cups or 64cm
+		return prevAsset + 2**4; // 16 cups or 32cm
 	}
 }
 setup.allCurses.AssetRobustnessF = new AssetRobustnessF()
@@ -2378,7 +2378,7 @@ class AssetRobustnessG extends Curse {
 	}
 
 	growAsset(prevAsset) {
-		return prevAsset + 2**6; // 64 cups or 128cm
+		return prevAsset + 2**5; // 32 cups or 64cm
 	}
 }
 setup.allCurses.AssetRobustnessG = new AssetRobustnessG()
