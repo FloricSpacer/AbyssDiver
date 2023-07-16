@@ -277,22 +277,22 @@ Setting.addToggle("OtherSceneToggleFilter", {
 });
 
 Setting.addToggle("MenCycleToggleFilter", {
-    label : "Hide messages containing information about your menstrual cycle ",
+    label : "Hide messages containing information about your menstrual cycle",
     default  : true,
 });
 
 Setting.addToggle("WSHidden", {
-    label : "Hide content involving watersports",
+    label : "Hide content involving watersports/urine",
     default  : false,
 });
 
 Setting.addToggle("amputationHidden", {
-    label : "Hide content involving amputation. This includes non-physical crippling such as removing ability to hear or speak",
+    label : "Hide content involving amputation. This includes non-physical crippling, such as losing the ability to hear or speak",
     default  : false,
 });
 
 Setting.addRange("appAgeControl", {
-    label    : "Minimum age your physical body can regress to (3-18):",
+    label    : "Minimum apparent age your physical body can regress to (3-18):",
     min      : 3,
     default  : 3,
     max      : 18,
