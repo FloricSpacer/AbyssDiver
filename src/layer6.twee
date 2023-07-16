@@ -15,7 +15,7 @@
 They grow taller as you proceed, until you're wading through a thicket or navel-high tentacles, prodding and rubbing against your most sensitive areas. By this point, the heat has become truly intense, almost sauna-like. It's so hot that great swathes of the tentacle fields are actually aflame, thousands of tendrils being burned away and perpetually springing up again, a land of flesh doused in fire: a perfect vision of Hell. Some of the fire are in a familiar orange-red hue, while other come in more exotic greens, pinks, and purples, only lightly tickling when they lap at your skin. Small pieces of rubble, perhaps of some ancient structures, litter the layer... but the tentacles and flames have long since crushed and burned them into unrecognizable, meaningless rock.
 
 [[Walk through the sixth layer of the Abyss|Layer6 Hub]]<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-	<<if $visitL6 == 0>>
+	<<if $visitL6 === 0>>
 	<br><<print "[[Use Cherry's chaotic luck|Layer6 Cherry]]">><</if>>
 <</if>><</nobr>>
 
@@ -27,22 +27,22 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 	<<audio "layer6" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-<<if $visitL6 == 0>>
+<<if $visitL6 === 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL6 = 1>>
-<<elseif $secondVisitL6 == 0>>
+<<elseif $secondVisitL6 === 0>>
 	<<set $secondVisitL6 = 1>>
 	<<set $layerTemp = 18>>
 <<else>>
 	<<set $layerTemp = random(0,20)>>
 <</if>>
-<<if $layerTemp == 1>>
+<<if $layerTemp === 1>>
 	As you walk through a field of charred flower-like tentacles, you notice a peculiar creature wriggling through the sea of tentacles. It looks like a snake, but its body is covered in tiny suction cups, leaving a trail of wet spots on the ground. The creature seems unbothered by the heat and flames, and it slithers past you without a second glance.<br><br>
-<<elseif $layerTemp == 2>>
+<<elseif $layerTemp === 2>>
 	As you venture deeper into the layer, the heat grows more intense, and the air becomes thick with the savory scent of smoke. You come across a small clearing, where the tentacles have given way to a bubbling, steaming hot spring. The water appears inviting, but upon closer inspection, you notice that it's filled with writhing tentacles, gently caressing and coiling around each other. Deciding it's not worth the risk, you continue on your way.<br><br>
-<<elseif $layerTemp == 3>>
+<<elseif $layerTemp === 3>>
 	As you wade through the sea of tentacles, you come across a peculiar sight: a lone tree, its branches swaying with the movements of the writhing tendrils below. The tree's bark is gnarled and blackened, as if it has been scorched by the intense heat, but it somehow still manages to stand tall amidst the chaos. You notice that the tentacles seem to avoid the tree, creating a small, temporary reprieve from the relentless groping.<br><br>
-<<elseif $layerTemp == 6 && $mc.hasCurse("Hijinks Ensue")>>
+<<elseif $layerTemp === 6 && $mc.hasCurse("Hijinks Ensue")>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -63,12 +63,12 @@ They grow taller as you proceed, until you're wading through a thicket or navel-
 
 <</if>>
 
-<<if $forageWater == 1>>
+<<if $forageWater === 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily water on this layer">><br>
 <</if>>
-<<if $forageFood == 1>>
+<<if $forageFood === 1>>
 	<<print "You are currently foraging for your daily food on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily food on this layer">><br><</if>>
@@ -116,12 +116,12 @@ How would you like to use Cherry's chaotic luck ability?
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
 <<nobr>>
-<<if $forageWater == 0>>
+<<if $forageWater === 0>>
 	<<print "[[Start foraging for water in The River Dycx|Layer6 Forage][$forageWater = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for water|Layer6 Forage][$forageWater = 0]]">><br>
 <</if>>
-<<if $forageFood == 0>>
+<<if $forageFood === 0>>
 	<<print "[[Start foraging for food from Omen Eyes|Layer6 Forage][$forageFood = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for food|Layer6 Forage][$forageFood = 0]]">><br>
@@ -129,6 +129,13 @@ If you decide to start foraging for food or water, it means that you will not co
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from the layer|Layer6 Flasks]]<br>
 <</if>>
+<br>
+<<if $slingshot>>
+	[[Hunt and consume Omen Eyes|Layer6 Forage][$foodL6 += 1]]<br>
+<<elseif $items[13].count && $items[20].count >= Math.max(3 - $bullRed, 1)>>
+	[[Hunt and consume Flairabou|Layer6 Forage][$foodL6 += 1;$items[20].count -= Math.max(3 - $bullRed, 1)]]<br>
+<</if>>
+[[Consume unfiltered water from the river Dycx|Layer6 Forage][$hexflame += 1;$waterL6 += 1]]<br>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer6 Hub]]
@@ -146,7 +153,7 @@ If you decide to start foraging for food or water, it means that you will not co
 :: Layer6 Curses [layer6 cards nobr]
 <p><<CarryAdjust>></p>
 
-<<if $escBalDepl==0>>\
+<<if $escBalDepl===0>>\
 	<p>[[Return to exploring layer 6|Layer6 Hub]]</p>
 <<else>>\
 	<p>[[Return to your balloon|Escape Balloon L6]]</p>
@@ -154,7 +161,7 @@ If you decide to start foraging for food or water, it means that you will not co
 
 <<CurseGrid `setup.cursesOnLayer[6]`>>
 
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	<p>[[Return to exploring layer 6|Layer6 Hub]]</p>
 <<else>>
 	<p>[[Return to your balloon|Escape Balloon L6]]</p>
@@ -188,8 +195,8 @@ If you decide to start foraging for food or water, it means that you will not co
 :: Layer6 Ascend 1 [layer6]
 Returning to the fragrant desert of the previous layer will take 15 days of trekking, and cost 65 corruption.
 
-<<if $DaedalusEquip==true >>\
-	<<if $DaedalusFly==false>>\
+<<if $DaedalusEquip>>\
+	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
 		[[Flap your wings and prepare to fly to the next layer|Layer6 Ascend 1][$DaedalusFly=true]]
 	<<else>>\
@@ -255,7 +262,7 @@ You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
 <<for _relic range $relics>>
 	<<set _foundOnLayer = setup.relicsOnLayer.findIndex(relicsOnLayer => relicsOnLayer.includes(_relic.name))>>
 	<<print `<<set _visitedRelicLayer = $visitL${_foundOnLayer}>>`>>
-	<<if _visitedRelicLayer && _relic.name != 'Kin Shifter' && !_totalRelics.some(e => e.name == _relic.name)>>
+	<<if _visitedRelicLayer && _relic.name !== 'Kin Shifter' && !_totalRelics.some(e => e.name === _relic.name)>>
 		<<capture _relic>>
 			&nbsp; [[_relic.name|Maw of Kimaris Site][$dubloons -= 10, $corruption -= Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10), $ownedRelics.push(_relic)]]
 			for <<print Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10)>> corruption points<br>
@@ -264,7 +271,7 @@ You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
 <</for>><br>
 You may pick up a copy of an old Relic for 20 dubloons and 2x its corruption cost:<br>
 <<for _relic range _totalRelics>>
-	<<if _relic.name != 'Kin Shifter'>>
+	<<if _relic.name !== 'Kin Shifter'>>
 		<<capture _relic>>
 			&nbsp; [[_relic.name|Maw of Kimaris Site][$mawUse = true, $dubloons -= 20, $corruption -= Math.max(2 * _relic.corr - $corRed, 10), $ownedRelics.push(_relic)]]
 			for <<print Math.max(2 * _relic.corr - $corRed, 10)>> corruption points<br>
@@ -450,7 +457,7 @@ In the burning world around you, your mind reels at the changes, at the loss of 
 This may impact how your sexual encounters and conversations with your companions play out.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -485,7 +492,7 @@ Beneath you, the tentacles wriggle and writhe, their rhythm echoing your heart's
 <</if>>\
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -504,7 +511,7 @@ You pause, momentarily frozen in your journey through the Abyss, as you consider
 A tentacle brushes against your thigh, curling around the skin. Its touch is as tantalizing as ever, but now, it feels different. There is an awareness of what you've lost, of the boundary that has been drawn around you.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -519,7 +526,7 @@ A tentacle brushes against your thigh, curling around the skin. Its touch is as 
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -538,7 +545,7 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 <<include "Horny Retrieval">>
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -579,9 +586,9 @@ Example adjectives:
 <<set $corruption += _curse.corr * $hornCount >>
 
 :: Horny Retrieval [layer6]
-Suddenly, you are struck with a splitting headache, in an almost literal sense as you can almost feel your skull splitting apart. Luckily, you aren't dying, but <<if $hornCount == 1>>a shape is<<else>>two shapes are<</if>> emerging from your skull, and <<if $hornCount == 1>>it seems<<else>>they seem<</if>> to be <<HornGrowthDesc $hornVariation $hornCount>>. The pain subsides as you feel the $hornAdjective horn<<if $hornCount > 1>>s<</if>> pushing out of your head, but sensations on the horn<<if $hornCount > 1>>s<</if>> still feel tender, as if <<if $hornCount == 1>>it<<else>>they<</if>> were an especially sensitive part of your body.
+Suddenly, you are struck with a splitting headache, in an almost literal sense as you can almost feel your skull splitting apart. Luckily, you aren't dying, but <<if $hornCount === 1>>a shape is<<else>>two shapes are<</if>> emerging from your skull, and <<if $hornCount === 1>>it seems<<else>>they seem<</if>> to be <<HornGrowthDesc $hornVariation $hornCount>>. The pain subsides as you feel the $hornAdjective horn<<if $hornCount > 1>>s<</if>> pushing out of your head, but sensations on the horn<<if $hornCount > 1>>s<</if>> still feel tender, as if <<if $hornCount === 1>>it<<else>>they<</if>> were an especially sensitive part of your body.
 
-Naturally, you reach up to touch your new addition<<if $hornCount > 1>>s<</if>> and confirm that indeed <<if $hornCount == 1>>it is<<else>>they are<</if>> hard, made of some bone-like material, but also quite sensitive. You can feel even the most tender touch when you caress the horn<<if $hornCount > 1>>s<</if>> and perhaps it might even be pleasurable to touch in a certain way? <<if $hornCount == 1>>This<<else>>These<</if>> might be a part of your body you'll have to experiment with later, when you have some free time.
+Naturally, you reach up to touch your new addition<<if $hornCount > 1>>s<</if>> and confirm that indeed <<if $hornCount === 1>>it is<<else>>they are<</if>> hard, made of some bone-like material, but also quite sensitive. You can feel even the most tender touch when you caress the horn<<if $hornCount > 1>>s<</if>> and perhaps it might even be pleasurable to touch in a certain way? <<if $hornCount === 1>>This<<else>>These<</if>> might be a part of your body you'll have to experiment with later, when you have some free time.
 
 
 :: Take on Drawing Spades [layer6]
@@ -602,7 +609,7 @@ As you continue to explore your Abyss-altered self, you can't help but wonder ab
 You turn your attention back to the path ahead, a daunting yet enticing world of tentacles and hellish flames. As you trudge forward, your tail follows suit, curling and uncurling in the heated air. 
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -617,7 +624,7 @@ You turn your attention back to the path ahead, a daunting yet enticing world of
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -662,7 +669,7 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 	As the Leaky Curse takes hold of you, you don't notice anything different. Maybe that's not really surprising considering you don't have any genitals anymore the Curse can affect. Now that you're thinking about it, you seem to drool a little bit. Did the Curse affect your mouth because you don't have genitals? Or are you just drooling because you started thinking about genitals you no longer possess? It can be hard to tell, but your mouth definitely seems more moist than it used to be.
 <</if>>
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -689,7 +696,7 @@ The implications are staggering. How will you maintain control when every absent
 The answers are far from comforting, leaving you to face a future filled with uncertainty and strange, voyeuristic desire.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -709,7 +716,7 @@ The answers are far from comforting, leaving you to face a future filled with un
 <<include "Semen Demon Retrieval">>
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -760,7 +767,7 @@ You start to feel thirsty and then hungry. After a while you feel completely fam
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -775,7 +782,7 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the sixth layer|Layer6 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 6|Layer6 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L6]]
@@ -938,7 +945,7 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 	You continue through the flaming fields of tentacles for much longer than you'd like, until you eventually reach the slightly less hellish heat of the fifth layer. The scent of burning meat is replaced with fragrant spices and the tentacles are replaced with sand, you've made it out of hell.
 
 	<<include "Curse Descriptions">>
-	<<if $TwinFly == true>>
+	<<if $TwinFly>>
 		<<include "Twin rejoin">>
 	<</if>>
 	[[Return to the fifth layer|Layer5 Hub]]
@@ -1020,9 +1027,9 @@ Threats:
 
 <<nobr>>
 <<set _random = random(1,3)>>
-<<if _random == 1>>
+<<if _random === 1>>
 [img[setup.ImagePath+'Environments/Layer6Fire.png']]
-<<elseif _random == 2>>
+<<elseif _random === 2>>
 [img[setup.ImagePath+'Environments/Layer6Mountain.png']]
 <<else>>
 [img[setup.ImagePath+'Environments/Layer6Landscape.png']]
@@ -1051,7 +1058,7 @@ As the beast's tendrils slowly begin to reach towards you, you realize that this
 	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
 	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (19 - $bullRed)]]<br><br>
 <</if>>
-<<if $slingshot == 1>>
+<<if $slingshot === 1>>
 Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
 [[Defeat it with the Brave Vector|$returnPassage]]<br><br>
 <</if>>
@@ -1129,7 +1136,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<</link>><br>	
 	<</if>>
 <</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+<<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
 	[[Have Khemia fight it off with Joyous Sunder|$returnPassage]]<br><br>
 <</if>>
@@ -1181,7 +1188,7 @@ Use the following option only if you have specifically considered your inventory
 [img[setup.ImagePath+'Threats/greatertentaclebeast.png']]
 <<PassTime $tentacleFucked>>\
 
-<<if $khemiaFucked == 0 && $mc.vagina == 1 && $mc.breastsCor > 0>>\
+<<if $khemiaFucked === 0 && $mc.vagina === 1 && $mc.breastsCor > 0>>\
 	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they delicately caress your $mc.breastsLabel cup breasts, teasing your nipples, and exploring the soft flesh of your inner thighs.
 
 	As the numbing liquid seeps into your flesh, your resistance begins to crumble. Your body, betraying your will, succumbs to the overwhelming sensations flooding your senses. The tendrils, now firmly in control, probe deeper, invading the most private depths of your womanhood with a skillful precision that leaves you gasping for air. Some tendrils continue to play with your breasts, kneading them and tugging gently on your nipples, while others slither their way into your most intimate crevices.
@@ -1199,7 +1206,7 @@ Use the following option only if you have specifically considered your inventory
 	As the last of the tendrils slips away, you collapse to the ground, your body a trembling, sweat-slicked mass of spent nerves and exhausted muscles. You draw in deep, ragged breaths, your lungs aching for the oxygen they had been so cruelly denied. The once-overpowering scent of smoke now serves as a grounding reminder of your surroundings, a faint anchor to reality amidst the chaos of your recent ordeal.
 
 	Despite the lingering exhaustion, a sense of relief and freedom washes over you as you realize that the greater tentacle beast has released you. The taste of survival is bittersweet, a complex mixture of gratitude, fear, and the lingering remnants of pleasure that still cling to your nerve endings. You know that the coming $tentacleFucked days will be a challenge, your body weakened and vulnerable, but you are determined to press onward.
-<<elseif $khemiaFucked == 0>>\
+<<elseif $khemiaFucked === 0>>\
 	In a flash, the greater tentacle beast lunges toward you, its countless tendrils erupting from the ground and surrounding you in a suffocating embrace. The slick, sinewy tendrils coil around your limbs, binding you tightly as they explore every inch of your body with perverse curiosity. Their touch is deceptively gentle, yet insistent, sending shivers down your spine as they caress your most intimate areas.
 
 	As the numbing liquid seeps into your flesh, your resistance begins to crumble. Your body, betraying your will, succumbs to the overwhelming sensations flooding your senses. The tendrils, now firmly in control, probe deeper, invading your most private depths with a skillful precision that leaves you gasping for air.
@@ -1247,20 +1254,20 @@ With a heart-pounding realization, you remember the hoard of dubloons you carry.
 As the dragon's maw opens, revealing a churning, swirling vortex of multicolored fire, you steel yourself for the decision that could determine your fate in this unforgiving layer of the Abyss.
 
 <<nobr>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon == 1>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 1>>
 The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
 <</if>>
-<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon == 0>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
-	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 99, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 99, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1]]<br><br>
 <</if>>
-<<if $joyousSword == 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon == 0>>
+<<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 3, $status.penalty += 2, $khemiaDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 3, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1]]<br><br>
 <</if>>
-<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon == 0>>
+<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon === 0>>
 While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration += 3, $status.penalty += 2, $electricDragon == 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration += 3, $status.penalty += 2, $electricDragon === 1, $dubloons += 50, $dragonKill += 1]]<br><br>
 <</if>>
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
 	[[Offer 100 dubloons to appease the dragon|$returnPassage][$dubloons -= 100]]<br><br>

@@ -1,6 +1,6 @@
 /* exported assert, maybeParseInt */
 function assert(condition, message) {
-    if (!condition) {
-        console.error(message)
-    }
+	if (!condition) {
+		console.error(message)
+	}
 }

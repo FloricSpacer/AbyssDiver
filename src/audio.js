@@ -39,7 +39,7 @@
 		if (options.setting) {
 			settings.volume = options.current;
 		}
-		if ($('input[name=volume]').val() != options.current) {
+		if ($('input[name=volume]').val() !== options.current) {
 			$('input[name=volume]').val(options.current);
 		}
 		try {

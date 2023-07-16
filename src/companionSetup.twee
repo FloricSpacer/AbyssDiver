@@ -304,7 +304,7 @@
 !<<print $hiredCompanions[$temp].name>>
 [img[setup.ImagePath+$hiredCompanions[$temp].image]]
 
-<<if $hiredCompanions[$temp].name != $companionTwin.name && $hiredCompanions[$temp].name != $companionBandit.name>>
+<<if $hiredCompanions[$temp].name !== $companionTwin.name && $hiredCompanions[$temp].name !== $companionBandit.name>>
 	<<include `$hiredCompanions[$temp].name + " Introduction"`>>
 	<<nobr>>
 	<<if $hiredCompanions[$temp].id === setup.companionIds.cloud>>
@@ -406,7 +406,7 @@ Likes reading, learning new languages (fluent in 6 and counting), and tea. Her t
 <q>Ready to go when you are. I hope you know what you're doing.</q>
 
 :: Twin Introduction
-Your twin, who you first met after taking the Double Trouble Curse on layer 8. <<if $companionTwin.sex=='male'>>He <<else>>She <</if>> thinks you are the copy that <<if $companionTwin.sex=='male'>>he <<else>>she <</if>> met after taking the Double Trouble Curse <<if $companionTwin.sex=='male'>>himself. <<else>>herself. <</if>>
+Your twin, who you first met after taking the Double Trouble Curse on layer 8. <<if $companionTwin.sex==='male'>>He <<else>>She <</if>> thinks you are the copy that <<if $companionTwin.sex==='male'>>he <<else>>she <</if>> met after taking the Double Trouble Curse <<if $companionTwin.sex==='male'>>himself. <<else>>herself. <</if>>
 
 The rest of the world just sees you as a pair of twins who did everything together, shared the same tastes and even went on this crazy journey together into the Abyss. So it appears you have a new companion, who is basically another version of you. Well, even if you can't trust others, you can always trust yourself, right?
 
@@ -440,25 +440,25 @@ One can only imagine what she'll do if she manages to break free.
 		<br>
 	<</for>>
 	<<if setup.haveSmartphoneAI>>
-		<<if $currentLayer==0>>
+		<<if $currentLayer===0>>
 			[[Ask Ai for information on this layer|AI ConvoL0]]<br>
-		<<elseif $currentLayer==1>>
+		<<elseif $currentLayer===1>>
 			[[Ask Ai for information on this layer|AI ConvoL1]]<br>
-		<<elseif $currentLayer==2>>
+		<<elseif $currentLayer===2>>
 			[[Ask Ai for information on this layer|AI ConvoL2]]<br>
-		<<elseif $currentLayer==3>>
+		<<elseif $currentLayer===3>>
 			[[Ask Ai for information on this layer|AI ConvoL3]]<br>
-		<<elseif $currentLayer==4>>
+		<<elseif $currentLayer===4>>
 			[[Ask Ai for information on this layer|AI ConvoL4]]<br>
-		<<elseif $currentLayer==5>>
+		<<elseif $currentLayer===5>>
 			[[Ask Ai for information on this layer|AI ConvoL5]]<br>
-		<<elseif $currentLayer==6>>
+		<<elseif $currentLayer===6>>
 			[[Ask Ai for information on this layer|AI ConvoL6]]<br>
-		<<elseif $currentLayer==7>>
+		<<elseif $currentLayer===7>>
 			[[Ask Ai for information on this layer|AI ConvoL7]]<br>
-		<<elseif $currentLayer==8>>
+		<<elseif $currentLayer===8>>
 			[[Ask Ai for information on this layer|AI ConvoL8]]<br>
-		<<elseif $currentLayer==9>>
+		<<elseif $currentLayer===9>>
 			[[Ask Ai for information on this layer|AI ConvoL9]]<br>
 		<</if>>
 	<</if>>
@@ -475,9 +475,9 @@ One can only imagine what she'll do if she manages to break free.
 	@@.alert2; Because of your handicaps you are unable to have an effective conversation with your companions.@@ 
 	<<for _companion range $hiredCompanions>>
 		<<set $temp = _companion.name>>
-		<<if $temp==$companionTwin.name>>
+		<<if $temp===$companionTwin.name>>
 			<<print "[[_companion.name| Twin Overview]]: $companionTwin.affec">>
-		<<elseif $temp==$companionBandit.name>>
+		<<elseif $temp===$companionBandit.name>>
 			<<print "[[_companion.name| Bandit Overview]]: $companionBandit.affec">>
 		<<else>>
 			<<print "[[_companion.name|" + _companion.name + " Overview]]: $companion" + _companion.name + ".affec">>
@@ -487,10 +487,10 @@ One can only imagine what she'll do if she manages to break free.
 <<else>>
 	<<for _companion range $hiredCompanions>>
 		<<set $temp = _companion.name>>
-		<<if $temp==$companionTwin.name>>
+		<<if $temp===$companionTwin.name>>
 			<<print "[[_companion.name| Twin Overview]]: $companionTwin.affec">>
 			<br>
-		<<elseif $temp==$companionBandit.name>>
+		<<elseif $temp===$companionBandit.name>>
 			<<print "[[_companion.name| Bandit Overview]]: $companionBandit.affec">>
 		<<else>>
 			<<print "[[_companion.name|" + _companion.name + " Overview]]: $companion" + _companion.name + ".affec">>
@@ -504,72 +504,72 @@ One can only imagine what she'll do if she manages to break free.
 :: CompanionDescription
 <<nobr>>
 <<if _companion.id === setup.companionIds.golem>>The golem, which is controlled by your summoned specter,<<else>>_companion.name<</if>> is a _companion.sex <<PerceivedRace _companion>>.
-<<if _companion.sex=="male">>He<<else>>She<</if>> is <<set _meters = (_companion.heightCor > 100)>><<print (Math.round(_companion.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>> tall 
-and <<ShowAge _companion.realAge>> old<<if Math.round(12 * _companion.realAge) != Math.round(12 * _companion.appAge)>>, but <<if _companion.sex=="male">>he<<else>>she<</if>> appears to be <<ShowAge _companion.appAge>> old<</if>>.
+<<if _companion.sex==="male">>He<<else>>She<</if>> is <<set _meters = (_companion.heightCor > 100)>><<print (Math.round(_companion.heightCor)*(_meters ? 0.01 : 1)).toFixed(_meters ? 2 : 1) + (_meters ? " meters" : " cm")>> tall
+and <<ShowAge _companion.realAge>> old<<if Math.round(12 * _companion.realAge) !== Math.round(12 * _companion.appAge)>>, but <<if _companion.sex==="male">>he<<else>>she<</if>> appears to be <<ShowAge _companion.appAge>> old<</if>>.
 
 <br><br>
-<<if _companion.sex=="male">>His<<else>>Her<</if>> hair color is _companion.hair.<br>
-<<if _companion.eyeCount==0>>
-<<if _companion.sex=="male">>He<<else>>She<</if>> has no eyes, only empty sockets. <<if _companion.sex=="male">>He<<else>>She<</if>> is effectively blind without the use of others to guide <<if _companion.sex=="male">>him<<else>>her<</if>>.
-<<elseif _companion.eyeCount==1>>
-<<if _companion.sex=="male">>He<<else>>She<</if>> only has 1 eye, which is colored _companion.eyeColor. 
+<<if _companion.sex==="male">>His<<else>>Her<</if>> hair color is _companion.hair.<br>
+<<if _companion.eyeCount===0>>
+<<if _companion.sex==="male">>He<<else>>She<</if>> has no eyes, only empty sockets. <<if _companion.sex==="male">>He<<else>>She<</if>> is effectively blind without the use of others to guide <<if _companion.sex==="male">>him<<else>>her<</if>>.
+<<elseif _companion.eyeCount===1>>
+<<if _companion.sex==="male">>He<<else>>She<</if>> only has 1 eye, which is colored _companion.eyeColor.
 <<else>>
-<<if _companion.sex=="male">>He<<else>>She<</if>> has two normal eyes which are colored _companion.eyeColor.
+<<if _companion.sex==="male">>He<<else>>She<</if>> has two normal eyes which are colored _companion.eyeColor.
 <</if>>
 <br>
-<<if _companion.sex=="male">>He<<else>>She<</if>> has _companion.skinColor colored _companion.skinType skin.<<if _companion.skinType.includes("furred") >> <<print setup.allCurses.MaximumFluff.appDesc>><</if>><br>
-<<if _companion.armCount==1>><<if _companion.sex=="male">>He<<else>>She<</if>> only has one arm. <<elseif _companion.armCount>2>><<if _companion.sex=="male">>He<<else>>She<</if>> has more arms now than when <<if _companion.sex=="male">>he<<else>>she<</if>> began the journey.<</if>>
-<<if _companion.legCount==1>><<if _companion.sex=="male">>He<<else>>She<</if>> only has one leg. <<elseif _companion.legCount==0>><<if _companion.sex=="male">>He<<else>>She<</if>> doesn't have any legs anymore. <<if _companion.hasCurse("Seafolk")>> Instead <<if _companion.sex=="male">>he<<else>>she<</if>> has a beautiful, finned tail. Could <<if _companion.sex=="male">>he<<else>>she<</if>> be considered a <<if _companion.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
-<<if _companion.sex=="male">>He<<else>>She<</if>> has _companion.ears ears.
+<<if _companion.sex==="male">>He<<else>>She<</if>> has _companion.skinColor colored _companion.skinType skin.<<if _companion.skinType.includes("furred") >> <<print setup.allCurses.MaximumFluff.appDesc>><</if>><br>
+<<if _companion.armCount===1>><<if _companion.sex==="male">>He<<else>>She<</if>> only has one arm. <<elseif _companion.armCount>2>><<if _companion.sex==="male">>He<<else>>She<</if>> has more arms now than when <<if _companion.sex==="male">>he<<else>>she<</if>> began the journey.<</if>>
+<<if _companion.legCount===1>><<if _companion.sex==="male">>He<<else>>She<</if>> only has one leg. <<elseif _companion.legCount===0>><<if _companion.sex==="male">>He<<else>>She<</if>> doesn't have any legs anymore. <<if _companion.hasCurse("Seafolk")>> Instead <<if _companion.sex==="male">>he<<else>>she<</if>> has a beautiful, finned tail. Could <<if _companion.sex==="male">>he<<else>>she<</if>> be considered a <<if _companion.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><</if>>
+<<if _companion.sex==="male">>He<<else>>She<</if>> has _companion.ears ears.
 <br><br>
 <<if _companion.gender <= 1>>
 	_companion.name looks like a typical man, with a masculine facial structure and a body profile that would obviously seem male from a distance.
-<<elseif _companion.gender == 2>>
-	_companion.name looks like man, but <<if _companion.sex=="male">>his<<else>>her<</if>> features are a bit softer than average. No one would mistake <<if _companion.sex=="male">>him<<else>>her<</if>> for a woman, but maybe the label of "twink" could apply to <<if _companion.sex=="male">>him<<else>>her<</if>>.
-<<elseif _companion.gender == 3>>
-	_companion.name looks pretty androgynous. If someone were just looking at <<if _companion.sex=="male">>him<<else>>her<</if>> with clothes on, most people would guess <<if _companion.sex=="male">>he<<else>>she<</if>> looks like a very effeminate man, but others might see <<if _companion.sex=="male">>him<<else>>her<</if>> as a butch woman.
-<<elseif _companion.gender == 4>>
-	_companion.name looks pretty androgynous. If someone were just looking at <<if _companion.sex=="male">>him<<else>>her<</if>> with clothes on, most people would guess <<if _companion.sex=="male">>he<<else>>she<</if>> look like a very butch woman, but others might see <<if _companion.sex=="male">>him<<else>>her<</if>> as an effeminate man.
-<<elseif _companion.gender == 5>>
-	_companion.name looks like a woman, but a bit on the masculine side. Many people would likely assume <<if _companion.sex=="male">>he<<else>>she<</if>> is a tomboy based on <<if _companion.sex=="male">>his<<else>>her<</if>> appearance.
+<<elseif _companion.gender === 2>>
+	_companion.name looks like man, but <<if _companion.sex==="male">>his<<else>>her<</if>> features are a bit softer than average. No one would mistake <<if _companion.sex==="male">>him<<else>>her<</if>> for a woman, but maybe the label of "twink" could apply to <<if _companion.sex==="male">>him<<else>>her<</if>>.
+<<elseif _companion.gender === 3>>
+	_companion.name looks pretty androgynous. If someone were just looking at <<if _companion.sex==="male">>him<<else>>her<</if>> with clothes on, most people would guess <<if _companion.sex==="male">>he<<else>>she<</if>> looks like a very effeminate man, but others might see <<if _companion.sex==="male">>him<<else>>her<</if>> as a butch woman.
+<<elseif _companion.gender === 4>>
+	_companion.name looks pretty androgynous. If someone were just looking at <<if _companion.sex==="male">>him<<else>>her<</if>> with clothes on, most people would guess <<if _companion.sex==="male">>he<<else>>she<</if>> look like a very butch woman, but others might see <<if _companion.sex==="male">>him<<else>>her<</if>> as an effeminate man.
+<<elseif _companion.gender === 5>>
+	_companion.name looks like a woman, but a bit on the masculine side. Many people would likely assume <<if _companion.sex==="male">>he<<else>>she<</if>> is a tomboy based on <<if _companion.sex==="male">>his<<else>>her<</if>> appearance.
 <<elseif _companion.gender >= 6>>
 	_companion.name looks like a typical woman, with a feminine face and a figure that looks clearly female from a distance.
 <</if>>
 <<if _companion.penisCor <= 2.5>>
-	<<if _companion.sex=="male">>His<<else>>Her<</if>> crotch looks completely flat, based on a cursory glance.
+	<<if _companion.sex==="male">>His<<else>>Her<</if>> crotch looks completely flat, based on a cursory glance.
 <<elseif _companion.penisCor <= 4.5>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> is sporting a small but unmistakable bulge in <<if _companion.sex=="male">>his<<else>>her<</if>> pants.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> is sporting a small but unmistakable bulge in <<if _companion.sex==="male">>his<<else>>her<</if>> pants.
 <<elseif _companion.penisCor <= 6.5>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> is sporting a significant bulge in <<if _companion.sex=="male">>his<<else>>her<</if>> pants.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> is sporting a significant bulge in <<if _companion.sex==="male">>his<<else>>her<</if>> pants.
 <<elseif _companion.penisCor <= 8.5>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> is sporting a noticeably large bulge in <<if _companion.sex=="male">>his<<else>>her<</if>> pants.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> is sporting a noticeably large bulge in <<if _companion.sex==="male">>his<<else>>her<</if>> pants.
 <<elseif _companion.penisCor > 8.5>>
-	It looks like <<if _companion.sex=="male">>he<<else>>she<</if>> has an anaconda living in <<if _companion.sex=="male">>his<<else>>her<</if>> pants. What a monster that must be!
+	It looks like <<if _companion.sex==="male">>he<<else>>she<</if>> has an anaconda living in <<if _companion.sex==="male">>his<<else>>her<</if>> pants. What a monster that must be!
 <</if>>
 <<if _companion.breastsCor < 2>>
-	<<if _companion.sex=="male">>His<<else>>Her<</if>> chest looks completely flat.
+	<<if _companion.sex==="male">>His<<else>>Her<</if>> chest looks completely flat.
 <<elseif _companion.breastsCor < 4>>
-	<<if _companion.sex=="male">>His<<else>>Her<</if>> chest seems to have the slight curve of small breasts.
+	<<if _companion.sex==="male">>His<<else>>Her<</if>> chest seems to have the slight curve of small breasts.
 <<elseif _companion.breastsCor < 6>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> seems to have noticeable, and decently sized breasts.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> seems to have noticeable, and decently sized breasts.
 <<elseif _companion.breastsCor < 8>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> is pretty stacked with unmistakably large breasts.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> is pretty stacked with unmistakably large breasts.
 <<elseif _companion.breastsCor < 10>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> is stacked with unmistakably very large breasts. They must cause some serious back pain.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> is stacked with unmistakably very large breasts. They must cause some serious back pain.
 <<elseif _companion.breastsCor < 12>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> is stacked with almost comically large breasts. They must cause some serious back pain.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> is stacked with almost comically large breasts. They must cause some serious back pain.
 <<elseif _companion.breastsCor >= 12>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> seems to be more breast than person at this point. Breasts this large are a serious handicap in everything <<if _companion.sex=="male">>he<<else>>she<</if>> does.
+	<<if _companion.sex==="male">>He<<else>>She<</if>> seems to be more breast than person at this point. Breasts this large are a serious handicap in everything <<if _companion.sex==="male">>he<<else>>she<</if>> does.
 <</if>>
 <<if _companion.lactation>0>>
-	<<if _companion.sex=="male">>He<<else>>She<</if>> keeps rubbing <<if _companion.sex=="male">>his<<else>>her<</if>> apparently sore breasts, and occasionally wet spots are even visible on <<if _companion.sex=="male">>his<<else>>her<</if>> clothes over <<if _companion.sex=="male">>his<<else>>her<</if>> chest.<br>
+	<<if _companion.sex==="male">>He<<else>>She<</if>> keeps rubbing <<if _companion.sex==="male">>his<<else>>her<</if>> apparently sore breasts, and occasionally wet spots are even visible on <<if _companion.sex==="male">>his<<else>>her<</if>> clothes over <<if _companion.sex==="male">>his<<else>>her<</if>> chest.<br>
 <</if>>
 <br>
 <<if _companion.hasCurse("Horny")>>
 	_companion.name has <<if _companion.horns === 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if _companion.horns > 1>>s<</if>> protruding from
 	<<switch $hornVariation>>
 		<<case "rhino">>
-			<<if _companion.sex=="male">>his<<else>>her<</if>> nose.<br><br>
+			<<if _companion.sex==="male">>his<<else>>her<</if>> nose.<br><br>
 		<<default>>
 			<<if _companion.horns === 1>>the center of <<if _companion.sex === "male">>his<<else>>her<</if>> forehead<<else>><<if _companion.sex === "male">>his<<else>>her<</if>> head<</if>>.<br><br>
 	<</switch>>
@@ -765,7 +765,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <<if !$ConvoHandicapLarge>>
 	<<if $hiredCompanions.length > 0>>
 		<<set _temp1 = random(0,$hiredCompanions.length - 1)>>
-		<<if $hiredCompanions[_temp1].name != $companionTwin.name && $hiredCompanions[_temp1].name != $companionGolem.name && $hiredCompanions[_temp1].name != $companionBandit.name>>
+		<<if $hiredCompanions[_temp1].name !== $companionTwin.name && $hiredCompanions[_temp1].name !== $companionGolem.name && $hiredCompanions[_temp1].name !== $companionBandit.name>>
 			<<set _convoOptions = ["layer"]>>
 
 			<<set _string = "$" + $hiredCompanions[_temp1].name + "ConvoLac" >>
@@ -773,27 +773,27 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 			<<if  _boolean>>
 				<<set _convoOptions.push("lac")>>
 			<</if>>
-			<<if $WettingSolution==1 && ($hiredCompanions[_temp1].id === setup.companionIds.lily || $hiredCompanions[_temp1].id === setup.companionIds.khemia)>>
+			<<if $WettingSolution===1 && ($hiredCompanions[_temp1].id === setup.companionIds.lily || $hiredCompanions[_temp1].id === setup.companionIds.khemia)>>
 				<<set _temp3 = random(0,1)>>
-				<<if _temp3 == 0>>
+				<<if _temp3 === 0>>
 					<<set _convoOptions.push("wet")>>
 				<<else>>
 					<<set _convoOptions.push("wetDoll")>>
 				<</if>>
-			<<elseif $WettingSolution==1>>
+			<<elseif $WettingSolution===1>>
 				<<set _convoOptions.push("wetDoll")>>
-			<<elseif $WettingSolution==2 && ($hiredCompanions[_temp1].id === setup.companionIds.maru || $hiredCompanions[_temp1].id === setup.companionIds.lily || $hiredCompanions[_temp1].id === setup.companionIds.khemia)>>
+			<<elseif $WettingSolution===2 && ($hiredCompanions[_temp1].id === setup.companionIds.maru || $hiredCompanions[_temp1].id === setup.companionIds.lily || $hiredCompanions[_temp1].id === setup.companionIds.khemia)>>
 				<<set _convoOptions.push("wet")>>
-			<<elseif $WettingSolution==3 && $hiredCompanions[_temp1].id === setup.companionIds.saeko>>
+			<<elseif $WettingSolution===3 && $hiredCompanions[_temp1].id === setup.companionIds.saeko>>
 				<<set _convoOptions.push("wet")>>
 			<</if>>
 
 			<<set _temp2 = random(0,_convoOptions.length-1)>>
-			<<if "layer"==_convoOptions[_temp2]>>
+			<<if "layer"===_convoOptions[_temp2]>>
 				<<include `$hiredCompanions[_temp1].name + " Layer " + $currentLayer`>>
-			<<elseif "lac"==_convoOptions[_temp2]>>
+			<<elseif "lac"===_convoOptions[_temp2]>>
 				<<include `$hiredCompanions[_temp1].name + "ConvoLac Rep"`>>
-			<<elseif "wet"==_convoOptions[_temp2]>>
+			<<elseif "wet"===_convoOptions[_temp2]>>
 				<<if $hiredCompanions[_temp1].id === setup.companionIds.saeko>>
 					<<set _temp3 = random(1,4)>>
 					<<include `$hiredCompanions[_temp1].name + " Schedule " + _temp3`>>
@@ -806,7 +806,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 				<<else>>
 					<<include `$hiredCompanions[_temp1].name + " Diapered"`>>
 				<</if>>
-			<<elseif "wetDoll"==_convoOptions[_temp2]>>
+			<<elseif "wetDoll"===_convoOptions[_temp2]>>
 				<<if $dolleventWet > 6>>
 					<<include "Doll Diapered 3">>
 				<<elseif $dolleventWet > 3>>
@@ -815,7 +815,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 					<<include "Doll Diapered 1">>
 				<</if>>
 			<</if>>
-		<<elseif $WettingSolution==1>>
+		<<elseif $WettingSolution===1>>
 			<<if $dolleventWet > 6>>
 				<<include "Doll Diapered 3">>
 			<<elseif $dolleventWet > 3>>
@@ -824,7 +824,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 				<<include "Doll Diapered 1">>
 			<</if>>
 		<</if>>
-	<<elseif $WettingSolution==1>>
+	<<elseif $WettingSolution===1>>
 		<<if $dolleventWet > 4>>
 			<<include "Doll Diapered 3">>
 		<<elseif $dolleventWet > 2>>

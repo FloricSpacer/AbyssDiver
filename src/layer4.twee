@@ -15,7 +15,7 @@
 This layer is enveloped in a bitter, piercing cold, strengthened by Miasma to effectively penetrate any kind of insulating clothing or similar protection. Your only option for staying warm is an active source that radiates heat. Without something easily portable, like a torch, you'll need to frequently stop to take shelter to start campfires. If you have a portable heat source, you may subtract 2 days from all time costs on this page. The 5 romer stones together don't quite produce enough heat to keep you warm on their own.
 
 <<nobr>>
-<<if $visitL4 == 0>>
+<<if $visitL4 === 0>>
 [[Walk through the fourth layer of the Abyss|Layer4 Spectre]]<br>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 		<br><<print "[[Use Cherry's chaotic luck|Layer4 Cherry]]">>
@@ -45,23 +45,23 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 	<<audio "layer4" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-<<if $visitL4 == 0>>
+<<if $visitL4 === 0>>
 	<<set $endSpectre = $time>>
 	<<set $visitL4 = 1>>
 	<<set $layerTemp = 8>>
-<<elseif $secondVisitL4 == 0>>
+<<elseif $secondVisitL4 === 0>>
 	<<set $secondVisitL4 = 1>>
 	<<set $layerTemp = 18>>
 <<else>>
 	<<set $layerTemp = random(0,20)>>
 <</if>>
-<<if $layerTemp == 1 && setup.haveColdProtection>>
+<<if $layerTemp === 1 && setup.haveColdProtection>>
 	As you trudge through the snow, you suddenly feel a gust of wind pick up, and a flurry of snowflakes swirl around you. The miasma-enhanced cold bites at your skin, and you struggle to maintain visibility. You quickly reach for your heat source, igniting it with a flare of heat that temporarily pushes the biting cold away. The storm subsides just as quickly as it began, but you're reminded of the harsh reality of this layer of the Abyss. <br><br>
-<<elseif $layerTemp == 2>>
+<<elseif $layerTemp === 2>>
 	A sudden flurry of Miasma-driven hail pelts down on you, each icy stone biting into your exposed skin. You take shelter behind a nearby glacier, watching as the hailstorm intensifies. Just as you're about to leave your hiding place, you notice a small, crystalline creature darting in and out of the hailstones, seemingly unaffected by the storm. Its delicate, ice-like body refracts the Miasma's light, creating a mesmerizing dance of colors. Once the hailstorm subsides, the creature disappears into the snowy landscape.<br><br>
-<<elseif $layerTemp == 3>>
-	As you trudge through the thick snow, you notice a cluster of frostbitten flowers, their petals a haunting shade of deep blue. As you lean in to inspect them, you feel a strange warmth emanating from them. Curious, you cautiously touch one of the petals, and your fingertips are met with a tantalizing heat, a stark contrast to the surrounding cold.<<if $abyssKnow == 1>> Upon closer inspection, you find that these flowers are a rare species known as Heatblooms, which generate warmth to survive in the harsh conditions. Unfortunately, they aren't useful for warming people, as they will only generate warmth in the harsh cold of the storm. Once you bring them close to your body, they'll become as inert as any other flower.<</if>><br><br>
-<<elseif $layerTemp == 6 && $mc.hasCurse(HijinksEnsue)>>
+<<elseif $layerTemp === 3>>
+	As you trudge through the thick snow, you notice a cluster of frostbitten flowers, their petals a haunting shade of deep blue. As you lean in to inspect them, you feel a strange warmth emanating from them. Curious, you cautiously touch one of the petals, and your fingertips are met with a tantalizing heat, a stark contrast to the surrounding cold.<<if $abyssKnow === 1>> Upon closer inspection, you find that these flowers are a rare species known as Heatblooms, which generate warmth to survive in the harsh conditions. Unfortunately, they aren't useful for warming people, as they will only generate warmth in the harsh cold of the storm. Once you bring them close to your body, they'll become as inert as any other flower.<</if>><br><br>
+<<elseif $layerTemp === 6 && $mc.hasCurse(HijinksEnsue)>>
 	<<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
@@ -87,22 +87,22 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 
 	<</if>>
 
-	<<if $items[9].count > 0 && !setup.haveColdProtection && $torchUse == 0>>
+	<<if $items[9].count > 0 && !setup.haveColdProtection && $torchUse === 0>>
 	[[Use torches to reduce travel times on this layer by 2 days each at the cost of 1 torch per travel|Layer4 Hub][$torchUse = 1]]<br><br>
 	<</if>>
-	<<if $torchUse == 1 && !setup.haveColdProtection>>
+	<<if $torchUse === 1 && !setup.haveColdProtection>>
 	[[Stop using torches to reduce travel time|Layer4 Hub][$torchUse = 0]]<br><br>
 	<</if>>
 
 <</if>>
 
-<<if $forageWater == 1>>
+<<if $forageWater === 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
 	<<print "You are not currently foraging for your daily water on this layer">><br>
 <</if>>
-<<if $forageFood == 1>>
-	<<if $slingshot == 1>>
+<<if $forageFood === 1>>
+	<<if $slingshot === 1>>
 	<<print "You are currently foraging for your daily food on this layer with your Brave Vector, allowing you to hunt with no daily bullet cost.">><br>
 	<<elseif $items[20].count < 2>>
 	<<print "You need a gun and at least 2 bullets to be able to hunt flairabou for your daily food on this layer.">><br>
@@ -155,7 +155,7 @@ How would you like to use Cherry's chaotic luck ability?
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 <<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-<<if _heightDirEvent === undefined && $forageFood == 1>>
+<<if _heightDirEvent === undefined && $forageFood === 1>>
 <<set _heightDirEvent = new HeightDirectionEvent()>>
 <<set $mc.events.push(_heightDirEvent)>>
 Would you like to increase or decrease your height due to eating flairabou meat?
@@ -165,12 +165,12 @@ Would you like to increase or decrease your height due to eating flairabou meat?
 
 <</if>>
 <<nobr>>
-<<if $forageWater == 0>>
+<<if $forageWater === 0>>
 	<<print "[[Start foraging for water in Algal Meltwater|Layer4 Forage][$forageWater = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for water|Layer4 Forage][$forageWater = 0]]">><br>
 <</if>>
-<<if $forageFood == 0>>
+<<if $forageFood === 0>>
 	<<print "[[Start foraging for food from Flairabou|Layer4 Forage][$forageFood = 1]]">><br>
 	<<else>>
 	<<print "[[Stop foraging for food|Layer4 Forage][$forageFood = 0]]">><br>
@@ -178,6 +178,20 @@ Would you like to increase or decrease your height due to eating flairabou meat?
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from the layer|Layer4 Flasks]]<br>
 <</if>>
+<br>
+<<if $slingshot>>
+	[[Hunt and consume Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1]]<br>
+<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
+	[[Hunt and consume Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]<br>
+<</if>>
+<<if $abyssKnow>>
+	<<if $slingshot>>
+		[[Hunt and consume carefully prepared Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1]]<br>
+	<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
+		[[Hunt and consume carefully prepared Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]<br>
+	<</if>>
+<</if>>
+[[Consume water from melted snow|Layer4 Forage][$algalSize += 1;$waterL4 += 1]]<br>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer4 Hub]]
@@ -201,7 +215,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 :: Layer4 Curses [layer4 cards nobr]
 <p><<CarryAdjust>></p>
 
-<<if $escBalDepl==0>>\
+<<if $escBalDepl===0>>\
 	<p>[[Return to exploring layer 4|Layer4 Hub]]</p>
 <<else>>\
 	<p>[[Return to your balloon|Escape Balloon L4]]</p>
@@ -209,7 +223,7 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 
 <<CurseGrid `setup.cursesOnLayer[4]`>>
 
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	<p>[[Return to exploring layer 4|Layer4 Hub]]</p>
 <<else>>
 	<p>[[Return to your balloon|Escape Balloon L4]]</p>
@@ -243,8 +257,8 @@ The Brave Vector Relic you can find here is a perfect example of something you m
 :: Layer4 Ascend 1 [layer4]
 Backtracking through to the caverns of the previous layer will take you 7 days and cost 35 corruption.
 
-<<if $DaedalusEquip==true >>\
-	<<if $DaedalusFly==false>>\
+<<if $DaedalusEquip>>\
+	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
 		[[Flap your wings and prepare to fly to the next layer|Layer4 Ascend 1][$DaedalusFly=true]]
 	<<else>>\
@@ -279,7 +293,7 @@ The air seems to get drier as you proceed further down. You might want to stockp
 <<include "Libido Curse">>
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -300,7 +314,7 @@ Panic flutters briefly in your heart. In the midst of this desolate, freezing en
 As you continue your descent into the frost-bitten depths, you ponder your situation, a curious mixture of anticipation and apprehension. How will this affect your journey? How will you manage the necessities of this new condition, milking and all? You aren't sure. But, in the face of the Abyss, you have no choice but to adapt, to evolve.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -313,9 +327,9 @@ As you continue your descent into the frost-bitten depths, you ponder your situa
 <<CarryAdjust>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
+<<if $mc.penisCor>0 && $mc.breastsCor===0 >>\
 	The intensity of this Curse is stronger than you were expecting. Your penis springs to full erection, and then bulges ever larger. The base, the shaft, the tip start swelling to an alarming degree. Drops of precum start oozing out of the tip, but the growing doesn't stop. Then, finally, the Curse releases its grip, but you stare slack-jawed as you realize you're now sporting a $mc.penisCor inch long dong. The erection lasts for a little while longer, but dealing with a member this large without it tripping up your legs is going to require some practice. You grimace at a slight pinching sensation as you hobble forward
-<<elseif $mc.penisCor==0 && $mc.breastsCor>0>>\
+<<elseif $mc.penisCor===0 && $mc.breastsCor>0>>\
 	The intensity of this Curse is stronger than you were expecting. Your nipples jut out like pencil erasers and small dribbles of milk start to come out of them as an intense pressure and a stretching sensation fills your breasts.
 
 	The swelling of your boobs is straining against the skin, making them temporarily as taut as inflated balloons. The skin seems to be expanding to accommodate the mass that is swelling in your breasts, but then the dribbles of milk turn into three intense squirts before the experience seems to have come to an end. You gape down at your new breasts that have grown a whopping 8 cup sizes, to a $mc.breastsLabel cup, and even your heavy breathing is sending rippling quivers into them. Do they even make bras that can accommodate what your tits have become? Surely they must, but you feel off balance as you teeter forward.
@@ -326,7 +340,7 @@ As you continue your descent into the frost-bitten depths, you ponder your situa
 <</if>>\
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -341,7 +355,7 @@ As you continue your descent into the frost-bitten depths, you ponder your situa
 You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -362,7 +376,7 @@ You're struck by the realization that you'll need to sleep for 12 hours a day, a
 You know that this Curse could make your journey through the Abyss more challenging, as you'll need to find a safe haven for those long hours of sleep. But at the same time, you can't help but be intrigued by the idea of such exquisite rest, especially in a place so bereft of comfort.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -395,7 +409,7 @@ But just as you think you can bear no more, the creatures vanish, leaving you al
 You jolt awake, your body slick with sweat and your own fluids, and your heart racing in your chest. This will be what every night is like for you from now on.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -414,7 +428,7 @@ You know that from now on you are much more easily influenced and are particular
 <b>Warning: This may make mental hazards deeper in the Abyss much more dangerous!</b>
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -445,7 +459,7 @@ You know that from now on you are much more easily influenced and are particular
 <</if>>\
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -466,7 +480,7 @@ The Curse is insidious in its subtlety; there is no physical manifestation, no a
 As you continue your exploration, you can't help but contemplate how this Curse will affect your future. Relationships will be tested, alliances may crumble, and trust will be a luxury you can no longer afford. The weight of your own honesty may become a burden too heavy to bear.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -489,7 +503,7 @@ Your lips part, revealing two especially large teeth, their tips just barely vis
 As you experiment with your newly-acquired teeth, biting down on a piece of leather from your gear, you realize the immense strength they possess. A sudden, powerful desire to use them courses through you, though you know you must be cautious not to harm any potential partners. The thought of restraining this newfound power only serves to fuel your excitement further.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -501,13 +515,13 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
+<<if $mc.penisCor>0 && $mc.breastsCor===0 >>\
 	As you take the Curse, wave of dull energy creeps up from the ground, numbing and weighing down your legs. It reaches for your defenseless penis, and suddenly, there's a void where sensation once was. Your penis is more than flaccid; it's inert. 
 	
 	You try to engage the muscles that once gave it life, but you're met with emptiness. Your penis is unresponsive, yet hypersensitive to your touch, like an appendage you can feel but have no control over. The realization that your flaccid member is now permanent is crushing. 
 	
 	You mourn the loss of conventional sex and consider exploring unconventional methods to satisfy your desires.
-<<elseif $mc.penisCor==0 && $mc.breastsCor>0>>\
+<<elseif $mc.penisCor===0 && $mc.breastsCor>0>>\
 	As you take the Curse, a dull wave of energy washes over your shoulders, sinking into your breasts with a tingling sensation. You gasp as your nipples are pulled inwards, disappearing into your chest. Curious, you reach a finger to pull one of them out, and a vulnerable, intimate feeling washes over you. 
 	
 	Despite your efforts, your nipple remains entirely soft and inverted. Your breasts now resemble doughnuts more than domes, and a mischievous thought crosses your mind, wondering how various objects would feel pressed into the crevices on your chest. Shaking your head to clear the thought, you realize that breastfeeding would be quite a challenge, though not entirely impossible if someone were to clamp their mouth around a wide area and probe inward with their tongue. 
@@ -528,7 +542,7 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 <</if>>\
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -540,7 +554,7 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>><<CarryAdjust>>\
 [img[setup.ImagePath + _curse.pic]]
 
-<<if $mc.penisCor>0 && $mc.breastsCor==0 >>\
+<<if $mc.penisCor>0 && $mc.breastsCor===0 >>\
 	A wave of energy creeps up from the ground, causing your legs to tingle. Your anticipation heightens as it approaches your vulnerable penis. 
 	
 	Before the energy even reaches it, your member twitches to life, and upon contact, you're instantly harder than ever. The sensation is a blend of soothing caress and electrifying jolts of pleasure. As the energy courses through your groin, you gasp, feeling as if your penis is ensnared by pulsating threads of energy. 
@@ -549,7 +563,7 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 	
 	Glancing down, you notice a small smear of precum leaking from your member. 
 
-<<elseif $mc.penisCor==0 && $mc.breastsCor>0>>\
+<<elseif $mc.penisCor===0 && $mc.breastsCor>0>>\
 	A wave of energy ripples down your shoulders and pools around your breasts. It seeps into your areolae, swirling around your nipples and making them more erect than ever before. 
 	
 	The energy doesn't dissipate but lingers beneath your skin, causing a constant tingling sensation. You gaze down at your permanently erect nipples and wonder if they've grown slightly. The persistent arousal and heightened sensitivity will make walking through the Abyss an incredibly distracting endeavor. 
@@ -574,7 +588,7 @@ As you experiment with your newly-acquired teeth, biting down on a piece of leat
 <</if>>
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -597,7 +611,7 @@ Taking a few cautious steps, your new tongue coils and undulates as you try to a
 After the initial shock subsides, you become intrigued by the potential of this Curse. Your mind races with the tantalizing possibilities your new appendage could offer.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -646,7 +660,7 @@ Though the Reptail Curse may seem like a burden, you find that it has its advant
 Despite these benefits, you can't shake the feeling of alienation brought on by the Curse. It almost feels like you aren't even human anymore.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -669,7 +683,7 @@ Desperation begins to set in as you ponder the implications of this Curse. How w
 With each step you take, the frigid air seems to mock you, reminding you of the transformation you've endured.
 
 [[Accept more Curses from the fourth layer|Layer4 Curses]]
-<<if $escBalDepl==0>>
+<<if $escBalDepl===0>>
 	[[Return to exploring layer 4|Layer4 Hub]]
 <<else>>
 	[[Return to your balloon|Escape Balloon L4]]
@@ -682,7 +696,7 @@ With each step you take, the frigid air seems to mock you, reminding you of the 
 	<<if $items[2].count > 0>>
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
-		<<if $abyssKnow==1>>
+		<<if $abyssKnow===1>>
 			<<set $flaskMatrix[0]+=1>>
 		<<else>>
 			<<set $flaskMatrix[3]+=1>>
@@ -695,7 +709,7 @@ With each step you take, the frigid air seems to mock you, reminding you of the 
 
 [img[setup.ImagePath+'Foraging/algalmeltwater.png']]
 
-<<if $abyssKnow == 0>>
+<<if $abyssKnow === 0>>
 You ignite your campfire and melt some of the snow from the ground around you, slowly turning parts of the frozen wasteland around you into life-sustaining water. However, the moment you taste the water, you notice a strange taste, the hint of miasma, and feel a throbbing in your groin. You feel like this water is likely to have some effect on you down there.
 <<else>>
 Using your knowledge of the Abyss, you specifically look to make sure you can get some good water directly from the bluish-green snow that is found occasionally around the layer. The water has a slight green tint and a lightly minty flavor, but it seems pure and safe to you, allowing you to continue your journey with a larger store of water than before.
@@ -790,7 +804,7 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 	You do not have enough dubloons for an offering.
 <<else>>
 	<<for _i, _curse range $mc.curses>>
-		<<if _curse.name != 'Double Trouble' && _curse.name != 'Conjoined' &&
+		<<if _curse.name !== 'Double Trouble' && _curse.name !== 'Conjoined' &&
 			!$hiredCompanions.every(companion => companion === $companionGolem || companion.hasCurse(_curse.name))
 		>>
 			<<capture _i>>
@@ -1248,7 +1262,7 @@ Your hands reach a small crevasse, offering a much-needed respite from the climb
 	You continue your hike and try to keep somewhat warm despite the bone-chilling cold, but eventually the temperature starts to rise. However, once you've gotten to the comfortable warmth of the cave systems, you find the light is once again disappearing, leaving you in the dim darkness of the third layer.
 
 	<<include "Curse Descriptions">>
-	<<if $TwinFly == true>>
+	<<if $TwinFly>>
 		<<include "Twin rejoin">>
 	<</if>>
 	[[Return to the third layer|Layer3 Hub]]
@@ -1426,11 +1440,11 @@ Threats:
 
 <<nobr>>
 <<set _random = random(1,4)>>
-<<if _random == 1>>
+<<if _random === 1>>
 [img[setup.ImagePath+'Environments/Layer4Landscape1.png']]
-<<elseif _random == 2>>
+<<elseif _random === 2>>
 [img[setup.ImagePath+'Environments/Layer4Landscape2.png']]
-<<elseif _random == 3>>
+<<elseif _random === 3>>
 [img[setup.ImagePath+'Environments/Layer4Landscape3.png']]
 <<else>>
 [img[setup.ImagePath+'Environments/Layer4Landscape4.png']]
@@ -1457,7 +1471,7 @@ How do you want to deal with the creature descending upon you?
 	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured in the process, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
 	[[Have Khemia fight it off with a sword|$returnPassage][$status.duration += (6 - $statRed), $status.penalty += 1]]<br><br>
 <</if>>
-<<if ($joyousSword == 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+<<if ($joyousSword === 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With a powerful Relic sword in hand, Khemia can defeat the Drifting Swallower without any major issues after an intense battle.<br>
 	[[Allow Khemia to defeat it with his Relic blade|$returnPassage]]<br><br>
 <</if>>
@@ -1465,7 +1479,7 @@ How do you want to deal with the creature descending upon you?
 	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to its evasive movements.<br>
 	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (5 - $bullRed)]]<br><br>
 <</if>>
-	<<if $slingshot == 1>>
+	<<if $slingshot === 1>>
 	Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
 	[[Defeat it with the Brave Vector|$returnPassage]]<br><br>
 <</if>>
