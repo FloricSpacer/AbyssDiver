@@ -39,6 +39,7 @@ Hopefully you'll be able to get used to it.
 	<<audio "layer9" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
+<<set $timeL9T1=1>>
 <<if $visitL9 === 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL9 = 1>>
@@ -127,13 +128,87 @@ If you decide to start foraging for food or water, it means that you will not co
 
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
 
-:: Bloodstained Sanctuary Site [layer9]
-<<PassTimeWithEvents>>\
-<<if !setup.passingTime()>>\
+:: Bloodstained Sanctuary Site [layer9 nobr]
+<<PassTimeWithEvents>>
+<<if !setup.passingTime()>>
 [img[setup.ImagePath+'Wonders/bloodstainedsanctuary.png']]
-xxx
+<br>
+XXX placeholder XXX You walk onto the giant bloodstained altar.<br><br>
+<<if $bloodstainedSanctuaryUsed>>
+	The place seems devoid of any energy<br><br>
+<<else>>
+	[[Sacrifice yourself|Bloodstained Sanctuary Site][$corruption = +200, $bloodstainedSanctuaryUsed = true, $gameOver = true]]<br>
+
+	<<for _i, _companion range $hiredCompanions>>
+		<<set _flag = false>>
+		<<set _tempName = _companion.name>>
+		<<set _companionId = _companion.id>>
+		_companionId
+		<<switch _companionId>>
+			<<case setup.companionIds.golem>>
+				You can't sacrifice your Golem here.<br>
+			<<default>>
+				<<if _companionId === setup.companionIds.bandit >><<set _tempName = "Bandit">><</if>>
+				<<if _companionId === setup.companionIds.twin >><<set _tempName = "Twin">><</if>>
+				<<capture _companion _i _tempName>>
+					<<set _choiceText = "Sacrifice " + _tempName>>
+					<<link _choiceText "Sacrifice Apply">>
+						<<set $hiredCompanions.deleteAt(_i)>>
+						<<set $corruption += 200>>
+						<<set $bloodstainedSanctuaryUsed = true>>
+					<</link>><br>
+				<</capture>>
+		<</switch>>
+
+	<</for>>
+<</if>>
 [[Return to exploring the rest of the layer|Layer9 Hub]]
 <</if>>
+
+:: Sacrifice Apply [layer9 nobr] 
+
+/*xxx*/You made your sacrifice.<br><br>
+
+<<set _affectionPenalty = 100>>
+<<if _affectionPenalty > 0>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
+		<<set $companionMaru.affec -= _affectionPenalty>>
+		<<say $companionMaru>> That's not nice... <</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
+		<<set $companionLily.affec -= _affectionPenalty>>
+		<<say $companionLily>> How could you?! <</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+		<<set $companionKhemia.affec -= _affectionPenalty>>
+		<<say $companionKhemia>> Not cool! <</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
+		<<set $companionCherry.affec -= _affectionPenalty>>
+		<<say $companionCherry>> I thought you were different. <</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
+		<<set $companionCloud.affec -= _affectionPenalty>>
+		<<say $companionCloud>> Tsk. Untrustworthy.<</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
+		<<set $companionSaeko.affec -= _affectionPenalty>>
+		<<say $companionSaeko>> Your modus operandi has been noted.<</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
+		<<set $companionTwin.affec -= Math.ceil(_affectionPenalty/2)>>
+		<<say $companionTwin>> Although I understand why you did it, I don't know if I would've done the same. <</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
+		<<set $companionBandit.affec -= Math.ceil(_affectionPenalty/2)>>
+		<<say $companionBandit>> Hmpf! <</say>><br>
+	<</if>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
+		<<say $companionGolem>> ... <</say>><br>
+	<</if>>
+<</if>>
+
+[[Continue exploring the ninth layer|Layer9 Hub]]
 
 :: Layer9 Flasks [layer9]
 <<nobr>>
@@ -154,7 +229,7 @@ xxx
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
 <<RelicGrid `setup.relicsOnLayer[9]`>>
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
-
+<<set $timeL9T1=1>>
 :: Pick up the Radial Circulation [layer9]
 <<CollectRelic $relic97>>\
 <<if !setup.passingTime()>>
@@ -548,14 +623,14 @@ Threats:
 
 :: Layer9 Travel Events [layer9 nobr]
 <<set _triggers = {
-	elder: () => $timeL9 === 0 || $timeL9T1 >= 5,
+	elder: () => ($timeL9 === 0 || $timeL9T1 >= 5) && $timeL9T1==1,
 }>>
 
 <<PassTime _triggers>>
 
 <<if _triggers.elder()>>
 	<<set $returnPassage = passage()>>
-	<<set $timeL9T1 -= 5>>
+	<<set $timeL9T1 -= 1>>
 	<<include "Layer9 Elder Encounter">><br><br>
 	[[Return to exploring layer 9|$returnPassage]]
 <</if>>
