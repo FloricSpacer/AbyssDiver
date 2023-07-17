@@ -133,9 +133,9 @@ If you decide to start foraging for food or water, it means that you will not co
 <<if !setup.passingTime()>>
 [img[setup.ImagePath+'Wonders/bloodstainedsanctuary.png']]
 <br>
-XXX placeholder XXX You walk onto the giant bloodstained altar.<br><br>
+XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in order to sacrifice?<br><br>
 <<if $bloodstainedSanctuaryUsed>>
-	The place seems devoid of any energy<br><br>
+	The place seems devoid of any energy.<br><br>
 <<else>>
 	[[Sacrifice yourself|Bloodstained Sanctuary Site][$corruption = +200, $bloodstainedSanctuaryUsed = true, $gameOver = true]]<br>
 
@@ -153,9 +153,7 @@ XXX placeholder XXX You walk onto the giant bloodstained altar.<br><br>
 				<<capture _companion _i _tempName>>
 					<<set _choiceText = "Sacrifice " + _tempName>>
 					<<link _choiceText "Sacrifice Apply">>
-						<<set $hiredCompanions.deleteAt(_i)>>
-						<<set $corruption += 200>>
-						<<set $bloodstainedSanctuaryUsed = true>>
+						<<set $temp = _i>>
 					<</link>><br>
 				<</capture>>
 		<</switch>>
@@ -166,10 +164,83 @@ XXX placeholder XXX You walk onto the giant bloodstained altar.<br><br>
 <</if>>
 
 :: Sacrifice Apply [layer9 nobr] 
+<<set _tempSucces = false>>
+<<if $hiredCompanions[$temp].id === setup.companionIds.bandit && !$BanditConvo0>>
+	You pull the Bandit allong through the murky waters to the central altar.<br><br>
 
-/*xxx*/You made your sacrifice.<br><br>
+	<<say $companionBandit>>HmmmHmm!<</say>><br>
+	It is as if she knows what is going to happen to her here. The environment masks any tears streaming from her face, but her face betrays her anyway.<br><br>
 
-<<set _affectionPenalty = 100>>
+	<<say $mc>>I'm sorry, but everybody has a part to play, a purpose, and I'm afraid this is your purpose.<</say>><br>
+	You strike her quickly and hard with the concealed weapon you are holding. She struggles a bit in her restraints but there is a cloud of red blood quickly forming around her. Her struggle becomes sluggish soon and quickly after she goes completely limp.<br><br>
+<<elseif $hiredCompanions[$temp].id === setup.companionIds.cherry>>
+	You ask Cherry to follow you to the bloodstained altar in the center of the structure. Cherry complies without a word. She swims to the center of the altar and seems to kneel down and close her eyes. A bit caught of guard you can't help yourself and ask her what she's doing.<br><br>
+
+	<<say $companionCherry>>Let's please skip the whole theater. We both know why we are here. End my missery and let my death have more use than my life.<</say>><br>
+	You gulp by the forwardness of her. Nevertheless, you made your decission. You clutch your concealed weapon and step forward.<br><br>
+
+	<<say $mc>>Okay, thank you for being cooperative here. I whish....<</say>><br>
+	<<say $companionCherry>>JUST DO It!<</say>><br>
+	You recoil a bit from her last sudden outburst, but you get a grip again and let out a deep sigh. You move swiftly and strike her with determination. Within a second it's over. Cherry's body is half floating lifelessly above the altar, while her blood mixes with the dark water around you. <br><br>
+	<<set _tempSucces = true>>
+<<else>>
+	/*xxx*/You ask $hiredCompanions[$temp].name if <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> wants to join you to explore the Bloodstained Sanctuary. <br><br>
+	When you arrive $hiredCompanions[$temp].name seems to hesitate to step onto the central altar.<br><br>
+
+	<<say $hiredCompanions[$temp]>>So why did we need to come here again?<</say>><br>
+	You look at $hiredCompanions[$temp].name and you're not sure of its a genuine question or if <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> knows something is up.<br>
+	<<say $mc>>First, let me ask you something. You trust me right?<</say>><br>
+	<<if $hiredCompanions[$temp].affec>0>>
+		<<set _tempRand = random(0,$hiredCompanions[$temp].affec)>>
+	<<else>>
+		<<set _tempRand=0>>
+	<</if>>
+	<<if _tempRand < 5>>
+		<<say $hiredCompanions[$temp]>>To be honest, no. We are at some creepy wonder, that looks like a place where people get murdered. And you asked me to come with you and step on this altar. Unless you have a really convincing reason, I'll pass. <</say>>
+		<<say $mc>>Could you please stop asking question and just go to the middle?<</say>><br>
+		<<say $hiredCompanions[$temp]>>No! And I want to go this instance!<</say>><br>
+		<<say $mc>>Ugh, I didn't wanted this to come to this, but you leave me no choice.<</say>><br>
+		You lunge at you companion in an effort to subdue <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>>.<br><br>
+		<<if $mc.HandicapThreat + $mc.fit + random(-1,1)> $companionBandit.HandicapThreat + $companionBandit.fit + random(-1,1)>>
+			After a short brawl you manage to gain the upper hand and find an opening to strike $hiredCompanions[$temp].name with you concealed weapon. <<if $hiredCompanions[$temp].sex=="male">>He<<else>>She<</if>> recoils in pain. You use that opportunity to strike again. Quickly you are both in a red mist and $hiredCompanions[$temp].name 's movement become slughish. After a moment you once so lively companion is floating lifelessly before you.<br><br>
+			<<set _tempSucces = true>>
+		<<else>>
+			You try to subdue $hiredCompanions[$temp].name but before long you're in pretty bad shape from all the pummeling you received. <<if $hiredCompanions[$temp].sex=="male">>He<<else>>She<</if>> swims and you can only halfheartedly give chase. You blew you chance at the sacrifice this time!<br><br>
+		<</if>>
+	<<else>>
+		<<say $hiredCompanions[$temp]>>Yeah, of course. It's just that this place looks like some kind of scene from a horror movie and I just want to get out here as soon as we're done.<</say>><br>
+		<<say $mc>>It will only take a second, we just have to close our eyes and say a prayer.<</say>><br>
+		You go ahead and close your eyes, but peer through your eyelids to see if $hiredCompanions[$temp].name also closses <<if $hiredCompanions[$temp].sex=="male">>his<<else>>here<</if>> eyes. The moment you see <<if $hiredCompanions[$temp].sex=="male">>him<<else>>here<</if>> floating with <<if $hiredCompanions[$temp].sex=="male">>his<<else>>here<</if>>  eyes closed you make lunge. You strike with you concealed weapon.<br><br>
+		<<say $hiredCompanions[$temp]>>Ahhh! What....ah...are...I...uh...trusted...you<</say>><br>
+		A pool of red water has formed around your former companion as <<if $hiredCompanions[$temp].sex=="male">>his<<else>>here<</if>> bobs livelesly in the water.<br><br>
+		<<set _tempSucces = true>>
+	<</if>>
+
+<</if>>
+
+<<if _tempSucces>>
+	For a second nothing happens and you just float there in a weird tranquility looking at the dead body before you. Suddenly all crystals start to glow and an other worldly purple fire ignites in the centre of the altar. You close your eyes to shield them from the bright light. You feel in that instance the miasma is cleansed from your body. When you open your eyes again, the corpse has vanished, all crystals have dimmed and the purple flame is extinguished. The whole place feels devoid of power now.<br><br>
+	<<set $hiredCompanions.deleteAt($temp)>>
+	<<set $corruption += 200>>
+	<<set $bloodstainedSanctuaryUsed = true>>
+	<<if $hiredCompanions[$temp].id === setup.companionIds.bandit && !$BanditConvo0>>
+		<<set _affectionPenalty = 25>>
+	<<else>>
+		<<set _affectionPenalty = 50>>
+	<</if>>
+	<<include "Bloodstained Sanctuary Reactions">>
+	[[Continue exploring the ninth layer|Layer9 Hub]]
+
+<<elseif !_tempSucces && $hiredCompanions[$temp].id !== setup.companionIds.twin>>
+	<<include "Bloodstained Sanctuary Reactions">>
+	[[Continue exploring the ninth layer|Layer9 Hub]]
+
+<<else>>
+	Your twin is on you before you know it though. <<if $companionTwin.sex=="male">>He<<else>>She<</if>> is choking you from the back. You try to fight back, but it's useless from this disadvantages position. You feel yourself getting tired from struggling and the lack of oxygen. The moment you world starts to grow black and your limbs start to go numb you feel a sharp pain in your neck. After that everything goes dark.
+	<<set $gameOver=1>>
+<</if>>
+
+:: Bloodstained Sanctuary Reactions
 <<if _affectionPenalty > 0>>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
 		<<set $companionMaru.affec -= _affectionPenalty>>
@@ -208,7 +279,6 @@ XXX placeholder XXX You walk onto the giant bloodstained altar.<br><br>
 	<</if>>
 <</if>>
 
-[[Continue exploring the ninth layer|Layer9 Hub]]
 
 :: Layer9 Flasks [layer9]
 <<nobr>>
