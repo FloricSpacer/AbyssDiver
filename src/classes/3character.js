@@ -833,7 +833,13 @@ class Character {
 	 */
 	get subdom() {
 		let subdom = 0;
+		if (this.id === setup.companionIds.maru) subdom = 1;
+		if (this.id === setup.companionIds.lily) subdom = -1;
+		if (this.id === setup.companionIds.khemia) subdom = -1;
+		if (this.id === setup.companionIds.cherry) subdom = 1;
 		if (this.id === setup.companionIds.golem) subdom = 10;
+		if(this.id === setup.companionIds.bandit && State.variables.BanditConvo0)  subdom = -1;
+		if(this.id === setup.companionIds.bandit && !State.variables.BanditConvo0)  subdom = 2;
 		for (let event of this.events) {
 			subdom = event.changeSubDom(subdom);
 		}
