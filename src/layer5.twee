@@ -1597,14 +1597,14 @@ In your inventory you have:
 		<</link>>
 	<</capture>>
 	
-	<<if $flaskMatrix[_temp]>= $waterDropNb >> 
+	<<if $flaskMatrix[_temp]>= $waterDropNb || setup.flaskLabels[_temp] === 'Aquarius Ex Nihilo'>> 
 		 | 
 		<<capture _temp>>
 			<<link "Drop <<print $waterDropNb>> water" "Layer5 Borer Water">>
-				<<if $items[3].count > 0 || $items[0].count > 0>>
-					<<if setup.flaskLabels[_temp]==="Bottled water" || $items[3].count <= 0>>
+				<<if $items[3].count > 0 || $items[0].count > 0 || $ownedRelics.some(r => r.name === 'Aquarius Ex Nihilo')>>
+					<<if (setup.flaskLabels[_temp]==="Bottled water" || $items[3].count <= 0) && setup.flaskLabels[_temp] !== 'Aquarius Ex Nihilo'>>
 						<<set $items[0].count -= $waterDropNb >>
-					<<else>>
+					<<elseif setup.flaskLabels[_temp] !== 'Aquarius Ex Nihilo'>>
 						<<set $items[3].count -= $waterDropNb  >>
 						<<set $items[2].count += $waterDropNb  >>
 						<<set $flaskMatrix[_temp] -= $waterDropNb  >>
