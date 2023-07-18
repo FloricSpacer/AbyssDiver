@@ -667,14 +667,13 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 		@@.unreachable; This Curse can not be taken in combination with the other Curses you have already taken
 	<<else>>
 		<<print "[[Take on " + _name + "]]">>
-		<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>\
+		<<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 		<br><br>
-			<<if $ManagedMisfortuneActive.length >= $ManagedMisfortuneMax >>\
+			<<if $ManagedMisfortuneActive.length >= $ManagedMisfortuneMax >>
 				@@.unreachable; You can not store a new Curse while you are still affected by all the Curses in Managed Misfortune.       
-			<<else>>\
+			<<else>>
 				<<for _i=0; _i < $ManagedMisfortuneMax && _i <= $StoredCurse.length; _i++ >>
-					<<capture _i>>
-					<<capture _curse>>
+					<<capture _i, _curse>>
 					<<if _i < $StoredCurse.length>>
 						<<if !$ManagedMisfortuneActive.some(e => e.name === $StoredCurse[_i].name)>>
 							<<print "[[Switch out "+ $StoredCurse[_i].name +" for " + _name +" in the Managed Misfortune's marble|Layer"+ $currentLayer +" Curses][$StoredCurse.deleteAt(_i), $StoredCurse.push(_curse)]]">>
@@ -682,7 +681,6 @@ You will also have a new name, 'Princess'. Others will find it impossible to cal
 					<<else>>
 						<<print "[[Store " + _name +" in Managed Misfortune's free marble|Layer"+ $currentLayer +" Curses][$StoredCurse.push(_curse)]]">>
 					<</if>>
-					<</capture>>
 					<</capture>>
 				<br><br>
 				<</for>>

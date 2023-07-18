@@ -31,27 +31,23 @@
 :: Semen Demon Widget [widget nobr]
 <<widget "SemenDemonCalc">>
 <<set _sdcurse = $mc.getCurse(SemenDemon)>>
-<<set _sdTotal = $mc.events.filter(e => e instanceof SemenDemon).reduce((v, e) => v + e.amount)>>
+<<set _sdTotal = $mc.events.filter(e => e instanceof SemenDemon).reduce((v, e) => v + 1)>>
 <<if _sdcurse !== undefined>>
 	<<set _contributions = 0>>
 	<<if
 		($mc.penis > 0 && _sdcurse.fluidType !== 'vaginal fluids') ||
 		($mc.vagina > 0 && _sdcurse.fluidType !== 'semen')
 	>>
-		<<if $mc.hasCurse("Leaky")>>
-			<<set _contributions += Math.floor((1+$crumbleFluid/100)*2)>>
-		<<else>>
-			<<set _contributions += Math.floor(1+$crumbleFluid/100)>>
-		<</if>>
+		<<set _contributions += 1+$mc.fluids/100>>
 	<</if>>
 
 	<<for _i=0; _i<$SemenDemonVec.length; _i++ >>
 		<<if $hiredCompanions.some(e => e.name === $SemenDemonVec[_i].name)>>
-			<<set _contributions +=1>>
+			<<set _contributions += $SemenDemonVec[_i].fluids / 100>>
 		<</if>>
 	<</for>>
 
-	<<set $SemenDemonBalance += (_contributions - _sdTotal) * _args[0]>>/* */
+	<<set $SemenDemonBalance += (Math.floor(_contributions) - _sdTotal) * _args[0]>>/* */
 	<<if $SemenDemonBalance < -14>>
 		<<set $gameOver=true>>
 	<<elseif $SemenDemonBalance > 14>>

@@ -302,6 +302,8 @@ class Character {
 
 	/**
 	 * Removes a Curse from this character.
+	 * Curses on the main character should always be removed this way to ensure it's removed from the twin too,
+	 * not dropped from events manually.
 	 * @param {Class | string} curse The name or class of the Curse to remove.
 	 * @param {boolean} all Iff all is true, removes all copies of the Curse, not just the last.
 	 */
@@ -313,6 +315,9 @@ class Character {
 			// noinspection JSUnresolvedReference -- findLastIndex exists, I'm not sure why my linter claims it doesn't.
 			let i = this.events.findLastIndex(e => typeof curse === 'string' ? e.name === curse : e instanceof curse);
 			if (i >= 0) this.events.deleteAt(i);
+		}
+		if (this.id === setup.companionIds.mc) {
+			State.variables.companionTwin.removeCurse(curse, all);
 		}
 	}
 
@@ -865,6 +870,8 @@ class Character {
 
 	/**
 	 * Returns a description of this character's ears.
+	 * The description is a string such as would fit into the phrase "this character has ### ears",
+	 * for example "furry cat".
 	 * @returns {string} A description of this character's ears.
 	 */
 	get ears() {
@@ -874,6 +881,9 @@ class Character {
 
 	/**
 	 * Returns the quantity of this character's body hair.
+	 * 1: normal human
+	 * 0: no body hair below the nose (hair removal, scales, exoskeleton...)
+	 * 2: full-body hair coverage (maximum fluff)
 	 * @returns {number} The level of this character's body hair.
 	 */
 	get bodyHair() {
@@ -1010,17 +1020,32 @@ class Character {
 	}
 
 	/**
+	 * Sets the character's original image icon. Has no effect on body-swapped characters.
+	 * @param value
+	 */
+	set imageIcon(value) {
+		this._imageIcon = value;
+	}
+
+	/**
 	 * Returns the path of the image used in icons representing this character.
 	 * @returns {string} The path to the image containing this character's icon.
 	 */
 	get imageIcon() {
 		let transformed = this.events.reduce((v, e) => e.changeImageIcon(v), '');
+		// as a special exception, anybody who swapped with the bandit is released
+		if (transformed === 'Icons/BanditIcon.jpg') transformed = 'Icons/BanditIcon_released.jpg';
 		if (transformed !== '') return transformed;
 
 		if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
 			let image = this.appGender <= 5 ? 'M' : 'F';
 			return `Player Icons/player${image}.png`;
 		}
+
+		if (this.id === setup.companionIds.bandit && State.variables.BanditConvo0) {
+			return 'Icons/BanditIcon_released.jpg'
+		}
+
 		return this._imageIcon;
 	}
 
