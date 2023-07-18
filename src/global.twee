@@ -669,12 +669,7 @@ They are a bit sore at the moment.
 			($mc.vagina > 0 && e.fluidType !== 'semen')
 		))
 	>>
-		<<if $mc.hasCurse("Leaky")>>
-			<<set _temp = Math.floor((1+$crumbleFluid/100)*2)>>
-		<<else>>
-			<<set _temp = Math.floor(1+$crumbleFluid/100)>>
-		<</if>>
-		You can supply yourself with <<print _temp*2>> loads a day.
+		You can supply yourself with <<print Math.floor($mc.fluids/100*2)>> loads a day.
 	<</if>>
 	<<if $SemenDemonVec.length > 0>>
 		<<if $SemenDemonVec.length === 1>>
@@ -682,7 +677,7 @@ They are a bit sore at the moment.
 		<<else>>
 			<<print `${$SemenDemonVec.slice(0, -1).map(c => c.name).join(', ')} and ${$SemenDemonVec.at(-1).name}`>>
 		<</if>>
-		<<if $SemenDemonVec.length === 1>>is<<else>>are<</if>> providing you with <<print 2 * $SemenDemonVec.length>> loads a day.
+		<<if $SemenDemonVec.length === 1>>is<<else>>are<</if>> providing you with <<print 2 * $SemenDemonVec.map(c => c.fluids / 100).reduce((a, b) => a + b, 0)>> loads a day.
 	<</if>>
 	<<print " ">>
 <</if>>
@@ -1482,7 +1477,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 						Please enter your new exoskeleton color: <<textbox "_curse.skinColor" "shiny black" "Use Items and Relics">><br>
 					<<elseif _curse.name === "Horny" && !$hornVariation>>
 						<<include "Horny Customization">><br>
-					<<elseif _curse instanceof SemenDemon && !_curse.fluidType>>
+					<<elseif _curse instanceof SemenDemon && !$mc.hasCurse(SemenDemon)>>
 						<<include "Semen Demon Customization">><br>
 					<<elseif _curse.name === "Eye on the Prize" && !$eyeRemove>>
 						<<include "Eye on the Prize Customization">><br>
@@ -1509,6 +1504,14 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 					<</if>>
 					<<set _text = "Activate stored " + _curse.name + " Curse">>
 					<<link _text "Use Items and Relics">>
+						<<if _curse instanceof SemenDemon>>
+							<<set _curse = _curse.copy()>>
+							<<set _prevCurse = $mc.getCurse(SemenDemon)>>
+							<<if _prevCurse !== undefined>>
+								<<set _curse.fluidType = _prevCurse.fluidType>>
+							<</if>>
+						<</if>>
+
 						<<set $mc.addCurse(_curse)>>
 						<<set $ManagedMisfortuneActive.push(_curse)>>
 					<</link>><br>
