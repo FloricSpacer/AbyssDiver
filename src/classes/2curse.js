@@ -1715,12 +1715,25 @@ class SemenDemon extends Curse {
 	/**
 	 * Creates a new Semen Demon curse.
 	 * @param {'semen' | 'sexual fluids' | 'vaginal fluids'} fluidType The type of fluids the cursed character is required to consume.
-	 * @param {number} amount The number of times this Curse has been taken.
+	 * @param {number} amount Deprecated: Semen Demon is now taken multiple times by actually taking it multiple times.
 	 */
 	constructor(fluidType = 'sexual fluids', amount = 1) {
 		super('Semen Demon', 20, 'Curses/semendemon.png', 'libido');
 		this.fluidType = fluidType;
-		this.amount = amount;
+		if (amount !== 1) console.error('Semen Demon created with invalid amount')
+	}
+
+	get maximum() {
+		return 4;
+	}
+
+	/**
+	 * Returns 1
+	 * @deprecated To take Semen Demon multiple times, use multiple instances.
+	 * @returns {number} The number 1
+	 */
+	get amount() {
+		return 1
 	}
 
 	/**

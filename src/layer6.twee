@@ -705,9 +705,14 @@ The answers are far from comforting, leaving you to face a future filled with un
 
 :: Take on Semen Demon [layer6]
 <<set _curse = new SemenDemon()>>\
+<<set _prevCurse = $mc.getCurse(SemenDemon)>>\
 <<set $mc.addCurse(_curse)>>\
 [img[setup.ImagePath + _curse.pic]]
-<<include "Semen Demon Customization">>
+<<if _prevCurse !== undefined>>\
+	<<set _curse.fluidType = _prevCurse.fluidType>>\
+<<else>>\
+	<<include "Semen Demon Customization">>
+<</if>>\
 
 [[Confirm|Take on Semen Demon pt2]]
 
@@ -726,21 +731,22 @@ The answers are far from comforting, leaving you to face a future filled with un
 <<set _curse = $mc.getCurse(SemenDemon)>>\
 What would be your preferred meal type.
 
+@@.alert2; Not having the correct equipment to supply yourself or taking more than one level will mean you have to find additional sources or you will die!@@<br><br>
+
 <<radiobutton "_curse.fluidType" "sexual fluids" checked>> Any sexual fluids
 <<radiobutton "_curse.fluidType" "semen">> Just semen
 <<radiobutton "_curse.fluidType" "vaginal fluids">> Just vaginal fluids
 
-How many levels of the Curse would you like to gain?
-
-@@.alert2; Not having the correct equipment to supply yourself or taking more than one level will mean you have to find additional sources or you will die!@@<br><br>
-
-<<radiobutton "_curse.amount" 1 checked>> One
-<<radiobutton "_curse.amount" 2 >> Two
-<<radiobutton "_curse.amount" 3 >> Three
-<<radiobutton "_curse.amount" 4 >> Four
 
 :: Apply Stored Semen Demon Curse
-<<set $mc.addCurse(new SemenDemon())>>
+<<set _curse = new SemenDemon()>>
+<<set _prevCurse = $mc.getCurse(SemenDemon)>>
+<<set $mc.addCurse(_curse)>>
+<<if _prevCurse !== undefined>>
+	<<set _curse.fluidType = _prevCurse.fluidType>>
+<<else>>
+	<<include "Semen Demon Customization">>
+<</if>>
 <<include "Semen Demon Taken">>
 <<include "Semen Demon Retrieval">>
 
@@ -749,7 +755,7 @@ How many levels of the Curse would you like to gain?
 
 :: Semen Demon Taken [nobr]
 <<set _curse = $mc.getCurse(SemenDemon)>>
-<<set $corruption += _curse.corr * _curse.amount>>
+<<set $corruption += _curse.corr>>
 <<if _curse.fluidType !== "sexual fluids">>
 	<<set $corruption +=15>>
 <</if>>
