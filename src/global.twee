@@ -2060,7 +2060,7 @@ How many dubloons would you like to pay back?
 		<</if>>
 	<</if>>
 	/* Check whether we need to be foraging for water to avoid dying of dehydration. */
-	<<if !$forageWater && $dehydrated > 1 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay>>
+	<<if !$forageWater && $dehydrated > 1 && $items[0].count + $items[3].count + $items[25].count < _consumptionPerDay && setup.flaskLabels[$flaskPref] !== 'Aquarius Ex Nihilo'>>
 		<<if $currentLayer !== 3 && $currentLayer !== 5 && passage() !== 'Layer3 Threat2'>>
 			@@.alert2; In order to avoid death by dehydration, you are currently foraging for water on this layer, no matter the consequences.<br>
 			<<set $forageWater = 1>>
@@ -2430,10 +2430,10 @@ How many dubloons would you like to pay back?
 
 :: Drinking code [nobr]
 <<FlaskFirst>>
-<<if $items[3].count >= _consumptionPerDay || $items[0].count >= _consumptionPerDay>>
-	<<if $items[3].count < _consumptionPerDay || setup.flaskLabels[$flaskPref] === 'Bottled water'>>
+<<if $items[3].count >= _consumptionPerDay || $items[0].count >= _consumptionPerDay || $ownedRelics.some(r => r.name === "Aquarius Ex Nihilo")>>
+	<<if ($items[3].count < _consumptionPerDay || setup.flaskLabels[$flaskPref] === 'Bottled water') && setup.flaskLabels[$flaskPref] !== 'Aquarius Ex Nihilo'>>
 		<<set $items[0].count -= _consumptionPerDay>>
-	<<else>>
+	<<elseif setup.flaskLabels[$flaskPref] !== 'Aquarius Ex Nihilo'>>
 		<<set $items[3].count -= _consumptionPerDay>>
 		<<set $items[2].count += _consumptionPerDay>>
 		<<set $flaskMatrix[$flaskPref] -= _consumptionPerDay>>
@@ -2473,10 +2473,10 @@ How many dubloons would you like to pay back?
 
 :: Water drop code[nobr]
 <<FlaskFirst>>
-<<if $items[3].count > 0 || $items[0].count > 0>>
-	<<if setup.flaskLabels[$flaskPref]==="Bottled water" || $items[3].count <= 0>>
+<<if $items[3].count > 0 || $items[0].count > 0 || $ownedRelics.some(r => r.name === "Aquarius Ex Nihilo")>>
+	<<if setup.flaskLabels[$flaskPref]==="Bottled water" || $items[3].count <= 0 || !$ownedRelics.some(r => r.name === "Aquarius Ex Nihilo")>>
 		<<set $items[0].count -= 1 >>
-	<<else>>
+	<<elseif setup.flaskLabels[$flaskPref] !== 'Aquarius Ex Nihilo'>>
 		<<set $items[3].count -= 1  >>
 		<<set $items[2].count += 1  >>
 		<<set $flaskMatrix[$flaskPref] -= 1  >>
