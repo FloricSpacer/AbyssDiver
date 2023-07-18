@@ -143,7 +143,6 @@ XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in
 		<<set _flag = false>>
 		<<set _tempName = _companion.name>>
 		<<set _companionId = _companion.id>>
-		_companionId
 		<<switch _companionId>>
 			<<case setup.companionIds.golem>>
 				You can't sacrifice your Golem here.<br>
@@ -179,16 +178,29 @@ XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in
 	<<say $companionCherry>>Let's please skip the whole theater. We both know why we are here. End my missery and let my death have more use than my life.<</say>><br>
 	You gulp by the forwardness of her. Nevertheless, you made your decission. You clutch your concealed weapon and step forward.<br><br>
 
-	<<say $mc>>Okay, thank you for being cooperative here. I whish....<</say>><br>
+	<<say $mc>>Okay, thank you for being cooperative here. I wish....<</say>><br>
 	<<say $companionCherry>>JUST DO It!<</say>><br>
 	You recoil a bit from her last sudden outburst, but you get a grip again and let out a deep sigh. You move swiftly and strike her with determination. Within a second it's over. Cherry's body is half floating lifelessly above the altar, while her blood mixes with the dark water around you. <br><br>
 	<<set _tempSucces = true>>
+<<elseif $hiredCompanions[$temp].id === setup.companionIds.twin>>
+	You ask  $hiredCompanions[$temp].name to follow you to the bloodstained altar in the center of the structure. A sly smile adorns <<if $hiredCompanions[$temp].sex=="male">>his<<else>>her<</if>> face.<br><br>
+	<<say $companionTwin>>Sure!<</say>><br>
+	You feel <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> might know what's up. It might be better to lose her in the murky waters so you can ambush <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>>.<br><br>
+	<<if $TwinVar1>>
+		Eventhough, that was your plan you followed $hiredCompanions[$temp].name towards the central altar, but you manage to lose <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>> in the end anyway.<br><br>
+	<<else>>
+		You followed $hiredCompanions[$temp].name towards the central altar, and manage to hide from <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>> as you approached the structure. Clearly, <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> had a similar idea as you suddenly see <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>> dashing to get underneath it. You slowly approach $hiredCompanions[$temp].name from below, while you see <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>> constantly checking the area for you.<br>
+		You swim up quickly from behind and manage to start choking of <<if $hiredCompanions[$temp].sex=="male">>his<<else>>her<</if>> air supply.<br><br>
+		<<say $companionTwin>>Argh! Get...off...urgh...<</say>><br>
+		<<if $hiredCompanions[$temp].sex=="male">>He<<else>>She<</if>> struggles to get you off in vain. Soon, though, the struggling becomes flailing and that's when you decide to strike <<if $hiredCompanions[$temp].sex=="male">>his<<else>>her<</if>> neck with the concealed weapon you brought. A red mist starts to form from wound in <<if $hiredCompanions[$temp].sex=="male">>his<<else>>her<</if>> neck around <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>>. Quickly after the flailing also stops and your twin's body is suspended lifelessly before you in the water. You hope that killing a person just below the altar also counts, but you drag her body to the top side to be sure.<br><br>
+		<<set _tempSucces = true>>
+	<</if>>
 <<else>>
 	/*xxx*/You ask $hiredCompanions[$temp].name if <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> wants to join you to explore the Bloodstained Sanctuary. <br><br>
 	When you arrive $hiredCompanions[$temp].name seems to hesitate to step onto the central altar.<br><br>
 
 	<<say $hiredCompanions[$temp]>>So why did we need to come here again?<</say>><br>
-	You look at $hiredCompanions[$temp].name and you're not sure of its a genuine question or if <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> knows something is up.<br>
+	You look at $hiredCompanions[$temp].name and you're not sure of its a genuine question or if <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> knows something is up.<br><br>
 	<<say $mc>>First, let me ask you something. You trust me right?<</say>><br>
 	<<if $hiredCompanions[$temp].affec>0>>
 		<<set _tempRand = random(0,$hiredCompanions[$temp].affec)>>
@@ -196,16 +208,17 @@ XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in
 		<<set _tempRand=0>>
 	<</if>>
 	<<if _tempRand < 5>>
-		<<say $hiredCompanions[$temp]>>To be honest, no. We are at some creepy wonder, that looks like a place where people get murdered. And you asked me to come with you and step on this altar. Unless you have a really convincing reason, I'll pass. <</say>>
+		<<say $hiredCompanions[$temp]>>To be honest, no. We are at some creepy wonder, that looks like a place where people get murdered. And you asked me to come with you and step on this altar. Unless you have a really convincing reason, I'll pass. <</say>><br>
 		<<say $mc>>Could you please stop asking question and just go to the middle?<</say>><br>
 		<<say $hiredCompanions[$temp]>>No! And I want to go this instance!<</say>><br>
 		<<say $mc>>Ugh, I didn't wanted this to come to this, but you leave me no choice.<</say>><br>
 		You lunge at you companion in an effort to subdue <<if $hiredCompanions[$temp].sex=="male">>him<<else>>her<</if>>.<br><br>
-		<<if $mc.HandicapThreat + $mc.fit + random(-1,1)> $companionBandit.HandicapThreat + $companionBandit.fit + random(-1,1)>>
+		<<if $mc.HandicapThreat + $mc.fit + random(-1,1)> $hiredCompanions[$temp].HandicapThreat + $hiredCompanions[$temp].fit + random(-1,1)>>
 			After a short brawl you manage to gain the upper hand and find an opening to strike $hiredCompanions[$temp].name with you concealed weapon. <<if $hiredCompanions[$temp].sex=="male">>He<<else>>She<</if>> recoils in pain. You use that opportunity to strike again. Quickly you are both in a red mist and $hiredCompanions[$temp].name 's movement become slughish. After a moment you once so lively companion is floating lifelessly before you.<br><br>
 			<<set _tempSucces = true>>
 		<<else>>
-			You try to subdue $hiredCompanions[$temp].name but before long you're in pretty bad shape from all the pummeling you received. <<if $hiredCompanions[$temp].sex=="male">>He<<else>>She<</if>> swims and you can only halfheartedly give chase. You blew you chance at the sacrifice this time!<br><br>
+			You try to subdue $hiredCompanions[$temp].name, but <<if $hiredCompanions[$temp].sex=="male">>he<<else>>she<</if>> fights you off. Before long you're in pretty bad shape from all the pummeling you received. <<if $hiredCompanions[$temp].sex=="male">>He<<else>>She<</if>> swims away and you can only halfheartedly give chase. You blew your chance at the sacrifice this time!<br><br>
+			<<set $hiredCompanions[$temp].affec-=100>>
 		<</if>>
 	<<else>>
 		<<say $hiredCompanions[$temp]>>Yeah, of course. It's just that this place looks like some kind of scene from a horror movie and I just want to get out here as soon as we're done.<</say>><br>
@@ -220,18 +233,19 @@ XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in
 
 <<if _tempSucces>>
 	For a second nothing happens and you just float there in a weird tranquility looking at the dead body before you. Suddenly all crystals start to glow and an other worldly purple fire ignites in the centre of the altar. You close your eyes to shield them from the bright light. You feel in that instance the miasma is cleansed from your body. When you open your eyes again, the corpse has vanished, all crystals have dimmed and the purple flame is extinguished. The whole place feels devoid of power now.<br><br>
-	<<set $hiredCompanions.deleteAt($temp)>>
-	<<set $corruption += 200>>
-	<<set $bloodstainedSanctuaryUsed = true>>
 	<<if $hiredCompanions[$temp].id === setup.companionIds.bandit && !$BanditConvo0>>
 		<<set _affectionPenalty = 25>>
 	<<else>>
 		<<set _affectionPenalty = 50>>
 	<</if>>
 	<<include "Bloodstained Sanctuary Reactions">>
+	<<set $hiredCompanions.deleteAt($temp)>>
+	<<set $corruption += 200>>
+	<<set $bloodstainedSanctuaryUsed = true>>
 	[[Continue exploring the ninth layer|Layer9 Hub]]
 
 <<elseif !_tempSucces && $hiredCompanions[$temp].id !== setup.companionIds.twin>>
+	<<set _affectionPenalty = 25>>
 	<<include "Bloodstained Sanctuary Reactions">>
 	[[Continue exploring the ninth layer|Layer9 Hub]]
 
@@ -240,39 +254,47 @@ XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in
 	<<set $gameOver=1>>
 <</if>>
 
-:: Bloodstained Sanctuary Reactions
+:: Bloodstained Sanctuary Reactions [layer9 nobr]
 <<if _affectionPenalty > 0>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $hiredCompanions[$temp].id !== setup.companionIds.maru>>
 		<<set $companionMaru.affec -= _affectionPenalty>>
-		<<say $companionMaru>> That's not nice... <</say>><br>
+		<<say $companionMaru>> That's... horrible! <</say>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily) && $hiredCompanions[$temp].id !== setup.companionIds.lily>>
 		<<set $companionLily.affec -= _affectionPenalty>>
 		<<say $companionLily>> How could you?! <</say>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $hiredCompanions[$temp].id !== setup.companionIds.khemia>>
 		<<set $companionKhemia.affec -= _affectionPenalty>>
-		<<say $companionKhemia>> Not cool! <</say>><br>
+		<<say $companionKhemia>> That's really fucking cold, <<PerceivedGender2 $mc>>!<</say>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry) && $hiredCompanions[$temp].id !== setup.companionIds.cherry>>
 		<<set $companionCherry.affec -= _affectionPenalty>>
-		<<say $companionCherry>> I thought you were different. <</say>><br>
+		<<say $companionCherry>> You are an example of why life is so terrible.<</say>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
-		<<set $companionCloud.affec -= _affectionPenalty>>
-		<<say $companionCloud>> Tsk. Untrustworthy.<</say>><br>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud) && $hiredCompanions[$temp].id !== setup.companionIds.cloud>>
+		<<if $hiredCompanions[$temp].id === setup.companionIds.bandit && !$BanditConvo0>>
+			<<set $companionCloud.affec -= Math.ceil(_affectionPenalty/2)>>
+			<<say $companionCloud>> It had to be done.<</say>><br>
+		<<else>>
+			<<set $companionCloud.affec -= _affectionPenalty*2>>
+			<<say $companionCloud>> To abuse trust like that, you make me sick!<</say>><br>
+		<</if>>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && $hiredCompanions[$temp].id !== setup.companionIds.saeko>>
 		<<set $companionSaeko.affec -= _affectionPenalty>>
-		<<say $companionSaeko>> Your modus operandi has been noted.<</say>><br>
+		<<say $companionSaeko>> This...There is no rational justifying this!<</say>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin) && $hiredCompanions[$temp].id !== setup.companionIds.twin>>
 		<<set $companionTwin.affec -= Math.ceil(_affectionPenalty/2)>>
-		<<say $companionTwin>> Although I understand why you did it, I don't know if I would've done the same. <</say>><br>
+		<<say $companionTwin>> Eventhough, I had the same idea, I never actually did it. I want to believe I never would've. <</say>><br>
 	<</if>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && !$BanditConvo0 && $hiredCompanions[$temp].id !== setup.companionIds.bandit>>
 		<<set $companionBandit.affec -= Math.ceil(_affectionPenalty/2)>>
 		<<say $companionBandit>> Hmpf! <</say>><br>
+	<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && !$BanditConvo0 && $hiredCompanions[$temp].id !== setup.companionIds.bandit>>
+		<<set $companionBandit.affec -= Math.ceil(_affectionPenalty/2)>>
+		<<say $companionBandit>> I've seen some bad stuff, but I think this might be some of thw worst I've seen still.<</say>><br>	
 	<</if>>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 		<<say $companionGolem>> ... <</say>><br>
