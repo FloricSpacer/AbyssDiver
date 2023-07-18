@@ -378,6 +378,7 @@ Object.defineProperties(setup, {
             'Flask with heavily contaminated water from the eighth layer',
             'Flask with heavily contaminated water from the ninth layer',
             'Bottled water',
+            'Aquarius Ex Nihilo',
         ],
     },
     // Get curse by name.
