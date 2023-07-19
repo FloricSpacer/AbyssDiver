@@ -1098,14 +1098,24 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<</if>>
 <</if>>
 
-<<if ($items[4].count > 0) && ($status.penalty > 0) && $dragonBurn === 0>>
+<<if setup.haveHealing && ($status.penalty > 0) && $dragonBurn === 0>>
 	<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
-	[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
+	<<link "Use a medkit or other healing item to cure your status condition instantly" "Use Items and Relics">>
+		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+			<<set $items[4].count -= 1>>
+		<</if>>
+		<<set $status.penalty = 0, $status.duration = 0>>
+	<</link>><br>
 <</if>>
 
-<<if ($items[4].count > 1) && ($status.penalty > 0) && $dragonBurn === 1>>
+<<if (($items[4].count > 1) || $ownedRelics.some(r => r.name === 'Lifespanner')) && ($status.penalty > 0) && $dragonBurn === 1>>
 	<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
-	[[Use a medkit to cure your status condition instantly|Use Items and Relics][$status.penalty = 0, $status.duration = 0, $items[4].count -= 2, $dragonBurn = 0]]<br>
+	<<link "Use two medkits or other healing item to cure your status condition instantly" "Use Items and Relics">>
+		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+			<<set $items[4].count -= 2>>
+		<</if>>
+		<<set $status.penalty = 0, $status.duration = 0, $dragonBurn = 0>>
+	<</link>><br>
 <</if>>
 
 <<if $items[25].count > 0 && $wardWaterDrink === 0>>

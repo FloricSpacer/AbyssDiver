@@ -500,6 +500,10 @@ Object.defineProperties(setup, {
     haveRope: {
         get: () => checkAvailability(['Rope'], ['Orbweaver'], ['rope']),
     },
+    // Check whether the player has items that can heal status conditions.
+    haveHealing: {
+        get: () => checkAvailability(['Medkit'], ['Lifespanner']),
+    },
     // Check whether the player has protection from cold.
     haveColdProtection: {
         get: () => {

@@ -270,10 +270,15 @@ Every Relic in this layer is found in one of the many ruins that are carved into
 
 <p>
 <<if $status.duration > 0>>
-<<if $items[4].count > 0>>
-[[Use a medkit to cure your status condition instantly|passage()][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]<br>
+<<if setup.haveHealing>>
+	<<link "Use a medkit or other healing item to cure your status condition instantly" "Layer5 Relics">>
+		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+			<<set $items[4].count -= 1>>
+		<</if>>
+		<<set $status.penalty = 0, $status.duration = 0>>
+	<</link>><br>
 <<else>>
-You do not have a medkit to cure your status condition.<br>
+	You do not have a medkit or other healing items to cure your status condition.<br>
 <</if>>
 <</if>>
 [[Continue exploring the fifth layer|Layer5 Hub]]
@@ -499,11 +504,18 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 
 	<h1 class="gameover">Game Over</h1>
 <<else>>
-	The booby trap has caused you serious injury, increasing all travel times by 3 days until you use a medkit.
+	The booby trap has caused you serious injury, increasing all travel times by 3 days until you use a medkit or other healing item.
 	[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
-	<<if $items[4].count > 0>>\
-		[[Use a medkit to cure your status and continue the search for the Relic|Layer5 Booby2][$status.penalty = 0, $status.duration = 0, $items[4].count -=1]]
-	<</if>>\
+	<<nobr>>
+	<<if setup.haveHealing>>
+		<<link "Use a medkit or other healing item to cure your status and continue the search for the Relic" "Layer5 Booby2">>
+			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+				<<set $items[4].count -= 1>>
+			<</if>>
+			<<set $status.penalty = 0, $status.duration = 0>>
+		<</link>><br>
+	<</if>><br>
+	<</nobr>>
 <</if>>
 
 
