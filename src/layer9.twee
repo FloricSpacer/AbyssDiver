@@ -90,7 +90,7 @@ Hopefully you'll be able to get used to it.
 [[View the Layer 9 habitation option|Layer9 Habitation]]<br>
 <br>
 [[Look up towards the surface|Layer9 Ascend 1]]<br>
-[[Look down at the next layer|Layer9 Exit1]]
+[[Try to reach the bottom of the ocean|Layer9 Exit1]]
 
 :: Layer9 Forage [image layer9]
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 10-foraging.png']]
@@ -117,6 +117,52 @@ If you decide to start foraging for food or water, it means that you will not co
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer9 Hub]]
+
+
+:: Layer9 Ascend 1 [layer9]
+As this layer is entirely underwater, ascending is actually relatively fast here. Returning to the eight layer will take 20 days and 120 corruption normally.
+
+<<if $DaedalusEquip>>\
+	You're wings will be of little use in this aquatic environment. They will also not hinder you significantly.
+<</if>>\
+[[Continue your ascent|Layer9 Ascend2]]
+[[Turn back and continue your business on the ninth layer|Layer9 Hub]]
+
+
+:: Layer9 Ascend2 [layer9]
+<<nobr>>
+<<if !setup.passingTime()>>
+	<<set _multiplier = 1>>
+	<<StartTraveling 20 0 _multiplier>>
+<</if>>
+<<PassTimeWithEvents>>
+<</nobr>>\
+<<if !setup.passingTime()>>
+	<<nobr>>
+		<<set $corruption -= 120 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+	<</nobr>>
+	/*xxx */
+	Simply swimming, and mostly upwards as well, is surprisingly more easy than some of the previous difficult terrain navigation you had to do on the previous layers.
+
+	You made sure you didn't ascend to much on a day to avoid divers sickness but you kept a steady pace. Now after some time the water has gotten lighter and you see some bizarre submerged structures. Not long after those first structures you finally reach the surface and are greated by the dissorienting architecture of the eight layer.
+	<<include "Curse Descriptions">>
+	[[Return to the eighth layer|Layer8 Hub]]
+<</if>>
+
+:: Layer9 Exit1 [layer9]
+Are you sure? Completing your descent through the dark sea will take @@.italic;80 days@@;, if you wish to continue deeper still.
+[[Turn back and continue your business on the ninth layer|Layer9 Hub]]
+<<TravelToPassage 'Continue your descent in order to reach the bottom' 'Layer9 Exit2' 80>>
+
+
+:: Layer9 Exit2 [layer9]
+<<PassTimeWithEvents>>\
+<<if !setup.passingTime()>>
+	...how much water must it have been? Is it even possible for a cave to go that deep. Surely, you would have hit the mantle or something by now? Do space and time have any meaning at all, at this point?
+	<<include "Curse Descriptions">>
+
+	[[Enter a dimly twinkeling barrier|???]]
+<</if>>
 
 
 :: Layer9 Wonders [layer9 cards nobr]
@@ -650,6 +696,11 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 <</for>>
 <<include "Curse Randomizer">>
 
+:: Layer9 Threats [image layer9]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 10-threats.png']]
+
+[[Return to exploring the ninth layer|Layer9 Hub]]
+
 :: Layer9 Elder Encounter
 /*xxx */
 <<set _temp = random(0,3)>>
@@ -730,3 +781,16 @@ Threats:
 :: Layer9 Camp
 
 <<include 'CampCode'>>
+
+:: Layer9 Habitation [image layer9]
+[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 10-habitation.png']]
+
+<<return>>
+
+<<nobr>>
+	<<if $corruption >= 0>>
+	[[Choose to stay on the ninth layer|Habitation Ending]]
+	<<else>>
+	You must have a corruption value of 0 or greater to choose a habitation option.
+<</if>>
+<</nobr>>
