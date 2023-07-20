@@ -86,6 +86,7 @@ class Character {
 	 * @param {string} o.oears The original shape of this character's body's ears.
 	 * @param {string} o.oeyeColor The original color of this character's body's eyes.
 	 * @param {string} o.oblood The original color of this character's blood.
+	 * @param {number} o.osubdom The original submission/domination factor of this character.
 	 * @param {number} o.pregnantT The day in which this character has been impregnated.
 	 * @param {number} o.due The day in which this character's pregnancy is due.
 	 * @param {number} o.lastBirth The day on which this character's last birth occurred.
@@ -98,7 +99,7 @@ class Character {
 		            openis, ogender, fit, oheight,
 		            comfortableHeight = oheight, age, appDesc = '', fear,
 		            ohair, oskinColor, oskinType='', oears='normal human', oeyeColor,
-		            oblood='red', pregnantT=setup.never, due=setup.never,
+		            oblood='red', osubdom=0, pregnantT=setup.never, due=setup.never,
 		            lastBirth=setup.never, switched=false, events=[]}) {
 		if ([name, carry, image, imageIcon, obreasts, openis, ogender, fit, oheight, comfortableHeight,
 			 age, appDesc, fear, ohair, oskinColor, oeyeColor].includes(undefined)) {
@@ -185,6 +186,9 @@ class Character {
 		assert(typeof oblood === 'string',
 			   'oblood must be a string');
 		this.oblood = oblood;
+		assert(typeof osubdom === 'number',
+			   'osubdom must be a number');
+		this.osubdom = osubdom;
 		assert(Array.isArray(events),
 			   "events must be an array of events");
 		this.events = events;
@@ -297,6 +301,7 @@ class Character {
 	}
 
 	get curses() {
+		if (this.id === setup.companionIds.twin) return State.variables.mc.curses;
 		return this.events.filter(e => e instanceof Curse);
 	}
 
@@ -599,7 +604,7 @@ class Character {
 
 	/**
 	 * Returns the base size of this character's breasts. For internal use only.
-	 * When writing events involving this character use breastsCor instead.
+	 * When writing events involving this character, use breastsCor instead.
 	 * @returns {number}
 	 */
 	get breasts() {
@@ -714,7 +719,7 @@ class Character {
 		}
 		if (size_factor <= 6) {
 			/* Puberty phase: It shifts for females as theirs ends earlier; for simplicity */
-			/* I assumed the start is the same regardless although this is not entirely    */
+			/* I assumed the start is the same regardless, although this is not entirely   */
 			/* correct. I used a polynomial here to simulate the 'reverse growth spurt'.   */
 			let gendered_factor = size_factor - 0.2 * (this.gender - 1);
 			return adultHeight * (1 -
@@ -832,14 +837,7 @@ class Character {
 	 * @returns {number} The degree of sub/dom-ness of this character.
 	 */
 	get subdom() {
-		let subdom = 0;
-		if (this.id === setup.companionIds.maru) subdom = 1;
-		if (this.id === setup.companionIds.lily) subdom = -1;
-		if (this.id === setup.companionIds.khemia) subdom = -1;
-		if (this.id === setup.companionIds.cherry) subdom = 1;
-		if (this.id === setup.companionIds.golem) subdom = 10;
-		if(this.id === setup.companionIds.bandit && State.variables.BanditConvo0)  subdom = -1;
-		if(this.id === setup.companionIds.bandit && !State.variables.BanditConvo0)  subdom = 2;
+		let subdom = this.osubdom;
 		for (let event of this.events) {
 			subdom = event.changeSubDom(subdom);
 		}
