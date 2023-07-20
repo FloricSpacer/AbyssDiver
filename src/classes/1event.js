@@ -189,7 +189,7 @@ class CharEvent {
 
 	// eslint-disable-next-line no-unused-vars
 	lewdnessMult(prevLewdness, character) {
-		// multiplicative lewdness change. In a separate function because it needs to happen after additive change.
+		// Multiplicative lewdness change. In a separate function because it needs to happen after additive change.
 		return prevLewdness;
 	}
 
@@ -715,3 +715,46 @@ class LewdnessEvent extends CharEvent {
 }
 
 window.LewdnessEvent = LewdnessEvent;
+
+/* exported SubdomEvent */
+class SubdomEvent extends CharEvent {
+	/**
+	 * Creates a new submission/domination modifying event.
+	 * @param {string} name The name of the event.
+	 * @param {number} amount The number of stages by which to change the character's subdom factor.
+	 */
+	constructor(name, amount) {
+		super(name, 'other');
+		this.amount = amount;
+	}
+
+	/**
+	 * Returns the internal state of this event, from which another event can be built.
+	 * @returns {any} The internal state of this event.
+	 * @protected
+	 */
+	_internalState() {
+		return {superState: super._internalState(), amount: this.amount};
+	}
+
+	/**
+	 * Initialises this SubdomEvent with the given internal state.
+	 * Intended to be used only on new, empty objects while cloning.
+	 * @param {any} superState
+	 * @param {number} amount
+	 * @param {boolean} preventable
+	 * @returns {SubdomEvent} This object
+	 * @protected
+	 */
+	_init({superState, amount}) {
+		super._init(superState);
+		this.amount = amount;
+		return this;
+	}
+
+	changeSubDom(prevSubDom) {
+		return prevSubDom + this.amount;
+	}
+}
+
+window.SubdomEvent = SubdomEvent;

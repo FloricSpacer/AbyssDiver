@@ -733,7 +733,7 @@ Object.defineProperties(setup, {
             if (State.variables.mc.curses.find(c => c.name === 'Sex Switcheroo') === undefined && wantsOtherGenitals) {
                 willingCurses.push('Futa Fun');
             }
-            // men do *not* want to get pregnant.
+            // Men do *not* want to get pregnant.
             // Maru will take the risk though, for the opportunity to have a (non-adopted) family later.
             if (companion.mindSex === 'male' && companion.womb > 0 && companion.id !== setup.companionIds.maru) {
                 willingCurses.push('Absolute Birth Control');
@@ -741,7 +741,7 @@ Object.defineProperties(setup, {
             return willingCurses;
         }
     },
-    // puts one copy of a relic back where it was found. Only used for debugging purposes.
+    // Puts one copy of a relic back where it was found. Only used for debugging purposes.
     returnRelic: {
         value: (relic, all=false) => {
             if (typeof relic === 'string') {

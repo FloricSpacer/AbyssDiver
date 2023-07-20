@@ -530,7 +530,7 @@ class HeatRut extends Curse {
 		super('Heat/Rut', 20, 'Curses/heat.png', 'libido');
 	}
 
-	// libido change is implemented as special-purpose code in Character.libido because it requires accessing
+	// Libido change is implemented as special-purpose code in Character.libido because it requires accessing
 	// global variables and only applies to the main character.
 	// We might want to change that.
 
@@ -1737,7 +1737,7 @@ class SemenDemon extends Curse {
 	}
 
 	/**
-	 * Returns the customisation options chosen for this curse, if any.
+	 * Returns the customisation options chosen for this Curse, if any.
 	 * @returns {[string, number]} The customisation options, in the same order they are used in the constructor.
 	 * @protected
 	 */
@@ -1921,7 +1921,7 @@ class Weakling extends Curse {
 		super('Weakling', 65, 'Curses/weakling.png', 'none');
 	}
 
-	// handicaps implemented as special-purpose code in Character because it needs to come last.
+	// Handicaps are implemented as special-purpose code in Character because it needs to come last.
 }
 setup.allCurses.Weakling = new Weakling()
 State.variables.curse91 = setup.allCurses.Weakling
@@ -2129,7 +2129,7 @@ class AmpuQtie extends Curse {
 	}
 
 	/**
-	 * Returns the customisation options chosen for this curse, if any.
+	 * Returns the customisation options chosen for this Curse, if any.
 	 * @returns {[number, number]} The customisation options, in the same order they are used in the constructor.
 	 * @protected
 	 */
@@ -2215,7 +2215,7 @@ class ALittleExtra extends Curse {
 	}
 
 	/**
-	 * Returns the customisation options chosen for this curse, if any.
+	 * Returns the customisation options chosen for this Curse, if any.
 	 * @returns {[string]} The customisation options, in the same order they are used in the constructor.
 	 * @protected
 	 */
