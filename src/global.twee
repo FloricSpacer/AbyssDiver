@@ -1733,17 +1733,23 @@ What is your new name?
 <<textbox "$mc.name" "Nana" "Commerce Balloon">>
 
 
-:: Balloon debt1 [balloon]
+:: Balloon debt1 [surface]
+
 Cloud is willing to allow you to use his connections to fund your expedition, as long as you can pay back the loan after you're done, with interest of course.
+
+Unfortunately, he'll only let you borrow up to 200 dubloons unless you spend them immediately. You can go into negative dubloons while on the surface, and if you do, you will enter debt when you enter the Abyss. Otherwise, you can borrow up to 200 dubloons at once here.
+
+You have currently borrowed $tempDebt of your 200 dubloons of extra debt.
 
 How many dubloons would you like to borrow?
 <<textbox "$temp" "">>
 
-[[Confirm|Commerce Balloon][$dubloons += parseInt($temp), $debt += parseInt(Math.round($temp * 1.2))]]
+[[Confirm|Commerce Balloon][$dubloons += Math.min(parseInt($temp), (200 - $tempDebt)), $debt += parseInt(Math.round(Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2)), $tempDebt += Math.min(parseInt($temp), (200 - $tempDebt))]]
 <<back>>
 
 
-:: Balloon debt2 [balloon]
+:: Balloon debt2 [surface]
+
 In order to finally settle down at an ending, you must pay off your debt to Cloud's mysterious connections. You currently owe $debt dubloons of debt to them.
 
 How many dubloons would you like to pay back?
@@ -1751,6 +1757,7 @@ How many dubloons would you like to pay back?
 
 [[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
+
 
 :: Curse removal widget [widget nobr]
 <<widget "RemoveCurse">>
