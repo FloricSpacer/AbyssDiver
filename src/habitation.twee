@@ -2,66 +2,106 @@
 
 <<set setup.habitationSurface = {
 	name: "Surfaced Diver",
+	location: "the surface",
+	locationCode: "L0",
 	pic: "Habitation/surfacehabitation.png",
 	description: "Habitation Surface Description",
 }>>
 
 <<set setup.habitationL1 = {
 	name: "Outcast Village",
+	location: "the first layer",
+	locationCode: "L1",
 	pic: "Habitation/outcastvillage.png",
 	description: "Habitation L1 Description",
 }>>
 
 <<set setup.habitationL2 = {
 	name: "Downcast Village",
+	location: "the second layer",
+	locationCode: "L2",
 	pic: "Habitation/l2habitation.png",
 	description: "Habitation L2 Description",
 }>>
 
 <<set setup.habitationL3 = {
 	name: "Nymph Caverns",
+	location: "the third layer",
+	locationCode: "L3",
 	pic: "Habitation/l3habitation.png",
 	description: "Habitation L3 Description",
 }>>
 
 <<set setup.habitationL4 = {
 	name: "Wasteland Nomads",
+	location: "the fourth layer",
+	locationCode: "L4",
 	pic: "Habitation/l4habitation.png",
 	description: "Habitation L4 Description",
 }>>
 
 <<set setup.habitationL5 = {
 	name: "Orpheus Research Facility",
+	location: "the fifth layer",
+	locationCode: "L5",
 	pic: "Habitation/l5habitation.png",
 	description: "Habitation L5 Description",
 }>>
 
 <<set setup.habitationL6 = {
 	name: "Cult of Abaddon",
+	location: "the sixth layer",
+	locationCode: "L6",
 	pic: "Habitation/l6habitation.png",
 	description: "Habitation L6 Description",
 }>>
 
 <<set setup.habitationL7 = {
 	name: "Transhuman Revolution",
+	location: "the seventh layer",
+	locationCode: "L7",
 	pic: "Habitation/l7habitation.png",
 	description: "Habitation L7 Description",
 }>>
 
 <<set setup.habitationL8 = {
 	name: "Halcyon Daze",
+	location: "the eight layer",
+	locationCode: "L8",
 	pic: "Habitation/8possibilty1.png",
 	description: "Habitation L8 Description",
 }>>
 
 <<set setup.habitationL9 = {
 	name: "A New Appendage",
+	location: "the ninth layer",
+	locationCode: "L9",
 	pic: "Habitation/l9habitation.png",
 	description: "Habitation L9 Description",
 }>>
 
+:: HabitationGrid [widget nobr]
+<<widget "HabitationGrid">>
+<div class="cards-grid cards-wide">
+	<<for _habitation range _args>>
+		<div>
+			[img[setup.ImagePath + _habitation.pic]]
+			<h2>_habitation.name</h2>
+			<<if $corruption >= 0 && $debt <= 0 && $dubloons >= 0>>
+				<p><<link `'Choose to stay on ' + _habitation.location` `_ending`>><</link>></p>
+			<<elseif $corruption < 0>>
+				<p>@@color:grey;You can't choose a habitation while having negative corruption!@@</p>
+			<<else>>
+				<<set _temp = $debt - $dubloons>>
+				<p>@@color:grey;You must pay off all of your debt to settle down for habitation on the surface. You have _temp dubloons of debt, which you can pay at the Administrative Building.@@</p>
+			<</if>>
+			<p><<include `"Habitation " + _habitation.locationCode + " Description"`>></p>
+		</div>
+	<</for>>
+</div>
+<</widget>>
 
-:: Habitation Surface Description
+:: Habitation L0 Description
 
 So, you've decided you've had enough adventuring down in the Abyss, and you've returned a hero, with all your Relics as spoils of your quest. Congratulations! Feel free to sell off any Relics you no longer want at the shop and convert your remaining dubloons into whatever currency you like. The rest of your Relics are yours to keep!
 
