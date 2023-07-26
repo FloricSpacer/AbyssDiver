@@ -158,15 +158,13 @@ How would you like to use Cherry's chaotic luck ability?
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-foraging.png']]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
-<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-<<if _heightDirEvent === undefined && $forageFood === 1>>
-<<set _heightDirEvent = new HeightDirectionEvent()>>
-<<set $mc.events.push(_heightDirEvent)>>
-Would you like to increase or decrease your height due to eating flairabou meat?
+<<if $mc.heightDir === 0 && $forageFood === 1>>
+	<<set _heightDirEvent = new HeightDirectionEvent()>>
+	<<set $mc.events.push(_heightDirEvent)>>
+	Would you like to increase or decrease your height due to eating flairabou meat?
 
-<<radiobutton "_heightDirEvent.heightDirection" -1 checked>> Decrease
-<<radiobutton "_heightDirEvent.heightDirection" 1 >> Increase
-
+	<<radiobutton "_heightDirEvent.heightDirection" -1 checked>> Decrease
+	<<radiobutton "_heightDirEvent.heightDirection" 1 >> Increase
 <</if>>
 <<nobr>>
 <<if $forageWater === 0>>
@@ -821,6 +819,294 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 
 [[Return to exploring layer 4|Layer4 Hub]]
 <</if>>
+
+
+:: Diver shrine [layer4]
+Here you can compile constellations of Curses to inflict on other divers visiting this shrine, or let yourself be cursed by another diver's constellation for extra corruption.
+
+[[View constellations left by previous divers|Diver shrine builtins]]
+[[View constellations you created|Diver shrine user]]
+[[Take on a random constellation for 1.5x corruption|Diver shrine take random]]
+[[Create a new constellation of curses for future divers|Diver shrine make new]]
+[[Import/export constellations|Diver shrine import]]
+[[Go back to the Steady Shrine|Steady Shrine Site]]
+
+:: Diver shrine builtins [layer4]
+These constellations of curses have been left by previous divers.
+You may choose one of them and be cursed with it for the usual corruption, or go back and choose to be inflicted with a random constellation for additional corruption.
+
+<<nobr>>
+	<<for _constellation range setup.getCurseSets()>>
+		<<capture _constellation>>
+			<<link _constellation.name "Diver shrine inspect constellation">>
+				/* I really don't like that we have to set a global variable here, but there's no other way
+				 * to show this on a new page afaict. */
+				<<set $diverShrineSelectedCurse = _constellation.name>>
+			<</link>>
+			<br>
+		<</capture>>
+	<</for>>
+<</nobr>>
+
+<<back>>
+
+:: Diver shrine user [layer4]
+These are the constellations of curses you (or previous divers in your slice of the multiverse) created.
+You may choose one of them and be cursed with it for the usual corruption, or go back and choose to be inflicted with a random constellation for additional corruption.
+
+<<nobr>>
+	<<for _constellation range setup.getUserCurseSets()>>
+		<<capture _constellation>>
+			<<link _constellation.name "Diver shrine inspect user constellation">>
+				/* I really don't like that we have to set a global variable here, but there's no other way
+				 * to show this on a new page afaict. */
+				<<set $diverShrineSelectedCurse = _constellation.name>>
+			<</link>>
+			<br>
+		<</capture>>
+	<</for>>
+<</nobr>>
+
+<<back>>
+
+:: Diver shrine inspect constellation [layer4 nobr]
+<<set _constellation = setup.getCurseSets().find(c => c.name === $diverShrineSelectedCurse)>>
+This constellation includes the following curses:<br><br>
+<<for _curse range _constellation.curses>>
+	/* We could also make this a link which inserts the description when clicked, but I don't want to spoil curses
+	 * they haven't seen yet. */
+	<<print _curse.name>><br>
+<</for>>
+<br>
+If you own the notebook or smartphone you can look up the description of curses you know about in the layer notes.<br>
+If you don't remember them, or haven't been to their layer... You're in for a surprise :)
+<br><br>
+Description:<br>
+<<print _constellation.description>>
+<br><br>
+[[Take on this constellation|Diver shrine take constellation]]<br>
+<<back>>
+
+:: Diver shrine inspect user constellation [layer4 nobr]
+<<set _constellation = setup.getUserCurseSets().find(c => c.name === $diverShrineSelectedCurse)>>
+This constellation includes the following curses:<br><br>
+<<for _curse range _constellation.curses>>
+	/* We could also make this a link which inserts the description when clicked, but I don't want to spoil curses
+	 * they haven't seen yet. */
+	<<print _curse.name>><br>
+<</for>>
+<br>
+If you own the notebook or smartphone you can look up the description of curses you know about in the layer notes.
+If you don't remember them, or haven't been to their layer... You're in for a surprise :)
+<br><br>
+Description:<br>
+<<print _constellation.description>>
+<br><br>
+[[Take on this constellation|Diver shrine take user constellation]]<br>
+[[Remove this constellation|Diver shrine][setup.removeUserCurseSet($diverShrineSelectedCurse)]]<br>
+<<back>>
+<br><br>
+If you want to share this constellation with others, use this code:
+<pre><<print JSON.stringify(_constellation)>></pre>
+You can triple-click inside the code box to select it all.
+
+:: Diver shrine take random [layer4 nobr]
+<<set _systemConstellations = setup.getCurseSets()>>
+<<set _userConstellations = setup.getUserCurseSets()>>
+<<set _constellations = _systemConstellations.length + _userConstellations.length>>
+<<set _selected = Math.floor(Math.random() * _constellations)>>
+<<if _selected < _systemConstellations.length>>
+	<<set $diverShrineSelectedCurse = _systemConstellations[_selected].name>>
+	<<set _constellation = _systemConstellations[_selected]>>
+<<else>>
+	<<set $diverShrineSelectedCurse = _userConstellations[_selected - _systemConstellations.length].name>>
+	<<set _constellation = _userConstellations[_selected - _systemConstellations.length]>>
+<</if>>
+
+<<if _constellation.canBeTakenBy($mc)>>
+	You've been inflicted with the $diverShrineSelectedCurse constellation!<br>
+	<<set _diverShrineMultiply = true>>
+	<<include "Diver shrine apply constellation">>
+<<elseif _systemConstellations.concat(_userConstellations).every(c => !c.canBeTakenBy($mc))>>
+	There are no constellations you are able to take. They all have unfulfilled requirements, such as a curse
+	which is incompatible with your current curses, or you already have all the curses in the constellation.
+<<else>>
+	<<include "Diver shrine take random">>
+<</if>>
+
+:: Diver shrine take constellation [layer4 nobr]
+<<set _constellation = setup.getCurseSets().find(c => c.name === $diverShrineSelectedCurse)>>
+<<set _incompatible = false>>
+<<for _curse range _constellation.curses>>
+	<<if !$mc.isCompatible(_curse)>>
+		<<set _incompatible = _curse.name>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set _unfulfilledRequirements = _constellation.requirements.filter(r => !r.isSatisfiedBy($mc))>>
+<<if _incompatible !== false>>
+	This constellation includes the _incompatible curse which cannot be taken with your existing curses.<br>
+	<<back>>
+<<elseif _unfulfilledRequirements.length > 0>>
+	The following requirements for taking this constellation are not met:
+	<ul>
+	<<for _req range _unfulfilledRequirements>>
+		<li><<print _req.errorMessage()>></li>
+	<</for>>
+	</ul>
+<<else>>
+	<<include "Diver shrine apply constellation">>
+<</if>>
+
+:: Diver shrine take user constellation [layer4 nobr]
+<<set _constellation = setup.getUserCurseSets().find(c => c.name === $diverShrineSelectedCurse)>>
+<<set _incompatible = false>>
+<<for _curse range _constellation.curses>>
+	<<if !$mc.isCompatible(_curse)>>
+		<<set _incompatible = _curse.name>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set _unfulfilledRequirements = _constellation.requirements.filter(r => !r.isSatisfiedBy($mc))>>
+<<if _incompatible !== false>>
+	This constellation includes the _incompatible curse which cannot be taken with your existing curses.<br>
+	<<back>>
+<<elseif _unfulfilledRequirements.length > 0>>
+	The following requirements for taking this constellation are not met:
+	<ul>
+	<<for _req range _unfulfilledRequirements>>
+		<li><<print _req.errorMessage()>></li>
+	<</for>>
+	</ul>
+<<else>>
+	<<include "Diver shrine apply constellation">>
+<</if>>
+
+:: Diver shrine apply constellation [layer4 nobr]
+You got the following new curses:<br>
+<<for _curse range _constellation.curses>>
+	<<set _constellationCount = _constellation.curses.filter(c => c instanceof _curse.constructor).length>>
+	<<set _userCount = $mc.events.filter(c => c instanceof _curse.constructor).length>>
+	<<if _userCount < _constellationCount && $mc.isCompatible(_curse)>>
+		<h2>
+			<<if _curse instanceof BelowTheVeil>>
+				B̸̳̀e̷̞̅l̷̠̽o̸̝͝w̶̻̄ ̵̡͊t̶̖͠h̵͙̔ë̵͎́ ̸̭́V̸̖͘e̸̓͜ḭ̴͂l̷͕̅
+			<<else>>
+				<<print _curse.name>>
+			<</if>>
+		</h2>
+		<<if _curse instanceof SemenDemon && $mc.hasCurse(SemenDemon)>>
+			<<set _curse.fluidType = $mc.getCurse(SemenDemon).fluidType>>
+		<</if>>
+		<<if _curse.name.startsWith("Libido Reinforcement ") || _curse.name.startsWith("Gender Reversal ")>>
+			<<LeveledCurseDescription `_curse.name`>>
+		<<else>>
+			<<include `_curse.name + " Description"`>>
+		<</if>>
+		<<if _diverShrineMultiply>>
+			<<set _curse.corruption = _curse.constructor.corruption * 1.5;>>
+		<<else>>
+			<<set _curse.corruption = _curse.constructor.corruption>>
+		<</if>>
+		<<set $mc.addCurse(_curse)>>
+		<<set $corruption += _curse.corruption>>
+	<</if>>
+<</for>>
+<br><br>
+[[Continue|Diver shrine]]
+
+:: Diver shrine make new [layer4 nobr]
+Choose a name for your new constellation. Using an existing name will overwrite that constellation.<br>
+<<set _name = "myConstellation">>
+<<textbox '_name' 'myConstellation'>><br>
+Write a description for your new constellation. Be as brief or as expansive as you want.
+<<textarea '_description' ''>>
+<br><br>
+Choose a subset of your current curses to form a new constellation:<br>
+<<set _curses = []>>
+<<for _curse range $mc.curses>>
+	<<capture _curse, _toggle>>
+		<<set _toggle = toggle((curse => b => b === true ? _curses.pushUnique(curse) : _curses.delete(curse))(_curse))>>
+		<label style="display:flex;justify-content:space-between;align-items:center;max-width:30em;margin:auto;"><<print _curse.name>> <<printHTML _toggle>></label>
+	<</capture>>
+<</for>>
+<div id="diver-shrine-confirm-diag" style="display:none">
+	Constellation Saved. If you want to share this constellation with others, use this code:
+	<pre id="diver-shrine-export-box"></pre>
+	You can triple-click inside the code box to select it all.<br>
+	Note that these constellations, like saves, are stored in local storage — a browser feature to persist data.<br>
+	This means that if you use a different browser (or in some browsers a different profile) you won't see them and
+	if you're using a private window, they'll be deleted when you close the tab (or window, depends on the browser).<br>
+	If you delete this website's data ("Clear cookies and site data" or similar buttons), they'll disappear too.<br>
+	In any of these cases, save the above code somewhere and import it again to restore the constellation.
+</div><br>
+<<link "Save">>
+	<<set _constellation = new Constellation(_name, _curses, _description)>>
+	<<set setup.addUserCurseSet(_constellation)>>
+	<<set $('#diver-shrine-export-box').text(JSON.stringify(_constellation))>>
+	<<set $('#diver-shrine-confirm-diag').css({display: 'initial'})>>
+<</link>><br>
+<<back>>
+
+:: Diver shrine import [layer4]
+WARNING: Constellation codes can be abused to run arbitrary code. A malicious person could share a fake \
+constellation code that instead of adding a constellation performs other actions.
+It could change the state of your game, change the game itself, show deceiving messages or mine cryptocurrencies \
+in your browser.
+
+It could <b>not</b> access your hard drive or any personal information that you haven't typed into the game and \
+it will become inactive when you close this tab (although it could store itself and reactivate next time you open the game).
+Entering an untrusted code on this page is about as dangerous as visiting any other untrusted website, as long as you \
+keep in mind that after you do it, you should consider the entire game untrusted, even if previously you didn't.
+
+We recommend not to use any constellation codes from sources you don't trust.
+
+
+Use this code to share all your constellations:\
+<pre>\
+<<print JSON.stringify(setup.getUserCurseSets())>>
+</pre>\
+Paste such a code here to import all of its constellations. Note that if you already have constellations with the same name, they will be overwritten.
+<input type="text" id="diver-shrine-bulk-import-field" />
+
+<<link "Import constellations">>
+	<<set _constellations = JSON.tryParse($('#diver-shrine-bulk-import-field')[0].value)>>
+	<<if _constellations === false || !(Array.isArray(_constellations) && _constellations.every(c => c instanceof Constellation))>>
+		<<set alert('The code you provided is not a valid set of constellations. It could be a single constellation, in which case use the form below to import it.')>>
+	<<else>>
+		<<set for (let constellation of _constellations) {
+			if (!setup.addUserCurseSet(constellation)) {
+				alert(`Importing constellations failed at constellation ${constellation}. This happened because the place where constellations are stored has limited size, and we ran out of space. This is configurable on most browsers (look up "increase local storage size" for your browser). Note that saves (including the automatic one that lets your reload the page without losing progress) and Curse constellations are stored in the same place and so compete for space. A large number of constellations will reduce the space available for saves and vice-versa. This means you might be able to make more space by deleting some saves or constellations. It also means that if importing this constellation failed, saving (including the mentioned automatic save) might fail soon too. We recommend ensuring that there is sufficient space immediately.`);
+				break;
+			}
+		}>>
+		<<set $('#diver-shrine-bulk-import-field')[0].value = ''>>
+	<</if>>
+<</link>>
+
+
+Import a single constellation's code here:
+<input type="text" id="diver-shrine-import-single-field" />
+Write a name here if you want to replace the constellation's name (e.g., to avoid a collision with an existing constellation):
+<input type="text" id="diver-shrine-import-single-name" />
+
+<<link "Import constellation">>
+	<<set _name = $('#diver-shrine-import-single-name')[0].value>>
+	<<set _constellation = JSON.tryParse($('#diver-shrine-import-single-field')[0].value)>>
+	<<if !_constellation instanceof Constellation>>
+		<<set alert('The code you provided is not a valid constellation. It could be a set of constellations instead, in which case use the form above to import it')>>
+	<<elseif _name !== ''>>
+		<<set _constellation.name = _name>>
+	<<else>>
+		<<if !setup.addUserCurseSet(_constellation)>>
+        	<<set alert(`Importing constellations failed. This happened because the place where constellations are stored has limited size, and we ran out of space. This is configurable on most browsers (look up "increase local storage size" for your browser). Note that saves (including the automatic one that lets your reload the page without losing progress) and Curse constellations are stored in the same place and so compete for space. A large number of constellations will reduce the space available for saves and vice-versa. This means you might be able to make more space by deleting some saves or constellations. It also means that if importing this constellation failed, saving (including the mentioned automatic save) might fail soon too. We recommend ensuring that there is sufficient space immediately.`);>>
+        <</if>>
+        <<set $('#diver-shrine-import-single-field')[0].value = ''>>
+        <<set $('#diver-shrine-import-single-name')[0].value = ''>>
+	<</if>>
+<</link>>
+
+<<back>>
 
 
 :: Purity Tree Site [layer4]
@@ -1552,5 +1838,7 @@ Three days later, the Drifting Swallower expels you from its body, leaving you b
 <<else>>
 	None of your companions trust you at this shrine anymore. None will get close enough for you to use the shrine with them. They watch you with eyes full of fear and anger, as if they could bolt at any moment and leave you alone in the Abyss.
 <</if>>
+
+[[Visit the Diver shrine|Diver shrine]]
 [[Return to exploring the fourth layer|Layer4 Hub]]
 <</if>>
