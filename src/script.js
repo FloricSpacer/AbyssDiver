@@ -1,3 +1,75 @@
+// These JSDoc declarations silence warnings about undeclared properties of the variables object.
+
+/**
+ * @type {object}
+ * @property {Object.<string, any>} variables
+ */
+State
+
+/**
+ * @callback variablesGetter
+ * @returns {Object.<string, any>}
+ */
+/**
+ * @type {variablesGetter}
+ */
+variables
+
+// This JSDoc declaration defines the extensions we add to setup in this file
+/**
+ * @typedef SugarCubeSetupObject
+ * @extends SugarCubeSetupObject
+ * @property {string} Path
+ * @property {string} ImagePath
+ * @property {string} SoundPath
+ * @property {int} never
+ * @property {string[]} flaskLabels
+ * @property {function} curse
+ * @property {function} curses
+ * @property {function} item
+ * @property {function} items
+ * @property {function} relic
+ * @property {function} relics
+ * @property {function} companion
+ * @property {function} companions
+ * @property {function} sellValue
+ * @property {function} modAffection
+ * @property {function} activeCurseCount
+ * @property {number} carriedWeight
+ * @property {boolean} haveCuttingTool
+ * @property {boolean} haveSword
+ * @property {boolean} haveScubaGear
+ * @property {boolean} haveSmartphoneRegular
+ * @property {boolean} haveSmartphoneAI
+ * @property {boolean} haveSmartphone
+ * @property {boolean} haveUnlimitedLightSource
+ * @property {boolean} havePotentialLightSource
+ * @property {boolean} haveTravelLightSource
+ * @property {boolean} haveNotepad
+ * @property {boolean} haveRope
+ * @property {boolean} haveHealing
+ * @property {boolean} haveColdProtection
+ * @property {boolean} haveHeatProtection
+ * @property {function} sellRelic
+ * @property {function} unsellRelic
+ * @property {function} loseRelic
+ * @property {boolean} passingTime
+ * @property {function} startPassingTime
+ * @property {function} stopPassingTime
+ * @property {function} isPregnant
+ * @property {function} setConsideredPregnant
+ * @property {function} setNotPregnant
+ * @property {function} dueDate
+ * @property {function} daysConsideredPregnant
+ * @property {function} daysUntilDue
+ * @property {function} willingCurses
+ * @property {function} returnRelic
+ * @property {function} getCurseSets
+ * @property {function} getUserCurseSets
+ * @property {function} setUserCurseSets
+ * @property {function} addUserCurseSet
+ */
+
 Object.defineProperties(Number.prototype, {
     // Rounds the number to the given number of decimals.
     toRounded: {
@@ -759,5 +831,335 @@ Object.defineProperties(setup, {
                 }
             }
         }
-    }
+    },
+    /* global Constellation */
+    // eslint-disable-next-line no-unused-vars
+    /* global LibidoReinforcementA, GenderReversalA, AssetRobustnessA, ClothingRestrictionA, ShrunkenAssets, HairRemoval, PermaDye, FreckleSpeckle, KnifeEar, DizzyingHeights, IncreasedSensitivity, RefractoryRefactorization, LibidoReinforcementB, GenderReversalB, AssetRobustnessB, AgeReductionA, FluffyEars, FluffyTail, MaximumFluff, HeatRut, Lightweight, SexSwitcheroo, FutaFun, BlushingVirgin, SubmissivenessRectificationA, GenderReversalC, AssetRobustnessC, ClothingRestrictionB, PowerDom, Curse2020, ComicRelief, EqualOpportunity, AbsolutePregnancy, AbsoluteBirthControl, WackyWombs, Omnitool, Gooey, RainbowSwirl, DoublePepperoni, LiteralBlushingVirgin, LibidoReinforcementC, LactationRejuvenationA, AssetRobustnessD, AgeReductionB, SleepTight, SweetDreams, HypnoHappytime, CrossdressYourHeart, LieDetector, Megadontia, Softie, HardMode, LingualLeviathan, TippingTheScales, Reptail, ColdBlooded, LibidoReinforcementD, GenderReversalD, PleasureRespecificationA, ClothingRestrictionC, MassacreManicure, DoS, DoM, HijinksEnsue, FlowerPower, Cellulose, Chlorophyll, Pheromones, Carapacian, Hemospectrum, WrigglyAntennae, Eggxellent, SubmissivenessRectificationB, LactationRejuvenationB, PleasureRespecificationB, AgeReductionC, Horny, DrawingSpades, TattooTally, Leaky, WanderingHands, SemenDemon, Quota, InTheLimelight, LibidoReinforcementE, GenderReversalE, AssetRobustnessE, UrineReamplificationA, BarterSystem, SharedSpace, Weakling, RandomOrgasms, Beastly, CreatureOfTheNight, Minishish, Colossalable, LibidoReinforcementF, GenderReversalF, AssetRobustnessF, UrineReamplificationB, EyeOnThePrize, DeafeningSilence, TaciturnTurnaround, AmpuQtie, NoseGoes, ArmArmy, ALittleExtra, Null, Seafolk, TakenForGranite, DoubleTrouble, Conjoined, LibidoReinforcementG, GenderReversalG, AssetRobustnessG, Literalization, ConsentDissent, TheMaxim, AdversePossession, Erased, TicklyTentacles, Eyescream, AMouthful, BelowTheVeil, PrincessProtocol */
+    // eslint-disable-next-line no-unused-vars
+    /* global NotGrowingReq, NotShrinkingReq, HasPenisReq, HasVaginaReq */
+    getCurseSets: {
+        /**
+         * Gets the game-defined list of curse sets.
+         * @returns {Constellation[]} A list of Constellations.
+         */
+        value: () => {
+            // noinspection JSNonASCIINames
+            return [
+                new Constellation('Pet',
+                                  [
+                                      new FluffyEars('furry cat'),
+                                      new FluffyTail('flowing cat'),
+                                      new SharedSpace(),
+                                      new HairRemoval(),
+                                      new SleepTight(),
+                                      new ClothingRestrictionB(),
+                                      new ClothingRestrictionC(),
+                                      new DizzyingHeights(-1),
+                                      new DizzyingHeights(-1),
+                                      new DizzyingHeights(-1),
+                                      new DizzyingHeights(-1),
+                                      new DizzyingHeights(-1),
+                                      new BarterSystem(),
+                                      new SubmissivenessRectificationA(),
+                                      new HeatRut(),
+                                      new IncreasedSensitivity(),
+                                      new ShrunkenAssets(),
+                                      new AgeReductionB(),
+                                      new RainbowSwirl('lightly tanned', 'deep blue'),
+                                      new Chlorophyll(),
+                                      new EqualOpportunity(),
+                                      new ComicRelief(),
+                                      new ColdBlooded(),
+                                      new Erased(),
+                                      new Omnitool(),
+                                      new Pheromones(),
+                                  ],
+                                  `This constellation turns cursed persons into a human pet (inspired by cats). 
+Curse explanations: 
+ - fluffy ears/tail — aesthetic.
+ - Shared Space — pets don't get personal space.
+ - Hair Removal — aesthetic.
+ - Sleep Tight — pets lounge around and sleep everywhere.
+ - Clothing Restriction C/B — pets don't wear clothes.
+ - Dizzying Heights — pets tend to be small.
+ - Barter System — pets don't have money.
+ - Submissiveness Rectification A — pets (mostly) obey their owners.
+ - Heat/Rut — pets go into heat sometimes.
+ - Increased Sensitivity — pets like it when people pet them.
+ - Shrunken Assets — a pet with huge breasts just looks weird.
+ - Age Reduction B — a pet that looks like a 50 year old just looks weird. This curse ensures age 20 or less.
+ - Rainbow Swirl — needed to negate the skin-changing effect of the next curse.
+ - Chlorophyll — pets like to lounge in the sun.
+ - Equal Opportunity — pets don't distinguish between human genders.
+ - Comic Relief — nobody would take a pet seriously.
+ - Cold Blooded — pets like to cuddle and sleep in the sun.
+ - Erased — nobody remembers a time when this pet wasn't a pet.
+ - Omnitool — pets give birth to pets.
+ - Pheromones — pets like getting attention from people around them.`,
+                                  [new NotGrowingReq()]),
+                new Constellation('Pet — beastly',
+                                  [
+                                      new FluffyEars('furry cat'),
+                                      new FluffyTail('flowing cat'),
+                                      new MaximumFluff('cat-furred'),
+                                      new PermaDye('mottled black and white'),
+                                      new SharedSpace(),
+                                      new ClothingRestrictionA(),
+                                      new ClothingRestrictionB(),
+                                      new ClothingRestrictionC(),
+                                      new BarterSystem(),
+                                      new HeatRut(),
+                                      new ComicRelief(),
+                                      new Omnitool(),
+                                      new Erased(),
+                                      new Megadontia(),
+                                      new Beastly(),
+                                  ],
+                                  `This constellation turns people into a pet. 
+Unlike the Pet constellation, this one is focused more on making them animal-like than on treatment by others.
+Most curses should be fairly self-explanatory.
+A few that might not be:
+ - Comic Relief: People don't take animals seriously.
+ - Erased: animals have always been animals.`),
+                new Constellation('Eldritch',
+                                  [
+                                      new Erased(),
+                                      new ClothingRestrictionC(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new TicklyTentacles(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new Eyescream(),
+                                      new AMouthful(),
+                                      new AMouthful(),
+                                      new AMouthful(),
+                                      new AMouthful(),
+                                      new AMouthful(),
+                                      new BelowTheVeil(),
+                                  ],
+                                  `This constellation turns people into an eldritch being. 
+The curses should be pretty self-explanatory.
+Clothing restriction C is there to people from hiding themselves.`),
+                new Constellation('Sex Slave',
+                                  [
+                                      new LibidoReinforcementA(),
+                                      new LibidoReinforcementB(),
+                                      new LibidoReinforcementC(),
+                                      new ClothingRestrictionC(),
+                                      new HairRemoval(),
+                                      new KnifeEar(),
+                                      new IncreasedSensitivity(),
+                                      new RefractoryRefactorization(),
+                                      new AgeReductionA(),
+                                      new Lightweight(),
+                                      new LiteralBlushingVirgin(),
+                                      new SubmissivenessRectificationA(),
+                                      new SubmissivenessRectificationB(),
+                                      new ComicRelief(),
+                                      new EqualOpportunity(),
+                                      new AbsoluteBirthControl(),
+                                      new HypnoHappytime(),
+                                      new LieDetector(),
+                                      new HardMode(),
+                                      new LingualLeviathan(),
+                                      new ColdBlooded(),
+                                      new PleasureRespecificationA(),
+                                      new DoM(),
+                                      new Pheromones(),
+                                      new Leaky(),
+                                      new WanderingHands(),
+                                      new Quota(),
+                                      new BarterSystem(),
+                                      new SharedSpace(),
+                                      new Weakling(),
+                                      new RandomOrgasms(),
+                                      // The genital field is only used if the character has both genitals, so this is
+                                      // safe even if a man takes this constellation.
+                                      new ALittleExtra('vagina'),
+                                      new DoubleTrouble('Nono', 'same'),
+                                      new Erased(),
+                                  ],
+                                  `This constellation turns people into perfect sex slaves.
+Explanations for a few of the curses:
+ - Knife-ear is optional, for masters who like that sort of thing.
+ - One level of age reduction ensures you don't get old sex slaves. Masters with certain preferences might prefer a slave with the other levels too.
+ - Lightweight makes slaves more receptive to aphrodisiacs and other drugs.
+ - Literal Blushing Virgins are valued by some, though perhaps off-putting to others. Up to the master's preference.
+ - Cold Blooded gives slaves an incentive to stay with their master(s) at night AND makes it harder to escape, especially in winter.
+ - Libido reinforcements mean they're going to want a lot of sex, and Pleasure Respecification A means they'll want it with their master instead of taking care of it themselves.
+ - DoM does unfortunately decrease pleasure from other sources a bit, but it is assumed the increased sensitivity and other curses make up for it.
+ - Quota also makes them proactively try to please their masters and provides ulterior obstacles to escaping.
+ - Barter System because slaves don't own property.
+ - Erased avoids complications with wannabe rescuers from the slave's past.
+ - Double Trouble is a free 2-for-1 package.
+ Optionally add Consent Dissent.`),
+                new Constellation('Trans',
+                                  [
+                                      new GenderReversalA(),
+                                      new GenderReversalB(),
+                                      new GenderReversalC(),
+                                      new GenderReversalD(),
+                                      new GenderReversalE(),
+                                      new SexSwitcheroo(),
+                                  ],
+                                  `This constellation flips the cursed person's sex and gender.`),
+                new Constellation('Statue',
+                                  [
+                                      new LibidoReinforcementA(),
+                                      new LibidoReinforcementB(),
+                                      new LibidoReinforcementC(),
+                                      new LibidoReinforcementD(),
+                                      new ClothingRestrictionA(),
+                                      new ClothingRestrictionB(),
+                                      new ClothingRestrictionC(),
+                                      new HairRemoval(),
+                                      new PermaDye('asbestos-white'),
+                                      new IncreasedSensitivity(),
+                                      new RefractoryRefactorization(),
+                                      new HeatRut(),
+                                      new SubmissivenessRectificationA(),
+                                      new SubmissivenessRectificationB(),
+                                      new EqualOpportunity(),
+                                      new AbsoluteBirthControl(),
+                                      new RainbowSwirl('granite-grey', 'quartz-white'),
+                                      new SweetDreams(),
+                                      new HardMode(),
+                                      new HijinksEnsue(),
+                                      new Pheromones(),
+                                      new TattooTally(),
+                                      new WanderingHands(),
+                                      new Quota(),
+                                      new InTheLimelight(),
+                                      new InTheLimelight(),
+                                      new InTheLimelight(),
+                                      new InTheLimelight(),
+                                      new SharedSpace(),
+                                      new RandomOrgasms(),
+                                      new RandomOrgasms(),
+                                      new RandomOrgasms(),
+                                      new RandomOrgasms(),
+                                      new RandomOrgasms(),
+                                      new ALittleExtra('vagina'),
+                                      new TakenForGranite(),
+                                      new TheMaxim('vagina'),
+                                  ],
+                                  `This constellation turns people into statues.
+All the curses that make them orgasm a lot, combined with Taken for Granite.
+A few extra explanations:
+ - Tattoo Tally doesn't really serve a function, it just makes sense for a statue to be scribbled on.
+ - The Maxim is genital-specific, so this constellation assumes the statue is female. Take Futa Fun or Sex Switcheroo first if that is not the case.`,
+                                  [new HasVaginaReq()])
+            ];
+        }
+    },
+    getUserCurseSets: {
+        /**
+         * Gets the user-defined list of curse sets.
+         * @returns {Constellation[]} A list of constellations.
+         */
+        value: () => {
+            let jsonSets = localStorage.getItem('abyss-diver-user-defined-curse-sets');
+            if (jsonSets === null) return [];
+            /** @type {Constellation[]} */
+            let objSets = JSON.parse(jsonSets);
+            for (let set of objSets) {
+                for (let curse of set.curses) {
+                    curse.time = State.variables.time;
+                }
+            }
+            return objSets;
+        }
+    },
+    setUserCurseSets: {
+        /**
+         * Stores the given curse sets in local storage.
+         * @param {Constellation[]} sets
+         */
+        value: (sets) => {
+            try {
+                localStorage.setItem('abyss-diver-user-defined-curse-sets', JSON.stringify(sets));
+            } catch (ex) {
+                return false;
+            }
+            return true;
+        }
+    },
+    addUserCurseSet: {
+        /**
+         * Adds a curse set to the user-defined list.
+         * If the set with the given name already exists, it is replaced.
+         * @param {Constellation} constellation The constellation to add or replace.
+         * @return {boolean} true iff the changed set has been saved successfully.
+         */
+        value: (constellation) => {
+            for (let curse of constellation.curses) {
+                // unset the height change direction since user constellations don't have requirements.
+                if (curse instanceof DizzyingHeights) curse.direction = 0;
+            }
+            let sets = setup.getUserCurseSets();
+            let replaced = sets.find(c => c.name === constellation.name);
+            if (replaced !== undefined) sets.delete(replaced);
+            sets.push(constellation);
+            return setup.setUserCurseSets(sets);
+        }
+    },
+    removeUserCurseSet: {
+        /**
+         * Removes the curse set with the given name, if it exists.
+         * @param {string} name The name of the set to remove.
+         */
+        value: (name) => {
+            let sets = setup.getUserCurseSets();
+            sets.deleteWith(c => c.name === name);
+            return setup.setUserCurseSets(sets);
+        }
+    },
+    // used by the print widget to temporarily store the elements to be printed
+    printWidgetCache: {
+        value: {}
+    },
 });
+
+Object.defineProperties(JSON, {
+    tryParse: {
+        /**
+         * Returns the parsed object if successful and false otherwise.
+         * @param {string} jsonString The string to parse
+         * @returns {any|false} The parsed object or false
+         */
+        value: jsonString => {
+            try {
+                let res = JSON.parse(jsonString);
+                if (res !== null && typeof res === 'object') {
+                    return res;
+                }
+            } catch (e) { /* empty */ }
+            return false;
+        }
+    }
+})
