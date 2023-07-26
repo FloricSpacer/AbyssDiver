@@ -179,7 +179,6 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 
 :: Debug Menu
 
-
 [[Surface Hub]]
 [[Layer1 Hub]]
 [[Layer2 Hub]]
@@ -194,6 +193,8 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 <<if $time > 0>>
 	[[View time spent in each layer|Time Stats]]<br>
 <</if>>
+
+[[All Curses]]
 
 [[Pick up the Pulse Bloom]]
 [[Pick up the Luminous Phantasmagoria]]
@@ -251,6 +252,12 @@ genderVoice $mc.genderVoice
 style $mc.style
 style1 $mc.style1
 imageIcon $mc.imageIcon
+<<back>>
+
+
+:: All Curses [nobr noreturn cards]
+<<back>>
+<<CurseGrid `setup.cursesOnLayer.reduce((a, b) => a.concat(b), [])`>>
 <<back>>
 
 
@@ -1493,7 +1500,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 						<<include "Eye on the Prize Customization">><br>
 					<<elseif _curse.name === "Ampu-Q-tie" && _curse.arms + _curse.legs === 0>>
 						<<include "Ampu-Q-tie Customization">><br>
-					<<elseif _curse.name === "Dizzying Heights" && $mc.getEvent(HeightDirectionEvent) === undefined>>
+					<<elseif _curse.name === "Dizzying Heights" && $mc.heightDir === 0>>
 						<<set _heightDirEvent = new HeightDirectionEvent()>>
 						<<set $mc.events.push(_heightDirEvent)>>
 						As you look into the marbles you see your own reflection in the marble, as well as the miasma of the Curse swirling within.<br>

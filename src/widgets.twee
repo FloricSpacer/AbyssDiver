@@ -1144,3 +1144,26 @@
 <</if>>
 
 <</widget>>
+
+:: Improved print widget [widget nobr]
+<<widget "printHTML">>
+	/* Be careful when using this widget. Sugarcube argument parsing is a bit screwy so you might get unintended results.
+	 * To be safe, only use variables as arguments to this widget. */
+	<<if _args[0] instanceof HTMLElement>>
+		<<set _target = _args[0]>>
+	<<else>>
+		<<set _target = eval(_args.join(' '))>>
+		<<set console.warn('using unsafe eval variant of print widget')>>
+	<</if>>
+	/* with 1M "slots", using 200 widgets on the same page gives you a 0.002% chance of a collision */
+	<<set _id = Math.floor(Math.random() * 1024 * 1024)>>
+	<<set setup.printWidgetCache[_id] = _target>>
+	<span class="print-widget-id-class" @data-content="_id"></span>
+	<script>
+		if (SugarCube.setup === undefined) alert('This passage uses a feature that does not work if it is the first passage to be shown after loading (you\'ll get another error message about that right after this one).\nWe recommend you switch passage immediately (press any link that replaces all the text on the screen) and then come back to this passage to do whatever you wanted to do (the forward/backward navigation arrows in the top left of the page (NOT the browser\'s) should also work).\nWe also recommend that you avoid reloading the page or saving the game while on this passage in the future.');
+		$('.print-widget-id-class').each((i, e) => {
+			e.replaceWith(SugarCube.setup.printWidgetCache[e.dataset.content]);
+			delete SugarCube.setup.printWidgetCache[e.dataset.content];
+		});
+	</script>
+<</widget>>

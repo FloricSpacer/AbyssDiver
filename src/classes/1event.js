@@ -31,18 +31,12 @@ class CharEvent {
 	/**
 	 * Initialises this CharEvent with the given internal state. Intended to be used only on new, empty objects while
 	 * cloning.
-	 * @param {string} name
-	 * @param {'age' | 'asset' | 'lactation' | 'height' | 'heightdir' | 'libido' | 'standards' | 'lewdness' | 'none' |
-	 *     'other'} type
-	 * @param {number} time
+	 * @param {object} o The internal state to be copied over.
 	 * @returns {CharEvent} This object
 	 * @protected
 	 */
-	_init({name, type, time}) {
-		this.name = name;
-		this.type = type;
-		this.time = time;
-		return this;
+	_init(o) {
+		return Object.assign(this, o);
 	}
 
 	/**

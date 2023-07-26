@@ -121,9 +121,9 @@ What do you want to do while you're here?<br><br>
 
 This layer is pretty tame, and besides the Miasma, threats from the Abyss itself are rare here.
 <br><br>
-A @@color:red;red@@ background indictes that something is not a choice for you to make, but rather a threat that needs to be addressed during your time in that layer. You can't skim past them and ignore them; they're a challange you need to face whether you like it or not.
+A @@color:red;red@@ background indicates that something is not a choice for you to make, but rather a threat that needs to be addressed during your time in that layer. You can't skim past them and ignore them; they're a challenge you need to face whether you like it or not.
 <br><br>
-All of the balloons available in the shop are safeguarded against threats like these, and you won't need to worry about them being intercepter during their accent.
+All of the balloons available in the shop are safeguarded against threats like these, and you won't need to worry about them being intercepted during their ascent.
 </p>
 
 <p>[[Continue exploring the first layer|Layer1 Hub]]</p>
@@ -420,29 +420,22 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 	<br>What hair color do you prefer?<br>
 	<<textbox "_dyeCurse.hairColor" "turquoise">><br>
 <</if>>
-<<if _temp1===9 || _temp2===9>>
+<<set _hasDH = (_DHCurse = _curse1 instanceof DizzyingHeights) || (_DHCurse = _curse2 instanceof DizzyingHeights)>>
+<<if _hasDH>>
 	<<set $dizzyCount +=1>>
-	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-	<<if _heightDirEvent === undefined>>
-		<<set _heightDirEvent = new HeightDirectionEvent()>>
-		<<set $mc.events.push(_heightDirEvent)>>
+	<<if $mc.heightDir === 0>>
 		<br>Would you like to increase or decrease your height?<br>
-		<<capture _heightDirEvent>>
-		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
-		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
-		<</capture>>
-	<<elseif _heightDirEvent.heightdir === 1>>
+		<<set _DHCurse.direction = -1>>
+		<<radiobutton "_DHCurse.direction" -1 checked>> Decrease<br>
+		<<radiobutton "_DHCurse.direction" 1 >> Increase<br>
+	<<elseif $mc.heightDir === 1>>
 		You feel yourself growing even more.<br>
 	<<else>>
 		You feel yourself shrinking even more.<br>
 	<</if>>
 <</if>>
 <br>
-<<link "Continue on to the rest of the layer" "Layer1 Hub">>
-	<<if _temp1===9 || _temp2===9>>
-		<<set $mc.addCurse(new DizzyingHeights())>>
-	<</if>>
-<</link>>
+[[Continue on to the rest of the layer|Layer1 Hub]]
 
 <</nobr>>
 
@@ -462,29 +455,20 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 
 With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.<<nobr>>
 <br>
-<<if $temp2===9>>
+<<if _curse instanceof DizzyingHeights>>
 	<<set $dizzyCount +=1>>
-	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-	<<if _heightDirEvent === undefined>>
-		<<set _heightDirEvent = new HeightDirectionEvent()>>
-		<<set $mc.events.push(_heightDirEvent)>>
+	<<if $mc.heightDir === 0>>
 		<br>Would you like to increase or decrease your height?<br>
-		<<capture _heightDirEvent>>
-		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
-		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
-		<</capture>>
-	<<elseif _heightDirEvent.heightdir === 1>>
+		<<set _curse.direction = -1>>
+		<<radiobutton "_curse.direction" -1 checked>> Decrease<br>
+		<<radiobutton "_curse.direction" 1 >> Increase<br>
+	<<elseif $mc.heightDir === 1>>
 			You feel yourself growing even more.<br>
 	<<else>>
 			You feel yourself shrinking even more.<br>
 	<</if>>
-
-	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
-		<<set $mc.addCurse(new DizzyingHeights())>>
-	<</link>>
-<<else>>
-[[Continue on to the rest of the layer|Layer1 Hub]]
 <</if>>
+[[Continue on to the rest of the layer|Layer1 Hub]]
 <</nobr>>
 
 
@@ -923,18 +907,17 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 :: Take on Dizzying Heights [layer1]
 <<set _curse = new DizzyingHeights()>>\
+<<set $mc.addCurse(_curse)>>\
 <<set $corruption += _curse.corr>><<set $dizzyCount +=1>>\
 [img[setup.ImagePath + _curse.pic]]
 
 <<nobr>>
-<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-<<if _heightDirEvent === undefined>>
-	<<set _heightDirEvent = new HeightDirectionEvent()>>
-	<<set $mc.events.push(_heightDirEvent)>>
+<<if $mc.heightDir === 0>>
 	Would you like to increase or decrease your height?<br>
-	<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
-	<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
-<<elseif _heightDirEvent.heightDir === 1>>
+	<<set _curse.direction = -1>>
+	<<radiobutton "_curse.direction" -1 checked>> Decrease<br>
+	<<radiobutton "_curse.direction" 1 >> Increase<br>
+<<elseif $mc.heightDir === 0 === 1>>
 	In the first moments after the Curse sets in, you hardly notice anything amiss. However, a growing discomfort seizes your body, leaving you feeling sore and aching. You sit down, trying to alleviate the pain as dizziness overwhelms you. The sensation feels familiar, reminiscent of something from long ago... growing pains.<br><br>
 
 	You shake your head, attempting to clear your foggy thoughts. Glancing at your legs, you could almost swear they're lengthening right before your eyes. The change is subtle and slow, making it difficult to discern with your hazy concentration. After a few minutes, the aches mostly subside, and you carefully rise to your feet.<br><br>
@@ -947,8 +930,6 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 	Your bizarre, malodorous dance lasts for several minutes, though it feels like an eternity. At its conclusion, you find your feet landing differently than you expect. The world around you appears subtly larger – you've become 5 cm (2 inches) shorter, altering your perception more than you would have thought possible.<br><br>
 <</if>>
-/* Needs to be added after the height direction event */
-<<set $mc.addCurse(_curse)>>
 <</nobr>>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
@@ -1202,7 +1183,7 @@ Use the following option only if you have specifically considered your inventory
 		<<say $companionBandit>>Trust me when I say the feeling is mutual, you greedy selfish pig<</say>><br>
 		<<set _companionBonus += 10 >>
 	<<else>>
-		Your captive does whatever she can while bound to impede you in the fight and help her former gangmembers.<br>
+		Your captive does whatever she can while bound to impede you in the fight and help her former gang members.<br>
 		<<set _companionBonus -= 5 >>
 	<</if>>
 <</if>>
@@ -1211,7 +1192,7 @@ Use the following option only if you have specifically considered your inventory
 	<<if _twinBonus > 7>>
 		Your twin fights seems to be fighting 2 bandits at the same time, and winning! 
 	<<elseif _twinBonus > 5>>
-		Much like yourself, your twin is not the most experienced fighter. But the fact that they are able to keep atleast a bandit busy is already helping you out.
+		Much like yourself, your twin is not the most experienced fighter. But the fact that they are able to keep at least a bandit busy is already helping you out.
 	<<elseif _twinBonus > 0>>
 		You're not the fighting type, so neither is your twin. The antics of your twin seems to be drawing some attention away from you, which is helpful, but other than that it's not very effective.
 	<<else>>
@@ -1238,8 +1219,8 @@ Use the following option only if you have specifically considered your inventory
 /*xxx */
 The bandits efforts to overpower you prove to be in vein. You manage to knock them all out, only the bandit leader is trying to still get up.
 
-<<say $Banditleader>>Damn, what happend? You're not an easy target at all...<</say>>
-With that she also collapses from excertion and injuries.
+<<say $Banditleader>>Damn, what happened? You're not an easy target at all...<</say>>
+With that she also collapses from exertion and injuries.
 
 [[Continue on your journey|Layer1 Hub]]
 
@@ -1274,7 +1255,7 @@ As you lock eyes with the bandit leader to anticipate her next move you get hit 
 <<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit)>>\
 	<<if $BanditConvo0>>\
 
-		<<say $Banditleader>>What a pathic bunch.<</say>>
+		<<say $Banditleader>>What a pathetic bunch.<</say>>
 		They leader ignores you and walks right past you to the bandit who joined your party.
 
 		<<say $Banditleader>>You were always a worthless piece of shit, you know? No wonder you got captured. I guess you fit in with these losers.<</say>>
@@ -1294,7 +1275,7 @@ As you lock eyes with the bandit leader to anticipate her next move you get hit 
 		As she says that she starts walking over to you.
 
 		<<say $mc>>Listen, I just want to say that...<</say>>
-		Before you're finnished she kicks you in the side and you double over from the pain.
+		Before you're finished she kicks you in the side and you double over from the pain.
 
 		<<say $companionBandit>>This piece of shit is all yours, Boss<</say>>
 		<<nobr>>
@@ -1303,7 +1284,7 @@ As you lock eyes with the bandit leader to anticipate her next move you get hit 
 		<</nobr>>
 	<</if>>\
 <</if>>\
-<<say $Banditleader>> I was only going to collect a modest fee for crossing this bridge, but now I think I'm going to pick you clean of everthing valuable<</say>>
+<<say $Banditleader>> I was only going to collect a modest fee for crossing this bridge, but now I think I'm going to pick you clean of everything valuable<</say>>
 Defiantly you spit some blood from your mouth at her feet.
 
 <<say $Banditleader>>Tsk, annoying until the last moment. Night Night<</say>>
@@ -1329,7 +1310,7 @@ When you wake up you find that all of your Relics are gone<<if $hiredCompanions.
 
 	<<if $BanditConvo0>>\
 		<<say $companionBandit>>I'm not... uh... I've been thinking...<</say>>
-		As she says that she avoids all eyecontact with her former leader.
+		As she says that she avoids all eye contact with her former leader.
 
 		<<say $Banditleader>>Get your ass over here, Vesper!<</say>>
 		Vesper jolts up and runs over to the bandit commander.

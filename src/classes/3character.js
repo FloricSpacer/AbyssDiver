@@ -373,6 +373,15 @@ class Character {
 	}
 
 	/**
+	 * Returns true iff this character can take the given curse.
+	 * @param curse The curse to be checked.
+	 * @returns {boolean} Whether the given curse is compatible with this character's curses.
+	 */
+	isCompatible(curse) {
+		return !this.curses.some(c => c.name in curse.incompatibilities);
+	}
+
+	/**
 	 * Returns the character's current age as it would be without age-reducing Curses.
 	 * Includes time spent in the Abyss and the effects of the fountain of youth.
 	 * @returns {number} The character's biological age.
@@ -690,6 +699,18 @@ class Character {
 		// Look up an ASCII table for more information (this is unicode not ascii, but the first 128 code points are
 		// copied from ascii for compatibility).
 		return String.fromCodePoint(63 + Math.floor(size));
+	}
+
+	/**
+	 * Returns the direction in which height changes are applied to this character.
+	 * @returns {number} -1, 0 or 1 for decreasing, unset or increasing respectively.
+	 */
+	get heightDir() {
+		let direction = 0;
+		for (let event of this.events) {
+			direction = event.changeHeightDirection(direction);
+		}
+		return direction;
 	}
 
 	/**
