@@ -420,29 +420,22 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 	<br>What hair color do you prefer?<br>
 	<<textbox "_dyeCurse.hairColor" "turquoise">><br>
 <</if>>
-<<if _temp1===9 || _temp2===9>>
+<<set _hasDH = (_DHCurse = _curse1 instanceof DizzyingHeights) || (_DHCurse = _curse2 instanceof DizzyingHeights)>>
+<<if _hasDH>>
 	<<set $dizzyCount +=1>>
-	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-	<<if _heightDirEvent === undefined>>
-		<<set _heightDirEvent = new HeightDirectionEvent()>>
-		<<set $mc.events.push(_heightDirEvent)>>
+	<<if $mc.heightDir === 0>>
 		<br>Would you like to increase or decrease your height?<br>
-		<<capture _heightDirEvent>>
-		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
-		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
-		<</capture>>
-	<<elseif _heightDirEvent.heightdir === 1>>
+		<<set _DHCurse.direction = -1>>
+		<<radiobutton "_DHCurse.direction" -1 checked>> Decrease<br>
+		<<radiobutton "_DHCurse.direction" 1 >> Increase<br>
+	<<elseif $mc.heightDir === 1>>
 		You feel yourself growing even more.<br>
 	<<else>>
 		You feel yourself shrinking even more.<br>
 	<</if>>
 <</if>>
 <br>
-<<link "Continue on to the rest of the layer" "Layer1 Hub">>
-	<<if _temp1===9 || _temp2===9>>
-		<<set $mc.addCurse(new DizzyingHeights())>>
-	<</if>>
-<</link>>
+[[Continue on to the rest of the layer|Layer1 Hub]]
 
 <</nobr>>
 
@@ -462,29 +455,20 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 
 With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.<<nobr>>
 <br>
-<<if $temp2===9>>
+<<if _curse instanceof DizzyingHeights>>
 	<<set $dizzyCount +=1>>
-	<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-	<<if _heightDirEvent === undefined>>
-		<<set _heightDirEvent = new HeightDirectionEvent()>>
-		<<set $mc.events.push(_heightDirEvent)>>
+	<<if $mc.heightDir === 0>>
 		<br>Would you like to increase or decrease your height?<br>
-		<<capture _heightDirEvent>>
-		<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
-		<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
-		<</capture>>
-	<<elseif _heightDirEvent.heightdir === 1>>
+		<<set _curse.direction = -1>>
+		<<radiobutton "_curse.direction" -1 checked>> Decrease<br>
+		<<radiobutton "_curse.direction" 1 >> Increase<br>
+	<<elseif $mc.heightDir === 1>>
 			You feel yourself growing even more.<br>
 	<<else>>
 			You feel yourself shrinking even more.<br>
 	<</if>>
-
-	<<link "Continue on to the rest of the layer" "Layer1 Hub">>
-		<<set $mc.addCurse(new DizzyingHeights())>>
-	<</link>>
-<<else>>
-[[Continue on to the rest of the layer|Layer1 Hub]]
 <</if>>
+[[Continue on to the rest of the layer|Layer1 Hub]]
 <</nobr>>
 
 
@@ -923,18 +907,17 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 :: Take on Dizzying Heights [layer1]
 <<set _curse = new DizzyingHeights()>>\
+<<set $mc.addCurse(_curse)>>\
 <<set $corruption += _curse.corr>><<set $dizzyCount +=1>>\
 [img[setup.ImagePath + _curse.pic]]
 
 <<nobr>>
-<<set _heightDirEvent = $mc.getEvent(HeightDirectionEvent)>>
-<<if _heightDirEvent === undefined>>
-	<<set _heightDirEvent = new HeightDirectionEvent()>>
-	<<set $mc.events.push(_heightDirEvent)>>
+<<if $mc.heightDir === 0>>
 	Would you like to increase or decrease your height?<br>
-	<<radiobutton "_heightDirEvent.heightdir" -1 checked>> Decrease<br>
-	<<radiobutton "_heightDirEvent.heightdir" 1 >> Increase<br>
-<<elseif _heightDirEvent.heightDir === 1>>
+	<<set _curse.direction = -1>>
+	<<radiobutton "_curse.direction" -1 checked>> Decrease<br>
+	<<radiobutton "_curse.direction" 1 >> Increase<br>
+<<elseif $mc.heightDir === 0 === 1>>
 	In the first moments after the Curse sets in, you hardly notice anything amiss. However, a growing discomfort seizes your body, leaving you feeling sore and aching. You sit down, trying to alleviate the pain as dizziness overwhelms you. The sensation feels familiar, reminiscent of something from long ago... growing pains.<br><br>
 
 	You shake your head, attempting to clear your foggy thoughts. Glancing at your legs, you could almost swear they're lengthening right before your eyes. The change is subtle and slow, making it difficult to discern with your hazy concentration. After a few minutes, the aches mostly subside, and you carefully rise to your feet.<br><br>
@@ -947,8 +930,6 @@ It seems that you now look like either an elf out of a storybook or someone who 
 
 	Your bizarre, malodorous dance lasts for several minutes, though it feels like an eternity. At its conclusion, you find your feet landing differently than you expect. The world around you appears subtly larger – you've become 5 cm (2 inches) shorter, altering your perception more than you would have thought possible.<br><br>
 <</if>>
-/* Needs to be added after the height direction event */
-<<set $mc.addCurse(_curse)>>
 <</nobr>>
 
 [[Accept more Curses from the first layer|Layer1 Curses]]
