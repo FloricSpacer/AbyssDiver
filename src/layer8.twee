@@ -335,8 +335,7 @@ There is a very easily accessible source of water on this layer, the Lethe Taps,
 <</if>>
 [[Return to exploring your food and water options on this layer|Layer8 Forage]]
 
-
-:: Layer8 Threats [image layer8]
+/*
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-threats.png']]
 
 <<nobr>>
@@ -361,7 +360,15 @@ You can consider your equipment, allies, and general health to take into account
 [[Think about how strong you will be against the clockwork dolls|Layer8 Inanis Check]]
 
 [[Return to exploring the eighth layer|Layer8 Hub]]
+*/
+:: Layer8 Threats [layer8 cards nobr]
+<h1>Threats</h1>
 
+<p>[[Continue exploring the eighth layer|Layer8 Hub]]</p>
+
+<<ThreatGrid setup.inanisEgo setup.dementialAberrations>>
+
+<p>[[Continue exploring the eighth layer|Layer8 Hub]]</p>
 
 :: Layer8 Relics [layer8 cards nobr]
 <p><<CarryAdjust>><<checkTime>></p>
@@ -1579,7 +1586,7 @@ If you continue your descent in spite of everything, descending past this layer'
 			<<set _companionBonus += 5* (1+ $companionCloud.HandicapThreat/10)>>
 			<<set _ammo = Math.max($ammoStrat, $cloudStrat)>>
 			<<set _equipmentBonus += _ammo*5>>
-			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * _ammo - $bullRed, 1)>>
+			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * Math.max(_ammo - $bullRed,1), 1)>>
 			<<if $items[20].count <= _bulletsUsed>>
 				Cloud has used the last of your bullets...
 				<<set $items[20].count = 0 >>
@@ -1623,18 +1630,18 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _equipmentBonus += 7>>
 	<</if>>
 
-		<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
-			<<set _equipmentBonus += 5*$ammoStrat>>
-			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * _ammo * 3 - $bullRed, 1)>>
-			<<if $items[20].count <= _bulletsUsed>>
-				You have used the last of your bullets...<br>
-				<<set $items[20].count = 0 >>
-				<<set $ammoStrat = 0>>
-			<<else>>
-				You used _bulletsUsed bullets fighting off the enemy.<br>
-				<<set $items[20].count -= _bulletsUsed>>
-			<</if>>
+	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
+		<<set _equipmentBonus += 5*$ammoStrat>>
+		<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * Math.max($ammoStrat * 3 - $bullRed,1), 1)>>
+		<<if $items[20].count <= _bulletsUsed>>
+			You have used the last of your bullets...<br>
+			<<set $items[20].count = 0 >>
+			<<set $ammoStrat = 0>>
+		<<else>>
+			You used _bulletsUsed bullets fighting off the enemy.<br>
+			<<set $items[20].count -= _bulletsUsed>>
 		<</if>>
+	<</if>>
 
 	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
 	<</if>>
