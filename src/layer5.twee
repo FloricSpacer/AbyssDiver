@@ -288,7 +288,7 @@ Every Relic in this layer is found in one of the many ruins that are carved into
 </p>
 
 <div class="cards-grid">
-<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<set _totalRelics = $ownedRelics.concat($soldRelics, $lostRelics)>>
 <<set _layerRelics = setup.relicsOnLayer[5]>>
 <<for _i = 0; _i < _layerRelics.length; _i++>>
 <div>
@@ -1415,9 +1415,11 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 <<nobr>>
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
-	<<if $DaedalusFly>>
-		<<include "Companions Stranded">>
+	<<if $DaedalusFly || $mechaBoarded>>
 		<<set _multiplier = 1/2>>
+		<<if $DaedalusFly && !$mechaBoarded>>
+			<<include "Companions Stranded">>
+		<</if>>
 	<</if>>
 	<<StartTraveling `setup.haveRope ? 11 : 24` 0 _multiplier>>
 <</if>>
@@ -1703,7 +1705,7 @@ Navigating through the chaotic landscape of swirling sand and dancing petals, yo
 Do you want to walk through the One-sided Tunnel and send your items back up to the surface?
 <<TravelToPassage 'Walk through the tunnel' 'Layer5 Tunnel' 2>>
 
-<<set _totalRelics = $ownedRelics.concat($soldRelics)>>\
+<<set _totalRelics = $ownedRelics.concat($soldRelics, $lostRelics)>>\
 <<if _totalRelics.some(e => e.name === "Superpositional Skewer") && $items[7].count > 0>>\
 	You can also utilize your Superpositional Skewer to sync with your commerce balloon, then swap it with a rock or something after you leave the Tunnel, which would allow you to instantly retrieve your items if you wish to.
 	<<TravelToPassage 'Use the Superpositional Skewer to save 1 commerce balloon, then enter the Tunnel' 'Layer5 Tunnel' 2 0 1 '$tunnelSkewer = 1'>>

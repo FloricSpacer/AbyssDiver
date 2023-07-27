@@ -114,6 +114,9 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
         return "DollEnd";
     }
+    if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer == 0 ){
+        return "Starlit Unlocked";
+    }
     if (StoryVar.boundBanditEnding) {
         return "Bound Bandit Ending";
     }
@@ -580,14 +583,14 @@ Object.defineProperties(setup, {
     haveColdProtection: {
         get: () => {
             const vars = variables();
-            return Boolean(vars.heatOverride || vars.slwear || (vars.warmCloth && !vars.dollevent2));
+            return Boolean(vars.heatOverride || vars.slwear || (vars.warmCloth && !vars.dollevent2) || vars.mechaBoarded);
         },
     },
     // Check whether the player has protection from heat.
     haveHeatProtection: {
         get: () => {
             const vars = variables();
-            return Boolean(vars.coolOverride || vars.slwear || (vars.coolCloth && !vars.dollevent2));
+            return Boolean(vars.coolOverride || vars.slwear || (vars.coolCloth && !vars.dollevent2) || vars.mechaBoarded);
         },
     },
     // Sell a relic.

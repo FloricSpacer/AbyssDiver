@@ -1432,6 +1432,19 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<</if>>
 <</if>>
 
+<<if setup.starlitConquestActivated.count==1 && $mechaBoarded>>
+	/*xxx */
+	You are currently in the cockpit of the Starlit Conquest. The rest of your companions will automatically board the mecha if it goes into airship mode between layers.
+	[[Dismount the mecha and continue on foot|Use Items and Relics][$mechaBoarded = false]]
+<<elseif setup.starlitConquestActivated.count==1 && !$mechaBoarded>>
+	Your mecha is following you. It will not fight by itself!
+	<<if $SizeHandicap>>
+		Due to your size you can no longer operate the mecha unfortunately.
+	<<else>>
+		[[Board the mecha and continue your journey flying around in your fighting machine|Use Items and Relics][$mechaBoarded = true]]
+	<</if>>
+<</if>>
+
 <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 	<br>You look at the glistening set of marbles known as the Managed Misfortune.<br>
 	<<if !$StoredCurse.length>>
@@ -2115,7 +2128,7 @@ How many dubloons would you like to pay back?
 				<<case 6>>
 					<<set $timeL6 += 1>>
 					/* Add a jinxed flame counter for every day unless the player is flying. */
-					<<if !$DaedalusFly>><<set $hexflame += 1>><</if>>
+					<<if !$DaedalusFly && !$mechaBoarded>><<set $hexflame += 1>><</if>>
 				<<case 7>>
 					<<set $timeL7 += 1>>
 					/* Subtract dubloons for every day spent on this layer (even while detained). */
