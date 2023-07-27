@@ -258,7 +258,7 @@ There is a very easily accessible source of water on this layer, the River Dycx,
 	With a horrifyingly human-like belch, the Maw spits forth the Relic you requested, now slightly singed at the edges but still perfectly usable. Retrieving it from the edge of the Maw, you approach the Maw once again and consider what you want to do.
 <</if>>
 <<nobr>>
-<<set _totalRelics = $ownedRelics.concat($soldRelics)>>
+<<set _totalRelics = $ownedRelics.concat($soldRelics, $lostRelics)>>
 You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
 <<for _relic range $relics>>
 	<<set _foundOnLayer = setup.relicsOnLayer.findIndex(relicsOnLayer => relicsOnLayer.includes(_relic.name))>>
@@ -937,9 +937,11 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 <<nobr>>
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
-	<<if $DaedalusFly>>
-		<<include "Companions Stranded">>
+	<<if $DaedalusFly || $mechaBoarded>>
 		<<set _multiplier = 1/2>>
+		<<if $DaedalusFly && !$mechaBoarded>>
+			<<include "Companions Stranded">>
+		<</if>>
 	<</if>>
 	<<StartTraveling 15 0 _multiplier>>
 <</if>>

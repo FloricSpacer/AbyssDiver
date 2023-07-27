@@ -1020,9 +1020,11 @@ Traveling back to the surface from here will take 1 day, and will cost 10 corrup
 <<nobr>>
 <<if !setup.passingTime()>>
 	<<set _multiplier = 1>>
-	<<if $DaedalusFly>>
-		<<include "Companions Stranded">>
+	<<if $DaedalusFly || $mechaBoarded>>
 		<<set _multiplier = 1/2>>
+		<<if $DaedalusFly && !$mechaBoarded>>
+			<<include "Companions Stranded">>
+		<</if>>
 	<</if>>
 	<<StartTraveling 1 0 _multiplier>>
 <</if>>
