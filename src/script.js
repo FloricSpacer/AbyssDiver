@@ -557,7 +557,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has a light source that won't run out.
     haveUnlimitedLightSource: {
-        get: () => checkAvailability(['Flashlight'], ['Sunbeam', 'Glare Vantage'], ['light', 'BDwear']) || setup.haveSmartphone,
+        get: () => checkAvailability(['Flashlight'], ['Sunbeam', 'Glare Vantage'], ['light', 'BDwear']) || setup.haveSmartphone || setup.starlitConquestActivated.count>0,
     },
     // Check whether the player has a light source, including consumables and ones that can only be used in short bursts.
     havePotentialLightSource: {
