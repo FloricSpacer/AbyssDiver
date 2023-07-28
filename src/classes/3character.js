@@ -1481,7 +1481,7 @@ class Character {
 	}
 
 	/**
-	 * Returns the number of eyes this character has.
+	 * Returns the number of regular eyes this character has.
 	 * @returns {number} The number of eyes on this character.
 	 */
 	get eyeCount() {
@@ -1506,6 +1506,18 @@ class Character {
 	 */
 	get legCount() {
 		return this.events.reduce((v, e) => e.removeLeg(v), 2);
+	}
+
+	get tentacles() {
+		return this.events.reduce((v, e) => e.addTentacle(v), 0);
+	}
+
+	get extraEyes() {
+		return this.events.reduce((v, e) => e.addExtraEye(v), 0);
+	}
+
+	get extraMouths() {
+		return this.events.reduce((v, e) => e.addMouth(v), 0);
 	}
 }
 window.Character = Character;
