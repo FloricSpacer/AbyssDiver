@@ -2962,7 +2962,7 @@ setup.curseArray.push(DoubleTrouble)
 class Conjoined extends Curse {
 	static corruption = 80;
 	static curseName = 'Conjoined';
-	static description = `Pick on of your hired companions, or your twin from the Double Trouble Curse if you took it. You and that person are now conjoined, either from the hip down, chest down, or simply being two heads sharing a body. Separation would be fatal for both of you even before considering Curse rebound effects. Your conjoined body will not have the "purity gene", and will slowly take on the effects of any Curses you have (though they will be less pronounced on the other person's half if they don't have those same Curses.)
+	static description = `Pick one of your hired companions, or your twin from the Double Trouble Curse if you took it. You and that person are now conjoined, either from the hip down, chest down, or simply being two heads sharing a body. Separation would be fatal for both of you even before considering Curse rebound effects. Your conjoined body will not have the "purity gene", and will slowly take on the effects of any Curses you have (though they will be less pronounced on the other person's half if they don't have those same Curses.)
 
 You each control half of your shared body, and movement will be very difficult. Add 1 day to all travel times down here. If you're conjoined to a companion, any physical skills will probably be rendered useless by the fusion, and they'll probably be extremely freaked out, with morale at an all time low. If you're conjoined with your twin, they'll probably be cool with it, though. They're just as okay with it as you are.
 
