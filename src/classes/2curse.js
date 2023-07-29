@@ -1,4 +1,5 @@
 /* global CharEvent, AgeEvent */
+// noinspection JSUnusedGlobalSymbols
 
 /**
  * @typedef SugarCubeSetupObject
@@ -37,7 +38,7 @@ class Curse extends CharEvent {
 		this.corruption = this.constructor.corruption;
 		this._appDesc = appDesc;
 	}
-	
+
 	_internalState() {
 		return Object.assign({corruption: this.corruption}, super._internalState())
 	}
@@ -57,7 +58,7 @@ class Curse extends CharEvent {
 	 */
 	clone() {
 		return Reflect.construct(this.constructor, this._customisationOptions())
-			._init(this._internalState());
+		              ._init(this._internalState());
 	}
 
 	/**
@@ -88,6 +89,10 @@ class Curse extends CharEvent {
 		return this.constructor.picture;
 	}
 
+	get description() {
+		return this.constructor.description;
+	}
+
 	get corr() {
 		return this.corruption;
 	}
@@ -105,10 +110,6 @@ class Curse extends CharEvent {
 
 	get variantPassage() {
 		return `${this.name} Variant`;
-	}
-
-	get descriptionPassage() {
-		return `${this.name} Description`
 	}
 
 	/**
@@ -150,6 +151,7 @@ class Curse extends CharEvent {
 class LibidoReinforcementA extends Curse {
 	static corruption = 20;
 	static curseName = 'Libido Reinforcement A';
+	static description = `Gives one level of the Libido Reinforcement Curse, which boosts your sex drive according to how many Libido Reinforcement effects you've taken.`;
 	static picture = 'Curses/libidoreinforcementA.png';
 	static type = 'libido';
 	constructor() {
@@ -168,6 +170,7 @@ setup.curseArray.push(LibidoReinforcementA)
 class GenderReversalA extends Curse {
 	static corruption = 15;
 	static curseName = 'Gender Reversal A';
+	static description = `Gives one level of Gender Reversal, which causes gradual changes in your body that cause you to appear as the gender opposite to what you were assigned at birth. No effect on penis or boob size.`;
 	static picture = 'Curses/genderreversalA.png';
 	static type = 'gender';
 	constructor() {
@@ -186,6 +189,7 @@ setup.curseArray.push(GenderReversalA)
 class AssetRobustnessA extends Curse {
 	static corruption = 10;
 	static curseName = 'Asset Robustness A';
+	static description = `Grows your boobs by about 1 cup size and/or increases your penis size by about 2.5cm (1in), depending on what's applicable. For all Asset Robustness Curses, band and sizes and girth are scaled appropriately, and your assets will grow back to their new, increased size if surgically reduced.`;
 	static picture = 'Curses/assetrobustnessA.png';
 	static type = 'gender';
 	constructor() {
@@ -208,11 +212,12 @@ setup.curseArray.push(AssetRobustnessA)
 class ClothingRestrictionA extends Curse {
 	static corruption = 30;
 	static curseName = 'Clothing Restriction A';
+	static description = `Prevents you from ever wearing anything that would commonly be considered an "accessory." Includes scarves, hats, piercings, pasties, jewelry, and so on. Kind of a bummer. Doesn't include items serving a specific necessary purpose, like prescription glasses. None of the Clothing restriction Curses include Relics if they are worn with the intention of making use of their effect.`;
 	static picture = 'Curses/clothingrestrictionA.png';
 	static type = 'none';
 	constructor() {
 		super('Clothing Restriction A', 'none',
-			  'You cannot bring yourself to wear any accessories anywhere on your body. ');
+		      'You cannot bring yourself to wear any accessories anywhere on your body. ');
 	}
 }
 setup.allCurses.ClothingRestrictionA = new ClothingRestrictionA()
@@ -223,6 +228,7 @@ setup.curseArray.push(ClothingRestrictionA)
 class ShrunkenAssets extends Curse {
 	static corruption = 75;
 	static curseName = 'Shrunken Assets';
+	static description = `Decreases boob size/penis size to approximately minimal levels - about AA cup boobs and a roughly 1cm (~0.5in) penis. They will resist surgical attempts at enhancement. Can't be taken with any Asset Robustness Curses. (That's why you get so many points for it.)`;
 	static picture = 'Curses/shrunkenassets.png';
 	static type = 'gender';
 	constructor() {
@@ -249,11 +255,12 @@ setup.curseArray.push(ShrunkenAssets)
 class HairRemoval extends Curse {
 	static corruption = 5;
 	static curseName = 'Hair Removal';
+	static description = `Permanently removes all hair below your nose, and even shapes your eyebrows into a pleasing shape so you don't have to maintain them. Never shave again!`;
 	static picture = 'Curses/hairremoval.png';
 	static type = 'none';
 	constructor() {
 		super('Hair Removal', 'none',
-			  '<<if !$mc.hasCurse("Maximum Fluff")>>Your entire body below your nose is completely hairless and smooth. Your eyebrows also look like they have been carefully trimmed. <</if>>');
+		      '<<if !$mc.hasCurse("Maximum Fluff")>>Your entire body below your nose is completely hairless and smooth. Your eyebrows also look like they have been carefully trimmed. <</if>>');
 	}
 
 	// eslint-disable-next-line no-unused-vars
@@ -274,6 +281,7 @@ setup.curseArray.push(HairRemoval)
 class PermaDye extends Curse {
 	static corruption = 5;
 	static curseName = 'Perma-dye';
+	static description = `Permanently changes your natural hair color to a significantly different, visually distinct color of your choice. You can choose if you want to go with a fun, weird color like purple or just stick with the normal human range.`;
 	static picture = 'Curses/perma-dye.png';
 	static type = 'none';
 	constructor(hairColor='turquoise') {
@@ -313,11 +321,12 @@ setup.curseArray.push(PermaDye)
 class FreckleSpeckle extends Curse {
 	static corruption = 10;
 	static curseName = 'Freckle Speckle';
+	static description = `Gives you a splatter of freckles or moles around your body. You can arrange their exact locations and density, but they have to be a significant and noticeable feature. Make sure to include one of those nakibokuro under-eye beauty marks, they're super cute!`;
 	static picture = 'Curses/frecklespeckle.png';
 	static type = 'none';
 	constructor() {
 		super('Freckle Speckle', 'none',
-			  'An assortment of freckles are spread over your body. ');
+		      'An assortment of freckles are spread over your body. ');
 	}
 }
 setup.allCurses.FreckleSpeckle = new FreckleSpeckle()
@@ -328,6 +337,7 @@ setup.curseArray.push(FreckleSpeckle)
 class KnifeEar extends Curse {
 	static corruption = 20;
 	static curseName = 'Knife-ear';
+	static description = `Gives you a pair of sharp, pointy, elfish ears. There are some humans on the surface who get surgery to look like this, so you'll only kind of stick out up there!<br>Also effects any other ear-related Curses you take.`;
 	static picture = 'Curses/knifeear.png';
 	static type = '';
 	constructor() {
@@ -347,6 +357,7 @@ setup.curseArray.push(KnifeEar)
 class DizzyingHeights extends Curse {
 	static corruption = 5;
 	static curseName = 'Dizzying Heights';
+	static description = `Increases or decreases your current height by 5cm (2in), by your preference. This will take a very long time to get used to. All height changes in the Abyss must be in the same direction. (max. 5)`;
 	static picture = 'Curses/dizzyingheights.png';
 	static type = 'height';
 	constructor(direction=0) {
@@ -391,6 +402,7 @@ setup.curseArray.push(DizzyingHeights)
 class IncreasedSensitivity extends Curse {
 	static corruption = 10;
 	static curseName = 'Increased Sensitivity';
+	static description = `Significantly increases the sensitivity of your erogenous zones - even brief, soft stimulation will quickly bring you over the edge.`;
 	static picture = 'Curses/increasedsensitivity.png';
 	static type = 'libido';
 	constructor() {
@@ -410,6 +422,7 @@ setup.curseArray.push(IncreasedSensitivity)
 class RefractoryRefactorization extends Curse {
 	static corruption = 10;
 	static curseName = 'Refractory Refactorization';
+	static description = `Removes your refractory period, allowing you to orgasm many times in quick succession. Has a noticeable effect regardless of your sexual equipment. Makes a powerful yet dangerous combo with Increased Sensitivity.`;
 	static picture = 'Curses/refractoryrefactorization.png';
 	static type = 'libido';
 	constructor() {
@@ -429,6 +442,7 @@ setup.curseArray.push(RefractoryRefactorization)
 class LibidoReinforcementB extends Curse {
 	static corruption = 25;
 	static curseName = 'Libido Reinforcement B';
+	static description = `Gives one level of the Libido Reinforcement Curse, boosting your sex drive.`;
 	static picture = 'Curses/libidoreinforcementB.png';
 	static type = 'libido';
 	constructor() {
@@ -447,6 +461,7 @@ setup.curseArray.push(LibidoReinforcementB)
 class GenderReversalB extends Curse {
 	static corruption = 20;
 	static curseName = 'Gender Reversal B';
+	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change.`;
 	static picture = 'Curses/genderreversalB.png';
 	static type = 'gender';
 	constructor() {
@@ -465,6 +480,7 @@ setup.curseArray.push(GenderReversalB)
 class AssetRobustnessB extends Curse {
 	static corruption = 15;
 	static curseName = 'Asset Robustness B';
+	static description = `Grows your boobs by about 2 cup sizes and/or increased your penis size by about 5 cm (2in), depending on what's applicable. You can have Asset Robustness Curses affect butt sizes too if you like.`;
 	static picture = 'Curses/assetrobustnessB.png';
 	static type = 'none';
 	constructor() {
@@ -487,6 +503,7 @@ setup.curseArray.push(AssetRobustnessB)
 class AgeReductionA extends Curse {
 	static corruption = 15;
 	static curseName = 'Age Reduction A';
+	static description = `Reduces your apparent physical age by 2 years or sets it to 20, whichever is younger. Many might consider this a boon.`;
 	static picture = 'Curses/agereductionA.png';
 	static type = 'age';
 	constructor() {
@@ -510,6 +527,7 @@ setup.curseArray.push(AgeReductionA)
 class FluffyEars extends Curse {
 	static corruption = 20;
 	static curseName = 'Fluffy Ears';
+	static description = `You gain a set of ears from a (non-human) mammal of your choice on the top of your head, replacing your old ears. Be the kemonomimi you've always wanted to be.`;
 	static picture = 'Curses/fluffyears.png';
 	static type = 'none';
 	constructor(earType='furry cat') {
@@ -549,6 +567,7 @@ setup.curseArray.push(FluffyEars)
 class FluffyTail extends Curse {
 	static corruption = 20;
 	static curseName = 'Fluffy Tail';
+	static description = `A tail from a mammal of your choice will spout from your lower back. You can take up to 9 if you're going for the kitsune or nekomata look or something, but only the first grants any corruption.`;
 	static picture = 'Curses/fluffytail.png';
 	static type = 'none';
 	constructor(tailType='flowing cat') {
@@ -587,6 +606,7 @@ setup.curseArray.push(FluffyTail)
 class MaximumFluff extends Curse {
 	static corruption = 30;
 	static curseName = 'Maximum Fluff';
+	static description = `Fur from a non-human mammal of your choice will grow over your entire body, forming a pelt. Cannot be chosen with the "Hair Removal" Curse, but if you like you can have this Curse override it instead, giving this Curse's points and effect and removing the points you got from Hair Removal.`;
 	static picture = 'Curses/maximumfluff.png';
 	static type = 'none';
 	constructor(hairType='cat-furred') {
@@ -634,6 +654,7 @@ setup.curseArray.push(MaximumFluff)
 class HeatRut extends Curse {
 	static corruption = 20;
 	static curseName = 'Heat/Rut';
+	static description = `For approximately one day a month, your libido will skyrocket, making it much harder to control yourself. Grants two temporary levels of the Libido Reinforcement Curse.`;
 	static picture = 'Curses/heat.png';
 	static type = 'libido';
 	constructor() {
@@ -646,7 +667,7 @@ class HeatRut extends Curse {
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness;
 		}
 		return prevLewdness + 2;
@@ -660,11 +681,14 @@ setup.curseArray.push(HeatRut)
 class Lightweight extends Curse {
 	static corruption = 15;
 	static curseName = 'Lightweight';
+	static description = `You take bonus damage from alcohol. Even a single beer will leave your speech a bit slurred and your reactions dulled, and drinking anything harder will almost certainly lead to you eventually blacking out.
+
+Also enhances the effects of things like aphrodisiacs and recreational drugs, and even coffee. Just a sip of caffeine will lead to you being very hyper, jittery, and excitable.`;
 	static picture = 'Curses/lightweight.png';
 	static type = 'none';
 	constructor() {
 		super('Lightweight', 'none',
-			  'Just a little bit of alcohol turns you into a drunk mess. You\'d better not go out partying without trusted friends nearby. Behavior altering substances in general also have a much stronger effect on you. ');
+		      'Just a little bit of alcohol turns you into a drunk mess. You\'d better not go out partying without trusted friends nearby. Behavior altering substances in general also have a much stronger effect on you. ');
 	}
 }
 setup.allCurses.Lightweight = new Lightweight()
@@ -675,6 +699,7 @@ setup.curseArray.push(Lightweight)
 class SexSwitcheroo extends Curse {
 	static corruption = 30;
 	static curseName = 'Sex Switcheroo';
+	static description = `If you have a penis, it'll retreat inwards and be replaced with a vagina and all other associated organs, along with breasts roughly proportionate to the size of penis you had as compared to the average. The reverse happens if you started with a vagina, and you'll gain a penis roughly proportionate to the size of your old boobs. (Flat boobs get a very small micropenis.)`;
 	static picture = 'Curses/sexswitcheroo.png';
 	static type = 'gender';
 	constructor() {
@@ -722,6 +747,9 @@ setup.curseArray.push(SexSwitcheroo)
 class FutaFun extends Curse {
 	static corruption = 35;
 	static curseName = 'Futa Fun';
+	static description = `Has the same effect as Sex Switcheroo, but leaves you with a penis, a pair of boobs, and a vagina (You can decide if you want balls or not). All of your new parts will both be affected by all Asset Robustness or Shrunken Assets Curses from here onwards. Can't be taken with Sex Switcheroo.
+
+If you already have both a penis and a pair of breasts, congrats on the free points! Well, maybe your bottom parts have changed, but it's less of a change for you than for someone else taking this Curse.`;
 	static picture = 'Curses/futafun.png';
 	static type = 'gender';
 	constructor() {
@@ -762,11 +790,12 @@ setup.curseArray.push(FutaFun)
 class BlushingVirgin extends Curse {
 	static corruption = 25;
 	static curseName = 'Blushing Virgin';
+	static description = `You'll find sexual activities and nudity to be uncomfortable and very embarrassing. You can still do sexy stuff, you'll just be cutely embarrassed and extremely bashful when doing so.`;
 	static picture = 'Curses/blushingvirgin.png';
 	static type = 'none';
 	constructor() {
 		super('Blushing Virgin', 'none',
-			  'You are very shy about nudity, and even getting undressed while no one is looking already feels a bit embarrassing to you. Sex also feels very embarrassing, no matter how many times you might have done it. ');
+		      'You are very shy about nudity, and even getting undressed while no one is looking already feels a bit embarrassing to you. Sex also feels very embarrassing, no matter how many times you might have done it. ');
 	}
 
 	// eslint-disable-next-line no-unused-vars
@@ -782,6 +811,7 @@ setup.curseArray.push(BlushingVirgin)
 class SubmissivenessRectificationA extends Curse {
 	static corruption = 20;
 	static curseName = 'Submissiveness Rectification A';
+	static description = `Makes you significantly more submissive to the desires of others, and even has minor effects outside of the bedroom. You'll still be able to refuse requests that you're strongly against, but you can give up any hope of taking a dominant role.`;
 	static picture = 'Curses/subrectificationA.png';
 	static type = 'libido';
 	constructor() {
@@ -804,6 +834,7 @@ setup.curseArray.push(SubmissivenessRectificationA)
 class GenderReversalC extends Curse {
 	static corruption = 20;
 	static curseName = 'Gender Reversal C';
+	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. Don't worry, I hear androgyny is in vogue!`;
 	static picture = 'Curses/genderreversalC.png';
 	static type = 'gender';
 	constructor() {
@@ -822,6 +853,7 @@ setup.curseArray.push(GenderReversalC)
 class AssetRobustnessC extends Curse {
 	static corruption = 25;
 	static curseName = 'Asset Robustness C';
+	static description = `Grows your boobs by about 4 cup sizes and/or increases your penis size by about 10cm (4in), depending on what's applicable. You'll probably need to buy some new bras or underwear.`;
 	static picture = 'Curses/assetrobustnessC.png';
 	static type = 'gender';
 	constructor() {
@@ -844,11 +876,12 @@ setup.curseArray.push(AssetRobustnessC)
 class ClothingRestrictionB extends Curse {
 	static corruption = 40;
 	static curseName = 'Clothing Restriction B';
+	static description = `Completely prevents you from wearing any kind of underwear, or anything at all covering you underneath your main outfit. Also includes socks. All Clothing Restriction Curses manifest as an extreme mental revulsion for wearing that type of clothing, changing to extreme mental distress and immediately attempting to remove it if you're somehow forcibly clothed.`;
 	static picture = 'Curses/clothingrestrictionB.png';
 	static type = 'none';
 	constructor() {
 		super('Clothing Restriction B', 'none',
-			  'You cannot bring yourself to wear any underwear whatsoever. ');
+		      'You cannot bring yourself to wear any underwear whatsoever. ');
 	}
 
 	static get incompatibilities() {
@@ -857,7 +890,7 @@ class ClothingRestrictionB extends Curse {
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness;
 		}
 		return prevLewdness + 4;
@@ -871,11 +904,12 @@ setup.curseArray.push(ClothingRestrictionB)
 class PowerDom extends Curse {
 	static corruption = 25;
 	static curseName = 'Power Dom';
+	static description = `Modifies your personality to cause you to become markedly more dominant, both in and out of the bedroom. You simply won't be able to sit still and let someone else take the lead, even in situations where you might have been more comfortable doing so previously. Cannot be taken with any Submissiveness Rectification Curses.`;
 	static picture = 'Curses/power dom.png';
 	static type = 'libido';
 	constructor() {
 		super('Power Dom', 'libido',
-			  'You are never able to sit back and let someone else take charge, neither in life nor in sex. ');
+		      'You are never able to sit back and let someone else take charge, neither in life nor in sex. ');
 	}
 
 	static get incompatibilities() {
@@ -894,11 +928,12 @@ setup.curseArray.push(PowerDom)
 class Curse2020 extends Curse {
 	static corruption = 20;
 	static curseName = '20/20000000';
+	static description = `Gives you a severe case of all-around garbage eyes. It also makes them more sensitive, making contacts very uncomfortable - you could wear them on rare occasions, but they'd be hell to wear as part of a normal routine. Conjures up a durable yet kinda unstylish pair of glasses for your journey - you should pick out something more suitable when you get out of here.`;
 	static picture = 'Curses/20-20.png';
 	static type = 'none';
 	constructor() {
 		super('20/20000000', 'none',
-			  'Your sight is pretty terrible, and you are pretty much blind without glasses. Contacts also feel extremely uncomfortable. ');
+		      'Your sight is pretty terrible, and you are pretty much blind without glasses. Contacts also feel extremely uncomfortable. ');
 	}
 
 }
@@ -910,11 +945,12 @@ setup.curseArray.push(Curse2020)
 class ComicRelief extends Curse {
 	static corruption = 25;
 	static curseName = 'Comic Relief';
+	static description = `Severely reduces the odds of anyone taking you seriously in any social situation. People may see you as a cute klutz, or a silly loudmouthed braggart, or a quirky sex-obsessed weirdo, but they will almost never see you as an actual threat, source of wisdom, or a real leader. In the script of your life, you'll be the butt of every joke.`;
 	static picture = 'Curses/comicrelief.png';
 	static type = 'none';
 	constructor() {
 		super('Comic Relief', 'none',
-			  'No one ever seems to take you seriously. You get patronized and talked down to pretty often. ');
+		      'No one ever seems to take you seriously. You get patronized and talked down to pretty often. ');
 	}
 }
 setup.allCurses.ComicRelief = new ComicRelief()
@@ -925,11 +961,12 @@ setup.curseArray.push(ComicRelief)
 class EqualOpportunity extends Curse {
 	static corruption = 25;
 	static curseName = 'Equal Opportunity';
+	static description = `You become 100% pansexual, to the extent that sex/gender is entirely irrelevant to you when evaluating how attractive someone is. Nothing like "okay I like them both, but I still prefer ________" here. If you already consider yourself this, then enjoy the free points!`;
 	static picture = 'Curses/equaloppurtunity.png';
 	static type = 'none';
 	constructor() {
 		super('Equal Opportunity', 'none',
-			  'Gender is really not an issue for you when selecting sexual partners. ');
+		      'Gender is really not an issue for you when selecting sexual partners. ');
 	}
 }
 setup.allCurses.EqualOpportunity = new EqualOpportunity()
@@ -940,11 +977,12 @@ setup.curseArray.push(EqualOpportunity)
 class AbsolutePregnancy extends Curse {
 	static corruption = 35;
 	static curseName = 'Absolute Pregnancy';
+	static description = `Absolutely any sex you have with another person will result in a viable pregnancy - even homosexual sex, so long as there's an available womb present in at least one of your bodies. No form of contraception or creative positioning (i.e. oral) can prevent this. Logic/fate will naturally prevent you from every having sex with anyone who has the Absolute Birth Control Curse, avoiding the whole unstoppable force/immovable object scenario.`;
 	static picture = 'Curses/absolutepregnancy.png';
 	static type = 'none';
 	constructor() {
 		super('Absolute Pregnancy', 'none',
-			  'Any and all sex you engage in results in pregnancy. ');
+		      'Any and all sex you engage in results in pregnancy. ');
 	}
 
 	static get incompatibilities() {
@@ -959,11 +997,12 @@ setup.curseArray.push(AbsolutePregnancy)
 class AbsoluteBirthControl extends Curse {
 	static corruption = 40;
 	static curseName = 'Absolute Birth Control';
+	static description = `Completely removes your ability to ever conceive a child with anyone else, as either a mother or father. Cannot be taken with Absolute Pregnancy, Wacky Wombs, or Omnitool.`;
 	static picture = 'Curses/absolutebirthcontrol.png';
 	static type = 'none';
 	constructor() {
 		super('Absolute Birth Control', 'none',
-			  'You are completely sterile and cannot have children. ');
+		      'You are completely sterile and cannot have children. ');
 	}
 
 	static get incompatibilities() {
@@ -978,6 +1017,7 @@ setup.curseArray.push(AbsoluteBirthControl)
 class WackyWombs extends Curse {
 	static corruption = 20;
 	static curseName = 'Wacky Wombs';
+	static description = `Adds a functional womb+ova to your body, connected to one of the following paths of your choice: your throat, urethra, anus, or side-by-side to an existing womb through a vaginal canal. Both male and females with this can be impregnated via penile penetration to the appropriate area. Your body will make the birthing process technically safe, but still probably pretty damn weird, kinda gross looking, and very painful. I guess that's pretty standard for pregnancy though?`;
 	static picture = 'Curses/wackywombs.png';
 	static type = 'gender';
 	constructor(wombLocation='throat') {
@@ -1040,6 +1080,7 @@ setup.curseArray.push(WackyWombs)
 class Omnitool extends Curse {
 	static corruption = 25;
 	static curseName = 'Omnitool';
+	static description = `Causes pregnancy to always be a possibility when your have sex, regardless of species differences, Children will be a mixture of the two species.`;
 	static picture = 'Curses/omnitool.png';
 	static type = 'none';
 	constructor() {
@@ -1058,6 +1099,7 @@ setup.curseArray.push(Omnitool)
 class Gooey extends Curse {
 	static corruption = 40;
 	static curseName = 'Gooey';
+	static description = `Causes your entire body to be made out of sticky, slimy unicolor goo. All the body altering Curses you received/will receive will cause your goo to roughly mimic the shape and texture of that feature - goo pelt, gooey tail, and so on. This will probably look quite odd with many Curses. Your goo is slightly malleable, but will quickly revert to the form given to you by Curses - no shapeshifting. Your durability and dietary restrictions are unchanged.`;
 	static picture = 'Curses/gooey.png';
 	static type = 'none';
 	constructor() {
@@ -1082,6 +1124,7 @@ setup.curseArray.push(Gooey)
 class RainbowSwirl extends Curse {
 	static corruption = 25;
 	static curseName = 'Rainbow Swirl';
+	static description = `Permanently changes your skin and eye colors to significantly different, visually distinct colors of your choice. You can choose if you want to go with unusual colors like pink or red, or just stick with the normal human range.`;
 	static picture = 'Curses/rainbowswirl.png';
 	static type = 'none';
 	constructor(skinColor='pink', eyeColor='pink') {
@@ -1135,11 +1178,12 @@ setup.curseArray.push(RainbowSwirl)
 class DoublePepperoni extends Curse {
 	static corruption = 20;
 	static curseName = 'Double Pepperoni';
+	static description = `Swells up your nipples, making them rather puffy, and noticeably increases the area of your areolae. Also makes them a bit more sensitive. Cute!`;
 	static picture = 'Curses/doublepepperoni.png';
 	static type = 'none';
 	constructor() {
 		super('Double Pepperoni', 'none',
-			  'Your nipples and areolae are rather large and puffy. ');
+		      'Your nipples and areolae are rather large and puffy. ');
 	}
 
 	// correcting minimum breast size is done in character.js (breastCor()) because it has to happen last.
@@ -1152,11 +1196,12 @@ setup.curseArray.push(DoublePepperoni)
 class LiteralBlushingVirgin extends Curse {
 	static corruption = 40;
 	static curseName = 'Literal Blushing Virgin';
+	static description = `Whenever you're having sex, you'll temporarily lose your memory of all your past sexual encounters, leading you to believe every time is your first. If you have one, you can also choose to regenerate your hymen to "complete the effect" if you like. It's not really an accurate indicator of virginity, so it doesn't matter either way.`;
 	static picture = 'Curses/literalblushingvirgin.png';
 	static type = 'none';
 	constructor() {
 		super('Literal Blushing Virgin', 'none',
-			  'No matter how many times you have sex, the moment it starts, you always forget your previous experiences, and genuinely believe it is your first time. ');
+		      'No matter how many times you have sex, the moment it starts, you always forget your previous experiences, and genuinely believe it is your first time. ');
 	}
 
 	// eslint-disable-next-line no-unused-vars
@@ -1172,6 +1217,7 @@ setup.curseArray.push(LiteralBlushingVirgin)
 class LibidoReinforcementC extends Curse {
 	static corruption = 35;
 	static curseName = 'Libido Reinforcement C';
+	static description = `Gives one level of the Libido Reinforcement Curse, boosting your sex drive. Please always practice safe sex!`;
 	static picture = 'Curses/libidoreinforcementC.png';
 	static type = 'libido';
 	constructor() {
@@ -1190,6 +1236,7 @@ setup.curseArray.push(LibidoReinforcementC)
 class LactationRejuvenationA extends Curse {
 	static corruption = 30;
 	static curseName = 'Lactation Rejuvenation A';
+	static description = `Causes you to be lactating slightly at all times, about as much as an average pregnant woman. Not too annoying; may require occasional milking and cause wet spots on clothing sometimes.`;
 	static picture = 'Curses/lactationA.png';
 	static type = 'none';
 	constructor() {
@@ -1208,6 +1255,7 @@ setup.curseArray.push(LactationRejuvenationA)
 class AssetRobustnessD extends Curse {
 	static corruption = 30;
 	static curseName = 'Asset Robustness D';
+	static description = `Grows your boobs by about 6 cup sizes and/or increases your penis size by about 15cm (6in), depending on what's applicable. The extra weight will take a while to get used to.`;
 	static picture = 'Curses/assetrobustnessD.png';
 	static type = 'gender';
 	constructor() {
@@ -1230,6 +1278,7 @@ setup.curseArray.push(AssetRobustnessD)
 class AgeReductionB extends Curse {
 	static corruption = 30;
 	static curseName = 'Age Reduction B';
+	static description = `Reduces your physical apparent age by 3 years or sets it to 20, whichever is younger. This may put you at a disadvantage in the Abyss. It doesn't show any additional mercy to the young.`;
 	static picture = 'Curses/agereductionB.png';
 	static type = 'none';
 	constructor() {
@@ -1253,11 +1302,12 @@ setup.curseArray.push(AgeReductionB)
 class SleepTight extends Curse {
 	static corruption = 45;
 	static curseName = 'Sleep Tight';
+	static description = `Makes your body require about 12 hours of sleep a day, but makes it always extremely comforting and pleasurable. If taken with Sweet Dreams, you will learn to embrace being wrapped in fear, your mind associating terror and helplessness with comfort. Note that the extra sleep at night translates to extra energy during the day, and so this has no impact on travel times here.`;
 	static picture = 'Curses/sleeptight.png';
 	static type = 'none';
 	constructor() {
 		super('Sleep Tight', 'none',
-			  'You need 12 hours of sleep each night, but at least sleeping is very comforting and pleasurable. you also feel a bit more energized during your waking hours. ');
+		      'You need 12 hours of sleep each night, but at least sleeping is very comforting and pleasurable. you also feel a bit more energized during your waking hours. ');
 	}
 }
 setup.allCurses.SleepTight = new SleepTight()
@@ -1268,11 +1318,12 @@ setup.curseArray.push(SleepTight)
 class SweetDreams extends Curse {
 	static corruption = 40;
 	static curseName = 'Sweet Dreams';
+	static description = `Every single time you go to sleep, you'll have sexual nightmares that heavily blur the line between terrifying and horny, and which will almost always cause several orgasms. Hope you don't mind the extra laundry!`;
 	static picture = 'Curses/sweetdreams.png';
 	static type = 'none';
 	constructor() {
 		super('Sweet Dreams', 'none',
-			  'Every night you have horrifyingly sexy and sexily horrifying wet nightmares, and wake up shaking in fear in a puddle of your own juices. ');
+		      'Every night you have horrifyingly sexy and sexily horrifying wet nightmares, and wake up shaking in fear in a puddle of your own juices. ');
 	}
 }
 setup.allCurses.SweetDreams = new SweetDreams()
@@ -1283,11 +1334,12 @@ setup.curseArray.push(SweetDreams)
 class HypnoHappytime extends Curse {
 	static corruption = 40;
 	static curseName = 'Hypno Happytime';
+	static description = `Makes you particularly suggestible. Directly hypnotizing you is easy, but someone determined to do so could manage to do it even through subtle methods, like subliminal messaging in media or something.`;
 	static picture = 'Curses/hypnohappytime.png';
 	static type = 'none';
 	constructor() {
 		super('Hypno Happytime', 'none',
-			  'yOu are very susceptiBlE to hYpnosis, and it is not hard to implant suggestions into your MalleablE mind. ');
+		      'yOu are very susceptiBlE to hYpnosis, and it is not hard to implant suggestions into your MalleablE mind. ');
 	}
 
 	growAsset(prevAsset) {
@@ -1302,11 +1354,12 @@ setup.curseArray.push(HypnoHappytime)
 class CrossdressYourHeart extends Curse {
 	static corruption = 35;
 	static curseName = 'Crossdress Your Heart';
+	static description = `Forces you to only wear clothing associated with the opposite genitals of those you have. Cannot be taken with Futa Fun or both Clothing Restrictions B and C at the same time.`;
 	static picture = 'Curses/crossdressyourheart.png';
 	static type = 'none';
 	constructor() {
 		super('Crossdress Your Heart', 'none',
-			  'You can only bring yourself to wear clothing associated with the opposite sex. ');
+		      'You can only bring yourself to wear clothing associated with the opposite sex. ');
 	}
 
 	static get incompatibilities() {
@@ -1321,11 +1374,12 @@ setup.curseArray.push(CrossdressYourHeart)
 class LieDetector extends Curse {
 	static corruption = 40;
 	static curseName = 'Lie Detector';
+	static description = `Anyone you communicate with will be able to instinctively tell whenever you're not being completely honest with them or hiding information they would want to know. Having to wear your heart on your sleeve can make life difficult in the long run.`;
 	static picture = 'Curses/liedetector.png';
 	static type = 'none';
 	constructor() {
 		super('Lie Detector', 'none',
-			  'No matter how convincing a lie you craft, everyone can tell when you are not being truthful. Others are aware even when you are just omitting information. ');
+		      'No matter how convincing a lie you craft, everyone can tell when you are not being truthful. Others are aware even when you are just omitting information. ');
 	}
 }
 setup.allCurses.LieDetector = new LieDetector()
@@ -1336,11 +1390,12 @@ setup.curseArray.push(LieDetector)
 class Megadontia extends Curse {
 	static corruption = 30;
 	static curseName = 'Megadontia';
+	static description = `Gives you some very sharp teeth. Be careful not to bite any partners! Also gives you 1-2 especially large teeth that will remain visible even with your mouth closed, giving you a perpetual smug-fang look.`;
 	static picture = 'Curses/sharpteeth.png';
 	static type = 'none';
 	constructor() {
 		super('Megadontia', 'none',
-			  'Your teeth are very sharp, and you have a couple of fangs poking out even when your mouth is closed. Some would call it cute, but be careful when making out. ');
+		      'Your teeth are very sharp, and you have a couple of fangs poking out even when your mouth is closed. Some would call it cute, but be careful when making out. ');
 	}
 
 	inhumanise(prevInhumanity) {
@@ -1355,6 +1410,7 @@ setup.curseArray.push(Megadontia)
 class Softie extends Curse {
 	static corruption = 35;
 	static curseName = 'Softie';
+	static description = `If you have a penis, it will never be erect again. You can still orgasm, but you'll be flaccid the entire time. If you have a vagina, your nipples will be constantly inverted. Even if you were to try and pull them out, they'd just spring right back to their inverted state.`;
 	static picture = 'Curses/softie.png';
 	static type = 'none';
 	constructor() {
@@ -1378,6 +1434,7 @@ setup.curseArray.push(Softie)
 class HardMode extends Curse {
 	static corruption = 35;
 	static curseName = 'Hard Mode';
+	static description = `If you have a penis, it will always be fully erect. If you have breasts, your nipples will constantly be erect, and probably visible through many kinds of clothing...maybe even with a bra, sometimes. If you have a vagina, it can make the clitoris a bit harder than normal too. Cannot be taken with Softie.`;
 	static picture = 'Curses/hardmode.png';
 	static type = 'none';
 	constructor() {
@@ -1390,7 +1447,7 @@ class HardMode extends Curse {
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness;
 		}
 		return prevLewdness + 2;
@@ -1404,11 +1461,12 @@ setup.curseArray.push(HardMode)
 class LingualLeviathan extends Curse {
 	static corruption = 30;
 	static curseName = 'Lingual Leviathan';
+	static description = `Increases the length of your tongue to approximately 30cm (12 in). You'll have to learn to eat carefully to avoid biting it, but you'll give amazing oral.`;
 	static picture = 'Curses/lingualleviathan.png';
 	static type = 'none';
 	constructor() {
 		super('Lingual Leviathan', 'none',
-			  'You have an extremely long, prehensile tongue, making you especially great at oral. ');
+		      'You have an extremely long, prehensile tongue, making you especially great at oral. ');
 	}
 
 	inhumanise(prevInhumanity) {
@@ -1423,6 +1481,7 @@ setup.curseArray.push(LingualLeviathan)
 class TippingTheScales extends Curse {
 	static corruption = 45;
 	static curseName = 'Tipping the Scales';
+	static description = `Your body is completely covered with a layer of rigid scales in a color of your choice. Hairs will still grow from them in whatever places you would typically grow hairs, so it would look really weird with the Maximum Fluff Curse. Strong enough to protect you well from most human weapons, but not the vicious beasts of the Abyss. Notably not limited to reptile scales. You can do fish scales instead and go for the Zora look, if you like.`;
 	static picture = 'Curses/tippingthescales.png';
 	static type = 'none';
 	constructor(scaleColor='green') {
@@ -1471,6 +1530,7 @@ setup.curseArray.push(TippingTheScales)
 class Reptail extends Curse {
 	static corruption = 35;
 	static curseName = 'Reptail';
+	static description = `Gives you a large, scaled, spiky reptile tail sprouting from your back. It would look pretty weird next to other tails if you have them, but there's nothing outright stopping you from taking this with the Fluffy Tail Curse or anything.`;
 	static picture = 'Curses/reptail.png';
 	static type = 'none';
 	constructor() {
@@ -1489,11 +1549,12 @@ setup.curseArray.push(Reptail)
 class ColdBlooded extends Curse {
 	static corruption = 40;
 	static curseName = 'Cold Blooded';
+	static description = `Changes your body's physiology to be similar to an ectotherm - that is, your body will produce negligible heat on its own, and you'll need to regularly heat it up via external sources, like sunlight (or Miasma light) so you don't freeze. I hope you like cuddling! Increases travel times in this layer by 1 day each if you don't use a portable source of heat. Without one, you'll need to stop and set up campfires very frequently.`;
 	static picture = 'Curses/coldblooded.png';
 	static type = 'none';
 	constructor() {
 		super('Cold Blooded', 'none',
-			  'You no longer produce heat on your own, and need external heat sources. Your nights lately involve a lot of cuddling. ');
+		      'You no longer produce heat on your own, and need external heat sources. Your nights lately involve a lot of cuddling. ');
 	}
 }
 setup.allCurses.ColdBlooded = new ColdBlooded()
@@ -1504,6 +1565,7 @@ setup.curseArray.push(ColdBlooded)
 class LibidoReinforcementD extends Curse {
 	static corruption = 40;
 	static curseName = 'Libido Reinforcement D';
+	static description = `Gives one level of the Libido Reinforcement Curse, boosting your sex drive. Others may have a hard time keeping up with you.`;
 	static picture = 'Curses/libidoreinforcementD.png';
 	static type = 'libido';
 	constructor() {
@@ -1522,6 +1584,7 @@ setup.curseArray.push(LibidoReinforcementD)
 class GenderReversalD extends Curse {
 	static corruption = 15;
 	static curseName = 'Gender Reversal D';
+	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. The grass is always greener, right?`;
 	static picture = 'Curses/genderreversalD.png';
 	static type = 'gender';
 	constructor() {
@@ -1540,11 +1603,12 @@ setup.curseArray.push(GenderReversalD)
 class PleasureRespecificationA extends Curse {
 	static corruption = 45;
 	static curseName = 'Pleasure Respecification A';
+	static description = `Completely prevents you from ever reaching climax on your own, through any form of masturbation or toys. You'll feel pleasure building, but release will be completely impossible without another party's help.`;
 	static picture = 'Curses/pleasurerespecA.png';
 	static type = 'none';
 	constructor() {
 		super('Pleasure Respecification A', 'none',
-			  'You can no longer orgasm from masturbation. you can still feel pleasure and work your way towards the edge, but you will always need someone else\'s help to climax. ');
+		      'You can no longer orgasm from masturbation. you can still feel pleasure and work your way towards the edge, but you will always need someone else\'s help to climax. ');
 	}
 }
 setup.allCurses.PleasureRespecificationA = new PleasureRespecificationA()
@@ -1555,11 +1619,12 @@ setup.curseArray.push(PleasureRespecificationA)
 class ClothingRestrictionC extends Curse {
 	static corruption = 60;
 	static curseName = 'Clothing Restriction C';
+	static description = `Prevents you from wearing any clothing generally considered of the primary part of an outfit - essentially anything not already covered by Clothing Restrictions A or B. Dresses, shirts, pants, skirts - all off the table. Also includes shoes.`;
 	static picture = 'Curses/clothingrestrictionC.png';
 	static type = 'none';
 	constructor() {
 		super('Clothing Restriction C', 'none',
-			  'You can no longer wear any clothing besides underwear, or clothes skimpy enough that others would consider them underwear. ');
+		      'You can no longer wear any clothing besides underwear, or clothes skimpy enough that others would consider them underwear. ');
 	}
 
 	static get incompatibilities() {
@@ -1568,7 +1633,7 @@ class ClothingRestrictionC extends Curse {
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness;
 		}
 		return prevLewdness + 4;
@@ -1576,7 +1641,7 @@ class ClothingRestrictionC extends Curse {
 
 	lewdnessMult(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness * 1.25;
 		}
 		return prevLewdness * 1.5;
@@ -1590,11 +1655,12 @@ setup.curseArray.push(ClothingRestrictionC)
 class MassacreManicure extends Curse {
 	static corruption = 30;
 	static curseName = 'Massacre Manicure';
+	static description = `You'll grow sharp claws instead of fingernails. They can be retracted somewhat when not in use, but probably not quite as much as you would like. Fingering people is still possible, don't worry! Just... be very careful.`;
 	static picture = 'Curses/massacremanicure.png';
 	static type = 'none';
 	constructor() {
 		super('Massacre Manicure', 'none',
-			  'You have sharp claws instead of fingernails. they are retractable to an extent, but remain a permanent fixture of your hands. ');
+		      'You have sharp claws instead of fingernails. they are retractable to an extent, but remain a permanent fixture of your hands. ');
 	}
 
 	inhumanise(prevInhumanity) {
@@ -1609,11 +1675,12 @@ setup.curseArray.push(MassacreManicure)
 class DoS extends Curse {
 	static corruption = 50;
 	static curseName = 'DoS';
+	static description = `Causes you to feel pleasure when inflicting others with pain, but numbs feelings of physical pleasure from other sources somewhat.`;
 	static picture = 'Curses/dos.png';
 	static type = 'libido';
 	constructor() {
 		super('DoS', 'libido',
-			  'You feel pleasure when inflicting pain on others, though other sources of pleasure are somewhat dulled. ');
+		      'You feel pleasure when inflicting pain on others, though other sources of pleasure are somewhat dulled. ');
 	}
 
 	changeSubDom(prevSubDom) {
@@ -1628,11 +1695,12 @@ setup.curseArray.push(DoS)
 class DoM extends Curse {
 	static corruption = 45;
 	static curseName = 'DoM';
+	static description = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both S and M, you will cease to feel pleasure entirely except when inflicting or receiving pain.`;
 	static picture = 'Curses/dom.png';
 	static type = 'libido';
 	constructor() {
 		super('DoM', 'libido',
-			  'All pain you feel is converted into pleasure, though other sources of pleasure are somewhat dulled. ');
+		      'All pain you feel is converted into pleasure, though other sources of pleasure are somewhat dulled. ');
 	}
 
 	changeSubDom(prevSubDom) {
@@ -1647,16 +1715,17 @@ setup.curseArray.push(DoM)
 class HijinksEnsue extends Curse {
 	static corruption = 40;
 	static curseName = 'Hijinks Ensue';
+	static description = `Gives you bad luck with regards to embarrassing sexual situations, to a hilarious degree. You'll accidentally stumble into sex, have people stumble in on you when you're having sex, have embarrassing wardrobe malfunctions, and rarely ever get a moment of peace to yourself. Sexual shenanigans will find you and humiliate you no matter what measures you take.`;
 	static picture = 'Curses/hijinxensue.png';
 	static type = 'none';
 	constructor() {
 		super('Hijinks Ensue', 'none',
-			  'You get involved in embarrassing sexual situations more often than it is reasonable. You are constantly getting caught in compromising positions, stumbling into other people having sex, suffering wardrobe malfunctions... ');
+		      'You get involved in embarrassing sexual situations more often than it is reasonable. You are constantly getting caught in compromising positions, stumbling into other people having sex, suffering wardrobe malfunctions... ');
 	}
 
 	lewdnessMult(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness * 1.25;
 		}
 		return prevLewdness * 1.5;
@@ -1670,6 +1739,7 @@ setup.curseArray.push(HijinksEnsue)
 class FlowerPower extends Curse {
 	static corruption = 40;
 	static curseName = 'Flower Power';
+	static description = `Causes flowers and vines to sprout all over your body, and replaces your hair with leaves or flower petals. You can influence their shape and locations somewhat, so long as they're visible. At least you'll probably smell nice! As long as you don't go for a Rafflesia or something, I mean.`;
 	static picture = 'Curses/flowerpower.png';
 	static type = 'none';
 	constructor() {
@@ -1688,6 +1758,7 @@ setup.curseArray.push(FlowerPower)
 class Cellulose extends Curse {
 	static corruption = 35;
 	static curseName = 'Cellulose';
+	static description = `Causes your skin to become smooth and slightly rigid, like plant matter. Can optionally include a layer of bark. Be careful around open flames!`;
 	static picture = 'Curses/cellulose.png';
 	static type = 'none';
 	constructor() {
@@ -1712,11 +1783,12 @@ setup.curseArray.push(Cellulose)
 class Chlorophyll extends Curse {
 	static corruption = 50;
 	static curseName = 'Chlorophyll';
+	static description = `Causes your body to require sunlight, or you will feel sluggish and low on energy. If you're wearing normal clothing on a sunny day, you'll need to spend about two hours in the sun daily to feel recharged, though you can reduce that to as low as 20 minutes if you sunbath nude. Thankfully, Miasma reactions will suffice in most layers of the Abyss, but you'll need to add 1 day of travel time for everything in layer 3, and anywhere else similarly dark.`;
 	static picture = 'Curses/photosynthesis.png';
 	static type = 'none';
 	constructor() {
 		super('Chlorophyll', 'none',
-			  'You need sunlight every day in order to feel energized; two hours when clothed, or 20 minutes nude. Thankfully, miasma takes care of most of your needs in the Abyss. ');
+		      'You need sunlight every day in order to feel energized; two hours when clothed, or 20 minutes nude. Thankfully, miasma takes care of most of your needs in the Abyss. ');
 	}
 
 	changeSkinColor(prevSkinColor) {
@@ -1734,11 +1806,12 @@ setup.curseArray.push(Chlorophyll)
 class Pheromones extends Curse {
 	static corruption = 45;
 	static curseName = 'Pheromones';
+	static description = `Causes you to near-constantly release scentless pheromones that make everyone around you quite aroused. The effect is slightly directed towards you, but the people around you may end up directing their lust towards others if you're not their type or you don't make a move. It isn't a rape aura; people still have their good senses - they're just more impassioned than they otherwise would be.`;
 	static picture = 'Curses/pheremones.png';
 	static type = 'none';
 	constructor() {
 		super('Pheromones', 'none',
-			  'You are constantly emitting pheromones that make other people more aroused, especially towards you. Thankfully, it does not cloud their judgment any more than natural arousal. ');
+		      'You are constantly emitting pheromones that make other people more aroused, especially towards you. Thankfully, it does not cloud their judgment any more than natural arousal. ');
 	}
 }
 setup.allCurses.Pheromones = new Pheromones()
@@ -1749,6 +1822,7 @@ setup.curseArray.push(Pheromones)
 class Carapacian extends Curse {
 	static corruption = 50;
 	static curseName = 'Carapacian';
+	static description = `Gives you a shiny, firm carapace or exoskeleton in the color of your choice surrounding about 80% of your body, only leaving small bits exposed around squishy areas and joints. Probably not strong enough to stand up to human weapons or creatures of the Abyss, but if might give you an edge in a fistfight?`;
 	static picture = 'Curses/carapacian.png';
 	static type = 'none';
 	constructor(skinColor='shiny black') {
@@ -1797,6 +1871,7 @@ setup.curseArray.push(Carapacian)
 class Hemospectrum extends Curse {
 	static corruption = 35;
 	static curseName = 'Hemospectrum';
+	static description = `Changes your blood into a color that is unnatural for humans, like purple or blue or green. You can decide what shade you'd like.`;
 	static picture = 'Curses/hemospectrum.png';
 	static type = 'none';
 	constructor(bloodColor='blue') {
@@ -1839,6 +1914,7 @@ setup.curseArray.push(Hemospectrum)
 class WrigglyAntennae extends Curse {
 	static corruption = 40;
 	static curseName = 'Wriggly Antennae';
+	static description = `Sprouts a pair of wriggling insect antennae from your forehead. They're sensitive to touch and you can taste things through them, so keep them clean!`;
 	static picture = 'Curses/wrigglyantennae.png';
 	static type = 'none';
 	constructor() {
@@ -1857,6 +1933,7 @@ setup.curseArray.push(WrigglyAntennae)
 class Eggxellent extends Curse {
 	static corruption = 45;
 	static curseName = 'Eggxellent';
+	static description = `If you have a penis, it will function similarly to an ovipositor, releasing eggs during ejaculation rather than semen. If you have a vagina, laying eggs will replace both periods (egg laying will still occur even if periods would normally be prevented via Relics or medically) and live births. (They can replace live births for any extra non-vaginal wombs you have too.)`;
 	static picture = 'Curses/eggxellent.png';
 	static type = 'none';
 	constructor() {
@@ -1885,6 +1962,7 @@ setup.curseArray.push(Eggxellent)
 class SubmissivenessRectificationB extends Curse {
 	static corruption = 35;
 	static curseName = 'Submissiveness Rectification B';
+	static description = `Causes you to become more submissive, like the Submissiveness Rectification A Curse. With two of them, you become physically incapable of resisting any request made of you except orders that would cause death or lasting damage to yourself or others. (Requests like "be my slave indefinitely" or "give me everything you own" would constitute lasting damage.)`;
 	static picture = 'Curses/submissivenessrectificationB.png';
 	static type = 'libido';
 	constructor() {
@@ -1907,6 +1985,7 @@ setup.curseArray.push(SubmissivenessRectificationB)
 class LactationRejuvenationB extends Curse {
 	static corruption = 40;
 	static curseName = 'Lactation Rejuvenation B';
+	static description = `Induces Permanent lactation, like the Lactation Rejuvenation A Curse. With two of them, your lactation will reach ridiculous levels normally impossible in humans or really any animal, requiring frequent milking throughout the day to prevent discomfort, temporarily increasing boob sizes at a rapid pace, and being capable of long, sustained milk streams at full capacity.`;
 	static picture = 'Curses/lactationrejuvenationB.png';
 	static type = 'none';
 	constructor() {
@@ -1925,11 +2004,12 @@ setup.curseArray.push(LactationRejuvenationB)
 class PleasureRespecificationB extends Curse {
 	static corruption = 55;
 	static curseName = 'Pleasure Respecification B';
+	static description = `Completely prevents you from ever climaxing from any sexual act with another person - you'll feel pleasure building, but release is only possible with masturbation. With both Pleasure Respecification A and B, orgasms of any kind become completely impossible, except when directly caused by a Curse.`;
 	static picture = 'Curses/pleasurerespecB.png';
 	static type = 'none';
 	constructor() {
 		super('Pleasure Respecification B', 'none',
-			  'You can no longer orgasm from sex with another person, and need to spend some time masturbating after the act to reach climax. ');
+		      'You can no longer orgasm from sex with another person, and need to spend some time masturbating after the act to reach climax. ');
 	}
 }
 setup.allCurses.PleasureRespecificationB = new PleasureRespecificationB()
@@ -1940,6 +2020,7 @@ setup.curseArray.push(PleasureRespecificationB)
 class AgeReductionC extends Curse {
 	static corruption = 45;
 	static curseName = 'Age Reduction C';
+	static description = `Reduces your apparent physical age by 4 years or sets it to 20, whichever is younger. You probably won't be able to carry as much weight as you used to if you end up particularly young.`;
 	static picture = 'Curses/agereductionC.png';
 	static type = 'age';
 	constructor() {
@@ -1963,6 +2044,7 @@ setup.curseArray.push(AgeReductionC)
 class Horny extends Curse {
 	static corruption = 20;
 	static curseName = 'Horny';
+	static description = `You get a noticeable horn in the shape of your choice sprouting from your head. It's strong, but quite sensitive to touch.`;
 	static picture = 'Curses/horny.png';
 	static type = 'none';
 	constructor() {
@@ -1982,6 +2064,7 @@ setup.curseArray.push(Horny)
 class DrawingSpades extends Curse {
 	static corruption = 40;
 	static curseName = 'Drawing Spades';
+	static description = `Gives you a cute spade-tipped demon tail. It's a major new erogenous zone, and its prehensility lends itself very well to being used creatively in sex. Occasionally may act on its own, attempting to pleasure you or others based on your subconscious desires.`;
 	static picture = 'Curses/drawingspades.png';
 	static type = 'none';
 	constructor() {
@@ -2000,11 +2083,12 @@ setup.curseArray.push(DrawingSpades)
 class TattooTally extends Curse {
 	static corruption = 55;
 	static curseName = 'Tattoo Tally';
+	static description = `You will have several small faintly-glowing runic tattoos across your body, culminating in one particularly large tattoo centered just above your pubic mound. These tattoos are very sensitive, and anyone who sees them will instantly be able to know the full breadth of your sexual history: total number of times having sex, number of different partners, how recently you last had sex, the kinds of fetishes you've indulged in, total volume of sexual fluids you've had in you... there's a lot of statistics there, and they'll see it all.`;
 	static picture = 'Curses/tattootally.png';
 	static type = 'none';
 	constructor() {
 		super('Tattoo Tally', 'none',
-			  'You have several small runic tattoos throughout your body, and a larger heart shaped one above your crotch. Everyone who looks at them instinctively knows the full extent of your sexual history. ');
+		      'You have several small runic tattoos throughout your body, and a larger heart shaped one above your crotch. Everyone who looks at them instinctively knows the full extent of your sexual history. ');
 	}
 }
 setup.allCurses.TattooTally = new TattooTally()
@@ -2015,11 +2099,12 @@ setup.curseArray.push(TattooTally)
 class Leaky extends Curse {
 	static corruption = 55;
 	static curseName = 'Leaky';
+	static description = `Your genitals will be abnormally lubricated at all times, with precum/vaginal lubricant. It'll get even worse if you're aroused at all, and you'll definitely have a stream going down your legs without a great deal of prior preparation. Expect a lot of fluid to be released when you orgasm. You'll be producing about twice as much as an average person, and this Curse about doubles fluid increases gained from eating Crumbleweeds in the previous layer. Also causes your fluids to take on an unusual flavor of your choice, without affecting their appearance.`;
 	static picture = 'Curses/leaky.png';
 	static type = 'none';
 	constructor() {
 		super('Leaky', 'none',
-			  `<<nobr>><<set _vagina = $mc.vagina > 0>>
+		      `<<nobr>><<set _vagina = $mc.vagina > 0>>
 <<set _penis = $mc.penis > 0>>
 <<if _vagina || _penis>>
 Your <<if _vagina>>pussy is always glistening with lubrication<</if>><<if _vagina && _penis>> and your <</if>><<if _penis>>cock is always leaking precum<</if>>, <<if _vagina && _penis>>so<<else>>and<</if>> it only takes a little motivation to get a real stream going down there.
@@ -2028,7 +2113,7 @@ Your <<if _vagina>>pussy is always glistening with lubrication<</if>><<if _vagin
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness;
 		}
 		if (character.hasCurse(ClothingRestrictionB) || character.hasCurse(ClothingRestrictionC)) {
@@ -2045,16 +2130,17 @@ setup.curseArray.push(Leaky)
 class WanderingHands extends Curse {
 	static corruption = 55;
 	static curseName = 'Wandering Hands';
+	static description = `Causes your body to subconsciously seek sexual release when you're not focusing on it, regardless of how aroused you are. You'll be writing an essay with one hand, and won't even notice your other hand masturbating until you're close to climax. Or you might absentmindedly grope your own chest in the middle of a conversation with a friend. In more serious cases, you could even find yourself grinding against objects or other people, and your lack of control will be especially apparent in your sleep. The effects can be largely nullified by wearing a vibrator or similar sex toy near-constantly.`;
 	static picture = 'Curses/wanderinghands.png';
 	static type = 'none';
 	constructor() {
 		super('Wandering Hands', 'none',
-			  'Whenever you aren\'t paying attention, your hands start rubbing your crotch. ');
+		      'Whenever you aren\'t paying attention, your hands start rubbing your crotch. ');
 	}
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness + 4;
 		}
 		return prevLewdness + 8;
@@ -2068,6 +2154,7 @@ setup.curseArray.push(WanderingHands)
 class SemenDemon extends Curse {
 	static corruption = 20;
 	static curseName = 'Semen Demon';
+	static description = `Requires you to drink at least 10ml of sexual fluids (semen or vaginal fluids) daily, or you will suffer symptoms of starvation. For reference, a single ejaculation is typically around 5ml, give or take, in both cases. Companions you have may help you if you have a good relationship, but a single companion would probably have trouble feeding you all on their own if you need a lot. You could try to supplement your diet with fluids from beasts of the Abyss - though the time spent doing so would likely substantially increase all travel times down here. This Curse can supply nutrition in place of food, but the Miasma prevents this from working inside the Abyss, unfortunately. You'll still need to eat real food too, while you're down here. You can get +15 extra corruption by restricting yourself to either semen or vaginal fluids exclusively.`;
 	static picture = 'Curses/semendemon.png';
 	static type = 'libido';
 	/**
@@ -2128,12 +2215,11 @@ class SemenDemon extends Curse {
 		if (character.vagina > 0 && this.fluidType !== "semen") safeConsumption += 2 * character.fluids / 100;
 		if (character.id === setup.companionIds.mc) {
 			// supplied by companions
-			safeConsumption += State.variables.hiredCompanions.reduce((v, c) => c.affec >= 15 &&
-																		   ((c.penis > 0 && this.fluidType !== 'vaginal fluids') ||
-																			(c.vagina > 0 && this.fluidType !== 'semen')
-																		   ) ? v + 2 * c.fluids / 100
-																			 : v,
-																	  safeConsumption);
+			safeConsumption += State.variables.hiredCompanions
+			                        .reduce((v, c) => c.affec >= 15 && ((c.penis > 0 && this.fluidType !== 'vaginal fluids') ||
+			                                                            (c.vagina > 0 && this.fluidType !== 'semen'))
+			                                          ? v + 2 * c.fluids / 100 : v,
+			                                safeConsumption);
 		}
 		if (safeConsumption >= this.amount * 2) return prevLewdness;
 		// The case in which the character finds somebody else to help them regularly still isn't covered, but we can't do that mechanically.
@@ -2148,6 +2234,7 @@ setup.curseArray.push(SemenDemon)
 class Quota extends Curse {
 	static corruption = 20;
 	static curseName = 'Quota';
+	static description = `Requires you to cause others a total of 2 orgasms per day via direct contact with your body, or you will experience a severe drop in energy, characteristic of heavy sleep deprivation. The quota is increased to 3 orgasms if taken in combination with Sleep Tight. This can replace sleep, but the Miasma prevents this from working inside the Abyss. I hope you've been kind to your companions, or you'll need to waste a lot of potential travel time pleasuring some monsters down here.`;
 	static picture = 'Curses/quota.png';
 	static type = 'libido';
 	constructor() {
@@ -2173,6 +2260,7 @@ setup.curseArray.push(Quota)
 class InTheLimelight extends Curse {
 	static corruption = 20;
 	static curseName = 'In the Limelight';
+	static description = `Requires you to be the primary source of at least 50 orgasms daily, or you will completely cease feeling joy, falling into a deep depression where any kind of productive effort is impossible. Unlike Quota, this can be via indirect means, such as media you're featured in being masturbated to. Your (mis)adventures in the Abyss will from here on out be magically recorded and transmitted to a great deal of people to achieve this, but you should probably try to be just a bit more provocative than usual, just to be sure. If you earn enough fans while you're down here, you could make a career for yourself after you leave!`;
 	static picture = 'Curses/inthelimelight.png';
 	static type = 'libido';
 	constructor() {
@@ -2185,7 +2273,7 @@ class InTheLimelight extends Curse {
 
 	changeLewdness(prevLewdness, character) {
 		if (character.id === setup.companionIds.mc &&
-			State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
+		    State.variables.ownedRelics.some(r => r.name === 'Luminous Phantasmagoria')) {
 			return prevLewdness + 2;
 		}
 		return prevLewdness + 4;
@@ -2205,6 +2293,7 @@ setup.curseArray.push(InTheLimelight)
 class LibidoReinforcementE extends Curse {
 	static corruption = 50;
 	static curseName = 'Libido Reinforcement E';
+	static description = `Gives one level of the Libido Reinforcement Curse. I hope your standards aren't too high, or you might be in for a bit of frustration.`;
 	static picture = 'Curses/libidoreinforcementE.png';
 	static type = 'libido';
 	constructor() {
@@ -2223,6 +2312,7 @@ setup.curseArray.push(LibidoReinforcementE)
 class GenderReversalE extends Curse {
 	static corruption = 45;
 	static curseName = 'Gender Reversal E';
+	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. Whether you're going for the trap/reverse trap look or going all the way, I'm sure you'll look great!`;
 	static picture = 'Curses/genderreversalE.png';
 	static type = 'gender';
 	constructor() {
@@ -2241,6 +2331,7 @@ setup.curseArray.push(GenderReversalE)
 class AssetRobustnessE extends Curse {
 	static corruption = 50;
 	static curseName = 'Asset Robustness E';
+	static description = `Grows your boobs by about 8 cup sizes and/or increases your penis size by about 20cm (8in), depending on what's applicable. This will probably be very inconvenient for you.`;
 	static picture = 'Curses/assetrobustnessE.png';
 	static type = 'gender';
 	constructor() {
@@ -2264,11 +2355,12 @@ class UrineReamplificationA extends Curse {
 	static iswatersports = true;
 	static corruption = 55;
 	static curseName = 'Urine Reamplification A';
+	static description = `Significantly reduces your bladder capacity. Though annoying, this shouldn't be too dangerous so long as you're careful. Urine Reamplification Curses also prevent the Event Horizon Relic from taking care of your pee for you.`;
 	static picture = 'Curses/urinereamplificationA.png';
 	static type = 'none';
 	constructor() {
 		super('Urine Reamplification A', 'none',
-			  'Your bladder capacity has been significantly reduced, you need to be careful to make sure you don\'t have any accidents. ');
+		      'Your bladder capacity has been significantly reduced, you need to be careful to make sure you don\'t have any accidents. ');
 	}
 }
 setup.allCurses.UrineReamplificationA = new UrineReamplificationA()
@@ -2279,11 +2371,12 @@ setup.curseArray.push(UrineReamplificationA)
 class BarterSystem extends Curse {
 	static corruption = 65;
 	static curseName = 'Barter System';
+	static description = `Any kind of circulating currency you gain, physical or digital, will just seem to mysteriously vanish. In fact, the only way you have of paying for things is via sexual favors. Thankfully, most vendors will be a lot more receptive to this idea than they would have been before...but not at Outset Town's! Better give your dubloons to a companion before you take this Curse, and let them handle buying and selling things. (You cannot give the vending machines sexual favors, either. Please don't fuck the vending machines.)`;
 	static picture = 'Curses/bartersystem.png';
 	static type = 'none';
 	constructor() {
 		super('Barter System', 'none',
-			  'You are unable to process currency, so one of your companions or friends will need to perform any transactions on your behalf, except for when a merchant is willing to trade you an item in exchange for a sexual favor. ');
+		      'You are unable to process currency, so one of your companions or friends will need to perform any transactions on your behalf, except for when a merchant is willing to trade you an item in exchange for a sexual favor. ');
 	}
 }
 setup.allCurses.BarterSystem = new BarterSystem()
@@ -2294,11 +2387,12 @@ setup.curseArray.push(BarterSystem)
 class SharedSpace extends Curse {
 	static corruption = 60;
 	static curseName = 'Shared Space';
+	static description = `Everybody around you will feel incredibly comfortable touching you and groping you, and the concept of "personal space" won't exist for you. You'll always be seen in the wrong if you try to point it out.`;
 	static picture = 'Curses/sharedspace.png';
 	static type = 'none';
 	constructor() {
 		super('Shared Space', 'none',
-			  'People around you are always happy to grope you, having little regard to giving you any space to yourself. ');
+		      'People around you are always happy to grope you, having little regard to giving you any space to yourself. ');
 	}
 }
 setup.allCurses.SharedSpace = new SharedSpace()
@@ -2309,6 +2403,7 @@ setup.curseArray.push(SharedSpace)
 class Weakling extends Curse {
 	static corruption = 65;
 	static curseName = 'Weakling';
+	static description = `Causes your physical strength to drop to hilarious, absurdly low levels. Your comfortable long-term carrying capacity drops to 5kg, and your short-term strength isn't much better. You'll also probably be much worse off in a fight, especially with melee weaponry. This affects your essence more than your physical musculature, so you could train and train and become positively sculpted, or even cut off your arms and replace them with robotics, and you wouldn't be any stronger. It won't reduce your strength in ways that could be hazardous to your health or prevent normal locomotion, though.`;
 	static picture = 'Curses/weakling.png';
 	static type = 'none';
 	constructor() {
@@ -2325,11 +2420,12 @@ setup.curseArray.push(Weakling)
 class RandomOrgasms extends Curse {
 	static corruption = 65;
 	static curseName = 'Random Orgasms';
+	static description = `Once a day, you will suffer a powerful, unprompted orgasm, with no warning whatsoever. Can be very embarrassing if you're in public.`;
 	static picture = 'Curses/randomorgasms.png';
 	static type = 'none';
 	constructor() {
 		super('Random Orgasms', 'none',
-			  '<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") === 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
+		      '<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") === 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
 	}
 
 	get maximum() {
@@ -2344,11 +2440,12 @@ setup.curseArray.push(RandomOrgasms)
 class Beastly extends Curse {
 	static corruption = 80;
 	static curseName = 'Beastly';
+	static description = `Causes you to subconsciously take on many animalistic traits, including but not limited to: inability to "speak" except with simplistic, unintelligible noises, extreme discomfort at using human toilets and preferring to either do your business outside or use a litterbox, preferring to clean yourself via licking rather than taking a bath, and really enjoying headpats. Causes you to take on stereotypical traits specific to any kind of specific fantasy animals or fantasy races you might have become, too. Doesn't affect intelligence, but may affect how intelligent others perceive you to be.`;
 	static picture = 'Curses/beastly.png';
 	static type = 'none';
 	constructor() {
 		super('Beastly', 'none',
-			  'You tend to behave in a very animalistic way instinctually. People around you tend to assume you\'re more of an animal or a pet than a person to be respected properly. ');
+		      'You tend to behave in a very animalistic way instinctually. People around you tend to assume you\'re more of an animal or a pet than a person to be respected properly. ');
 	}
 
 	// conversation handicap implemented as special-purpose code in Character
@@ -2361,11 +2458,12 @@ setup.curseArray.push(Beastly)
 class CreatureOfTheNight extends Curse {
 	static corruption = 40;
 	static curseName = 'Creature of the Night';
+	static description = `You become a vampire. You'll burst into flames in direct sunlight, though you can reduce this to just significant discomfort and itchiness with copious sunblock and/or a parasol. You don't have a pulse anymore, and by some measures, you're no longer among the living...though your body can still be stopped by the same kinds of physical force that would kill a human. Your skin has an odd, unearthly look to it, the lack of life in you being very apparent. You need to suck some blood to survive, but not that much...about one 3 minute feeding session weekly would be enough, and it's perfectly survivable for the donor, though draining. This doesn't replace your normal dietary requirements or anything, though. You require verbal permission to enter any private homes owned by someone else. You no longer age, and your body is immune to most diseases and toxins, allowing you to suck blood without fear from catching anything from your victim. All other classic vampire weaknesses and strengths don't apply to you.`;
 	static picture = 'Curses/creatureofthenight.png';
 	static type = 'none';
 	constructor() {
 		super('Creature of the Night', 'none',
-			  'You no longer have a pulse and sunlight causes you discomfort, similar to mythological vampires. You also need to drink a small amount of blood to survive, in addition to normal food. ');
+		      'You no longer have a pulse and sunlight causes you discomfort, similar to mythological vampires. You also need to drink a small amount of blood to survive, in addition to normal food. ');
 	}
 }
 setup.allCurses.CreatureOfTheNight = new CreatureOfTheNight()
@@ -2376,6 +2474,7 @@ setup.curseArray.push(CreatureOfTheNight)
 class Minishish extends Curse {
 	static corruption = 75;
 	static curseName = 'Minish-ish';
+	static description = `Reduces your height to about 10-20cm (4-8in), the rest of your bodily proportions following suit. This will have major effects on the remainder of your journey. Many Relics may be difficult or impossible to use. You will probably be unable to carry any weight of consequence, or engage in any kind of combat. If you don't have a companion to carry you or some other method of overcoming your slower movement, double all time costs. Your new metabolic rate means you need 1/4 as much food and water as you did before, but you need to actually have some method of carrying all that extra food and water to take advantage of this.`;
 	static picture = 'Curses/minish-ish.png';
 	static type = 'height';
 	constructor() {
@@ -2403,6 +2502,7 @@ setup.curseArray.push(Minishish)
 class Colossalable extends Curse {
 	static corruption = 75;
 	static curseName = 'Colossal-able';
+	static description = `Increases your height to roughly 100m (330ft), the rest of your proportions following suit. This will have major effects on the remainder of your journey. You will be able to carry a lot more than before, but the difficulties of moving around the Abyss with your new huge body, finding alternate larger routes, and being careful of your footing, will slow you down a lot: double all time costs. You are probably a bit better off in combat than before, but many of the vicious beasts of the Abyss are no stranger to taking down threats much larger than them, being fast and wily enough to still be major obstacles to you. Can't be taken with Minish-ish.`;
 	static picture = 'Curses/colossal-able.png';
 	static type = 'height';
 	constructor() {
@@ -2430,6 +2530,7 @@ setup.curseArray.push(Colossalable)
 class LibidoReinforcementF extends Curse {
 	static corruption = 55;
 	static curseName = 'Libido Reinforcement F';
+	static description = `Gives one level of the Libido Reinforcement Curse. Please don't end up on any sexual offender lists!`;
 	static picture = 'Curses/libidoreinforcementF.png';
 	static type = 'libido';
 	constructor() {
@@ -2448,6 +2549,7 @@ setup.curseArray.push(LibidoReinforcementF)
 class GenderReversalF extends Curse {
 	static corruption = 50;
 	static curseName = 'Gender Reversal F';
+	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. Do you like the way your body looks now?`;
 	static picture = 'Curses/genderreversalF.png';
 	static type = 'gender';
 	constructor() {
@@ -2466,6 +2568,7 @@ setup.curseArray.push(GenderReversalF)
 class AssetRobustnessF extends Curse {
 	static corruption = 60;
 	static curseName = 'Asset Robustness F';
+	static description = `Grows your boobs by about 16 cup sizes and/or increases your penis size by about 40cm (16in), depending on what's applicable. We're well into territory that could be considered a medical condition, now.`;
 	static picture = 'Curses/assetrobustnessF.png';
 	static type = 'gender';
 	constructor() {
@@ -2489,6 +2592,7 @@ class UrineReamplificationB extends Curse {
 	static iswatersports = true;
 	static corruption = 55;
 	static curseName = 'Urine Reamplification B';
+	static description = `Completely removes your ability to judge how full your bladder is, or hold it when it's full. Expect a lot of accidents, especially with Urine Reamplification A. Can be managed if you make using the restroom very frequently a habit, but be careful.`;
 	static picture = 'Curses/urinereamplificationB.png';
 	static type = 'none';
 	constructor() {
@@ -2504,6 +2608,7 @@ class EyeOnThePrize extends Curse {
 	static isamputation = true;
 	static corruption = 70;
 	static curseName = 'Eye on the Prize';
+	static description = `Gouges out one of the two eyes you were born with. (This might sting a little... and then a lot, for a long time. The wound will be sealed to prevent infection.) @@.italic; This could have major effects on your journey.@@ Losing one eye, and with it depth perception, will make many basic tasks difficult, rendering you much less capable of dealing with Threats. Losing both eyes will render you incapable of much of anything down here on your own. Even with a companion, you should assume a great deal of lost travel time, as they will need to slow their pace greatly to assist you. Can be taken twice if you still have both organic eyes.`;
 	static picture = 'Curses/eyeontheprize.png';
 	static type = 'handicap';
 	constructor() {
@@ -2523,6 +2628,9 @@ class DeafeningSilence extends Curse {
 	static isamputation = true;
 	static corruption = 90;
 	static curseName = 'Deafening Silence';
+	static description = `You will be rendered completely deaf, incapable of ever processing sound again. Potentially a very dangerous condition to have in the Abyss, reducing you ability to react to threats and making communication with companions more difficult.
+
+You can get an extra +10 corruption if you allow your ears to be violently ripped off, then sealed to prevent infection - so long as you have no other Curses affecting the ears.`;
 	static picture = 'Curses/deafeningsilence.png';
 	static type = 'handicap';
 	constructor() {
@@ -2544,6 +2652,9 @@ class TaciturnTurnaround extends Curse {
 	static isamputation = true;
 	static corruption = 90;
 	static curseName = 'Taciturn Turnaround';
+	static description = `Renders you completely mute, incapable of ever uttering a sound again. Will undoubtedly cast troubles on your journey if you're with a companion.
+
+You can get an extra +25 corruption by volunteering to have your tongue violently ripped out (and the wound magically sealed up), simultaneously removing your sense of taste, but you can't choose to do so if you took Lingual Leviathan.`;
 	static picture = 'Curses/taciturnturnaround.png';
 	static type = 'handicap';
 	constructor() {
@@ -2565,6 +2676,7 @@ class AmpuQtie extends Curse {
 	static isamputation = true;
 	static corruption = 45;
 	static curseName = 'Ampu-Q-tie';
+	static description = `Rips off one of your four limbs, about halfway up from the knee or elbow. (It's okay if you want to scream from the pain. The wound will be sealed up safely.) Prevents organic replacements from ever working, but you can get prosthetic replacements. @@.italic;This will likely have major effects on your journey.@@ Expect your carrying capacity to be heavily impacted for any arms you've lost, and in the absence of an appropriate countermeasure, you can expect insurmountable increases in travel time costs for losing any legs, likely forcing you to just give up and accept your fate. If you have a companion carry you the probably won't be able to carry much of anything else, and will be moving much slower than they would otherwise... even without limbs, humans are heavy. Can only be taken for organic, intact limbs.`;
 	static picture = 'Curses/ampu-Q-tie.png';
 	static type = 'none';
 	constructor(arms = 0, legs = 0) {
@@ -2621,6 +2733,7 @@ class NoseGoes extends Curse {
 	static isamputation = true;
 	static corruption = 65;
 	static curseName = 'Nose Goes';
+	static description = `Removes your sense of smell permanently. A relatively tame drawback that probably won't trouble you too much down here, but you'll miss out on the smells of freshly-cooked food, or of a flower garden on a balmy summer day, or of a refreshing salty ocean breeze... you'll probably miss them eventually.`;
 	static picture = 'Curses/nosegoes.png';
 	static type = 'handicap';
 	constructor() {
@@ -2639,6 +2752,9 @@ setup.curseArray.push(NoseGoes)
 class ArmArmy extends Curse {
 	static corruption = 15;
 	static curseName = 'Arm Army';
+	static description = `Adds an extra arm or leg in roughly the same spot your normal ones are. If you prefer, you could also have additional legs turn you into a centaur. Either way, the extra limbs will probably get in the way quite a bit and require years of practice before you're half as good at using them as you were before. This may slow down your travels or lower your ability to defend yourself. Limbs can be successfully amputated @@.italic;if@@ immediately replaced with prosthetics.
+
+Cannot be taken with Ampu-Q-tie. (max. 6)`;
 	static picture = 'Curses/armarmy.png';
 	static type = 'none';
 	constructor() {
@@ -2665,6 +2781,7 @@ setup.curseArray.push(ArmArmy)
 class ALittleExtra extends Curse {
 	static corruption = 35;
 	static curseName = 'A Little Extra';
+	static description = `Takes whatever sexual equipment you have between your legs and adds another copy of it down there. You can decide the exact configuration. If you have both a penis and a vagina, you may choose which gets copied.`;
 	static picture = 'Curses/alittleextra.png';
 	static type = 'none';
 	constructor(genital = '') {
@@ -2720,6 +2837,9 @@ setup.curseArray.push(ALittleExtra)
 class Null extends Curse {
 	static corruption = 80;
 	static curseName = 'Null';
+	static description = `Completely removes your genitals. You'll just have a smooth patch of skin on your groin, like a doll. Any waste that would've exited through there will instead be heading out the back door. Also removes your nipples, again leaving a smooth patch of skin in their place. If any Curse has its effects entirely negated by this, you lose the corruption points it gave you. Some Curses could be altered a bit, like Leaky lubricating your back door, or having Asset Robustness Curses that previously affected a penis now apply to boobs, while others will be inevitably be lost. Naturally, cannot be taken with A Little Extra.
+
+I hope you really like oral and/or anal!`;
 	static picture = 'Curses/null.png';
 	static type = 'gender';
 	constructor() {
@@ -2753,6 +2873,9 @@ setup.curseArray.push(Null)
 class Seafolk extends Curse {
 	static corruption = 50;
 	static curseName = 'Seafolk';
+	static description = `In place of legs, you now have a finned tail, allowing you to quickly swim through water. It also grants you a pair of gills in the position of your choice, allowing you to breathe underwater with ease. @@.italic; This doesn't seem like a very practical appendage in the Abyss!@@ Expect all the same drawbacks you would see if you took Ampu-Q-tie for your legs, but even greater as you still have the weight of your legs, just none of the function. You can get an extra +10 corruption if you elect to have your lungs completely adapt to being underwater, unable to breathe air. (This would probably be a bad idea.)
+
+Cannot be taken with Ampu-Q-tie directed at the legs - requires both legs to still be there.`;
 	static picture = 'Curses/seafolk.png';
 	static type = 'handicap';
 	constructor() {
@@ -2775,6 +2898,9 @@ setup.curseArray.push(Seafolk)
 class TakenForGranite extends Curse {
 	static corruption = 75;
 	static curseName = 'Taken for Granite';
+	static description = `Whenever you orgasm, you'll temporarily be petrified, turned into a completely immobile stone. The first time you orgasm in a given day, you'll be unpetrified after 5 minutes, but this will @@.italic;double@@ with each additional orgasm you have, only resetting at midnight. If you're petrified when the clock hits midnight, you'll still have to wait out your current timer. You'll sense what's going on around you when you're petrified just as well as you would normally, but will appear to the rest to the rest of the world as a completely immobile statue. Physical damage done to your stone form will be healed when you reform, but mental damage won't.
+
+If you're completely unable to orgasm due to the effects of Pleasure Respecification Curses, this will instead turn you to stone for a random 2 hour, non-sleeping period each day.`;
 	static picture = 'Curses/takenforgranite.png';
 	static type = 'none';
 	constructor() {
@@ -2789,6 +2915,15 @@ setup.curseArray.push(TakenForGranite)
 class DoubleTrouble extends Curse {
 	static corruption = 60;
 	static curseName = 'Double Trouble';
+	static description = `You have a twin now! This requires some explanations.
+
+They look near-identical to you, are near-identical genetically, and have all the same Curses you've picked, but can optionally have the opposite genitals. The rest the world, including relatives and companions, will recall the both of you having always been twins, and having ventured down tino the Abyss together. @@.italic;They@@ will remember a history where they ventured down on their own (with any companions), and where @@.italic;you@@ appeared after they took this Curse. For all you know, they could be right! (You'll find all the items you remember carrying down here on the fround between the two of you.) They could theoretically choose different Curses than you do from here on, but they have very similar tastes to you, so the probably won't.
+
+They'll need to eat too, so you should be @@.italic;doubling@@ the number of resources you consume each day. I really don't recommend trying to betray them or abuse them for gain, or trying to set them up as any kind of "dump stat character" - this is @@.italic;you@@ we're talking about here, kind of, so your odds with any scheme would be at most 50/50.
+
+Mechanically, you can consider them as a second avatar of "you" for most purposes - for example, they offer no additional uses of the Gossamery Scales, Icon of Mercy will remove the same Curse from you both simultaneously, Ring of the Devourer will give absorbed powers to both of you, Relics will deduct from both of your corruptions regardless of who picks it up, and so on. They offer a potential gameplay benefit in splitting up, providing a hand in carrying things, or fighting, but no other intrinsic mechanical benefits.
+
+You might be disinclined to trust them in light of some other features of this layer, but this one's not one of @@.italic;them@@;they're genuinely in the same boat as you. At least so long as they don't get captured by an Inanis Ego - their conversion conditions are the same as yours.`;
 	static picture = 'Curses/doubletrouble.png';
 	static type = 'none';
 	/**
@@ -2827,6 +2962,11 @@ setup.curseArray.push(DoubleTrouble)
 class Conjoined extends Curse {
 	static corruption = 80;
 	static curseName = 'Conjoined';
+	static description = `Pick on of your hired companions, or your twin from the Double Trouble Curse if you took it. You and that person are now conjoined, either from the hip down, chest down, or simply being two heads sharing a body. Separation would be fatal for both of you even before considering Curse rebound effects. Your conjoined body will not have the "purity gene", and will slowly take on the effects of any Curses you have (though they will be less pronounced on the other person's half if they don't have those same Curses.)
+
+You each control half of your shared body, and movement will be very difficult. Add 1 day to all travel times down here. If you're conjoined to a companion, any physical skills will probably be rendered useless by the fusion, and they'll probably be extremely freaked out, with morale at an all time low. If you're conjoined with your twin, they'll probably be cool with it, though. They're just as okay with it as you are.
+
+@@.bold;This Curse and Double Trouble are unique in that they cannot be stored with Managed Misfortune, or removed, transferred or copied with any Wonders.@@`;
 	static picture = 'Curses/conjoined.png';
 	static type = 'handicap';
 	constructor() {
@@ -2853,6 +2993,7 @@ setup.curseArray.push(Conjoined)
 class LibidoReinforcementG extends Curse {
 	static corruption = 60;
 	static curseName = 'Libido Reinforcement G';
+	static description = `Gives one level of the Libido Reinforcement Curse. I hope your standards aren't too high, or you might be in for a bit of frustration.`;
 	static picture = 'Curses/libidoreinforcementG.png';
 	static type = 'libido';
 	constructor() {
@@ -2871,6 +3012,7 @@ setup.curseArray.push(LibidoReinforcementG)
 class GenderReversalG extends Curse {
 	static corruption = 55;
 	static curseName = 'Gender Reversal G';
+	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. Whether you're going for the trap/reverse trap look or going all the way, I'm sure you'll look great!`;
 	static picture = 'Curses/genderreversalG.png';
 	static type = 'gender';
 	constructor() {
@@ -2889,6 +3031,7 @@ setup.curseArray.push(GenderReversalG)
 class AssetRobustnessG extends Curse {
 	static corruption = 80;
 	static curseName = 'Asset Robustness G';
+	static description = `Grows your boobs by about 32 cup sizes and/or increases your penis size by about 80cm (32in), depending on what's applicable. This is simply ridiculous.`;
 	static picture = 'Curses/assetrobustnessG.png';
 	static type = 'gender';
 	constructor() {
@@ -2911,6 +3054,14 @@ setup.curseArray.push(AssetRobustnessG)
 class Literalization extends Curse {
 	static corruption = 140;
 	static curseName = 'Literalization';
+	static description = `This Curse is unique among all other Curses of the Abyss in that it can only be selected if you have certain prerequisite Curses. It takes some of the changes built up by the other Curses and completely removes all vestiges of your humanoid form, turning you into a true beast. You may select to be transformed into one of the options below if you already have all the prerequisite Curses. All your other Curses will now apply to your new form in strange and interesting ways.
+1) Literally a non-human mammal: Fluffy Ears, Fluffy Tail, Maximum Fluff
+2) Literally a quadruped reptile or dragon: Lingual Leviathan, Tipping the Scales, Reptail
+3) Literally an insect or arachnid: Carapacian, Hemospectrum, Minish-ish
+4) Literally a plant (not recommended): Flower Power, Cellulose, Chlorophyll
+5) Literally a twisted, hellish, conventionally unsexy mythological demon: Horny, Drawing Spades
+6) Literally a fish (not recommended): Seafolk
+7) Literally a tentacle beast, identical to those of earlier layers: Tickly Tentacles, A Mouthful`;
 	static picture = 'Curses/literalization.png';
 	static type = 'none';
 	constructor() {
@@ -2925,6 +3076,7 @@ setup.curseArray.push(Literalization)
 class ConsentDissent extends Curse {
 	static corruption = 120;
 	static curseName = 'Consent Dissent';
+	static description = `Every manner of sexual encounter you experience from this point forward will be fated to be rape. Whether you're being held down by someone stronger than you and forced into it against your will, or terrorizing some poor innocent person and scarring them for life, you will never have happy, loving, consensual sex again. Doesn't actually affect the rate of success for you being a victim of or committing rape (it doesn't force you to get raped or become a rapist), but it will make attempts of the former more common. If taken with the Barter System Curse, nobody will agree to sex in exchange for giving you things, and you'll probably have to turn to a life of crime just to survive. If you're thinking you can fool the Abyss with roleplay, where you or the other person's actual consent depart from what is stated, you can try it, but don't be shocked if the Abyss turns the tables on you. Moral and legal conduct on your part will probably require either celibacy, or some way to fulfill your desires without trying to have sex with others.`;
 	static picture = 'Curses/consentdissent.png';
 	static type = 'none';
 	constructor() {
@@ -2939,6 +3091,7 @@ setup.curseArray.push(ConsentDissent)
 class TheMaxim extends Curse {
 	static corruption = 110;
 	static curseName = 'The Maxim';
+	static description = `Pick one: urethra, vaginal canal, anus. You now have a larval Chasm Crawler, a parasite unique to the Abyss, squirming around up there. It feeds off your bodily fluids, and will frequently directly stimulate your most sensitive areas in order to get you to produce more. It is not a gentle creature, and it might get a bit violent with your bits if it decides you're not producing enough. After a few weeks, with a body about five times the size it started with, its life cycle will be complete, and it will burst into hundreds of new larval Chasm Crawlers for you to expel. At least one Chasm Crawler will always remain within you, ready to begin the cycle anew. I recommend cooperating with it and keeping it happy. Chasm Crawlers are very intelligent and knowledgeable about anatomy, and can quickly (though not painlessly) worm their way up and take direct control of your brain if your actions threaten them. It may be possible to reach a reasonable understanding with a Chasm Crawler. They're not kind, and not particularly trustworthy, but their intelligence causes them to value a cooperative host.`;
 	static picture = 'Curses/themaxim.png';
 	static type = 'none';
 	constructor(location = 'anus') {
@@ -2970,6 +3123,7 @@ setup.curseArray.push(TheMaxim)
 class AdversePossession extends Curse {
 	static corruption = 115;
 	static curseName = 'Adverse Possession';
+	static description = `Your body is now home to a malevolent spirit that perished in the Abyss long ago, twisted by the ages and the Miasma. It is not your friend. Every other 24-hour period, it will gain full control of your body, with you sitting in the backseat, aware of and feeling everything it does, but being unable to stop any of it. This spirit will have sex with people you hate, put you in awful, humiliating situations, and try to ruin your day any way it can think of. It probably won't permanently ruin your life, since it does share your body, but it absolutely will not give you a fun time. It won't hamper your efforts to climb out of the Abyss, since it wants out of here too, but it'll be playing by its own rules. Why is it doing this? It wants full control. If you decide to give up and hand over full control of your body permanently, it will become noticeably gentler, though its tastes still differ enough from yours that you'll see and feel your body doing many things you'd rather not. (The reverse, getting it to give up control, is 100% impossible.) You'll have a long time to learn to love it, though.`;
 	static picture = 'Curses/adversepossession.png';
 	static type = 'none';
 	constructor() {
@@ -2985,6 +3139,7 @@ setup.curseArray.push(AdversePossession)
 class Erased extends Curse {
 	static corruption = 100;
 	static curseName = 'Erased';
+	static description = `Completely erases your old identity from the world. Nobody will have any memory of you going down into the Abyss, or who you are, and there will be no records, no citizenship, no property in your name - it will be as if you had never existed up there to begin with. Your own memories will be quite fuzzy, too: your presumed name and appearance before you came down are gone forever, never retrievable, and you'll have vague memories of your old life, but they'll be too fuzzy and feel unreal enough that you'll begin to doubt them too. Memories after you entered the Abyss will be unaffected. Companions will be disoriented at first, but should be able to piece things together since they've been down here with you this long. Doesn't erase debt to Outset Town's shop.`;
 	static picture = 'Curses/erased.png';
 	static type = 'none';
 	constructor() {
@@ -2999,6 +3154,7 @@ setup.curseArray.push(Erased)
 class TicklyTentacles extends Curse {
 	static corruption = 10;
 	static curseName = 'Tickly Tentacles';
+	static description = `Grow one big, meaty tendril of a tentacle from somewhere on your body. Did you know that octopi have two thirds of their neurons in their tentacles, giving them a distributed nervous system fundamentally different from human brains? You'll have some degree of control over your tentacles, but they decide many of their actions on their own, and you may not always agree with their decisions. They'll often abuse and exploit your body - and perhaps the bodies of others in entirely inappropriate situations - in lewd ways. Individually, they may not be as smart as you, but collectively, all bets are off.`;
 	static picture = 'Curses/ticklytentacles.png';
 	static type = 'none';
 	constructor() {
@@ -3007,6 +3163,14 @@ class TicklyTentacles extends Curse {
 
 	get maximum() {
 		return 10;
+	}
+
+	addTentacle(prevTentacles) {
+		return prevTentacles + 1;
+	}
+
+	inhumanise(prevInhumanity) {
+		return prevInhumanity + 2;
 	}
 }
 setup.allCurses.TicklyTentacles = new TicklyTentacles()
@@ -3017,6 +3181,7 @@ setup.curseArray.push(TicklyTentacles)
 class Eyescream extends Curse {
 	static corruption = 5;
 	static curseName = 'Eye-scream';
+	static description = `Grow one large additional eye in a spot where there really shouldn't be one. It can receive sensory information, but it's not nearly as high-fidelity or useful as the two eyes you were born with. This is compounded with the 20/20000000... Curse, which would leave the eyes blurred enough to be functionally useless...I don't think they make glasses for your special eyes, though it's probably not impossible that someone with great skill could come up with something.`;
 	static picture = 'Curses/eye-scream.png';
 	static type = 'none';
 	constructor() {
@@ -3025,6 +3190,14 @@ class Eyescream extends Curse {
 
 	get maximum() {
 		return 20;
+	}
+
+	addExtraEye(prevExtraEyes) {
+		return prevExtraEyes + 1;
+	}
+
+	inhumanise(prevInhumanity) {
+		return prevInhumanity + 1;
 	}
 }
 setup.allCurses.Eyescream = new Eyescream()
@@ -3035,6 +3208,7 @@ setup.curseArray.push(Eyescream)
 class AMouthful extends Curse {
 	static corruption = 20;
 	static curseName = 'A Mouthful';
+	static description = `Grow one large, grinning mouth somewhere on your body where there really shouldn't be one. Will take on any related Curses that would affect your original mouth. I really recommend not looking too deeply into them to figure out how, but food that is put into them will reach your stomach.`;
 	static picture = 'Curses/datmouf.png';
 	static type = 'none';
 	constructor() {
@@ -3043,6 +3217,14 @@ class AMouthful extends Curse {
 
 	get maximum() {
 		return 5;
+	}
+
+	addMouth(prevExtraMouths) {
+		return prevExtraMouths + 1;
+	}
+
+	inhumanise(prevInhumanity) {
+		return prevInhumanity + 1;
 	}
 }
 setup.allCurses.AMouthful = new AMouthful()
@@ -3053,6 +3235,7 @@ setup.curseArray.push(AMouthful)
 class BelowTheVeil extends Curse {
 	static corruption = 200;
 	static curseName = 'Below the Veil';
+	static description = `You have touched the void and tasted just a hint of the Ṯ̸͐r̶̙͝u̵̯̾t̷̩̀h̵̯̔, and you will never be the same. Your appearance up until now has merely been a mask, one that is now paper-thin, quickly eroded under the gaze of others. Anyone observing you in any way will feel a primal fear creep into them, quickly replaced by what can only be called insanity. This will make any kind of constructive interaction with others effectively impossible, and traveling with any companions will be completely impractical — even if you somehow managed to get them to stay with you, your presence would quickly render them useless.`;
 	static picture = 'Curses/belowtheveil.png';
 	static type = 'none';
 	constructor() {
@@ -3067,6 +3250,9 @@ setup.curseArray.push(BelowTheVeil)
 class PrincessProtocol extends Curse {
 	static corruption = 25;
 	static curseName = 'Princess Protocol';
+	static description = `Transforms you into the eternal damsel-in-distress. You'll find yourself mysteriously landing in situations that demand rescuing, and you'll instinctively play the role of the helpless victim. Perhaps you'll end up bound and gagged, trapped in a tower, or lost in a labyrinth, but rest assured, a hero will always appear to save the day. No matter the circumstances, you will be unable to extricate yourself without aid. Even if you previously possessed skills to help in such situations, you'll discover them mysteriously inaccessible when you're in distress.
+
+You will also have a new name, 'Princess'. Others will find it impossible to call you anything else, and you will feel a deep internal compulsion to respond to it.`;
 	static picture = 'Curses/princessprotocol.png';
 	static type = 'none';
 	constructor() {
