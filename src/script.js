@@ -114,7 +114,7 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
         return "DollEnd";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer == 0 ){
+    if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer === 0 ){
         return "Starlit Unlocked";
     }
     if (StoryVar.boundBanditEnding) {
@@ -1004,7 +1004,6 @@ Clothing restriction C is there to people from hiding themselves.`),
                                       // The genital field is only used if the character has both genitals, so this is
                                       // safe even if a man takes this constellation.
                                       new ALittleExtra('vagina'),
-                                      new DoubleTrouble('Nono', 'same'),
                                       new Erased(),
                                   ],
                                   `This constellation turns people into perfect sex slaves.
@@ -1019,8 +1018,8 @@ Explanations for a few of the curses:
  - Quota also makes them proactively try to please their masters and provides ulterior obstacles to escaping.
  - Barter System because slaves don't own property.
  - Erased avoids complications with wannabe rescuers from the slave's past.
- - Double Trouble is a free 2-for-1 package.
- Optionally add Consent Dissent.`),
+ Optionally add Consent Dissent.
+ Optionally add Fluffy Ears and Tail (Fluffy Ears will override Knife-ear).`),
                 new Constellation('Trans',
                                   [
                                       new GenderReversalA(),
