@@ -218,6 +218,18 @@ class CharEvent {
 	changeCarryHandicap(prevHandicap) {
 		return prevHandicap;
 	}
+
+	addTentacle(prevTentacles) {
+		return prevTentacles;
+	}
+
+	addExtraEye(prevExtraEyes) {
+		return prevExtraEyes;
+	}
+
+	addMouth(prevExtraMouths) {
+		return prevExtraMouths;
+	}
 }
 
 window.CharEvent = CharEvent;
