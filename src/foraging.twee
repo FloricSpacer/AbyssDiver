@@ -186,6 +186,34 @@
 			<h2>_foraging.name</h2>
 			<<if $currentlayer === 7>>
 				<p><<print "[[Work on " + _foraging.name + "]]">></p>
+			<<elseif _foraging.forageType === "water" && $currentLayer === 3>>
+				<<if $items[2].count > 0>>
+					<<if $atWaterSource>>
+						<p><<link 'Fill your empty flasks with water from the underground river' 'Layer3 Flasks'>><</link>></p>
+					<<else>>
+						<p><<TravelToPassage 'Fill your empty flasks with water from underground rivers' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>></p>
+					<</if>>
+				<<else>>
+					<<if $atWaterSource>>
+						<p>You need empty flasks to fill them with water from the underground river.</p>
+					<<else>>
+						<p><<TravelToPassage 'Find an underground river to avoid using your water' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>></p>
+					<</if>>
+				<</if>>
+			<<elseif _foraging.forageType === "water" && $currentLayer === 5>>
+				<<if $items[2].count > 0>>
+					<<if $atWaterSource>>
+						<p><<link 'Fill your empty flasks with water from an oasis' 'Layer5 Flasks'>><</link>></p>
+					<<else>>
+						<p><<TravelToPassage 'Fill your empty flasks with water from an oasis' 'Layer5 Flasks' 7 `-($abyssKnow + 2 * $oasisVisit)`>></p>
+					<</if>>
+				<<else>>
+					<<if $atWaterSource>>
+						<p>You need empty flasks to fill them with water from the underground river.</p>
+					<<else>>
+						<p><<TravelToPassage 'Find an oasis to avoid using your water' 'Layer5 Flasks' 7 `-($abyssKnow + 2 * $oasisVisit)`>></p>
+					<</if>>
+				<</if>>
 			<<elseif $currentLayer === 2 && _foraging.forageType === "food">>
 				<<if $forageFood === 0>>
 					<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0 && _foraging.name === "Flanberries">>
@@ -197,7 +225,7 @@
 					<<else>>
 						<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
 					<</if>>
-					<<else>>
+				<<else>>
 					<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
 				<</if>>
 			<<else>>
