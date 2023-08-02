@@ -1,0 +1,51 @@
+:: Init Habitation
+
+<<set setup.blisshroom = {
+	name: "Blisshroom",
+	location: "Layer 1",
+	pic: "Foraging/blisshroom.png",
+	description: "Blisshroom Description",
+}>>
+
+<<set setup.cloudpools = {
+	name: "Cloudpools",
+	location: "Layer 1",
+	pic: "Foraging/cloudpools.png",
+	description: "Cloudpools Description",
+}>>
+
+
+:: ForagingGrid [widget nobr]
+<<widget "ForagingGrid">>
+<div class="cards-grid cards-wide">
+	<<for _foraging range _args>>
+		<div>
+			[img[setup.ImagePath + _foraging.pic]]
+			<h2>_foraging.name</h2>
+			<<if $corruption >= 0 && $debt <= 0 && $dubloons >= 0>>
+				<p><<link `'Forage for ' + _foraging.name`>><</link>></p>
+			<<elseif $corruption < 0>>
+				<p>@@color:grey;You can't choose a habitation while having negative corruption!@@</p>
+			<<else>>
+				<<set _temp = $debt - $dubloons>>
+				<p>@@color:grey;You must pay off all of your debt to settle down for habitation on the surface. You have _temp dubloons of debt, which you can pay at the Administrative Building.@@</p>
+			<</if>>
+			<p><<include `_foraging.name + " Description"`>></p>
+		</div>
+	<</for>>
+</div>
+<</widget>>
+
+:: Blisshroom Description
+
+Small, pink mushrooms that can be found growing throughout the layer. They have an interesting taste similar to strawberry, but sweeter and less tart, with a very faint spicy aftertaste.
+
+Without the help of the Encyclopedia Abyssia, a days' worth of Blisshrooms will inevitably include some that are in the process of actively releasing spores, during which they are not entirely safe to eat - a day of food from them will permanently give you one level of the Gender Reversal Curse, but without any corruption points in return.
+
+With the help of the Encyclopedia Abyssia, you will be able to easily pick out the slight differences in coloration and texture of the sporing Blisshrooms, and avoid them when foraging for them. This will leave them entirely safe to eat, with no ill effects - they're considered quite delicious among divers, in fact.
+
+:: Cloudpools Description
+
+The Abyss has a large, complex, and mostly self-contained water cycle, and it all starts here in the first layer. Evaporated water coalesces into clouds in the Miasma-filled air, giving them fluffier and slightly more stable properties than normal clouds - not quite solid enough to support a human's body weight, but solid enough that you can reach out and gently touch them without them dispersing, and enough that small (inedible) birds will occasionally perch on top of them. These clouds drift around the upper reaches of the first layer and the mouth of the Abyss, condensing into water and forming waterfalls before flowing down into ponds. The water that can be collected directly from clouds or from their direct waterfalls/ponds is safe, delicious, and has not yet had a chance to be tainted by Miasma, and so has no ill effects.
+
+However, without the Encyclopedia Abyssia, you will not know any of this, nor have a good grasp on effective "cloud hunting" spots, and you'll end up drinking from pools lower down. These will have some Miasma infused in them, causing them to give the same effect as the Asset Robustness A Curse for each day of water, but without any corruption in return. If you have the Shrunken Assets Curse, or obtain it in the future, this effect is completely nullified.
