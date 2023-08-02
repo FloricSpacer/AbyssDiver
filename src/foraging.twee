@@ -1,17 +1,19 @@
-:: Init Habitation
+:: Init Foraging
 
 <<set setup.blisshroom = {
 	name: "Blisshroom",
-	location: "Layer 1",
+	location: "Layer1",
 	pic: "Foraging/blisshroom.png",
 	description: "Blisshroom Description",
+	forageType: "food"
 }>>
 
 <<set setup.cloudpools = {
 	name: "Cloudpools",
-	location: "Layer 1",
+	location: "Layer1",
 	pic: "Foraging/cloudpools.png",
 	description: "Cloudpools Description",
+	forageType: "water"
 }>>
 
 
@@ -22,13 +24,30 @@
 		<div>
 			[img[setup.ImagePath + _foraging.pic]]
 			<h2>_foraging.name</h2>
-			<<if $corruption >= 0 && $debt <= 0 && $dubloons >= 0>>
-				<p><<link `'Forage for ' + _foraging.name`>><</link>></p>
-			<<elseif $corruption < 0>>
-				<p>@@color:grey;You can't choose a habitation while having negative corruption!@@</p>
+			<<if $currentLayer === 2 && _foraging.forageType === "food">>
+				<<if $forageFood === 0>>
+					<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0 && _foraging.name === "Flanberries">>
+						<<print "[[Start foraging for flanberries for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 0, $L2FoodConvo = 1]]">><br>
+					<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0 && _foraging.name === "Mudgrazer">>
+						<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 1, $L2FoodConvo = 1]]">><br>
+					<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 1 && _foraging.name === "Flanberries">>
+						<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
+					<<else>>
+						<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
+					<</if>>
+					<<else>>
+					<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
+				<</if>>
 			<<else>>
-				<<set _temp = $debt - $dubloons>>
-				<p>@@color:grey;You must pay off all of your debt to settle down for habitation on the surface. You have _temp dubloons of debt, which you can pay at the Administrative Building.@@</p>
+				<<if $forageWater === 0 && _foraging.forageType === "water">>
+					<p><<print "[[Forage for " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 1]]">></p>
+				<<elseif $forageWater === 1 && _foraging.forageType === "water">>
+					<p><<print "[[Stop foraging for " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 0]]">></p>
+				<<elseif $forageFood === 0 && _foraging.forageType === "food">>
+					<p><<print "[[Forage for " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 1]]">></p>
+				<<else>>
+					<p><<print "[[Stop foraging for " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 0]]">></p>
+				<</if>>
 			<</if>>
 			<p><<include `_foraging.name + " Description"`>></p>
 		</div>
