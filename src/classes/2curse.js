@@ -1,6 +1,8 @@
 /* global CharEvent, AgeEvent */
 // noinspection JSUnusedGlobalSymbols
 
+// TODO: descriptionMitigated fields in all curses are written by Annonymus and not reviewed/edited by anybody else (xxx)
+
 /**
  * @typedef SugarCubeSetupObject
  * @extends SugarCubeSetupObject
