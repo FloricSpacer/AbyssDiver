@@ -1188,13 +1188,17 @@ class Character {
 				}
 			}
 		}
-		if (eyes < 1) {
-			if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
-				handicap -= 5;
-				if (this.id === setup.companionIds.mc && State.variables.BDwear) {
-					handicap += 3;
+		if (this.extraEyes === 0) {
+			if (eyes < 1) {
+				if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
+					handicap -= 5;
+					if (this.id === setup.companionIds.mc && State.variables.BDwear) {
+						handicap += 3;
+					}
 				}
 			}
+		} else if (eyes < 1) {
+			handicap -= 1
 		}
 		handicap = this.events.reduce((v, e) => e.changeThreatHandicap(v), handicap)
 
@@ -1305,7 +1309,7 @@ class Character {
 				handicap -= 1;
 			}
 		}
-		if (eyes < 1) {
+		if (eyes < 1 && this.extraEyes === 0) {
 			if (this.id !== setup.companionIds.mc || !State.variables.BionicEye) {
 				handicap -= 4;
 				if (this.id === setup.companionIds.mc && State.variables.BDwear) {
