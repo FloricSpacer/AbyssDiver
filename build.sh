@@ -66,4 +66,4 @@ fi
 
 OUTPUT="Abyss Diver.html"
 echo "Compiling to: $OUTPUT"
-TWEEGO_PATH="$WORKAREA/storyformats/" "$TWEEGO" "$WORKAREA/src/" -o "$OUTPUT" "$@"
+TWEEGO_PATH="$WORKAREA/storyformats/" "$TWEEGO" "$WORKAREA/src/" "$WORKAREA/dependencies/" -o "$OUTPUT" "$@"
