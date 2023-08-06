@@ -80,7 +80,7 @@ const creepify = {
         top: true,
         middle: true,
         bottom: true,
-        maxHeight: 2,   // How many diacritic marks shall we put on top/bottom?
+        maxHeight: 1,   // How many diacritic marks shall we put on top/bottom?
         randomization: 50 // 0-100%. maxHeight 100 and randomization 20%: the height goes from 80 to 100. randomization 70%, height goes from 30 to 100.
     }
 };
