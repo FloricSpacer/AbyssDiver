@@ -348,9 +348,9 @@ class Character {
 	 * @returns {CharEvent | undefined} The event in question or undefined if none was found.
 	 */
 	getEvent(event) {
-		let curseIndex = this.events.findLastIndex(typeof event === 'string' ? e => e.name === event : e => e instanceof event);
-		if (curseIndex < 0) return undefined;
-		return this.events[curseIndex];
+		let eventIndex = this.events.findLastIndex(typeof event === 'string' ? e => e.name === event : e => e instanceof event);
+		if (eventIndex < 0) return undefined;
+		return this.events[eventIndex];
 	}
 
 	/**
@@ -1522,6 +1522,15 @@ class Character {
 
 	get extraMouths() {
 		return this.events.reduce((v, e) => e.addMouth(v), 0);
+	}
+
+	get hasPurityGene() {
+		return ![setup.companionIds.mc, setup.companionIds.twin, setup.companionIds.bandit].includes(this.id)
+	}
+
+	get foodConsumption() {
+		if (this.hasPurityGene) return 0;
+		return this.events.reduce((v, e) => e.changeFoodConsumption(v), 1);
 	}
 }
 window.Character = Character;
