@@ -569,7 +569,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has a way to take notes.
     haveNotepad: {
-        get: () => checkAvailability(['Notepad and pen'], null, ['notepad']) || setup.haveSmartphone,
+        get: () => checkAvailability(['Notepad and Pen'], null, ['notepad']) || setup.haveSmartphone,
     },
     // Check whether the player has a rope or equivalent.
     haveRope: {
