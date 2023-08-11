@@ -230,6 +230,10 @@ class CharEvent {
 	addMouth(prevExtraMouths) {
 		return prevExtraMouths;
 	}
+
+	changeFoodConsumption(prevConsumption) {
+		return prevConsumption;
+	}
 }
 
 window.CharEvent = CharEvent;
