@@ -2591,10 +2591,13 @@ class Minishish extends Curse {
 	miniOrGigantify(prevHeight) {
 		return prevHeight / 10;
 	}
-
 	addSizeHandicap(prevHandicap) {
 		// What if all companions are minish-ised too?
 		return State.variables.hiredCompanions.length === 0 || prevHandicap;
+	}
+
+	changeFoodConsumption(prevConsumption) {
+		return prevConsumption / 4;
 	}
 }
 setup.allCurses.Minishish = new Minishish()
