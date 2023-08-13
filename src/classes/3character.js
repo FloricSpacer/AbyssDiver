@@ -1,5 +1,5 @@
 "use strict";
-/* global assert, AgeEvent, Curse, DoubleTrouble, ShrunkenAssets, Leaky, HardMode, InTheLimelight */
+/* global assert, AgeEvent, Curse, DoubleTrouble, ShrunkenAssets, Leaky, HardMode, InTheLimelight, BodyChangeEvent */
 
 /**
  * @typedef SugarCubeSetupObject
@@ -191,7 +191,7 @@ class Character {
 		this.osubdom = osubdom;
 		assert(Array.isArray(events),
 			   "events must be an array of events");
-		this.events = events;
+		this._events = events;
 		assert(typeof pregnantT === 'number',
 			   'pregnantT must be a number');
 		this.pregnantT = pregnantT;
@@ -220,7 +220,7 @@ class Character {
 			age: this.age, appDesc: this.appDesc, fear: this.fear, ohair: this.ohair,
 			oskinColor: this.oskinColor, oskinType: this.oskinType, oears: this.oears,
 			oeyeColor: this.oeyeColor, oblood: this.oblood, pregnantT: this.pregnantT, due: this.due,
-			lastBirth: this.lastBirth, switched: this.switched, events: this.events.map(e => e)
+			lastBirth: this.lastBirth, switched: this.switched, events: this._events.map(e => e)
 		};
 	}
 
@@ -303,6 +303,31 @@ class Character {
 	get curses() {
 		if (this.id === setup.companionIds.twin) return State.variables.mc.curses;
 		return this.events.filter(e => e instanceof Curse);
+	}
+
+	get events() {
+		if (this.id === setup.companionIds.twin) {
+			// The twin gets all events (curses and forage effects) of the main character.
+			// Except body switch, which needs to be inverted if targeting the twin and omitted otherwise.
+			return State.variables.mc._events.map(e => {
+				if (!(e instanceof BodyChangeEvent)) {
+					return e;
+				}
+				if (e.next.id === setup.companionIds.twin) {
+					let ret = e.clone();
+					ret.previous = e.next;
+					ret.next = e.previous;
+					return ret;
+				} else {
+					return false;
+				}
+			}).filter(e => e !== false);
+		}
+		return this._events;
+	}
+
+	set events(value) {
+		this._events = value;
 	}
 
 	/**
