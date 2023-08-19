@@ -415,6 +415,9 @@ Grateful, you thank Maru once more and decide to carry on with your journey, now
 <<if  $companionLily.lactation>0 && !$LilyConvoLac && $LilyConvo2 && $hiredCompanions.some(e=> e.id === setup.companionIds.lily)>>
 	<<set _numConvos += 1>>[[You see Lily sporting wet spots on her shirt|Lily ConvoLac]]<br>
 <</if>>
+<<if  $mc.heightCor<150 && $companionLily.heightCor>150 && !$LilyConvoCarry && $LilyConvo2 && $hiredCompanions.some(e=> e.id === setup.companionIds.lily)>>
+	<<set _numConvos += 1>>[[You struggle to get over an obstacle while you notice Lily walking up behind you|Lily Carry Start]]<br>
+<</if>>
 <<if
 	!$SemenDemonVec.some(e => e.id === setup.companionIds.lily) &&
 	$mc.curses.some(e =>
@@ -1120,10 +1123,10 @@ Lily lets out a soft moan and firmly holds your head to her breast.
 <<say $companionLily>>This feels so much better already. You and me, we're going to do this more often.<</say>>
 She lets out a small giggle as she strokes your $mc.hair hair softly as you continue to drink.
 
-[[Continue until you had your fill|Party overview][$LilyConvoLac=true, $items[1].count +=1, $items[0].count +=1]]
+[[Continue until you had your fill|Party overview][$LilyMommy = true, $LilyConvoLac=true, $items[1].count +=1, $items[0].count +=1]]
 
 :: Lily ConvoLac Mommy
-<<set $companionLily.affec+=(2+$hsswear)>>\
+<<set $companionLily.affec+=(2+$hsswear)>><<set $LilyMommy = true>>\
 
 <<say $mc>>Yes, mommy.<</say>>
 <<say $companionLily>>Oh, you make me so happy.<</say>>
@@ -1138,7 +1141,7 @@ Lily lets out a soft moan and firmly holds your head to her breast.
 <<say $companionLily>>This feels so much better already... You and me, we're going to do this more often.<</say>>
 She lets out a small giggle as she strokes your $mc.hair hair softly as you continue to drink.
 
-[[Continue until you have your fill|Party overview][$LilyConvoLac=true, $items[1].count +=1, $items[0].count +=1]]
+[[Continue until you have your fill|Party overview][$LilyMommy = true, $LilyConvoLac=true, $items[1].count +=1, $items[0].count +=1]]
 
 :: Lily Carry Start
 /*xxx */
@@ -1184,21 +1187,23 @@ Recognizing she's teasing you again you decide to play into it.
 Now it's Lily's turn to be flustered for a second before she starts grinning.
 You banter a bit more back and forth before eventually returning to the journey.
 
-[[Continue your journey|Party overview]]
+[[Continue your journey|Party overview][$LilyConvoCarry=2]]
 
 :: Lily Carry Accepted
 /*xxx */
+<<set $companionLily.affec+=(2+$hsswear)>>\
 <<say $mc>>Yeah, that does sound a little better.<</say>>
 <<say $companionLily>>Ow sweety, I love it so much if you just let mommy take care of you!<</say>>
 As she says that she picks you up in her arms.
-<<if $LilyConvoLac>>\
+<<if $LilyMommy>>\
+	<<set $companionLily.affec+=(2+$hsswear)>>
 	You blush deeply as she reminds you to how she wants you to call her. You nuzzle into her bosom.
 
 	<<say $mc>>Yes Mommy!<</say>>
 	<<say $companionLily>>That's my cute litlle <<if $mc.sex=="male">>boy<<else>>girl<</if>>. You make me so happy!<</say>>
 	You decide it's better to just enjoy the moment and keep cuddling Lily while she carries you.
 
-	[[Continue your journey|Party overview]]
+	[[Continue your journey|Party overview][$LilyConvoCarry=1]]
 <<else>>\
 <<say $mc>>Mommy, what do you...<</say>>
 Lily puts her finger over your mouth.
@@ -1216,20 +1221,22 @@ Lily puts her finger over your mouth.
 <</if>>
 <</if>>\
 :: Lily Carry noMommy
+<<set $companionLily.affec-=(2-$hsswear)>>
 <<say $mc>>I think I just prefer Lily<</say>>
 Lily lets out a bit of disappointed sigh. 
 
 <<say $companionLily>>It will come in time I guess<</say>>
 She sticks her tongue out playfully.
 
-[[Continue your journey|Party overview]]
+[[Continue your journey|Party overview][$LilyConvoCarry=1]]
 
 :: Lily Carry Mommy
+<<set $companionLily.affec+=(2+$hsswear)>>
 <<say $mc>>Okay, Mommy<</say>>
 <<say $companionLily>>That's my cute litlle <<if $mc.sex=="male">>boy<<else>>girl<</if>>. You make me so happy!<</say>>
 You decide it's better to just enjoy the moment and keep cuddling Lily while she carries you.
 
-[[Continue your journey|Party overview]]
+[[Continue your journey|Party overview][$LilyConvoCarry=1, $LilyMommy=true]]
 
 :: Khemia Conversations [nobr]
 
