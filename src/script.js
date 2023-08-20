@@ -108,7 +108,7 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
         return "BrokerEnd";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2){
+    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length==0){
         return "DollWarning";
     }
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
@@ -199,7 +199,7 @@ Config.navigation.override = function (destPassage) {
         StoryVar.mc.inhuman < 6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
         return "Bandit Arrested";
     }
-    if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 3 && StoryVar.mc.age > 17) {
+    if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.mc.age > 17 && StoryVar.AgeEndReached == false) {
         return "AgeEnd";
     }
     if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap && StoryVar.hiredCompanions.some(e => e.id === setup.companionIds.maru)) {

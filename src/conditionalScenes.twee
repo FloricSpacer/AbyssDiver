@@ -49,6 +49,153 @@ If you are over 18, please go back and enter an age above 18 to continue.
 
 <<back>>
 
+:: AgeEnd
+/*xxx */
+<<set _string = "Layer" + $currentLayer + " Habitation">>
+<<if $currentLayer==0>>
+	<<set _string = "Surface Habitation">>
+<</if>>
+<<set _temp =0 >>
+<<set $AgeEndReached = true>>
+As you feel your body regress further under the influence of the Abyss you a starting to ponder wheter continuing is even viable at this point. Suddenly a bright flash and loud noise behind you startle you.
+
+<<say $babyCollectionUnit>>Greetings adventurer. I have come to collect you as you are on path to the infancy and to prevent any harm from coming to you in the Abyss by ending your expedition. Please step in the designated bed. It is the safest way to bring you back to the surface and get the proper care you now need.<</say>> 
+<<say $mc>>Infancy? I didn't become a baby!<</say>>
+<<say $babyCollectionUnit>>Possible error in processing subject. Analyzing subject.<</say>>
+<<if $mc.curses.some(c=>c.name === "Urine Reamplification A" || "Urine Reamplification B" )>>\
+	<<say $babyCollectionUnit>>Incontince detected in subject.<</say>> <<set _temp+=1>>
+	<<if $WettingSolution == 1 || $WettingSolution == 2 >>\
+		<<say $babyCollectionUnit>>Subject is bound to infantile undergarments as a measure of protection from accidents.<</say>> <<set _temp+=1>>
+	<</if>>\
+<</if>>\
+<<if $mc.heightCor<120>>\
+	<<say $babyCollectionUnit>>Subject is below the lower bound of normal adult height, but within childlike height ranges.<</say>> <<set _temp+=1>>
+<</if>>\
+<<if $dollevent2>>\
+	<<say $babyCollectionUnit>>Subject carries around a doll for comfort.<</say>> <<set _temp+=1>>
+<</if>>\
+<<if $IQdrop>20>>\
+	<<say $babyCollectionUnit>>Subject has mental capacity closer to a child than an adult.<</say>><<set _temp+=1>>
+<</if>>\
+<<if $mc.penisCor < 4 && $mc.breastsCor < 4 >>\
+	<<say $babyCollectionUnit>>Subject lacks signs of sexual matuarity.<</say>><<set _temp+=1>>
+<</if>>\
+<<if $mc.appAge < 6>>\
+	<<say $babyCollectionUnit>>Subject general appearance matches toddler appearance.<</say>><<set _temp+=1>>
+<</if>>\
+<<say $babyCollectionUnit>>Processing results.<</say>><<set _temp+=1>>
+<<if _temp < 2 >>\
+	<<say $babyCollectionUnit>>You are indeed not a "baby" or anything approaching this level of immaturity. Nevertheless it is deemed unethical to continue with this level of regression. Please step in the designated bed.<</say>>
+<<elseif _temp < 4 >>\
+	<<say $babyCollectionUnit>>You are indeed not a "baby" but you are approaching high levels of immaturity. Recollection was justified. Please step in the designated bed.<</say>>
+<<else>>\
+	<<say $babyCollectionUnit>>You are closer to being a "baby" in every aspect but the technical age requirement than first assesed. Recollection was justified, but late. Compiling report on this case. Please step in the designated bed.<</say>>
+<</if>>\
+<<if $LilyMommy && $hiredCompanions.some(e=> e.id === setup.companionIds.lily)>>\
+	<<say $companionLily>> What's the matter here?<</say>>
+	<<say $mc>>Lily! This robot just came....<</say>>
+	Lily kneels down to you an puts her finger on your lips, which stops your story.
+
+	<<say $companionLily>>You keep forgetting sweety, it's not Lily anymore for you. It's Mommy. Remember?<</say>>
+	You bashfully look down.
+
+	<<say $mc>>Yes Mommy<</say>>
+	<<say $babyCollectionUnit>>"Mommy"...<</say>>
+	The robot turns to Lily.
+
+	<<say $babyCollectionUnit>>Are you the parent or legal gaurdian of this child?<</say>>
+	<<say $companionLily>>Well you could say that, although I'm not really sure about the legal part.<</say>>
+	<<say $babyCollectionUnit>>Without legal status extraction of the apperent minor must continue unless a document of intention is signed at this moment.<</say>>
+	<<say $companionLily>>Ow that sounds like our only option in that case, what does it entail?<</say>>
+	The robot prints a document and hands it to Lily.
+
+	<<say $babyCollectionUnit>>Summary of document of intention on gaurdianship: You will assume full guardianship of the subject nominated for extraction. You will thereby assume or legal right and obligations of the subject. In legal terms the subject will be your assigned child untill subject is deemed mature again by a commitee, of which you will be a member. This document is only valid for 60 days and a full document of guardianship must be signed in outset town by that time to avoid subject extraction. Please read the full document to obtain the details. Sign at the bottom of the document.<</say>>
+	<<say $mc>>You can't be serious! This is not right!<</say>>
+	<<say $companionLily>>Hush sweety, the grownups are talking. I think this sounds like a very good idea.<</say>>
+	Lily proceeds to take the pen and document from the robot and sign her name under it.
+
+	<<say $mc>>Well, I don't agree! You can't make me sign it!<</say>>
+	<<say $babyCollectionUnit>>Subject authorization not required. Thank you and be sure to sign the rest of the paper work within 60 days.<</say>>
+	With that the robot vanishes with a flash again.
+
+	<<say $mc>>Lily! You can't be serious! Please tell me this was just a ploy yo get rid of the robot.<</say>>
+	She smiles and pets you on the head.
+
+	<<say $companionLily>>It's Mommy, officially now remember? Anyway, I was getting bored of the Abyss and was just sticking around for you!<</say>>
+	She boops you on the nose.
+
+	<<say $companionLily>>I think it's time to go on a whole new set of adventures! And the first one is to get back to Outset Town ASAP to get everything signed! What do you say?<</say>>
+	[[Yes Mommy|AgeEnd2]]
+<<else>>\
+	[[Okay, take me back to outset town I guess|AgeEnd1]]
+<</if>>\
+<<if $corruption >=0 >>\
+	[[Run and try to survive in this layer while keeping low|_string]]
+<</if>>
+
+:: AgeEnd1
+/*xxx */
+<<say $mc>>Okay, take me back to outset town I guess.<</say>>
+You step inside the small bed in the robot. As you lay down, the hatch closes. You hear a loud noise and the hatch opens up again. You are looking at a woman with glasses standing there looking at you. But whats more is that you seem to be back at the surface? How is that even possible?
+
+<<say $rndF>>Don't be afraid darling, I'm here to help you! We need to do some boring paper work and than you can play with some new friends<</say>>
+<<say $mc>>I don't understand.<</say>>
+<<say $rndF>>That's okay hunny, let the grownups worry about everything.<</say>>
+She takes you by the hand and leads you to a small room. She and man in somewhat dull suit ask you a buch of questions and write most of it down.
+
+You learn that you are in a separate department of the Outset Town Daycare, which is run by the municipality. Before too long you are taken to a group with other former divers who look more like toddlers now.
+To be honest they also behave more like toddlers and there is little to recognize them as former divers anymore. As the day ends you get taken to a sleeping room with the other toddlers only to be taken back to the playroom the next day.
+The days go by as you wait for something to happen, somebody to get you out of this daycare. Untill after a few days one of the other toddler divers approaches you.
+
+<<say $rndM>>I guessing you are still hoping that somebody will come and get you? I'm sorry to say but you're stuck here with us for quite some time.<</say>>
+<<say $mc>>What?! That can't be right!<</say>>
+<<say $rndM>>Yeah I'm sorry, it was quite a shock for me as well when somebody told me the samething. Apperently, we lost all are legal right and our now under the gaurdianship of the municipality untill we are deemed mature again.<</say>>
+<<say $mc>>No! I need to get out of here as soon as I can!<</say>>
+<<say $rndM>>I get that feeling, but first of all you must look more mature and that will take time and the second thing is that you shouldn't be a problem. You see everybody playing here? It's not that they lost their minds... I think... it's more like 50% coping with being here and getting through the day and 50% trying to fit in so you might leave sooner. At least for me.<</say>>
+<<say $mc>>I...I'm at a loss for words.<</say>>
+<<say $rndM>>I get it. Maybe you want to join me in doing something to take your mind of it, trust me, that's better for your mental health.<</say>>
+You look down, still in shock upon learning what your immediate future holds for you.
+
+<<say $mc>>Okay<</say>>
+As you say that, your new friend hands you soom crayons and you spend the day colloring pictures. The next day you played with the plushies with your new friend and so your new daily routine began of feedings, playing and early bedtime for the near and not so near future.
+
+[img[setup.ImagePath+'AgeEnd1.Webp']]
+
+<h1 class="gameover">Game Over</h1>
+
+:: AgeEnd2
+/*xxx */
+As Lily takes you back to the surface at an incredible pace, you have little time to think about your new situation. You feel you are still processing everything as you stand in the municipality building where Lily is signing you right away.
+That night as you lay in bed you still feel very sad for some reason, maybe it's because you lost a lot of freedom or maybe because your adventure didn't end the way that you envisioned. 
+Lily pulls you close towards her and strokes your hair.
+
+<<say $companionLily>>What's the matter sweety? Talk to Mommy.<</say>>
+<<say $mc>>I don't know Mommy it's so everwhelming, and now with the papers signed I feel like I lost something.<</say>>
+Lily starts to laugh.
+
+<<say $companionLily>>Are you worried about that? That was more to tease you, and so you finally know your role.<</say>>
+She gives you a sly grin
+
+<<say $mc>>You can't just sign my freedoms away as a tease!<</say>>
+<<say $companionLily>>Don't throw a tantrum sweety, trust Mommy. It's just some papers in a building here.<</say>>
+<<say $mc>>Those papers are valid in the entire nation!<</say>>
+Lily just chuckles.
+
+<<say $mc>>It's not funny, we had to end the adventure in the Abyss as well!<</say>>
+<<say $companionLily>>So you worried our adventure has ended? I think it is time to show you something. Hold me tight now sweety!<</say>>
+As she says that you look into her eyes as they start to go from her own purple to pink to red to every color imaginable. Lily starts glowing a radiant light.
+
+<<say $mc>>No way, are you really an angel?!<</say>>
+Lily chuckles once more.
+
+<<say $companionLily>>I'm not always joking! But maybe I'm not exactly an angel, but what I do know is that you are my little angel now!<</say>>
+With that the room dissapears in a bright light and you feel like you start falling. You hold on to Lily who is just smilling. And then you hit the ground with her, not hard, but enough to leave you groaning. As you look up you are no longer in the room in Outset town. You are laying in a grassy field with some trees dotted around. Only everything looks a bit of. The grass is weirdly shapped and the trees are also odd.
+
+<<say $mc>>What happend? Where are we?<</say>>
+<<say $companionLily>>At our new adventure, my little angel!<</say>>
+
+<h1 class="gameover">The End..?</h1>
+
 :: Maxim Labor Scene [nobr]
 <<set $MaximCycleT_flag = false>>
 /*xxx */
