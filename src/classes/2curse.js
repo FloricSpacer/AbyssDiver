@@ -182,7 +182,7 @@ class GenderReversalA extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalA = new GenderReversalA()
@@ -485,7 +485,7 @@ class GenderReversalB extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalB = new GenderReversalB()
@@ -875,7 +875,7 @@ class GenderReversalC extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalC = new GenderReversalC()
@@ -1658,7 +1658,7 @@ class GenderReversalD extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalD = new GenderReversalD()
@@ -2414,7 +2414,7 @@ class GenderReversalE extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalE = new GenderReversalE()
@@ -2666,7 +2666,7 @@ class GenderReversalF extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalF = new GenderReversalF()
@@ -3176,7 +3176,7 @@ class GenderReversalG extends Curse {
 	}
 
 	changeGender(character, prevGender) {
-		return prevGender + character.osex === 'male' ? 1 : -1;
+		return prevGender + (character.osex === 'male' ? 1 : -1);
 	}
 }
 setup.allCurses.GenderReversalG = new GenderReversalG()

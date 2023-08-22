@@ -141,7 +141,7 @@ Macro.add('PassTime', {
 			// This means that we can use the optional chaining operator to add events to the bandit iff she's in the party
 			let bandit = State.variables.hiredCompanions.some(c => c.id === setup.companionIds.bandit) ? State.variables.companionBandit
 			                                                                                           : null;
-			// try to eat
+			// try to eat and drink
 			let ate = false;
 			let drank = false;
 			if (state.energy > 0) {
