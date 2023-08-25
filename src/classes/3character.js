@@ -456,16 +456,17 @@ class Character {
 			gender += 1;
 		}
 
-		if (this.appAge < 12 && gender > 4) {
-			gender -= 2;
-		} else if (this.appAge < 12 && gender < 3) {
-			gender += 2;
-		} else if (this.appAge <= 14 && gender > 5) {
+		if (this.appAge <= 14 && gender > 5) {
 			gender -= 1;
 		} else if (this.appAge <= 14 && gender < 2) {
 			gender += 1;
 		}
 		
+		if (this.appAge < 12 && gender > 4) {
+			gender -= 1;
+		} else if (this.appAge < 12 && gender < 3) {
+			gender += 1;
+		} 
 		return Math.clamp(gender, 1, 6)
 	}
 
