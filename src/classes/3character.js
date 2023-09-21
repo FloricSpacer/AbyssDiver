@@ -916,6 +916,10 @@ class Character {
 		if (this.id === setup.companionIds.mc) {
 			appGender += 0.5 * State.variables.colwear + 0.25 * State.variables.scent + 0.5 * State.variables.slwear
 			if (State.variables.dollevent2) appGender++;
+			else if (this.hasCurse(CrossdressYourHeart )){
+				if (State.variables.sex == "male") appGender++;
+				else appGender--;
+			}
 		}
 		return appGender;
 	}
