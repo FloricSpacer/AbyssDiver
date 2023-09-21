@@ -1092,32 +1092,35 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <br><br>
 How are you going to deal with the bandits encircling you?<br><br>
 
-<<if setup.haveCuttingTool && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
-	Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.<br>
-	[[Let Khemia and his sword deal with these jokers|Layer1 Bandits Won]]<br><br>
+<<if $mc.curses.some(e => e.name === "Below the Veil">>
+	[[Behold a small hint of your eldritch visage to them|Layer1 Bandits Veil]]
+<<else>>
+	<<if setup.haveCuttingTool && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+		Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.<br>
+		[[Let Khemia and his sword deal with these jokers|Layer1 Bandits Won]]<br><br>
+	<</if>>
+	<<if $items[13].count > 0 && $items[20].count > 2>>
+		These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.<br>
+		[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br><br>
+	<</if>>
+	<<if $slingshot === 1>>
+		Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.<br>
+		[[Scare them off with the Brave Vector|Layer1 Hub]]<br><br>
+	<</if>>
+	<<if $BionicArm>>
+		With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
+		[[Wield Glory's Grasp to command the situation|Layer1 Bandits Won]]<br><br>
+	<</if>>
+	<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)) && $mc.subdom<1>>/*xxx */
+		You're not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
+		[[Brawl it out with them|Layer1 Bandits Fight]]<br><br>
+	<</if>>
+	Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?<br>
+	[[Hand over some of the Relics you've collected|Relic Surrender][$surrVal to 0 ]]<br><br>
+	<br>
+	Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.<br>
+	[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub]]<br>
 <</if>>
-<<if $items[13].count > 0 && $items[20].count > 2>>
-	These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.<br>
-	[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br><br>
-<</if>>
-<<if $slingshot === 1>>
-	Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.<br>
-	[[Scare them off with the Brave Vector|Layer1 Hub]]<br><br>
-<</if>>
-<<if $BionicArm>>
-	With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
-	[[Wield Glory's Grasp to command the situation|Layer1 Bandits Won]]<br><br>
-<</if>>
-<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)) && $mc.subdom<1>>/*xxx */
-	You're not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
-	[[Brawl it out with them|Layer1 Bandits Fight]]<br><br>
-<</if>>
-Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?<br>
-[[Hand over some of the Relics you've collected|Relic Surrender][$surrVal to 0 ]]<br><br>
-<br>
-Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.<br>
-[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub]]<br>
-
 :: Layer1 Bandits Fight [layer1 nobr]
 
 <<set _relicBonus = 0>>
@@ -1301,6 +1304,27 @@ You hardly register what happens next, but it feels like your face hits a brick 
 	/*<<set $ownedRelics=[]>>*/
 <</nobr>>
 When you wake up you find that all of your Relics are gone<<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit) && !$BanditConvo0>> along with the bandit you captured<</if>>. Damn those bandits!
+[[Continue on your journey|Layer1 Hub]]
+
+:: Layer1 Bandits Veil [layer1]
+
+As you step into the relative serenity of the shallows, your form flickers, the façade of humanity ever so briefly shimmering to reveal the eldritch terror beneath. An almost alien luminescence dances around you, casting eerie shadows that sway and jerk in patterns that defy the natural laws of light and shadow.
+
+<<say $banditLeader>>Well, lookie here, fellas! A diver returning with loot. Give it up, stranger, and we won't have to turn ugly.<</say>>
+There's a bravado in the bandit leader's voice, a forced laugh hiding behind her threat. The others echo her sentiment, a pack of hyenas circling their intended prey. Their guns, weathered and ill-maintained, glint under the dim light. In their eyes, you see a glimmer of desperation, not unlike a cornered animal.
+
+<<say $mc>>I suggest you reconsider.<</say>>
+Your voice sounds odd even to your ears, an unsettling harmonious dissonance, as if a choir of Abyssal voices have replaced your own. The air grows colder, as the pressure around you seems to increase, a palpable sense of dread permeating the environment. The bandit leader chuckles nervously, trying to mask the tremble in her voice.
+
+<<say $banditLeader>>A tough one, eh? Alright then, let's do this the hard way.<</say>>
+As the bandit moves to aim her pistol, you let your façade drop further. The sight they behold isn't one that human minds are meant to comprehend. A nightmarish figure, tendrils writhing, eyes like voids in the universe, form shifting and changing in ways that defy spatial and temporal understanding. Madness is a small price to pay for such a revelation.
+
+<<say $mc>>Still eager to fight?<</say>>
+The bandits stagger back, their faces a mask of terror. Their sanity is hanging by a thread, their eyes darting, unable to comprehend the entity they're confronting. A couple of them drop their weapons, falling to their knees, consumed by the terror of your otherworldly visage.
+
+<<say $banditLeader>>N... no... please... just... go.<</say>>
+Her voice barely a whimper, the leader backs away, stumbling over her own feet, scrambling to create distance. They'd been prepared to face a weary traveler, but an eldritch being from the Abyss? The sight is enough to send them running in fear, leaving behind their ill-gotten gains, their greed replaced by a primal desire for survival. You continue on your path, leaving the bandits to the mercy of their nearly shattered sanity.
+
 [[Continue on your journey|Layer1 Hub]]
 
 :: Relic Surrender [layer1]
