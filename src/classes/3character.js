@@ -920,6 +920,9 @@ class Character {
 				if (State.variables.sex == "male") appGender++;
 				else appGender--;
 			}
+			if (this.hasCurse(ClothingRestrictionC) && this.hasCurse(HairRemoval)){
+				appGender +=0.5;
+			}
 		}
 		return appGender;
 	}
