@@ -365,12 +365,12 @@ class DollTransformation extends AgeEvent {
 	}
 	
 	changePenis(character, prevPenis){
-		if (State.variables.doublePenis){
-			return State.variables.doublePenis = false;
-		}  else if (prevPenis>1) {
-			return Math.max(0, prevPenis - 1);
-		} else {
+		if (State.variables.dollevent2 || prevPenis<=0){
 			return 0;
+		} else if (State.variables.doublePenis){
+			return State.variables.doublePenis = false;
+		}  else {
+			return Math.max(0, prevPenis - 1);
 		}
 	}
 
