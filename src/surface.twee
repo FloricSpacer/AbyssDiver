@@ -753,42 +753,40 @@ The Relic $ownedRelics[$temp].name has been successfully sold and you've gotten 
 [img[setup.ImagePath+$items[19].image]]
 
 You step into the Relic Workshop of Outset Town. The air is thick with the smell of glue, sawdust, and molten metal. You see a couple of other adventurers tinkering away at Relics they found themselves. You approach one of the free workbenches and decide what you want to do.
-
 <<nobr>>
 <<for _relic range $ownedRelics>>
 	<<capture _relic>>
-		<<switch _relic.name>>
-			<<case "Purity Tree Plank">>
-				<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
-				[[Use Purity Wood Plank|Surface Workshop][setup.loseRelic(_relic), $corruption += 25]]<br>
-			<<case "Rømer Stones">>
-				<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br>
-				<br>You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will require using all of the Rømer stones to craft.<br>
-				<<if $warmCloth === 0>>
-					[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Warming Clothes').count = 1, $warmCloth = 1]]<br>
-				<</if>>
-				<<if $coolCloth === 0>>
-					[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Cooling Clothes').count = 1, $coolCloth = 1]]<br>
-				<</if>>
-			<<case "Creepy Doll" && !$dollevent>>
-				<br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
-				[[Use scissors to cut open the doll|Doll event]]<br>
-			<<case "Brave Vector" && $slingshot === 0>>
-				<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo.<br>
-				[[Reshape the Brave Vector into a powerful slingshot|Surface Workshop][$slingshot = 1]]<br>
-			<<case "Joyous Sunder" && $joyousSword === 0>>
-				<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. <br>
-				[[Reshape the Joyous Sunder into a true sword|Surface Workshop][$joyousSword = 1]]<br>
-			<<case "Moonwatcher" && !$BionicEye>>
-				<br>As you contemplate the potential benefits of the Moonwatcher serving as a bionic eye, an almost electric thrill runs through you. The thought of gaining night vision and the ability to see through objects seems incredibly appealing. Here, at the Relic Workshop, they can safely perform the installation for you.<br>
-				[[Opt to have the Moonwatcher installed as your bionic eye|Surface Workshop][$light = 1, $BionicEye = true]]<br>
-			<<case "Glory's Grasp" && !$BionicArm>>
-				<br>The allure of Glory's Grasp replacing your organic arm with a bionic one is not lost on you. The notion carries with it a certain charm and intrigue. Here, in the Relic Workshop, they can ensure a secure and proficient installation.<br>
-				[[Proceed with the installation of Glory's Grasp as your bionic arm|Surface Workshop][$BionicArm = true]]<br>
-			<<case "Omoikane Circuit" && setup.haveSmartphoneRegular>>
-				<br>The Omoikane Circuit, you've heard, is a Relic specifically designed for integration with your phone. Why not seize this opportunity to upgrade your device right here in the safety of the Relic Workshop?<br>
-				[[It's time to revolutionize your phone!|AI ConvoIn][setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.loseRelic(_relic) ]]<br>
-		<</switch>>
+		<<if _relic.name == "Purity Tree Plank">>
+			<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
+			[[Use Purity Wood Plank|Surface Workshop][setup.loseRelic(_relic), $corruption += 25]]<br>
+		<<elseif _relic.name == "Rømer Stones">>
+			<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br>
+			<br>You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will require using all of the Rømer stones to craft.<br>
+			<<if $warmCloth === 0>>
+				[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Warming Clothes').count = 1, $warmCloth = 1]]<br>
+			<</if>>
+			<<if $coolCloth === 0>>
+				[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Cooling Clothes').count = 1, $coolCloth = 1]]<br>
+			<</if>>
+		<<elseif _relic.name == "Creepy Doll" && !$dollevent>>
+			<br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
+			[[Use scissors to cut open the doll|Doll event]]<br>
+		<<elseif _relic.name == "Brave Vector" && $slingshot === 0>>
+			<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo.<br>
+			[[Reshape the Brave Vector into a powerful slingshot|Surface Workshop][$slingshot = 1]]<br>
+		<<elseif _relic.name == "Joyous Sunder" && $joyousSword === 0>>
+			<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. <br>
+			[[Reshape the Joyous Sunder into a true sword|Surface Workshop][$joyousSword = 1]]<br>
+		<<elseif _relic.name == "Moonwatcher" && !$BionicEye>>
+			<br>As you contemplate the potential benefits of the Moonwatcher serving as a bionic eye, an almost electric thrill runs through you. The thought of gaining night vision and the ability to see through objects seems incredibly appealing. Here, at the Relic Workshop, they can safely perform the installation for you.<br>
+			[[Opt to have the Moonwatcher installed as your bionic eye|Surface Workshop][$light = 1, $BionicEye = true]]<br>
+		<<elseif _relic.name == "Glory's Grasp" && !$BionicArm>>
+			<br>The allure of Glory's Grasp replacing your organic arm with a bionic one is not lost on you. The notion carries with it a certain charm and intrigue. Here, in the Relic Workshop, they can ensure a secure and proficient installation.<br>
+			[[Proceed with the installation of Glory's Grasp as your bionic arm|Surface Workshop][$BionicArm = true]]<br>
+		<<elseif _relic.name == "Omoikane Circuit" && setup.haveSmartphoneRegular>>
+			<br>The Omoikane Circuit, you've heard, is a Relic specifically designed for integration with your phone. Why not seize this opportunity to upgrade your device right here in the safety of the Relic Workshop?<br>
+			[[It's time to revolutionize your phone!|AI ConvoIn][setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.loseRelic(_relic) ]]<br>
+		<</if>>
 	<</capture>>
 <</for>>
 <<if setup.haveSmartphoneAI>>
