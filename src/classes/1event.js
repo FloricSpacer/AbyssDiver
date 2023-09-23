@@ -359,6 +359,31 @@ class DollTransformation extends AgeEvent {
 	age(prevAge) {
 		return Math.min(17 * AgeEvent.aYear, prevAge - 2 * AgeEvent.aYear)
 	}
+
+	changeGender(character, prevGender) {
+		return Math.min(6, prevGender + 1)
+	}
+	
+	changePenis(character, prevPenis){
+		if (State.variables.doublePenis){
+			return State.variables.doublePenis = false;
+		}  else if (prevPenis>1) {
+			return Math.max(0, prevPenis - 1);
+		} else {
+			return 0;
+		}
+	}
+
+
+	changeVagina(character, prevVagina) {
+		// used by Curses that add/remove genitals
+	 	if (prevVagina===1 && State.variables.dollevent2){
+			return 0;
+		} else {
+			return prevVagina;
+		}
+	}
+
 }
 
 window.DollTransformation = DollTransformation
