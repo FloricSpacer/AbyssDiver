@@ -1506,11 +1506,11 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set $L8T1_difficulty += 0.3>>
 	<<elseif $L8T1_counter===3>>
 		Some of the clockwork dolls seem to have Relics of their own. Most are empty-handed or only hold makeshift weapons, but an increasing number are holding copies of items from your own esoteric collection. It seems that from now on, they will be empowered by the strength of the Relics you've picked up along the way in your journey.<br>
-		<<set $L8T1_counter += 0.5>>
+		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += Math.min(0.7, $ownedRelics.length/10)>>
 	<<elseif $L8T1_counter===4>>
 		By now, the dolls are communicating and coordinating advanced tactics and trying to make the most of the Relics they have. With each passing day their numbers and powers grow. They are as smart as you and their resources are almost as powerful. How long do you think you can survive against a threat like this?<br>
-		<<set $L8T1_counter += 0.75>>
+		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += 0.35>>
 	<</if>>
 <<else>>
@@ -1554,9 +1554,6 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 	
 	<<set _curseBonus +=  ($mc.heightCor - $mc.oheight)/$mc.oheight*100>>
-	<<if ($mc.heightCor - $mc.oheight)/$mc.oheight*100 > 0 >>
-	<<elseif ($mc.heightCor - $mc.oheight)/$mc.oheight*100 < 0 >>
-	<</if>>
 
 	<<if $mc.skinType === "sticky, slimy">>
 		<<set _curseBonus += 3>>
@@ -1615,7 +1612,7 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _companionBonus += 5 * (1+ $companionSaeko.HandicapThreat/10)>>
 	<</if>>
 
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
 		<<if $BanditConvo0>>
 			<<set _companionBonus += 10 * (1 + $companionBandit.HandicapThreat / 10)>>
 		<<else>>
@@ -1628,13 +1625,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
-		<<set _twinBonus = 5 * (1+ $companionTwin.HandicapThreat/10) +_curseBonus>>
-		<<if _twinBonus > 7 >>
-		<<elseif _twinBonus > 5>>
-		<<elseif _twinBonus > 0>>
-		<<else>>
-		<</if>>
-		<<set _companionBonus += _twinBonus>>
+		<<set _companionBonus += 5 * (1+ $companionTwin.HandicapThreat/10) +_curseBonus>>
 	<</if>>
 
 	<<if setup.haveCuttingTool>>
