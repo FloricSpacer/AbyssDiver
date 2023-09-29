@@ -108,7 +108,7 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
         return "BrokerEnd";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length==0){
+    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length===0){
         return "DollWarning";
     }
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
@@ -199,7 +199,7 @@ Config.navigation.override = function (destPassage) {
         StoryVar.mc.inhuman < 6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
         return "Bandit Arrested";
     }
-    if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.mc.age > 17 && StoryVar.AgeEndReached == false) {
+    if (isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.mc.age > 17 && StoryVar.AgeEndReached === false) {
         return "AgeEnd";
     }
     if (StoryVar.companionMaru.affec < -9 && !StoryVar.companionMaru.swap && StoryVar.hiredCompanions.some(e => e.id === setup.companionIds.maru)) {
@@ -224,7 +224,7 @@ Config.navigation.override = function (destPassage) {
 };
 
 // Listen for the :passagestart jQuery event.
-$(document).on(':passagestart', () => {
+$(document).on(':passagestart', ev => {
     // Get a reference to the active story variables store.
     const vars = variables();
 
@@ -301,6 +301,8 @@ $(document).on(':passagestart', () => {
             }
         }
     }
+
+    $(ev.content).wiki(`<<if settings.accessible>><script>[...document.getElementsByClassName('passage')].forEach(e => e.classList.add('accessible'))</${'script'}><</if>>`);
 });
 
 // eslint-disable-next-line no-constant-condition -- Change from false to true if running inside Twine.
@@ -333,6 +335,11 @@ Macro.add('say', {
                 `</div>`;
             $(this.output).wiki(output);
         }
+});
+
+Setting.addToggle("accessible", {
+    label : "Remove potentially-inaccessible text formatting for the vision-impaired",
+    default  : false,
 });
 
 Setting.addHeader("Content Settings");
