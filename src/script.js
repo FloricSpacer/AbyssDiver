@@ -302,6 +302,12 @@ $(document).on(':passagestart', ev => {
         }
     }
 
+    // NOTE: we cannot do this on an element that's higher up than .passage.
+    // It might be easier to add the class to the body, but sugarcube does not rebuild the entire page between
+    // passages, just the passages, so if we add a class to the body it remains there until the user reloads (even
+    // if the setting is turned off again).
+    // We could add use the body and add an else branch that removes the class to get around the problem,
+    // I decided to just take the highest element that gets replaced every passage.
     $(ev.content).wiki(`<<if settings.accessible>><script>[...document.getElementsByClassName('passage')].forEach(e => e.classList.add('accessible'))</${'script'}><</if>>`);
 });
 
