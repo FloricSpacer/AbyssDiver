@@ -43,6 +43,7 @@ Macro.add('PassTime', {
 		}
 		
 		while (!breakForEvent && state.unweightedDayIndex < state.expectedDays) {
+
 			/* Increment the day index. We only break out of the inner loop because we're sated, can't eat/drink or */
 			/* because an event is about to happen. An event might interrupt our attempts to decrease starvation or */
 			/* dehydration, but that's okay - we'll try again during the next trip. */
@@ -66,11 +67,11 @@ Macro.add('PassTime', {
 				                          'foraging for water on this layer, no matter the consequences.<br>')
 				State.variables.forageWater = 1;
 			}
-		
-		/* Starvation and dehydration go up by 1 every day. If the player is starving */
-		/* or dehydrated, assume that they will stop to forage until they are sated. */
-		State.variables.starving += 1;
-		State.variables.dehydrated += 1;
+
+			/* Starvation and dehydration go up by 1 every day. If the player is starving */
+			/* or dehydrated, assume that they will stop to forage until they are sated. */
+			State.variables.starving += 1;
+			State.variables.dehydrated += 1;
 			while (State.variables.starving > 0 || State.variables.dehydrated > 0) {
 
 				/* Increment the actual day. */
