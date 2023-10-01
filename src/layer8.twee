@@ -95,6 +95,7 @@ Threats:
 	<<set $L8T1_milestones = [0,10,30,70,100] >>
 	<<set $L8T1_counter = 0>>
 	<<set $L8T1_difficulty = 1>>
+	<<set $offset = 0>>
 <<elseif $secondVisitL8 === 0>>
 	<<set $secondVisitL8 = 1>>
 	<<set $layerTemp = 18>>
@@ -1401,7 +1402,6 @@ If you continue your descent in spite of everything, descending past this layer'
 	Your claw-like nails help you somewhat if you get into hand-to-hand combat.<br>
 	<<set _curseBonus += 2>>
 <</if>>
-<<set _curseBonus = _curseBonus*(10+HandicapThreat)/10>>
 
 <<set _companionBonus = 0>>
 <<set _equipmentBonus = 0>>
@@ -1494,15 +1494,17 @@ If you continue your descent in spite of everything, descending past this layer'
 		But your companions lack the strength and skill to protect you very effectivly.
     <</if>>
 	<br>
-<</if>>
-
-<<if _L8T1_counter<=4>>
-	<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))) * $timeL8T1-_offset)**0.67).toRounded(1)>>
 <<else>>
-	<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))*(1 + (_timeL8T1-75)/15)) * $timeL8T1-_offset)**0.67).toRounded(1)>>
+	<<set _handicapThreat=$mc.HandicapThreat>>
 <</if>>
 
-<<set _temp = (2 * (_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
+<<if $L8T1_counter<=4>>
+	<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))) * $timeL8T1-$offset)**0.67).toRounded(1)>>
+<<else>>
+	<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))*(1 + (_timeL8T1-75)/15)) * $timeL8T1-$offset)**0.67).toRounded(1)>>
+<</if>>
+
+<<set _temp = (2 * (_relicBonus + _curseBonus + _equipmentBonus + _handicapThreat * 10)).toRounded(1)>>
 
 <<set _chance = _temp - _L8T1_threshold + 100>>
 
@@ -1519,14 +1521,12 @@ If you continue your descent in spite of everything, descending past this layer'
 <<elseif _chance <= 80>>
 	<<set _string = "a good">>
 <<elseif _chance < 100>>
-	<<set _string = "a highly likely">>
+	<<set _string = "a very high">>
 <<else>>
 	<<set _string = "a sure">>
 <</if>>
 
-In a fight against the Inanis Ego you think you have a _string chance of survival.
-
-<br>Your relative strength bonus due to these factors against the Inanis Ego is _temp, though in a real fight you would also get a bonus between 1 and 100 based on random factors such as terrain and luck. And based on your experience. If you encountered them today, they would have a strength of _L8T1_threshold, which you would need to overcome. <br>
+In a fight against the Inanis Ego you think you have _string chance of survival.
 
 <br>[[Continue exploring the eighth layer|Layer8 Hub]]
 
@@ -1553,7 +1553,6 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 		The doll's face collapses and it's body crumples into a useless heap before you. It wasn't much of threat, but it certainly was off-putting. It may be a dangerous sign of things to come.<br>
 		<<set $L8T1_counter += 1>>
 		<<set _temp1=0>>
-		<<set $offset = 0>>
 	<<elseif $L8T1_counter===1>>
 		Walking around the never-ending halls of the eighth layer, you spot a porcelain figure standing at the end of the hallway. It is waving to you, apparently friendly.<br><br>
 		
@@ -1575,7 +1574,7 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 	<<elseif $L8T1_counter===2>>
 		While walking through the halls today, a group of them attempted a simple ambush, which you easily avoided. However, they lead you directly into a second group and wrapped around to reinforce them using the eldritch geometry of this layer.<br><br>
 
-		This wasn't too much of a threat, but the fact they were able to navigate the layer and plan coordinated tactics is worrying...
+		This wasn't too much of a threat, but the fact they were able to navigate the layer and plan coordinated tactics is worrying...<br>
 		<<set $L8T1_counter += 1>>
 		<<set $L8T1_difficulty += 5>>
 		<<set $offset += 5*$timeL8T1>>
@@ -1672,8 +1671,6 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 		<<set _curseBonus += 2>>
 	<</if>>
 
-	<<set _curseBonus = _curseBonus*(10+HandicapThreat)/10>>
-
 	<<set _companionBonus = 0>>
 	<<set _equipmentBonus = 0>>
 
@@ -1693,7 +1690,6 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 				<<set _companionBonus += 5 * (1 + $companionKhemia.HandicapThreat / 10)>>
 			<</if>>
 		<</if>>
-		<br>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
@@ -1710,16 +1706,15 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 			<<set _equipmentBonus += _ammo*5>>
 			<<set _bulletsUsed = Math.max(Math.ceil($timeL8T1 / 8) * Math.max(_ammo - $bullRed,1), 1)>>
 			<<if $items[20].count <= _bulletsUsed>>
-				Cloud has used the last of your bullets...
+				Cloud has used the last of your bullets...<br>
 				<<set $items[20].count = 0 >>
 				<<set $ammoStrat = 0>>
 				<<set $cloudStrat = 0>>
 			<<else>>
-				Cloud used _bulletsUsed bullets fighting off the enemy.
+				Cloud used _bulletsUsed bullets fighting off the enemy.<br>
 				<<set $items[20].count -= _bulletsUsed>>
 			<</if>>
 		<</if>>
-		<br>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
@@ -1741,7 +1736,6 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
 		<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
 		<<set _companionBonus += _twinBonus>>
-		<br>
 	<</if>>
 
 	<<if setup.haveCuttingTool>>
@@ -1759,7 +1753,8 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 			<<set _companionBonus = 0>>
 			<<set _handicapThreat = Math.floor(companionBonus)>>
 		<</if>>
-		<br>
+	<<else>>
+		<<set _handicapThreat=$mc.HandicapThreat>>
 	<</if>>
 
 	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
@@ -1775,10 +1770,10 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 		<</if>>
 	<</if>>
 
-	<<if _L8T1_counter<=4>>
-		<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))) * $timeL8T1-_offset)**0.67).toRounded(1)>>
+	<<if $L8T1_counter<=4>>
+		<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))) * $timeL8T1-$offset)**0.67).toRounded(1)>>
 	<<else>>
-		<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))*(1 + (_timeL8T1-75)/15)) * $timeL8T1-_offset)**0.67).toRounded(1)>>
+		<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))*(1 + (_timeL8T1-75)/15)) * $timeL8T1-$offset)**0.67).toRounded(1)>>
 	<</if>>
 
 	<<set _L8T1_threshold2 = _L8T1_threshold * 1.25>>
@@ -1786,7 +1781,6 @@ In a fight against the Inanis Ego you think you have a _string chance of surviva
 
 	<<set _temp = random(1, 100) + (2 * (_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
 
-	<br>
 	<<if _temp >  _L8T1_threshold3>>
 		<br>Dispatching the horde proved to be trivial. Your defenses and capabilities far outstripped any forces the puppets brought against you.<br>
 	<<elseif _temp > _L8T1_threshold2 && _temp <=  _L8T1_threshold3>>
