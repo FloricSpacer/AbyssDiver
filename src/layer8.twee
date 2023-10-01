@@ -94,7 +94,7 @@ Threats:
 	<<set $visitL8 = 1>>
 	<<set $L8T1_milestones = [0,10,30,70,100] >>
 	<<set $L8T1_counter = 0>>
-	<<set $L8T1_difficulty = -0.1>>
+	<<set $L8T1_difficulty = 1>>
 <<elseif $secondVisitL8 === 0>>
 	<<set $secondVisitL8 = 1>>
 	<<set $layerTemp = 18>>
@@ -1337,9 +1337,42 @@ If you continue your descent in spite of everything, descending past this layer'
 	The sword you made from the Joyous Sunder slices through any resistance as if it were nothing more than air, giving you a great advantage in melee fights.<br>
 	<<set _relicBonus += 10>>
 <</if>>
+<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+	The mighty sunbeam slices through anything, while setting the remains a blaze. It proves to be a deadly weapon in close proximity.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Acrobatic Accord")>>
+	The Acrobatic Accord makes you perfectly ambidextrous, which increases your fighting skills. More importantly the added extreme flexibility also significantly raises you evasive skills. <br>
+	<<set _relicBonus += 7>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+	A single clap of the Breathless Exhale produce and airburst that is strong enough to knock down small groups of these inanimate dolls. They serve as a useful tool for ranged crowd control.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Perpetual Repose")>>
+	The Perpetual Repose serves as an impenetrable shield. It offers good protection against most attacks of the Horde. Just be careful they don't grab it!<br>
+	<<set _relicBonus += 7>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Out Of Mind")>>
+	<<if $hiredCompanions.length ==0 && $timeL8T1<40>>
+		Being invisible, thanks to the Out Of Mind cloak, allows you to avoid detection. Atleast, as long as the numbers are small and the individuals dolls still only have half a brain.<br>
+		<<set _relicBonus += 40>>
+	<<else>>
+		The horde hears and smells you are there somewhere. Though, being invisible, thanks to Out Of Mind cloak, will still make it harder for them to fight you.
+		<<set _relicBonus += 10>>
+	<</if>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Yliaster Materia")>>
+	Eventhough the Yliaster Materia makes a poor weapon against the living monsters of the Abyss, the inanimate clockwork dolls are suspectable to its phase changing properties. Thus, any doll that comes in it's range is literally at risk of being vaporized.<br>
+	<<set _relicBonus += 10>>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "Red Thread Flourish")>>
+	The large red ribbon proves to be both a great offensive tool and a defensive tool. It manages to block attack, even unnoticed ones from the back, while at the same time it makes short work of every mimic that comes within 20 meters of you.
+ 	<<set _relicBonus += 20>>
+<</if>>
 <<if $DaedalusEquip>>
 	Having wings on your back allows you to stay out of reach of the mimics. Except for the ones that have ranged weapons, of course, but you can certainly dodge those, right?<br>
-	<<set _relicBonus += 7>>
+	<<set _relicBonus += 10>>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
 	The combination of the Toral Wave and Empath Coil allows you to electrocute the mimics easily, it's very useful as long as you get a chance to use it on them.<br>
@@ -1350,14 +1383,14 @@ If you continue your descent in spite of everything, descending past this layer'
 	<<set _relicBonus += 3>>
 <</if>>
 <<if $mechaBoarded>>
-	While in your mecha you make short work of whole hordes of creepy mimics bij targeting them with its plasma cannons.
-	<<set _relicBonus += 50>>
+	While in your mecha you make short work of whole hordes of creepy mimics bij targeting them with its plasma cannons, while keeping you protected inside. The ones that do come close feel the damage its plasma swords can dish out.
+	<<set _relicBonus += 150>>
 <</if>>
 
-<<set _curseBonus =  ($mc.heightCor - $mc.oheight) / $mc.oheight * 100>>
-<<if _curseBonus > 0 >>
+<<set _curseBonus =  0>>
+<<if ($mc.heightCor - $mc.oheight) / $mc.oheight * 100 > 0 >>
 	The fact that you have become much larger during your travels means you have a size advantage over most of the mimics.<br>
-<<elseif _curseBonus < 0 >>
+<<elseif ($mc.heightCor - $mc.oheight) / $mc.oheight * 100 < 0 >>
 	The fact that you have shrunk significantly during your travels means you are at a size disadvantage over most of the mimics.<br>
 <</if>>
 <<if $mc.skinType === "sticky, slimy">>
@@ -1368,6 +1401,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	Your claw-like nails help you somewhat if you get into hand-to-hand combat.<br>
 	<<set _curseBonus += 2>>
 <</if>>
+<<set _curseBonus = _curseBonus*(10+HandicapThreat)/10>>
 
 <<set _companionBonus = 0>>
 <<set _equipmentBonus = 0>>
@@ -1450,11 +1484,49 @@ If you continue your descent in spite of everything, descending past this layer'
 	<<set _equipmentBonus += 5 * $ammoStrat>>
 <</if>>
 
-<<set _L8T1_threshold = (($L8T1_difficulty + $timeL8T1 / 100) * $timeL8T1).toRounded(1)>>
+<<if $mc.HandicapThreat<0 && _companionBonus>0>>
+    <<set _companionBonus = $mc.HandicapThreat*2>>
+    <<set _handicapThreat = 0>>
+	Eventhough you are in a more vulnarable state due to your curses, your companions can protect you to certain degree.
+    <<if _companionBonus < 0 >>
+        <<set _companionBonus = 0>>
+        <<set _handicapThreat = Math.floor(companionBonus)>>
+		But your companions lack the strength and skill to protect you very effectivly.
+    <</if>>
+	<br>
+<</if>>
 
-<<set _temp = (3 * (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
+<<if _L8T1_counter<=4>>
+	<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))) * $timeL8T1-_offset)**0.67).toRounded(1)>>
+<<else>>
+	<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))*(1 + (_timeL8T1-75)/15)) * $timeL8T1-_offset)**0.67).toRounded(1)>>
+<</if>>
 
-<br>Your relative strength bonus due to these factors against the Inanis Ego is _temp, though in a real fight you would also get a bonus between 1 and 100 based on random factors such as terrain and luck. And based on your experience. If you encountered them today, they would have a strength of _L8T1_threshold, which you would need to overcome.<br>
+<<set _temp = (2 * (_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
+
+<<set _chance = _temp - _L8T1_threshold + 100>>
+
+<<if _chance <= 0>>
+	<<set _string = "no">>
+<<elseif _chance <= 20>>
+	<<set _string = "a very marginal">>
+<<elseif _chance <= 40>>
+	<<set _string = "a slim">>
+<<elseif _chance <= 50>>
+	<<set _string = "a low">>
+<<elseif _chance <= 60>>
+	<<set _string = "a decent">>
+<<elseif _chance <= 80>>
+	<<set _string = "a good">>
+<<elseif _chance < 100>>
+	<<set _string = "a highly likely">>
+<<else>>
+	<<set _string = "a sure">>
+<</if>>
+
+In a fight against the Inanis Ego you think you have a _string chance of survival.
+
+<br>Your relative strength bonus due to these factors against the Inanis Ego is _temp, though in a real fight you would also get a bonus between 1 and 100 based on random factors such as terrain and luck. And based on your experience. If you encountered them today, they would have a strength of _L8T1_threshold, which you would need to overcome. <br>
 
 <br>[[Continue exploring the eighth layer|Layer8 Hub]]
 
@@ -1481,6 +1553,7 @@ If you continue your descent in spite of everything, descending past this layer'
 		The doll's face collapses and it's body crumples into a useless heap before you. It wasn't much of threat, but it certainly was off-putting. It may be a dangerous sign of things to come.<br>
 		<<set $L8T1_counter += 1>>
 		<<set _temp1=0>>
+		<<set $offset = 0>>
 	<<elseif $L8T1_counter===1>>
 		Walking around the never-ending halls of the eighth layer, you spot a porcelain figure standing at the end of the hallway. It is waving to you, apparently friendly.<br><br>
 		
@@ -1497,21 +1570,24 @@ If you continue your descent in spite of everything, descending past this layer'
 
 		They all look like you in some way. Maybe the don't quite resemble you as much as the waving figure, but they all seem like different, distorted versions of yourself, with different genders, extra limbs, different sizes, or some completely inhuman characteristics. Why are they here? What are these things?<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 0.2>>
+		<<set $L8T1_difficulty += 10>>
+		<<set $offset += 10*$timeL8T1>>
 	<<elseif $L8T1_counter===2>>
 		While walking through the halls today, a group of them attempted a simple ambush, which you easily avoided. However, they lead you directly into a second group and wrapped around to reinforce them using the eldritch geometry of this layer.<br><br>
 
 		This wasn't too much of a threat, but the fact they were able to navigate the layer and plan coordinated tactics is worrying...
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 0.3>>
+		<<set $L8T1_difficulty += 5>>
+		<<set $offset += 5*$timeL8T1>>
 	<<elseif $L8T1_counter===3>>
 		Some of the clockwork dolls seem to have Relics of their own. Most are empty-handed or only hold makeshift weapons, but an increasing number are holding copies of items from your own esoteric collection. It seems that from now on, they will be empowered by the strength of the Relics you've picked up along the way in your journey.<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += Math.min(0.7, $ownedRelics.length/10)>>
+		<<set $L8T1_difficulty += 0>>
 	<<elseif $L8T1_counter===4>>
 		By now, the dolls are communicating and coordinating advanced tactics and trying to make the most of the Relics they have. With each passing day their numbers and powers grow. They are as smart as you and their resources are almost as powerful. How long do you think you can survive against a threat like this?<br>
 		<<set $L8T1_counter += 1>>
-		<<set $L8T1_difficulty += 0.35>>
+		<<set $L8T1_difficulty += 10>>
+		<<set $offset += 10*$timeL8T1>>
 	<</if>>
 <<else>>
 	<<if $timeL8T1 < 10 >>
@@ -1538,22 +1614,55 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _relicBonus += 10>>
 	<</if>>
 
-	<<if $DaedalusEquip>>
+	<<if $ownedRelics.some(e => e.name === "Sunbeam")>>
+		<<set _relicBonus += 10>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Acrobatic Accord")>>
 		<<set _relicBonus += 7>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
+		<<set _relicBonus += 10>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Perpetual Repose")>>
+		<<set _relicBonus += 7>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Out Of Mind")>>
+		<<if $hiredCompanions.length ==0 && $timeL8T1<40>>
+			<<set _relicBonus += 40>>
+		<<else>>
+			<<set _relicBonus += 10>>
+		<</if>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Yliaster Materia")>>
+		<<set _relicBonus += 10>>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Red Thread Flourish")>>
+		<<set _relicBonus += 20>>
+	<</if>>
+
+	<<if $DaedalusEquip>>
+		<<set _relicBonus += 10>>
 	<</if>>
 
 	<<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") >>
 		<<set _relicBonus += 10>>
 	<</if>>
 
-	<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
+	<<if $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge < 18>>
 		<<set _relicBonus += 3>>
 	<</if>>
+
 	<<if $mechaBoarded>>
-		<<set _relicBonus += 50>>
+		<<set _relicBonus += 150>>
 	<</if>>
-	
-	<<set _curseBonus +=  ($mc.heightCor - $mc.oheight)/$mc.oheight*100>>
+
+	<<set _curseBonus =  0>>
 
 	<<if $mc.skinType === "sticky, slimy">>
 		<<set _curseBonus += 3>>
@@ -1563,27 +1672,32 @@ If you continue your descent in spite of everything, descending past this layer'
 		<<set _curseBonus += 2>>
 	<</if>>
 
+	<<set _curseBonus = _curseBonus*(10+HandicapThreat)/10>>
+
+	<<set _companionBonus = 0>>
+	<<set _equipmentBonus = 0>>
+
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
-		<<set _companionBonus += 2* (1+ $companionMaru.HandicapThreat/10)>>
+		<<set _companionBonus += 2 * (1 + $companionMaru.HandicapThreat / 10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
-		<<set _companionBonus += 8* (1+ $companionLily.HandicapThreat/10)>>
+		<<set _companionBonus += 8 * (1 + $companionLily.HandicapThreat / 10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
-		<<set _companionBonus += 15* (1+ $companionKhemia.HandicapThreat/10)>>
+		<<set _companionBonus += 15 * (1 + $companionKhemia.HandicapThreat / 10)>>
 		<<if setup.haveCuttingTool>>
-			<<set _companionBonus += 8* (1+ $companionKhemia.HandicapThreat/10)>>
+			<<set _companionBonus += 8 * (1 + $companionKhemia.HandicapThreat / 10)>>
 			<<if $ownedRelics.some(e => e.name === "Sunbeam") || $joyousSword>>
-			<<set _companionBonus += 5* (1+ $companionKhemia.HandicapThreat/10)>>
+				<<set _companionBonus += 5 * (1 + $companionKhemia.HandicapThreat / 10)>>
 			<</if>>
 		<</if>>
 		<br>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-		<<set _companionBonus += 1* (1+ $companionCherry.HandicapThreat/10)>>
+		<<set _companionBonus += 1 * (1 + $companionCherry.HandicapThreat / 10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
@@ -1609,7 +1723,7 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
-		<<set _companionBonus += 5 * (1+ $companionSaeko.HandicapThreat/10)>>
+		<<set _companionBonus += 5 * (1 + $companionSaeko.HandicapThreat / 10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
@@ -1621,15 +1735,31 @@ If you continue your descent in spite of everything, descending past this layer'
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
-		<<set _companionBonus += 10 * (1+$companionGolem.HandicapThreat/10)>>
+		<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
 	<</if>>
 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
-		<<set _companionBonus += 5 * (1+ $companionTwin.HandicapThreat/10) +_curseBonus>>
+		<<set _twinBonus = 5 * (1 + $companionTwin.HandicapThreat / 10) + _curseBonus>>
+		<<set _companionBonus += _twinBonus>>
+		<br>
 	<</if>>
 
 	<<if setup.haveCuttingTool>>
 		<<set _equipmentBonus += 7>>
+	<</if>>
+
+	<<if $items[20].count > 0 && $items[13].count > 0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
+		<<set _equipmentBonus += 5 * $ammoStrat>>
+	<</if>>
+
+	<<if $mc.HandicapThreat<0 && _companionBonus>0>>
+		<<set _companionBonus = $mc.HandicapThreat*2>>
+		<<set _handicapThreat = 0>>
+		<<if _companionBonus < 0 >>
+			<<set _companionBonus = 0>>
+			<<set _handicapThreat = Math.floor(companionBonus)>>
+		<</if>>
+		<br>
 	<</if>>
 
 	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
@@ -1645,16 +1775,18 @@ If you continue your descent in spite of everything, descending past this layer'
 		<</if>>
 	<</if>>
 
-	<<if $items[20].count>0 && $items[13].count>0 && !$hiredCompanions.some(e => e.id === setup.companionIds.cloud) && !$slingshot>>
+	<<if _L8T1_counter<=4>>
+		<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))) * $timeL8T1-_offset)**0.67).toRounded(1)>>
+	<<else>>
+		<<set _L8T1_threshold = ((($L8T1_difficulty + $timeL8T1 / (1.5*(_companionBonus+7))*(1 + (_timeL8T1-75)/15)) * $timeL8T1-_offset)**0.67).toRounded(1)>>
 	<</if>>
 
-	<<set _L8T1_threshold = ($L8T1_difficulty + $timeL8T1 / 100) * $timeL8T1>>
 	<<set _L8T1_threshold2 = _L8T1_threshold * 1.25>>
 	<<set _L8T1_threshold3 = _L8T1_threshold * 1.5>>
 
-	<<set _temp = random(1, 100) + 3 * (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10)>>
+	<<set _temp = random(1, 100) + (2 * (_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
 
-<br>
+	<br>
 	<<if _temp >  _L8T1_threshold3>>
 		<br>Dispatching the horde proved to be trivial. Your defenses and capabilities far outstripped any forces the puppets brought against you.<br>
 	<<elseif _temp > _L8T1_threshold2 && _temp <=  _L8T1_threshold3>>
