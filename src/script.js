@@ -254,6 +254,7 @@ $(document).on(':passagestart', ev => {
         'hiredCompanions',
         'DaedalusCompanions',
         'DesertedCompanions',
+        'LostCompanions',
         'SemenDemonVec',
     ].map(varName => vars[varName]);
 

@@ -120,7 +120,7 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
 <<if $fear === "">>
 <b>[[Approach a grizzled diver and ask for advice for your dive|Surface Diver Tips 1]]</b><br><br>
 <</if>>
-<<if $hiredCompanions.length === 0>>
+<<if $hiredCompanions.length === 0 && $LostCompanions.length === 0  && $DesertedCompanions.length === 0>>
 <b>[[Check out the companions available to hire|Surface Companions]]</b><br><br>
 <</if>>
 <<if $hiredCompanions.length > 0 || setup.haveSmartphoneAI>>
@@ -130,7 +130,7 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
 <<else>>
 [[Approach a grizzled diver and ask for advice for your dive|Surface Diver Tips 3]]<br>
 <</if>>
-<<if $hiredCompanions.length > 0>>
+<<if $hiredCompanions.length > 0 || $LostCompanions.length > 0  || $DesertedCompanions.length > 0>>
 [[Check out the companions available to hire|Surface Companions]]<br>
 <</if>>
 [[Use Items and Relics]]<br>
@@ -225,7 +225,7 @@ These are descriptions of the companions when they first join you on your expedi
 [img[setup.ImagePath + _companion.image]]
 <h2><<print _companion.name>></h2>
 <p>
-<<if $hiredCompanions.some(e => e.name === _companion.name)>>
+<<if $hiredCompanions.some(e => e.name === _companion.name) || $LostCompanions.some(e => e.name === _companion.name) || $DesertedCompanions.some(e => e.name === _companion.name)>>
 <button class="link-internal macro-button" type="button" disabled>Already hired</button>
 <<else>>
 <<button `"Hire for " + _companion.cost + " dubloons"` `"Hire " + _companion.name`>><</button>>
