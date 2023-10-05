@@ -56,9 +56,9 @@ function tabletSinglePlayer() {
 }
 
 /**
- * Returns true iff the "Gourmet" requirement of the smaragdine tablet would be satisfied if the player picks it up right
- * now, i.e. if they ate one of every food or drink in the game.
- * @return {boolean} true iff the "Single Player" requirement of the smaragdine tablet is satisfied
+ * Returns true iff the "Gourmet" requirement of the smaragdine tablet is satisfied, i.e. if they ate one of every
+ * food or drink in the game.
+ * @return {boolean} true iff the "Gourmet" requirement of the smaragdine tablet is satisfied
  */
 function tabletGourmet() {
 	return Object.getOwnPropertyNames(State.variables.smaragdineFoodConsumed)
@@ -71,5 +71,16 @@ function tabletGourmet() {
 	       Object.getOwnPropertyNames(State.variables)
 	             .filter(p => p.startsWith('foodL'))
 	             .map(p => State.variables[p] > 0)
-	             .reduce((a, b) => a && b, true)
+	             .reduce((a, b) => a && b, true);
+}
+
+/**
+ * Returns true iff the "Danger Fetish" requirement of the smaragdine tablet is satisfied, i.e. if they have been
+ * defeated by every rapey threat.
+ * @return {boolean} true iff the "Danger Fetish" requirement of the smaragdine tablet is satisfied
+ */
+function tabletDangerFetish() {
+	return Object.getOwnPropertyNames(State.variables.smaragdineFoodConsumed)
+	             .map(p => State.variables.smaragdineThreatsSubmitted[p])
+	             .reduce((a, b) => a && b, true);
 }

@@ -1450,7 +1450,7 @@ How do you want to deal with the tentacle beast moving in on you?
 <<nobr>>
 <<if $items[14].count > 0>>
 	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
-	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
+	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
@@ -1475,6 +1475,7 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
 	<</link>><br><br>
@@ -1484,6 +1485,7 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>> /* shouldn't be necessary but better to be safe */
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
 	<</link>><br><br>
@@ -1493,6 +1495,7 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 <<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
 	<<set $status.duration += (3 - $statRed)>>
 	<<set $status.penalty += 2>>
+	<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
 <</link>><br>
