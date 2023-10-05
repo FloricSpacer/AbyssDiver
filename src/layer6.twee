@@ -1090,10 +1090,12 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
 	<<link "Fight it off with a sword" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 10>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 		<<PregCheckTentacle $mc>>
 	<</link>><br>
 	<<if setup.haveHealing>>
 		<<link "Fight it off with a sword and cure the status using a medkit or other healing item" $returnPassage>>
+			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
@@ -1105,10 +1107,12 @@ Relying on your own swordplay will allow you to put up a minimum amount of resis
 Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
 	<<link "Fight it off with Sunbeam" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 9>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 		<<PregCheckTentacle $mc>>
 	<</link>><br>
 	<<if setup.haveHealing>>
 		<<link "Fight it off with Sunbeam and cure the status using a medkit or other healing item" $returnPassage>>
+			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
@@ -1120,6 +1124,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
 	<<link "Have Khemia fight it off with a sword" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 2>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 		<<set $khemiaFucked = 1 >>
 		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>
@@ -1128,6 +1133,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
+			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 			<<PregCheckTentacle $companionKhemia>>
 		<</link>><br>	
 	<</if>>
@@ -1136,6 +1142,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
 	<<link "Have Khemia fight it off with Sunbeam" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 		<<set $khemiaFucked = 1 >>
 		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>	
@@ -1144,6 +1151,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
+			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 			<<PregCheckTentacle $companionKhemia>>
 		<</link>><br>	
 	<</if>>
@@ -1155,6 +1163,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 <<link "Allow it to overpower you" "Layer6 Threat1 2">>
 	<<set $tentacleFucked = 12>>
+	<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
 	<<set _sdCurse = $mc.getCurse(SemenDemon)>>
@@ -1170,6 +1179,7 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 
 <<if setup.haveHealing>>
 	<<link "Allow it to overpower you and use a medkit or other healing item to cure the status" $returnPassage>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
 		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 			<<set $items[4].count -= 1>>
 		<</if>>
@@ -1273,16 +1283,16 @@ As the dragon's maw opens, revealing a churning, swirling vortex of multicolored
 The dragon takes care to avoid Khemia at close range, so he won't have a chance to use Sunbeam this time, at least not if he wants to make it out alive. <br><br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
-	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get it's hoard of 50 dubloons when you kill it though.<br>
-	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 99, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get its hoard of 50 dubloons when you kill it though.<br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 99; $status.penalty += 2; $khemiaDragon === 1; $dubloons += 50, $dragonKill += 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
 <</if>>
 <<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 3, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 3; $status.penalty += 2; $khemiaDragon === 1; $dubloons += 50; $dragonKill += 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon === 0>>
 While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration += 3, $status.penalty += 2, $electricDragon === 1, $dubloons += 50, $dragonKill += 1]]<br><br>
+	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration += 3; $status.penalty += 2; $electricDragon === 1; $dubloons += 50; $dragonKill += 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
 <</if>>
 <<if $mechaBoarded>>
 	/*xxx */
@@ -1292,7 +1302,7 @@ While the Fell Dragons are immune to most conventional methods of attack, you ca
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
 	[[Offer 100 dubloons to appease the dragon|$returnPassage][$dubloons -= 100]]<br><br>
 If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
-	[[Try to run and accept the consequences|$returnPassage][$status.duration += 99, $status.penalty += 4, $dubloons += 50, $dragonBurn = 1]]<br><br>
+	[[Try to run and accept the consequences|$returnPassage][$status.duration += 99; $status.penalty += 4; $dubloons += 50; $dragonBurn = 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
