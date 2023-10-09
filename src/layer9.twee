@@ -743,16 +743,20 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
 
-:: Layer9 Elder Encounter
+:: Layer9 Elder Encounter [layer9]
 /*xxx */
 <<set _temp = random(0,3)>>
+<<if $Elderbeaten > 3 || $timeL9 >50>>
+	<<set $ElderSerious = true>>
+<</if>>
+
 <<if $timeL9 === 0>>
-You suddenly feel a voice reverberate trough the water
+		You suddenly feel a voice reverberate trough the water
 
-<<say $elder>>Well, well, well, how rare... a visitor<</say>>
-You turn around to see who is addressing you, but you see nothing but murky water in every direction.
+		<<say $elder>>Well, well, well, how rare... a visitor<</say>>
+		You turn around to see who is addressing you, but you see nothing but murky water in every direction.
 
-<<say $elder>>Don't fret little visitor, we'll see each other soon enough<</say>>
+		<<say $elder>>Don't fret little visitor, we'll see each other soon enough<</say>>
 <<elseif $timeL9 <=25 >>
 	<<if _temp===0>>
 		<<say $elder>>What a curious oddity you are. Do you, yourself still know why you came down here?<</say>>
@@ -763,7 +767,7 @@ You turn around to see who is addressing you, but you see nothing but murky wate
 	<<else>>
 		<<say $elder>>I can't wait to see you struggle to survive! It makes me want to see it sooner than later.<</say>>
 	<</if>>
-<<elseif $timeL9 <=50 && !$ElderSerious>>
+<<elseif !$ElderSerious>>
 	<<if _temp===0>>
 		<<say $elder>>Let's play, I want to see what you are made off. Literally...<</say>>
 	<<elseif _temp===1>>
@@ -773,6 +777,13 @@ You turn around to see who is addressing you, but you see nothing but murky wate
 	<<else>>
 		<<say $elder>> You made it this far, maybe you could actually an exhilarating. For a while at least...  <</say>>
 	<</if>>
+
+	<<ConversationChoices
+	[[Try to evade the Elder|Elder evasion attempt]]
+	[[Try to flee the Elder|Elder flee attempt]]
+	[[Try to fight the Elder|Elder fight attempt]]
+	>>
+	
 <<else>>
 	<<if _temp===0>>
 		<<say $elder>>I have grown bored of these games. I will end this now.<</say>>
@@ -783,8 +794,49 @@ You turn around to see who is addressing you, but you see nothing but murky wate
 	<<else>>
 		<<say $elder>>Become part of me, resistance is futile at this point.<</say>>
 	<</if>>
+	[[Try to evade the Elder|Elder attempt][$temp2 = "evade"]]
+	[[Try to flee the Elder|Elder attempt][$temp2 = "flee"]]
+	[[Try to fight the Elder|Elder fight attempt][$temp2 = "fight"]]
 <</if>>
 
+:: Elder attempt [layer9 nobr]
+<<if $temp2 = "evade">>
+	what relics do you want to use in your attempt to evade the Elder's senses so you can escape it's tentacles?
+<<elseif $temp2 ="flee">>
+
+<<elseif $temp2 = "flight">>
+
+<</if>>
+<<for _i, _relic range $ownedRelics>>
+	<<capture _i>>
+		&nbsp; [[_relic.name|Elder evasion attempt2][$temp = $ownedRelics[_i].name]]<br>
+	<</capture>>
+<</for>>
+
+:: Elder evasion attempt2 [layer9 nobr]
+<<if ($temp2 = "evade" && $ElderEvasionList.some(e => e.name === $temp)) || ($temp2 = "flee" && $ElderFlightList.some(e => e.name === $temp)) || ($temp2 = "fight" && $ElderFightList.some(e => e.name === $temp))>>
+	<<set _succes=true>>
+<<else>>
+	<<set _succes=false>>
+<</if>>
+
+<<if _succes && $temp2 = "evade">>
+	The Elder quickly loses track off you. You use the opportunity to quickly get away.<br>
+<<elseif _succes && $temp2 = "flee">>
+	You dodge and weave the tentacles and with great speed you get away from them. The tentacles give chase but it almost feels halfharted and quickly they dissappear in the murky depths again.<br>
+<<elseif _succes && $temp2 = "fight">>
+	You brace yourself for a fight. Using your $temp, you easily beat manage to beat one of the giant tentacles only for a second one to swoop in quickly. You fight hard and you fight long and eventually the tentacles stop comming. You live to see another day.<br>
+<<else>>
+	You're idea to use $temp sounded good in your head, but quickly the tentacles start coiling around you. With nowhere to run or hide and completely immobilized you are at the mercy of the elder.
+	_rand = random(1,3)
+	<<if _rand==1>>
+		*elder tears of limbs.
+	<<elseif _rand==2>>
+		*elder forces you to carry its spawn.
+	<<else>>
+		*elder slaps a random curse on you.
+	<</if>>
+<</if>>
 
 :: Layer9 notes [image layer9 noreturn]
 
