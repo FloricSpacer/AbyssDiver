@@ -90,6 +90,7 @@ class Character {
 	 * @param {number} o.pregnantT The day in which this character has been impregnated.
 	 * @param {number} o.due The day in which this character's pregnancy is due.
 	 * @param {number} o.lastBirth The day on which this character's last birth occurred.
+	 * @param {boolean} o.tentaclePreg Whether this character is currently impragnated by tentacles.
 	 * @param {boolean} o.switched Whether this character has switched bodies.
 	 * @param {CharEvent[]} o.events The list of events that affected this character.
 	 */

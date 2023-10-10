@@ -729,6 +729,25 @@
 
 <</widget>>
 
+<<widget "PregCheckTentacle">>
+	<<if _args[0].hasCurse(Omnitool)>>
+		<<if setup.isPregnant(_args[0])>>
+			<<set _flag1=true>>
+		<<else>>
+			<<set _flag1=false>>
+		<</if>>
+		<<PregCheck>>
+		<<if setup.isPregnant(_args[0])>>
+			<<set _flag2=true>>
+		<<else>>
+			<<set _flag2=false>>
+		<</if>>
+		<<if !_flag1 && _flag2>>
+			<<set _args[0].tentaclePreg=true>>
+		<</if>>
+	<</if>>
+<</widget>>
+
 :: Pregnancy Check widget for the whole party with a monster encounter[widget nobr]
 <<widget "MonsterPregCheckParty">>
 <<for _i=0; _i<$hiredCompanions.length; _i++ >>
