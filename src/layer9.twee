@@ -4,7 +4,7 @@
 <<masteraudio stop>>
 <<audio "layer9" volume 0.2 play loop>>
 <<set $timeL8T2a = 0, $timeL8T2b = 0>>
-<<set $timeL9T1 = 0>>
+<<set $timeL9T1 = 5>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -38,7 +38,6 @@ Hopefully you'll be able to get used to it.
 	<<audio "layer9" volume 0.2 play loop>>
 <</if>>
 <<CarryAdjust>><<checkTime>>
-<<set $timeL9T1=1>>
 <<if $visitL9 === 0>>
 	<<set $layerTemp = 8>>
 	<<set $visitL9 = 1>>
@@ -367,7 +366,7 @@ XXX placeholder XXX You approach the sanctuary. Who do you want to bring here in
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
 <<RelicGrid `setup.relicsOnLayer[9]`>>
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
-<<set $timeL9T1=1>>
+
 :: Pick up the Radial Circulation [layer9]
 <<CollectRelic $relic97>>\
 <<if !setup.passingTime()>>
@@ -743,68 +742,82 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
 
-:: Layer9 Elder Encounter [layer9]
+:: Layer9 Elder Encounter [layer9 nobr]
 /*xxx */
 <<set _temp = random(0,3)>>
-<<if $Elderbeaten > 3 || $timeL9 >50>>
+<<if $Elderbeaten >= 3 || $timeL9 >50>>
 	<<set $ElderSerious = true>>
 <</if>>
+<<set $timeL9T1-=5>>
 
 <<if $timeL9 === 0>>
-		You suddenly feel a voice reverberate trough the water
+	You suddenly feel a voice reverberate trough the water<br><br>
 
-		<<say $elder>>Well, well, well, how rare... a visitor<</say>>
-		You turn around to see who is addressing you, but you see nothing but murky water in every direction.
+	<<say $elder>>Well, well, well, how rare... a visitor<</say>><br>
+	You turn around to see who is addressing you, but you see nothing but murky water in every direction.<br><br>
 
-		<<say $elder>>Don't fret little visitor, we'll see each other soon enough<</say>>
+	<<say $elder>>Don't fret little visitor, we'll see each other soon enough<</say>><br>
+	[[Continue on your journey|$returnPassage]]
 <<elseif $timeL9 <=25 >>
 	<<if _temp===0>>
-		<<say $elder>>What a curious oddity you are. Do you, yourself still know why you came down here?<</say>>
+		<<say $elder>>What a curious oddity you are. Do you, yourself still know why you came down here?<</say>><br>
 	<<elseif _temp===1>>
-		<<say $elder>>I wonder what color your blood has become... and how it tastes<</say>>
+		<<say $elder>>I wonder what color your blood has become... and how it tastes<</say>><br>
 	<<elseif _temp===2>>
-		<<say $elder>>Will your mind fold quickly if I push you a little, even though you're so close to your final goal?<</say>>
+		<<say $elder>>Will your mind fold quickly if I push you a little, even though you're so close to your final goal?<</say>><br>
 	<<else>>
-		<<say $elder>>I can't wait to see you struggle to survive! It makes me want to see it sooner than later.<</say>>
+		<<say $elder>>I can't wait to see you struggle to survive! It makes me want to see it sooner than later.<</say>><br>
 	<</if>>
+		[[Continue on your journey|$returnPassage]]
 <<elseif !$ElderSerious>>
+	<<if $ElderLastWin!="">>
+		<<set _i=0>>
+		<<for _relic range $ownedRelics>>
+			<<capture _relic>>
+				<<if _relic.name == $ElderLastWin>>
+					A tentacle suddenly comes from behind some of the other tentacles with a blistering speed you don't expect, hitting you like a freight train. While you are trying to regain your senses you see another tentacles has taken hold of your $ElderLastWin. The relic is being crushed while being dragged in the the seemingly infinite depths of the ocean.<br><br>
+					<<set _j=_i>>
+				<</if>>
+			<</capture>>
+			<<set _i+=1>>
+		<</for>>
+		<<set $ownedRelics.deleteAt(_j)>>
+	<</if>>
 	<<if _temp===0>>
-		<<say $elder>>Let's play, I want to see what you are made off. Literally...<</say>>
+		<<say $elder>>Let's play, I want to see what you are made off. Literally...<</say>><br>
 	<<elseif _temp===1>>
-		<<say $elder>>Let's see if I can make you succumb to me if I try a little.<</say>>
+		<<say $elder>>Let's see if I can make you succumb to me if I try a little.<</say>><br>
 	<<elseif _temp===2>>
-		<<say $elder>>Seeing a mortal struggle to cling to life will be exciting. Now cling to it as hard as you can!<</say>>
+		<<say $elder>>Seeing a mortal struggle to cling to life will be exciting. Now cling to it as hard as you can!<</say>><br>
 	<<else>>
-		<<say $elder>> You made it this far, maybe you could actually an exhilarating. For a while at least...  <</say>>
+		<<say $elder>> You made it this far, maybe you could actually an exhilarating. For a while at least...  <</say>><br>
 	<</if>>
 
-	<<ConversationChoices
-	[[Try to evade the Elder|Elder evasion attempt]]
-	[[Try to flee the Elder|Elder flee attempt]]
-	[[Try to fight the Elder|Elder fight attempt]]
-	>>
+	[[Try to evade the Elder|Elder attempt][$temp2 = "evade"]]<br>
+	[[Try to flee the Elder|Elder attempt][$temp2 = "flee"]]<br>
+	[[Try to fight the Elder|Elder attempt][$temp2 = "fight"]]<br>
 	
 <<else>>
 	<<if _temp===0>>
-		<<say $elder>>I have grown bored of these games. I will end this now.<</say>>
+		<<say $elder>>I have grown bored of these games. I will end this now.<</say>><br>
 	<<elseif _temp===1>>
-		<<say $elder>>It's time for me to fulfill you destiny and let you join me.<</say>>
+		<<say $elder>>It's time for me to fulfill you destiny and let you join me.<</say>><br>
 	<<elseif _temp===2>>
-		<<say $elder>>You're struggle was amusing, it ends here.<</say>>
+		<<say $elder>>You're struggle was amusing, it ends here.<</say>><br>
 	<<else>>
-		<<say $elder>>Become part of me, resistance is futile at this point.<</say>>
+		<<say $elder>>Become part of me, resistance is futile at this point.<</say>><br>
 	<</if>>
-	[[Try to evade the Elder|Elder attempt][$temp2 = "evade"]]
-	[[Try to flee the Elder|Elder attempt][$temp2 = "flee"]]
-	[[Try to fight the Elder|Elder fight attempt][$temp2 = "fight"]]
+	[[Try to evade the Elder|Elder attempt][$temp2 = "evade"]]<br>
+	[[Try to flee the Elder|Elder attempt][$temp2 = "flee"]]<br>
+	[[Try to fight the Elder|Elder attempt][$temp2 = "fight"]]<br>
 <</if>>
 
 :: Elder attempt [layer9 nobr]
-<<if $temp2 = "evade">>
-	what relics do you want to use in your attempt to evade the Elder's senses so you can escape it's tentacles?
-<<elseif $temp2 ="flee">>
+<<if $temp2 == "evade">>
+	what relics do you want to use in your attempt to evade the Elder's senses so you can escape it's tentacles?<br><br>
+<<elseif $temp2 == "flee">>
 
-<<elseif $temp2 = "flight">>
+<<elseif $temp2 == "flight">>
 
 <</if>>
 <<for _i, _relic range $ownedRelics>>
@@ -814,29 +827,34 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 <</for>>
 
 :: Elder evasion attempt2 [layer9 nobr]
-<<if ($temp2 = "evade" && $ElderEvasionList.some(e => e.name === $temp)) || ($temp2 = "flee" && $ElderFlightList.some(e => e.name === $temp)) || ($temp2 = "fight" && $ElderFightList.some(e => e.name === $temp))>>
+<<if ($temp2 == "evade" && $ElderEvasionList.some(e => e === $temp)) || ($temp2 == "flee" && $ElderFlightList.some(e => e === $temp)) || ($temp2 == "fight" && $ElderFightList.some(e => e === $temp))>>
 	<<set _succes=true>>
+	<<set $Elderbeaten+=1>>
+	<<set $ElderLastWin = $temp>>
 <<else>>
 	<<set _succes=false>>
+	<<set $ElderLastWin = "">>
 <</if>>
 
-<<if _succes && $temp2 = "evade">>
+<<if _succes && $temp2 == "evade">>
 	The Elder quickly loses track off you. You use the opportunity to quickly get away.<br>
-<<elseif _succes && $temp2 = "flee">>
+<<elseif _succes && $temp2 == "flee">>
 	You dodge and weave the tentacles and with great speed you get away from them. The tentacles give chase but it almost feels halfharted and quickly they dissappear in the murky depths again.<br>
-<<elseif _succes && $temp2 = "fight">>
+<<elseif _succes && $temp2 == "fight">>
 	You brace yourself for a fight. Using your $temp, you easily beat manage to beat one of the giant tentacles only for a second one to swoop in quickly. You fight hard and you fight long and eventually the tentacles stop comming. You live to see another day.<br>
 <<else>>
-	You're idea to use $temp sounded good in your head, but quickly the tentacles start coiling around you. With nowhere to run or hide and completely immobilized you are at the mercy of the elder.
-	_rand = random(1,3)
+	Your idea to use $temp sounded good in your head, but quickly the tentacles start coiling around you. With nowhere to run or hide and completely immobilized you are at the mercy of the elder.<br>
+	<<set _rand = random(1,3)>>
 	<<if _rand==1>>
 		*elder tears of limbs.
 	<<elseif _rand==2>>
 		*elder forces you to carry its spawn.
 	<<else>>
-		*elder slaps a random curse on you.
+		*elder advances a curse line.
 	<</if>>
 <</if>>
+<br>
+[[Return to exploring layer 9|$returnPassage]]
 
 :: Layer9 notes [image layer9 noreturn]
 
@@ -860,16 +878,19 @@ Threats:
 
 :: Layer9 Travel Events [layer9 nobr]
 <<set _triggers = {
-	elder: () => ($timeL9 === 0 || $timeL9T1 >= 5) && $timeL9T1==1,
+	elder: () => $timeL9T1 >= 5 ,
 }>>
 
 <<PassTime _triggers>>
 
 <<if _triggers.elder()>>
-	<<set $returnPassage = passage()>>
-	<<set $timeL9T1 -= 1>>
-	<<include "Layer9 Elder Encounter">><br><br>
-	[[Return to exploring layer 9|$returnPassage]]
+	<<if $timeL9<=25>>
+		You feel a presence closely observing you.<br> 
+		[[Are you being watched?|Layer9 Elder Encounter][$returnPassage = passage()]]<br>
+	<<else>>
+		From the depth tentacles start swarming you. It seems the Elder is here and it is done simply observing you.<br> 
+		[[Face off against the Elder|Layer9 Elder Encounter][$returnPassage = passage()]]<br>
+	<</if>>
 <</if>>
 
 :: Layer9 Camp
