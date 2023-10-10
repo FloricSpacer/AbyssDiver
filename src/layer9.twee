@@ -770,19 +770,6 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<</if>>
 		[[Continue on your journey|$returnPassage]]
 <<elseif !$ElderSerious>>
-	<<if $ElderLastWin!="">>
-		<<set _i=0>>
-		<<for _relic range $ownedRelics>>
-			<<capture _relic>>
-				<<if _relic.name == $ElderLastWin>>
-					A tentacle suddenly comes from behind some of the other tentacles with a blistering speed you don't expect, hitting you like a freight train. While you are trying to regain your senses you see another tentacles has taken hold of your $ElderLastWin. The relic is being crushed while being dragged in the the seemingly infinite depths of the ocean.<br><br>
-					<<set _j=_i>>
-				<</if>>
-			<</capture>>
-			<<set _i+=1>>
-		<</for>>
-		<<set $ownedRelics.deleteAt(_j)>>
-	<</if>>
 	<<if _temp===0>>
 		<<say $elder>>Let's play, I want to see what you are made off. Literally...<</say>><br>
 	<<elseif _temp===1>>
@@ -793,9 +780,9 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 		<<say $elder>> You made it this far, maybe you could actually an exhilarating. For a while at least...  <</say>><br>
 	<</if>>
 
-	[[Try to evade the Elder|Elder attempt][$temp2 = "evade"]]<br>
-	[[Try to flee the Elder|Elder attempt][$temp2 = "flee"]]<br>
-	[[Try to fight the Elder|Elder attempt][$temp2 = "fight"]]<br>
+	[[Try to evade the Elder|Elder attempt][$temp2 = "Evade"]]<br>
+	[[Try to flee the Elder|Elder attempt][$temp2 = "Flight"]]<br>
+	[[Try to fight the Elder|Elder attempt][$temp2 = "Fight"]]<br>
 	
 <<else>>
 	<<if _temp===0>>
@@ -807,17 +794,17 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<<else>>
 		<<say $elder>>Become part of me, resistance is futile at this point.<</say>><br>
 	<</if>>
-	[[Try to evade the Elder|Elder attempt][$temp2 = "evade"]]<br>
-	[[Try to flee the Elder|Elder attempt][$temp2 = "flee"]]<br>
-	[[Try to fight the Elder|Elder attempt][$temp2 = "fight"]]<br>
+	[[Try to evade the Elder|Elder attempt][$temp2 = "Evade"]]<br>
+	[[Try to flee the Elder|Elder attempt][$temp2 = "Flight"]]<br>
+	[[Try to fight the Elder|Elder attempt][$temp2 = "Fight"]]<br>
 <</if>>
 
 :: Elder attempt [layer9 nobr]
-<<if $temp2 == "evade">>
+<<if $temp2 == "Evade">>
 	what relics do you want to use in your attempt to evade the Elder's senses so you can escape it's tentacles?<br><br>
-<<elseif $temp2 == "flee">>
+<<elseif $temp2 == "Flight">>
 
-<<elseif $temp2 == "flight">>
+<<elseif $temp2 == "Fight">>
 
 <</if>>
 <<for _i, _relic range $ownedRelics>>
@@ -827,20 +814,35 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 <</for>>
 
 :: Elder evasion attempt2 [layer9 nobr]
-<<if ($temp2 == "evade" && $ElderEvasionList.some(e => e === $temp)) || ($temp2 == "flee" && $ElderFlightList.some(e => e === $temp)) || ($temp2 == "fight" && $ElderFightList.some(e => e === $temp))>>
+
+<<if ($temp2 == "Evade" && $ElderEvadeWinList.some(e => e === $temp)) || ($temp2 == "Flight" && $ElderFlightWinList.some(e => e === $temp)) || ($temp2 == "Fight" && $ElderFightWinList.some(e => e === $temp))>>
+	<<set _succes=false>>
+	<<set _i=0>>
+	<<for _relic range $ownedRelics>>
+		<<capture _relic>>
+			<<if _relic.name == $temp>>
+				A tentacle suddenly comes from behind some of the other tentacles with a blistering speed you don't expect, hitting you like a freight train. While you are trying to regain your senses you see another tentacles has taken hold of your $temp. The relic is being crushed while being dragged in the the seemingly infinite depths of the ocean.<br><br>
+				<<set _j=_i>>
+			<</if>>
+		<</capture>>
+		<<set _i+=1>>
+	<</for>>
+	<<set $ownedRelics.deleteAt(_j)>>
+
+<<elseif !$ElderSerious && (($temp2 == "Evade" && $ElderEvadeList.some(e => e === $temp)) || ($temp2 == "Flight" && $ElderFlightList.some(e => e === $temp)) || ($temp2 == "Fight" && $ElderFightList.some(e => e === $temp)))>>
 	<<set _succes=true>>
 	<<set $Elderbeaten+=1>>
-	<<set $ElderLastWin = $temp>>
+	<<set _string = "$Elder" + $temp2 + "WinList">>
+	<<print "<<set " + _string + ".push($temp)>>">>
 <<else>>
 	<<set _succes=false>>
-	<<set $ElderLastWin = "">>
 <</if>>
 
-<<if _succes && $temp2 == "evade">>
+<<if _succes && $temp2 == "Evade">>
 	The Elder quickly loses track off you. You use the opportunity to quickly get away.<br>
-<<elseif _succes && $temp2 == "flee">>
+<<elseif _succes && $temp2 == "Flight">>
 	You dodge and weave the tentacles and with great speed you get away from them. The tentacles give chase but it almost feels halfharted and quickly they dissappear in the murky depths again.<br>
-<<elseif _succes && $temp2 == "fight">>
+<<elseif _succes && $temp2 == "Fight">>
 	You brace yourself for a fight. Using your $temp, you easily beat manage to beat one of the giant tentacles only for a second one to swoop in quickly. You fight hard and you fight long and eventually the tentacles stop comming. You live to see another day.<br>
 <<else>>
 	Your idea to use $temp sounded good in your head, but quickly the tentacles start coiling around you. With nowhere to run or hide and completely immobilized you are at the mercy of the elder.<br>
