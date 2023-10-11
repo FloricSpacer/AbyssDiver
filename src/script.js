@@ -135,59 +135,56 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.companionMaru.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionMaru.id;
         StoryVar.MaruConvoPreg = false;
-        StoryVar.companionMaru.setNotPregnant();
         StoryVar.companionMaru.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionLily.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionLily.id;
         StoryVar.LilyConvoPreg = false;
-        StoryVar.companionLily.setNotPregnant();
         StoryVar.companionLily.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionKhemia.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionKhemia.id;
         StoryVar.KhemiaConvoPreg = false;
-        StoryVar.companionKhemia.setNotPregnant();
         StoryVar.companionKhemia.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionCherry.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionCherry.id;
         StoryVar.CherryConvoPreg = false;
-        StoryVar.companionCherry.setNotPregnant();
         StoryVar.companionCherry.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionCloud.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionCloud.id;
         StoryVar.CloudConvoPreg = false;
-        StoryVar.companionCloud.setNotPregnant();
         StoryVar.companionCloud.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionSaeko.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionSaeko.id;
         StoryVar.SaekoConvoPreg = false;
-        StoryVar.companionSaeko.setNotPregnant();
         StoryVar.companionSaeko.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionBandit.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionBandit.id;
         StoryVar.BanditConvoPreg = false;
-        StoryVar.companionBandit.setNotPregnant();
         StoryVar.companionBandit.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
     if (StoryVar.companionTwin.daysUntilDue === 0) {
         StoryVar.companionLabor = StoryVar.companionTwin.id;
         StoryVar.TwinConvoPreg = false;
-        StoryVar.companionTwin.setNotPregnant();
         StoryVar.companionTwin.lastBirth = StoryVar.time;
         return "Labor Scene Companion";
     }
+
+    if ((StoryVar.time - StoryVar.pregnant_surprise.pregnantT > 45 && StoryVar.pregnant_surprise.o.mindSex == "female")||(StoryVar.time - StoryVar.pregnant_surprise.pregnantT > 180 && StoryVar.pregnant_surprise.o.mindSex == "male")){
+        return "Pregnancy Swap Surprise";
+    }
+
     if (StoryVar.BanditConvo0_rejoin < StoryVar.time) {
         return "Bandit Joins";
     }
