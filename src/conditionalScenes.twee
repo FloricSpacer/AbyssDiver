@@ -645,13 +645,14 @@ Your breathing becomes rapid and shallow as you try to keep up with the contract
 :: Labor Scene Companion
 
 <<nobr>>
-<<set _temp = 13*$BabysBirthed + 3567 + $time>>
 <<for _i = 0; _i < $hiredCompanions.length; _i++>>
-<<if $hiredCompanions[_i].id === $companionLabor>>
-<<set _temp1 = _i>>
-<</if>>
+	<<if $hiredCompanions[_i].id === $companionLabor>>
+		<<if !$hiredCompanions[_temp1].tentaclePreg>>
+			<<set _temp = 13*$BabysBirthed + 3567 + $time>>
+		<</if>>
+		<<set _temp1 = _i>>
+	<</if>>
 <</for>>
-<<set setup.setNotPregnant($hiredCompanions[_temp1])>>
 <</nobr>>
 As you walk together, <<print setup.id2name($companionLabor)>> begins to lag slightly behind. Suddenly, you hear a soft moan. Turning around, you find $companionLabor hunched over, her face twisted in pain.
 
@@ -668,24 +669,35 @@ After several agonizing hours...
 $hiredCompanions[_temp1].name appears utterly exhausted, but with determination in her eyes, she grits her teeth and starts pushing again.
 
 <<say $hiredCompanions[_temp1]>>AHHHH, just come out already! AAHHH!<</say>>
-With that final push, you see the baby emerge, and you carefully cradle the newborn in your arms. It begins to cry almost immediately.
+<<if $hiredCompanions[_temp1].tentaclePreg>>\/*xxx */
+	However, what you slowly see emerging defies al expectations. Its dark and purple and slimey. You go silent as the scenes continues to unfold. With one last push the thing comes out of $companionLabor.
+	
+	Where you expect a baby there is writhing mess of tentacles laying in the floor. You are in complete shock.
 
-<<say $mc>> You did it! You actually did it!<</say>>
-Handing $hiredCompanions[_temp1].name her crying baby, you watch as a tear of joy rolls down her cheek.
+	A single eye emerges from the tentacle heap and looks at $companionLabor. She seems to be looking back at it with a sense of terror on her face.
+	
+	<<say $hiredCompanions[_temp1]>>What... How? Where is my beautifull baby?<</say>>
+	After what seems like an eternity of looking at each other the tentacle monsters starts moving around and slowly slithers away into the darkness of the Abyss.
+<<else>>\
+	With that final push, you see the baby emerge, and you carefully cradle the newborn in your arms. It begins to cry almost immediately.
 
-<<say $babyCollectionUnit>>Greetings, adventurer. Congratulations on becoming a parent. I have come to collect the baby. Please place the baby in the designated tray.<</say>>
-A massive robot, appearing seemingly out of nowhere, towers over you both. An arm extends towards $hiredCompanions[_temp1].name, presenting a metal tray lined with soft bedding.
+	<<say $mc>> You did it! You actually did it!<</say>>
+	Handing $hiredCompanions[_temp1].name her crying baby, you watch as a tear of joy rolls down her cheek.
+<</if>>
+<<if !$hiredCompanions[_temp1].tentaclePreg>>\
+	<<say $babyCollectionUnit>>Greetings, adventurer. Congratulations on becoming a parent. I have come to collect the baby. Please place the baby in the designated tray.<</say>>
+	A massive robot, appearing seemingly out of nowhere, towers over you both. An arm extends towards $hiredCompanions[_temp1].name, presenting a metal tray lined with soft bedding.
 
-<<say $hiredCompanions[_temp1]>>What? Who are you? Why are you here?<</say>>
-<<say $babyCollectionUnit>>I am owned by the Outset Town Parental Society Centre for Child Care. I have been tasked with monitoring the Abyss and rescuing newborns from it. Please place the baby in the designated tray.<</say>>
-<<say $hiredCompanions[_temp1]>> You're not taking my baby! I haven't even named <<if Math.ceil($time/2)*2===$time>>him <<else>>her <</if>>yet!<</say>>
-<<say $babyCollectionUnit>>Name filing procedures can be fulfilled up to 7 days after retrieving the baby from the municipality building of Outset Town at desk J to L. Please place the baby in the designated tray. This is the last time this request will be made.<</say>>
-<<say $hiredCompanions[_temp1]>>Like hell I will!<</say>>
-With incredible speed and surprising gentleness for such a colossal machine, one arm shoots out to cut the umbilical cord, two others restrain $hiredCompanions[_temp1].name, and the fourth one, bearing the tray, scoops up the baby and places it in a container atop itself.
+	<<say $hiredCompanions[_temp1]>>What? Who are you? Why are you here?<</say>>
+	<<say $babyCollectionUnit>>I am owned by the Outset Town Parental Society Centre for Child Care. I have been tasked with monitoring the Abyss and rescuing newborns from it. Please place the baby in the designated tray.<</say>>
+	<<say $hiredCompanions[_temp1]>> You're not taking my baby! I haven't even named <<if Math.ceil($time/2)*2===$time>>him <<else>>her <</if>>yet!<</say>>
+	<<say $babyCollectionUnit>>Name filing procedures can be fulfilled up to 7 days after retrieving the baby from the municipality building of Outset Town at desk J to L. Please place the baby in the designated tray. This is the last time this request will be made.<</say>>
+	<<say $hiredCompanions[_temp1]>>Like hell I will!<</say>>
+	With incredible speed and surprising gentleness for such a colossal machine, one arm shoots out to cut the umbilical cord, two others restrain $hiredCompanions[_temp1].name, and the fourth one, bearing the tray, scoops up the baby and places it in a container atop itself.
 
-<<say $babyCollectionUnit>>I hope you enjoyed our service. You can apply for baby collection at the municipality building of Outset Town 3 days after you last left the Abyss. Your reference number will be _temp. Enjoy your day.<</say>>
-A bright flash of light forces you to close your eyes. When you open them, both the robot and the baby are gone.
-
+	<<say $babyCollectionUnit>>I hope you enjoyed our service. You can apply for baby collection at the municipality building of Outset Town 3 days after you last left the Abyss. Your reference number will be _temp. Enjoy your day.<</say>>
+	A bright flash of light forces you to close your eyes. When you open them, both the robot and the baby are gone.
+<</if>>
 $hiredCompanions[_temp1].name spends the next few days recovering, with you at her side offering emotional and physical support. Gradually, she starts walking around a little again.
 <<if $hiredCompanions[_temp1].id !== setup.companionIds.cherry && $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
 Cherry's medical expertise greatly aids $hiredCompanions[_temp1].name in her recovery. In the end, you don't truly resume your travels in earnest until after 4 days.
@@ -695,6 +707,7 @@ In the end, you don't truly resume your travels in earnest until after 7 days.
 <<set _waitTime = 7>>
 <</if>>
 <<PassTime _waitTime>>\
+<<set setup.setNotPregnant($hiredCompanions[_temp1])>>
 
 <<link "You cast your eyes once more on the central location of this layer, ready to get moving again" $interruptReturn>><</link>>
 
