@@ -501,11 +501,10 @@ Shocked you silence your thoughts. 'You' still continue your adventure, but you 
 <h1 class="gameover">Game Over</h1>
 
 :: Labor Scene
-<<set setup.setNotPregnant($mc)>>\
-<<set $menCycleFlag = true>>\
-<<set $menCycleT = $time+63>>\
-<<set $BabysBirthed += 1>>\
-<<set _temp = 13*$BabysBirthed + 3567 + $time>>\
+<<if !$mc.tentaclePreg>>
+	<<set $BabysBirthed += 1>>\
+	<<set _temp = 13*$BabysBirthed + 3567 + $time>>\
+<</if>>
 You feel a sudden, sharp pain in your lower abdomen as your muscles begin to contract. The pain is intense and comes in waves, radiating from your belly down to your legs. You feel a hot, sweaty sensation all over your body as your skin becomes slick with perspiration.
 
 Your breathing becomes rapid and shallow as you try to keep up with the contractions. You hear your own gasps and moans as you push through the pain. You feel pressure in your lower region, as if your body is trying to force something out.
@@ -521,11 +520,15 @@ Your breathing becomes rapid and shallow as you try to keep up with the contract
 	You feel a sense of panic and fear as you wonder if you can handle the pain. But you also feel a sense of determination and strength as you push through each contraction. 
 
 	Eventually, as the baby's head begins to crown, you feel a burning sensation down below. You push with all your might, using every ounce of energy you have left. 
-	
-	And finally, a sense of relief and joy washes over you as your <<if $bewitchBabies > 0>>first<</if>>baby's body slides out into the world. You cry tears of happiness as you hold your little bundle of joy in your arms for the first time.<<if $bewitchBabies > 0>>
-	
-	Then, you repeat the process for your next $bewitchBabies babies. Your fertility has been skyrocketed by the tainted water you drank earlier, and now you're paying the price with an especially arduous labor for all of your babies.<</if>>
-
+	<<if $mc.tentaclePreg>>/*xxx */
+		And suddenly you entire baby's body slides out you in one go. However, what you see fills you with terror. Where you expect a baby there is writhing mess of tentacles laying in the floor. 
+		
+		A single eye emerges from the tentacle heap and looks at you intensly. You want to scream but the air seems to be stuck in your lungs. After what seems like an eternity of looking at each other the tentacle monsters starts moving around and slowly slithers away into the darkness of the Abyss.
+	<<else>>
+		And finally, a sense of relief and joy washes over you as your <<if $bewitchBabies > 0>>first<</if>>baby's body slides out into the world. You cry tears of happiness as you hold your little bundle of joy in your arms for the first time.<<if $bewitchBabies > 0>>
+		
+		Then, you repeat the process for your next $bewitchBabies babies. Your fertility has been skyrocketed by the tainted water you drank earlier, and now you're paying the price with an especially arduous labor for all of your babies.<</if>>
+	<</if>>
 <<elseif $hiredCompanions.length===1>>\
 	<<say $hiredCompanions[0]>> What's wrong? Is everything okay? <</say>>
 	<<say $mc>>I think I'm going into labor.<</say>> 
@@ -540,12 +543,22 @@ Your breathing becomes rapid and shallow as you try to keep up with the contract
 
 	<<say $hiredCompanions[0]>> Keep pushing, you're almost there!<</say>>
 	Eventually, as the baby's head begins to crown, you feel a burning sensation down below. You push with all your might, using every ounce of energy you have left. 
+	<<if $mc.tentaclePreg>>/*xxx */
+		<<say $mc>>AAAAAHHHHHH<</say>> 
+		And suddenly you entire baby's body slides out you in one go. However, what you see fills you with terror. 
+		
+		<<say $hiredCompanions[0]>> What in the world is that?!<</say>>
+		
+		Where you expect a baby there is writhing mess of tentacles laying in the floor. $hiredCompanions[0].name seems to be in complete shock.
 
-	<<say $mc>>AAAAAHHHHHH<</say>> 
-	And finally, a sense of relief and joy washes over you as your baby's body slides out into the world. You cry tears of happiness as your companion picks up and holds your little bundle of joy in <<if $hiredCompanions[0].sex==='male'>>his<<else>>her<</if>> arms. You're weak, but reach out to hold your newborn child.
+		A single eye emerges from the tentacle heap and looks at you intensly. You want to scream but the air seems to be stuck in your lungs. After what seems like an eternity of looking at each other the tentacle monsters starts moving around and slowly slithers away into the darkness of the Abyss.
+	<<else>>
+		<<say $mc>>AAAAAHHHHHH<</say>> 
+		And finally, a sense of relief and joy washes over you as your baby's body slides out into the world. You cry tears of happiness as your companion picks up and holds your little bundle of joy in <<if $hiredCompanions[0].sex==='male'>>his<<else>>her<</if>> arms. You're weak, but reach out to hold your newborn child.
 
-	<<say $hiredCompanions[0]>> You did it!<</say>>
-	<<if $hiredCompanions[0].sex==='male'>>He<<else>>She<</if>> hands you your crying baby and a tear slides from your cheek.
+		<<say $hiredCompanions[0]>> You did it!<</say>>
+		<<if $hiredCompanions[0].sex==='male'>>He<<else>>She<</if>> hands you your crying baby and a tear slides from your cheek.
+	<</if>>
 <<elseif $hiredCompanions.length>1>>\
 	<<set _temp1 = random(0,$hiredCompanions.length-1)>><<set _temp2 = random(0,$hiredCompanions.length-1)>><<set _temp3 = random(0,$hiredCompanions.length-1)>>\
 	<<say $hiredCompanions[_temp1]>> What's wrong? Is everything okay? <</say>>
@@ -561,26 +574,38 @@ Your breathing becomes rapid and shallow as you try to keep up with the contract
 
 	<<say $hiredCompanions[_temp3]>> Keep pushing, you're almost there!<</say>>
 	Eventually, as the baby's head begins to crown, you feel a burning sensation down below. You push with all your might, using every ounce of energy you have left. 
+	
+	<<if $mc.tentaclePreg>>/*xxx */
+		<<say $mc>>AAAAAHHHHHH<</say>> 
+		And suddenly you entire baby's body slides out you in one go. However, what you see fills you with terror. 
+		
+		<<say $hiredCompanions[_temp3]>> What in the world is that?!<</say>>
+		
+		Where you expect a baby there is writhing mess of tentacles laying in the floor. All your companions seem to be in complete shock and back away a little.
 
-	<<say $mc>>AAAAAHHHHHH<</say>> 
-	And finally, a sense of relief and joy washes over you as your baby's body slides out into the world. You cry tears of happiness as your companion picks up and holds your little bundle of joy in <<if $hiredCompanions[0].sex==='male'>>his<<else>>her<</if>> arms. You're weak, but reach out to hold your newborn child.
+		A single eye emerges from the tentacle heap and looks at you intensly. You want to scream but the air seems to be stuck in your lungs. After what seems like an eternity of looking at each other the tentacle monsters starts moving around and slowly slithers away into the darkness of the Abyss.
+	<<else>>
+		<<say $mc>>AAAAAHHHHHH<</say>> 
+		And finally, a sense of relief and joy washes over you as your baby's body slides out into the world. You cry tears of happiness as your companion picks up and holds your little bundle of joy in <<if $hiredCompanions[0].sex==='male'>>his<<else>>her<</if>> arms. You're weak, but reach out to hold your newborn child.
 
-	<<say $hiredCompanions[_temp3]>> You did it!<</say>>
-	<<if $hiredCompanions[_temp3].sex==='male'>>He<<else>>She<</if>> hands you your crying baby and a tear slides from your cheek.
+		<<say $hiredCompanions[_temp3]>> You did it!<</say>>
+		<<if $hiredCompanions[_temp3].sex==='male'>>He<<else>>She<</if>> hands you your crying baby and a tear slides from your cheek.
+	<</if>>
 <</if>>\
-<<say $babyCollectionUnit>>Greetings adventurer. Congratulations on becoming a parent. I have come to collect the infant to prevent any harm from coming to it during your expedition in the Abyss. Please place the infant in the designated bed. It is the safest way to bring an infant back to the surface and get the proper care they need.<</say>> 
-A hulking robot, that has come seemingly out of nowhere, towers over you. An arm stretches out towards you holding a metal tray with copious amounts of soft bedding within.
+<<if !$mc.tentaclePreg>>
+	<<say $babyCollectionUnit>>Greetings adventurer. Congratulations on becoming a parent. I have come to collect the infant to prevent any harm from coming to it during your expedition in the Abyss. Please place the infant in the designated bed. It is the safest way to bring an infant back to the surface and get the proper care they need.<</say>> 
+	A hulking robot, that has come seemingly out of nowhere, towers over you. An arm stretches out towards you holding a metal tray with copious amounts of soft bedding within.
 
-<<say $mc>>What? who are you? Why are you here?<</say>> 
-<<say $babyCollectionUnit>>I'm owned and operated by the Outset Town Center for Child Care and Protection. I have been tasked with monitoring the Abyss and rescuing newborns from divers within it. Please place the <<if $bewitchBabies > 0>>babies<<else>>baby<</if>> in the designated bed.<</say>> 
-<<say $mc>>What are you?<</say>> 
-<<say $babyCollectionUnit>>I am a Relic retrieved from Layer 5 by a previous diver who generously donated me to Outset Town to help protect future infants from coming to harm within the Abyss. Please place the baby in the designated bed. This is for the best for your child. The Abyss is an extremely dangerous location and it is best for you to reunite with your child upon return to the surface.<</say>>
-<<say $mc>>What do you mean? What if I don't want to give away my <<if $bewitchBabies > 0>>babies<<else>>baby<</if>> to some unknown robot.<</say>> 
-With shocking speed, but also grace and precision for such a large machine, one robotic limb reaches out and cuts the umbilical cord while two others hold you down and a fourth scoops up the <<if $bewitchBabies > 0>>babies<<else>>baby<</if>> and places <<if $bewitchBabies > 0>>them<<else>>it<</if>> in the bedded container.
+	<<say $mc>>What? who are you? Why are you here?<</say>> 
+	<<say $babyCollectionUnit>>I'm owned and operated by the Outset Town Center for Child Care and Protection. I have been tasked with monitoring the Abyss and rescuing newborns from divers within it. Please place the <<if $bewitchBabies > 0>>babies<<else>>baby<</if>> in the designated bed.<</say>> 
+	<<say $mc>>What are you?<</say>> 
+	<<say $babyCollectionUnit>>I am a Relic retrieved from Layer 5 by a previous diver who generously donated me to Outset Town to help protect future infants from coming to harm within the Abyss. Please place the baby in the designated bed. This is for the best for your child. The Abyss is an extremely dangerous location and it is best for you to reunite with your child upon return to the surface.<</say>>
+	<<say $mc>>What do you mean? What if I don't want to give away my <<if $bewitchBabies > 0>>babies<<else>>baby<</if>> to some unknown robot.<</say>> 
+	With shocking speed, but also grace and precision for such a large machine, one robotic limb reaches out and cuts the umbilical cord while two others hold you down and a fourth scoops up the <<if $bewitchBabies > 0>>babies<<else>>baby<</if>> and places <<if $bewitchBabies > 0>>them<<else>>it<</if>> in the bedded container.
 
-<<say $babyCollectionUnit>>I hope you enjoyed our service. I apologize for any inconvenience I may have caused. You can apply for baby collection at the municipality building of Outset Town 3 days after you last left the Abyss. Your reference number will be _temp. I wish you a swift recovery and hope that you are able to return for your child soon.<</say>>
-It emits of a bright flash of light that forces you to close your eyes, and you hear the sound of mechanisms and gears whirring. When you manage to open them again, the Relic robot and the baby are gone.
-
+	<<say $babyCollectionUnit>>I hope you enjoyed our service. I apologize for any inconvenience I may have caused. You can apply for baby collection at the municipality building of Outset Town 3 days after you last left the Abyss. Your reference number will be _temp. I wish you a swift recovery and hope that you are able to return for your child soon.<</say>>
+	It emits of a bright flash of light that forces you to close your eyes, and you hear the sound of mechanisms and gears whirring. When you manage to open them again, the Relic robot and the baby are gone.
+<</if>>
 <<if $hiredCompanions.length<1>>\
 	You spend the next few days recovering, both emotionally as well as physically. You have to do everything yourself and everything from eating to washing yourself is difficult at first.
 
@@ -613,6 +638,9 @@ It emits of a bright flash of light that forces you to close your eyes, and you 
 <</if>>\
 
 <<link "You cast your eyes once more on the path ahead, it's time to get moving once again" $interruptReturn>><</link>>
+<<set setup.setNotPregnant($mc)>>\
+<<set $menCycleFlag = true>>\
+<<set $menCycleT = $time+63>>\
 
 :: Labor Scene Companion
 

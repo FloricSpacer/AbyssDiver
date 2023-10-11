@@ -1,10 +1,10 @@
 :: Layer6 1 [layer6]
 <<nobr>>
-<<set $currentLayer = 6>>
-<<masteraudio stop>>
-<<audio "layer6" volume 0.2 play loop>>
-<<set $timeL5T1 = 0, $timeL5T2 = 0>>
-<<set $timeL6T1 = 0, $timeL6T2 = 0>>
+	<<set $currentLayer = 6>>
+	<<masteraudio stop>>
+	<<audio "layer6" volume 0.2 play loop>>
+	<<set $timeL5T1 = 0, $timeL5T2 = 0>>
+	<<set $timeL6T1 = 0, $timeL6T2 = 0>>
 <</nobr>>\
 \
 @@.layerTitle;
@@ -1080,18 +1080,14 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
 	<<link "Fight it off with a sword" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 10>>
-		<<if $mc.hasCurse("Omnitool")>>
-			<<PregCheck>>
-		<</if>>
+		<<PregCheckTentacle $mc>>
 	<</link>><br>
 	<<if setup.haveHealing>>
 		<<link "Fight it off with a sword and cure the status using a medkit or other healing item" $returnPassage>>
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
-			<<if $mc.hasCurse("Omnitool")>>
-				<<PregCheck>>
-			<</if>>
+			<<PregCheckTentacle $mc>>
 		<</link>><br>
 	<</if>>	
 <</if>>
@@ -1099,18 +1095,14 @@ Relying on your own swordplay will allow you to put up a minimum amount of resis
 Using the power of Sunbeam to fight it yourself is better than using a sword, but only marginally so. It will leave you tentacle fucked for 9 days after the battle.<br>
 	<<link "Fight it off with Sunbeam" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 9>>
-		<<if $mc.hasCurse("Omnitool")>>
-			<<PregCheck>>
-		<</if>>
+		<<PregCheckTentacle $mc>>
 	<</link>><br>
 	<<if setup.haveHealing>>
 		<<link "Fight it off with Sunbeam and cure the status using a medkit or other healing item" $returnPassage>>
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
-			<<if $mc.hasCurse("Omnitool")>>
-				<<PregCheck>>
-			<</if>>
+			<<PregCheckTentacle $mc>>
 		<</link>><br>
 	<</if>>	
 <</if>>
@@ -1119,20 +1111,14 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	<<link "Have Khemia fight it off with a sword" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 2>>
 		<<set $khemiaFucked = 1 >>
-		<<set _temp = random(0,100)>>
-		<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
-				<<set $pregKhemia = $time-14>>
-		<</if>>
+		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>
 	<<if setup.haveHealing >>
 		<<link "Have Khemia fight it off with a sword and use a medkit or other healing item to cure his status" $returnPassage>>
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
-			<<set _temp = random(0,100)>>
-			<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
-				<<set $pregKhemia = $time-14>>
-			<</if>>
+			<<PregCheckTentacle $companionKhemia>>
 		<</link>><br>	
 	<</if>>
 <</if>>
@@ -1141,20 +1127,14 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	<<link "Have Khemia fight it off with Sunbeam" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 1>>
 		<<set $khemiaFucked = 1 >>
-		<<set _temp = random(0,100)>>
-		<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
-			<<set $pregKhemia = $time-14>>
-		<</if>>
+		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>	
 	<<if setup.haveHealing>>
 		<<link "Have Khemia fight it off with Sunbeam and use a medkit or other healing item to cure his status" $returnPassage>>
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
-			<<set _temp = random(0,100)>>
-			<<if $companionKhemia.hasCurse(Omnitool) && $companionKhemia.womb > 0 && (_temp < 20 || $companionKhemia.hasCurse(AbsolutePregnancy)) && !$companionKhemia.hasCurse(AbsoluteBirthControl)>>
-				<<set $pregKhemia = $time-14>>
-			<</if>>
+			<<PregCheckTentacle $companionKhemia>>
 		<</link>><br>	
 	<</if>>
 <</if>>
@@ -1165,9 +1145,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 <<link "Allow it to overpower you" "Layer6 Threat1 2">>
 	<<set $tentacleFucked = 12>>
-	<<if $mc.hasCurse("Omnitool")>>
-		<<PregCheck>>
-	<</if>>
+	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
 	<<set _sdCurse = $mc.getCurse(SemenDemon)>>
 	<<if _sdCurse !== undefined && _sdCurse.fluidType !== "vaginal fluids" >>
@@ -1185,9 +1163,7 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 			<<set $items[4].count -= 1>>
 		<</if>>
-		<<if $mc.hasCurse("Omnitool")>>
-			<<PregCheck>>
-		<</if>>
+		<<PregCheckTentacle $mc>>
 		<<set _sdCurse = $mc.getCurse(SemenDemon)>>
 		<<if _sdCurse !== undefined &&  _sdCurse.fluidType !== "vaginal fluids" >>
 			<<set $SemenDemonBalance+=20>>
