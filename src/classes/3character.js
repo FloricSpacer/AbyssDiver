@@ -275,6 +275,7 @@ class Character {
 	setNotPregnant() {
 		this.pregnantT = setup.never;
 		this.due = setup.never;
+		this.tentaclePreg = false;
 	}
 
 	/**
