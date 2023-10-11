@@ -276,6 +276,9 @@ class Character {
 		this.pregnantT = setup.never;
 		this.due = setup.never;
 		this.tentaclePreg = false;
+		if (State.variables.pregnant_surprise === this){
+			State.variables.pregnant_surprise = ""
+		} 
 	}
 
 	/**
