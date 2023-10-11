@@ -101,7 +101,7 @@ class Character {
 		            comfortableHeight = oheight, age, appDesc = '', fear,
 		            ohair, oskinColor, oskinType='', oears='normal human', oeyeColor,
 		            oblood='red', osubdom=0, pregnantT=setup.never, due=setup.never,
-		            lastBirth=setup.never, switched=false, events=[]}) {
+		            lastBirth=setup.never, tentaclePreg=false, switched=false, events=[]}) {
 		if ([name, carry, image, imageIcon, obreasts, openis, ogender, fit, oheight, comfortableHeight,
 			 age, appDesc, fear, ohair, oskinColor, oeyeColor].includes(undefined)) {
 			console.error(`Character constructor called without all required arguments (${name || 'missing name'}).`);
@@ -202,6 +202,9 @@ class Character {
 		assert(typeof lastBirth === 'number',
 			   'lastBirth must be a number')
 		this.lastBirth = lastBirth;
+		assert(typeof tentaclePreg === 'boolean',
+			   'tentaclePreg must be a boolean')
+		this.tentaclePreg = tentaclePreg;
 		assert(typeof switched === 'boolean',
 			   'switched must be a boolean')
 		this.switched = switched;
@@ -209,7 +212,7 @@ class Character {
 
 	/**
 	 * Returns the internal state of this Character, from which another character can be built.
-	 * @returns {{mindSex: ("male"|"female"), oears: string, fit: number, comfortableHeight: number, imageIcon: string, oheight: number, id: number, ohair: string, pregnantT: number, events: CharEvent[], fear: ("darkness"|"spiders"|"wolves"|"snakes"|"insects"|"slime"|"desperation"|"rot"|"unknown"), image: string, cost: number, osex: ("male"|"female"), swap: boolean, ogender: number, oblood: string, lastBirth: number, oskinColor: string, oeyeColor: string, desiredBreasts: number, due: number, openis: number, appDesc: string, oskinType: string, name: string, affec: (number|undefined), switched: boolean, carry: number, obreasts: number, age: number}}
+	 * @returns {{mindSex: ("male"|"female"), oears: string, fit: number, comfortableHeight: number, imageIcon: string, oheight: number, id: number, ohair: string, pregnantT: number, events: CharEvent[], fear: ("darkness"|"spiders"|"wolves"|"snakes"|"insects"|"slime"|"desperation"|"rot"|"unknown"), image: string, cost: number, osex: ("male"|"female"), swap: boolean, ogender: number, oblood: string, lastBirth: number, oskinColor: string, oeyeColor: string, desiredBreasts: number, due: number, tentaclePreg: boolean, openis: number, appDesc: string, oskinType: string, name: string, affec: (number|undefined), switched: boolean, carry: number, obreasts: number, age: number}}
 	 */
 	_internalState() {
 		return {
@@ -220,7 +223,7 @@ class Character {
 			fit: this.fit, oheight: this.oheight, comfortableHeight: this.comfortableHeight,
 			age: this.age, appDesc: this.appDesc, fear: this.fear, ohair: this.ohair,
 			oskinColor: this.oskinColor, oskinType: this.oskinType, oears: this.oears,
-			oeyeColor: this.oeyeColor, oblood: this.oblood, pregnantT: this.pregnantT, due: this.due,
+			oeyeColor: this.oeyeColor, oblood: this.oblood, pregnantT: this.pregnantT, due: this.due, tentaclePreg: this.tentaclePreg,
 			lastBirth: this.lastBirth, switched: this.switched, events: this._events.map(e => e)
 		};
 	}
