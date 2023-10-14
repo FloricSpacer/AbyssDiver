@@ -1080,11 +1080,11 @@ As the beast's tendrils slowly begin to reach towards you, you realize that this
 <<nobr>>
 <<if $items[13].count > 0 && $items[20].count > 18>>
 	You can take it down effectively with a gun, but you'll need at least 19 bullets to take it down due its amorphous form and enormous size. But even despite those limitations, a ranged weapon like a gun is probably the safest way to take one of these down.<br>
-	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (19 - $bullRed)]]<br><br>
+	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (19 - $bullRed); $smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
 <</if>>
 <<if $slingshot === 1>>
 Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
-[[Defeat it with the Brave Vector|$returnPassage]]<br><br>
+[[Defeat it with the Brave Vector|$returnPassage][$smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
 <</if>>
 <<if $items[14].count > 0>>
 Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
@@ -1124,7 +1124,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	Khemia has enough expertise with a blade to be able to fight it off, but even he wouldn't be able to get away safely, becoming immobilized for 2 days if you let him fight for you with a sword.<br>
 	<<link "Have Khemia fight it off with a sword" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 2>>
-		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true; $smaragdineThreatsDefeated.tentacleGreater = true>>
 		<<set $khemiaFucked = 1 >>
 		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>
@@ -1133,7 +1133,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
-			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
+			<<set $smaragdineThreatsSubmitted.tentacleGreater = true; $smaragdineThreatsDefeated.tentacleGreater = true>>
 			<<PregCheckTentacle $companionKhemia>>
 		<</link>><br>	
 	<</if>>
@@ -1142,7 +1142,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 	If you equip Khemia with Sunbeam, he'll be more effective, but even then he'd be left incapacitated from the various numbing agents for a full day.<br>
 	<<link "Have Khemia fight it off with Sunbeam" "Layer6 Threat1 2">>
 		<<set $tentacleFucked = 1>>
-		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
+		<<set $smaragdineThreatsSubmitted.tentacleGreater = true; $smaragdineThreatsDefeated.tentacleGreater = true>>
 		<<set $khemiaFucked = 1 >>
 		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>	
@@ -1151,14 +1151,14 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
 				<<set $items[4].count -= 1>>
 			<</if>>
-			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
+			<<set $smaragdineThreatsSubmitted.tentacleGreater = true; $smaragdineThreatsDefeated.tentacleGreater = true>>
 			<<PregCheckTentacle $companionKhemia>>
 		<</link>><br>	
 	<</if>>
 <</if>>
 <<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
-	[[Have Khemia fight it off with Joyous Sunder|$returnPassage]]<br><br>
+	[[Have Khemia fight it off with Joyous Sunder|$returnPassage][$smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
 <</if>>
 If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 <<link "Allow it to overpower you" "Layer6 Threat1 2">>
@@ -1174,7 +1174,7 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 
 <<if $mechaBoarded>>
 	You can almost imagine your Starlit Conquest humming in satisfaction, as if it knows it was built to fight these sort of monstrosities and revels in the fact that it can finally do so. <br>
-	[[Set all weapon systems on go and start shooting and slicing this beast|$returnPassage]]<br><br>
+	[[Set all weapon systems on go and start shooting and slicing this beast|$returnPassage][$smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
 <</if>>
 
 <<if setup.haveHealing>>
@@ -1195,7 +1195,7 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 <<if  ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.golem) && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
 <br><br>As the titanic tentacle beast closes in on you, you suddenly hear an ethereal voice talking to you, seeming to come from nowhere and all around at the same time.<br><br>
 
-<<say $creepydoll>>Oh, this one is really scary! But don't be scared, I won't let him hurt you. Keep your eyes closed for a long time and Just hold me tight, then I promise all the bad things will disappear. <</say>><br>
+<<say $creepydoll>>Oh, this one is really scary! But don't be scared, I won't let him hurt you. Keep your eyes closed for a long time and just hold me tight, then I promise all the bad things will disappear. <</say>><br>
 
 An incredibly intense, yet still pleasant, warmth radiates from the Creepy Doll, ushering you to hold it close and invite it into your heart.<br><br>
 
@@ -1297,7 +1297,7 @@ While the Fell Dragons are immune to most conventional methods of attack, you ca
 <<if $mechaBoarded>>
 	/*xxx */
 	The dragon stands tall in front of you, clearly unwilling to back down even though you are in the Starlit Conquest. This might be a worthy opponent to test the full capabilities of your machine on.
-	[[Dodge and weave through the dragons attacks, while peppering it with your plasma cannon|$returnPassage][$dubloons += 50, $dragonKill += 1]]<br><br>
+	[[Dodge and weave through the dragons attacks, while peppering it with your plasma cannon|$returnPassage][$dubloons += 50; $dragonKill += 1]]<br><br>
 <</if>>
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
 	[[Offer 100 dubloons to appease the dragon|$returnPassage][$dubloons -= 100]]<br><br>
