@@ -1764,27 +1764,27 @@ How do you want to deal with the creature descending upon you?
 <<nobr>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured in the process, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|$returnPassage][$status.duration += (6 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true]]<br><br>
+	[[Have Khemia fight it off with a sword|$returnPassage][$status.duration += (6 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true; $smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
 <<if ($joyousSword === 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With a powerful Relic sword in hand, Khemia can defeat the Drifting Swallower without any major issues after an intense battle.<br>
-	[[Allow Khemia to defeat it with his Relic blade|$returnPassage]]<br><br>
+	[[Allow Khemia to defeat it with his Relic blade|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 4>>
 	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to its evasive movements.<br>
-	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (5 - $bullRed)]]<br><br>
+	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (5 - $bullRed); $smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
 	<<if $slingshot === 1>>
 	Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
-	[[Defeat it with the Brave Vector|$returnPassage]]<br><br>
+	[[Defeat it with the Brave Vector|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Tranquility Knell")>>
 	The Drifting Swallower detects its prey by sensing vibrations, but the Tranquility Knell silences noise in the air and other media, nearly eliminating vibrations and leaving the creature virtually blind. This effect should provide you with a 30-minute window where the Swallower is unable to find you, allowing you to escape unnoticed until you are out of range.<br>
-	[[Escape with the Tranquility Knell|$returnPassage]]<br><br>
+	[[Escape with the Tranquility Knell|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
 <<if $mechaBoarded>>
 	The Drifting Swallower looks imposing even from the mecha you're currently in. However, it should still be no match.<br>
-	[[Activate the plasma cannons and shoot it down|$returnPassage]]<br><br>
+	[[Activate the plasma cannons and shoot it down|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistent light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
 [[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration += 99; $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true]]

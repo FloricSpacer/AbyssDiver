@@ -80,7 +80,22 @@ function tabletGourmet() {
  * @return {boolean} true iff the "Danger Fetish" requirement of the smaragdine tablet is satisfied
  */
 function tabletDangerFetish() {
-	return Object.getOwnPropertyNames(State.variables.smaragdineFoodConsumed)
+	return Object.getOwnPropertyNames(State.variables.smaragdineThreatsSubmitted)
 	             .map(p => State.variables.smaragdineThreatsSubmitted[p])
 	             .reduce((a, b) => a && b, true);
+}
+
+/**
+ * Returns true iff the "Abyssal Champion" requirement of the smaragdine tablet is satisfied, i.e. if they have
+ * defeated every defeatable threat at least once. Note that the original smaragdine tablet does not mention layer 7's
+ * threats (the tax drone and security robot) and the Elder, even though these can't be realistically defeated.
+ * This implementation does not require them to be defeated.
+ * @return {boolean} true iff the "Abyssal Champion" requirement of the smaragdine tablet is satisfied
+ */
+function tabletAbyssalChampion() {
+	return Object.getOwnPropertyNames(State.variables.smaragdineThreatsDefeated)
+	             .map(p => State.variables.smaragdineThreatsDefeated[p])
+	             .reduce((a, b) => a && b, true) &&
+	       State.variables.dragonKill > 0 &&
+		   State.variables.L8T1_counter > 0;
 }
