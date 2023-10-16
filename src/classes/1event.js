@@ -388,6 +388,50 @@ class DollTransformation extends AgeEvent {
 
 window.DollTransformation = DollTransformation
 
+class ElderLegRemoval extends CharEvent {
+	constructor(limb) {
+		super('Elder Leg Removal', 'none');
+	}
+
+	/**
+	 * Returns the internal state of this event, from which another event can be built.
+	 * @returns {any} The internal state of this event.
+	 * @protected
+	 */
+	_internalState() {
+		return {superState: super._internalState()};
+	}
+	
+	removeLeg(prevLegs) {
+		return prevLegs - 1;
+	}
+
+}
+
+window.ElderLegRemoval = ElderLegRemoval
+
+class ElderArmRemoval extends CharEvent {
+	constructor(limb) {
+		super('Elder Arm Removal', 'none');
+	}
+
+	/**
+	 * Returns the internal state of this event, from which another event can be built.
+	 * @returns {any} The internal state of this event.
+	 * @protected
+	 */
+	_internalState() {
+		return {superState: super._internalState()};
+	}
+	
+	removeArm(prevArms) {
+		return prevArms - 1;
+	}
+
+}
+
+window.ElderArmRemoval = ElderArmRemoval
+
 /* exported AssetEvent */
 class AssetEvent extends CharEvent {
 	/**
