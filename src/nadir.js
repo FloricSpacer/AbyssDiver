@@ -99,3 +99,29 @@ function tabletAbyssalChampion() {
 	       State.variables.dragonKill > 0 &&
 		   State.variables.L8T1_counter > 0;
 }
+
+/**
+ * Returns true iff the "Collector" requirement of the smaragdine tablet is satisfied, i.e. if at least half of
+ * all relics have been collected
+ * @return {boolean} true iff the "Collector" requirement of the smaragdine tablet is satisfied
+ */
+function tabletCollector() {
+	/** @type [] */
+	let collectedRelics = State.variables.ownedRelics.concat(State.variables.soldRelics, State.variables.lostRelics).map(r => r.name);
+	let count = State.variables.relics.map(r => collectedRelics.includes(r.name) ? 1 : 0).reduce((a, b) => a + b, 0);
+
+	return count >= State.variables.relics.length / 2;
+}
+
+/**
+ * Returns true iff the "Curator" requirement of the smaragdine tablet is satisfied, i.e. if at least half of
+ * all relics have been collected
+ * @return {boolean} true iff the "Curator" requirement of the smaragdine tablet is satisfied
+ */
+function tabletCurator() {
+	/** @type [] */
+	let collectedRelics = State.variables.ownedRelics.concat(State.variables.soldRelics, State.variables.lostRelics).map(r => r.name);
+	let count = State.variables.relics.map(r => collectedRelics.includes(r.name) ? 1 : 0).reduce((a, b) => a + b, 0);
+
+	return count >= State.variables.relics.length;
+}
