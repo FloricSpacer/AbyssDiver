@@ -6,6 +6,8 @@
 <<set $timeL8T2a = 0, $timeL8T2b = 0>>
 <<set $timeL9T1 = 5>>
 <<set $forcedL9Ending = false>>
+<<set $LS_used = 0>>
+
 <</nobr>>\
 \
 @@.layerTitle;
@@ -881,14 +883,14 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 				A limb arm trails blood as it sinks into the darkness by itself. The manacing tentacles finally retreat.<br><br>
 
 				<<say _target>>Ahhh... My arm! My arm!<</say>><br>
-				<<if !$ownedRelics.some(r=> r.name==="Lifespanner")>>
+				<<if !$ownedRelics.some(r=> r.name==="Lifespanner") && $LS_used < 2>>
 					<<set _target.events.push(new ElderArmRemoval())>>
 				<</if>>
 			<<elseif _rand2==2 || _target.armCount==0 >>
 				A limb leg trails blood as it sinks into the darkness by itself. The manacing tentacles finally retreat.<br><br>
 
 				<<say _target>>Ahhh... My leg! My leg!<</say>><br>
-				<<if !$ownedRelics.some(r=> r.name==="Lifespanner")>>
+				<<if !$ownedRelics.some(r=> r.name==="Lifespanner") && $LS_used < 2>>
 					<<set _target.events.push(new ElderLegRemoval())>>
 				<</if>>
 			<<else>>
@@ -896,15 +898,65 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 			<</if>>
 			A steady stream of blood is also flowwing from the now gapping hole on what's still some left over appendige on <<if _target===$mc>>your<<else>>_target.name 's<</if>> body. Immediat action is needed to prevent dying from bloodloss and infection!<br><br>
 
-			<<if $ownedRelics.some(r=> r.name==="Lifespanner")>>
-	
-				Without hesitation you get the Lifespanner from your bag and hit the gapping wound with it. The wound starts glowing faintly and suddenly it seems as the cloud of red mist around the wound is collapsing into itself again. A moment later bits and pieces from the dark murky waters start flying upwards again, folled by the bulk of the mangled limb. Everything reattaches itself and within a few moments it is almost like nothing has happend.<br><br>
-			
-				<<say _target>>It's... It's back!<</say>><br>
+			<<if $ownedRelics.some(r=> r.name==="Lifespanner") && $LS_used < 3>>
+				
+				<<if $LS_used ==0 >>
+					Without hesitation you get the Lifespanner from your bag and hit the gapping wound with it. The wound starts glowing faintly and suddenly it seems as the cloud of red mist around the wound is collapsing into itself again. A moment later bits and pieces from the dark murky waters start flying upwards again, folled by the bulk of the mangled limb. Everything reattaches itself and within a few moments it is almost like nothing has happend.<br><br>
+				
+					<<say _target>>It's... It's back!<</say>><br>
 
-				[[Return to exploring layer 9|$returnPassage]]
+					[[Return to exploring layer 9|$returnPassage]]
+				<<elseif $LS_used == 1>>
+					Once again you immediately get the Lifespanner from your bag and hit the gapping wound with it. The wound starts glowing faintly and suddenly it seems as the cloud of red mist around the wound is collapsing into itself again. A moment later bits and pieces from the dark murky waters start flying upwards again, folled by the bulk of the mangled limb. However, this time a single tentacle reemerges from the depth. It catches the limb again and starts squeezing it to a pulp. Any large pieces, it grabs again and it squeezes those to a pulp again. <br><br>
+				
+					<<say _target>>It's... It's back!<</say>><br>
+					[[Return to exploring layer 9|$returnPassage]]
 
+				<<else>>
+					Some gruesome scene were the elder keeps ripping limbs of over and over again untill you either don't want to regrow it anymore or the Lifespanner is out of uses. Anyway you're not using the lifespanner anymore but you still at risk of bleeding to death in the water. <br><br> 
+					<<if _target!=$companionCherry && $hiredCompanions.some(c=> c.name==="Cherry")>>
+						/* these can be the same as the versions without the elder torture before it, but might be nice to have slightly altered versions here. */
+						Cherry springs into action on action, seemingly on autopilot. With a makeshift tourniquet she slows the bleeding. From her own supplies she fetches a small bottle.
 
+						<<say $companionCherry>>This was supposed to get me through the day, so you better thank me after this!<</say>><br>
+
+						She opens the bottle and starts pressing the opening against the wound in multiple locations. A smell of strong alcohol permutates in the water.
+
+						<<say _target>>Ahhh it hurts!<</say>><br>
+
+						<<say $companionCherry>>Just keep still for a second. This going to hurt even more.<</say>><br>
+
+						She starts sowwing the wound closed with a thread and needle. Finally, she rips of some cloth from her own clothes and starts fixing it to the tourniquet, so it covers the wound. 
+
+						<<say $companionCherry>>There, you should be able to make it. But just so you know, if this happens to me. Please don't bother...<</say>><br>
+						
+						[[Return to exploring layer 9|$returnPassage]]
+
+					<<elseif $items[4].count > 0>>
+						/* these can be the same as the versions without the elder torture before it, but might be nice to have slightly altered versions here. */
+						Without hesitation you get a medkit from your bag. The tourniquet goes first, deinfectant for the wound and finally stiches and bindings to close the wound again. It shouldn't be lethal anymore now, but still...<br><br>
+					<<else>>
+						/* these can be the same as the versions without the elder torture before it, but might be nice to have slightly altered versions here. */
+						<<if _target===$mc>>
+							Without anything to treat the wound you keep bleeding into the ocean around you. Soon the ocean starts to become darker and darker. You don't know if it's because your now almost limb body sinks deeper into the ocean or because you conciousness is slowly fading. One thing is for sure, this is the end...<br><br>
+							<<set $forcedL9Ending = true>>
+							[[Face the music| Layer9 Habitation Ending]]
+						<<else>>
+							Without anything to treat the wound _target.name keeps bleeding into the ocean. There is nothing you can do but just watch as _target.name loses conciousness and slowly starts to sink deeper in to the Abyss.<br><br>
+
+							<<say $mc>>_target.name! Wake up! Wake up! Nooo!<</say>><br>
+							<<for _i=0; _i<$hiredCompanions.length; _i++>>
+								<<if $hiredCompanions[_i]===_target>>
+									<<set _temp_compIndex=_i>>
+								<</if>>
+							<</for>>
+							<<set $LostCompanions.push($hiredCompanions[_temp_compIndex])>>
+							<<set $hiredCompanions.deleteAt(_temp_compIndex)>>
+							[[Return to exploring layer 9 with one person less|$returnPassage]]
+
+						<</if>>
+					<</if>>
+				<</if>>
 			<<elseif _target!=$companionCherry && $hiredCompanions.some(c=> c.name==="Cherry")>>
 				Cherry springs into action on action, seemingly on autopilot. With a makeshift tourniquet she slows the bleeding. From her own supplies she fetches a small bottle.
 
@@ -954,6 +1006,10 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
 		<<checkTime>>
+		<<if $mc.womb == 0 >>
+			You feel something inside of you has changed, as if the elder has made your body ready to conceive the next time this happens.<br><br>
+			<<set $mc.events.push(new ElderArmWombAdded())>>
+		<</if>>
 		<br>
 
 		[[Return to exploring layer 9|$returnPassage]]

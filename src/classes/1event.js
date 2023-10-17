@@ -430,7 +430,29 @@ class ElderArmRemoval extends CharEvent {
 
 }
 
-window.ElderArmRemoval = ElderArmRemoval
+class ElderWombAdded extends CharEvent {
+	constructor(wombLocation='anus') {
+		super('Elder Womb Added', 'none');
+		this._wombLocation = wombLocation;
+	}
+
+	/**
+	 * Returns the internal state of this event, from which another event can be built.
+	 * @returns {any} The internal state of this event.
+	 * @protected
+	 */
+	_internalState() {
+		return {superState: super._internalState()};
+	}
+	
+	changeWomb(character, prevWomb, extraWombLocations) {
+		let location = this._wombLocation;
+		return [prevWomb + 1, extraWombLocations.concat([location])];
+	}
+
+}
+window.ElderWombAdded = ElderWombAdded
+
 
 /* exported AssetEvent */
 class AssetEvent extends CharEvent {
