@@ -754,7 +754,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 :: Layer9 Elder Encounter [layer9 nobr]
 /*xxx */
 <<set _temp = random(0,3)>>
-<<set $temp ="">>
+<<set $temp = "Nothing">>
 <<set $temp_list = []>>
 <<if $Elderbeaten >= 3 || $timeL9 >50>>
 	<<set $ElderSerious = true>>
@@ -821,38 +821,48 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 <<if $ownedRelics.length==0>>
 	[[You don't have any relics!|Elder attempt2][$temp = "Nothing"]]
 <<else>>
-	<<for _j=0; _j<$temp.length;_j++>>
-		You have selected: _temp[_j]<br>
-	<</for>>
-	<<if $temp_list.length<3>>
+
+	<<if $temp_list.length<2>>
 		<<for _i, _relic range $ownedRelics>>
 			<<capture _i>>
-				&nbsp; [[_relic.name|Elder attempt][$temp_list.push($ownedRelics[_i].name)]]<br>
+				<<if !$temp_list.some(r => r === _relic.name)>>
+					&nbsp; [[_relic.name|Elder attempt][$temp_list.push($ownedRelics[_i].name)]]<br>
+				<</if>>
 			<</capture>>
 		<</for>>
 	<<else>>
-		You can combine two relics at maximum.
+		You can combine two relics at maximum.<br>
 	<</if>>
-	<<if $temp_list.length==1>>
-		<<set $temp = $temp__list[0]>>
-		<<set $temp_alt = $temp__list[0]>>
-	<<elseif $temp_list.length==2>>
-		<<set $temp = $temp__list[0] + " & " +  $temp_list[1]>>
-		<<set $temp_alt = $temp__list[0] + " & " +  $temp_list[1]>>
+	<br>
+	You have selected:<br>
+	<<for _j=0; _j<$temp_list.length;_j++>>
+		<<print $temp_list[_j]>><br>
+	<</for>>
+	<<if $temp_list.length==0>>
+		Nothing!<br>
+	<</if>>
 
+	<<if $temp_list.length==1>>
+		<<set $temp = $temp_list[0]>>
+		<<set $temp_alt = $temp_list[0]>>
+	<<elseif $temp_list.length==2>>
+		<<set $temp = $temp_list[0] + " & " +  $temp_list[1]>>
+		<<set $temp_alt = $temp_list[1] + " & " +  $temp_list[0]>>
 	<</if>>
-	[[Face the Elder|Elder attempt2][$temp = $ownedRelics[_i].name]]
+
+		<br>[[Face the Elder with your selection|Elder attempt2]]
 <</if>>
 
 
 :: Elder attempt2 [layer9 nobr]
-/*xxx */
+/*xxx */ 
 <<if ($temp2 == "Evade" && ($ElderEvadeWinList.some(e => e === $temp) || $ElderEvadeWinList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightWinList.some(e => e === $temp) || $ElderFlightWinList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightWinList.some(e => e === $temp) || $ElderFightWinList.some(e => e === $temp_alt)))>>
 	<<set _succes=false>>
 	<<set _i=0>>
 	<<for _relic range $ownedRelics>>
+		<<set _randRelic = random(1,$temp_list.length)>>
 		<<capture _relic>>
-			<<if _relic.name == $temp>>
+			<<if _relic.name == $temp_list[_randRelic]>>
 				A tentacle suddenly comes from behind some of the other tentacles with a blistering speed you don't expect, hitting you like a freight train. While you are trying to regain your senses you see another tentacles has taken hold of your $temp. The relic is being crushed while being dragged in the the seemingly infinite depths of the ocean.<br><br>
 				<<set _j=_i>>
 			<</if>>
@@ -861,7 +871,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<</for>>
 	<<set $ownedRelics.deleteAt(_j)>>
 
-<<elseif !$ElderSerious && (($temp2 == "Evade" && $ElderEvadeList.some(e => e === $temp)) || ($temp2 == "Flight" && $ElderFlightList.some(e => e === $temp)) || ($temp2 == "Fight" && $ElderFightList.some(e => e === $temp)))>>
+<<elseif !$ElderSerious && (($temp2 == "Evade" && ($ElderEvadeList.some(e => e === $temp) || $ElderEvadeList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightList.some(e => e === $temp) || $ElderFlightList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightList.some(e => e === $temp) || $ElderFightList.some(e => e === $temp_alt))))>>
 	<<set _succes=true>>
 	<<set $Elderbeaten+=1>>
 	<<set _string = "$Elder" + $temp2 + "WinList">>
@@ -872,10 +882,16 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 
 <<if _succes && $temp2 == "Evade">>
 	The Elder quickly loses track off you. You use the opportunity to quickly get away.<br>
+	[[Return to exploring layer 9|$returnPassage]]
+
 <<elseif _succes && $temp2 == "Flight">>
 	You dodge and weave the tentacles and with great speed you get away from them. The tentacles give chase but it almost feels halfharted and quickly they dissappear in the murky depths again.<br>
+	[[Return to exploring layer 9|$returnPassage]]
+
 <<elseif _succes && $temp2 == "Fight">>
 	You brace yourself for a fight. Using your $temp, you easily beat manage to beat one of the giant tentacles only for a second one to swoop in quickly. You fight hard and you fight long and eventually the tentacles stop comming. You live to see another day.<br>
+	[[Return to exploring layer 9|$returnPassage]]
+
 <<else>>
 	<<if $temp == "Nothing">> Fighting the Elder with just you bare equipment was ill advised to be sure, but now that the plan unfolds it becomes painfully obvious. Powerfull tentacles bat everything you throw at them aside and start coilling around you.<<else>>Your idea to use $temp sounded good in your head, but quickly the tentacles start coiling around you.<</if>> With nowhere to run or hide and completely immobilized you are at the mercy of the elder.<br><br>
 	<<if !$mc.tentaclePreg && !$mc.hasCurse('Absolute Birth Control')>>
@@ -1033,7 +1049,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 		<<checkTime>>
 		<<if $mc.womb == 0 >>
 			You feel something inside of you has changed, as if the elder has made your body ready to conceive the next time this happens.<br><br>
-			<<set $mc.events.push(new ElderArmWombAdded())>>
+			<<set $mc.events.push(new ElderWombAdded())>>
 		<</if>>
 		<br>
 
