@@ -3447,3 +3447,19 @@ setup.allCurses.PrincessProtocol = new PrincessProtocol()
 State.variables.curse125 = setup.allCurses.PrincessProtocol
 window.PrincessProtocol = PrincessProtocol
 setup.curseArray.push(PrincessProtocol)
+
+class GestationJumpstart extends Curse {
+	static corruption = 35;
+	static curseName = 'Gestation Jumpstart';
+	static description = `Time's ticking faster for your womb! Whenever you're impregnated, the process accelerates dramatically: the first two trimesters each only take a week. By the end of the second week, you'll find yourself in the third trimester, bearing the full weight of an almost-due pregnancy. A rapid journey that can be a whirlwind of emotions and physical changes. It's a wild ride that requires the bearer to adapt quickly. Only those with a womb can be affected by this Curse.`;
+	static descriptionMitigated = `Time's ticking faster for your womb! Whenever you're impregnated, the process accelerates dramatically: the first two trimesters each only take a week. By the end of the second week, you'll find yourself in the third trimester, bearing the full weight of an almost-due pregnancy. A rapid journey that can be a whirlwind of emotions and physical changes. It's a wild ride that requires the bearer to adapt quickly. Only those with a womb can be affected by this Curse.\nThanks to your MITIGATIONRELICNAME, you have the power to somewhat regulate the speed of the pregnancy progression, either hastening it or delaying it by up to a factor of two. You can also gain insights about the fetus's development and health during the rapid gestation period. The birthing process becomes safer and relatively painless.`;
+	static picture = 'Curses/gestationjumpstart.png';
+	static type = 'none';
+	constructor() {
+		super('Gestation Jumpstart', 'none');
+	}
+}
+setup.allCurses.GestationJumpstart = new GestationJumpstart()
+State.variables.curse126 = setup.allCurses.GestationJumpstart
+window.GestationJumpstart = GestationJumpstart
+setup.curseArray.push(GestationJumpstart)
