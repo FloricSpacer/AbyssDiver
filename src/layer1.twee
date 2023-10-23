@@ -498,7 +498,7 @@ Choose the Curse you wish to remove:
 			&nbsp; [[_curse.name|Icon Removal][$temp = _i]]<br>
 		<</capture>>
 	<<elseif _curse.name === 'The Maxim'>>
-		&nbsp; [[_curse.name|Maxim Bad End]] @@.alert1; You're stomach starts to hurt from the thrashing parasite when you're considering this option./*xxx*/<br>
+		&nbsp; [[_curse.name|Maxim Bad End]] @@.alert1; You feel a sudden, sharp pain in your stomach when you consider this option, as if the parasite is sending you a warning.<br>
 	<</if>>
 <</for>>
 <</nobr>>
@@ -1111,8 +1111,8 @@ How are you going to deal with the bandits encircling you?<br><br>
 		With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
 		[[Wield Glory's Grasp to command the situation|Layer1 Bandits Won]]<br><br>
 	<</if>>
-	<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)) && $mc.subdom<1>>/*xxx */
-		You're not sure if you can take the whole group, but your definitely aren't going down without a fight!<br>
+	<<if !$BionicArm && !(setup.haveSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)) && $mc.subdom<1>>
+		You're not sure if you can take on the whole group, but you aren't going down without a fight!<br>
 		[[Brawl it out with them|Layer1 Bandits Fight]]<br><br>
 	<</if>>
 	Perhaps giving them what they want is the safer choice. After all, you can always gather more Relics in your travels, can't you?<br>
@@ -1181,15 +1181,15 @@ How are you going to deal with the bandits encircling you?<br><br>
 	<<set _companionBonus += 10 * (1 + $companionGolem.HandicapThreat / 10)>>
 <</if>>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
-	<<if $BanditConvo0>>/*xxx */
-		Your captured bandit turned loyal companion shows her true colors... by actually helping you fight off her former gangmembers!<br><br>
+	<<if $BanditConvo0>>
+		The bandit you once captured but later befriended stands by your side, fending off her former comrades with you.<br><br>
 
-		<<say $Banditleader>>tsk, you worthless piece of shit. I never liked you, you know<</say>><br>
+		<<say $Banditleader>>You worthless piece of shit! I always knew you were no good!<</say>><br>
 
-		<<say $companionBandit>>Trust me when I say the feeling is mutual, you greedy selfish pig<</say>><br>
+		<<say $companionBandit>>Believe me, the feeling is mutual, you selfish pig.<</say>><br>
 		<<set _companionBonus += 10 >>
 	<<else>>
-		Your captive does whatever she can while bound to impede you in the fight and help her former gang members.<br>
+		Despite being your captive, she uses every opportunity to impede you during the fight, aiding her former comrades in the skirmish.<br>
 		<<set _companionBonus -= 5 >>
 	<</if>>
 <</if>>
@@ -1222,11 +1222,10 @@ How are you going to deal with the bandits encircling you?<br><br>
 <</if>>
 
 :: Layer1 Bandits Won [layer1]
-/*xxx */
-The bandits efforts to overpower you prove to be in vain. You manage to knock them all out, only the bandit leader is trying to still get up.
+The bandits' attempt to overpower you fails. One by one, they fall, leaving only their leader who struggles to stand.
 
-<<say $Banditleader>>Damn, what happened? You're not an easy target at all...<</say>>
-With that she also collapses from exertion and injuries.
+<<say $Banditleader>>How did this happen? You're tougher than you look!<</say>>
+Gasping for breath, she too falls, succumbing to her injuries.
 
 [[Continue on your journey|Layer1 Hub]]
 
@@ -1243,45 +1242,45 @@ With that she also collapses from exertion and injuries.
 <</if>>
 
 :: Bandit Captured [layer1]
-/*xxx */
 [img[setup.ImagePath+$companionBandit.image]]
 
-Congratulations?.. you managed to take a captive on you journey! The captured bandit will function as a companion but with a few twists. 
+Congratulations? You managed to take a captive to drag along with you on your journey! The captured bandit will function as a companion but with a few notable differences. 
 
-First of all, she doesn't have the purity gene, which means you need to keep her fed and hydrated during the trip.
-Second of all, as long as she is bound its not wise to put any important equipment let alone Relics within her reach. This means she has effectively no carry capacity.
-Finally, at the moment she hates you and will do everything in her power to escape and return to her own band. She might even take some trophies home if you aren't careful!
+For starters, she lacks the purity gene, so you'll need to ensure she's fed and hydrated during your expedition.
+
+Second, while she's bound, don't trust her with important equipment or Relics — her carrying capacity is effectively zero.
+
+And third, she resents you. She'll be constantly seeking an opportunity to escape and might even try to take a few valuables along if you aren't vigilant.
 
 [[Continue on your journey|Layer1 Hub]]
 
 :: Layer1 Bandits Lost [layer1]
-/*xxx */
-You try to hold your own but <<if $hiredCompanions.length>0>> before long your entire party is whipped out and you're the only on left standing<<else>>the entire group proves to much to handle for you by yourself<</if>>.
-As you lock eyes with the bandit leader to anticipate her next move you get hit on the back of your head with some heavy item from one of the other bandits again. You fall to your knees.
+Despite your valiant effort, the bandits overwhelm you. <<if $hiredCompanions.length>0>>Your party is quickly defeated, leaving only you to face them<<else>>You stand no chance facing them alone<</if>>. A sudden blow from behind makes you stagger and fall to your knees.
+
 <<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit)>>\
 	<<if $BanditConvo0>>\
 
-		<<say $Banditleader>>What a pathetic bunch.<</say>>
-		They leader ignores you and walks right past you to the bandit who joined your party.
+		<<say $Banditleader>>Such a pathetic group.<</say>>
+		Ignoring you, she approaches the bandit who had previously joined you.
 
-		<<say $Banditleader>>You were always a worthless piece of shit, you know? No wonder you got captured. I guess you fit in with these losers.<</say>>
-		Hardly able to talk with her beat up and swollen face your ally sits panting.
+		<<say $Banditleader>>Always the weakest link, weren't you? It's no wonder you got caught.<</say>>
+		Barely able to speak, your ally responds weakly.
 
-		<<say $companionBandit>>Screw you, Kamilla<</say>>
-		The leader's face contorts and she walks over. She stops for a second before your ally as she kicks her in the gut.
+		<<say $companionBandit>>Go to hell, Kamilla.<</say>>
+		In anger, Kamilla delivers a punishing kick to the gut, leaving your ally gasping for breath.
 
-		<<say $companionBandit>>Ahh!<</say>>
-		<<say $Banditleader>>As for you...<</say>>
-		As she says that she walks back over to you.
+		<<say $companionBandit>>Agh!<</say>>
+		<<say $Banditleader>>And as for you...<</say>>
+		She turns her attention back to you.
 	<<else>>
-		<<say $Banditleader>>Somebody release Vesper now that this seems about over.<</say>>
-		Some of the bandits rush over to help release your captive. <<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>
+		<<say $Banditleader>>Someone free Vesper. This is nearly over.<</say>>
+		Some bandits rush to release your captive. <<set $companionBandit.imageIcon = "Icons/BanditIcon_released.jpg">>
 
-		<<say $companionBandit>>Finally! You're going to pay for what you did, you fucker!<</say>>
-		As she says that she starts walking over to you.
+		<<say $companionBandit>>Finally! You'll regret what you did to me!<</say>>
+		As she says this, she approaches you, fury evident.
 
-		<<say $mc>>Listen, I just want to say that...<</say>>
-		Before you're finished she kicks you in the side and you double over from the pain.
+		<<say $mc>>Listen, I wanted to...<</say>>
+		Interrupted by a sharp kick, you groan in pain.
 
 		<<say $companionBandit>>This piece of shit is all yours, Boss<</say>>
 		<<nobr>>
@@ -1290,11 +1289,11 @@ As you lock eyes with the bandit leader to anticipate her next move you get hit 
 		<</nobr>>
 	<</if>>\
 <</if>>\
-<<say $Banditleader>> I was only going to collect a modest fee for crossing this bridge, but now I think I'm going to pick you clean of everything valuable<</say>>
-Defiantly you spit some blood from your mouth at her feet.
+<<say $Banditleader>>I just wanted a modest, fair toll for crossing the bridge. Now? I'll take everything you've got.<</say>>
+DWith defiance, you spit blood at her feet.
 
-<<say $Banditleader>>Tsk, annoying until the last moment. Night Night<</say>>
-You hardly register what happens next, but it feels like your face hits a brick wall and soon afterwards everything goes black.
+<<say $Banditleader>>Persistent, aren't you? Sleep tight.<</say>>
+You don't see what happens, but the world blurs, then everything goes dark.
 
 <<nobr>>
 	<<for _i=0; _i<$ownedRelics.length; _i+=0>>
@@ -1303,7 +1302,7 @@ You hardly register what happens next, but it feels like your face hits a brick 
 	<</for>>
 	/*<<set $ownedRelics=[]>>*/
 <</nobr>>
-When you wake up you find that all of your Relics are gone<<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit) && !$BanditConvo0>> along with the bandit you captured<</if>>. Damn those bandits!
+Awakening, you find all your relics missing<<if $hiredCompanions.some(c=>c.id === setup.companionIds.bandit) && !$BanditConvo0>>, as well as the bandit you once captured<</if>>. Those wretched bandits!
 [[Continue on your journey|Layer1 Hub]]
 
 :: Layer1 Bandits Veil [layer1]
