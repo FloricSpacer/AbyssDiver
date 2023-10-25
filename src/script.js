@@ -378,6 +378,11 @@ Setting.addToggle("amputationHidden", {
     default  : false,
 });
 
+Setting.addToggle("ArachnophobiaMode", {
+    label : "Arachnophobia mode (Hide any images of spiders that would appear)",
+    default  : false,
+});
+
 Setting.addRange("appAgeControl", {
     label    : "Minimum apparent age your physical body can regress to (3-18):",
     min      : 3,
