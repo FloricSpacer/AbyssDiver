@@ -125,3 +125,67 @@ function tabletCurator() {
 
 	return count >= State.variables.relics.length;
 }
+
+/**
+ * Awards accomplished achievements and adds the corresponding corruption.
+ * @return {void}
+ */
+function updateTablet() {
+	if (!State.variables.smaragdineAchievements.speedrun && tabletSpeedrun()) {
+		State.variables.corruption += 175;
+		State.variables.smaragdineAchievements.speedrun = true;
+	}
+	if (!State.variables.smaragdineAchievements.worldRecord && tabletWorldRecord()) {
+		State.variables.corruption += 200;
+		State.variables.smaragdineAchievements.worldRecord = true;
+	}
+	if (!State.variables.smaragdineAchievements.TAS && tabletTAS()) {
+		State.variables.corruption += 225;
+		State.variables.smaragdineAchievements.TAS = true;
+	}
+	if (!State.variables.smaragdineAchievements.OTP && tabletOTP()) {
+		State.variables.corruption += 200;
+		State.variables.smaragdineAchievements.OTP = true;
+	}
+	if (!State.variables.smaragdineAchievements.singlePlayer && tabletSinglePlayer()) {
+		State.variables.corruption += 300;
+		State.variables.smaragdineAchievements.singlePlayer = true;
+	}
+
+	if (!State.variables.smaragdineAchievements.gourmet && tabletGourmet()) {
+		State.variables.corruption += 150;
+		State.variables.smaragdineAchievements.gourmet = true;
+	}
+	if (!State.variables.smaragdineAchievements.dangerFetish && tabletDangerFetish()) {
+		State.variables.corruption += 125;
+		State.variables.smaragdineAchievements.dangerFetish = true;
+	}
+	if (!State.variables.smaragdineAchievements.abyssalChampion && tabletAbyssalChampion()) {
+		State.variables.corruption += 175;
+		State.variables.smaragdineAchievements.abyssalChampion = true;
+	}
+	if (!State.variables.smaragdineAchievements.collector && tabletCollector()) {
+		State.variables.corruption += 200;
+		State.variables.smaragdineAchievements.collector = true;
+	}
+	if (!State.variables.smaragdineAchievements.curator && tabletCurator()) {
+		State.variables.corruption += 250;
+		State.variables.smaragdineAchievements.curator = true;
+	}
+
+	if (!State.variables.smaragdineAchievements.magnumOpus &&
+	    State.variables.smaragdineAchievements.speedrun &&
+	    State.variables.smaragdineAchievements.worldRecord &&
+	    State.variables.smaragdineAchievements.TAS &&
+	    (State.variables.smaragdineAchievements.OTP || State.variables.smaragdineAchievements.singlePlayer) &&
+	    State.variables.smaragdineAchievements.gourmet &&
+	    State.variables.smaragdineAchievements.dangerFetish &&
+	    State.variables.smaragdineAchievements.abyssalChampion &&
+	    State.variables.smaragdineAchievements.collector &&
+	    State.variables.smaragdineAchievements.curator
+	) {
+		State.variables.corruption += 500;
+		State.variables.smaragdineAchievements.magnumOpus = true;
+	}
+}
+
