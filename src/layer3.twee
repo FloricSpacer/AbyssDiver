@@ -1450,40 +1450,42 @@ How do you want to deal with the tentacle beast moving in on you?
 <<nobr>>
 <<if $items[14].count > 0>>
 	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
-	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed), $status.penalty += 1]]<br><br>
+	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.tentacleLesser = true; $smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|$returnPassage]]<br><br>
+	[[Have Khemia fight it off with a sword|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 10>>
 	Due to its amorphous nature, it will take at least 11 bullets to take down the monster.<br>
-	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (11 - $bullRed)]]<br><br>
+	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (11 - $bullRed); $smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $mechaBoarded>>
 	/*xxx */
 	From the safety of the cockpit in your mighty machine, the small tentacle monster feels more like an insect than a threat.<br>
-	[[Squash it with the Starlit Conquest|$returnPassage]]<br><br>
+	[[Squash it with the Starlit Conquest|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $slingshot === 1>>
 Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily pebbles to use as ammo are abundant in the rocky caves of this layer.<br>
-[[Defeat it with the Brave Vector|$returnPassage]]<br><br>
+[[Defeat it with the Brave Vector|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
-	Your eyes fall on the Effacing Asperity. You could spray this at the monster in an hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
+	Your eyes fall on the Effacing Asperity. You could spray this at the monster in hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
 	<<link "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
 	<</link>><br><br>
 <<elseif $ownedRelics.some(r => r.name === "Effacing Asperity" ) && !$layer3TentacleLubedFirstTime >>
-	If you let it overpower you while using Effacing Asperity as a lubricant, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
+	If you let it overpower you while using Effacing Asperity as a lubricant, the tentacle beast will subject you <<if $hiredCompanions.length > 0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
 	<<link "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>> /* shouldn't be necessary but better to be safe */
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
 	<</link>><br><br>
@@ -1493,6 +1495,7 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 <<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
 	<<set $status.duration += (3 - $statRed)>>
 	<<set $status.penalty += 2>>
+	<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
 <</link>><br>
@@ -1513,7 +1516,7 @@ A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embr
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|$returnPassage]]
+[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]
 
 
 /* used Effacing Asperity on lesser tentacle beast */

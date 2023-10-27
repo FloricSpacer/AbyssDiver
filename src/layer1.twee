@@ -1098,8 +1098,8 @@ Using your knowledge of the Abyss, you specifically look to make sure you can ge
 <br><br>
 How are you going to deal with the bandits encircling you?<br><br>
 
-<<if $mc.curses.some(e => e.name === "Below the Veil">>
-	[[Behold a small hint of your eldritch visage to them|Layer1 Bandits Veil]]
+<<if $mc.curses.some(e => e.name === "Below the Veil")>>
+	[[Behold a small hint of your eldritch visage to them|Layer1 Bandits Veil][$smaragdineThreatsDefeated.bandits = true]]
 <<else>>
 	<<if setup.haveCuttingTool && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 		Though outnumbered, your group's prowess in combat more than compensates, especially with Khemia at your side. His hand already rests on the hilt of his sword, his eyes gleaming with a fierce determination. All he needs is your signal. You're confident that the bandits will scatter like leaves in the wind the moment they witness Khemia's skills.<br>
@@ -1107,11 +1107,11 @@ How are you going to deal with the bandits encircling you?<br><br>
 	<</if>>
 	<<if $items[13].count > 0 && $items[20].count > 2>>
 		These bandits have gravely underestimated you. Prepared for the perils of the Abyss, you are not one to be trifled with. Show them that you have a real weapon, and they'll think twice about their decision.<br>
-		[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2]]<br><br>
+		[[Fire 2 warning shots with your pistol to scare them off|Layer1 Hub][$items[20].count -= 2; $smaragdineThreatsDefeated.bandits = true]]<br><br>
 	<</if>>
 	<<if $slingshot === 1>>
 		Use the power of the Brave Vector and frighten away the bandits. If they hear a few pebbles crashing into the ground with the force of a bullet, they won't want to get any closer.<br>
-		[[Scare them off with the Brave Vector|Layer1 Hub]]<br><br>
+		[[Scare them off with the Brave Vector|Layer1 Hub][$smaragdineThreatsDefeated.bandits = true]]<br><br>
 	<</if>>
 	<<if $BionicArm>>
 		With Glory's Grasp at your command, you could manipulate gravity to hoist their leader into the air. The sight of her gasping for breath, suspended mid-air or hurled into her cohorts, would be enough to scatter the bandits like rats before a cat.<br>
@@ -1125,7 +1125,7 @@ How are you going to deal with the bandits encircling you?<br><br>
 	[[Hand over some of the Relics you've collected|Relic Surrender][$surrVal to 0 ]]<br><br>
 	<br>
 	Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.<br>
-	[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub]]<br>
+	[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub][$smaragdineThreatsDefeated.bandits = true]]<br>
 <</if>>
 :: Layer1 Bandits Fight [layer1 nobr]
 
@@ -1246,6 +1246,7 @@ Gasping for breath, she too falls, succumbing to her injuries.
 
 	<</link>>
 <</if>>
+<<set $smaragdineThreatsDefeated.bandits = true>>\
 
 :: Bandit Captured [layer1]
 [img[setup.ImagePath+$companionBandit.image]]

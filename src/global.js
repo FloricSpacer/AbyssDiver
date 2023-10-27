@@ -150,14 +150,16 @@ Macro.add('PassTime', {
 					// If we used energy rations to speed up travel, use those first (regardless of foraging settings).
 					State.variables.items[24].count -= consumption;
 					state.energy -= 1;
+					State.variables.smaragdineFoodConsumed.energy = true;
 					ate = true;
 				}
 				if (State.variables.items[25].count >= consumption &&
 					(State.variables.wardWaterDrink === 1 ||
 						(State.variables.wardWaterDrink === 2 && State.variables.hexflame > 9))) {
 					/* If we're drinking ward water, use that first (regardless of foraging settings). */
-					State.variables.items[25] -= consumption;
+					State.variables.items[25].count -= consumption;
 					if (State.variables.hexflame > 9) State.variables.hexflame -= 1;
+					State.variables.smaragdineFoodConsumed.wardWater = true;
 					drank = true;
 				}
 				if (State.variables.atWaterSource) {
@@ -205,6 +207,9 @@ Macro.add('PassTime', {
 								} else {
 									State.variables.lastFlan = State.variables.time;
 								}
+								State.variables.smaragdineFoodConsumed.flan = true;
+							} else {
+								State.variables.smaragdineFoodConsumed.mud = true;
 							}
 							ate = true;
 						}
@@ -340,11 +345,13 @@ Macro.add('PassTime', {
 					if (State.variables.items[1].count >= consumption) {
 						// eat regular food
 						State.variables.items[1].count -= consumption;
+						State.variables.smaragdineFoodConsumed.ration = true;
 						ate = true;
 					} else if (State.variables.items[1].count + State.variables.items[24].count >= consumption) {
 						// if we don't have enough regular food but have energy rations left, use them
 						State.variables.items[24].count -= consumption - State.variables.items[1].count;
 						State.variables.items[1].count = 0;
+						State.variables.smaragdineFoodConsumed.energy = true;
 						ate = true;
 					}
 				}
@@ -361,6 +368,7 @@ Macro.add('PassTime', {
 								|| setup.flaskLabels[State.variables.flaskPref] === 'Bottled water')
 							&& setup.flaskLabels[State.variables.flaskPref] !== 'Aquarius Ex Nihilo') {
 							State.variables.items[0].count -= consumption;
+							State.variables.smaragdineFoodConsumed.bottle = true;
 						} else if (setup.flaskLabels[State.variables.flaskPref] !== 'Aquarius Ex Nihilo') {
 							State.variables.items[3].count -= consumption;
 							State.variables.items[2].count += consumption;
@@ -402,6 +410,7 @@ Macro.add('PassTime', {
 					} else if (State.variables.items[25].count >= consumption) {
 						State.variables.items[25].count -= consumption;
 						if (State.variables.hexflame > 9) State.variables.hexflame -= 1;
+						State.variables.smaragdineFoodConsumed.wardWater = true;
 						drank = true;
 					}
 				}

@@ -510,7 +510,7 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 	<h1 class="gameover">Game Over</h1>
 <<else>>
 	The booby trap has caused you serious injury, increasing all travel times by 3 days until you use a medkit or other healing item.
-	[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3]]
+	[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3;$smaragdineThreatsSubmitted.booby = true]]
 	<<nobr>>
 	<<if setup.haveHealing>>
 		<<link "Use a medkit or other healing item to cure your status and continue the search for the Relic" "Layer5 Booby2">>
@@ -1424,12 +1424,12 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 
 	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
-		<<link "Summon a powerful gust to drive the swarm away from you" `passage()`>><<set $timeL5T1 -= 8>><</link>><br>
+		<<link "Summon a powerful gust to drive the swarm away from you" `passage()`>><<set $timeL5T1 -= 8>><<set $smaragdineThreatsDefeated.scuttler = true>><</link>><br>
 	<</if>>
 
 	<<if $mechaBoarded>>
 		Inside the Starlit Conquest you remain unaffected by the pheromones of Mayfly Scuttlers. 
-		<<link "Continue your journey unimpeded" `passage()`>><<set $timeL5T1 -= 8>><</link>><br>
+		<<link "Continue your journey unimpeded" `passage()`>><<set $timeL5T1 -= 8>><<set $smaragdineThreatsDefeated.scuttler = true>><</link>><br>
 	<</if>>
 <</if>>
 
@@ -1473,7 +1473,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 <<link "Hide out in the ruins for the day" `$returnPassage`>><<PassTime 1>><</link>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of or avoid these pests.
-[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|$returnPassage]]
+[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|$returnPassage][$smaragdineThreatsDefeated.scuttler = true]]
 
 
 :: Layer5 Exit2 [layer5]
@@ -1593,16 +1593,16 @@ How will you deal with the monstrous worm approaching you?
 <<nobr>>
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With Khemia's exceptional swordsmanship and the power of the Sunbeam Relic, he can fend off the beast. However, the struggle will leave him injured, requiring a day to recuperate.<br>
-	<<link 'Have Khemia fight it off with Sunbeam' `$returnPassage`>><<PassTime 1>><</link>><br><br>
+	<<link 'Have Khemia fight it off with Sunbeam' `$returnPassage`>><<PassTime 1>><<set $smaragdineThreatsSubmitted.borer = true; $smaragdineThreatsDefeated.borer = true>><</link>><br><br>
 <</if>>
 <<if $joyousSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Wielding the formidable Joyous Sunder, an expert swordsman like Khemia can effortlessly vanquish the creature without sustaining any injuries.<br>
-	[[Have Khemia fight it off with Joyous Sunder|$returnPassage]]<br><br>
+	[[Have Khemia fight it off with Joyous Sunder|$returnPassage][$smaragdineThreatsDefeated.borer = true]]<br><br>
 <</if>>
 <<if $mechaBoarded>>
 	/*xxx */
 	With your Starlit Conquest you should be more than a match for these worms.<br>
-	[[Activate the plasma sword and start slicing away|$returnPassage]]<br><br>
+	[[Activate the plasma sword and start slicing away|$returnPassage][$smaragdineThreatsDefeated.borer = true]]<br><br>
 <</if>>
 Sacrificing 10 days' worth of water will distract the Borer long enough for you to escape. If you don't choose which water to drop specifically, you'll relinquish your water supply based on your drinking water priority order, as it's the most easily accessible in this perilous situation.<br>
 	<<link "Choose which water type to use as distraction" "Layer5 Borer Drop Overview">>
@@ -1620,7 +1620,7 @@ Succumbing to the Dune Devouring Borer's onslaught will lead to a gruesome fate 
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|$returnPassage]]
+[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|$returnPassage][$smaragdineThreatsDefeated.borer = true]]
 
 :: Layer5 Borer Drop Overview
 <<FlaskFirst>>
