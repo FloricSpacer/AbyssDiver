@@ -32,7 +32,7 @@ function tabletTAS() {
  */
 function tabletOTP() {
 	return State.variables.hiredCompanions
-	            .concat(State.variables.desertedCompanions)
+	            .concat(State.variables.DesertedCompanions)
 	            .concat(State.variables.LostCompanions)
 	            .filter(c => ![setup.companionIds.ai,
 	                           setup.companionIds.twin,
@@ -47,7 +47,7 @@ function tabletOTP() {
  */
 function tabletSinglePlayer() {
 	return State.variables.hiredCompanions
-	            .concat(State.variables.desertedCompanions)
+	            .concat(State.variables.DesertedCompanions)
 	            .concat(State.variables.LostCompanions)
 	            .filter(c => ![setup.companionIds.ai,
 	                           setup.companionIds.twin,
@@ -65,11 +65,11 @@ function tabletGourmet() {
 	             .map(p => State.variables.smaragdineFoodConsumed[p])
 	             .reduce((a, b) => a && b, true) &&
 	       Object.getOwnPropertyNames(State.variables)
-	             .filter(p => p.startsWith('waterL'))
+	             .filter(p => p.startsWith('waterL') && p !== 'waterL7')
 	             .map(p => State.variables[p] > 0)
 	             .reduce((a, b) => a && b, true) &&
 	       Object.getOwnPropertyNames(State.variables)
-	             .filter(p => p.startsWith('foodL'))
+	             .filter(p => p.startsWith('foodL') && p !== 'foodL7')
 	             .map(p => State.variables[p] > 0)
 	             .reduce((a, b) => a && b, true);
 }
