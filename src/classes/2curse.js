@@ -3420,6 +3420,9 @@ class BelowTheVeil extends Curse {
 	static get descriptionMitigated() {
 		return `You have touched the void and tasted just a hint of the ${Creepify.encode("Truth")}, and you will never be the same. Your appearance up until now has merely been a mask, one that is now paper-thin, quickly eroded under the gaze of others. Anyone observing you in any way will feel a primal fear creep into them, quickly replaced by what can only be called insanity. This will make any kind of constructive interaction with others effectively impossible, and traveling with any companions will be completely impractical — even if you somehow managed to get them to stay with you, your presence would quickly render them useless.\nThanks to your MITIGATIONRELICNAME, you can add other effects in an aura around you, affecting even those not looking around you. You could make the people feel worship towards you (only to recoil if they do manage to lay eyes on you) and form a cult (though you wouldn't be very involved in it, unless you want everybody to quickly get raving mad), or simply make everybody super aroused and cause spontaneous orgies wherever you go (which, again, you couldn't participate in yourself). Some of the people who go mad because of you will start worshipping and attempting to summon a powerful entity from ███████████. If there are enough of them, they might even succeed... nobody can foresee what that will mean for you and the world, but until then, the being will protect you — concerted attempts to kill you because of your nature are doomed to fail as key personnel go missing or mad, equipment breaks and fate conspires against them.`;
 	}
+	inhumanise(prevInhumanity) {
+		return prevInhumanity + 2;
+	}
 }
 setup.allCurses.BelowTheVeil = new BelowTheVeil()
 State.variables.curse124 = setup.allCurses.BelowTheVeil
