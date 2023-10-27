@@ -1200,6 +1200,10 @@ class Character {
 		if (this.blood !== 'red') inhuman += 2;
 		if (this.horns > 0) inhuman += 2;
 		if (this.horns > 1) inhuman += 1;
+		if (this.height > 300) inhuman += 1;
+		if (this.height < 100) inhuman += 1;
+		if (this.height > 1000) inhuman += 1;
+		if (this.height < 50) inhuman += 1;
 		inhuman += this.tail.length * 2;
 		inhuman = this.events.reduce((v, e) => e.inhumanise(v), inhuman);
 		if (this.id === setup.companionIds.mc && State.variables.LuminousWear) inhuman /= 4;
