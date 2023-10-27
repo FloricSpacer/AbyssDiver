@@ -128,49 +128,60 @@ function tabletCurator() {
 
 /**
  * Awards accomplished achievements and adds the corresponding corruption.
- * @return {void}
+ * @return {[string]} The list of achievements that hadn't been achieved before but are now.
  */
 function updateTablet() {
+	let newlyAchieved = []
 	if (!State.variables.smaragdineAchievements.speedrun && tabletSpeedrun()) {
 		State.variables.corruption += 175;
 		State.variables.smaragdineAchievements.speedrun = true;
+		newlyAchieved.push('speedrun');
 	}
 	if (!State.variables.smaragdineAchievements.worldRecord && tabletWorldRecord()) {
 		State.variables.corruption += 200;
 		State.variables.smaragdineAchievements.worldRecord = true;
+		newlyAchieved.push('worldRecord');
 	}
 	if (!State.variables.smaragdineAchievements.TAS && tabletTAS()) {
 		State.variables.corruption += 225;
 		State.variables.smaragdineAchievements.TAS = true;
+		newlyAchieved.push('TAS');
 	}
 	if (!State.variables.smaragdineAchievements.OTP && tabletOTP()) {
 		State.variables.corruption += 200;
 		State.variables.smaragdineAchievements.OTP = true;
+		newlyAchieved.push('OTP');
 	}
 	if (!State.variables.smaragdineAchievements.singlePlayer && tabletSinglePlayer()) {
 		State.variables.corruption += 300;
 		State.variables.smaragdineAchievements.singlePlayer = true;
+		newlyAchieved.push('singlePlayer');
 	}
 
 	if (!State.variables.smaragdineAchievements.gourmet && tabletGourmet()) {
 		State.variables.corruption += 150;
 		State.variables.smaragdineAchievements.gourmet = true;
+		newlyAchieved.push('gourmet');
 	}
 	if (!State.variables.smaragdineAchievements.dangerFetish && tabletDangerFetish()) {
 		State.variables.corruption += 125;
 		State.variables.smaragdineAchievements.dangerFetish = true;
+		newlyAchieved.push('dangerFetish');
 	}
 	if (!State.variables.smaragdineAchievements.abyssalChampion && tabletAbyssalChampion()) {
 		State.variables.corruption += 175;
 		State.variables.smaragdineAchievements.abyssalChampion = true;
+		newlyAchieved.push('abyssalChampion');
 	}
 	if (!State.variables.smaragdineAchievements.collector && tabletCollector()) {
 		State.variables.corruption += 200;
 		State.variables.smaragdineAchievements.collector = true;
+		newlyAchieved.push('collector');
 	}
 	if (!State.variables.smaragdineAchievements.curator && tabletCurator()) {
 		State.variables.corruption += 250;
 		State.variables.smaragdineAchievements.curator = true;
+		newlyAchieved.push('curator');
 	}
 
 	if (!State.variables.smaragdineAchievements.magnumOpus &&
@@ -186,6 +197,8 @@ function updateTablet() {
 	) {
 		State.variables.corruption += 500;
 		State.variables.smaragdineAchievements.magnumOpus = true;
+		newlyAchieved.push('magnumOpus');
 	}
+	return newlyAchieved;
 }
 
