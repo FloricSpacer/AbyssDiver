@@ -157,7 +157,7 @@ Macro.add('PassTime', {
 					(State.variables.wardWaterDrink === 1 ||
 						(State.variables.wardWaterDrink === 2 && State.variables.hexflame > 9))) {
 					/* If we're drinking ward water, use that first (regardless of foraging settings). */
-					State.variables.items[25] -= consumption;
+					State.variables.items[25].count -= consumption;
 					if (State.variables.hexflame > 9) State.variables.hexflame -= 1;
 					State.variables.smaragdineFoodConsumed.wardWater = true;
 					drank = true;
