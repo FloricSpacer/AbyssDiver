@@ -58,7 +58,7 @@ You have $items[3].count days of water in filled flasks.<br>
 [[Organize your drinking water|Flask Order]]<br>
 <</if>>
 <br>
-Items:<br>
+<b>Items:</b><br>
 
 <<for _i = 0; _i < $items.length; _i++>>
 	<<capture _i>>
@@ -72,7 +72,7 @@ Items:<br>
 <</for>>
 <br>
 <<if $ownedRelics.length > 0>>
-	Relics:<br> 
+	<b>Relics:</b><br> 
 	<<for _i = 0; _i < $ownedRelics.length; _i++>>
 		<<capture _i>>
 			<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]]">><<if setup.functionalRelics.contains($ownedRelics[_i].name)>> ☸<</if>><br>
@@ -104,6 +104,23 @@ The total value of all your Relics is $total_value_relics dubloons.<br><br>
 <</if>>
 Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
 Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br><br>
+
+<div class="progress-bar-container">
+  <<set _percent = (setup.carriedWeight / $totalCarry) * 100>>
+	<<if _percent <= 50>>
+    <<set _color = "#4CAF50">> <!-- Green for 50% and below -->
+  <<elseif _percent <= 75>>
+    <<set _color = "#FFC107">> <!-- Yellow for 51% to 75% -->
+  <<else>>
+    <<set _color = "#F44336">> <!-- Red for 76% and above -->
+  <</if>>
+
+  <<print "<div class=\"progress-bar-fill\" style=\"width:" + _percent + "%; background-color:" + _color + ";\"></div>">>
+</div>
+
+
+
+<br><br>
 
 <<back [[$menuReturn]]>>
 <</nobr>>
