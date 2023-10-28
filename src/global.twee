@@ -24,19 +24,28 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 @@.alert1;You currently have <<print $hexflame - 9>> jinxed flame counters,  increasing travel times by <<print Math.trunc($hexflame / 10)>> and increasing corruption gain by <<print (5 * Math.trunc($hexflame / 10))>> on every layer other than layer 6.@@<br><br>
 <</if>>
 
-Your Curses are:<br>
+<b>Curses:</b>:<br>
 
 <<for _i = 0; _i < $mc.curses.length; _i++>>
 	<<capture _i>>
-		<<print "[[$mc.curses[_i].name|Curse Info][$temp = _i]]">><br>
+		<<if $mc.curses[_i].name === "Below the Veil">>
+			<<print "[[" + Creepify.encode("Below the Veil") + "|Curse Info][$temp = _i]]">><br>
+		<<else>>
+			<<print "[[$mc.curses[_i].name|Curse Info][$temp = _i]]">><br>
+		<</if>>
 	<</capture>>
 <</for>>
 <</nobr>>
 <<back [[$menuReturn]]>>
 
 :: Curse Info
-
-!<<print $mc.curses[$temp].name>>
+<<nobr>>
+!<<if $mc.curses[$temp].name === "Below the Veil">>
+	<<print Creepify.encode("Below the Veil")>><br>
+<<else>>
+	<<print $mc.curses[$temp].name>>
+<</if>>
+<</nobr>>
 [img[setup.ImagePath+$mc.curses[$temp].pic]]
 
 <<print $mc.curses[$temp].description>>
