@@ -72,6 +72,13 @@ Hopefully you'll be able to get used to it.
 	xxx PLACEHOLDER GENERAL LAYER DESCRIPTION
 <</if>>
 
+<<if  $time - $CatastropheUsed <= 2>>
+	<<set $forageWater = 0>>
+<</if>>
+<<if  $time - $CatastropheUsed <= 5>>
+	<<set $forageFood = 0>>
+<</if>>
+
 <<if $forageWater === 1>>
 	<<print "You are currently foraging for your daily water on this layer">><br>
 	<<else>>
@@ -89,7 +96,11 @@ Hopefully you'll be able to get used to it.
 <</if>>
 <br>
 [[Learn about the threats on this layer|Layer9 Threats]]<br>
-[[Check for food and water you can forage for|Layer9 Forage]]<br>
+<<if  $time - $CatastropheUsed > 2>>
+	[[Check for food and water you can forage for|Layer9 Forage]]<br>
+<<else>>
+	@@.alert1; In the immediate aftermath of the destruction you caused with the Catastrophe, there is nothing to forage@@<br>
+<</if>>
 [[Search for Relics|Layer9 Relics]]<br>
 [[Take on Curses to purge your corruption|Layer9 Curses]]<br>
 [[Look for any Wonders you can take advantage of|Layer9 Wonders]]<br>
@@ -105,10 +116,14 @@ Hopefully you'll be able to get used to it.
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
 <<nobr>>
-<<if $forageFood === 0>>
-	<<print "[[Start foraging for food from Crevasse Carp|Layer9 Forage][$forageFood = 1]]">><br>
-	<<else>>
-	<<print "[[Stop foraging for food|Layer9 Forage][$forageFood = 0]]">><br>
+<<if  $time - $CatastropheUsed <= 5>>
+	@@.alert1; Fish do not seem to have returned yet in the aftermath of the destruction@@<br>
+<<else>>
+	<<if $forageFood === 0>>
+		<<print "[[Start foraging for food from Crevasse Carp|Layer9 Forage][$forageFood = 1]]">><br>
+		<<else>>
+		<<print "[[Stop foraging for food|Layer9 Forage][$forageFood = 0]]">><br>
+	<</if>>
 <</if>>
 <<if $forageWater === 0>>
 	<<print "[[Start foraging for water in freshwater pockets|Layer9 Forage][$forageWater = 1]]">><br>
@@ -119,7 +134,11 @@ If you decide to start foraging for food or water, it means that you will not co
 [[Fill your empty flasks with water from freshwater pockets|Layer9 Flasks]]<br>
 <</if>>
 <br>
-[[Consume food from Crevasse Carp|Layer9 Forage][$corruption -= 2;$foodL9 += 1]]<br>
+<<if  $time - $CatastropheUsed <= 5>>
+	@@.alert1; Fish do not seem to have returned yet in the aftermath of the destruction@@<br>
+<<else>>
+	[[Consume food from Crevasse Carp|Layer9 Forage][$corruption -= 2;$foodL9 += 1]]<br>
+<</if>>
 [[Consume water from freshwater pockets|Layer9 Forage][$corruption -= 1;$waterL9 += 1]]<br>
 <</nobr>>
 
@@ -770,9 +789,11 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 <h1>Threats</h1>
 
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
-
-<<ThreatGrid setup.theElder>>
-
+<<if $ElderDestroyed>>
+	Nothing seems to remain of the elder.<br><br>
+<<else>>
+	<<ThreatGrid setup.theElder>>
+<</if>>
 <p>[[Continue exploring the ninth layer|Layer9 Hub]]</p>
 
 :: Layer9 Elder Encounter [layer9 nobr]
@@ -868,7 +889,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 		<</if>>	
 		<<print $temp_list[_j]>>
 		<<if $temp_list[_j] == "Catastrophe">>
-			<<print "@@.alert1; Using the Catastrophe here might cause mass devistation and will result in your own death!">>
+			<<print "@@.alert2; Using the Catastrophe here might cause mass devistation and will result in your own death!">>
 		<</if>>			
 		<br>
 	<</for>>
@@ -1123,7 +1144,7 @@ Threats:
 
 :: Layer9 Travel Events [layer9 nobr]
 <<set _triggers = {
-	elder: () => $timeL9T1 >= 5 ,
+	elder: () => ($timeL9T1 >= 5 && !$ElderDestroyed),
 }>>
 
 <<PassTime _triggers>>
@@ -1197,11 +1218,41 @@ And so it continues, for an eternity that stretches out until the stars burn out
 
 @@.layerTitle;<h1>THE END</h1>@@
 
-:: Catastrophe Layer Destruction
-
+:: Catastrophe Layer Destruction[nobr]
 /*xxx*/
-Massive ball of fire and vaporized water. Everything gone, fish gone, elder gone, chaos, blabla. These are just last thoughts as you are being atomized yourself.
+You shoot the catastrophe in the direction of where the elders tentacles seem to come from. Massive ball of fire and vaporized water. Everything gone, fish gone, elder gone, chaos, blabla. <br>
+<<if $hiredCompanions.length>0>>
+You see the silhouette of $hiredCompanions[0].name one more time as it, and thus $hiredCompanions[0].name itself, flickers out of existence.
+	<<if $hiredCompanions.length>1>>
+		The rest of your companions share the same fate as they are consumed by the ball of plasma and fire.
+	<</if>>
+<<for _i=0; _i<$hiredCompanions.length; _i++>>
+	<<set $LostCompanions.push($hiredCompanions[_i])>>
+<</for>>
+<<set $hiredCompanions = []>>
+<br>
+<</if>>
+These are just last thoughts as you and your equipment are flung around when the shockwave hits you, right before being atomized yourself when the ball of fire finally reaches you.
 <<set $gameOver = true>>
-
+<<set $ElderDestroyed = true>>
+<<set $CatastropheUsed = $time>>
+<<for _i = 0; _i<$items.length; _i++>>
+	<<set $items[_i].count=0>>
+<</for>>
+<<if $ownedRelics.some(r=> r.name === "Phoenix Obol")>>
+	<<set _phoenix = true>>
+<</if>>
+<<for _i=0; _i<$ownedRelics.length; _i++>>
+	<<if $ownedRelics.name != "Phoenix Obol">>
+		<<set $lostRelics.push($ownedRelics[_i])>>
+	<</if>>
+<</for>>
+<<set $ownedRelics=[]>>
+<<if _phoenix>>
+	<<set $ownedRelics.push($relic76)>>
+<</if>>
+<<set $dubloons = 0>>
+<br><br>
+[[Next|Layer9 Hub]]
 
 
