@@ -864,13 +864,19 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 			<<set $temp_list[_j] = "Joyous Sunder Sword">>
 		<</if>>
 		<<if $temp_list[_j] == "Starlit Conquest" && $mechaBoarded>>
-			<<set $temp_list[_j] = "Active Starlit Conquest">>
+			<<set $temp_list[_j] = "Activated Starlit Conquest">>
 		<</if>>	
-		<<print $temp_list[_j]>><br>
+		<<print $temp_list[_j]>>
+		<<if $temp_list[_j] == "Catastrophe">>
+			<<print "@@.alert1; Using the Catastrophe here might cause mass devistation and will result in your own death!">>
+		<</if>>			
+		<br>
 	<</for>>
 	<<if $temp_list.length==0>>
 		Nothing!<br>
 	<</if>>
+	<br>
+	[[Delete entire selection|Elder attempt][$temp_list=[]]]<br>
 
 	
 	<<if $temp_list.length==1>>
@@ -881,7 +887,12 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 		<<set $temp_alt = $temp_list[1] + " & " +  $temp_list[0]>>
 	<</if>>
 
+	<<if $temp_list.some(r=> r==="Catastrophe")>>
+		<br>[[Face the Elder with your selection|Catastrophe Layer Destruction]]
+	<<else>>
 		<br>[[Face the Elder with your selection|Elder attempt2]]
+	<</if>>
+
 <</if>>
 
 
@@ -1185,3 +1196,12 @@ As the centuries roll on, you bear witness to the creation of new, horrific tent
 And so it continues, for an eternity that stretches out until the stars burn out, and beyond. The Elder, with you as a part of it, continues its endless existence in the dark depths of the Abyss, a silent, terrible god in its underwater domain.
 
 @@.layerTitle;<h1>THE END</h1>@@
+
+:: Catastrophe Layer Destruction
+
+/*xxx*/
+Massive ball of fire and vaporized water. Everything gone, fish gone, elder gone, chaos, blabla. These are just last thoughts as you are being atomized yourself.
+<<set $gameOver = true>>
+
+
+
