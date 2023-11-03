@@ -109,36 +109,17 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 
 <p>[[Continue exploring the third layer|Layer3 Hub]]</p>
 
-:: Layer3 Forage [image layer3]
+:: Layer3 Forage [cards layer3]
 <<PassTimeWithEvents>>\
 <<if !setup.passingTime()>>\
 <<checkTime>>
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 4-foraging.png']]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
+<<ForagingGrid setup.crystallineConfectionaries setup.undergroundRivers>>
 <<nobr>>
-<<if $forageFood === 0>>
-	[[Start foraging for Crystalline Confectionaries for food|Layer3 Forage][$forageFood = 1]]<br><br>
-<<else>>
-	[[Stop foraging for food|Layer3 Forage][$forageFood = 0]]<br><br>
-<</if>>
-<<if $items[2].count > 0>>
-	<<if $atWaterSource>>
-		<<link 'Fill your empty flasks with water from the underground river' 'Layer3 Flasks'>><</link>><br><br>
-	<<else>>
-		<<TravelToPassage 'Fill your empty flasks with water from underground rivers' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>><br><br>
-	<</if>>
-<<else>>
-	<<if $atWaterSource>>
-		You need empty flasks to fill them with water from the underground river.<br><br>
-	<<else>>
-		<<TravelToPassage 'Find an underground river to avoid using your water' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>><br><br>
-	<</if>>
-<</if>>
-<br>
 [[Consume food from unsafe crystals|Layer3 Forage][$mc.events.push(new AgeEvent("Crystalline Confectionery Major", {years: 1}));$foodL3 += 1]]<br>
-<<if $abyssKnow>>[[Consume food from safe crystals|Layer3 Forage][$mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}));$foodL3 += 1]]<br><</if>>
+<<if $abyssKnow>>[[Consume food from safe crystals|Layer3 Forage][$mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}));$foodL3 += 1]]<br><br><</if>>
 
 <<if $atWaterSource>>
 	You can also wait at the underground river if you'd like to pass the time while waiting for something.<br>
