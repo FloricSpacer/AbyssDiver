@@ -228,15 +228,25 @@
 				<<else>>
 					<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
 				<</if>>
+			<<elseif $currentLayer === 1 && _foraging.forageType === "food">>
+				<<if $forageFood === 0>>
+					<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L1FoodConvo === 0>>
+						<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage Convo][$forageFood = 1, $L1FoodConvo = 1]]">><br>
+					<<else>>	
+						<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage][$forageFood = 1]]">><br>
+					<</if>>
+				<<else>>
+					<<print "[[Stop foraging for food|Layer1 Forage][$forageFood = 0]]">><br>
+				<</if>>
 			<<else>>
 				<<if $forageWater === 0 && _foraging.forageType === "water">>
-					<p><<print "[[Forage for " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 1]]">></p>
+					<p><<print "[[Start Foraging for water from" + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 1]]">></p>
 				<<elseif $forageWater === 1 && _foraging.forageType === "water">>
-					<p><<print "[[Stop foraging for " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 0]]">></p>
+					<p><<print "[[Stop foraging for water from" + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 0]]">></p>
 				<<elseif $forageFood === 0 && _foraging.forageType === "food">>
-					<p><<print "[[Forage for " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 1]]">></p>
+					<p><<print "[[Forage for food from" + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 1]]">></p>
 				<<else>>
-					<p><<print "[[Stop foraging for " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 0]]">></p>
+					<p><<print "[[Stop foraging for food from" + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 0]]">></p>
 				<</if>>
 			<</if>>
 			<p><<include `_foraging.name + " Description"`>></p>
