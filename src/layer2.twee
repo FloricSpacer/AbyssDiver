@@ -127,39 +127,23 @@ How would you like to use Cherry's chaotic luck ability?
 <p>[[Continue exploring the second layer|Layer2 Hub]]</p>
 
 
-:: Layer2 Forage [image layer2]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 3-foraging.png']]
+:: Layer2 Forage [cards layer2]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
 Note: If you try to forage for meat, but run out of bullets or don't have a gun (or suitable replacement), you will forage for some flanberries instead, with any side effects that may entail.
 
+<<ForagingGrid setup.flanberries setup.mudgrazer setup.bewitcherPlant>>
 <<nobr>>
-<<if $forageWater === 0>>
-	<<print "[[Start foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 1]]">><br>
-	<<else>>
-	<<print "[[Stop foraging for water in Bewitcher Plants|Layer2 Forage][$forageWater = 0]]">><br>
-<</if>>
-<<if $forageFood === 0>>
-	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0>>
-		<<print "[[Start foraging for flanberries for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 0, $L2FoodConvo = 1]]">><br>
-		<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 1, $L2FoodConvo = 1]]">><br>
-	<<else>>	
-		<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
-		<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
-	<</if>>
-	<<else>>
-	<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
-<</if>>
+
 <<if $items[2].count > 0>>
-[[Fill your empty flasks with water from the layer|Layer2 Flasks]]<br>
+[[Fill your empty flasks with water from the layer|Layer2 Flasks]]<br><br>
 <</if>>
-<br>
+
 [[Consume food from unripe Flanberries|Layer2 Forage][$mc.events.push(new LibidoEvent("Flanberry Major", 1)); $foodL2 += 1; $smaragdineFoodConsumed.flan = true]]<br>
 <<if $abyssKnow>>[[Consume food from ripe Flanberries|Layer2 Forage][$lastFlan = $time; $foodL2 += 1; $smaragdineFoodConsumed.flan = true]]<br><</if>>
 [[Consume rainwater|Layer2 Forage][$bewitchBabies += 1;$waterL2 += 1]]<br>
 <</nobr>>
-
 [[Return to exploring the rest of the layer|Layer2 Hub]]
 
 :: Layer2 Forage Convo
