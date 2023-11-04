@@ -110,26 +110,13 @@ Hopefully you'll be able to get used to it.
 <span class="icon">[img[setup.ImagePath+'Icons/ascent.png']]</span> [[Look up towards the surface|Layer9 Ascend 1]]<br>
 [[Try to reach the bottom of the ocean|Layer9 Exit1]]
 
-:: Layer9 Forage [image layer9]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 10-foraging.png']]
+:: Layer9 Forage [cards layer9]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 
 <<nobr>>
-<<if  $time - $CatastropheUsed <= 5>>
-	@@.alert1; Fish do not seem to have returned yet in the aftermath of the destruction@@<br>
-<<else>>
-	<<if $forageFood === 0>>
-		<<print "[[Start foraging for food from Crevasse Carp|Layer9 Forage][$forageFood = 1]]">><br>
-		<<else>>
-		<<print "[[Stop foraging for food|Layer9 Forage][$forageFood = 0]]">><br>
-	<</if>>
-<</if>>
-<<if $forageWater === 0>>
-	<<print "[[Start foraging for water in freshwater pockets|Layer9 Forage][$forageWater = 1]]">><br>
-	<<else>>
-	<<print "[[Stop foraging for water|Layer9 Forage][$forageWater = 0]]">><br>
-<</if>>
+<<ForagingGrid setup.crevasseCarp setup.freshwaterPockets>>
+
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from freshwater pockets|Layer9 Flasks]]<br>
 <</if>>
@@ -137,9 +124,9 @@ If you decide to start foraging for food or water, it means that you will not co
 <<if  $time - $CatastropheUsed <= 5>>
 	@@.alert1; Fish do not seem to have returned yet in the aftermath of the destruction@@<br>
 <<else>>
-	[[Consume food from Crevasse Carp|Layer9 Forage][$corruption -= 2;$foodL9 += 1]]<br>
+	[[Consume food from Crevasse Carp once|Layer9 Forage][$corruption -= 2;$foodL9 += 1]]<br>
 <</if>>
-[[Consume water from freshwater pockets|Layer9 Forage][$corruption -= 1;$waterL9 += 1]]<br>
+[[Consume water from freshwater pockets once|Layer9 Forage][$corruption -= 1;$waterL9 += 1]]<br>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer9 Hub]]

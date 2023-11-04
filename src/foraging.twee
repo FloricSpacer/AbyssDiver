@@ -184,7 +184,9 @@
 		<div>
 			[img[setup.ImagePath + _foraging.pic]]
 			<h2>_foraging.name</h2>
-			<<if $currentlayer === 7>>
+			<<if _foraging.forageType === "food" &&$currentlayer === 9 && $time - $CatastropheUsed <= 5>>
+				<p>@@.alert1; Fish have not yet returned in the aftermath of the destruction@@</p>
+			<<elseif $currentlayer === 7>>
 				<p><<print "[[Work on " + _foraging.name + "]]">></p>
 			<<elseif _foraging.forageType === "water" && $currentLayer === 3>>
 				<<if $items[2].count > 0>>
@@ -238,6 +240,32 @@
 				<<else>>
 					<<print "[[Stop foraging for food|Layer1 Forage][$forageFood = 0]]">><br>
 				<</if>>
+			<<else>>
+				<<if $forageWater === 0 && _foraging.forageType === "water">>
+					<p><<print "[[Start Foraging for water from " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 1]]">></p>
+				<<elseif $forageWater === 1 && _foraging.forageType === "water">>
+					<p><<print "[[Stop foraging for water from " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 0]]">></p>
+				<<elseif $forageFood === 0 && _foraging.forageType === "food">>
+					<p><<print "[[Forage for food from " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 1]]">></p>
+				<<else>>
+					<p><<print "[[Stop foraging for food from " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 0]]">></p>
+				<</if>>
+			<</if>>
+			<p><<include `_foraging.name + " Description"`>></p>
+		</div>
+	<</for>>
+</div>
+<</widget>>
+
+:: ForagingGridNarrow [widget nobr]
+<<widget "ForagingGrid">>
+<div class="cards-grid">
+	<<for _foraging range _args>>
+		<div>
+			[img[setup.ImagePath + _foraging.pic]]
+			<h2>_foraging.name</h2>
+			<<if $currentlayer === 7>>
+				<p><<print "[[Work on " + _foraging.name + "]]">></p>
 			<<else>>
 				<<if $forageWater === 0 && _foraging.forageType === "water">>
 					<p><<print "[[Start Foraging for water from " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 1]]">></p>

@@ -156,8 +156,7 @@ How would you like to use Cherry's chaotic luck ability?
 <p>[[Continue exploring the fourth layer|Layer4 Hub]]</p>
 
 
-:: Layer4 Forage [image layer4]
-[img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 5-foraging.png']]
+:: Layer4 Forage [cards layer4]
 
 If you decide to start foraging for food or water, it means that you will not consume your stored food rations or water supply while consuming time on tasks in this layer, but you will not obtain more supplies by starting to forage here.
 <<if $mc.heightDir === 0 && $forageFood === 1>>
@@ -169,33 +168,25 @@ If you decide to start foraging for food or water, it means that you will not co
 	<<radiobutton "_heightDirEvent.heightDirection" 1 >> Increase
 <</if>>
 <<nobr>>
-<<if $forageWater === 0>>
-	<<print "[[Start foraging for water in Algal Meltwater|Layer4 Forage][$forageWater = 1]]">><br>
-	<<else>>
-	<<print "[[Stop foraging for water|Layer4 Forage][$forageWater = 0]]">><br>
-<</if>>
-<<if $forageFood === 0>>
-	<<print "[[Start foraging for food from Flairabou|Layer4 Forage][$forageFood = 1]]">><br>
-	<<else>>
-	<<print "[[Stop foraging for food|Layer4 Forage][$forageFood = 0]]">><br>
-<</if>>
+<<ForagingGrid setup.flairabou setup.algalMeltwater>>
+
 <<if $items[2].count > 0>>
 [[Fill your empty flasks with water from the layer|Layer4 Flasks]]<br>
 <</if>>
 <br>
 <<if $slingshot>>
-	[[Hunt and consume Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1]]<br>
+	[[Hunt and consume Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1]]<br>
 <<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
-	[[Hunt and consume Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]<br>
+	[[Hunt and consume Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]<br>
 <</if>>
 <<if $abyssKnow>>
 	<<if $slingshot>>
-		[[Hunt and consume carefully prepared Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1]]<br>
+		[[Hunt and consume carefully prepared Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1]]<br>
 	<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
-		[[Hunt and consume carefully prepared Flairabou|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]<br>
+		[[Hunt and consume carefully prepared Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]<br>
 	<</if>>
 <</if>>
-[[Consume water from melted snow|Layer4 Forage][$algalSize += 1;$waterL4 += 1]]<br>
+[[Consume water from melted snow once|Layer4 Forage][$algalSize += 1;$waterL4 += 1]]<br>
 <</nobr>>
 
 [[Return to exploring the rest of the layer|Layer4 Hub]]
