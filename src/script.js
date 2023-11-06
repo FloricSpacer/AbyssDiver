@@ -342,7 +342,7 @@ Macro.add('say', {
 });
 
 Setting.addToggle("accessible", {
-    label : "Remove potentially-inaccessible text formatting for the vision-impaired",
+    label : "Disable extra fancy text formatting",
     default  : false,
 });
 
