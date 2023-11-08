@@ -1199,3 +1199,28 @@
 		});
 	</script>
 <</widget>>
+
+:: bordered widget [widget nobr]
+/* Arguments:
+     0: path of the image to use
+     1: path of the border to use — default 'images/bordershop.png'
+   Note that using a non-square image will result in elliptical borders.
+   When using this widget, be careful with newlines:
+   <<bordered>>
+     sometext
+   <</bordered>
+   will result in an empty line at the start of the content
+ */
+<<widget "bordered" container>>
+<<capture _style>>
+  <<set _args[1] = _args[1] || 'images/bordershop.png'>>
+  <<set _style = `border-image: url('${_args[1]}') 82 / 20px / 10px round`>>
+
+  <div class="bordered" @style="_style">
+    <img @src="_args[0]">
+    <div>
+      _contents
+    </div>
+  </div>
+<</capture>>
+<</widget>>
