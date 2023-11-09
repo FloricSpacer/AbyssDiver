@@ -466,23 +466,38 @@ body.start, body.balloon {
   display: inline-block;
   width: max-content;
 }
+
 .toggle-item {
-  padding: 1ex;
+  --padding: 1ex;
+  padding: var(--padding);
+  /* Add one pixel to the left for the border */
+  padding-left: calc(var(--padding) + 1px);
   display: inline-block;
-}
-.toggle-item:not(.selected) {
-  /* Original color is #eee */
-  color: rgba(223.125, 223.125, 223.125, 0.8)
-}
-.toggle-item.selected {
-  /* This property will be overwritten by the next two for the toggle but remain for the select */
-  background: #1c4785;
-}
-.toggle-item.on.selected {
-  background: #0d520d;
-}
-.toggle-item.off.selected {
-  background: #721313;
+  &:not(.selected) {
+    /* Original color is #eee */
+    color: rgba(223.125, 223.125, 223.125, 0.8)
+  }
+  /* add a border to the left of every element that is not the first, selected, or to the right of the selected one */
+  &:not(.selected):not(:first-child):not(.selected + *) {
+    background: linear-gradient(to bottom, transparent 15%, #555 25%, #555 75%, transparent 85%) left/1px no-repeat;
+  }
+  &.selected {
+    background: #1c4785;
+    &.on {
+      background: #0d520d;
+    }
+    &.off {
+      background: #721313;
+    }
+    &:not(:last-child) {
+      /* the selected element "eats" the border pixel of the one to its right */
+      padding-right: calc(var(--padding) + 1px);
+    }
+  }
+  .selected + & {
+    /* drop the border pixel in the element that follows the selected one */
+    padding-left: var(--padding);
+  }
 }
 
 
@@ -653,4 +668,5 @@ img.half-size {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  column-gap: 1em;
 }
