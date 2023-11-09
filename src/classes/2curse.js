@@ -3461,6 +3461,9 @@ class GestationJumpstart extends Curse {
 	constructor() {
 		super('Gestation Jumpstart', 'none');
 	}
+	static get incompatibilities() {
+		return ['Absolute Birth Control']
+	}
 }
 setup.allCurses.GestationJumpstart = new GestationJumpstart()
 State.variables.curse126 = setup.allCurses.GestationJumpstart
