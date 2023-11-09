@@ -92,6 +92,7 @@ class Character {
 	 * @param {number} o.lastBirth The day on which this character's last birth occurred.
 	 * @param {boolean} o.tentaclePreg Whether this character is currently impragnated by tentacles.
 	 * @param {boolean} o.switched Whether this character has switched bodies.
+	 * @param {boolean} o.gestationJumps Tracks character specific gestation jumps for Gestation Jumpstart.
 	 * @param {CharEvent[]} o.events The list of events that affected this character.
 	 */
 	constructor({id, name, cost=-1, carry, affec=0, swap=false,
@@ -101,7 +102,7 @@ class Character {
 		            comfortableHeight = oheight, age, appDesc = '', fear,
 		            ohair, oskinColor, oskinType='', oears='normal human', oeyeColor,
 		            oblood='red', osubdom=0, pregnantT=setup.never, due=setup.never,
-		            lastBirth=setup.never, tentaclePreg=false, switched=false, events=[]}) {
+		            lastBirth=setup.never, tentaclePreg=false, switched=false, gestationJumps=0, events=[]}) {
 		if ([name, carry, image, imageIcon, obreasts, openis, ogender, fit, oheight, comfortableHeight,
 			 age, appDesc, fear, ohair, oskinColor, oeyeColor].includes(undefined)) {
 			console.error(`Character constructor called without all required arguments (${name || 'missing name'}).`);
@@ -208,6 +209,9 @@ class Character {
 		assert(typeof switched === 'boolean',
 			   'switched must be a boolean')
 		this.switched = switched;
+		assert(typeof gestationJumps === 'number',
+		'gestationJumps must be a number')
+ 		this.gestationJumps = gestationJumps;
 	}
 
 	/**
@@ -224,7 +228,7 @@ class Character {
 			age: this.age, appDesc: this.appDesc, fear: this.fear, ohair: this.ohair,
 			oskinColor: this.oskinColor, oskinType: this.oskinType, oears: this.oears,
 			oeyeColor: this.oeyeColor, oblood: this.oblood, pregnantT: this.pregnantT, due: this.due, tentaclePreg: this.tentaclePreg,
-			lastBirth: this.lastBirth, switched: this.switched, events: this._events.map(e => e)
+			lastBirth: this.lastBirth, switched: this.switched, gestationJumps: this.gestationJumps, events: this._events.map(e => e)
 		};
 	}
 
@@ -267,6 +271,7 @@ class Character {
 		}
 		this.pregnantT = State.variables.time - 14;
 		this.due = this.pregnantT + 280 + random(-7, 7);
+		this.gestationJumps = 0;
 	}
 
 	/**
@@ -279,6 +284,7 @@ class Character {
 		if (State.variables.pregnant_surprise === this){
 			State.variables.pregnant_surprise = ""
 		} 
+		this.gestationJumps = 0;
 	}
 
 	/**

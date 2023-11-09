@@ -185,6 +185,14 @@ Config.navigation.override = function (destPassage) {
         return "Pregnancy Swap Surprise";
     }
 
+    if (StoryVar.gestation_scene1) {
+        return "Gestation Scene1";
+    }
+
+    if (StoryVar.gestation_scene2) {
+        return "Gestation Scene2";
+    }
+
     if (StoryVar.BanditConvo0_rejoin < StoryVar.time) {
         return "Bandit Joins";
     }

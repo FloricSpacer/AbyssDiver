@@ -586,6 +586,24 @@
 	<</if>>	
 <</if>>
 
+<<for _i=0; _i<=$hiredCompanions.length; _i++>>
+	<<set _target = _i==$hiredCompanions.length ? $mc : $hiredCompanions[_i]>>
+	<<if _target.hasCurse("Gestation Jumpstart") && _target.gestationJumps==0 && setup.daysConsideredPregnant(_target) > 50 >>
+		<<set _target.due = _target.due - 90;>>
+		<<set _target.pregnantT = _target.pregnantT - 90;>>
+		<<set _target.gestationJumps++>>
+		<<set $gestation_scene1 = true>>
+	<<elseif _target.hasCurse("Gestation Jumpstart") && _target.gestationJumps==1 && setup.daysConsideredPregnant(_target) > 160 >>
+		<<set _target.due = _target.due - 60;>>
+		<<set _target.pregnantT = _target.pregnantT - 60;>>
+		<<set _target.gestationJumps++>>
+		<<set $gestation_scene2 = true>>
+	<<else>>
+		<<set $gestation_scene1 = false>>
+		<<set $gestation_scene2 = false>>
+	<</if>>
+<</for>>
+
 <<if setup.daysConsideredPregnant($mc) >= 14>>
 	/* Show symptoms alert once every 3 times, unless it's early in the pregnancy and mc was expecting to start her cycle. */
 	<<if $random === 0 || (!$menFirstCycle && setup.daysConsideredPregnant($mc) < 45)>>
