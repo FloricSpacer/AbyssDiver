@@ -1083,22 +1083,6 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <br>[[Empty some flasks or drop some items/Relics you're carrying|Drop Items Menu]]<br>
 
-<<if $abyssKnow === 1>>
-	<br>You currently have Abyssal knowledge granted by the encyclopedia, smartphone or Saeko. You can choose to disable it if you would like more side effects from foraging:<br>
-	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]<br>
-<<elseif $abyssKnow === 0 && ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>
-	<br>You currently have Abyssal knowledge by the encyclopedia, smartphone or Saeko, but you are not using it. You can choose to enable it if you would like less side effects from foraging:<br>
-	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]<br>
-<</if>>
-
-<<if $items[24].count > 0>>
-	<<if !$useEnergyrations>>
-		<br>[[Start using your energy rations|Use Items and Relics][$useEnergyrations = true]]<br>
-	<<else>>
-		<br>[[Stop using your energy rations|Use Items and Relics][$useEnergyrations = false]]<br>
-	<</if>>
-<</if>>
-
 <<if $items[11].count < 1 && $ownedRelics.some(e => e.name === "Silk Twister")>>
 <br>You could spend a day weaving a rope out of your own hair using the Silk Twister. You'd end up with a rope, but it would take a day of effort weaving it.<br>
 <<WaitAtPassage 'Weave a hair rope' `"Silk Twister Rope"` '1'>><br>
@@ -1166,56 +1150,6 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<</link>><br>
 <</if>>
 
-<<if $items[25].count > 0 && $wardWaterDrink === 0>>
-	<br>You are currently not drinking your Ward Water to reduce your jinxed flame counters. Would you like to start drinking your Ward Water?<br>
-	[[Always drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 1]]<br>
-	[[Drink Ward Water instead of foraging or using other water sources when you have 1 or more hexflame counters|Use Items and Relics][$wardWaterDrink = 2]]<br>
-<<elseif $wardWaterDrink === 1>>
-	<br>You are currently drinking your Ward Water every day to reduce your jinxed flame counters. Would you like to stop drinking your Ward Water?<br>
-	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
-	[[Drink Ward Water instead of foraging or using other water sources when you have 1 or more hexflame counters|Use Items and Relics][$wardWaterDrink = 2]]<br>
-<<elseif $wardWaterDrink === 2>>
-	<br>You are currently drinking your Ward Water to reduce your jinxed flame counters whenever you have 1 or more jinxed flame counters. Would you like to change when you drink your Ward Water?<br>
-	[[Always drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 1]]<br>
-	[[Never drink Ward Water instead of foraging or using other water sources|Use Items and Relics][$wardWaterDrink = 0]]<br>
-<</if>>
-
-<<if $items[25].count > 0 && $hexflame > 9>>
-	<br>You can drink as much Ward Waters as you want if you you want to reduce your jinxed flame counters. This might not be the most economical idea, but it can help you solve the issue immediately if you're not worried about conserving water.<br>
-	[[Drink some Ward Water to reduce your hexflame count|Ward Water Drink]]<br>
-
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
-	<<if $hsswear>>
-		<br>You can take off the stole you are using to improve relations with your companions. This will remove the benefit in affection events you are gaining from the Relic.<br>
-		[[Take off the Heart-stealing Stole|Use Items and Relics][$hsswear=0]]<br>
-	<<else>>
-		<br>You can put on the majestic stole you have, it is sure to help sway the hearts of your companions to become more friendly and respect you as a leader. This increases the affection gain from any event that alters affection.<br>
-		[[Wear the Heart-stealing Stole|Use Items and Relics][$hsswear=1]]<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Solace Lace")>>
-	<<if $slwear>>
-		<br>You can take off the small white bow. This will remove the protection from extreme environments you are gaining from the Relic.<br>
-		[[Take off the Solace Lace|Use Items and Relics][$slwear=0]]<br>
-	<<else>>
-		<br>You can put on the small white bow you have. It will shield you from any extreme environmental temperatures, protect you from illness and above all make you hair look more feminine and cute!<br>
-		[[Wear the Solace Lace|Use Items and Relics][$slwear=1]]<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Event Horizon")>>
-	<<if $EventHorizonWear>>
-		<br> You can take off the Event Horizon bracelet. This will make sure you body's natural waste management will start again.
-		[[Take off the Event Horizon|Use Items and Relics][$EventHorizonWear=false]]<br>
-	<<else>>
-		<br> You can put on the Event Horizon bracelet. This will make sure you body's natural waste management will stop.
-		[[Put on the Event Horizon|Use Items and Relics][$EventHorizonWear=true]]<br>
-	<</if>>
-<</if>>
-
 <<if $ownedRelics.some(e => e.name === "World Stone")>>
 	<br>
 	<<if $mc.fit >= 10>>
@@ -1230,61 +1164,14 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<</if>>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Chain of Lorelei")>>
-	<<if $colwear>>
-		<br>Currently your voice is different than the one you were used to. Right now you have a feminine voice that sounds like its coming from someone with a natural talent for singing, as if you could be the central figure in an angelic chorus or make a career in music with only minimal training.<br>
-		[[Take the Chain of Lorelei off|Use Items and Relics][$colwear=0]]<br>
-	<<else>>
-		<br>You have a fairly normal <<GenderPronoun>> voice, but perhaps you sound different if you took advantage of one of your Relics?<br>
-		[[Wear the Chain of Lorelei|Use Items and Relics][$colwear=1]]<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Blind Divine")>>
-	<<if $BDwear>>
-		<br>You are currently wearing the Blind Divine, 
-		<<if $eyeCount<2 && !$BionicEye>>
-			it feels you can perceive even more than when you still had both your eyes. The limited range of the Relic still makes it feel a little more awkward than when you had your normal vision.
-		<<else>>
-			which allows you to perceive your immediate surroundings to a precise level you could never hope to achieve with your eyes.
-		<</if>>
-		<br>
-		[[Take the Blind Divine off|Use Items and Relics][$BDwear=false]]<br>
-	<<else>>
-		<br>You have the Blind Divine, would you like to wear it to obtain to power of blindsight?<br>
-		[[Wear the Blind Divine|Use Items and Relics][$BDwear=true]]<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
-	<<if $HeavyHeadwear>>
-		<br>You are currently wearing the Heavy is the Head mask, greatly enhancing your intelligence.
-		<br>
-		[[Take the Heavy is the Head off|Use Items and Relics][$HeavyHeadwear=false,$IQdrop+=999]]<br>
-	<<else>>
-		<br>You have the Heavy is the Head, would you like to wear it and enhance your intelligence?<br>
-		[[Wear the Heavy is the Head|Use Items and Relics][$HeavyHeadwear=true,$IQdrop-=999]]<br>
-	<</if>>
-<</if>>
-
 <<if $ownedRelics.some(e => e.name === "Aegis Coffin")>>
 	<<if $AegisWear>>
+	    /* Why are we printing this here if there's nothing the player can do with it anyway? */
 		<br>After resting in the Aegis Coffin, your bones have been transformed into an orichalcum skeleton. You have no further use for this powerful Relic.
 		<br>
 	<<else>>
 		<br>You possess the Aegis Coffin. Would you like to slumber within it to replace your current skeleton with a superior orichalcum one?<br>
 		[[Sleep in the Aegis Coffin|Use Items and Relics][$AegisWear=true, setup.skeletonRemains.weight= 9.3*$mc.heightCor/170, setup.skeletonRemains.count+=1,$items.push(setup.skeletonRemains)]]<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
-	<<if $LightningWear>>
-		<br>The Lightning Rook is always within arm's reach, ready to give you an advantage in combat.
-		<br>
-		[[Put the Lightning Rook away|Use Items and Relics][$LightningWear=false]]<br>
-	<<else>>
-		<br>By grasping the Lightning Rook, time slows to a crawl, making battles significantly easier, especially when you're armed with a firearm. You can bring it close so that you're always ready to use its power.<br>
-		[[Keep the Lightning Rook close and ready to use at a moment's notice|Use Items and Relics][$LightningWear=true]]<br>
 	<</if>>
 <</if>>
 
@@ -1299,17 +1186,6 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>You are already under the effect of the Pulse Bloom.<br>
 	<<else>>
 		<br>You have nobody to use the Pulse Bloom on.<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Luminous Phantasmagoria")>>
-	<<if $LuminousWear>>
-		<br>The Luminous Phantasmagoria is floating above your head, making you appear more normal and innocent to anyone who observes you.
-		<br>
-		[[Put the Luminous Phantasmagoria away|Use Items and Relics][$LuminousWear=false]]<br>
-	<<else>>
-		<br>By wearing the Luminous Phantasmagoria people would view you as more normal and innocent.<br>
-		[[Hold the Luminous Phantasmagoria over your head and wear it|Use Items and Relics][$LuminousWear=true]]<br>
 	<</if>>
 <</if>>
 
@@ -1328,7 +1204,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>You have the opportunity to summon a spirit to forge a golem using the power of the Lambent Specter<br><br>
 		[[Summon a spirit with the Lambent Specter|Lambent Use]]
 	<</if>>
-<br><br>	
+<br><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Memory Reign") && $hiredCompanions.length > 0>>
@@ -1339,7 +1215,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $MaruConvo1 = false>>
 			<<set $MaruConvo2 = false>>
 			<<set $MaruConvoPreg = false>>
-			<<set $companionMaru.affec=0>>			
+			<<set $companionMaru.affec=0>>
 		<</link>><br>
 	<</if>>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
@@ -1350,7 +1226,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $LilyPromise = false>>
 			<<set $LilyConvoLac = false>>
 			<<set $LilyConvoPreg = false>>
-			<<set $companionLily.affec=0>>			
+			<<set $companionLily.affec=0>>
 		<</link>><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
@@ -1364,7 +1240,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $KhemiaConvoMostMasc = false>>
 			<<set $khmeiaWettingFlag = false>>
 			<<set $KhemiaConvoPreg = false>>
-			<<set $companionKhemia.affec=0>>			
+			<<set $companionKhemia.affec=0>>
 		<</link>><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
@@ -1375,7 +1251,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $CherryConvoLac = false>>
 			<<set $CherryFluffy = false>>
 			<<set $CherryConvoPreg = false>>
-			<<set $companionCherry.affec=0>>			
+			<<set $companionCherry.affec=0>>
 		<</link>><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
@@ -1386,7 +1262,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $CloudConvoLac = false>>
 			<<set $CloudConvoPreg = false>>
 			<<set $altCloud	   = true>>
-			<<set $companionCloud.affec=0>>			
+			<<set $companionCloud.affec=0>>
 		<</link>><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
@@ -1396,7 +1272,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $SaekoConvo2 = false>>
 			<<set $SaekoConvoPlant = false>>
 			<<set $SaekoConvoPreg = false>>
-			<<set $companionSaeko.affec=0>>			
+			<<set $companionSaeko.affec=0>>
 		<</link>><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
@@ -1406,35 +1282,8 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			<<set $TwinFly = false>>
 			<<set $TwinConvoPreg = false>>
 			<<set $pregTwinMC = false>>
-			<<set $companionTwin.affec=0>>			
+			<<set $companionTwin.affec=0>>
 		<</link>><br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "From Seafoam")>>
-	<<if !$scent>>
-		<br>Currently you have a neutral scent<br>
-		[[Scrub yourself with the sponge while imagining a sweet, floral scent|Use Items and Relics][$scent=1]]<br>
-		[[Scrub yourself with the sponge while imagining a spicy, musky scent|Use Items and Relics][$scent=-1]]<br>
-	<<elseif $scent===1 >>
-		<br>You have a sweet and floral scent lingering about you<br>
-		[[Scrub yourself with the sponge while imagining the sponge to be odorless|Use Items and Relics][$scent=0]]<br>
-		[[Scrub yourself with the sponge while imagining a spicy, musky scent|Use Items and Relics][$scent=-1]]<br>
-	<<else>>
-		<br>You have a strong, musky scent lingering about you<br>
-		[[Scrub yourself with the sponge while imagining the sponge to be odorless|Use Items and Relics][$scent=0]]<br>
-		[[Scrub yourself with the sponge while imagining a sweet, floral scent|Use Items and Relics][$scent=1]]<br>
-	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Sibyl Blend")>>
-	
-	<<if $SibylBuff === 0>>
-		<br>You have possession of the Sibyl Blend, brewing it and looking in the leaves can point you in the direction of a Relic, saving you 1 day on your next Relic travel time, and this is reflected in the time costs shown on the Relic page.<br>
-		[[Use the Sibyl Blend to help find the next Relic more quickly|Use Items and Relics][$SibylBuff = 1]]<br>
-	<<else>>
-		<br>The Sibyl Blend tea leaves have pointed you in a clear direction for the next Relic. You are confident that finding it will take you 1 less day than it normally would, and this is reflected in the time costs shown on the Relic page.<br>
-		[[Stop using the Sibyl Blend to help find future Relics|Use Items and Relics][$SibylBuff = 0]]<br>
 	<</if>>
 <</if>>
 
@@ -1448,41 +1297,151 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
 <</if>>
 
-<<if $ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
-	<<if !$DaedalusEquip>>
-		<br> You have obtained an incredibly complex and intricate mechanism that you can wrap around your chest like a sash, then it will interface with your nervous system and allow you to control its wings and take flight.<br>
-		[[Equip the Daedalus Mechanism|Daedalus Mechanism Select][$DaedalusEquip = true]]<br>
-	<<else>>
-		<br>Wing-like structures seem to organically sprout from your back, but it is actually the wings of the Daedalus Mechanism which is around your chest.<br>
-		[[Take off the Daedalus Mechanism|Use Items and Relics][$DaedalusEquip = false, $DaedalusFly=false]]<br>
-		<<if !$DaedalusFly>>
-			[[I will fly between layers instead of walking|Use Items and Relics][$DaedalusFly=true]] (Note: This will leave companions behind and they will have to catch up at normal speed)<br>
+<div class="relicToggles">
+	<<if $abyssKnow === 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>
+		<div class="relicToggleEntry">
+			<div>If you have the encyclopedia, the smartphone or are travelling with Saeko you can turn Abyssal knowledge on or off</div>
+			<div><<printHTML `toggle(b => $abyssKnowCheatoff = !b, !$abyssKnowCheatoff)`>></div>
+		</div>
+	<</if>>
+
+	<<if $items[24].count > 0>>
+		<div class="relicToggleEntry">
+			<div>Use energy rations</div>
+			<div><<printHTML `toggle(b => $useEnergyrations = b, $useEnergyrations)`>></div>
+		</div>
+	<</if>>
+
+	<<if $items[25].count > 0>>
+		<div class="relicToggleEntry">
+			<div>Use Ward Water instead of forage or other water sources</div>
+			<div><<printHTML `select(v => $wardWaterDrink = v, {Never: 0, 'When Jinxed': 1, Always: 2}, $wardWaterDrink)`>></div>
+		</div>
+	<</if>>
+
+	<<if $items[25].count > 0 && $hexflame > 9>>
+		<div>
+			You can drink as much Ward Water as you want if you you want to reduce your jinxed flame counters. This might not be the most economical idea, but it can help you solve the issue immediately if you're not worried about conserving water.<br>
+			[[Drink some Ward Water to reduce your hexflame count|Ward Water Drink]]
+    	</div>
+    <</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Heart-stealing Stole")>>
+		<div class="relicToggleEntry">
+			<div>You can put on the majestic stole you have, it is sure to help sway the hearts of your companions to become more friendly and respect you as a leader. This increases the affection gain from any event that alters affection.</div>
+			<div><<printHTML `toggle(v => $hsswear = v ? 1 : 0, !!$hsswear)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Solace Lace")>>
+		<div class="relicToggleEntry">
+			<div>You can put on the small white bow you have. It will shield you from any extreme environmental temperatures, protect you from illness and above all make you hair look more feminine and cute!</div>
+			<div><<printHTML `toggle(v => $slwear = v ? 1 : 0, !!$slwear)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Event Horizon")>>
+		<div class="relicToggleEntry">
+			<div>You can put on the Event Horizon bracelet. This will make sure you body's natural waste management will stop.</div>
+			<div><<printHTML `toggle(v => $EventHorizonWear = v, $EventHorizonWear)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Chain of Lorelei")>>
+		<div class="relicToggleEntry">
+			<div>You can wear the Chain of Lorelei to get a feminine voice that sounds like its coming from someone with a natural talent for singing, as if you could be the central figure in an angelic chorus or make a career in music with only minimal training.</div>
+			<div><<printHTML `toggle(v => $colwear = v ? 1 : 0, !!$colwear)`>></div>
+		</div>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Blind Divine")>>
+		<div class="relicToggleEntry">
+			<div>You can wear the Blind Divine to obtain the power of blindsight
+				<<if $eyeCount<2 && !$BionicEye>>
+					which allows you to perceive even more than when you still had both your eyes. The limited range of the Relic still makes it feel a little more awkward than when you had your normal vision.
+				<<else>>
+					which allows you to perceive your immediate surroundings to a precise level you could never hope to achieve with your eyes.
+				<</if>>
+			</div>
+			<div><<printHTML `toggle(v => $BDwear = v, $BDwear)`>></div>
+		</div>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "Heavy is the Head")>>
+		<div class="relicToggleEntry">
+			<div>You have the Heavy is the Head, would you like to wear it and enhance your intelligence?</div>
+			/* The IQ drop really ought to be calculated, not stored like this */
+			<div><<printHTML `toggle(v => {$HeavyHeadwear = v; $IQdrop += v ? -999 : 999;}, $HeavyHeadwear)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
+		<div class="relicToggleEntry">
+			<div>By grasping the Lightning Rook, time slows to a crawl, making battles significantly easier, especially when you're armed with a firearm. You can keep it close so that you're always ready to use its power at a moment's notice.</div>
+			<div><<printHTML `toggle(v => $LightningWear = v, $LightningWear)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Luminous Phantasmagoria")>>
+		<div class="relicToggleEntry">
+			<div>By wearing the Luminous Phantasmagoria people would view you as more normal and innocent.</div>
+			<div><<printHTML `toggle(v => $LuminousWear = v, $LuminousWear)`>></div>
+		</div>
+	<</if>>
+
+	<<if $ownedRelics.some(e => e.name === "From Seafoam")>>
+		<div class="relicToggleEntry">
+			<div>You can scrub yourself with the From Seafoam sponge while imagining a specific scent to change the way you smell</div>
+			<div><<printHTML `select(v => $scent = v, {"spicy, musky": -1, 'odorless': 0, 'sweet, floral': 1}, $scent)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Sibyl Blend")>>
+		<div class="relicToggleEntry">
+			<div>You have possession of the Sibyl Blend, brewing it and looking in the leaves can point you in the direction of a Relic, saving you 1 day on your next Relic travel time, and this is reflected in the time costs shown on the Relic page.</div>
+			<div><<printHTML `toggle(v => $SibylBuff = v, $SibylBuff)`>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Daedalus Mechanism")>>
+    	<<set _daedalusFlyToggle = toggle(v => $DaedalusFly = v, $DaedalusFly)>>
+		<div class="relicToggleEntry">
+			<div>You have obtained an incredibly complex and intricate mechanism that you can wrap around your chest like a sash, then it will interface with your nervous system and allow you to control its wings and take flight.</div>
+			<div><<printHTML `toggle(v => {
+				$DaedalusEquip = v;
+				if (!v) {
+					_daedalusFlyToggle.disable();
+					document.getElementById('daedalusFlyToggleEntry').style.display = 'none';
+				} else {
+					document.getElementById('daedalusFlyToggleEntry').style.display = '';
+				}
+			}, $DaedalusEquip)`>></div>
+		</div>
+		<<set _style = $DaedalusEquip ? 'margin-top:-0.5em;' : 'margin-top:-1em;display: none'>>
+		<div class="relicToggleEntry" id="daedalusFlyToggleEntry" @style="_style">
+			<div>You can fly between layers instead of walking (note: this will leave companions behind and they will have to catch up at normal speed).</div>
+			<div><<printHTML _daedalusFlyToggle>></div>
+		</div>
+	<</if>>
+
+    <<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
+		<div class="relicToggleEntry">
+			<div>You look at the temporally limit-broken Aeonglass and ponder its endless use. You could activate it and effectively always travel at double speed to cut your travel times in half.</div>
+			<div><<printHTML `toggle(v => $endlessAeonglass = v, $endlessAeonglass)`>></div>
+		</div>
+	<</if>>
+
+	<<if setup.starlitConquestActivated.count==1>>
+		<<if $SizeHandicap>>
+			<div>Due to your size constraints, operating the mecha is no longer feasible. The cockpit would not be able to accommodate you.</div>
 		<<else>>
-			[[I will walk between layers instead of flying|Use Items and Relics][$DaedalusFly=false]]<br>
+			<div class="relicToggleEntry">
+				<div>Behind you, the Starlit Conquest stands tall and majestic, its gleaming Adamantium chassis reflecting faint light even in this dark Abyss. Its sheer presence is a comforting reminder of its power, even in its dormant state. But remember, it won't fight on its own! You can board it and continue your journey in the Starlit Conquest.</div>
+				<div><<printHTML `toggle(v => $mechaBoarded = v, $mechaBoarded)`>></div>
+			</div>
 		<</if>>
 	<</if>>
-<</if>>
-
-<<if $ownedRelics.some(e => e.name === "Aeonglass with Endless Time")>>
-	<<if $endlessAeonglass>>
-		<br>You look at the temporally limit-broken Aeonglass and ponder its endless use. It is currently active, so you are effectively always traveling at double speed now!<br>
-		[[Stop traveling at double speed for now|Use Items and Relics][$endlessAeonglass = false]]<br>
-	<<else>>
-		<br>You look at the temporally limit-broken Aeonglass and ponder its endless use. It is currently inactive. You could activate it and effectively always travel at double speed to cut your travel times in half.<br>
-		[[Let's travel at double speed from now on|Use Items and Relics][$endlessAeonglass = true]]<br>
-	<</if>>
-<</if>>
-
-<<if setup.starlitConquestActivated.count==1 && $mechaBoarded>>
-	<br>Seated within the magnificent cockpit of the Starlit Conquest, you're surrounded by advanced controls that seem almost intuitive. Ambient lights from the dashboard cast a soothing glow across the space. You can almost feel the unlimited energy emanating from its core, ready to burst forth at your command. The hum of the mech's inner workings assures you of its readiness. Your companions, sensing the mech's shift, stand ready to automatically board once the Starlit Conquest transforms into its airship mode.<br>	[[Dismount the mecha and continue on foot|Use Items and Relics][$mechaBoarded = false]]<br>
-<<elseif setup.starlitConquestActivated.count==1 && !$mechaBoarded>>
-	<br>Behind you, the Starlit Conquest stands tall and majestic, its gleaming Adamantium chassis reflecting faint light even in this dark Abyss. Its sheer presence is a comforting reminder of its power, even in its dormant state. But remember, it won't fight on its own!<br>
-	<<if $SizeHandicap>>
-		Due to your size constraints, operating the mecha is no longer feasible. The cockpit would not be able to accommodate you.<br>
-	<<else>>
-		[[Climb aboard the Starlit Conquest and continue your journey|Use Items and Relics][$mechaBoarded = true]]<br>
-	<</if>>
-<</if>>
+</div>
 
 <<if $ownedRelics.some(e => e.name === "Managed Misfortune")>>
 	<br>You look at the glistening set of marbles known as the Managed Misfortune.<br>
