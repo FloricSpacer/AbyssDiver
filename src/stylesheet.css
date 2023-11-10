@@ -469,6 +469,7 @@ body.start, body.balloon {
 
 .toggle-item {
   --padding: 1ex;
+  /* Add one pixel to the left for the border */
   padding: var(--padding);
   padding-left: calc(var(--padding) + 1px);
   display: inline-block;
@@ -478,6 +479,7 @@ body.start, body.balloon {
   color: rgba(223, 223, 223, 0.8);
 }
 
+ /* add a border to the left of every element that is not the first, selected, or to the right of the selected one */
 .toggle-item:not(.selected):not(:first-child):not(.selected + *) {
   background: linear-gradient(to bottom, transparent 15%, #555 25%, #555 75%, transparent 85%) left/1px no-repeat;
 }
@@ -494,10 +496,12 @@ body.start, body.balloon {
   background: #721313;
 }
 
+/* the selected element "eats" the border pixel of the one to its right */
 .toggle-item.selected:not(:last-child) {
   padding-right: calc(var(--padding) + 1px);
 }
 
+/* drop the border pixel in the element that follows the selected one */
 .selected + .toggle-item {
   padding-left: var(--padding);
 }
