@@ -1225,6 +1225,7 @@ class Character {
 	 * @returns {number} The level of conversation handicap of this character.
 	 */
 	get conversationHandicap() {
+		if (State.variables.WhispersWear) return 0;
 		if (this.curses.some(c => c.name === 'Deafening Silence')) return 2;
 		if (this.curses.some(c => c.name === 'Beastly')) return 1;
 		if (this.curses.some(c => c.name === 'Taciturn Turnaround')) return 1;
