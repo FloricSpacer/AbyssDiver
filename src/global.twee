@@ -1298,6 +1298,11 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
 <</if>>
 
+<<if $ownedRelics.some(e => e.name === "Ring of the Devourer")>>
+		<br>You can absorb the power of a relic, destroying it in the process.<br>
+		[[Choose a relic to absorb|Ring of the Devourer Use]]<br><br>
+<</if>>
+
 <div class="relicToggles">
 	<<if $abyssKnow === 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>
 		<div class="relicToggleEntry">
@@ -1374,6 +1379,13 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 			/* The IQ drop really ought to be calculated, not stored like this */
 			<div><<printHTML `toggle(v => {$HeavyHeadwear = v; $IQdrop += v ? -999 : 999;}, $HeavyHeadwear)`>></div>
 		</div>
+	<<elseif $devouredRelics.some(e => e.name === "Heavy is the Head")>>
+		<div class="relicToggleEntry">
+			<div>You have absorbed the Heavy is the Head relic. Your intelligence has permanently been enhanced.</div>
+			<<set $IQdrop = -999>>
+			<<set $HeavyHeadwear = true>>
+			/* The IQ drop really ought to be calculated, not stored like this */
+		</div>
 	<</if>>
 
     <<if $ownedRelics.some(e => e.name === "Lightning Rook")>>
@@ -1387,6 +1399,12 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<div class="relicToggleEntry">
 			<div>By wearing the Luminous Phantasmagoria people would view you as more normal and innocent.</div>
 			<div><<printHTML `toggle(v => $LuminousWear = v, $LuminousWear)`>></div>
+		</div>
+	<<elseif $devouredRelics.some(e => e.name === "Luminous Phantasmagoria")>>
+		<div class="relicToggleEntry">
+			<div>You have absorbed the Luminous Phantasmagoria relic. The world will permanently view you as more normal and innocent.</div>
+			<<set $LuminousWear = true>>
+			/* The IQ drop really ought to be calculated, not stored like this */
 		</div>
 	<</if>>
 
@@ -1611,6 +1629,21 @@ What would you like to do with your Managed Misfortune?
 	<</capture>>
 <</for>>
 
+:: Ring of the Devourer Use [nobr noreturn]
+<<set _i = 0>>
+<<for _relic range $ownedRelics>>
+	<<capture _i _relic>>
+		<<if _relic.name != "Perpetual Repose" && _relic.name != "Ring of the Devourer">>
+			<<link _relic.name "Use Items and Relics">>
+				<<set $ownedRelics.deleteAt(_i)>>
+				<<set $lostRelics.push(_relic)>>
+				<<set $devouredRelics.push(_relic)>>
+			<</link>><br>
+		<</if>>
+	<</capture>>
+	<<set _i++>>
+<</for>>
+<<back>>
 
 :: Ward Water Drink
 
