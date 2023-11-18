@@ -1133,18 +1133,32 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if setup.haveHealing && ($status.penalty > 0) && $dragonBurn === 0>>
 	<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
-	<<link "Use a medkit or other healing item to cure your status condition instantly" "Use Items and Relics">>
-		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+	
+	<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+		<<set _text = "Touch yourself to heal your injuries with the power of the absorbed Lifespanner">>
+	<<else>>
+		<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
+	<</if>>
+
+	<<link  _text "Use Items and Relics">>
+		<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 			<<set $items[4].count -= 1>>
 		<</if>>
 		<<set $status.penalty = 0, $status.duration = 0>>
 	<</link>><br>
 <</if>>
 
-<<if (($items[4].count > 1) || $ownedRelics.some(r => r.name === 'Lifespanner')) && ($status.penalty > 0) && $dragonBurn === 1>>
+<<if (($items[4].count > 1) || $ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner')) && ($status.penalty > 0) && $dragonBurn === 1>>
 	<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
-	<<link "Use two medkits or other healing item to cure your status condition instantly" "Use Items and Relics">>
-		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+	
+	<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+		<<set _text = "Touch yourself to heal your injuries with the power of the absorbed Lifespanner">>
+	<<else>>
+		<<set _text = "Use two medkits or other healing item to cure your status condition instantly">>
+	<</if>>
+	
+	<<link _text "Use Items and Relics">>
+		<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 			<<set $items[4].count -= 2>>
 		<</if>>
 		<<set $status.penalty = 0, $status.duration = 0, $dragonBurn = 0>>

@@ -601,7 +601,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has items that can heal status conditions.
     haveHealing: {
-        get: () => checkAvailability(['Medkit'], ['Lifespanner']),
+        get: () => checkAvailability(['Medkit'], ['Lifespanner']) || vars.devouredRelics.some(r => r.name === 'Lifespanner'),
     },
     // Check whether the player has protection from cold.
     haveColdProtection: {
