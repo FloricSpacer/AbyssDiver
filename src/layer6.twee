@@ -1093,9 +1093,16 @@ Relying on your own swordplay will allow you to put up a minimum amount of resis
 		<<PregCheckTentacle $mc>>
 	<</link>><br>
 	<<if setup.haveHealing>>
-		<<link "Fight it off with a sword and cure the status using a medkit or other healing item" $returnPassage>>
+
+		<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+			<<set _text = "Fight it off with a sword and cure the status by touching yourself with the power of the absorbed Lifespanner">>
+		<<else>>
+			<<set _text = "Fight it off with a sword and cure the status using a medkit or other healing item">>
+		<</if>>
+
+		<<link _text $returnPassage>>
 			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
-			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<PregCheckTentacle $mc>>
@@ -1110,9 +1117,16 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<PregCheckTentacle $mc>>
 	<</link>><br>
 	<<if setup.haveHealing>>
-		<<link "Fight it off with Sunbeam and cure the status using a medkit or other healing item" $returnPassage>>
+
+		<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+			<<set _text = "Fight it off with Sunbeam and cure the status by touching yourself with the power of the absorbed Lifespanner">>
+		<<else>>
+			<<set _text = "Fight it off with Sunbeam and cure the status using a medkit or other healing item">>
+		<</if>>
+
+		<<link _text $returnPassage>>
 			<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
-			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<PregCheckTentacle $mc>>
@@ -1128,8 +1142,15 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>
 	<<if setup.haveHealing >>
-		<<link "Have Khemia fight it off with a sword and use a medkit or other healing item to cure his status" $returnPassage>>
-			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+
+		<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+			<<set _text = "Have Khemia fight it off with a sword and cure his status condition by touching him with the power of the absorbed Lifespanner">>
+		<<else>>
+			<<set _text = "Have Khemia fight it off with a sword and use a medkit or other healing item to cure his status">>
+		<</if>>
+		
+		<<link  _text $returnPassage>>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<set $smaragdineThreatsSubmitted.tentacleGreater = true; $smaragdineThreatsDefeated.tentacleGreater = true>>
@@ -1146,8 +1167,15 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 		<<PregCheckTentacle $companionKhemia>>
 	<</link>><br>	
 	<<if setup.haveHealing>>
-		<<link "Have Khemia fight it off with Sunbeam and use a medkit or other healing item to cure his status" $returnPassage>>
-			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+
+		<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+			<<set _text = "Have Khemia fight it off with Sunbeam and cure his status condition by touching him with the power of the absorbed Lifespanner">>
+		<<else>>
+			<<set _text = "Have Khemia fight it off with Sunbeam and use a medkit or other healing item to cure his status">>
+		<</if>>
+
+		<<link _text $returnPassage>>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<set $smaragdineThreatsSubmitted.tentacleGreater = true; $smaragdineThreatsDefeated.tentacleGreater = true>>
@@ -1177,9 +1205,16 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 <</if>>
 
 <<if setup.haveHealing>>
-	<<link "Allow it to overpower you and use a medkit or other healing item to cure the status" $returnPassage>>
+
+	<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+		<<set _text = "Allow it to overpower you and use the power of the absorbed Lifespanner to cure the status">>
+	<<else>>
+		<<set _text = "Allow it to overpower you and use a medkit or other healing item to cure the status">>
+	<</if>>
+
+	<<link _text $returnPassage>>
 		<<set $smaragdineThreatsSubmitted.tentacleGreater = true>>
-		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 			<<set $items[4].count -= 1>>
 		<</if>>
 		<<PregCheckTentacle $mc>>

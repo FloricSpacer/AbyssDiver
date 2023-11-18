@@ -269,16 +269,23 @@ Every Relic in this layer is found in one of the many ruins that are carved into
 
 <p>
 <<if $status.duration > 0>>
-<<if setup.haveHealing>>
-	<<link "Use a medkit or other healing item to cure your status condition instantly" "Layer5 Relics">>
-		<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
-			<<set $items[4].count -= 1>>
+	<<if setup.haveHealing>>
+
+		<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+			<<set _text = "Touch yourself to heal your injuries with the power of the absorbed Lifespanner">>
+		<<else>>
+			<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
 		<</if>>
-		<<set $status.penalty = 0, $status.duration = 0>>
-	<</link>><br>
-<<else>>
-	You do not have a medkit or other healing items to cure your status condition.<br>
-<</if>>
+
+		<<link _text "Layer5 Relics">>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
+				<<set $items[4].count -= 1>>
+			<</if>>
+			<<set $status.penalty = 0, $status.duration = 0>>
+		<</link>><br>
+	<<else>>
+		You do not have a medkit or other healing items to cure your status condition.<br>
+	<</if>>
 <</if>>
 [[Continue exploring the fifth layer|Layer5 Hub]]
 </p>
@@ -511,8 +518,15 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 	[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3;$smaragdineThreatsSubmitted.booby = true]]
 	<<nobr>>
 	<<if setup.haveHealing>>
-		<<link "Use a medkit or other healing item to cure your status and continue the search for the Relic" "Layer5 Booby2">>
-			<<if !$ownedRelics.some(r => r.name === 'Lifespanner')>>
+
+		<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+			<<set _text = "Touch yourself to heal your injuries with the power of the absorbed Lifespanner">>
+		<<else>>
+			<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
+		<</if>>
+
+		<<link _text "Layer5 Booby2">>
+			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<set $status.penalty = 0, $status.duration = 0>>
