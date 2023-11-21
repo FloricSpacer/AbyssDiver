@@ -1134,7 +1134,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <<if setup.haveHealing && ($status.penalty > 0) && $dragonBurn === 0>>
 	<br>You currently have a status condition that is slowing down your next $status.duration travel times by $status.penalty days each.<br>
 	
-	<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+	<<if $devouredRelics.some(r => r.name === 'Lifespanner')>>
 		<<set _text = "Touch yourself to heal your injuries with the power of the absorbed Lifespanner">>
 	<<else>>
 		<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
@@ -1151,7 +1151,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <<if (($items[4].count > 1) || $ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner')) && ($status.penalty > 0) && $dragonBurn === 1>>
 	<br>You currently have a severe dragon burn which is slowing you down permanently until you heal it, however it will take 2 medkits to heal it properly.<br>
 	
-	<<if $devouredRelics.some(r => r.name = 'Lifespanner')>>
+	<<if $devouredRelics.some(r => r.name === 'Lifespanner')>>
 		<<set _text = "Touch yourself to heal your injuries with the power of the absorbed Lifespanner">>
 	<<else>>
 		<<set _text = "Use two medkits or other healing item to cure your status condition instantly">>
@@ -1572,7 +1572,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 
 
-:: Managed Misfortune Use
+:: Managed Misfortune Use [nobr noreturn]
 
 What would you like to do with your Managed Misfortune?
 
@@ -1659,7 +1659,7 @@ What would you like to do with your Managed Misfortune?
 				<<radiobutton "_curse.bloodColor" "white">> White<br>
 			<</if>>
 			<<set _text = "Activate stored " + _curse.name + " Curse">>
-			<<link _text "Use Items and Relics">>
+			<<link _text "Managed Misfortune Use">>
 				<<if _curse instanceof SemenDemon>>
 					<<set _curse = _curse.copy()>>
 					<<set _prevCurse = $mc.getCurse(SemenDemon)>>
@@ -1674,13 +1674,14 @@ What would you like to do with your Managed Misfortune?
 		<<else>>
 			You are affected by Curse _curse.name stored in the marbles.<br>
 			<<set _text = "Deactivate stored " + _curse.name + " Curse">>
-			<<link _text "Use Items and Relics">>
+			<<link _text "Managed Misfortune Use">>
 				<<RemoveCurse _curse>>
 			<</link>><br>
 		<</if>>
 	<</capture>>
 <</for>>
 
+<<back>>
 :: Ring of the Devourer Use [nobr noreturn]
 <<set _i = 0>>
 Which Relic would you like to devour with your Ring?<br><br>
@@ -1886,8 +1887,6 @@ How many dubloons would you like to pay back?
 	<<set _j = $ManagedMisfortuneActive.findLastIndex(curse => curse.name === _targetCurse.name)>>
 	<<if _j !== -1>>
 		<<set $ManagedMisfortuneActive.deleteAt(_j)>>
-		<<set _k = $StoredCurse.findLastIndex(curse => curse.name === _targetCurse.name)>>
-		<<set $StoredCurse.deleteAt(_k)>>
 	<</if>>
 <</if>>
 
