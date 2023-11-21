@@ -597,7 +597,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has a rope or equivalent.
     haveRope: {
-        get: () => checkAvailability(['Rope'], ['Orbweaver'], ['rope']),
+        get: () => checkAvailability(['Rope'], ['Orbweaver'], ['Daedalus Mechanism'], ['rope']),
     },
     // Check whether the player has items that can heal status conditions.
     haveHealing: {
