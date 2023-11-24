@@ -38,6 +38,9 @@ Macro.add('PassTime', {
 			if (mc.hasCurse(SemenDemon)) {
 				new Wikifier(this.output, `<<SemenDemonCalc ${state.weightedDayIndex}>>`)
 			}
+			if (mc.hasCurse(CreatureOfTheNight)) {
+				new Wikifier(this.output, `<<CreatureOfTheNightCalc ${state.weightedDayIndex}>>`)
+			}
 			/* Reset the weighted day index. */
 			state.weightedDayIndex = 0
 		}

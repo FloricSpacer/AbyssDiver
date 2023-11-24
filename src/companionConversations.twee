@@ -4021,36 +4021,9 @@ You ignore the soft, trembling pleas echoing in the cold air, your eyes locked o
 <<elseif $mc.HandicapThreat + _appFitCor > _companion.HandicapThreat + _companionFitCor >>
 <<say _companion>>What are you..? Please don't...<</say>>
 You ignore the soft, trembling pleas echoing in the cold air, your eyes locked on the task at hand. The Pulse Bloom, vibrant and robust, rests within your grip, ready to perform its unusual magic. An uncanny silence punctuates your forceful extraction of the life fluid, the bloom absorbing it greedily, a vampire of the plant kingdom.
-<<link "Use the Pulse Bloom" "Pulse Bloom Transformation" >>
+	<<link "Use the Pulse Bloom" "Pulse Bloom Transformation" >>
 		<<set _companion.affec -= 6 - $hsswear>>
-		<<set $PulseBloomStorage.osex = $mc.osex>>
-		<<set $PulseBloomStorage.obreasts = $mc.obreasts>>
-		<<set $PulseBloomStorage.openis = $mc.openis>>
-		<<set $PulseBloomStorage.ogender = $mc.ogender>>
-		<<set $PulseBloomStorage.oheight = $mc.oheight>>
-		<<set $PulseBloomStorage.age = $mc.age>>
-		<<set $PulseBloomStorage.ohair = $mc.ohair>>
-		<<set $PulseBloomStorage.oskinColor = $mc.oskinColor>>
-		<<set $PulseBloomStorage.oeyeColor = $mc.oeyeColor>>
-		<<set $PulseBloomStorage.penisCor = $mc.penisCor>>
-		<<set $PulseBloomStorage.breastsCor = $mc.breastsCor>>
-		<<set $PulseBloomStorage.vagina = $mc.vagina>>
-		<<set $PulseBloomStorage.heightCor = $mc.heightCor>>
-		<<set $PulseBloomStorage.fit = _companionFitCor - _appFitCor>>
-
-		<<set $mc.osex = _companion.osex>>
-		<<set $mc.obreasts = _companion.obreasts>>
-		<<set $mc.openis = _companion.openis>>
-		<<set $mc.ogender = _companion.ogender>>
-		<<set $mc.oheight = _companion.oheight>>
-		<<set $mc.age = Math.max(_companion.age, 18)>> /* Prevent instant bad end. */
-		<<set $mc.ohair = _companion.ohair>>
-		<<set $mc.oskinColor = _companion.oskinColor>>
-		<<set $mc.oeyeColor = _companion.oeyeColor>>
-		<<set $mc.desc += _companion.appDesc>>
-		<<set $mc.fit += $PulseBloomStorage.fit>>
-		<<set $PulseBloomDate = $time>>
-		<<CarryAdjust>>
+		<<include "Pulse Bloom Code">>
 	<</link>>
 <<else>>
 However _companion.name manages the wrestle you off and soon you're the one on the ground. You find yourself sprawled on the cold ground, gasping, looking up at _companion.name's face twisted with confusion and anger.
@@ -4099,6 +4072,20 @@ You produce the unusual flower, the crimson hue glimmering in the light.
 	You ready the Pulse Bloom, your heart racing with anticipation.
 
 	<<link "Extract the blood to use the Pulse Bloom" "Pulse Bloom Transformation" >>
+		<<include "Pulse Bloom Code">>
+	<</link>>
+<<else>>
+	<<say _companion>>So, I had rather you'd not do it.<</say>>
+	You sigh, the weight of disappointment heavy on your shoulders.
+
+	<<say $mc>> Okay fair enough.<</say>>
+	The words escape your lips, a quiet acceptance of your companion's wishes.
+
+	<<link 'Return to your adventure' $hubReturn>><</link>>
+<</if>>
+<</if>>
+
+:: Pulse Bloom Code
 		<<set _appFitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>
 		<<set _companionFitCor = _companion.hasCurse("Weakling") ? 0 : _companion.fit>>
 
@@ -4131,17 +4118,7 @@ You produce the unusual flower, the crimson hue glimmering in the light.
 		<<set $mc.fit += $PulseBloomStorage.fit>>
 		<<set $PulseBloomDate = $time>>
 		<<CarryAdjust>>
-	<</link>>
-<<else>>
-	<<say _companion>>So, I had rather you'd not do it.<</say>>
-	You sigh, the weight of disappointment heavy on your shoulders.
 
-	<<say $mc>> Okay fair enough.<</say>>
-	The words escape your lips, a quiet acceptance of your companion's wishes.
-
-	<<link 'Return to your adventure' $hubReturn>><</link>>
-<</if>>
-<</if>>
 :: Pulse Bloom Transformation[nobr]
 You tenderly clutch the Pulse Bloom, drawing it closer to your face, as you take a deep breath, inhaling its crimson vapors. Your nostrils flare, savoring the intoxicatingly sweet and pungent scent. Yet, oddly, nothing seems to occur immediately. Exhaling, you proceed to draw in more of these ruby-hued emissions, until the Pulse Bloom has no more to offer. You stand there in quiet anticipation, but nothing appears to be taking place.<br>
 Minutes trickle by, only for you to suddenly sense your heartbeat accelerating, each pulse resonating through your veins, making your blood buzz. You're seized by an alarming dizziness, and your body flushes with a heat that is almost too much to bear. Disoriented, you stagger, attempting to regain your balance when you feel the transformation seeping into you like ink in water.<br><br>
