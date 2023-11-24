@@ -56,6 +56,23 @@
 <</if>>
 <</widget>>
 
+:: Creature of the Night Widget [widget nobr]
+<<widget "CreatureOfTheNightCalc">>
+	<<set _sdcurse = $mc.getCurse(CreatureOfTheNight)>>
+
+	<<set _contributions: (_sdcurse.donor == "none"  || $CotNBalance>2) ? 0 : 2>>
+	<<set $CotNBalance += (_contributions - 1)* _args[0]>>
+	<<if $devouredRelics.some(c=> c.name==="Pulse Bloom") && _sdcurse.donor != "none" >>
+		<<print "<<set _companion = $companion" + _sdcurse.donor + ">>">>
+		<<include "Pulse Bloom Code">>
+	<</if>>
+	<<if $CotNBalance < -35>>
+		<<set $gameOver=true>>
+	<<elseif $CotNBalance > 10>>
+		<<set $CotNBalance = 10>>
+	<</if>>
+<</widget>>
+
 :: Pronoun widgets [widget nobr]
 <<widget "Pronoun">>
 	<<if $mc.appGender<=5>>
@@ -652,6 +669,7 @@
 
 <<if $DesertedCompanions.length > 0 >>
 	<<set $SemenDemonVec = []>>
+	<<set $CreatureOfTheNight.donor = "none">>
 	<<set _rejoinD = $companionsDepartT>>
 	<<if $currentLayer< $companionsDepartL >>
 		<<for _i = $currentLayer; _i < $companionsDepartL; _i++>>
