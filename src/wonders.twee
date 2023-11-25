@@ -114,9 +114,42 @@
 	time: 0,
 }>>
 
+<<set setup.voidDiamond = {
+	name: "Void Diamond",
+	pic: "Wonders/voiddiamond.png",
+	time: 0,
+}>>
+
 :: WonderGrid [widget nobr]
 <<widget "WonderGrid">>
 <div class="cards-grid cards-wide">
+	<<for _wonder range _args>>
+		<<if _wonder.condition && !_wonder.condition()>><<continue>><</if>>
+		<div>
+			[img[setup.ImagePath + _wonder.pic]]
+			<h2>_wonder.name</h2>
+			<<if _wonder.time > 0>>
+				<<PreviewTravelTime '_time' _wonder.time>>
+				<<set _timeStyle = _time > _wonder.time ? "@@color:red;" : _time < _wonder.time ? "@@color:green;" : "">>
+				<p class="cost">
+					<<if _time !== _wonder.time>><s>
+						Travel Time: <<print _wonder.time + (_wonder.time === 1 ? " day" : " days")>>
+					</s><br><</if>>
+					Travel Time: <<print _timeStyle + _time + (_time === 1 ? " day" : " days") + (_timeStyle ? "@@" : "")>>
+				</p>
+				<p><<TravelToPassage `'Travel to the ' + _wonder.name` `_wonder.name + " Site"` _time>></p>
+			<<else>>
+				<p><<link `'Use the ' + _wonder.name` `_wonder.name + " Site"`>><</link>></p>
+			<</if>>
+			<p><<include `_wonder.name + " Description"`>></p>
+		</div>
+	<</for>>
+</div>
+<</widget>>
+
+:: WonderGridGold [widget nobr]
+<<widget "WonderGridGold">>
+<div class="cards-grid-gold cards-wide">
 	<<for _wonder range _args>>
 		<<if _wonder.condition && !_wonder.condition()>><<continue>><</if>>
 		<div>
@@ -298,7 +331,7 @@ Magnum Opus: Achieve every single one of the Smaragdine Testament's other non -c
 
 Upon completing this task, the Smaragdine Testament will split open, and a small jade-green egg will materialize from the rubble. You may then take this egg to anywhere you please in the Abyss and place it down, to create an entirely new layer in that location, designed to your specifications and being positioned above or below whichever of the other lavers you please. You also receive + 500 corruption when the Smaragdine Testament splits open.
 
-:: Shifting Obelisk Description
+:: The Shifting Obelisk Description
 
 As you move through this strange place, eventually the weight of the darkness feels like a physical shroud. Eventually, you will find the Shifting Obelisk. This enigmatic structure is carved from a single block of a strange materials that seems to drink all light from its surrounding.
 
