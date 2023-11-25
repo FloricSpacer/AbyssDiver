@@ -57,13 +57,13 @@
 <</widget>>
 
 :: Creature of the Night Widget [widget nobr]
-<<widget "CreatureOfTheNightCalc">>
-	<<set _sdcurse = $mc.getCurse(CreatureOfTheNight)>>
-
-	<<set _contributions: (_sdcurse.donor == "none"  || $CotNBalance>2) ? 0 : 2>>
+<<widget "CreatureOfTheNightCalc">>/*xxx */
+	<<set _contributions = ($donor==""  || $CotNBalance>2) ? 0 : 7>>
 	<<set $CotNBalance += (_contributions - 1)* _args[0]>>
-	<<if $devouredRelics.some(c=> c.name==="Pulse Bloom") && _sdcurse.donor != "none" >>
-		<<print "<<set _companion = $companion" + _sdcurse.donor + ">>">>
+	<<if $devouredRelics.some(c=> c.name === "Pulse Bloom") && $donor!="" && $CotNBalance<=2 >>
+		@@.alert1; The absorbed power of the pulse bloom changed your appearance when drinking blood!@@
+		<<print "<<set _companion = $companion" + $donor + ">>">>
+		<<set $PulseBloomUse = _companion>>
 		<<include "Pulse Bloom Code">>
 	<</if>>
 	<<if $CotNBalance < -35>>
@@ -743,7 +743,7 @@
 	<<set $mc.ohair = $PulseBloomStorage.ohair>>
 	<<set $mc.oskinColor = $PulseBloomStorage.oskinColor>>
 	<<set $mc.oeyeColor = $PulseBloomStorage.oeyeColor>>
-	<<set $mc.desc = "">>
+	<<set $mc.appDesc = "">>
 	<<set $mc.fit -= $PulseBloomStorage.fit>>
 	<<set $PulseBloomDate = setup.never>>
 	<<set $PulseBloomUse="">>
