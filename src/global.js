@@ -1,6 +1,6 @@
 'use strict';
 
-/* global UrineReamplificationA, UrineReamplificationB, SemenDemon, Wikifier, GenderEvent, AssetEvent, LibidoEvent, AgeEvent, HeightEvent, StandardsEvent */
+/* global UrineReamplificationA, UrineReamplificationB, SemenDemon, CreatureOfTheNight, Wikifier, GenderEvent, AssetEvent, LibidoEvent, AgeEvent, HeightEvent, StandardsEvent */
 Macro.add('PassTime', {
 	handler: function () {
 		let eventTriggers = this.args[0]
