@@ -1855,7 +1855,16 @@ After a while you finally make it back to your boss. "Gerard, I finally got them
 	<<if $items[14].count > 0>>
 		Even a novice could vanquish such a primal creature using a human weapon like your trusty sword.<br>
 		<<set $smaragdineThreatsDefeated.baying = true>>
-		[[Wield your sword and confront the beast|$returnPassage]]<br><br>
+		<<link "Wield your sword and confront the beast" $returnPassage>>
+			<<if $CotNBalance<-4>>
+				<<set $CotNBalance+=10>>
+				<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+					<<set _companion = _temp ? $creatureBayingGourmetMale : $creatureBayingGourmetFemale>>
+					<<set $PulseBloomUse = _companion>>
+					<<include "Pulse Bloom Code">>
+				<</if>>
+			<</if>>
+		<</link>><br><br>
 	<</if>>
 	<<if $items[13].count > 0 && $items[20].count > 2>>
 		Despite the creature's muscular build, it's no match for the lethal force of a pistol. A few well-aimed shots should do the trick.<br>
