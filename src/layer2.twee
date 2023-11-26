@@ -1859,17 +1859,29 @@ After a while you finally make it back to your boss. "Gerard, I finally got them
 			<<if $CotNBalance<-4>>
 				<<set $CotNBalance+=10>>
 				<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
-					<<set _companion = _temp ? $creatureBayingGourmetMale : $creatureBayingGourmetFemale>>
-					<<set $PulseBloomUse = _companion>>
+					<<set _companion = _temp ? $creatureBayingGourmetFemale : $creatureBayingGourmetMale>>
+					<<set $transformMonsterScene = true>>
+					<<set $PulseBloomUse = "Monster">>
 					<<include "Pulse Bloom Code">>
 				<</if>>
 			<</if>>
-		<</link>><br><br>
+		<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 	<</if>>
 	<<if $items[13].count > 0 && $items[20].count > 2>>
 		Despite the creature's muscular build, it's no match for the lethal force of a pistol. A few well-aimed shots should do the trick.<br>
 		<<set $smaragdineThreatsDefeated.baying = true>>
-		[[Fire your pistol thrice to bring down the beast|$returnPassage][$items[20].count -= 3]]
+		<<link "Fire your pistol thrice to bring down the beast" $returnPassage>>
+			<<set $items[20].count -= 3>>
+			<<if $CotNBalance<-4>>
+				<<set $CotNBalance+=10>>
+				<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+					<<set _companion = _temp ? $creatureBayingGourmetFemale : $creatureBayingGourmetMale>>
+					<<set $transformMonsterScene = true>>
+					<<set $PulseBloomUse = "Monster">>
+					<<include "Pulse Bloom Code">>
+				<</if>>
+			<</if>>
+		<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 	<</if>>
 	<<if $items[1].count > 4>>
 		Hunger is the driving force behind the beast's aggression. With an ample supply of food at your disposal, you could offer some rations to appease it.<br>
@@ -1882,7 +1894,17 @@ After a while you finally make it back to your boss. "Gerard, I finally got them
 	<<if $slingshot === 1>>
 		The Brave Vector slingshot, as powerful as a firearm, can subdue the beast with a series of precise shots.<br>
 		<<set $smaragdineThreatsDefeated.baying = true>>
-		[[Overcome the creature with the Brave Vector|$returnPassage]]<br><br>
+		<<link "Overcome the creature with the Brave Vector" $returnPassage>>
+			<<if $CotNBalance<-4>>
+				<<set $CotNBalance+=10>>
+				<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+					<<set _companion = _temp ? $creatureBayingGourmetFemale : $creatureBayingGourmetMale>>
+					<<set $transformMonsterScene = true>>
+					<<set $PulseBloomUse = "Monster">>
+					<<include "Pulse Bloom Code">>
+				<</if>>
+			<</if>>
+		<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 	<</if>>
 	<<if $mechaBoarded>>
 		As you activate the plasma sword of the Starlit Conquest, the baying gourmet whimpers like a terrified puppy and backs away.<br>
@@ -1927,7 +1949,17 @@ A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embr
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down the beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|$returnPassage][$smaragdineThreatsDefeated.baying = true]]
+<<link "Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts" $returnPassage>>
+	<<if $CotNBalance<-4>>
+		<<set $CotNBalance+=10>>
+		<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+			<<set _companion = _temp ? $creatureBayingGourmetFemale : $creatureBayingGourmetMale>>
+			<<set $transformMonsterScene = true>>
+			<<set $PulseBloomUse = "Monster">>
+			<<include "Pulse Bloom Code">>
+		<</if>>
+	<</if>>
+<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 
 :: Layer2 Gourmet Ravage
 [img[setup.ImagePath+'Threats/bayinggourmet.png']]

@@ -117,6 +117,9 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer === 0 ){
         return "Starlit Unlocked";
     }
+    if (StoryVar.PulseBloomUse == "Monster" && StoryVar.transformMonsterScene){
+        return "Monster Transformation";
+    }
     if (StoryVar.boundBanditEnding) {
         return "Bound Bandit Ending";
     }
