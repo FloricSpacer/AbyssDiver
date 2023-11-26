@@ -20,6 +20,15 @@ setup.companionIds = {
 	bandit: 9,
 	ai: 10,
 }
+
+setup.creatureIds = {
+	BayingGourmetMale : 101,
+	BayingGourmetFemale : 102,
+	DragonMale: 103,
+	DragonFemale: 104,
+
+}
+
 setup.id2name = id => {
 	switch (id) {
 		case setup.companionIds.mc:
@@ -44,6 +53,10 @@ setup.id2name = id => {
 			return State.variables.companionBandit.name;
 		case setup.companionIds.ai:
 			return State.variables.companionAi.name;
+		case setup.creatureIds.BayingGourmetMale:
+			return State.variables.creatureBayingGourmetMale.name;
+		case setup.creatureIds.BayingGourmetFemale:
+			return State.variables.creatureBayingGourmetFemale.name;
 		default:
 			console.error(`attempted to get name of invalid id ${id}`)
 			return '[unknown person (please report this bug to the developers)]'
@@ -1210,6 +1223,7 @@ class Character {
 		if (this.height < 100) inhuman += 1;
 		if (this.height > 1000) inhuman += 1;
 		if (this.height < 50) inhuman += 1;
+		if (State.variables.PulseBloomUse == "Monster") inhuman+=10;
 		inhuman += this.tail.length * 2;
 		inhuman = this.events.reduce((v, e) => e.inhumanise(v), inhuman);
 		if (this.id === setup.companionIds.mc && State.variables.LuminousWear) inhuman /= 4;

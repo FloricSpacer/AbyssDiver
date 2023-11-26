@@ -1318,15 +1318,48 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get its hoard of 50 dubloons when you kill it though.<br>
-	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 99; $status.penalty += 2; $khemiaDragon === 1; $dubloons += 50, $dragonKill += 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
+	<<link "Have Khemia fight it off with Sunbeam" $returnPassage>>
+		<<set $status.duration += 99, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1, $smaragdineThreatsSubmitted.dragon = true>>
+		<<if $CotNBalance<-4>>
+			<<set $CotNBalance+=10>>
+			<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+				<<set _companion = $Dragon>>
+				<<set $transformMonsterScene = true>>
+				<<set $PulseBloomUse = "Monster">>
+				<<include "Pulse Bloom Code">>
+			<</if>>
+		<</if>>
+	<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 <</if>>
 <<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	[[Have Khemia fight it off with Sunbeam|$returnPassage][$status.duration += 3; $status.penalty += 2; $khemiaDragon === 1; $dubloons += 50; $dragonKill += 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
+	<<link "Have Khemia fight it off with the Joyous Sunder sword" $returnPassage>>
+		<<set $status.duration += 3, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1, $smaragdineThreatsSubmitted.dragon = true>>
+		<<if $CotNBalance<-4>>
+			<<set $CotNBalance+=10>>
+			<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+				<<set _companion = $Dragon>>
+				<<set $transformMonsterScene = true>>
+				<<set $PulseBloomUse = "Monster">>
+				<<include "Pulse Bloom Code">>
+			<</if>>
+		<</if>>
+	<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon === 0>>
 While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	[[Use your Relics to electrocute the dragon|$returnPassage][$status.duration += 3; $status.penalty += 2; $electricDragon === 1; $dubloons += 50; $dragonKill += 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
+	<<link "Use your Relics to electrocute the dragon" $returnPassage>>
+		<<set $status.duration += 3, $status.penalty += 2, $electricDragon === 1, $dubloons += 50, $dragonKill += 1, $smaragdineThreatsSubmitted.dragon = true>>
+		<<if $CotNBalance<-4>>
+			<<set $CotNBalance+=10>>
+			<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+				<<set _companion = $Dragon>>
+				<<set $transformMonsterScene = true>>
+				<<set $PulseBloomUse = "Monster">>
+				<<include "Pulse Bloom Code">>
+			<</if>>
+		<</if>>
+	<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 <</if>>
 <<if $mechaBoarded>>
 	The dragon stands tall in front of you, unwilling to back down despite the power of your Starlit Conquest. This may be a worthy opponent to test the full capabilities of your machine. But if they see you fight like this, the dragons might avoid you from now on.
@@ -1339,4 +1372,15 @@ If you try to run away without fighting to keep your dubloons safe, prepare to b
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons|$returnPassage][$dragonKill += 1, $dubloons += 50]]
+<<link "Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons" $returnPassage>>
+	<<set $dragonKill += 1, $dubloons += 50>>
+	<<if $CotNBalance<-4>>
+		<<set $CotNBalance+=10>>
+		<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+			<<set _companion = $Dragon>>
+			<<set $transformMonsterScene = true>>
+			<<set $PulseBloomUse = "Monster">>
+			<<include "Pulse Bloom Code">>
+		<</if>>
+	<</if>>
+<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
