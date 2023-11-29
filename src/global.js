@@ -442,7 +442,7 @@ Macro.add('PassTime', {
 				let timeDiff = Math.round(state.weightedDay) - Math.round(state.weightedDayIndex)
 				new Wikifier(this.output,
 				             `Desperate to stave off starvation and dehydration, you spent an extra ${timeDiff} ` +
-				             `days foraging, extending the time spent to ${Math.round(state.weightedDay)} days!`)
+				             `days foraging, extending the time spent to ${Math.round(state.weightedDay)} days!<br><br>`)
 			}
 
 			/* If we ended on a fractional day that should be rounded up, increment the time. */
