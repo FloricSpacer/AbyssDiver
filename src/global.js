@@ -94,7 +94,9 @@ Macro.add('PassTime', {
 							if (!State.variables.DaedalusFly && !State.variables.mechaBoarded) State.variables.hexflame += 1
 							break;
 						case 7:
-							if (State.variables.dubloons >= 300) {
+							if (State.variables.voidDiamondActive == true){
+								break;
+							} else if (State.variables.dubloons >= 300) {
 								State.variables.dubloons -= 1;
 							} else if (State.variables.dubloons >= 100) {
 								State.variables.dubloons -= 2;
@@ -176,7 +178,7 @@ Macro.add('PassTime', {
 					case 1:
 						if (State.variables.forageFood && !ate) {
 							State.variables.foodL1 += 1;
-							if (!State.variables.abyssKnow) {
+							if (!State.variables.voidDiamondActive && !State.variables.abyssKnow) {
 								mc.events.push(new GenderEvent('Blisshroom Major'));
 								bandit?.push(new GenderEvent('Blisshroom Major'));
 							}
@@ -184,7 +186,7 @@ Macro.add('PassTime', {
 						}
 						if (State.variables.forageWater && !drank) {
 							State.variables.waterL1 += 1;
-							if (!State.variables.abyssKnow) {
+							if (!State.variables.voidDiamondActive && !State.variables.abyssKnow) {
 								mc.events.push(new AssetEvent("Cloudpool Major", 1));
 								bandit?.push(new AssetEvent("Cloudpool Major", 1));
 							}
@@ -218,7 +220,7 @@ Macro.add('PassTime', {
 						}
 						if (State.variables.forageWater && !drank) {
 							State.variables.waterL2 += 1;
-							if (!State.variables.abyssKnow){
+							if (!State.variables.voidDiamondActive && !State.variables.abyssKnow){
 								State.variables.bewitchBabies += 1;
 							}
 							drank = true;
@@ -228,13 +230,15 @@ Macro.add('PassTime', {
 					case 3: {
 						if (State.variables.forageFood && !ate) {
 							State.variables.foodL3 += 1;
-							let event = new AgeEvent("Crystalline Confectionery Major", {years: 1});
-							if (State.variables.abyssKnow) {
-								event = new AgeEvent("Crystalline Confectionery Minor", {months: 1});
+							if (!State.variables.voidDiamondActive) {
+								let event = new AgeEvent("Crystalline Confectionery Major", {years: 1});
+								if (State.variables.abyssKnow) {
+									event = new AgeEvent("Crystalline Confectionery Minor", {months: 1});
+								}
+								mc.events.push(event);
+								bandit?.events.push(event);
 							}
 							// They'll both get the same event, but that's fine because events are immutable.
-							mc.events.push(event);
-							bandit?.events.push(event);
 							ate = true;
 						}
 						// can't forage for water (unless at river, handled above)
@@ -256,14 +260,14 @@ Macro.add('PassTime', {
 								State.variables.items[20].count -= bulletsRequired;
 								ate = true;
 							}
-							if (ate) {
+							if (!State.variables.voidDiamondActive && ate) {
 								mc.events.push(event);
 								bandit?.events.push(event);
 							}
 						}
 						if (State.variables.forageWater && !drank) {
 							State.variables.waterL4 += 1;
-							if (!State.variables.abyssKnow){
+							if (!State.variables.voidDiamondActive && !State.variables.abyssKnow){
 								State.variables.algalSize += 1;
 							}
 							drank = true;
@@ -273,7 +277,10 @@ Macro.add('PassTime', {
 					case 5:
 						if (State.forageFood && !ate) {
 							State.variables.foodL5 += 1;
-							if (State.variables.abyssKnow) {
+							if (State.variables.voidDiamondActive) {
+								
+							}
+							else if (State.variables.abyssKnow) {
 								State.variables.crumbleFluid += 1;
 							} else {
 								State.variables.crumbleFluid += 5;
@@ -297,8 +304,8 @@ Macro.add('PassTime', {
 						}
 						if (State.variables.forageWater && !drank) {
 							State.variables.waterL6 += 1;
-							if (!State.variables.hiredCompanions.some(e => e.id === setup.companionIds.saeko) &&
-								setup.haveSmartphone){
+							if (!(State.variables.hiredCompanions.some(e => e.id === setup.companionIds.saeko) &&
+								setup.haveSmartphone) && (!State.variables.voidDiamondActive)){
 								State.variables.hexflame += 1;
 							}
 							drank = true;
@@ -311,13 +318,18 @@ Macro.add('PassTime', {
 					case 8:
 						if (State.variables.forageFood && !ate) {
 							State.variables.foodL8 += 1;
-							mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));
-							bandit?.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));
+							if (!State.variables.voidDiamondActive){
+								mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));
+								bandit?.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));
+							}
 							ate = true;
 						}
 						if (State.variables.forageWater && !drank) {
 							State.variables.waterL8 += 1;
-							if (State.variables.hiredCompanions.some(e => e.id === setup.companionIds.saeko)
+							if (State.variables.voidDiamondActive) {
+
+							}
+							else if (State.variables.hiredCompanions.some(e => e.id === setup.companionIds.saeko)
 								&& setup.haveSmartphone) {
 								State.variables.IQdrop += 0.05;
 							} else {
@@ -329,12 +341,16 @@ Macro.add('PassTime', {
 					case 9:
 						if (State.variables.forageFood && !ate) {
 							State.variables.foodL9 += 1;
-							State.variables.corruption -= 2;
+							if (!State.variables.voidDiamondActive) {
+								State.variables.corruption -= 2;
+							}
 							ate = true;
 						}
 						if (State.variables.forageWater && !drank) {
 							State.variables.waterL9 += 1;
-							State.variables.corruption -= 1;
+							if (!State.variables.voidDiamondActive) {
+								State.variables.corruption -= 1;
+							}
 							drank = true;
 						}
 						break;
