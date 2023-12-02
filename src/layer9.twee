@@ -152,7 +152,9 @@ As this layer is entirely underwater, ascending is actually relatively fast here
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
-		<<set $corruption -= 120 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+		<<if !$voidDiamondActive>>
+			<<set $corruption -= 120 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+		<</if>>
 	<</nobr>>\
 	As you ascend through the waters of the ninth layer, the overwhelming vastness of this underground ocean grips your senses. Around you, darkness prevails, a cloak of obscurity that makes the shaft of water from which you emerged seem like a distant memory. Your eyes strain to penetrate the gloom, but it's a futile effort; light fades into nothingness, leaving you suspended in a realm where the concepts of up and down blur. The notion of an endless fall into this aquatic void sends a shiver down your spine.
 
@@ -551,7 +553,7 @@ You have successfully taken the $relic108.name Relic. Hopefully you can make goo
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
+<<include "Libido Curse">>
 
 <<if $currentLayer == 9>>\
 	[[Accept more Curses from the ninth layer|Layer9 Curses]]
@@ -574,7 +576,7 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
+<<include "Gender Curse">>
 
 <<if $currentLayer == 9>>\
 	[[Accept more Curses from the ninth layer|Layer9 Curses]]
@@ -1252,7 +1254,7 @@ Threats:
 
 :: Layer9 Travel Events [layer9 nobr]
 <<set _triggers = {
-	elder: () => ($timeL9T1 >= 5 && !$ElderDestroyed),
+	elder: () => !$voidDiamondActive && ($timeL9T1 >= 5 && !$ElderDestroyed),
 }>>
 
 <<PassTime _triggers>>

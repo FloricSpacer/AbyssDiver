@@ -995,8 +995,6 @@ Please enter your new exoskeleton color:
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
-
 What would you like your new blood (or maybe hemolymph, depending on how human you are) color to be?
 
 <<radiobutton "_curse.bloodColor" "blue" checked>> Blue
@@ -1336,7 +1334,9 @@ After walking through the tunnel for about 5 or 6 hours (it's hard to precisely 
 
 And as soon as the harsh light of the fifth layer touches you, you notice your pack is suddenly much lighter! It seems that all of the items you brought with you into the Abyss have disappeared, presumably sent to the surface at a location which is suddenly intuitively available to your mind. <<if $ownedRelics.some(e => e.name === "Pocket Hoard")>>
 
-Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you can easily stick your whole arm in. In fact, there doesn't seem to be any limit to what you can fit into the rucksack, as long as it fits into the opening, but you can easily retrieve anything you put in. You have successfully activated your Pocket Hoard! Your carrying capacity is now effectively infinite, and the value of your Pocket Hoard has increased to 100 dubloons.
+Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you can easily stick your whole arm in. In fact, there doesn't seem to be any limit to what you can fit into the rucksack, as long as it fits into the opening, but you can easily retrieve anything you put in. You have successfully activated your Pocket Hoard!
+
+<b>Your carrying capacity is now effectively infinite, and the value of your Pocket Hoard has increased to 100 dubloons.</b>
 <</if>>
 
 [img[setup.ImagePath+'Environments/Layer5Tunnel.png']]
@@ -1421,7 +1421,7 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 
 :: Layer5 Travel Events [layer5 nobr]
 <<set _triggers = {
-	duneDevouringBorer: () => $timeL5T2 >= 9,
+	duneDevouringBorer: () => !$voidDiamondActive && $timeL5T2 >= 9,
 	mayflyScuttler: () => $timeL5T1 >= 8,
 }>>
 
@@ -1462,7 +1462,9 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 <</nobr>>
 <<if !setup.passingTime()>>
 	<<nobr>>
-		<<set $corruption -= 50 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+		<<if !$voidDiamondActive>>
+			<<set $corruption -= 50 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+		<</if>>
 	<</nobr>>
 	You continue through the scorching desert for days on end, until you eventually reach the contrasting bitter cold of the fourth layer. But before you can do anything on the fourth layer, you need to spend many days in the agonizingly slow climb through the enormous crevasse at its bottom. After many days of climbing, you're back to the snowy wastes of the fourth layer proper.
 
