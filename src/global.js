@@ -21,7 +21,7 @@ Macro.add('PassTime', {
 		if (!breakForEvent && state.expectedDays && !state.unweightedDayIndex) {
 			/* Temporarily use the weighted day index to store the weighted expected number of days. */
 			state.weightedDayIndex = Math.round(timeWeight * state.expectedDays)
-
+ 
 			if (!State.variables.WettingSolution &&
 			    (mc.hasCurse(UrineReamplificationA) || mc.hasCurse(UrineReamplificationB))) {
 				let upperBound = 15;
@@ -32,6 +32,9 @@ Macro.add('PassTime', {
 				if (random(1, upperBound ** state.weightedDayIndex) < upperBound ** state.weightedDayIndex -
 				    (upperBound - 1) ** state.weightedDayIndex) {
 					new Wikifier(this.output, '<<include "Wetting Events">>');
+					if(!State.variables.dollevent2){
+						state.expectedDays += 1
+					}
 				}
 			}
 
