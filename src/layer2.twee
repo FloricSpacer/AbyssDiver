@@ -981,8 +981,6 @@ You have successfully taken on the _curse.name Curse. Hopefully you are okay wit
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
 
-You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
-
 What type of ears would you like to gain?
 
 <<radiobutton "_curse.earType" "furry cat" checked>> Cat
@@ -1077,8 +1075,6 @@ What type of tail did you gain?
 <<set _curse = new MaximumFluff()>>\
 <<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
 [img[setup.ImagePath + _curse.pic]]
-
-You have successfully taken on the _curse.name Curse. Hopefully you are okay with accepting the permanent consequences.
 <<nobr>>
 <<set _hasHair = (_hairCurse = $mc.getCurse(HairRemoval)) !== undefined>>
 <<if _hasHair>>
@@ -1600,7 +1596,7 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 
 :: Layer2 Travel Events [layer2 nobr]
 <<set _triggers = {
-	bayingGourmet: () => $timeL2T1 >= 4 && $hiredCompanions.length < 4,
+	bayingGourmet: () => !$voidDiamondActive && $timeL2T1 >= 4 && $hiredCompanions.length < 4,
 }>>
 
 <<PassTime _triggers>>
@@ -1627,7 +1623,9 @@ A few tests and you can confirm you have pure water to fill your flasks with! No
 <</nobr>>\
 <<if !setup.passingTime()>>
 	<<nobr>>
-		<<set $corruption -= 15 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+		<<if !$voidDiamondActive>>
+			<<set $corruption -= 15 - $corRed + 5 * Math.trunc($hexflame / 10)>>
+		<</if>>
 	You continue your hike and try to keep somewhat dry from the droplets continually falling on your head, but eventually the dripping halts. You find yourself first in a sparse forest, then eventually back to the open, picturesque plains of the first layer.<br>
 	<<CarryAdjust>>
 	<<Threat1Criterion>>
