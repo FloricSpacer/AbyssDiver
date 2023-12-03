@@ -1,4 +1,25 @@
 /**
+ * The set of achievements in the smaragdine tablet. Each achievement grants a certain amount of corruption
+ * when achieved, has a certain condition required to be achieved and a certain human-friendly name.
+ *
+ * @type {Object.<string, {corruption: number, test: () => boolean, name: string}>}
+ */
+let tabletAchievements = {
+	speedrun: {corruption: 175, test: tabletSpeedrun, name: "Speedrun"},
+	worldRecord: {corruption: 200, test: tabletWorldRecord, name: "World Record"},
+	TAS: {corruption: 225, test: tabletTAS, name: "TAS"},
+	OTP: {corruption: 200, test: tabletOTP, name: "OTP"},
+	singlePlayer: {corruption: 300, test: tabletSinglePlayer, name: "Single Player"},
+	gourmet: {corruption: 150, test: tabletGourmet, name: "Gourmet"},
+	dangerFetish: {corruption: 125, test: tabletDangerFetish, name: "Danger Fetish"},
+	abyssalChampion: {corruption: 175, test: tabletAbyssalChampion, name: "Abyssal Champion"},
+	collector: {corruption: 200, test: tabletCollector, name: "Collector"},
+	curator: {corruption: 250, test: tabletCurator, name: "Curator"},
+	magnumOpus: {corruption: 500, test: tabletMagnumOpus, name: "Magnum Opus"}
+}
+window.tabletAchievements = tabletAchievements;
+
+/**
  * Returns true iff the "speedrun" requirement of the smaragdine tablet would be satisfied if the player picks it up
  * right now, i.e. if there are at least 600 days left in the spectre of the end's timer.
  * @return {boolean} true iff the "speedrun" requirement of the smaragdine tablet is satisfied
@@ -127,78 +148,37 @@ function tabletCurator() {
 }
 
 /**
+ * Returns true iff the "Magnum Opus" requirement of the smaragdine tablet is satisfied, i.e. if all other
+ * not mutually exclusive requirements have been satisfied
+ * @return {boolean} true iff the "Magnum Opus" requirement of the smaragdine tablet is satisfied
+ */
+function tabletMagnumOpus() {
+	return State.variables.smaragdineAchievements.speedrun &&
+	       State.variables.smaragdineAchievements.worldRecord &&
+	       State.variables.smaragdineAchievements.TAS &&
+	       (State.variables.smaragdineAchievements.OTP || State.variables.smaragdineAchievements.singlePlayer) &&
+	       State.variables.smaragdineAchievements.gourmet &&
+	       State.variables.smaragdineAchievements.dangerFetish &&
+	       State.variables.smaragdineAchievements.abyssalChampion &&
+	       State.variables.smaragdineAchievements.collector &&
+	       State.variables.smaragdineAchievements.curator;
+}
+
+/**
  * Awards accomplished achievements and adds the corresponding corruption.
  * @return {[string]} The list of achievements that hadn't been achieved before but are now.
  */
 function updateTablet() {
 	let newlyAchieved = []
-	if (!State.variables.smaragdineAchievements.speedrun && tabletSpeedrun()) {
-		State.variables.corruption += 175;
-		State.variables.smaragdineAchievements.speedrun = true;
-		newlyAchieved.push('speedrun');
-	}
-	if (!State.variables.smaragdineAchievements.worldRecord && tabletWorldRecord()) {
-		State.variables.corruption += 200;
-		State.variables.smaragdineAchievements.worldRecord = true;
-		newlyAchieved.push('worldRecord');
-	}
-	if (!State.variables.smaragdineAchievements.TAS && tabletTAS()) {
-		State.variables.corruption += 225;
-		State.variables.smaragdineAchievements.TAS = true;
-		newlyAchieved.push('TAS');
-	}
-	if (!State.variables.smaragdineAchievements.OTP && tabletOTP()) {
-		State.variables.corruption += 200;
-		State.variables.smaragdineAchievements.OTP = true;
-		newlyAchieved.push('OTP');
-	}
-	if (!State.variables.smaragdineAchievements.singlePlayer && tabletSinglePlayer()) {
-		State.variables.corruption += 300;
-		State.variables.smaragdineAchievements.singlePlayer = true;
-		newlyAchieved.push('singlePlayer');
+
+	for (let achievement in tabletAchievements) {
+		if (!State.variables.smaragdineAchievements[achievement] && tabletAchievements[achievement].test()) {
+			State.variables.corruption += tabletAchievements[achievement].corruption;
+			State.variables.smaragdineAchievements[achievement] = true;
+			newlyAchieved.push(achievement);
+		}
 	}
 
-	if (!State.variables.smaragdineAchievements.gourmet && tabletGourmet()) {
-		State.variables.corruption += 150;
-		State.variables.smaragdineAchievements.gourmet = true;
-		newlyAchieved.push('gourmet');
-	}
-	if (!State.variables.smaragdineAchievements.dangerFetish && tabletDangerFetish()) {
-		State.variables.corruption += 125;
-		State.variables.smaragdineAchievements.dangerFetish = true;
-		newlyAchieved.push('dangerFetish');
-	}
-	if (!State.variables.smaragdineAchievements.abyssalChampion && tabletAbyssalChampion()) {
-		State.variables.corruption += 175;
-		State.variables.smaragdineAchievements.abyssalChampion = true;
-		newlyAchieved.push('abyssalChampion');
-	}
-	if (!State.variables.smaragdineAchievements.collector && tabletCollector()) {
-		State.variables.corruption += 200;
-		State.variables.smaragdineAchievements.collector = true;
-		newlyAchieved.push('collector');
-	}
-	if (!State.variables.smaragdineAchievements.curator && tabletCurator()) {
-		State.variables.corruption += 250;
-		State.variables.smaragdineAchievements.curator = true;
-		newlyAchieved.push('curator');
-	}
-
-	if (!State.variables.smaragdineAchievements.magnumOpus &&
-	    State.variables.smaragdineAchievements.speedrun &&
-	    State.variables.smaragdineAchievements.worldRecord &&
-	    State.variables.smaragdineAchievements.TAS &&
-	    (State.variables.smaragdineAchievements.OTP || State.variables.smaragdineAchievements.singlePlayer) &&
-	    State.variables.smaragdineAchievements.gourmet &&
-	    State.variables.smaragdineAchievements.dangerFetish &&
-	    State.variables.smaragdineAchievements.abyssalChampion &&
-	    State.variables.smaragdineAchievements.collector &&
-	    State.variables.smaragdineAchievements.curator
-	) {
-		State.variables.corruption += 500;
-		State.variables.smaragdineAchievements.magnumOpus = true;
-		newlyAchieved.push('magnumOpus');
-	}
 	return newlyAchieved;
 }
 
