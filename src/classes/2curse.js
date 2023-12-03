@@ -92,7 +92,11 @@ class Curse extends CharEvent {
 	}
 
 	get description() {
-		return this.constructor.description;
+		if (true) { // TODO: check if the mitigation nadir reward is active
+			return this.constructor.description;
+		} else {
+			return this.constructor.descriptionMitigated;
+		}
 	}
 
 	get corr() {
