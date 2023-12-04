@@ -1051,7 +1051,7 @@ class AbsoluteBirthControl extends Curse {
 	}
 
 	static get incompatibilities() {
-		return ['Absolute Pregnancy', 'Wacky Wombs', 'Omnitool', ];
+		return ['Absolute Pregnancy', 'Wacky Wombs', 'Omnitool','Gestation Jumpstart' ];
 	}
 }
 setup.allCurses.AbsoluteBirthControl = new AbsoluteBirthControl()
