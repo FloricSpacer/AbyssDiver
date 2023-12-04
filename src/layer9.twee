@@ -50,26 +50,33 @@ Hopefully you'll be able to get used to it.
 <<else>>
 	<<set $layerTemp = random(0,20)>>
 <</if>>
-<<if $layerTemp === 1>>
-	The muffled silence of the ocean is briefly interrupted by the distant and eerie sound of water moving in vast volumes. Before you can comprehend its source, a massive unseen undercurrent tugs at you, spiraling you in a direction you hadn't intended to go. In the vast, unending expanse of the deep, it feels as if the Abyss itself is toying with you, like a cat with a mouse. It takes a few heart-pounding moments of effort to escape its grip and regain control. Shaken, you proceed with renewed caution.<br><br>
-<<elseif $layerTemp === 2>>
-	The water suddenly becomes filled with a soft hue. All around you, tiny plankton-like creatures begin to glow, creating a mesmerizing dance of lights. Their tiny bodies illuminate your path, and for a brief moment, the crushing darkness of the Abyss feels less intimidating. The dance lasts but a few moments before the creatures scatter, leaving you in the darkness once more.<br><br>
-<<elseif $layerTemp === 3 && $hiredCompanions.some(e => e.name === "Saeko")>>
-	Amidst the oppressive darkness, Saeko adjusts her glasses, pointing towards the faintly shimmering curtain ahead.<br><br>
-	
-	<<say $companionSaeko>>That appears to be a thermocline. It's a boundary where water of different temperatures meet. Causes that visual distortion.<</say>><br>
-	
-	Her voice is steady, filled with the reserved intrigue of a scientist making an observation, but the weight of the Abyss's bleakness mutes any overt enthusiasm. As you navigate through the curtain, the sudden change in temperature is unnerving. Saeko remains focused, jotting down brief notes on a waterproof pad, her demeanor a mix of curiosity and caution as you continue your journey.<br><br>
-<<elseif $layerTemp === 4>>
-	In these expansive depths, you feel an overwhelming sense of smallness. Everywhere you turn, there's just the vastness of water, pressing upon your psyche. The sensation of weightlessness combined with the eerie stillness makes you keenly aware of your isolation. The immediate vicinity feels like a shroud, wrapping around you, with only the muffled sound of your own heartbeat as a constant companion.<br><br>
-<<elseif $layerTemp === 6 && $mc.hasCurse("Hijinks Ensue")>>
-	<<include "Hijinks Ensue Scenes">>
-<<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
-	<<include "Companion Layer Interaction">>
-<<elseif $layerTemp >= 19>>
-	<<include "Curse Descriptions">><br><br>
+
+<<if $time == $CatastropheUsed>>
+	As you drift in the underwater gloom, the reality of your situation sets in. Your equipment, once your shield against the dangers of the Abyss, is gone, lost in the Catastrophe. More painfully, your companions, those who had journeyed with you, shared your struggles, and fought by your side, are no more. Their absence is a heavy weight, a void that the Phoenix Obol's power cannot fill.
+
+	You are alone now, stripped of your tools and allies, in the heart of an unforgiving sea. 
 <<else>>
-	As you plunge through the depths of the ninth layer, a vast, boundless underground ocean unfolds around you. Its magnitude is both mesmerizing and terrifying, reminding you of the insignificance of your existence in the face of the world around you. The impenetrable darkness that engulfs the expanse is disorienting, with the distant shaft of light above fading rapidly as you delve deeper. The chilling silence is punctuated only by the rhythmic beats of your own heart, the muffled sound of water pressing against your ears, and the slightest hint of something lurking just out of view.<br><br>
+	<<if $layerTemp === 1>>
+		The muffled silence of the ocean is briefly interrupted by the distant and eerie sound of water moving in vast volumes. Before you can comprehend its source, a massive unseen undercurrent tugs at you, spiraling you in a direction you hadn't intended to go. In the vast, unending expanse of the deep, it feels as if the Abyss itself is toying with you, like a cat with a mouse. It takes a few heart-pounding moments of effort to escape its grip and regain control. Shaken, you proceed with renewed caution.<br><br>
+	<<elseif $layerTemp === 2>>
+		The water suddenly becomes filled with a soft hue. All around you, tiny plankton-like creatures begin to glow, creating a mesmerizing dance of lights. Their tiny bodies illuminate your path, and for a brief moment, the crushing darkness of the Abyss feels less intimidating. The dance lasts but a few moments before the creatures scatter, leaving you in the darkness once more.<br><br>
+	<<elseif $layerTemp === 3 && $hiredCompanions.some(e => e.name === "Saeko")>>
+		Amidst the oppressive darkness, Saeko adjusts her glasses, pointing towards the faintly shimmering curtain ahead.<br><br>
+		
+		<<say $companionSaeko>>That appears to be a thermocline. It's a boundary where water of different temperatures meet. Causes that visual distortion.<</say>><br>
+		
+		Her voice is steady, filled with the reserved intrigue of a scientist making an observation, but the weight of the Abyss's bleakness mutes any overt enthusiasm. As you navigate through the curtain, the sudden change in temperature is unnerving. Saeko remains focused, jotting down brief notes on a waterproof pad, her demeanor a mix of curiosity and caution as you continue your journey.<br><br>
+	<<elseif $layerTemp === 4>>
+		In these expansive depths, you feel an overwhelming sense of smallness. Everywhere you turn, there's just the vastness of water, pressing upon your psyche. The sensation of weightlessness combined with the eerie stillness makes you keenly aware of your isolation. The immediate vicinity feels like a shroud, wrapping around you, with only the muffled sound of your own heartbeat as a constant companion.<br><br>
+	<<elseif $layerTemp === 6 && $mc.hasCurse("Hijinks Ensue")>>
+		<<include "Hijinks Ensue Scenes">>
+	<<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
+		<<include "Companion Layer Interaction">>
+	<<elseif $layerTemp >= 19>>
+		<<include "Curse Descriptions">><br><br>
+	<<else>>
+		As you plunge through the depths of the ninth layer, a vast, boundless underground ocean unfolds around you. Its magnitude is both mesmerizing and terrifying, reminding you of the insignificance of your existence in the face of the world around you. The impenetrable darkness that engulfs the expanse is disorienting, with the distant shaft of light above fading rapidly as you delve deeper. The chilling silence is punctuated only by the rhythmic beats of your own heart, the muffled sound of water pressing against your ears, and the slightest hint of something lurking just out of view.<br><br>
+	<</if>>
 <</if>>
 
 <<if  $time - $CatastropheUsed <= 2>>
@@ -1341,12 +1348,13 @@ And so it continues, for an eternity that stretches out until the stars burn out
 @@.layerTitle;<h1>THE END</h1>@@
 
 :: Catastrophe Layer Destruction[nobr]
-/*xxx*/
-You shoot the catastrophe in the direction of where the elders tentacles seem to come from. Massive ball of fire and vaporized water. Everything gone, fish gone, elder gone, chaos, blabla. <br>
+As your fingers hover over the trigger of the Catastrophe - a weapon of unfathomable power, a tempest contained within iron and steel - you feel the weight of your decision. This device, designed to unleash a cataclysmic force, is your last resort against the Elder. With a deep breath that tastes of determination, you press the button.
+
+In an instant, the Abyss transforms. A colossal orb of incandescent fire erupts, a sun birthed in the heart of the ocean. The water around it vaporizes in a seething frenzy, creating a maelstrom of steam and energy. The explosion radiates outward, a relentless tide of destruction. Fish, once gliding through the water with effortless grace, are instantly obliterated. The Elder's tentacles meet their end in a blinding inferno, even if the main body is too far away to truly be killed.
 <<if $hiredCompanions.length>0>>
-You see the silhouette of $hiredCompanions[0].name one more time as it, and thus $hiredCompanions[0].name itself, flickers out of existence.
+Through the turbulent waters and the shimmering heat, you glimpse the silhouette of $hiredCompanions[0].name one last time. Their form, a steadfast presence throughout your journey, flickers and distorts, like a mirage being swallowed by the desert sun. In a heart-wrenching moment, $hiredCompanions[0].name vanishes, erased from existence.
 	<<if $hiredCompanions.length>1>>
-		The rest of your companions share the same fate as they are consumed by the ball of plasma and fire.
+		One by one, your other companions are engulfed by the relentless surge of plasma and fire. Their faces, their stories, flash before your eyes, each a memory now lost to the all-consuming Catastrophe.
 	<</if>>
 <<for _i=0; _i<$hiredCompanions.length; _i++>>
 	<<set $LostCompanions.push($hiredCompanions[_i])>>
@@ -1354,7 +1362,7 @@ You see the silhouette of $hiredCompanions[0].name one more time as it, and thus
 <<set $hiredCompanions = []>>
 <br>
 <</if>>
-These are just last thoughts as you and your equipment are flung around when the shockwave hits you, right before being atomized yourself when the ball of fire finally reaches you.
+In these final moments, as the shockwave from the explosion engulfs you, the world around you becomes a blur of motion and light. Your equipment, once your lifeline in the deep, is now just debris caught in the maelstrom. You feel the searing heat as the ball of fire expands, reaching out to claim you. Your thoughts scatter, fragmented by the realization of your impending demise. In the last tick of time, you are atomized, becoming one with the cataclysm you unleashed.
 <<set $gameOver = true>>
 <<set $ElderDestroyed = true>>
 <<set $CatastropheUsed = $time>>
