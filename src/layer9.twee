@@ -965,7 +965,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 		<<say $elder>> You made it this far, maybe you could actually an exhilarating. For a while at least...  <</say>><br>
 	<</if>>
 
-	[[Try to evade the Elder|Elder attempt][$temp2 = "Evade"]]<br>
+	[[Try to hide from the Elder|Elder attempt][$temp2 = "Hide"]]<br>
 	[[Try to flee the Elder|Elder attempt][$temp2 = "Flight"]]<br>
 	[[Try to fight the Elder|Elder attempt][$temp2 = "Fight"]]<br>
 	
@@ -979,13 +979,13 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<<else>>
 		<<say $elder>>Become part of me, resistance is futile at this point.<</say>><br>
 	<</if>>
-	[[Try to evade the Elder|Elder attempt][$temp2 = "Evade"]]<br>
+	[[Try to hide from the Elder|Elder attempt][$temp2 = "Hide"]]<br>
 	[[Try to flee the Elder|Elder attempt][$temp2 = "Flight"]]<br>
 	[[Try to fight the Elder|Elder attempt][$temp2 = "Fight"]]<br>
 <</if>>
 
 :: Elder attempt [layer9 nobr]
-<<if $temp2 == "Evade">>
+<<if $temp2 == "Hide">>
 	What relics do you want to use in your attempt to evade the Elder's senses so you can escape it's tentacles?<br><br>
 <<elseif $temp2 == "Flight">>
 	What relics do you want to use in your attempt to fight the Elder's manacing tentacles in a bid to defeat them so you can escape?<br><br>
@@ -1048,7 +1048,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 
 :: Elder attempt2 [layer9 nobr]
 /*xxx */ 
-<<if ($temp2 == "Evade" && ($ElderEvadeWinList.some(e => e === $temp) || $ElderEvadeWinList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightWinList.some(e => e === $temp) || $ElderFlightWinList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightWinList.some(e => e === $temp) || $ElderFightWinList.some(e => e === $temp_alt)))>>
+<<if ($temp2 == "Hide" && ($ElderHideWinList.some(e => e === $temp) || $ElderHideWinList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightWinList.some(e => e === $temp) || $ElderFlightWinList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightWinList.some(e => e === $temp) || $ElderFightWinList.some(e => e === $temp_alt)))>>
 	<<set _succes=false>>
 	<<set _i=0>>
 	<<for _relic range $ownedRelics>>
@@ -1063,7 +1063,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<</for>>
 	<<set $ownedRelics.deleteAt(_j)>>
 
-<<elseif !$ElderSerious && (($temp2 == "Evade" && ($ElderEvadeList.some(e => e === $temp) || $ElderEvadeList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightList.some(e => e === $temp) || $ElderFlightList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightList.some(e => e === $temp) || $ElderFightList.some(e => e === $temp_alt))))>>
+<<elseif !$ElderSerious && (($temp2 == "Hide" && ($ElderHideList.some(e => e === $temp) || $ElderHideList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightList.some(e => e === $temp) || $ElderFlightList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightList.some(e => e === $temp) || $ElderFightList.some(e => e === $temp_alt))))>>
 	<<set _succes=true>>
 	<<set $Elderbeaten+=1>>
 	<<set _string = "$Elder" + $temp2 + "WinList">>
@@ -1072,7 +1072,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<<set _succes=false>>
 <</if>>
 
-<<if _succes && $temp2 == "Evade">>
+<<if _succes && $temp2 == "Hide">>
 	The Elder quickly loses track off you. You use the opportunity to quickly get away.<br>
 	[[Return to exploring layer 9|$returnPassage]]
 
