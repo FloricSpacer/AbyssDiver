@@ -278,7 +278,7 @@ Macro.add('PassTime', {
 						break;
 					}
 					case 5:
-						if (State.forageFood && !ate) {
+						if (State.variables.forageFood && !ate) {
 							State.variables.foodL5 += 1;
 							if (State.variables.voidDiamondActive) {
 								
@@ -293,7 +293,7 @@ Macro.add('PassTime', {
 						// can't forage for water (unless at oasis, handled above)
 						break;
 					case 6: {
-						if (State.forageFood && !ate) {
+						if (State.variables.forageFood && !ate) {
 							let bulletsRequired = Math.max(3 - State.variables.bullRed, 1);
 							if (State.variables.slingshot) {
 								State.variables.foodL6 += 1;
