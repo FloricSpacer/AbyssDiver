@@ -385,7 +385,7 @@ Setting.addToggle("WSHidden", {
 });
 
 Setting.addToggle("amputationHidden", {
-    label : "Hide content involving amputation. This includes non-physical crippling, such as losing the ability to hear or speak",
+    label : "Hide content involving voluntary amputation. This includes non-physical crippling, such as losing the ability to hear or speak",
     default  : false,
 });
 
