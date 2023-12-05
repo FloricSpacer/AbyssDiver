@@ -1399,10 +1399,6 @@ class HypnoHappytime extends Curse {
 		super('Hypno Happytime', 'none',
 		      'yOu are very susceptiBlE to hYpnosis, and it is not hard to implant suggestions into your MalleablE mind. ');
 	}
-
-	growAsset(prevAsset) {
-		return prevAsset + 2**0;
-	}
 }
 setup.allCurses.HypnoHappytime = new HypnoHappytime()
 State.variables.curse47 = setup.allCurses.HypnoHappytime
