@@ -794,6 +794,24 @@ If you already have both a penis and a pair of breasts, congrats on the free poi
 		return ['Sex Switcheroo']
 	}
 
+		/**
+	 * Returns the customisation options chosen for this Curse, if any.
+	 * @returns {[string]} The customisation options, in the same order they are used in the constructor.
+	 * @protected
+	 */
+		_customisationOptions() {
+			return [this.sexType];
+		}
+
+		get variation() {
+			return this.sexType;
+		}
+
+		set variation(value) {
+			console.error('Deprecated variation field used.')
+			this.sexType = value;
+		}
+
 	changePenis(character, prevPenis) {
 		if (character.curses.some(c => c instanceof Null)) return 0;
 		if (character.osex !== 'male') {
@@ -805,6 +823,7 @@ If you already have both a penis and a pair of breasts, congrats on the free poi
 
 	changeVagina(character, prevVagina) {
 		if (character.curses.some(c => c instanceof Null)) return 0;
+		if (this.sexType === "male") return 0;
 		return Math.max(prevVagina, 1);
 	}
 
