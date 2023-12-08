@@ -1276,8 +1276,8 @@ class Character {
 		handicap = this.events.reduce((v, e) => e.changeThreatHandicap(v), handicap)
 
 		let height = this.height
-		if (height > 185) {
-			handicap += Math.min(Math.floor(((height - 170) / 170 - 1) * 10), 7);
+		if (height > 215) {
+			handicap += Math.min(Math.floor(((height - 170) / 170 - 1) * 5), 7);
 		} else if (height < 125) {
 			handicap += Math.max(Math.floor(((height - 170) / height - 1) * 5), -7);
 		}
