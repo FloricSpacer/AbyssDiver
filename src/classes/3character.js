@@ -1278,8 +1278,8 @@ class Character {
 		let height = this.height
 		if (height > 185) {
 			handicap += Math.min(Math.floor(((height - 170) / 170 - 1) * 10), 7);
-		} else if (height < 125) {
-			handicap += Math.max(Math.floor(((height - 170) / height - 1) * 5), -7);
+		} else if (height < 155) {
+			handicap += Math.max(Math.floor(((height - 170) / height - 1) * 10), -7);
 		}
 
 		if (this.id === setup.companionIds.khemia && State.variables.convo.khemiaAegis === 1) handicap += 5;
