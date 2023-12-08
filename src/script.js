@@ -304,7 +304,7 @@ $(document).on(':passagestart', ev => {
             const relicVar = relicVars.find(relicVar => relic.name === relicVar.name);
             if (relicVar) {
                 relics[i] = relicVar;
-            } else {
+            } else if (relicVar!= "Starlit Conquest Activated") {
                 // Purity tree plank doesn't have a relic variable
                 console.error(`Couldn't find numbered relic variable for relic with name ${relic.name}!`);
             }
