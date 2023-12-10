@@ -2960,7 +2960,7 @@ class ALittleExtra extends Curse {
 	}
 
 	changeVagina(character, prevVagina) {
-		if (character.penis === 0 || (character.vagina > 0 && this.genitals === 'vagina')) {
+		if (character.penis === 0 || (prevVagina > 0 && this.genitals === 'vagina')) {
 			return prevVagina + 1;
 		}
 		return prevVagina;
