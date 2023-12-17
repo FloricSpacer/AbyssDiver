@@ -1486,7 +1486,7 @@ In these final moments, as the shockwave from the explosion engulfs you, the wor
 <br><br>
 [[Next|Layer9 Hub]]
 
-:: Layer9 Preview [image layer8]
+:: Layer9 Preview [image layer9]
 As you bring the charm up to your eye and gaze deep into the red crystal, your vision fades and a new image comes clearly into view:
 
 @@.layerTitle;
@@ -1522,3 +1522,131 @@ A cold sweat washes over you and a sense of revulsion forces you to retch.
 Finally, the vision fades, leaving you standing once again where you were before, with only a brief sense of motion sickness as you orient yourself back to your physical body. As you look at the Gleam Dazer once again, you notice the Relic is cracked and broken.
 
 [[Return|$previewReturn][setup.loseRelic('Gleam Dazer')]]
+
+
+:: Layer9 Cherry [layer9]
+[img[setup.ImagePath+'Surface/cherry.png']]
+
+How would you like to use Cherry's chaotic luck ability?
+
+[[Get 2 random Relics for half cost|Layer9 Cherry Relic]]
+[[Get 2 random Curses for +50% corruption|Layer9 Cherry Curse]]
+[[Get 1 Relic and 1 Curse|Layer9 Cherry Mix]]
+
+:: Layer9 Cherry Relic [layer9]
+<<nobr>>
+<<set $temp1 = random(0,11) + 96>>
+<<set $temp2 = random(0,11) + 96>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 96>>
+	<<if $temp1 !== $temp2>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set $ownedRelics.push($relics[$temp2])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+<</nobr>>
+
+The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
+
+[[Continue on to the rest of the layer|Layer9 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
+
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+	<<link "Reroll with Devil's Own" "Layer9 Cherry Relic">>
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+		
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
+
+		<<set setup.loseRelic("Devil's Own")>>
+	<</link>>
+
+<</if>>
+
+
+:: Layer9 Cherry Curse [layer9]
+<<nobr>>
+<<set $temp1 = random(0,11) + 108>>
+<<set $temp2 = random(0,11) + 108>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp1 = random(0,11) + 108>>
+	<<set $temp2 = random(0,11) + 108>>
+	<<if ($temp1 !== $temp2) && !($mc.hasCurse("Shrunken Assets") && ($temp1 === 110 || $temp2 === 110) )>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set _curse1 = setup.curseByNum($temp1)>>
+<<set _curse2 = setup.curseByNum($temp2)>>
+<<set $mc.addCurse(_curse1)>>
+<<set $mc.addCurse(_curse2)>>
+<<set _curse1.corr = Math.round(Math.max((_curse1.corr * 3 / 2), 0))>>
+<<set _curse2.corr = Math.round(Math.max((_curse2.corr * 3 / 2), 0))>>
+<<set $corruption += _curse1.corr>>
+<<set $corruption += _curse2.corr>>
+<</nobr>>
+
+The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a cost of _curse1.corr and _curse2.corr corruption respectively.
+
+[[Continue on to the rest of the layer|Layer9 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
+
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+	<<link "Reroll with Devil's Own" "Layer9 Cherry Curse">>
+		<<set $corruption -= _curse1.corr>>
+		<<RemoveCurse _curse1>>
+		
+		<<set $corruption -= _curse2.corr>>
+		<<RemoveCurse _curse2>>
+
+		<<set setup.loseRelic("Devil's Own")>>
+	<</link>>
+
+<</if>>
+
+
+:: Layer9 Cherry Mix []
+<<nobr>>
+<<set $temp1 = random(0,11) + 96>>
+<<for $i = 0; $i < 1; $i>>
+	<<set $temp2 = random(0,11) + 108>>
+	<<if !($mc.hasCurse("Shrunken Assets") && $temp2 === 110)>>
+		<<break>>
+	<</if>>
+<</for>>
+<<set $ownedRelics.push($relics[$temp1])>>
+
+<<set $corruption -= Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+<<set _curse = setup.curseByNum($temp2)>>
+<<set $mc.addCurse(_curse)>>
+<<set _curse.corr = Math.round(Math.max((_curse.corr * 1.5), 0))>>
+<<set $corruption += $_curse.corr>>
+<</nobr>>
+
+With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> corruption and obtained the Curse _curse.name for a gain of _curse.corr corruption respectively.
+
+[[Continue on to the rest of the layer|Layer9 Hub]]
+
+<<if $ownedRelics.some(e => e.name === "Devil's Own")>>
+
+	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
+
+	<<link "Reroll with Devil's Own" "Layer9 Cherry Mix">>
+		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
+		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
+		
+		<<set $corruption -= _curse.corr>>
+		<<RemoveCurse _curse>>
+		<<set setup.loseRelic("Devil's Own")>>
+	<</link>>
+
+<</if>>
