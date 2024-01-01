@@ -75,7 +75,9 @@ She seems to snap back from her thoughts.<br><br>
 <<say $companionBandit>>I don't know, it's this aura of dominance she radiates. On the other hand, she is a huge bitch and I would like nothing more than to kick her in the gut for all she said to me.<</say>><br>
 She shows a bit of wry smile.<br><br>
 <<say $mc>>Don't worry. If it comes to that I'll help you!<</say>><br>
-<<elseif $layerTemp === 7 && $mc.hasCurse(HijinksEnsue)>>
+<<elseif $layerTemp === 7>>
+<<include "L1 Reactions">>
+<<elseif $layerTemp === 8 && $mc.hasCurse(HijinksEnsue)>>
 <<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 <<include "Companion Layer Interaction">>
@@ -107,6 +109,7 @@ What do you want to do while you're here?<br><br>
 <span class="icon">[img[setup.ImagePath+'Icons/relicsearch.png']]</span> [[Search for Relics|Layer1 Relics]]
 <span class="icon">[img[setup.ImagePath+'Icons/curses.png']]</span> [[Take on Curses to purge your corruption|Layer1 Curses]]
 <span class="icon">[img[setup.ImagePath+'Icons/wonder.png']]</span> [[Look for any Wonders you can take advantage of|Layer1 Wonders]]
+<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Check out the farmers market|L1 Shop 1]]
 <span class="icon">[img[setup.ImagePath+'Icons/camping.png']]</span> [[Set up camp and rest here|Layer1 Camp]]
 <span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 1 habitation option|Layer1 Habitation]]
 
@@ -1238,7 +1241,6 @@ Gasping for breath, she too falls, succumbing to her injuries.
 		<<set $companionBandit.imageIcon = "Icons/BanditIcon.jpg">>
 		<<set $companionBandit.affec = -20>>
 		<<set $companionBandit.carry = 0>>
-
 	<</link>>
 <</if>>
 <<link "Quench your blood thirst using one of the bandits" "Layer1 Bandits Won">>
@@ -1526,6 +1528,51 @@ At some point enough is enough, and with your body regressed at much as yours wa
 [img[setup.ImagePath+'Habitation/outcastvillage.png']]
 [[test:go to end|Habitation Ending]]
 
+:: L1 Reactions [layer1]
+<<if $mc.appAge < 8>>
+	While walking through the village on the first layer a kid suddenly comes running up to you.
+
+	<<say $rndM>>Do you want to play with me?<</say>>
+	<<say $mc>>Oh I'm sorry I'm not a little kid, I don't have time to play.<</say>>
+	<<say $rndM>>Nu-uh, you are littler than me!<</say>>
+	To prove his point he stands next to you so both of you see that he is indeed a fraction bigger.
+
+	<<say $rndM>>You see! But I don't want to play with you anyway, you're too little!<</say>>
+	He sticks his tongue out and runs along again. Not wanting to leave to last word to some kid you yell after him.
+
+	<<say $mc>>I'm an adult you hear me!<</say>>
+	As the kid shows no sign of responding anymore, you feel embarrassment taking over you as you realize the irony of have to shout at some teasing kid that you are in fact mature.
+
+<<elseif $mc.appAge < 12>><br><br>
+	<<say $rndF>>Oh excuse me, little <<PronounPerceivedGender>>?<</say>>
+	A motherly woman in her mid thirties or early forties approaches you and making I contact with you.
+
+	<<say $mc>>Are you talking to me?<</say>>
+	<<say $rndF>>Yes, I am! Are you looking for a mother, perhaps?<</say>>
+	You turn a bit red.
+
+	<<say $mc>>I'm sorry but I'm afraid this is a misunderstanding. I'm not looking for my mother, you see, I'm...<</say>>
+	She cuts you off.
+
+	<<say $rndF>>Ow don't worry, I think you misunderstand. I know you are a diver. I used to be one and I still recognize the gear.<</say>>
+	<<say $mc>>But why did you ask if I lost my mother?<</say>>
+	<<say $rndF>>I didn't, I asked if you are looking for a mother. The abyss seems to think you would fit the role of a child.<</say>>
+	As she says that she motions to your regressed body.
+
+	<<say $rndF>>And I think I would fit the role of a mother.<</say>>
+	The woman winks at you with that last sentence, while cocking her hip. A wet spot starts to form around one of her nipples. Her hand shoots towards to cover it.
+
+	<<say $rndF>>Shoot, this patch is saturated again, damn curse.<</say>>
+	She mumbles to herself, before focussing back on you and giving you a warm smile.
+
+	<<say $rndF>>Well, are going to make me ask again if you need a mother?<</say>>
+	<<say $mc>>I'm not sure...<</say>>
+	<<say $rndF>>Ow come on, I've been lonely and bored since I got stranded her a few years ago. Try it for a few days? Trust me, you like it!<</say>>
+	She steps closer, lowers her body and spreads her arms, clearly intending to hug you.
+
+	<<say $mc>>I'm sorry I really have to go now!<</say>>
+	You dodge her hug and jolt away again.
+<</if>>
 
 :: Escape Balloon L1 [layer1]
 <<nobr>><<set $currentLayer = 1>><<if !isPlaying("layer1")>>
@@ -1622,3 +1669,37 @@ Sometimes you get a feeling like you lost something. Something precious to you t
 <</nobr>>
 
 <<include 'CampCode'>>
+
+:: ShopInventoryL1 [nobr]
+<p>Here are the items available for your to spend your $dubloons dubloons on.</p>
+
+<p>Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
+
+<div class="cards-grid">
+<<for _item range [$item2, $item1, $item5].concat($item10, $item12, $item27)>>
+<div>
+[img[setup.ImagePath + _item.image]]
+<p>
+<<if $items.some(e => e.name === _item.name && e.count >= _item.maxCount)>>
+	<button class="link-internal macro-button" type="button" disabled>Already bought</button>
+<<elseif _item.cost>>
+	<<button `"Buy for " + _item.cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
+<</if>>
+</p>
+<p>
+<<include `_item.name + " Description"`>>
+</p>
+</div>
+<</for>>
+</div>
+
+:: L1 Shop 1 [surface cards indoor nobr]
+<p><<say $rndM>> We might not have everything the surface has, but it's local and it's good quality! We're not buying your relics though. You have to contact the guys on the surface yourself.<</say>><p>
+
+<p><<CarryAdjust>></p>
+<p>[[Continue your journey|Layer1 Hub]]</p>
+
+<<include "ShopInventoryL1">>
+
+<p>[[Continue your journey|Layer1 Hub]]</p>
+
