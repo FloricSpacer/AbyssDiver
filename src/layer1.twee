@@ -75,9 +75,7 @@ She seems to snap back from her thoughts.<br><br>
 <<say $companionBandit>>I don't know, it's this aura of dominance she radiates. On the other hand, she is a huge bitch and I would like nothing more than to kick her in the gut for all she said to me.<</say>><br>
 She shows a bit of wry smile.<br><br>
 <<say $mc>>Don't worry. If it comes to that I'll help you!<</say>><br>
-<<elseif $layerTemp === 7>>
-<<include "L1 Reactions">>
-<<elseif $layerTemp === 8 && $mc.hasCurse(HijinksEnsue)>>
+<<elseif $layerTemp === 7 && $mc.hasCurse(HijinksEnsue)>>
 <<include "Hijinks Ensue Scenes">>
 <<elseif $layerTemp >= 18 - (1+$hiredCompanions.length) && $layerTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 <<include "Companion Layer Interaction">>
@@ -109,7 +107,7 @@ What do you want to do while you're here?<br><br>
 <span class="icon">[img[setup.ImagePath+'Icons/relicsearch.png']]</span> [[Search for Relics|Layer1 Relics]]
 <span class="icon">[img[setup.ImagePath+'Icons/curses.png']]</span> [[Take on Curses to purge your corruption|Layer1 Curses]]
 <span class="icon">[img[setup.ImagePath+'Icons/wonder.png']]</span> [[Look for any Wonders you can take advantage of|Layer1 Wonders]]
-<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Check out the farmers market|L1 Shop 1]]
+<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[Check out nearby Settlements|Layer1 Settlement]]
 <span class="icon">[img[setup.ImagePath+'Icons/camping.png']]</span> [[Set up camp and rest here|Layer1 Camp]]
 <span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 1 habitation option|Layer1 Habitation]]
 
@@ -1661,7 +1659,7 @@ Sometimes you get a feeling like you lost something. Something precious to you t
 
 <h1 class="gameover">Game Over</h1>
 
-:: Layer1 Camp
+:: Layer1 Camp[layer1]
 <<nobr>>
 <h1>Camping</h1>
 
@@ -1669,6 +1667,75 @@ Sometimes you get a feeling like you lost something. Something precious to you t
 <</nobr>>
 
 <<include 'CampCode'>>
+
+:: Layer1 Settlement[layer1 cards nobr]
+<h1>Settlements</h1>
+<p>
+@@.floatr;[img[setup.ImagePath+'icon.png']]@@
+/*xxx*/
+On some layers small layers people have gathered to form small settlements. These settlements serve as a place where one can retire their journey, but also interact with during their journey.
+<br><br>
+Similair to Outset Town shops and people can often be found here. But do expect their services to be more limited than in Outset Town itself.</p>
+
+<p>[[Continue exploring the wilderness of the first layer|Layer1 Hub]]</p>
+
+<<SettlementGrid setup.outcastvillage>>
+
+<p>[[Continue exploring the wilderness of the first layer|Layer1 Hub]]</p>
+
+:: Outcast Village Settlement[layer1 nobr]
+<<CarryAdjust>><<checkTime>>
+
+You stand in the middle of the vibrant little community that Outcast Villages has become.<br><br>
+<<if $visitSL1 === 0>>
+	<img src="Habitation/outcastvillage.png" width=70%><br>
+	<<set $visitSL1 += 1>>
+	<<set _settleTemp = 8>>
+<<elseif $visitSL1 === 1>>
+	<<set $visitSL1 += 1>>
+	<<set _settleTemp = 18>>
+<<else>>
+	<<set _settleTemp = random(0,20)>>
+<</if>>
+<<if _settleTemp === 1>>
+/*xxx */ You marvel at the hustle and bustle this small community still seems to provide. Everywhere people are working or talking to one another. The atmosphere seems rather pleasant. 
+<<elseif _settleTemp === 2>>
+
+<<elseif _settleTemp === 3>>
+
+<<elseif _settleTemp === 4 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+/*xxx */
+<<say $rndM>>Yo Khemia!<</say>><br>
+You and Khemia turn around to say a very tall middle aged man waving enthousiastically at you from on top of an unfinished building.
+<br><br>
+<<say $companionKhemia>>Yo Hartman! How have you been?<</say>><br>
+<<say $rndM>>Fine, fine we almost mannaged to finnish the new barn! Thanks again for the help last time. I didn't expect you to be back so soon with a different group though?<</say>><br>
+<<say $companionKhemia>>Yeah, the last dive was a bit of bust but I have a better feeling about this one.<</say>><br>
+He pats you on the back and gives you a wink as he says that.<br><br>
+<<say $rndM>>That's nice to hear, well don't let me hold you. See you soon!<</say>><br>
+With that the man waves a final time and gets back to work.<br><br>
+<<elseif _settleTemp === 5 && $hiredCompanions.some(e => e.id === setup.companionIds.lilly)>>
+As you walk through the village everybody greets you. You, but especially Lily is very enthousiastic in greet people back.<br><br>
+<<say $companionLily>>Hello! Good day ma'm!<</say>><br>
+The woman you both pass with bright orange eyes snickers from the over enthousiastic greeting.<br><br>
+<<say $rndF>>Hello dear! Ow my, What a lovely color of eyes you have gotten with your curse!<</say>><br>
+<<say $companionLily>>Ow, they are all natural. I actually can't be cursed as I'm an angel!<</say>><br>
+The woman stiffles a little giggle.<br><br>
+<<say $rndF>>You must be hoot to travel with. See you around!<</say>><br>
+<<say $companionLily>>Bye, ma'm!<</say>><br>
+<<elseif _settleTemp === 6>>
+<<include "L1 Reactions">>
+<<elseif _settleTemp === 7 && $mc.hasCurse(HijinksEnsue)>>
+<<include "Hijinks Ensue Scenes">>
+<<elseif _settleTemp >= 18 - (1+$hiredCompanions.length) && _settleTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
+<<include "Companion Layer Interaction">>
+<<elseif _settleTemp >= 19>>
+<<include "Curse Descriptions">><br><br>
+<</if>>
+
+<span class="icon">[img[setup.ImagePath+'Icons/inn.png']]</span> [[Go to the local Guesthouse|L1 Inn]]<br>
+<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Visit the farmers market|L1 Shop 1]]<br>
+<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 1 habitation option|Layer1 Habitation]]
 
 :: ShopInventoryL1 [nobr]
 <p>Here are the items available for your to spend your $dubloons dubloons on.</p>
@@ -1694,12 +1761,21 @@ Sometimes you get a feeling like you lost something. Something precious to you t
 </div>
 
 :: L1 Shop 1 [surface cards indoor nobr]
+/*xxx */
 <p><<say $rndM>> We might not have everything the surface has, but it's local and it's good quality! We're not buying your relics though. You have to contact the guys on the surface yourself.<</say>><p>
 
 <p><<CarryAdjust>></p>
-<p>[[Continue your journey|Layer1 Hub]]</p>
+<p>[[Continue your journey|Outcast Village Settlement]]</p>
 
 <<include "ShopInventoryL1">>
 
-<p>[[Continue your journey|Layer1 Hub]]</p>
+<p>[[Continue your journey|Outcast Village Settlement]]</p>
 
+:: L1 Inn [surface indoor nobr]
+[img[setup.ImagePath+'Surface/Inn Room.png']]
+<br><br>
+<p><<say $rndM>>Welcome, I'm sort of the local mayor here, but I also welcome guests in our extra room. We don't really have a lot of guests so I hope you'll excuse the simple nature of the room. My wife is an excellent cook though!<</say>></p>
+
+<p>[[Stay over at the guesthouse for 10 dubloons|Outcast Village Settlement][$dubloons-=10, $time+=1, $dehydrated = 0, $starving = 0]]</p><br>
+
+<p>[[Return to exploring the layer without waiting|Outcast Village Settlement]]</p>
