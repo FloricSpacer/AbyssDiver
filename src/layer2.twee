@@ -101,7 +101,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 <span class="icon">[img[setup.ImagePath+'Icons/curses.png']]</span> [[Take on Curses to purge your corruption|Layer2 Curses]]
 <span class="icon">[img[setup.ImagePath+'Icons/wonder.png']]</span> [[Look for any Wonders you can take advantage of|Layer2 Wonders]]
 <span class="icon">[img[setup.ImagePath+'Icons/camping.png']]</span> [[Set up camp and rest here|Layer2 Camp]]
-<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 2 habitation option|Layer2 Habitation]]
+<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 2 habitation option|Layer2 Habitation][$returnPassage="Downcast Village Settlement"]]
 
 <span class="icon">[img[setup.ImagePath+'Icons/ascent.png']]</span> [[Look up towards the surface|Layer2 Ascend 1]]
 <span class="icon">[img[setup.ImagePath+'Icons/descent.png']]</span> [[Look down at the next layer|Layer2 Exit1]]
@@ -254,7 +254,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 :: Layer2 Habitation [Layer2 cards nobr]
 <h1>Habitation</h1>
 <<if !$AgeEndReached>>
-	<p>[[Continue your business on the Second Layer|Layer2 Hub]]</p>
+	<p>[[Continue your business on the Second Layer|$returnPassage]]</p>
 <</if>>
 <<CarryAdjust>>
 <<set _lewdCrit=12>>
@@ -304,7 +304,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 <<HabitationGrid setup.habitationL2>>
 
 <<if !$AgeEndReached>>
-	<p>[[Continue your business on the Second Layer|Layer2 Hub]]</p>
+	<p>[[Continue your business on the Second Layer|$returnPassage]]</p>
 <</if>>
 
 :: Layer2 Ascend 1 [layer2]
@@ -2015,3 +2015,147 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 <</nobr>>
 
 <<include 'CampCode'>>
+
+:: Layer2 Settlement[layer1 cards nobr]
+<h1>Settlements</h1>
+<p>
+<p>[[Continue exploring the wilderness of the second layer|Layer2 Hub]]</p>
+
+<<SettlementGrid setup.downcastvillage>>
+
+<p>[[Continue exploring the wilderness of the second layer|Layer2 Hub]]</p>
+
+:: Downcast Village Settlement[layer1 nobr]
+<<PassTimeWithEvents>>
+<<if !setup.passingTime()>>
+	<<CarryAdjust>><<checkTime>>
+
+	You walk through the small community that is Downcast village. The constant rains give this place a depressing atmosphere.<br><br>
+	<<if $visitSL1 === 0>>
+		<img src="images/Habitation/l2habitation.png" width=70%><br>
+		<<set $visitSL1 += 1>>
+		<<set _settleTemp = 8>>
+	<<elseif $visitSL1 === 1>>
+		<<set $visitSL1 += 1>>
+		<<set _settleTemp = 21>>
+	<<else>>
+		<<set _settleTemp = random(0,20)>>
+	<</if>>
+	<<if _settleTemp === 1>>
+	/*xxx */ The people here avoid eye contact and scurry along as quickly as they can. As one person bumps into another across the street they start pushing and shouting to one another. Suddenly they break it off and hurry along again. <br><br>
+	<<elseif _settleTemp === 2>>
+	/*xxx */ As you walk by one of the huts you hear wanton moans comming from it, or are they screams of agony? It is hard to tell here. <br><br>
+	<<elseif _settleTemp === 3>>
+
+	<<elseif _settleTemp === 4 && $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
+	/*xxx */
+	As you walk through the narrow paths over the tree branches, somebody bumps into cloud.<br><br>
+	<<say $rndM>>Tsk, you're not wanted her traitor.<</say>><br>
+	Cloud turns around as if stung by a bee and grabs the unknown passerby by it's collar.<br><br>
+	<<say $companionCloud>>Leave me the fuck alone, I'm not here because I want to. Understand?!<</say>><br>
+	He pushes the man and the man walks away again.<br><br>
+	<<say $mc>>What was that about?<</say>><br>
+	<<say $companionCloud>>Nothing, let's just conclude our buisness here as fast as possible and move on...<</say>><br>
+
+	<<elseif _settleTemp === 5 && $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
+	/*xxx */
+	You're standing still searching for your equipment.<br><br>
+	<<say $companionCherry>>Eek!<</say>><br>
+	As you turn around you see a large man with unusually sharp teeth and scales holding cherry by arm with one hand and her ass with the other.<br><br>
+	<<say $rndM>>You're ass is begging for me, I can smell it from a mile away.<</say>><br>
+	<<say $companionCherry>>I don't...I...!<</say>><br>
+	You hurry to intervene.<br><br>
+	<<say $mc>>Let go at once, she is with me.<</say>><br>
+	The guy seems to size you up, but also looks around for some reason.<br><br>
+	<<say $rndM>>Sure, <<PerceivedStature $mc>> <<PerceivedGender $mc>>. Let's avoid an issue here.<</say>><br>
+	He turns to cherry.<br><br>
+	<<say $rndM>>I'm in the second hut on the left from here if you decide to ditch <<ObjectivePronoun>>.<</say>><br>
+	With that he grins at you, baring his sharp teeth and releases Cherry. He walks away.<br><br>
+	<<say $mc>>Are you okay, Cherry?<</say>><br>
+	<<say $companionCherry>>No worse than normal I guess.<</say>><br>
+	A bit shaken both of you continue.<br><br>
+	<<elseif _settleTemp === 6>>
+	<<include "L2 Reactions">>
+	<<elseif _settleTemp === 7 && $mc.hasCurse(HijinksEnsue)>>
+	<<include "Hijinks Ensue Scenes">>
+	<<elseif _settleTemp >= 18 - (1+$hiredCompanions.length) && _settleTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
+	<<include "Companion Layer Interaction">>
+	<<elseif _settleTemp >= 19>>
+	<<include "Curse Descriptions">><br><br>
+	<<elseif _settleTemp == 21>>
+	As you walk trough the village people suddenly move inside there huts. As you turn around an impossing figure walks towards you. It is a man in his late forties. He has quite a tall stature, but as he also sports wide shoulders and quite a belly you would sooner describe him as large rather than tall. Perhaps his most strike feature is that he has no striking features, which is odd considering everybody else in this community is clearly curse infected. He just looks...normal.<br><br>
+
+	You are so flabergasted by his sudden appearance that you nearly miss the two equally imposing figures following him shortly. Another person who is more dragon than human at this point. To their side is a nearly naked woman who is carrying a conspicuous staff that seems to have electricity weezing through it.<br><br>
+	The first man stops right in front of you and stretches out his hand focussing your attention back on him.<br><br>
+
+	<<say $rndM>>Well greetings. The name is Reed, Gerard Reed. I see you decided to visit our quint little community. Maybe you're interested in visiting my house on the top branch over there.<</say>><br>
+	He points at a relativly large hut on one of the top branches. 
+
+	<<say $rdnM>>I always like to hear what is happening outside of our small village from travelers. I also might have a buisness proposition if you're interested.<</say>>
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
+		<<say $companionCloud>>Not interested<</say>>
+		The dragon figure seems snarl and steps towards cloud, but is halted by Reed.<br><br>
+		<<say $rndM>>Well if it isn't little Cloud paying us a visit again. I'm afraid that for today I'm more interested in your employer, but we will catch up to you at some point.<</say>><br>
+		He gives Cloud the widest of grins.
+		<<say $rndM>>I'm sure of it.<</say>>
+	<</if>>
+	<<say $mc>>Uhm...Okay?<</say>><br>
+	<<say $rdnM>>Great, well you know where to find me. See you soon.<</say>>
+	And with that he walks off again.
+	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
+		<<say $companionCloud>>That guy is bad news. Trust me.<</say>>
+	<</if>>
+<</if>>
+
+	<span class="icon">[img[setup.ImagePath+'Icons/inn.png']]</span> [[Go to the local Guesthouse|L2 Inn]]<br>
+	<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Visit the farmers market|L2 Shop 1]]<br>
+	<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 2 habitation option|Layer2 Habitation][$returnPassage="Downcast Village Settlement"]]<br>
+	<span class="icon">[img[setup.ImagePath+'Icons/hub.png']]</span> [[Leave the village|Layer2 Hub]]<br>
+
+<</if>>
+
+:: ShopInventoryL2 [nobr]
+<p>Here are the items available for your to spend your $dubloons dubloons on.</p>
+
+<p>Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
+
+<div class="cards-grid">
+<<for _item range [$item2, $item1, $item3].concat($item21, $item15, setup.itemMoney)>>
+<div>
+[img[setup.ImagePath + _item.image]]
+<p>
+<<set _cost = _item.cost*2>>
+<<if $items.some(e => e.name === _item.name && e.count >= _item.maxCount)>>
+	<button class="link-internal macro-button" type="button" disabled>Already bought</button>
+<<elseif _item.cost>>
+	<<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
+<</if>>
+</p>
+<p>
+<<include `_item.name + " Description"`>>
+</p>
+</div>
+<</for>>
+</div>
+
+:: L2 Shop 1 [surface cards indoor nobr]
+/*xxx */
+<p><<say $rndM>> If you want to complain about pricing you can bugger of to the top again.<</say>><p>
+
+<p><<CarryAdjust>></p>
+<p>[[Continue your journey|Downcast Village Settlement]]</p>
+
+<<include "ShopInventoryL2">>
+
+<p>[[Continue your journey|Downcast Village Settlement]]</p>
+
+:: L2 Inn [surface indoor nobr]
+[img[setup.ImagePath+'Surface/Inn Room.png']]
+<br><br>
+<p><<say $rndF>>I have an extra room with some matrasses on the floor. 15 dubloons, take it or leave it. And don't complain about the food, just be gratefull you're getting any.<</say>></p>
+
+<p>[[Stay over at the guesthouse for 15 dubloons|Downcast Village Settlement][$dubloons-=15, $time+=1]]</p><br>
+
+<p>[[Return to exploring the layer without waiting|Downcast Village Settlement]]</p>
+
+:: L2 Reactions [layer1]
