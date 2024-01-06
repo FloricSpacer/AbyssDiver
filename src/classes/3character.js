@@ -1288,6 +1288,7 @@ class Character {
 			if (State.variables.BDwear) handicap += 1;
 			if (State.variables.BionicArm) handicap += 8;
 			if (State.variables.AegisWear) handicap += 5;
+			if (State.variables.aawear) handicap += 1;
 		}
 
 		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? 0 : this.fit;
@@ -1394,6 +1395,7 @@ class Character {
 
 		if (this.id === setup.companionIds.mc) {
 			if (State.variables.BionicArm) handicap += 3;
+			if (State.variables.aawear) handicap += 1;
 		}
 
 		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? 0 : this.fit;
