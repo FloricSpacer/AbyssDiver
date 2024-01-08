@@ -1136,7 +1136,13 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 
 
 :: Elder attempt2 [layer9 nobr]
-<<if ($temp2 == "Hide" && ($ElderHideWinList.some(e => e === $temp) || $ElderHideWinList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightWinList.some(e => e === $temp) || $ElderFlightWinList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightWinList.some(e => e === $temp) || $ElderFightWinList.some(e => e === $temp_alt)))>>
+<<set _hideCondition = ($temp2 == "Hide" && ($ElderHideList.some(e => e === $temp) || $ElderHideList.some(e => e === $temp_alt)))>>
+<<set _flightCondition = ($temp2 == "Flight" && ($ElderFlightList.some(e => e === $temp) || $ElderFlightList.some(e => e === $temp_alt))) >>
+<<set _fightCondition = ($temp2 == "Fight" && ($ElderFightList.some(e => e === $temp) || $ElderFightList.some(e => e === $temp_alt)))>>
+<<if $temp2 == "Fight" && ($temp == "Joyous Sunder Sword" || $temp_alt == "Joyous Sunder Sword") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $companionKhemia.armCount > 1>>
+
+<</if>>
+<<if  _hideCondition = ($temp2 == "Hide" && ($ElderHideWinList.some(e => e === $temp) || $ElderHideWinList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightWinList.some(e => e === $temp) || $ElderFlightWinList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightWinList.some(e => e === $temp) || $ElderFightWinList.some(e => e === $temp_alt)))>>
 	<<set _succes=false>>
 	<<set _i=0>>
 	<<for _relic range $ownedRelics>>
@@ -1153,7 +1159,7 @@ Around you, the aquatic world carries on undisturbed. The light from the shaft a
 	<</for>>
 	<<set $ownedRelics.deleteAt(_j)>>
 
-<<elseif !$ElderSerious && (($temp2 == "Hide" && ($ElderHideList.some(e => e === $temp) || $ElderHideList.some(e => e === $temp_alt))) || ($temp2 == "Flight" && ($ElderFlightList.some(e => e === $temp) || $ElderFlightList.some(e => e === $temp_alt))) || ($temp2 == "Fight" && ($ElderFightList.some(e => e === $temp) || $ElderFightList.some(e => e === $temp_alt))))>>
+<<elseif !$ElderSerious && _hideCondition || _flightCondition || _fightCondition >>
 	<<set _succes=true>>
 	<<set $Elderbeaten+=1>>
 	<<set _string = "$Elder" + $temp2 + "WinList">>
