@@ -394,6 +394,11 @@ Setting.addToggle("ArachnophobiaMode", {
     default  : false,
 });
 
+Setting.addToggle("RandomizedThreats", {
+    label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
+    default  : true,
+});
+
 Setting.addRange("appAgeControl", {
     label    : "Minimum apparent age your physical body can regress to (3-18):",
     min      : 3,
