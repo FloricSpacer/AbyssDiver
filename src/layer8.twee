@@ -1814,7 +1814,12 @@ In a fight against the Inanis Ego you think you have _string chance of survival.
 	<<set _L8T1_threshold2 = _L8T1_threshold * 1.25>>
 	<<set _L8T1_threshold3 = _L8T1_threshold * 1.5>>
 
-	<<set _temp = random(1, 100) + (2 * (3*_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
+<<if settings.RandomizedThreats>>
+    <<set _temp = random(1, 100) + (2 * (3*_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
+<<else>>
+    <<set _temp = 50 + (2 * (3*_relicBonus + _curseBonus + _equipmentBonus + $mc.HandicapThreat * 10)).toRounded(1)>>
+<</if>>
+
 
 	<<if _temp >  _L8T1_threshold3>>
 		<br>Dispatching the horde proved to be trivial. Your defenses and capabilities far outstripped any forces the puppets brought against you.<br>
