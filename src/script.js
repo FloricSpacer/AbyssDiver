@@ -789,7 +789,7 @@ Object.defineProperties(setup, {
                     }
                     break;
                 case setup.companionIds.cherry:
-                    willingCurses.push("Age Reduction A", "Age Reduction B", "Fluffy Ears", "Fluffy Tail", "Omnitool",
+                    willingCurses.push("Age Reduction A", "Age Reduction B", "Fluffy Ears", "Maximum Fluff", "Fluffy Tail", "Omnitool",
                         "Sleep Tight", "Submissiveness Rectification A", "Submissiveness Rectification B");
                     if (companion.curses.map(c => c.name).includesAll('Fluffy Ears', 'Fluffy Tail', 'Maximum Fluff')) {
                         willingCurses.push('Literalization');
