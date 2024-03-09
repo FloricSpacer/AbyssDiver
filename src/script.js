@@ -1202,3 +1202,39 @@ Object.defineProperties(JSON, {
         }
     }
 })
+
+
+setup.setupDalleImageGenerator = async function() {
+    const apiKey = settings.OpenAIAPIKey;
+    const prompt = "A dog eating a banana";
+
+    try {
+        const response = await fetch('https://api.openai.com/v1/images/generations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'dall-e-3',
+                prompt: prompt,
+                n: 1,
+                size: "1024x1024"
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.data && data.data.length > 0) {
+            const imageUrl = data.data[0].url;
+            $("#dalleImage").attr("src", imageUrl);
+        } else {
+            console.error('No images returned:', data);
+        }
+    } catch (error) {
+        console.error('Error generating image:', error);
+    }
+}
+
+
+
