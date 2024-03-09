@@ -1224,6 +1224,7 @@ setup.setupDalleImageGenerator = async function() {
         });
 
         const data = await response.json();
+        console.log(data); // Debugging: Inspect the structure of the response
 
         if (data.data && data.data.length > 0) {
             const imageUrl = data.data[0].url;
