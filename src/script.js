@@ -357,6 +357,11 @@ Setting.addToggle("accessible", {
     default  : false,
 });
 
+Setting.addToggle("AIPortraitsMode", {
+    label : "Allows you to use your own OpenAI API key to generate portraits of your character at any time",
+    default  : true,
+});
+
 Setting.addHeader("Content Settings");
 
 Setting.addToggle("MaleSceneToggleFilter", {

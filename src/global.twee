@@ -531,6 +531,22 @@ Thanks again for playing! I hope the dive was worth it.
 
 
 :: Appearance [noreturn nobr]
+
+<<if settings.AIPortraitsMode == true>>
+    <<if settings.OpenAIAPIKey && settings.OpenAIAPIKey.startsWith("sk")>>
+        Nice!
+    <<else>>
+        Enter your OpenAI API key to enable the use of AI character portraits. (Do NOT share your save file if you have entered your API key. This option can be disabled in settings to remove this message.)
+		<<textbox "$userAPIKey" "" autofocus>>
+        <<button "Submit">>
+            <<set settings.OpenAIAPIKey to $userAPIKey>>
+            <<goto "Appearance">>
+        <</button>>
+    <</if>>
+	<br><hr>
+<</if>>
+
+
 <<CarryAdjust>>
 Your name is $mc.name and you are a $mc.sex <<PerceivedRace $mc>>.<br><hr>
 Your hair color is $mc.hair.<br>
@@ -846,6 +862,16 @@ You feel like you have slowed down mentally compared to normal. It's not that yo
 <</if>>
 
 Overall the world would probably see you now as a <<PerceivedStature $mc>> <<PerceivedRace $mc>> <<PerceivedGender $mc>>.<br><br>
+
+<<if settings.OpenAIAPIKey and settings.OpenAIAPIKey.startsWith("sk")>>
+    Would you like to reset your OpenAI API key?<br>
+    <span class="reset-button"><<button "Reset API Key">>
+        <<set settings.OpenAIAPIKey = null>>
+		<<set $userAPIKey = null>>
+        <<goto "Appearance">>
+    <</button>></span><br><br>
+<</if>>
+
 <<back [[$menuReturn]]>>
 
 :: Layer Notes [noreturn nobr]
