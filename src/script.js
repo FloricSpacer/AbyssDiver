@@ -1268,7 +1268,7 @@ setup.evaluateCharacterDescription = function(mc) {
         description += `An adult. `;
     }
     else if (mc.appAge < 55) {
-        description += `A middle-aged adullt. `;
+        description += `A middle-aged adult. `;
     }
     else if (mc.appAge < 65) {
         description += `And older adult. `;
@@ -1340,7 +1340,7 @@ setup.evaluateCharacterDescription = function(mc) {
     if (mc.hasCurse("Seafolk")) description += "A merfolk with a merfolk tail. ";
     if (mc.hasCurse("Tickly Tentacles")) description += `${mc.tentacles} squirming tentacles growing from their body. `;
     if (mc.hasCurse("Eye-scream")) description += `${mc.extraEyes} extra eyes on their body. `;
-    if (mc.hasCurse("A Mouthfull")) description += `${mc.extraMouths} extra mouths on their body. `;
+    if (mc.hasCurse("A Mouthful")) description += `${mc.extraMouths} extra mouths on their body. `;
     if (mc.hasCurse("Below the Veil")) description += "A strange, eldritch entity that seems very creepy and *wrong* in subtle ways. ";
 
     return description;
