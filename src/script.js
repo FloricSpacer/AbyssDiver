@@ -1291,10 +1291,10 @@ setup.evaluateCharacterDescription = function(mc) {
     // Gender and physical appearance
     switch(mc.gender) {
         case 1: description += "A masculine man. "; break;
-        case 2: description += "A feminine man (twink). "; break;
+        case 2: description += "A feminine man (twink, femboy). "; break;
         case 3: description += "A very androgynous man. "; break;
         case 4: description += "A very androgynous woman. "; break;
-        case 5: description += "A masculine woman (butch). "; break;
+        case 5: description += "A masculine woman (butch, tomboy). "; break;
         case 6: description += "A feminine woman. "; break;
     }
 
@@ -1326,7 +1326,7 @@ setup.evaluateCharacterDescription = function(mc) {
     // Curses and conditions
     if (mc.hasCurse("Freckle Speckle")) description += "Many freckles. ";
     if (mc.hasCurse("20/20000000")) description += "Wearing thick glasses. ";
-    if (mc.hasCurse("Gooey")) description += "A slime girl, very slimey body. ";
+    if (mc.hasCurse("Gooey")) description += "A slime person, very slimey body. ";
     if (mc.hasCurse("Crossdress Your Heart")) description += "Crossdressing as the opposite gender. ";
     if (mc.hasCurse("Lingual Leviathan")) description += "A 12-inch long tongue. ";
     if (mc.hasCurse("Massacre Manicure")) description += "Very sharp and long fingernails. ";
