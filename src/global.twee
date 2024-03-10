@@ -534,17 +534,12 @@ Thanks again for playing! I hope the dive was worth it.
 
 
 <<if settings.AIPortraitsMode == true>>
+	<img src="images/GeneratedPortraits/CharacterPortrait.png" width=70%><br>
     <<if settings.OpenAIAPIKey && settings.OpenAIAPIKey.startsWith("sk")>>
-		Generate an AI portrait of your character (this will take a few seconds):<br>
-		<<button "Generate Portrait">>
-			<<script>>
-				setup.setupDalleImageGenerator();
-			<</script>>
-		<</button>><br>
-		<img id="dalleImage" src="" alt="DALL·E Generated Image" style="max-width: 70%;">
+		[[Generate New AI Portrait]]
     <<else>>
-        Enter your OpenAI API key to enable the use of AI character portraits. (Do NOT share your save file if you have entered your API key. This option can be disabled in settings to remove this message.)
-		<<textbox "$userAPIKey" "" autofocus>>
+        Enter your OpenAI API key to enable the generation of AI character portraits. (Do NOT share your save file if you have entered your API key! The AI Portrait option can be disabled in settings to remove this message.)
+		<<textbox "$userAPIKey" "">>
         <<button "Submit">>
             <<set settings.OpenAIAPIKey to $userAPIKey>>
             <<goto "Appearance">>
@@ -2598,3 +2593,21 @@ You pack the newly made rope carefully, ready for whatever challenges lie ahead.
 
 [[Return|$hubReturn][$items[11].count +=1, $hairRope = true]]
 <</if>>
+
+:: Generate AI Portrait [noreturn nobr]
+
+Generate a new AI portrait of your character (this will take a few seconds). Be aware that you must pay with credit on your OpenAI account for each generation.<br>
+<<button "Generate New Portrait">>
+	<<script>>
+		setup.setupDalleImageGenerator();
+	<</script>>
+<</button>>
+<img id="dalleImage" src="" alt="DALL·E Generated Image" style="max-width: 70%;"><br>
+
+Once your portrait is generated, you must follow the next step to save it for long term use.
+
+<b>>Right click the image and save it as an image named "CharacterPortrait.png" in the folder /images/GeneratedPortraits.</b>
+
+Once you do that, the image should appear properly in your appearance page from now on.
+
+<<back [[$menuReturn]]>>
