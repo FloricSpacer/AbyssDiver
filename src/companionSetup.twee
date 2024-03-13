@@ -302,6 +302,9 @@
 <<set $BanditSemenForced=false>>
 <<set $Bandit_LastT = setup.never>>
 
+<<set $Discuss_Maru_Saeko = false>>
+<<set $Discuss_Lily_Khemia = false>>
+
 <<set $aiMemWipe = 0>>
 <<set $aiSuggest = false>>
 
@@ -452,6 +455,15 @@ One can only imagine what she'll do if she manages to break free.
 		<</if>>
 		<hr>
 	<</for>>
+
+	/*discussions */
+	<<if $MaruConvo0 && $SaekoConvo0 && $hiredCompanions.some(e=> e.id === setup.companionIds.saeko) && $hiredCompanions.some(e=> e.id === setup.companionIds.maru) && !$Discuss_Maru_Saeko>>
+		<<set _numConvos += 1>>[[Something seems brewing between Maru and Saeko|Maru and Saeko][$Discuss_Maru_Saeko=true]]<br>
+	<</if>>
+	<<if $LilyConvo0 && $KhemiaConvo0 && $hiredCompanions.some(e=> e.id === setup.companionIds.lily) && $hiredCompanions.some(e=> e.id === setup.companionIds.khemia) && !$Discuss_Lily_Khemia>>
+		<<set _numConvos += 1>>[[Lily comes walking towards you with a brisk pace|Lily and Khemia][$Discuss_Lily_Khemia=true]]<br>
+	<</if>>
+
 	<<if setup.haveSmartphoneAI>>
 		<<if $currentLayer===0>>
 			[[Ask Ai for information on this layer|AI ConvoL0]]<br>
