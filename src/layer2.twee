@@ -100,6 +100,7 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 <span class="icon">[img[setup.ImagePath+'Icons/relicsearch.png']]</span> [[Search for Relics|Layer2 Relics]]
 <span class="icon">[img[setup.ImagePath+'Icons/curses.png']]</span> [[Take on Curses to purge your corruption|Layer2 Curses]]
 <span class="icon">[img[setup.ImagePath+'Icons/wonder.png']]</span> [[Look for any Wonders you can take advantage of|Layer2 Wonders]]
+<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[Check out nearby Settlements|Layer2 Settlement]]
 <span class="icon">[img[setup.ImagePath+'Icons/camping.png']]</span> [[Set up camp and rest here|Layer2 Camp]]
 <span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 2 habitation option|Layer2 Habitation][$returnPassage="Downcast Village Settlement"]]
 
@@ -2078,39 +2079,51 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 	<<include "L2 Reactions">>
 	<<elseif _settleTemp === 7 && $mc.hasCurse(HijinksEnsue)>>
 	<<include "Hijinks Ensue Scenes">>
-	<<elseif _settleTemp >= 18 - (1+$hiredCompanions.length) && _settleTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
+	<<elseif _settleTemp == 18 - (1+$hiredCompanions.length) && _settleTemp < 19 && ($hiredCompanions.length > 0  || $ownedRelics.some(e => e.name === "Creepy Doll") )>>
 	<<include "Companion Layer Interaction">>
 	<<elseif _settleTemp >= 19>>
 	<<include "Curse Descriptions">><br><br>
-	<<elseif _settleTemp == 21>>
-	As you walk trough the village people suddenly move inside there huts. As you turn around an impossing figure walks towards you. It is a man in his late forties. He has quite a tall stature, but as he also sports wide shoulders and quite a belly you would sooner describe him as large rather than tall. Perhaps his most strike feature is that he has no striking features, which is odd considering everybody else in this community is clearly curse infected. He just looks...normal.<br><br>
+	<<elseif  $reedVisit == 0 >>
+	As you walk trough the village people suddenly move inside there huts. As you turn around an impossing figure walks towards you. It is a man in his late forties. He has quite a tall stature, but as he also sports wide shoulders and quite a belly. You would sooner describe him as large rather than tall. Perhaps his most strike feature is that he has no striking features, which is odd considering everybody else in this community is clearly curse infected. He just looks...normal.<br><br>
 
 	You are so flabergasted by his sudden appearance that you nearly miss the two equally imposing figures following him shortly. Another person who is more dragon than human at this point. To their side is a nearly naked woman who is carrying a conspicuous staff that seems to have electricity weezing through it.<br><br>
 	The first man stops right in front of you and stretches out his hand focussing your attention back on him.<br><br>
 
-	<<say $rndM>>Well greetings. The name is Reed, Gerard Reed. I see you decided to visit our quint little community. Maybe you're interested in visiting my house on the top branch over there.<</say>><br>
-	He points at a relativly large hut on one of the top branches. 
+	<<say $Reed>>Well greetings. The name is Reed, Gerard Reed. I see you decided to visit our quint little community. Maybe you're interested in visiting my house on the top branch over there.<</say>><br>
+	He points at a relativly large hut on one of the top branches. <br><br>
 
-	<<say $rdnM>>I always like to hear what is happening outside of our small village from travelers. I also might have a buisness proposition if you're interested.<</say>>
+	<<say $Reed>>I always like to hear what is happening outside of our small village from travelers. I also might have a buisness proposition if you're interested.<</say>><br>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
-		<<say $companionCloud>>Not interested<</say>>
+		<<say $companionCloud>>Not interested<</say>><br>
 		The dragon figure seems snarl and steps towards cloud, but is halted by Reed.<br><br>
-		<<say $rndM>>Well if it isn't little Cloud paying us a visit again. I'm afraid that for today I'm more interested in your employer, but we will catch up to you at some point.<</say>><br>
-		He gives Cloud the widest of grins.
-		<<say $rndM>>I'm sure of it.<</say>>
+		<<say $Reed>>Well if it isn't little Cloud paying us a visit again. I'm afraid that for today I'm more interested in your employer, but we will catch up to you at some point.<</say>><br>
+		He gives Cloud the widest of grins.<br><br>
+		<<say $Reed>>I'm sure of it.<</say>><br>
 	<</if>>
 	<<say $mc>>Uhm...Okay?<</say>><br>
-	<<say $rdnM>>Great, well you know where to find me. See you soon.<</say>>
-	And with that he walks off again.
+	<<say $Reed>>Great, well you know where to find me. See you soon.<</say>><br>
+	And with that he walks off again.<br><br>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
-		<<say $companionCloud>>That guy is bad news. Trust me.<</say>>
+		<<say $companionCloud>>That guy is bad news. Trust me.<</say>><br>
 	<</if>>
+	<<set $reedVisit += 1>>
 <</if>>
-
+	
+	<span class="icon">[img[setup.ImagePath+'Icons/useitems.png']]</span> [[Use Items and Relics]]<br>
+	<<if $hiredCompanions.length > 0 || setup.haveSmartphoneAI>>
+		<span class="icon">[img[setup.ImagePath+'Icons/partytalk.png']]</span> [[Interact with your party|Party overview]] <<CheckParty>><br>
+	<</if>>	
+	<<if $reedVisit > 0>>
+		<span class="icon">[img[setup.ImagePath+'Icons/partytalk.png']]</span> [[Visit Reed|Reed visit]] <br>
+	<</if>>
 	<span class="icon">[img[setup.ImagePath+'Icons/inn.png']]</span> [[Go to the local Guesthouse|L2 Inn]]<br>
-	<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Visit the farmers market|L2 Shop 1]]<br>
+	<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Visit the back alley market|L2 Shop 1]]<br>
 	<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 2 habitation option|Layer2 Habitation][$returnPassage="Downcast Village Settlement"]]<br>
 	<span class="icon">[img[setup.ImagePath+'Icons/hub.png']]</span> [[Leave the village|Layer2 Hub]]<br>
+	<<if $reedVisit==2 && !$reedQuestItem >>
+		<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Pickup Quest Item Debug option| Downcast Village Settlement][$reedQuestItem = true]]<br>
+	<</if>>
+
 
 <</if>>
 
@@ -2138,7 +2151,7 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 <</for>>
 </div>
 
-:: L2 Shop 1 [surface cards indoor nobr]
+:: L2 Shop 1 [layer2 cards indoor nobr]
 /*xxx */
 <p><<say $rndM>> If you want to complain about pricing you can bugger of to the top again.<</say>><p>
 
@@ -2149,7 +2162,7 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 
 <p>[[Continue your journey|Downcast Village Settlement]]</p>
 
-:: L2 Inn [surface indoor nobr]
+:: L2 Inn [layer2 indoor nobr]
 [img[setup.ImagePath+'Surface/Inn Room.png']]
 <br><br>
 <p><<say $rndF>>I have an extra room with some matrasses on the floor. 15 dubloons, take it or leave it. And don't complain about the food, just be gratefull you're getting any.<</say>></p>
@@ -2158,4 +2171,66 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 
 <p>[[Return to exploring the layer without waiting|Downcast Village Settlement]]</p>
 
-:: L2 Reactions [layer1]
+:: L2 Reactions [layer2]
+
+:: Reed visit [layer2 nobr]
+You approach the large hut Mister Reed is living in. <br><br>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
+	<<say $companionCloud>>I'll wait here untill you concluded whatever nefarious buisness you have with him.<</say>><br>
+	Cloud demonstrativly turns his backtowards the hut and keeps standing there, while you continue to the entrence.<br><br>
+<</if>>
+<<if $reedVisit==1>>
+	<<set $reedVisit +=1>>
+	<<say $Reed>> Ah, the new face in town. Welcome, Welcome I'm glad you came. I'm always interested to here how the surface is doing. Tell me, is outset town still run by those beaurocrats?<</say>><br>
+	<<say $mc>> I'm not sure what you mean, but I did have to fill in an awefull lot of paper before I could start this dive. Name, fitness, how much I could carry. The questions seemed endless. There was even one question about genital size, which seemed a bit inappropiate to be honest.<</say>><br>
+	Reed lets out a loud bellowing laugh.<br><br>
+	<<say $Reed>> Haha, same old, same old, from what I can tell in that case. They want to have a record of everything, up untill the amount of dust particles under your shoes that you bring in to the Abyss. It can be quite cumbersome indeed, but sometimes it is also quite handy, which brings me to my buisness proposition.<</say>><br>
+	He hunches a bit towards you with a wide grin.<br><br>
+	<<say $Reed>> You see, they also keep a lot of records on themselves, and I would be quite interested to see those. I mean in a way it's only fair if they can also see all our information, right?<</say>><br>
+	<<say $mc>> I guess, but what do you need me for in that case?<</say>><br>
+	<<say $Reed>>Cutting to the case, I like that. Well, to be honest I'm a bit bound to this village and that information is in the muncipality office in Outset town. I would like you to bring it to me, nothing more and nothing less. In return, I'll ofcourse reward you with some dubloons but more importantly I'll also help you to find stuff, a relic you want back from somebody for example.<</say>><br>
+	Reed is giving you that predatory big grin again.<br><br>
+	<<say $mc>>I don't know, I'll think it over.<</say>><br>
+	<<say $Reed>>Oh no pressure. But if you're done thinking it over, it's a beige folder labelled 'Public Service Employes Personallia'. It's quite big and it should be in one of the file cabinets in the archive room of the building. Remember, being in my good graces is a valuable thing here. Anyway, I'm afraid I have other stuff to attend to, see you soon.<</say>><br>
+	
+	[[Return to the settlement|Downcast Village Settlement]]
+<<elseif !$reedShop && !$reedQuestItem >>
+	<<say $Reed>>I see you have not been able to bring me the folder yet. Remember, it's a beige folder labelled 'Public Service Employes Personallia'. It's quite big and it should be in one of the file cabinets in the archive room of the muncipality building in Outset Town. I really hope that you bring the folder next time, I don't like wasting time.<</say>><br>
+	He gives you an icy stare.<br><br>
+
+	[[Return to the settlement|Downcast Village Settlement]]
+<<elseif !$reedShop && $reedQuestItem>>
+	<<say $mc>>I have the file you asked for.<</say>><br>
+	You hand of the large folder cache to Reed.<br><br>
+	<<say $Reed>>Splended! I knew you would come trough. Now as promissed, here is 50 dubloons as a reward and we can see if I can return the favor in finding some things other people have for you. We can also always do it next time, I'm sure we'll run into eachother again.<</say>><br>
+	<<set $dubloons += 50>> <<set $reedShop = true>>
+	[[Look at a list of relics you found but somebody else now owns| Reed Shop]]
+	[[Return to the settlement|Downcast Village Settlement]]
+
+<<elseif $reedShop>>
+	<<say $Reed>>Welcome, how can I help you today? Maybe I relic that was once yours and now in the possesion of somebody esle can be yours again. You know I can make it happen, but it comes at a prices of course.<</say>><br>
+	[[Look at a list of relics you found but somebody else now owns| Reed Shop]]
+<</if>>
+
+:: Reed Shop [layer2 cards indoor nobr]
+
+	<p>Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
+
+	<p>[[Return to the settlement|Downcast Village Settlement]]</p>
+
+	<div class="cards-grid">
+	<<for _item range $soldRelics>>
+	<div>
+	[img[setup.ImagePath + _item.image]]
+	<p>
+	<<set _cost = _item.value*2>>
+	<<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
+	</p>
+	<p>
+	<<include `_item.name + " Description"`>>
+	</p>
+	</div>
+	<</for>>
+	</div>
+
+	<p>[[Return to the settlement|Downcast Village Settlement]]</p>
