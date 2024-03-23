@@ -123,6 +123,9 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.boundBanditEnding) {
         return "Bound Bandit Ending";
     }
+    if (StoryVar.arrested) {
+        return "Arrested Scene";
+    }
     if (StoryVar.mc.age < 18) {
         return "AgeLimit";
     }
