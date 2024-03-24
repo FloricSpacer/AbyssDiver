@@ -1229,7 +1229,8 @@ setup.setupDalleImageGenerator = async function() {
                 model: 'dall-e-3',
                 prompt: prompt,
                 n: 1,
-                size: "1024x1024"
+                size: "1024x1024",
+                response_format: "b64_json"
             })
         });
 
@@ -1237,8 +1238,13 @@ setup.setupDalleImageGenerator = async function() {
         console.log(data); // Debugging: Inspect the structure of the response
 
         if (data.data && data.data.length > 0) {
-            const imageUrl = data.data[0].url;
-            $("#dalleImage").attr("src", imageUrl);
+            /*const imageUrl = data.data[0].url;
+            $("#dalleImage").attr("src", imageUrl);*/
+            const base64Image = data.data[0].b64_json; // Assuming this is the correct path
+            console.log("Base64 Image Data: ", base64Image ? base64Image.substring(0, 100) : "undefined");
+            setup.storeImage(base64Image)
+                .then(() => console.log('Image successfully stored.'))
+                .catch((error) => console.error('Failed to store image:', error));
         } else {
             console.error('No images returned:', data);
         }
@@ -1247,6 +1253,80 @@ setup.setupDalleImageGenerator = async function() {
     }
 }
 
+setup.storeImage = async function(base64Image) {
+    const dbName = "ImagesDB";
+    const storeName = "images";
+    const version = 2; // Increment this number to trigger onupgradeneeded
+    const imageKey = "playerPortrait"; // Constant key for the image
+
+    return new Promise((resolve, reject) => {
+        const dbOpenRequest = indexedDB.open(dbName, version);
+
+        dbOpenRequest.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName);
+                console.log(`${storeName} store created`);
+            }
+        };
+        
+        dbOpenRequest.onsuccess = function(event) {
+            const db = event.target.result;
+            const transaction = db.transaction([storeName], "readwrite");
+            const store = transaction.objectStore(storeName);
+
+            // Store the image with a constant key
+            const request = store.put(base64Image, imageKey);
+
+            request.onsuccess = function() {
+                console.log("Image stored in IndexedDB");
+                resolve();
+            };
+
+            request.onerror = function(event) {
+                console.error("Error storing image in IndexedDB:", event.target.error);
+                reject(event.target.error);
+            };
+        };
+
+        dbOpenRequest.onerror = function(event) {
+            console.error("Error opening database:", event.target.error);
+            reject(event.target.error);
+        };
+    });
+};
+
+
+
+
+setup.displayImage = async function() {
+    const dbName = "ImagesDB";
+    const storeName = "images";
+    const imageKey = "playerPortrait"; // The same constant key used for storing the image
+
+    const dbOpenRequest = indexedDB.open(dbName);
+
+    dbOpenRequest.onsuccess = function(event) {
+        const db = event.target.result;
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        
+        const request = store.get(imageKey);
+
+        request.onsuccess = function() {
+            const base64Image = request.result;
+            document.getElementById("dalleImage").src = "data:image/png;base64," + base64Image;
+        };
+
+        request.onerror = function(event) {
+            console.error("Error retrieving image from IndexedDB:", event.target.error);
+        };
+    };
+
+    dbOpenRequest.onerror = function(event) {
+        console.error("Error opening database:", event.target.error);
+    };
+}
 
 setup.evaluateCharacterDescription = function(mc) {
     let description = `The character is ${mc.sex}. `;
