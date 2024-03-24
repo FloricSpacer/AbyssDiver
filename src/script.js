@@ -370,6 +370,11 @@ Setting.addToggle("OverridePortrait", {
     default  : false,
 });
 
+Setting.addToggle("SidebarPortrait", {
+    label : "Display your current character portrait in the sidebar",
+    default  : false,
+});
+
 Setting.addToggle("RandomizedThreats", {
     label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
     default  : true,
@@ -1307,31 +1312,49 @@ setup.storeImage = async function(base64Image) {
 setup.displayImage = async function() {
     const dbName = "ImagesDB";
     const storeName = "images";
-    const imageKey = "playerPortrait"; // The same constant key used for storing the image
+    const imageKey = "playerPortrait";
+    const imgElement = document.getElementById("dalleImage");
 
+    // Attempt to open the database
     const dbOpenRequest = indexedDB.open(dbName);
 
     dbOpenRequest.onsuccess = function(event) {
         const db = event.target.result;
+        
+        // Check if the object store exists
+        if (!db.objectStoreNames.contains(storeName)) {
+            console.error("Object store does not exist.");
+            return;
+        }
+
         const transaction = db.transaction([storeName], "readonly");
         const store = transaction.objectStore(storeName);
-        
         const request = store.get(imageKey);
 
         request.onsuccess = function() {
             const base64Image = request.result;
-            document.getElementById("dalleImage").src = "data:image/png;base64," + base64Image;
+            console.log("Retrieved base64Image:", base64Image); // Debugging line
+            const imgElement = document.getElementById("dalleImage"); // Re-acquire the reference
+            if (base64Image) {
+                imgElement.src = "data:image/png;base64," + base64Image;
+            } else {
+                console.error("No base64 image data found."); // Error handling
+            }
         };
+        
 
         request.onerror = function(event) {
             console.error("Error retrieving image from IndexedDB:", event.target.error);
+          
         };
     };
 
     dbOpenRequest.onerror = function(event) {
         console.error("Error opening database:", event.target.error);
+       
     };
-}
+};
+
 
 setup.evaluateCharacterDescription = function(mc) {
     let description = `The character is ${mc.sex}. `;
@@ -1433,4 +1456,3 @@ setup.evaluateCharacterDescription = function(mc) {
 
     return description;
 };
-
