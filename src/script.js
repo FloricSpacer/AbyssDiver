@@ -361,7 +361,17 @@ Setting.addToggle("accessible", {
 });
 
 Setting.addToggle("AIPortraitsMode", {
-    label : "Allows you to use your own OpenAI API key to generate portraits of your character at any time",
+    label : "Enable you to use your own OpenAI API key to generate portraits of your character",
+    default  : true,
+});
+
+Setting.addToggle("OverridePortrait", {
+    label : "Override the most recent AI portrait with your own portrait choice, in the images folder",
+    default  : false,
+});
+
+Setting.addToggle("RandomizedThreats", {
+    label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
     default  : true,
 });
 
@@ -400,11 +410,6 @@ Setting.addToggle("amputationHidden", {
 Setting.addToggle("ArachnophobiaMode", {
     label : "Arachnophobia mode (Hide any images of spiders that would appear)",
     default  : false,
-});
-
-Setting.addToggle("RandomizedThreats", {
-    label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
-    default  : true,
 });
 
 Setting.addRange("appAgeControl", {
