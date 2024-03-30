@@ -103,6 +103,8 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 <span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[Check out nearby Settlements|Layer2 Settlement]]
 <span class="icon">[img[setup.ImagePath+'Icons/camping.png']]</span> [[Set up camp and rest here|Layer2 Camp]]
 <span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 2 habitation option|Layer2 Habitation][$returnPassage="Downcast Village Settlement"]]
+<<if $emilyVisit == true>><span class="icon">[img[setup.ImagePath+'Icons/plant.png']]</span> [[Visit Emily|Layer2 Emily Visit]]
+<</if>>\
 
 <span class="icon">[img[setup.ImagePath+'Icons/ascent.png']]</span> [[Look up towards the surface|Layer2 Ascend 1]]
 <span class="icon">[img[setup.ImagePath+'Icons/descent.png']]</span> [[Look down at the next layer|Layer2 Exit1]]
@@ -1573,6 +1575,98 @@ After safely storing the Relic, you continue your expedition. With the knowledge
 [[Continue exploring the second layer|Layer2 Hub]]
 <</if>>
 
+:: Pick up the Violet's Bounty [layer2]
+<<CollectRelic $relic109>>\
+<<if !setup.passingTime()>>
+As you wander through the foliage of the second layer, you notice the vines and foliage seem to be getting even thicker. While most of the layer seems to be a thick forest, this area feels like you're almost entering a continuous hedge, made up of strange flora that never lets up.
+
+After every vine, there is another one behind it, slowing your progress to a crawl, even as you attempt to determine the least dense path to follow. But finally, you manage to spot it, a small clearing what seems to be a vivid purple flower just beyond the next wall of green.
+
+[[Continue and pick up the flower|Emily Intro 1]]
+<</if>>
+
+:: Emily Intro 1 [layer2]
+
+Making your way through the final barrier of tangled vines, you spot the Relic — a radiant, oversized purple flower. As you step toward the brightly colored bloom, about to reach down, a voice interrupts your movement from your right.
+
+<<say $emily>>Excuse me? Please don’t do that.<</say>>
+
+The voice, though soft, carries a shade of aggressiveness that stops you cold. From behind a tree steps a creature covered in flowers and other foliage, a girl with skin and hair as green as the jungle around you.
+
+ (show Emily’s image here).
+
+<<say $emily>>That flower is an essential part of my collection. I would be heartbroken to see it taken away.<</say>>
+
+You reel back in surprise, you hadn't expected the relic to already have an owner — least of all something from the Abyss...
+
+[[Apologize|Emily Apologize]]
+[[Take it anyway|Emily Take Anyway]]
+[[Compromise?|Emily Compromise]]
+
+:: Emily Take Anyway [layer2]
+
+The plant creature doesn't seem to be a threat, its appearance is far from intimidating. So if you were quick, you could likely grab the Relic and escape before she could react. In a split-second decision, you reach down, yank the glowing flower from the earth, and dash back the way you came. When you hazard a glance back, she isn't pursuing you — instead, she stands rooted to the spot, her face filled with a solemn sadness, like she's more disappointed than angry.
+
+As you approach the vine-encased entrance to the clearing, a massive plant abruptly unfurls, catching you off guard. Before you can react, it unleashes a cloud of spores, engulfing you. Coughing and gasping, you notice a strange sensation — your skin hardening, becoming rough. Looking down, you realize it's turning green. The plant's unexpected attack has left a Curse, transforming you into something more akin to flora than fauna.
+
+[[You notice your changes from the Curse|Take on Cellulose Emily]]
+
+:: Take on Cellulose Emily [layer2]
+<<set _curse = new Cellulose()>>\
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>\
+[img[setup.ImagePath + _curse.pic]]
+
+A sharp, prickling sensation danced across your skin. It started as a faint itch on your wrist, a bothersome tickle that demanded attention.
+
+Then, a strange feeling of stiffness washed over your body, creeping along your skin like a slow-moving wave. The softness of your skin seemed to be replaced by a smooth, firm surface. Your fingers traced over your arm, as you explored the feeling of your new skin. Your skin felt like the bark of a young tree, smooth, sturdy, and... plant-like.
+
+The Curse had transformed your skin into something akin to plant matter. It was a peculiar sensation, being bound to the plant life in such a personal, intimate manner. It filled you with a strange desire, a yearning to be close to nature, to embrace it.
+
+As you retreat back the way you came, you question whether this little flower was really worth the cost...
+
+<<include "Inhumanity Warning">>
+
+[[Continue searching for the Relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+
+:: Emily Apologize [layer2]
+
+<<set $emilyVisit = true>>\
+<<say $mc>>Oh! I’m sorry! I had no idea you were the owner of this Relic, I’m not a thief, I swear!<</say>>
+Upon hearing your words, the plant girl's expression softens and her rigid posture relaxes.
+
+<<say $emily>>Ahh, you must be a diver? I've seen your kind pass through here. I also know the changes that befall those who delve deeper...<</say>>
+Emily seems to lose herself in thought for a moment as she stares off into the canopy.
+
+<<say $emily>>Oh! That gives me an idea! If you're venturing deeper, perhaps you could run an errand for me? Deeper in the Abyss, there are unique flowers that grow only on those layers. If you could bring some back, I would be able to cultivate them in my garden.<</say>>
+<<say $mc>>I hate to sound selfish, but what's in it for me? I can't risk my life for nothing...<</say>>
+After a moment's thought, Emily responds.
+
+<<say $emily>>That sounds fair. If you agree to this, I will let you take the Relic you desire. It might even assist you in locating the plants I need. Bring me these plants, and there might be... additional rewards for your efforts.<</say>>
+<<say $mc>>Alright, deal! Uh, do you have a name?<</say>>
+<<say $emily>>I was not given a name at birth like most people... But I do like the sound of Emily. You may call me that. And you can come back here to meet me, I'll be sure to keep the way clear for you. We can discuss the details of my request when you visit me later.<</say>>
+<i>You can now meet with Emily again any time from the main part of Layer 2.</i>
+
+[[Continue searching for the Relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
+:: Emily Compromise [layer2]
+
+<<set $emilyVisit = true>>\
+<<say $mc>>I have no intention of stealing this from you, but maybe we can make a deal? There must be something I can do for you in exchange for the Relic.<</say>>
+The plant girl seems to consider your offer for a few moments, appearing almost as rooted in place as the trees around you.
+
+<<say $emily>>Perhaps there is... I take it you're a diver, if you're interested in my Relic. That must mean you plan to venture deeper. Yes, deeper in the Abyss there are unique flowers that grow only on those layers. If you could bring some to me, I could cultivate them in my garden. If you agree to do this, I will let you take my flower with you. Fulfill this task, and there may be... additional rewards for your efforts.<</say>>
+She seems to smile for a moment, apparently glad that she was able to come up with a potential compromise.
+
+<<say $mc>>Alright, deal! Uh, do you have a name?<</say>>
+<<say $emily>>I was not given a name at birth like most people... But I do like the sound of Emily. You may call me that. And you can come back here to meet me, I'll be sure to keep the way clear for you. We can discuss the details of my request when you visit me later.<</say>>
+<i>You can now meet with Emily again any time from the main part of Layer 2.</i>
+
+[[Continue searching for the Relics of layer 2|Layer2 Relics]]
+[[Continue exploring the second layer|Layer2 Hub]]
+
 
 :: Layer2 Flasks [layer2]
 <<nobr>>
@@ -2220,23 +2314,50 @@ You approach the large hut Mister Reed is living in. <br><br>
 
 :: Reed Shop [layer2 cards indoor nobr]
 
-	<p>Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
+<p>Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
 
-	<p>[[Return to the settlement|Downcast Village Settlement]]</p>
+<p>[[Return to the settlement|Downcast Village Settlement]]</p>
 
-	<div class="cards-grid">
-	<<for _item range $soldRelics>>
-	<div>
-	[img[setup.ImagePath + _item.image]]
-	<p>
-	<<set _cost = _item.value*2>>
-	<<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
-	</p>
-	<p>
-	<<include `_item.name + " Description"`>>
-	</p>
-	</div>
-	<</for>>
-	</div>
+<div class="cards-grid">
+<<for _item range $soldRelics>>
+<div>
+[img[setup.ImagePath + _item.image]]
+<p>
+<<set _cost = _item.value*2>>
+<<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
+</p>
+<p>
+<<include `_item.name + " Description"`>>
+</p>
+</div>
+<</for>>
+</div>
 
-	<p>[[Return to the settlement|Downcast Village Settlement]]</p>
+<p>[[Return to the settlement|Downcast Village Settlement]]</p>
+
+:: Layer2 Emily Visit [layer2]
+<<if $emilyHome == false>>
+	You retrace your steps and head back to where you previously met that odd plant girl. And after a short walk through a passageway that was cleared of vines and thick foliage, you spot her again. She seems to be sitting quitely, examining a bluish moss growing on the bark of a nearby tree.
+
+	<<say $emily>>Ah, $mc.name, it's good to see you again. Did you want to ask me anything or discuss something?<</say>>
+<<elseif $emilyHome>>
+	You approach the small shack that makes up Emily's home, once again finding her nearby, tending her garden. She smiles when she notices you approaching and waves at you.
+
+	<<say $emily>>Ah, $mc.name, it's very nice to see you again! Did you want to ask me anything or discuss something?<</say>>
+<</if>>
+[[Ask Emily about her request|Emily Quest Details]]
+
+[[Ask Emily about her name|Emily Name]]
+[[Ask Emily where she sleeps|Emily Sleep]]
+[[Ask Emily what she eats|Emily Eat]]
+[[Ask Emily what she is|Emily About]]
+
+<<if $hasCaveFlower>>
+	[[Present Emily with the cave flower|Emily Cave Flower]]
+<</if>>
+<<if $hasPuritySeed>>
+	[[Present Emily with the purity seed|Emily Purity Seed]]
+<</if>>
+<<if $hasDesertFlower>>
+	[[Present Emily with the desert flower|Emily Desert Flower]]
+<</if>>
