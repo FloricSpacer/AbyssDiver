@@ -2345,6 +2345,13 @@ You approach the large hut Mister Reed is living in. <br><br>
 
 	<<say $emily>>Ah, $mc.name, it's very nice to see you again! Did you want to ask me anything or discuss something?<</say>>
 <</if>>
+<<nobr>><<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1)>>
+	You're able to eat and drink your fill at Emily's home, overcoming any deficits you've built up over time after you visit her house.
+	<br><br>
+	<<set $items[0].count = Math.max($items[0].count, 0)>>
+	<<set $items[1].count = Math.max($items[1].count, 0)>>
+<</if>><</nobr>>\
+
 [[Ask Emily about her request|Emily Quest Details]]
 
 [[Ask Emily about her name|Emily Name]]
@@ -2352,17 +2359,50 @@ You approach the large hut Mister Reed is living in. <br><br>
 [[Ask Emily what she eats|Emily Eat]]
 [[Ask Emily what she is|Emily About]]
 
-<<if $hasCaveFlower>>
+<<if $hasCaveFlower && !$emilyCaveFlower>>
 	[[Present Emily with the cave flower|Emily Cave Flower]]
-<</if>>
-<<if $hasPuritySeed>>
+<</if>>\
+<<if $hasPuritySeed && !$emilyPuritySeed>>
 	[[Present Emily with the purity seed|Emily Purity Seed]]
-<</if>>
-<<if $hasDesertFlower>>
+<</if>>\
+<<if $hasDesertFlower && !$emilyDesertFlower>>
 	[[Present Emily with the desert flower|Emily Desert Flower]]
+<</if>>\
+<<if $emily.affec > 1 && !$emilyHome>>
+	[[Emily wants to show you her home|Emily Home]]
+<</if>>\
+<<if $emilyHome>>
+	[[Spend a few nights in Emily's home to rest|Emily Rest]]
 <</if>>
 
 [[Return to exploring the second layer|Layer2 Hub]]
+
+:: Emily Home [layer2]
+
+Emily seems to trust you more after all you've done for her, so she leads you away from the place you've been meeting and to her true home.
+
+After navigating through the dense vegetation, a quaint, dilapidated two-story house comes into view. Despite its obvious decay – broken windows, gaping holes in the flooring, and a missing front door, there's a certain charm to it.
+
+<<say $emily>>Well? What do you think?<</say>>
+Emily asks, her pride in her home evident.
+
+Caught off guard by it's sad state, you manage a response.
+
+<<say $mc>>I... um... it's great! I'm just at a loss for words.<</say>>
+Emily beams at your response, offering you a room on the second floor for rest.
+
+<<say $emily>>I’m happy you like it, there is a spare room on the second floor, feel free to use it any time you need a rest from exploring.<</say>>
+The new arrangement enables you to bypass potential hazards while you wait here and safely eat food she provides you while visiting Emily directly at her home.
+
+[[Continue talking with Emily|Layer2 Emily Visit]]
+
+:: Emily Rest [layer2]
+<<set $safeRest = true>>
+You can rest as long as you wish here and will be provided clean food and water for as long as you wait. But you won't gain affection from companions, as they are getting a bit antsy to move on, rather than spend their whole time on this layer.
+
+<<include 'CampCode'>>
+
+[[Continue talking with Emily|Layer2 Emily Visit][$safeRest = false]]
 
 :: Emily Name [layer2]
 
@@ -2442,7 +2482,7 @@ Emily wanders off and seems to disappear for a few minutes as you wait for her t
 <i>You have gained medkit equivalents.</i>
 /<<set $item5.count += 2>>
 
-[[Continue talking with Emily|Layer2 Emily Visit]]
+[[Continue talking with Emily|Layer2 Emily Visit][$emily.affec += 1, $emilyCaveFlower = true]]
 
 :: Emily Purity Seed [layer2]
 
@@ -2462,7 +2502,7 @@ She leaves for a few moments, but quickly returns with 5 succulent-looking fruit
 <i>You have gained the equivalent of 5 water rations.</i>
 /<<set $item1.count += 5>>
 
-[[Continue talking with Emily|Layer2 Emily Visit]]
+[[Continue talking with Emily|Layer2 Emily Visit][$emily.affec += 1, $emilyPuritySeed = true]]
 
 :: Emily Desert Flower [layer2]
 
@@ -2483,4 +2523,4 @@ After that, Emily helps you to prepare a drink with the flowers. It ends up look
 <i>You have gained 40 corruption points from consuming the purity flowers.</i>
 /<<set $corruption += 40>>
 
-[[Continue talking with Emily|Layer2 Emily Visit]]
+[[Continue talking with Emily|Layer2 Emily Visit][$emily.affec += 1, $emilyDesertFlower = true]]
