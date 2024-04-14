@@ -112,7 +112,7 @@ Macro.add('PassTime', {
 						switch (State.variables.currentLayer) {
 							case 2:
 								// food rations
-								if (State.variables.items[1].count >= 0) State.variables.timeL2T1 += 1;
+								if (State.variables.items[1].count >= 10 && State.variables.safeRest == false) State.variables.timeL2T1 += 1;
 								break;
 							case 3:
 								State.variables.timeL3T1 += 1;
@@ -175,6 +175,14 @@ Macro.add('PassTime', {
 					State.variables['waterL' + State.variables.currentLayer] += 1;
 					drank = true;
 				}
+				if (State.variables.safeRest) {
+					// If we're currently resting in a safe spot, eat and drink from it.
+					State.variables['foodL' + State.variables.currentLayer] += 1;
+					ate = true;
+					State.variables['waterL' + State.variables.currentLayer] += 1;
+					drank = true;
+				}
+
 
 				// forage
 				switch (State.variables.currentLayer) {
