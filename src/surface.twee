@@ -1596,60 +1596,59 @@ Or...
 
 [[You could continue to explore with your new abilities|Surface Hub][$voidDiamondActive = true, $voidDiamondCarry = false, $time += 7]]
 
-/*xxx */
-:: Surface Muncipality Infiltration [surface nobr]
+:: Surface Municipality Infiltration [surface nobr]
 
 <<set $temp = "Nothing">>
 <<set $temp2 = "">>
-	
-There seem to be two clear paths to reach the archives room where the documents are located. You can either try the front door if you think you can deceive the people of the front desk with a relic, or you can try the locked service entrance in the back.<br><br>
+
+There are two apparent paths to the archives room where the documents are located. You can either attempt to bluff your way past the front desk using a relic, or try to bypass the locked service entrance at the back.<br><br>
 
 [[Attempt infiltration through the main entrance|Infiltration attempt][$temp2 = "front"]]<br>
 [[Attempt infiltration through the locked back entrance|Infiltration attempt][$temp2 = "back"]]<br>
 
 :: Infiltration attempt [surface nobr]
 <<if $temp2 == "front">>
-	What Relics do you want to use to infiltrate the building through the front door without being stopped by the employees?<br><br>
+    What Relics do you want to use to infiltrate the building through the front door without being stopped by the employees? A Relic that can deceive them or hide you may work well for this task.<br><br>
 <<elseif $temp2 == "back">>
-	What Relics do you want to use to infiltrate the building through the locked door in the back?<br><br>
+    What Relics do you want to use to infiltrate the building through the locked door in the back? A Relic that can move the items from a distance or get you through the locked door may work well for this task.<br><br>
 <</if>>
 
 <<if $ownedRelics.length==0 && $item15.count==0 && $item14.count==0>>
-	[[You don't have any Relics or useful items!|Infiltration attempt2][$temp = "Nothing"]]
+    [[You don't have any Relics or useful items!|Infiltration attempt2][$temp = "Nothing"]]
 <<else>>
 
-	<<for _i, _relic range $ownedRelics>>
-		<<capture _i>>
-			<<if $temp != _relic.name>>
-				&nbsp; [[_relic.name|Infiltration attempt][$temp = $ownedRelics[_i].name]]<br>
-			<</if>>
-		<</capture>>
-	<</for>>
-	<<if $item14.count != 0>>
-		&nbsp; [[Pistol|Infiltration attempt][$temp = "Pistol"]]<br>
-	<</if>>
-	<<if $item15.count != 0>>
-		&nbsp; [[Sword|Infiltration attempt][$temp = "Sword"]]<br>
-	<</if>>
+    <<for _i, _relic in $ownedRelics>>
+        <<capture _i>>
+            <<if $temp != _relic.name>>
+                &nbsp; [[_relic.name|Infiltration attempt][$temp = $ownedRelics[_i].name]]<br>
+            <</if>>
+        <</capture>>
+    <</for>>
+    <<if $item14.count != 0>>
+        &nbsp; [[Pistol|Infiltration attempt][$temp = "Pistol"]]<br>
+    <</if>>
+    <<if $item15.count != 0>>
+        &nbsp; [[Sword|Infiltration attempt][$temp = "Sword"]]<br>
+    <</if>>
 
-	<br>
-	You have selected:<br>
-	
-	<<if $temp == "Starlit Conquest Activated" && $mechaBoarded>>
-		<<set $temp = "Activated Starlit Conquest">>
-	<</if>>	
-	<<print $temp>>
-	<<if $temp == "Catastrophe">>
-		<<print "@@.alert2; Using the Catastrophe here might cause mass devistation and will result in your own death!">>
-	<</if>>			
-	<br>
-	[[Delete existing Relic selection|Infiltration attempt][$temp="Nothing"]]<br>
+    <br>
+    You have selected:<br>
+    
+    <<if $temp == "Starlit Conquest Activated" && $mechaBoarded>>
+        <<set $temp = "Activated Starlit Conquest">>
+    <</if>>    
+    <<print $temp>>
+    <<if $temp == "Catastrophe">>
+        <<print "@@.alert2; Using the Catastrophe here might cause mass devastation and will result in your own death! Choose another Relic.">>
+    <</if>>            
+    <br>
+    [[Delete existing Relic selection|Infiltration attempt][$temp="Nothing"]]<br>
 
-	<<if $temp=="Catastrophe">>
-		<br>[[Attempt the infiltration with your selected of Relic|Catastrophe Surface Destruction]]
-	<<else>>
-		<br>[[Attempt the infiltration with your selected of Relic|Infiltration attempt2]]
-	<</if>>
+    <<if $temp=="Catastrophe">>
+        <br>/*[[Attempt the infiltration with your selected Relic|Catastrophe Surface Destruction]]*/
+    <<else>>
+        <br>[[Attempt the infiltration with your selected Relic|Infiltration attempt2]]
+    <</if>>
 <</if>>
 
 
@@ -1657,64 +1656,64 @@ There seem to be two clear paths to reach the archives room where the documents 
 <<set _frontCondition = ($temp2 == "front" && ($MunchFrontList.some(e => e === $temp) || $MunchForceList.some(e => e === $temp)))>>
 <<set _backCondition = ($temp2 == "back" && ($MunchBackList.some(e => e === $temp) || $MunchForceList.some(e => e === $temp))) >>
 <<set _forceUsage = $MunchForceList.some(e => e === $temp)>>
-<<set _succes =  (_frontCondition || _backCondition) ? true : false>>
+<<set _success =  (_frontCondition || _backCondition) ? true : false>>
 
-<<if _succes && $temp2 == "front" && !_forceUsage>>
-	You manage the trick the employees at the muncipality office, and stroll right through the front entrance to the back offices where the archives are located. You manage the find the folder quite quickly and walk out of the front door again.<br>
-	<br>
-	@@.alert1; You obtained the documents for Reed!@@ <br><br>
-	<<set $reedQuestItem = true>>
+<<if _success && $temp2 == "front" && !_forceUsage>>
+    You manage to trick the employees at the municipality office and stroll right through the front entrance to the back offices where the archives are located. You quickly find the folder and walk out of the front door again.<br>
+    <br>
+    @@.alert1; You obtained the documents for Reed!@@ <br><br>
+    <<set $reedQuestItem = true>>
 
-	[[Return to Outset Town|Surface Hub]]
-<<elseif _succes && $temp2 == "front">>
-	Armed you turn the situation from an attempted infiltration in to an armed heist. It is clear that the employees at the muncipality office are very rattled and just give you what you want as quickly as possible.<br>
-	<br>
-	@@.alert1; You obtained the documents for Reed!@@ <br><br>
-	<<set $reedQuestItem = true>>
-	@@.alert2; You became wanted in Outset Town, be sure to change your appearance when you come back or risk being arrested!@@ <br><br>
-	<<set $WantedTraits = {
-		Active: true,
-		Day: $time,
-		Age: $mc.appAge,
-		Gender: $mc.appGender,
-		Human: $mc.inhuman,
-		Eye: $mc.eyeColor,
-		Hair: $mc.hair,
-		Height: $mc.heightCor 
-	}>>
-	[[Return to Outset Town|Surface Hub]]
+    [[Return to Outset Town|Surface Hub]]
+<<elseif _success && $temp2 == "front">>
+    Armed, you turn the situation from an attempted infiltration into an armed heist. The rattled employees quickly give you what you want.<br>
+    <br>
+    @@.alert1; You obtained the documents for Reed!@@ <br><br>
+    <<set $reedQuestItem = true>>
+    @@.alert2; You are now wanted in Outset Town, be sure to change your appearance when you come back or risk being arrested!@@ <br><br>
+    <<set $WantedTraits = {
+        Active: true,
+        Day: $time,
+        Age: $mc.appAge,
+        Gender: $mc.appGender,
+        Human: $mc.inhuman,
+        Eye: $mc.eyeColor,
+        Hair: $mc.hairColor,
+        Height: $mc.heightCor 
+    }>>
+    [[Return to Outset Town|Surface Hub]]
 
-<<elseif _succes && $temp2 == "back" && !_forceUsage>>
-	The door proves no obstacle and you manage to sneak inside stealthily. Once inside you patiently wait for an opportunity to enter the archives unseen. As you managed to remain undetected untill this point you have ample time to find the documents you are looking for and sneak outside again. <br> 
-	<br>
-	@@.alert1; You obtained the documents for Reed!@@ <br><br>
-	<<set $reedQuestItem = true>>
+<<elseif _success && $temp2 == "back" && !_forceUsage>>
+    The door proves no obstacle, and you manage to sneak inside stealthily. Once inside, you wait for an opportunity to enter the archives unseen. With ample time to find the documents, you sneak out again without being detected.<br> 
+    <br>
+    @@.alert1; You obtained the documents for Reed!@@ <br><br>
+    <<set $reedQuestItem = true>>
 
-	[[Return to Outset Town|Surface Hub]]
+    [[Return to Outset Town|Surface Hub]]
 
-<<elseif _succes && $temp2 == "back">>
-	Breaking the door with a weapon made a lot of noise, so you hurry inside as quickly as you can. The few employees that came to investigate the noise look starteled when you cross their path wielding $temp. You rush to the archives room and pull out every drawer untill you quickly spot the documents that you came for. When you try to exit to the back your path is blocked by a lone security guard. You hear police sirens in the distance now, but the guard seems focussed on your $temp. Realizing that his batton is no match he steps aside with gritted teeth, allowing you your escape.<br>
-	<br>
-	@@.alert1; You obtained the documents for Reed!@@ <br><br>
-	<<set $reedQuestItem = true>>
-	@@.alert2; You became wanted in Outset Town, be sure to change your appearance when you come back or risk being arrested!@@ <br><br>
-	<<set $WantedTraits = {
-		Active: true,
-		Day: $time,
-		Age: $mc.appAge,
-		Gender: $mc.appGender,
-		Human: $mc.inhuman,
-		Eye: $mc.eyeColor,
-		Hair: $mc.hairColor,
-		Height: $mc.heightCor 
-	}>>
-	[[Return to Outset Town|Surface Hub]]
+<<elseif _success && $temp2 == "back">>
+    Breaking the door with a weapon made a lot of noise, so you hurry inside as quickly as you can. The startled employees step aside when they see you wielding $temp. You quickly spot the documents in the archives room and grab them. When you try to exit to the back, a lone security guard blocks your path but steps aside, realizing his baton is no match for your $temp.<br>
+    <br>
+    @@.alert1; You obtained the documents for Reed!@@ <br><br>
+    <<set $reedQuestItem = true>>
+    @@.alert2; You are now wanted in Outset Town, be sure to change your appearance when you come back or risk being arrested!@@ <br><br>
+    <<set $WantedTraits = {
+        Active: true,
+        Day: $time,
+        Age: $mc.appAge,
+        Gender: $mc.appGender,
+        Human: $mc.inhuman,
+        Eye: $mc.eyeColor,
+        Hair: $mc.hairColor,
+        Height: $mc.heightCor 
+    }>>
+    [[Return to Outset Town|Surface Hub]]
 <<elseif $temp == "Nothing">> 
-	You can't expect to infiltrate the muncipality without a plan!<br><br>
-	[[Return to Outset Town|Surface Hub]]
+    You can't expect to infiltrate the municipality without a plan!<br><br>
+    [[Return to Outset Town|Surface Hub]]
 <<else>>
-	Your attemps amount to nothing and after a while a guards comes around and asks you with a firm undertone to leave the premise.<br><br>
-	[[Return to Outset Town|Surface Hub]]
+    Your attempts amount to nothing and after a while, a guard comes around and asks you with a firm undertone to leave the premises.<br><br>
+    [[Return to Outset Town|Surface Hub]]
 <</if>>
 
 :: Layer0 Travel Events [surface nobr]
