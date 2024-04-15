@@ -2344,12 +2344,12 @@ You approach the large hut where Mr. Reed resides. <br><br>
 <<if $emilyHome == false>>
 	You retrace your steps and head back to where you previously met that odd plant girl. And after a short walk through a passageway that was cleared of vines and thick foliage, you spot her again. She seems to be sitting quitely, examining a bluish moss growing on the bark of a nearby tree.
 
-	<<say $emily>>Ah, $mc.name, it's good to see you again. Did you want to ask me anything or discuss something?<</say>>
+	<<say $emily>>Ah, $mc.name, it's good to see you again. Did you want to ask me anything or discuss something?<</say>>\
 <<elseif $emilyHome>>
 	You approach the small shack that makes up Emily's home, once again finding her nearby, tending her garden. She smiles when she notices you approaching and waves at you.
 
-	<<say $emily>>Ah, $mc.name, it's very nice to see you again! Did you want to ask me anything or discuss something?<</say>>
-<</if>>
+	<<say $emily>>Ah, $mc.name, it's very nice to see you again! Did you want to ask me anything or discuss something?<</say>>\
+<</if>>\
 <<nobr>><<if $items[18].count > 0 && ($items[0].count < 1 || $items[1].count < 1)>>
 	You're able to eat and drink your fill at Emily's home, overcoming any deficits you've built up over time after you visit her house.
 	<br><br>
@@ -2364,27 +2364,27 @@ You approach the large hut where Mr. Reed resides. <br><br>
 [[Ask Emily where she sleeps|Emily Sleep]]
 [[Ask Emily what she eats|Emily Eat]]
 [[Ask Emily what she is|Emily About]]
-
 <<if $emily.affec > 2 && $emilySex == false>>
 	[[Emily is looking at your nervously, as if there's something she wants to ask|Emily Sex Intro]]
-<<else>>
+<<elseif $emily.affec > 2>>
 	[[Emily seems interested in having sex again|Emily Sex Intro]]
 <</if>>\
 <<if $hasCaveFlower && !$emilyCaveFlower>>
-	[[Present Emily with the cave flower|Emily Cave Flower]]
+	[[Present Emily with the cave flower|Emily Cave Flower]]\
 <</if>>\
 <<if $hasPuritySeed && !$emilyPuritySeed>>
-	[[Present Emily with the purity seed|Emily Purity Seed]]
+	[[Present Emily with the purity seed|Emily Purity Seed]]\
 <</if>>\
 <<if $hasDesertFlower && !$emilyDesertFlower>>
-	[[Present Emily with the desert flower|Emily Desert Flower]]
+	[[Present Emily with the desert flower|Emily Desert Flower]]\
 <</if>>\
 <<if $emily.affec > 1 && !$emilyHome>>
-	[[Emily wants to show you her home|Emily Home]]
+	[[Emily wants to show you her home|Emily Home]]\
 <</if>>\
 <<if $emilyHome>>
-	[[Spend a few nights in Emily's home to rest|Emily Rest]]
+	[[Spend a few nights in Emily's home to rest|Emily Rest]]\
 <</if>>\
+
 
 [[Return to exploring the second layer|Layer2 Hub]]
 
@@ -2405,7 +2405,7 @@ Emily beams at your response, offering you a room on the second floor for rest.
 <<say $emily>>I’m happy you like it, there is a spare room on the second floor, feel free to use it any time you need a rest from exploring.<</say>>
 The new arrangement enables you to bypass potential hazards while you wait here and safely eat food she provides you while visiting Emily directly at her home.
 
-[[Continue talking with Emily|Layer2 Emily Visit]]
+[[Continue talking with Emily|Layer2 Emily Visit][$emilyHome = true]]
 
 :: Emily Rest [layer2]
 <<set $safeRest = true>>
@@ -2477,6 +2477,8 @@ Her voice is thoughtful and contemplative. As she speaks, she looks away, lost i
 
 :: Emily Cave Flower [layer2]
 
+<<= '<img src="' + setup.ImagePath + 'Wonders/caveflower.jpeg" class="half-size">' >>
+
 You hold the small black flower up to Emily and smile. Her eyes sparkle with excitement.
 
 <<say $emily>>Oh yes! That is the flower from the cave below!<</say>>
@@ -2490,12 +2492,14 @@ Emily wanders off and seems to disappear for a few minutes as you wait for her t
 
 <<say $emily>>These are medicinal herbs. They are much more effective than herbal medicine from the surface, but they are also difficult to cultivate, so I only have a few. They should be just as effective as a medkit in treating any injuries you have.<</say>>
 
-<i>You have gained medkit equivalents.</i>
-/<<set $item5.count += 2>>
+<i>You have gained 2 medkit equivalents.</i>
+<<set $item5.count += 2>>\
 
 [[Continue talking with Emily|Layer2 Emily Visit][$emily.affec += 1, $emilyCaveFlower = true]]
 
 :: Emily Purity Seed [layer2]
+
+<<= '<img src="' + setup.ImagePath + 'Wonders/purityseed.jpeg" class="half-size">' >>
 
 You reach into your pack and bring the small, white seed to Emily. As you hand it over, you feel a hint of miasma in your hand as it thickens in the absence of the seed. But Emily seems to be almost ecstatic with excitement.
 
@@ -2511,11 +2515,13 @@ She leaves for a few moments, but quickly returns with 5 succulent-looking fruit
 <<say $emily>>These melons have an especially high water content, and they are very delicious. While they don't have much nutricious value, they are a delicious treat and each one holds 1 day worth of water rations in it. They will last a long time without rotting, and they can help you if you ever need a source of hydration. So I thought these would be helpful for you, especially in the deep Abyss where water is scarce.<</say>>
 
 <i>You have gained the equivalent of 5 water rations.</i>
-/<<set $item1.count += 5>>
+<<set $items[1].count += 5>>\
 
 [[Continue talking with Emily|Layer2 Emily Visit][$emily.affec += 1, $emilyPuritySeed = true]]
 
 :: Emily Desert Flower [layer2]
+
+<<= '<img src="' + setup.ImagePath + 'Wonders/desertflower.jpeg" class="half-size">' >>
 
 You reach out and present the leafy flower to Emily, being careful not to disturb the green petals as you hand it over to her. The overtly grassy smell is noticable even when you aren't trying to smell it though.
 
@@ -2532,7 +2538,7 @@ After a few moments, she returns with your reward, a pair of delicate white flow
 After that, Emily helps you to prepare a drink with the flowers. It ends up looking like a glass of milk, but it tastes like... nothing. There is a complete absence of flavor, but somehow a sensation of rightness and warmth when you drink it. It's a surprisingly pleasant drink, given the total lack of flavor.
 
 <i>You have gained 40 corruption points from consuming the purity flowers.</i>
-/<<set $corruption += 40>>
+<<set $corruption += 40>>\
 
 [[Continue talking with Emily|Layer2 Emily Visit][$emily.affec += 1, $emilyDesertFlower = true]]
 
