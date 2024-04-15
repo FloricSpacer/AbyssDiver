@@ -180,7 +180,7 @@ class Character {
 			   'appDesc must be a string');
 		this.appDesc = appDesc;
 		assert(['darkness', 'spiders', 'wolves', 'snakes', 'insects',
-				'slime', 'desperation', 'rot', 'unknown'].includes(fear),
+				'slime', 'desperation', 'rot', 'unknown', ""].includes(fear),
 			   `fear must be one of the implemented fears: 'darkness', 'spiders', 'wolves', 'snakes', 'insects', 
 		'slime', 'desperation', 'rot', 'unknown'`);
 		this.fear = fear;
