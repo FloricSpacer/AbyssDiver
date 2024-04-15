@@ -1405,18 +1405,19 @@ setup.evaluateCharacterDescription = function(mc) {
         case 2: description += "A feminine man (twink, femboy). "; break;
         case 3: description += "A very androgynous man. "; break;
         case 4: description += "A very androgynous woman. "; break;
-        case 5: description += "A masculine woman (butch, tomboy). "; break;
+        case 5: description += "A masculine woman (tomboy). "; break;
         case 6: description += "A feminine woman. "; break;
     }
 
     // Breast size
-    if (mc.breastsCor < 1) {
+    if (mc.breastsCor < 1 && mc.vagina === 0) {
         description += "";
+    } else if (mc.breastsCor < 1 && mc.vagina === 1) {
+        description += "A totally flat chest. ";
     } else if (mc.breastsCor < 6) {
-        const sizes = ["AA", "A", "B", "C", "D"];
-        description += `${sizes[mc.breastsCor - 1]} cup breasts. `;
+        description += "";
     } else {
-        description += "Very large breasts. ";
+        description += "Very buxom. ";
     }
 
     // Additional conditions
@@ -1437,7 +1438,7 @@ setup.evaluateCharacterDescription = function(mc) {
     // Curses and conditions
     if (mc.hasCurse("Freckle Speckle")) description += "Many freckles. ";
     if (mc.hasCurse("20/20000000")) description += "Wearing thick glasses. ";
-    if (mc.hasCurse("Gooey")) description += "A slime person, very slimey body. ";
+    if (mc.hasCurse("Gooey")) description += "A slime person, transluscent slime-skined. ";
     if (mc.hasCurse("Crossdress Your Heart")) description += "Crossdressing as the opposite gender. ";
     if (mc.hasCurse("Lingual Leviathan")) description += "A 12-inch long tongue. ";
     if (mc.hasCurse("Massacre Manicure")) description += "Very sharp and long fingernails. ";
