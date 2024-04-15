@@ -19,7 +19,6 @@ setup.companionIds = {
 	golem: 8,
 	bandit: 9,
 	ai: 10,
-	emily: 11,
 }
 
 setup.creatureIds = {
@@ -27,6 +26,7 @@ setup.creatureIds = {
 	BayingGourmetFemale : 102,
 	DragonMale: 103,
 	DragonFemale: 104,
+	Emily: 105,
 
 }
 
