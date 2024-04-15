@@ -19,6 +19,7 @@ setup.companionIds = {
 	golem: 8,
 	bandit: 9,
 	ai: 10,
+	emily: 11,
 }
 
 setup.creatureIds = {
