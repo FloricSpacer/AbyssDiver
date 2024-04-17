@@ -105,7 +105,7 @@ Config.navigation.override = function (destPassage) {
     // For interrupt scenes that don't result in a bad end, set the return passage.
     StoryVar.interruptReturn = destPassage;
 
-    if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
+    if (StoryVar.brokerUsed === true && StoryVar.corruption < 0) {
         return "BrokerEnd";
     }
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length===0){
