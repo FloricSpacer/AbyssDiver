@@ -206,7 +206,7 @@ Config.navigation.override = function (destPassage) {
         StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
         return "Bandit Escape";
     }
-    if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/BanditIcon_released.jpg" &&
+    if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/banditIcon_released.png" &&
         StoryVar.mc.inhuman < 6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
         return "Bandit Arrested";
     }
