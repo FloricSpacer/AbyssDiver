@@ -336,24 +336,45 @@ setup.SoundPath = setup.Path + "sounds/";
 
 //conversation macro
 Macro.add('say', {
-        tags: null,
-        handler: function () {
-            const person = this.args[0];
-            const imageIcon = this.args[1];
-            const output =
-                `<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
-                    `<div class="avatar">` +
-                        `<img src="${setup.ImagePath}${imageIcon ?? person?.imageIcon ?? ''}" style="width:100px;height:100px">` +
-                    `</div>` +
-                    `<span class="say-nameB">${person?.name ?? ''}</span>` +
-                    `<hr>` +
-                    `<span class="say-contents">` +
-                        `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
-                    `</span>` +
-                `</div>`;
-            $(this.output).wiki(output);
-        }
+    tags: null,
+    handler: function () {
+        const person = this.args[0];
+        const imageIcon = this.args[1];
+        let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
+
+        // Determine if this is the player's portrait
+        const isPlayer = person === State.variables.mc;
+
+        // Handle immediate image source replacement for override scenarios
+        if (isPlayer) {
+            if (settings.OverridePortrait) {
+                imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
+            } else if (setup.firstPortraitGen) {
+                // Placeholder imgSrc to ensure something is set immediately
+                imgSrc = "images/Player Icons/playerF.png"; // Placeholder image
+                // Fetch the base64 image from IndexedDB and set it as the portrait
+                setup.displayPortraitImage();  // Note: This will update the src later when the db operation completes
+            }
+        }        
+
+        const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
+
+        const output =
+            `<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
+                `<div class="avatar">` +
+                    `<img class="${imgClass}" src="${imgSrc}" style="width:100px;height:100px">` +
+                `</div>` +
+                `<span class="say-nameB">${person?.name ?? ''}</span>` +
+                `<hr>` +
+                `<span class="say-contents">` +
+                    `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
+                `</span>` +
+            `</div>`;
+        $(this.output).wiki(output);
+    }
 });
+
+
 
 Setting.addToggle("accessible", {
     label : "Disable extra fancy text formatting",
@@ -1354,9 +1375,66 @@ setup.displayImage = async function() {
         request.onsuccess = function() {
             const base64Image = request.result;
             console.log("Retrieved base64Image:", base64Image); // Debugging line
-            const imgElement = document.getElementById("dalleImage"); // Re-acquire the reference
             if (base64Image) {
-                imgElement.src = "data:image/png;base64," + base64Image;
+                const imgElements = document.querySelectorAll(".dalleImage");
+                imgElements.forEach(function(imgElement) {
+                    imgElement.src = "data:image/png;base64," + base64Image;
+                });
+            } else {
+                console.error("No base64 image data found."); // Error handling
+            }
+        };
+        
+        request.onerror = function(event) {
+            console.error("Error retrieving image from IndexedDB:", event.target.error);
+        };
+    };
+
+    dbOpenRequest.onerror = function(event) {
+        console.error("Error opening database:", event.target.error);
+    };
+};
+
+setup.displayPortraitImage = async function() {
+    const dbName = "ImagesDB";
+    const storeName = "images";
+    const imageKey = "playerPortrait";
+    const imgElement = document.getElementById("dalleImage");
+    const dbVersion = 4; // Define a version number for your database
+
+    // Attempt to open the database with version
+    const dbOpenRequest = indexedDB.open(dbName, dbVersion);
+
+    // This event is only triggered when a new database is being created or needs an upgrade
+    dbOpenRequest.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        // Create the object store if it doesn't exist
+        if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
+            console.log(storeName + " store created.");
+        }
+    };
+
+    dbOpenRequest.onsuccess = function(event) {
+        const db = event.target.result;
+        
+        if (!db.objectStoreNames.contains(storeName)) {
+            console.error("Object store does not exist even after attempting creation.");
+            return;
+        }
+
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        const request = store.get(imageKey);
+
+        request.onsuccess = function() {
+            const base64Image = request.result;
+            console.log("Retrieved base64Image:", base64Image); // Debugging line
+            if (base64Image) {
+                const imgElements = document.querySelectorAll(".portraitImage");
+                imgElements.forEach(function(imgElement) {
+                    imgElement.src = "data:image/png;base64," + base64Image;
+                });
             } else {
                 console.error("No base64 image data found."); // Error handling
             }
