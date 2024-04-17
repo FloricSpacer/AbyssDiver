@@ -1127,7 +1127,7 @@ class Character {
 	get imageIcon() {
 		let transformed = this.events.reduce((v, e) => e.changeImageIcon(v), '');
 		// as a special exception, anybody who swapped with the bandit is released
-		if (transformed === 'Icons/BanditIcon.jpg') transformed = 'Icons/BanditIcon_released.jpg';
+		if (transformed === 'Icons/banditIcon.png') transformed = 'Icons/banditIcon_released.png';
 		if (transformed !== '') return transformed;
 
 		if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
@@ -1136,7 +1136,7 @@ class Character {
 		}
 
 		if (this.id === setup.companionIds.bandit && State.variables.BanditConvo0) {
-			return 'Icons/BanditIcon_released.jpg'
+			return 'Icons/banditIcon_released.png'
 		}
 
 		return this._imageIcon;
