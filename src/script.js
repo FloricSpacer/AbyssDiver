@@ -1225,6 +1225,10 @@ setup.setupDalleImageGenerator = async function() {
     // Dynamically generated character description
     let characterDescription = setup.evaluateCharacterDescription(State.variables.mc); // Assuming $mc is stored in State.variables.mc
 
+    // Get the notification element
+    const notificationElement = document.getElementById('notification');
+
+
     // Concatenate the static prompt with the dynamic description
     const prompt = staticPrompt + characterDescription;
 
@@ -1243,7 +1247,10 @@ setup.setupDalleImageGenerator = async function() {
                 response_format: "b64_json"
             })
         });
-
+        
+        if (!response.ok) {
+            throw new Error('Failed to connect to OpenAI. Please check your API key and network connection and try again.');
+        }
         const data = await response.json();
         console.log(data); // Debugging: Inspect the structure of the response
 
@@ -1257,16 +1264,19 @@ setup.setupDalleImageGenerator = async function() {
                 .catch((error) => console.error('Failed to store image:', error));
         } else {
             console.error('No images returned:', data);
+            throw new Error('No images returned. This is likely due to a content policy error or server error from OpenAI. Please try again later.');
         }
     } catch (error) {
         console.error('Error generating image:', error);
+        notificationElement.textContent = error.message;
+        notificationElement.style.display = 'block';
     }
 }
 
 setup.storeImage = async function(base64Image) {
     const dbName = "ImagesDB";
     const storeName = "images";
-    const version = 2; // Increment this number to trigger onupgradeneeded
+    const version = 4; // Increment this number to trigger onupgradeneeded
     const imageKey = "playerPortrait"; // Constant key for the image
 
     return new Promise((resolve, reject) => {
@@ -1314,16 +1324,26 @@ setup.displayImage = async function() {
     const storeName = "images";
     const imageKey = "playerPortrait";
     const imgElement = document.getElementById("dalleImage");
+    const dbVersion = 4; // Define a version number for your database
 
-    // Attempt to open the database
-    const dbOpenRequest = indexedDB.open(dbName);
+    // Attempt to open the database with version
+    const dbOpenRequest = indexedDB.open(dbName, dbVersion);
+
+    // This event is only triggered when a new database is being created or needs an upgrade
+    dbOpenRequest.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        // Create the object store if it doesn't exist
+        if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
+            console.log(storeName + " store created.");
+        }
+    };
 
     dbOpenRequest.onsuccess = function(event) {
         const db = event.target.result;
         
-        // Check if the object store exists
         if (!db.objectStoreNames.contains(storeName)) {
-            console.error("Object store does not exist.");
+            console.error("Object store does not exist even after attempting creation.");
             return;
         }
 
@@ -1342,18 +1362,16 @@ setup.displayImage = async function() {
             }
         };
         
-
         request.onerror = function(event) {
             console.error("Error retrieving image from IndexedDB:", event.target.error);
-          
         };
     };
 
     dbOpenRequest.onerror = function(event) {
         console.error("Error opening database:", event.target.error);
-       
     };
 };
+
 
 
 setup.evaluateCharacterDescription = function(mc) {
