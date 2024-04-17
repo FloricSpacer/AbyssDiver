@@ -362,7 +362,7 @@ Setting.addToggle("accessible", {
 
 Setting.addToggle("AIPortraitsMode", {
     label : "Enable you to use your own OpenAI API key to generate portraits of your character",
-    default  : true,
+    default  : false,
 });
 
 Setting.addToggle("OverridePortrait", {
