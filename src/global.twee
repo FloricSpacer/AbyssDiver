@@ -554,7 +554,7 @@ Thanks again for playing! I hope the dive was worth it.
 	<<if settings.OverridePortrait == true>>
 		<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" style="max-width: 70%;">
 	<<elseif setup.firstPortraitGen>>
-		<img id="dalleImage" src="" style="max-width: 70%;">
+		<img class="dalleImage" src="" style="max-width: 70%;">
 		<<run setup.displayImage()>>
 	<</if>>
 	<br><br>
@@ -567,6 +567,7 @@ Thanks again for playing! I hope the dive was worth it.
 	<<else>>
         Enter your OpenAI API key to enable the generation of AI character portraits. (Do NOT share your save file if you have entered your API key! The AI Portrait option can be disabled in settings to remove this message.)<br>
 		[[API Key Guide]]<br>
+		[[View Portrait Prompt|Portrait Prompt]]<br>
 		<<textbox "$userAPIKey" "">><br>
         <<button "Submit">>
             <<set settings.OpenAIAPIKey to $userAPIKey>>
@@ -2633,7 +2634,7 @@ You pack the newly made rope carefully, ready for whatever challenges lie ahead.
 
 <<set $characterDescription = setup.evaluateCharacterDescription($mc)>>
 
-Generate a new AI portrait of your character (this will take a few seconds). Be aware that you must pay with credit on your OpenAI account for each generation.<br><br>
+Generate a new AI portrait of your character (this will take at least a few seconds). Be aware that you must pay with credit on your OpenAI account for each generation.<br><br>
 <<button "Generate New Portrait">>
 	<<script>>
         (async () => {
@@ -2642,8 +2643,10 @@ Generate a new AI portrait of your character (this will take a few seconds). Be 
         })();
     <</script>>
 	<<set setup.firstPortraitGen = true>>
-<</button>><br><br>
-<img id="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;"><br><br>
+<</button>><br>
+[[View Portrait Prompt|Portrait Prompt]]
+<div id="notification"></div><br>
+<img class="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;"><br><br>
 
 Once your portrait is generated, you can follow the next step to save it for long term use, otherwise it will be overridden when you generate a new portrait.<br><br>
 
@@ -2652,3 +2655,33 @@ Once your portrait is generated, you can follow the next step to save it for lon
 Once you do that, you can save the image for future use and enable the use of the image as your main portrait in settings.<br><br>
 
 <<back [[$menuReturn]]>>
+
+
+:: Portrait Prompt [noreturn nobr]
+
+This prompt is made to be used with DALL-E 3 or ChatGPT and may require modification to be used with other image models, such as Stable Diffusion. It also has all NSFW information stripped away, so you can add that back in if you are using an uncensored model.<br><br>
+
+If you have ChatGPT Plus, then you can likely paste this prompt directly into ChatGPT and it should work well.<br><br>
+
+Prompt:<br><br>
+
+Create an anime-inspired digital painting of a single adventurer with each of the following traits, in the background of the Abyss from MiA. Do NOT use the word character in the final prompt.<br><br>
+
+<<= setup.evaluateCharacterDescription(State.variables.mc) >><br><br>
+
+<<button "Copy Prompt">>
+	<<script>>
+		var promptText = "Create an anime-inspired digital painting of a single adventurer with each of the following traits, in the background of the Abyss from MiA. Do NOT use the word character in the final prompt.\n\n" + setup.evaluateCharacterDescription(State.variables.mc);
+		navigator.clipboard.writeText(promptText).then(function() {
+			alert("Prompt copied to clipboard!");
+		}, function() {
+			alert("Failed to copy prompt. Please try again.");
+		});
+	<</script>>
+	<<set setup.firstPortraitGen = true>>
+<</button>><br><br>
+
+<<back>>
+
+
+
