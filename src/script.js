@@ -105,7 +105,7 @@ Config.navigation.override = function (destPassage) {
     // For interrupt scenes that don't result in a bad end, set the return passage.
     StoryVar.interruptReturn = destPassage;
 
-    if (StoryVar.brokerUsed === 1 && StoryVar.corruption < 0) {
+    if (StoryVar.brokerUsed === true && StoryVar.corruption < 0) {
         return "BrokerEnd";
     }
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length===0){
@@ -206,7 +206,7 @@ Config.navigation.override = function (destPassage) {
         StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
         return "Bandit Escape";
     }
-    if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/BanditIcon_released.jpg" &&
+    if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/banditIcon_released.png" &&
         StoryVar.mc.inhuman < 6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
         return "Bandit Arrested";
     }
@@ -336,24 +336,45 @@ setup.SoundPath = setup.Path + "sounds/";
 
 //conversation macro
 Macro.add('say', {
-        tags: null,
-        handler: function () {
-            const person = this.args[0];
-            const imageIcon = this.args[1];
-            const output =
-                `<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
-                    `<div class="avatar">` +
-                        `<img src="${setup.ImagePath}${imageIcon ?? person?.imageIcon ?? ''}" style="width:100px;height:100px">` +
-                    `</div>` +
-                    `<span class="say-nameB">${person?.name ?? ''}</span>` +
-                    `<hr>` +
-                    `<span class="say-contents">` +
-                        `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
-                    `</span>` +
-                `</div>`;
-            $(this.output).wiki(output);
-        }
+    tags: null,
+    handler: function () {
+        const person = this.args[0];
+        const imageIcon = this.args[1];
+        let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
+
+        // Determine if this is the player's portrait
+        const isPlayer = person === State.variables.mc;
+
+        // Handle immediate image source replacement for override scenarios
+        if (isPlayer) {
+            if (settings.OverridePortrait) {
+                imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
+            } else if (setup.firstPortraitGen) {
+                // Placeholder imgSrc to ensure something is set immediately
+                imgSrc = "images/Player Icons/playerF.png"; // Placeholder image
+                // Fetch the base64 image from IndexedDB and set it as the portrait
+                setup.displayPortraitImage();  // Note: This will update the src later when the db operation completes
+            }
+        }        
+
+        const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
+
+        const output =
+            `<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
+                `<div class="avatar">` +
+                    `<img class="${imgClass}" src="${imgSrc}" style="width:100px;height:100px">` +
+                `</div>` +
+                `<span class="say-nameB">${person?.name ?? ''}</span>` +
+                `<hr>` +
+                `<span class="say-contents">` +
+                    `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
+                `</span>` +
+            `</div>`;
+        $(this.output).wiki(output);
+    }
 });
+
+
 
 Setting.addToggle("accessible", {
     label : "Disable extra fancy text formatting",
@@ -362,7 +383,7 @@ Setting.addToggle("accessible", {
 
 Setting.addToggle("AIPortraitsMode", {
     label : "Enable you to use your own OpenAI API key to generate portraits of your character",
-    default  : true,
+    default  : false,
 });
 
 Setting.addToggle("OverridePortrait", {
@@ -1225,6 +1246,10 @@ setup.setupDalleImageGenerator = async function() {
     // Dynamically generated character description
     let characterDescription = setup.evaluateCharacterDescription(State.variables.mc); // Assuming $mc is stored in State.variables.mc
 
+    // Get the notification element
+    const notificationElement = document.getElementById('notification');
+
+
     // Concatenate the static prompt with the dynamic description
     const prompt = staticPrompt + characterDescription;
 
@@ -1243,7 +1268,10 @@ setup.setupDalleImageGenerator = async function() {
                 response_format: "b64_json"
             })
         });
-
+        
+        if (!response.ok) {
+            throw new Error('Failed to connect to OpenAI. Please check your API key and network connection and try again.');
+        }
         const data = await response.json();
         console.log(data); // Debugging: Inspect the structure of the response
 
@@ -1257,16 +1285,19 @@ setup.setupDalleImageGenerator = async function() {
                 .catch((error) => console.error('Failed to store image:', error));
         } else {
             console.error('No images returned:', data);
+            throw new Error('No images returned. This is likely due to a content policy error or server error from OpenAI. Please try again later.');
         }
     } catch (error) {
         console.error('Error generating image:', error);
+        notificationElement.textContent = error.message;
+        notificationElement.style.display = 'block';
     }
 }
 
 setup.storeImage = async function(base64Image) {
     const dbName = "ImagesDB";
     const storeName = "images";
-    const version = 2; // Increment this number to trigger onupgradeneeded
+    const version = 5; // Increment this number to trigger onupgradeneeded
     const imageKey = "playerPortrait"; // Constant key for the image
 
     return new Promise((resolve, reject) => {
@@ -1275,7 +1306,8 @@ setup.storeImage = async function(base64Image) {
         dbOpenRequest.onupgradeneeded = function(event) {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName);
+                // Create the object store with a keyPath 'id'
+                db.createObjectStore(storeName, { keyPath: 'id' });
                 console.log(`${storeName} store created`);
             }
         };
@@ -1285,8 +1317,9 @@ setup.storeImage = async function(base64Image) {
             const transaction = db.transaction([storeName], "readwrite");
             const store = transaction.objectStore(storeName);
 
-            // Store the image with a constant key
-            const request = store.put(base64Image, imageKey);
+            // Store the image with the object that includes the key
+            const imageData = { id: imageKey, image: base64Image };
+            const request = store.put(imageData); // No second parameter needed
 
             request.onsuccess = function() {
                 console.log("Image stored in IndexedDB");
@@ -1314,16 +1347,26 @@ setup.displayImage = async function() {
     const storeName = "images";
     const imageKey = "playerPortrait";
     const imgElement = document.getElementById("dalleImage");
+    const dbVersion = 5; // Define a version number for your database
 
-    // Attempt to open the database
-    const dbOpenRequest = indexedDB.open(dbName);
+    // Attempt to open the database with version
+    const dbOpenRequest = indexedDB.open(dbName, dbVersion);
+
+    // This event is only triggered when a new database is being created or needs an upgrade
+    dbOpenRequest.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        // Create the object store if it doesn't exist
+        if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
+            console.log(storeName + " store created.");
+        }
+    };
 
     dbOpenRequest.onsuccess = function(event) {
         const db = event.target.result;
         
-        // Check if the object store exists
         if (!db.objectStoreNames.contains(storeName)) {
-            console.error("Object store does not exist.");
+            console.error("Object store does not exist even after attempting creation.");
             return;
         }
 
@@ -1332,28 +1375,88 @@ setup.displayImage = async function() {
         const request = store.get(imageKey);
 
         request.onsuccess = function() {
-            const base64Image = request.result;
-            console.log("Retrieved base64Image:", base64Image); // Debugging line
-            const imgElement = document.getElementById("dalleImage"); // Re-acquire the reference
-            if (base64Image) {
-                imgElement.src = "data:image/png;base64," + base64Image;
+            const imageData = request.result;
+            console.log("Retrieved image data object:", imageData); // Debugging line
+            if (imageData && imageData.image) {
+                const base64Image = imageData.image; // Access the 'image' property of the object
+                console.log("Retrieved base64Image:", base64Image); // Debugging line
+                const imgElements = document.querySelectorAll(".dalleImage");
+                imgElements.forEach(function(imgElement) {
+                    imgElement.src = "data:image/png;base64," + base64Image;
+                });
             } else {
                 console.error("No base64 image data found."); // Error handling
             }
         };
         
-
+        
         request.onerror = function(event) {
             console.error("Error retrieving image from IndexedDB:", event.target.error);
-          
         };
     };
 
     dbOpenRequest.onerror = function(event) {
         console.error("Error opening database:", event.target.error);
-       
     };
 };
+
+setup.displayPortraitImage = async function() {
+    const dbName = "ImagesDB";
+    const storeName = "images";
+    const imageKey = "playerPortrait";
+    const imgElement = document.getElementById("dalleImage");
+    const dbVersion = 5; // Define a version number for your database
+
+    // Attempt to open the database with version
+    const dbOpenRequest = indexedDB.open(dbName, dbVersion);
+
+    // This event is only triggered when a new database is being created or needs an upgrade
+    dbOpenRequest.onupgradeneeded = function(event) {
+        const db = event.target.result;
+        // Create the object store if it doesn't exist
+        if (!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
+            console.log(storeName + " store created.");
+        }
+    };
+
+    dbOpenRequest.onsuccess = function(event) {
+        const db = event.target.result;
+        
+        if (!db.objectStoreNames.contains(storeName)) {
+            console.error("Object store does not exist even after attempting creation.");
+            return;
+        }
+
+        const transaction = db.transaction([storeName], "readonly");
+        const store = transaction.objectStore(storeName);
+        const request = store.get(imageKey);
+
+        request.onsuccess = function() {
+            const imageData = request.result;
+            console.log("Retrieved image data object:", imageData); // Debugging line
+            if (imageData && imageData.image) {
+                const base64Image = imageData.image; // Access the 'image' property of the object
+                console.log("Retrieved base64Image:", base64Image); // Debugging line
+                const imgElements = document.querySelectorAll(".portraitImage");
+                imgElements.forEach(function(imgElement) {
+                    imgElement.src = "data:image/png;base64," + base64Image;
+                });
+            } else {
+                console.error("No base64 image data found."); // Error handling
+            }
+        };
+        
+        request.onerror = function(event) {
+            console.error("Error retrieving image from IndexedDB:", event.target.error);
+        };
+    };
+
+    dbOpenRequest.onerror = function(event) {
+        console.error("Error opening database:", event.target.error);
+    };
+};
+
 
 
 setup.evaluateCharacterDescription = function(mc) {
