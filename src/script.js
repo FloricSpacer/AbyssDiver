@@ -1297,7 +1297,7 @@ setup.setupDalleImageGenerator = async function() {
 setup.storeImage = async function(base64Image) {
     const dbName = "ImagesDB";
     const storeName = "images";
-    const version = 4; // Increment this number to trigger onupgradeneeded
+    const version = 5; // Increment this number to trigger onupgradeneeded
     const imageKey = "playerPortrait"; // Constant key for the image
 
     return new Promise((resolve, reject) => {
@@ -1306,7 +1306,8 @@ setup.storeImage = async function(base64Image) {
         dbOpenRequest.onupgradeneeded = function(event) {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName);
+                // Create the object store with a keyPath 'id'
+                db.createObjectStore(storeName, { keyPath: 'id' });
                 console.log(`${storeName} store created`);
             }
         };
@@ -1316,8 +1317,9 @@ setup.storeImage = async function(base64Image) {
             const transaction = db.transaction([storeName], "readwrite");
             const store = transaction.objectStore(storeName);
 
-            // Store the image with a constant key
-            const request = store.put(base64Image, imageKey);
+            // Store the image with the object that includes the key
+            const imageData = { id: imageKey, image: base64Image };
+            const request = store.put(imageData); // No second parameter needed
 
             request.onsuccess = function() {
                 console.log("Image stored in IndexedDB");
@@ -1345,7 +1347,7 @@ setup.displayImage = async function() {
     const storeName = "images";
     const imageKey = "playerPortrait";
     const imgElement = document.getElementById("dalleImage");
-    const dbVersion = 4; // Define a version number for your database
+    const dbVersion = 5; // Define a version number for your database
 
     // Attempt to open the database with version
     const dbOpenRequest = indexedDB.open(dbName, dbVersion);
@@ -1373,9 +1375,11 @@ setup.displayImage = async function() {
         const request = store.get(imageKey);
 
         request.onsuccess = function() {
-            const base64Image = request.result;
-            console.log("Retrieved base64Image:", base64Image); // Debugging line
-            if (base64Image) {
+            const imageData = request.result;
+            console.log("Retrieved image data object:", imageData); // Debugging line
+            if (imageData && imageData.image) {
+                const base64Image = imageData.image; // Access the 'image' property of the object
+                console.log("Retrieved base64Image:", base64Image); // Debugging line
                 const imgElements = document.querySelectorAll(".dalleImage");
                 imgElements.forEach(function(imgElement) {
                     imgElement.src = "data:image/png;base64," + base64Image;
@@ -1384,6 +1388,7 @@ setup.displayImage = async function() {
                 console.error("No base64 image data found."); // Error handling
             }
         };
+        
         
         request.onerror = function(event) {
             console.error("Error retrieving image from IndexedDB:", event.target.error);
@@ -1400,7 +1405,7 @@ setup.displayPortraitImage = async function() {
     const storeName = "images";
     const imageKey = "playerPortrait";
     const imgElement = document.getElementById("dalleImage");
-    const dbVersion = 4; // Define a version number for your database
+    const dbVersion = 5; // Define a version number for your database
 
     // Attempt to open the database with version
     const dbOpenRequest = indexedDB.open(dbName, dbVersion);
@@ -1428,9 +1433,11 @@ setup.displayPortraitImage = async function() {
         const request = store.get(imageKey);
 
         request.onsuccess = function() {
-            const base64Image = request.result;
-            console.log("Retrieved base64Image:", base64Image); // Debugging line
-            if (base64Image) {
+            const imageData = request.result;
+            console.log("Retrieved image data object:", imageData); // Debugging line
+            if (imageData && imageData.image) {
+                const base64Image = imageData.image; // Access the 'image' property of the object
+                console.log("Retrieved base64Image:", base64Image); // Debugging line
                 const imgElements = document.querySelectorAll(".portraitImage");
                 imgElements.forEach(function(imgElement) {
                     imgElement.src = "data:image/png;base64," + base64Image;
