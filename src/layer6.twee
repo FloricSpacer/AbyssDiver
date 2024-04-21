@@ -265,7 +265,7 @@ You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
 <<for _relic range $relics>>
 	<<set _foundOnLayer = setup.relicsOnLayer.findIndex(relicsOnLayer => relicsOnLayer.includes(_relic.name))>>
 	<<print `<<set _visitedRelicLayer = $visitL${_foundOnLayer}>>`>>
-	<<if _visitedRelicLayer && _relic.name !== 'Kin Shifter' && !_totalRelics.some(e => e.name === _relic.name)>>
+	<<if _visitedRelicLayer && _relic.name !== 'Kin Shifter' && _relic.name !== 'Purity Tree Plank' && !_totalRelics.some(e => e.name === _relic.name)>>
 		<<capture _relic>>
 			&nbsp; [[_relic.name|Maw of Kimaris Site][$dubloons -= 10, $corruption -= Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10), $ownedRelics.push(_relic)]]
 			for <<print Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10)>> corruption points<br>
@@ -274,7 +274,7 @@ You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
 <</for>><br>
 You may pick up a copy of an old Relic for 20 dubloons and 2x its corruption cost:<br>
 <<for _relic range _totalRelics>>
-	<<if _relic.name !== 'Kin Shifter'>>
+	<<if _relic.name !== 'Kin Shifter' && _relic.name !== 'Purity Tree Plank'>>
 		<<capture _relic>>
 			&nbsp; [[_relic.name|Maw of Kimaris Site][$mawUse = true, $dubloons -= 20, $corruption -= Math.max(2 * _relic.corr - $corRed, 10), $ownedRelics.push(_relic)]]
 			for <<print Math.max(2 * _relic.corr - $corRed, 10)>> corruption points<br>
