@@ -1566,4 +1566,4 @@ setup.evaluateCharacterDescription = function(mc) {
     if (mc.hasCurse("Below the Veil")) description += "A strange, eldritch entity that seems very creepy and *wrong* in subtle ways. ";
 
     return description;
-};
+}};
