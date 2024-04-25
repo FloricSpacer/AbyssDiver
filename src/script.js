@@ -1463,7 +1463,11 @@ setup.displayPortraitImage = async function() {
 
 
 setup.evaluateCharacterDescription = function(mc) {
-    let description = `The character is ${mc.sex}. `;
+    let description = ""
+    
+    if (mc.sex === "male" || mc.sex === "female"){ {
+        description += `The character is ${mc.sex}. `;
+    }
     description += `${mc.hair} colored hair. `;
     description += `${mc.eyeColor} colored eyes. `;
     description += `${mc.skinType} ${mc.skinColor} colored skin. `;
@@ -1496,9 +1500,9 @@ setup.evaluateCharacterDescription = function(mc) {
 
 
     if (mc.subdom > 0) {
-        description += "with a very submissive body posture. ";
+        description += "with a very shy body posture. ";
     } else if (mc.subdom < 0) {
-        description += "with a very dominant body posture. ";
+        description += "with a very strong body posture. ";
     }
 
     if (mc.hasCurse("Horny")) {
@@ -1523,7 +1527,7 @@ setup.evaluateCharacterDescription = function(mc) {
     } else if (mc.breastsCor < 6) {
         description += "";
     } else {
-        description += "Very buxom. ";
+        description += "Very large chest. ";
     }
 
     // Additional conditions
