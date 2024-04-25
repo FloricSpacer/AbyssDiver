@@ -1463,7 +1463,7 @@ setup.displayPortraitImage = async function() {
 
 
 setup.evaluateCharacterDescription = function(mc) {
-    let description = ""
+    let description = ``;
     
     if (mc.sex === "male" || mc.sex === "female"){ {
         description += `The character is ${mc.sex}. `;
