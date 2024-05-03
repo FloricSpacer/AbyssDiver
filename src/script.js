@@ -1523,11 +1523,11 @@ setup.evaluateCharacterDescription = function(mc) {
     if (mc.breastsCor < 1 && mc.vagina === 0) {
         description += "";
     } else if (mc.breastsCor < 1 && mc.vagina === 1) {
-        description += "A totally flat chest. ";
+        description += "with a totally flat chest. ";
     } else if (mc.breastsCor < 6) {
         description += "";
     } else {
-        description += "Very large chest. ";
+        description += "with an abnormally large chest. ";
     }
 
     // Additional conditions
@@ -1548,16 +1548,16 @@ setup.evaluateCharacterDescription = function(mc) {
     // Curses and conditions
     if (mc.hasCurse("Freckle Speckle")) description += "Many freckles. ";
     if (mc.hasCurse("20/20000000")) description += "Wearing thick glasses. ";
-    if (mc.hasCurse("Gooey")) description += "A slime person, transluscent slime-skined. ";
+    if (mc.hasCurse("Gooey")) description += "A slime person, transluscent slime-skinned. ";
     if (mc.hasCurse("Crossdress Your Heart")) description += "Crossdressing as the opposite gender. ";
-    if (mc.hasCurse("Lingual Leviathan")) description += "A 12-inch long tongue. ";
-    if (mc.hasCurse("Massacre Manicure")) description += "Very sharp and long fingernails. ";
+    if (mc.hasCurse("Lingual Leviathan")) description += "A very long tongue sticking out. ";
+    if (mc.hasCurse("Massacre Manicure")) description += "Abnormally sharp and long fingernails. ";
     if (mc.hasCurse("Flower Power")) description += "Covered in flowers. ";
     if (mc.hasCurse("Cellulose")) description += "Made of living plant matter, like a dryad. ";
     if (mc.hasCurse("Wriggly Antennae")) description += "Wriggly insect antennae on forehead. ";
     if (mc.hasCurse("Carapacian")) description += "Covered in an insect-like carapac. ";
     if (mc.hasCurse("Creature of the Night")) description += "A vampire, with vampire fangs. ";
-    if (mc.hasCurse("Minish-ish")) description += `Very tiny, only a few inches tall`;
+    if (mc.hasCurse("Minish-ish")) description += `Very tiny, only a few inches tall. `;
     if (mc.hasCurse("Colossal-able")) description += `Enormous, asbolutely giant. `;
     if (mc.hasCurse("Seafolk")) description += "A merfolk with a merfolk tail. ";
     if (mc.hasCurse("Tickly Tentacles")) description += `${mc.tentacles} squirming tentacles growing from their body. `;
