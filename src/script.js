@@ -1273,7 +1273,7 @@ setup.setupDalleImageGenerator = async function() {
         });
         
         if (!response.ok) {
-            throw new Error('Failed to connect to OpenAI. Please check your API key and network connection and try again.');
+            throw new Error('Failed to connect to OpenAI. Please check your API key and network connection and try again. If those are both correct, this may be due to a content policy error from OpenAI.');
         }
         const data = await response.json();
         console.log(data); // Debugging: Inspect the structure of the response
@@ -1288,7 +1288,7 @@ setup.setupDalleImageGenerator = async function() {
                 .catch((error) => console.error('Failed to store image:', error));
         } else {
             console.error('No images returned:', data);
-            throw new Error('No images returned. This is likely due to a content policy error or server error from OpenAI. Please try again later.');
+            throw new Error('No images returned from server. This is likely due to a content policy error or server error from OpenAI.');
         }
     } catch (error) {
         console.error('Error generating image:', error);
@@ -1532,7 +1532,7 @@ setup.evaluateCharacterDescription = function(mc) {
 
     // Additional conditions
     if (mc.dollevent2) {
-        description += "Wearing a tattered pink dress, like a doll. ";
+        description += "Wearing a tattered pink dress, resembling a child's doll. ";
     }
 
     // Pregnancy
