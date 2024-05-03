@@ -1506,7 +1506,7 @@ setup.evaluateCharacterDescription = function(mc) {
     }
 
     if (mc.hasCurse("Horny")) {
-        description += `with ${(mc.hornCount === 1) ? "a" : "two"} noticeable ${mc.hornAdjective} ${mc.hornVariation} horn${(mc.hornCount > 1) ? "s" : ""}. `;
+        description += `with ${(hornCount === 1) ? "a" : "two"} noticeable ${hornAdjective} ${hornVariation} horn${(hornCount > 1) ? "s" : ""}. `;
     }
 
     // Gender and physical appearance
