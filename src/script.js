@@ -115,7 +115,7 @@ Config.navigation.override = function (destPassage) {
         return "DollEnd";
     }
     if (StoryVar.endSpectre <= StoryVar.time + 900 && StoryVar.endSpectre > 0) {
-        return "SpecterEnd";
+        return "SpectreEnd";
     }
     if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer === 0 ){
         return "Starlit Unlocked";
