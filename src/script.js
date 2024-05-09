@@ -1465,9 +1465,16 @@ setup.displayPortraitImage = async function() {
 setup.evaluateCharacterDescription = function(mc) {
     let description = ``;
     
-    if (mc.sex === "male" || mc.sex === "female"){ {
-        description += `The character is ${mc.sex}. `;
-    }
+    const sex = mc.sex;
+    if (sex === "male") {
+        description += "The character is a man. ";
+    } else if (sex === "female") {
+        description += "The character is a woman. ";
+    } else {
+        description += "The character is androgynous. ";
+    };
+    
+
     description += `${mc.hair} colored hair. `;
     description += `${mc.eyeColor} colored eyes. `;
     description += `${mc.skinType} ${mc.skinColor} colored skin. `;
@@ -1566,4 +1573,4 @@ setup.evaluateCharacterDescription = function(mc) {
     if (mc.hasCurse("Below the Veil")) description += "A strange, eldritch entity that seems very creepy and *wrong* in subtle ways. ";
 
     return description;
-}};
+};
