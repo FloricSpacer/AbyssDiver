@@ -1465,10 +1465,9 @@ setup.displayPortraitImage = async function() {
 setup.evaluateCharacterDescription = function(mc) {
     let description = ``;
     
-    const sex = mc.sex;
-    if (sex === "male") {
+    if (mc.sex === "male") {
         description += "The character is a man. ";
-    } else if (sex === "female") {
+    } else if (mc.sex === "female") {
         description += "The character is a woman. ";
     } else {
         description += "The character is androgynous. ";
