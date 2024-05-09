@@ -1466,11 +1466,11 @@ setup.evaluateCharacterDescription = function(mc) {
     let description = ``;
     
     if (mc.sex === "male") {
-        description += "The character is a man. ";
+        description += "The character is a male. ";
     } else if (mc.sex === "female") {
-        description += "The character is a woman. ";
+        description += "The character is a female. ";
     } else {
-        description += "The character is androgynous. ";
+        description += "";
     };
     
 
