@@ -1292,7 +1292,7 @@ setup.setupDalleImageGenerator = async function() {
         }
     } catch (error) {
         console.error('Error generating image:', error);
-        notificationElement.textContent = error.message;
+        notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
         notificationElement.style.display = 'block';
     }
 }
@@ -1311,7 +1311,7 @@ setup.storeImage = async function(base64Image) {
             if (!db.objectStoreNames.contains(storeName)) {
                 // Create the object store with a keyPath 'id'
                 db.createObjectStore(storeName, { keyPath: 'id' });
-                console.log(`${storeName} store created`);
+                //console.log(`${storeName} store created`);
             }
         };
         
@@ -1325,7 +1325,7 @@ setup.storeImage = async function(base64Image) {
             const request = store.put(imageData); // No second parameter needed
 
             request.onsuccess = function() {
-                console.log("Image stored in IndexedDB");
+                //console.log("Image stored in IndexedDB");
                 resolve();
             };
 
@@ -1361,7 +1361,7 @@ setup.displayImage = async function() {
         // Create the object store if it doesn't exist
         if (!db.objectStoreNames.contains(storeName)) {
             db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
-            console.log(storeName + " store created.");
+            //console.log(storeName + " store created.");
         }
     };
 
@@ -1379,10 +1379,10 @@ setup.displayImage = async function() {
 
         request.onsuccess = function() {
             const imageData = request.result;
-            console.log("Retrieved image data object:", imageData); // Debugging line
+            //console.log("Retrieved image data object:", imageData); // Debugging line
             if (imageData && imageData.image) {
                 const base64Image = imageData.image; // Access the 'image' property of the object
-                console.log("Retrieved base64Image:", base64Image); // Debugging line
+               // console.log("Retrieved base64Image:", base64Image); // Debugging line
                 const imgElements = document.querySelectorAll(".dalleImage");
                 imgElements.forEach(function(imgElement) {
                     imgElement.src = "data:image/png;base64," + base64Image;
@@ -1419,7 +1419,7 @@ setup.displayPortraitImage = async function() {
         // Create the object store if it doesn't exist
         if (!db.objectStoreNames.contains(storeName)) {
             db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
-            console.log(storeName + " store created.");
+           // console.log(storeName + " store created.");
         }
     };
 
@@ -1437,10 +1437,10 @@ setup.displayPortraitImage = async function() {
 
         request.onsuccess = function() {
             const imageData = request.result;
-            console.log("Retrieved image data object:", imageData); // Debugging line
+            //console.log("Retrieved image data object:", imageData); // Debugging line
             if (imageData && imageData.image) {
                 const base64Image = imageData.image; // Access the 'image' property of the object
-                console.log("Retrieved base64Image:", base64Image); // Debugging line
+                //console.log("Retrieved base64Image:", base64Image); // Debugging line
                 const imgElements = document.querySelectorAll(".portraitImage");
                 imgElements.forEach(function(imgElement) {
                     imgElement.src = "data:image/png;base64," + base64Image;
@@ -1465,9 +1465,15 @@ setup.displayPortraitImage = async function() {
 setup.evaluateCharacterDescription = function(mc) {
     let description = ``;
     
-    if (mc.sex === "male" || mc.sex === "female"){ {
-        description += `The character is ${mc.sex}. `;
-    }
+    if (mc.sex === "male") {
+        description += "The character is a male. ";
+    } else if (mc.sex === "female") {
+        description += "The character is a female. ";
+    } else {
+        description += "";
+    };
+    
+
     description += `${mc.hair} colored hair. `;
     description += `${mc.eyeColor} colored eyes. `;
     description += `${mc.skinType} ${mc.skinColor} colored skin. `;
@@ -1506,6 +1512,11 @@ setup.evaluateCharacterDescription = function(mc) {
     }
 
     if (mc.hasCurse("Horny")) {
+        // Ensure these variables are defined
+        let hornCount = state.variables.hornCount || 0; // Adjust as needed
+        let hornAdjective = state.variables.hornAdjective || ""; // Adjust as needed
+        let hornVariation = state.variables.hornVariation || ""; // Adjust as needed
+
         description += `with ${(hornCount === 1) ? "a" : "two"} noticeable ${hornAdjective} ${hornVariation} horn${(hornCount > 1) ? "s" : ""}. `;
     }
 
@@ -1566,4 +1577,4 @@ setup.evaluateCharacterDescription = function(mc) {
     if (mc.hasCurse("Below the Veil")) description += "A strange, eldritch entity that seems very creepy and *wrong* in subtle ways. ";
 
     return description;
-}};
+};
