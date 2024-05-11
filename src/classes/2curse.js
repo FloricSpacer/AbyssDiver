@@ -2543,8 +2543,7 @@ class RandomOrgasms extends Curse {
 	static picture = 'Curses/randomorgasms.png';
 	static type = 'none';
 	constructor() {
-		super('Random Orgasms', 'none',
-		      '<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") === 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public. <<else>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public. <</if>>');
+		super('Random Orgasms', 'none');
 	}
 
 	get maximum() {
