@@ -114,7 +114,7 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
         return "DollEnd";
     }
-    if (StoryVar.endSpectre + 900 <= StoryVar.time && StoryVar.endSpectre > 0) {
+    if (StoryVar.endSpectre + 900 <= StoryVar.time && StoryVar.endSpectre > 0 && !StoryVar.voidDiamondActive) {
         return "SpectreEnd";
     }
     if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer === 0 ){
