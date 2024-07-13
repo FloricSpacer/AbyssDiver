@@ -1292,3 +1292,57 @@
   </div>
 <</capture>>
 <</widget>>
+
+:: Ascension Costs Widget [widget nobr]
+<<widget "ascensionCosts">>
+<<set _firstTimeCosts = [0, 10, 15, 25, 35, 50, 65, 80, 100, 120]>>
+<<set _subsequentCosts = [0, 5, 10, 20, 25, 40, 50, 65, 85, 100]>>
+<<set _timeCosts = [0, 1, 4, 6, 7, 24, 15, 7, 40, 20]>>
+<<set _currentCost = 0>>
+<<set _totalCost = 0>>
+<<set _currentModifiedCost = 0>>
+<<set _totalModifiedCost = 0>>
+<<set _currentTimeCost = 0>>
+
+<<if $ascendedLayers.includes($currentLayer - 1)>>
+    <<set _currentCost = _subsequentCosts[$currentLayer]>>
+<<else>>
+    <<set _currentCost = _firstTimeCosts[$currentLayer]>>
+<</if>>
+
+<<if $currentLayer === 5>>
+    <<set _currentTimeCost = setup.haveRope ? 11 : 24>>
+<<else>>
+    <<set _currentTimeCost = _timeCosts[$currentLayer]>>
+<</if>>
+
+<<set _modifiedCurrentCost = _currentCost - $corRed + 5 * Math.trunc($hexflame / 10)>>
+<<set _modifiedCurrentCost = Math.max(_modifiedCurrentCost, 0)>> 
+
+<<PreviewTravelTime '_modifiedCurrentTimeCost' _currentTimeCost>>
+
+<<for _i = $currentLayer; _i >= 1; _i-->>
+    <<if $ascendedLayers.includes(_i - 1)>>
+        <<set _layerCost = _subsequentCosts[_i]>>
+    <<else>>
+        <<set _layerCost = _firstTimeCosts[_i]>>
+    <</if>>
+    
+    <<set _modifiedLayerCost = _layerCost - $corRed + 5 * Math.trunc($hexflame / 10)>>
+    <<set _modifiedLayerCost = Math.max(_modifiedLayerCost, 0)>>
+    
+    <<set _totalCost += _layerCost>>
+    <<set _totalModifiedCost += _modifiedLayerCost>>
+<</for>>
+
+<<set $currentAscensionCost = _currentCost>>
+<<set $currentModifiedAscensionCost = _modifiedCurrentCost>>
+<<set $totalAscensionCost = _totalCost>>
+<<set $totalModifiedAscensionCost = _totalModifiedCost>>
+<<set $currentTimeCost = _currentTimeCost>>
+<<set $currentModifiedTimeCost = _modifiedCurrentTimeCost>>
+
+<<set $currentCostStyle = $currentModifiedAscensionCost > $currentAscensionCost ? "@@color:red;" : $currentModifiedAscensionCost < $currentAscensionCost ? "@@color:green;" : "">>
+<<set $totalCostStyle = $totalModifiedAscensionCost > $totalAscensionCost ? "@@color:red;" : $totalModifiedAscensionCost < $totalAscensionCost ? "@@color:green;" : "">>
+<<set $currentTimeStyle = $currentModifiedTimeCost > $currentTimeCost ? "@@color:red;" : $currentModifiedTimeCost < $currentTimeCost ? "@@color:green;" : "">>
+<</widget>>
