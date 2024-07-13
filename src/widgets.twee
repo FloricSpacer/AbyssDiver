@@ -1319,7 +1319,13 @@
 <<set _modifiedCurrentCost = _currentCost - $corRed + 5 * Math.trunc($hexflame / 10)>>
 <<set _modifiedCurrentCost = Math.max(_modifiedCurrentCost, 0)>> 
 
-<<PreviewTravelTime '_modifiedCurrentTimeCost' _currentTimeCost>>
+<<if $DaedalusFly || $mechaBoarded>>
+	<<set _multiplier = 1/2>>
+<<else>>
+	<<set _multiplier = 1>>
+<</if>>
+
+<<PreviewTravelTime '_modifiedCurrentTimeCost' _currentTimeCost 0 _multiplier>>
 
 <<for _i = $currentLayer; _i >= 1; _i-->>
     <<if $ascendedLayers.includes(_i - 1)>>
