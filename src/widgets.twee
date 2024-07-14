@@ -1354,3 +1354,27 @@
 <<set $totalCostStyle = $totalModifiedAscensionCost > $totalAscensionCost ? "@@color:red;" : $totalModifiedAscensionCost < $totalAscensionCost ? "@@color:green;" : "">>
 <<set $currentTimeStyle = $currentModifiedTimeCost > $currentTimeCost ? "@@color:red;" : $currentModifiedTimeCost < $currentTimeCost ? "@@color:green;" : "">>
 <</widget>>
+
+:: Descent Costs Widget [widget nobr]
+
+<<widget "descentTime">>
+<<set _descentTimeCosts = [0, 2, 5, 6, 19, 13, 16, 8, 45, 80]>>
+<<if $currentLayer === 4>>
+    <<set _currentTimeCost = setup.haveRope ? 8 : 19>>
+<<else>>
+    <<set _currentTimeCost = _descentTimeCosts[$currentLayer]>>
+<</if>>
+
+<<PreviewTravelTime '_modifiedCurrentTimeCost' _currentTimeCost>>
+
+<<set $descentTimeCost = _currentTimeCost>>
+<<set $modifiedDescentTimeCost = _modifiedCurrentTimeCost>>
+
+<<set $descentTimeStyle = $modifiedDescentTimeCost > $descentTimeCost ? "@@color:red;" : $modifiedDescentTimeCost < $descentTimeCost ? "@@color:green;" : "">>
+
+<<if $modifiedDescentTimeCost !== $descentTimeCost>>
+    <s>$descentTimeCost</s> <<print $descentTimeStyle + $modifiedDescentTimeCost + ($descentTimeStyle ? "@@" : "")>>
+<<else>>
+    $descentTimeCost
+<</if>>
+<</widget>>
