@@ -2380,6 +2380,86 @@ You approach the large hut where Mr. Reed resides. <br><br>
 
 <p>[[Return to the settlement|Downcast Village Settlement]]</p>
 
+:: Downcast Village Sell [layer2]
+<<CarryAdjust>>\
+<<if $visitL2RelicBuyer == false>>
+    <<set $visitL2RelicBuyer = true>>
+    You trudge through the perpetual downpour of Downcast Village, the dense canopy above offering little respite from the relentless rain. The makeshift structures of the village loom around you, their weathered surfaces glistening in the dim light that manages to penetrate the forest ceiling.
+
+    You spot a dilapidated shack with a crudely painted sign reading "Relic Exchange." As you approach, a figure emerges from the shadows. It's a woman with sickly green skin, her hair a tangled mess of writhing vines. Her left arm ends in a crab-like pincer, while her right hand clutches a rust-covered device emitting an eerie glow.
+
+    <<say $L2RelicBuyer>>Another diver, eh? Got any Relics to offload? I'll take 'em off your hands... for a fair price.<</say>>
+    She holds up the strange device.
+	
+	<<say $L2RelicBuyer>>This beauty tells me what your Relics are worth. Don't expect surface rates down here, though. We've all got to make a living in this hellhole.<</say>>
+<<else>>\
+    <<if $mc.inhuman < 2>>
+        As you enter the ramshackle Relic Exchange, the green-skinned woman looks up from a pile of corroded artifacts, her vine-like hair twisting as she narrows her eyes at your relatively human appearance.
+
+        <<say $L2RelicBuyer>>Well, well. A fresh looking one, aren't you. Brought any Relics to trade? Let's see what you've got, but don't expect charity. This ain't the surface, kid.<</say>>
+    <<elseif $mc.inhuman < 6>>
+        The Relic buyer barely glances up as you enter, her crab-like pincer clicking idly as she examines a strange artifact.
+
+        <<say $L2RelicBuyer>>Back again, eh? Got anything worth my time? Remember, I'm doing you a favor by buying this deep. My offer's three-quarters of topside prices or 10 dubloons less, whichever works out best for you. Ain't I generous? Take it or leave it.<</say>>
+    <<else>>
+        The buyer's eyes light up as you enter, her vine-hair writhing with excitement at the sight of your heavily corrupted form.
+
+        <<say $L2RelicBuyer>>Well, aren't you a sight? Bet you've got some real treasures on you. Come on, let's see what you're willing to part with. Just remember, this is Downcast. My prices reflect our... unique situation.<</say>>
+    <</if>>
+<</if>>\
+
+Here in Downcast Village, you can sell your Relics for 75% of their surface value or their value minus 10 dubloons, whichever is greater. It's not ideal, but it's the only option this deep in the Abyss unless you're willing to risk the journey back up.
+
+Choose the Relic you would like to sell:
+<<nobr>>
+<<for _relic range $ownedRelics>>
+    <<capture _relic>>
+        <<set _l2Value = Math.max(_relic.value * 0.75, _relic.value - 10)>>
+        <<set _sellValue = Math.floor(_l2Value + $sellAdd)>>
+        <<set _linkText = `Sell ${_relic.name} for ${_sellValue} dubloons`>>
+        /* Add a bit of indentation: */ &nbsp;
+        <<switch _relic.name>>
+            <<case "Creepy Doll">>
+                <<if $creepydoll.affec > 5>>
+                    The Creepy Doll seems to stare at you accusingly. You can't bring yourself to sell it...
+                <<else>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
+                <</if>>
+            <<case "World Stone">>
+                <<if $LilyPromise>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd), setup.modAffection('Lily', -5)]]
+                    Selling the World Stone now would break your promise to Lily. The guilt might be worse than the reduced price.
+                <<else>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
+                <</if>>
+            <<case "Everhevea">>
+                <<if setup.item('Empty Flask').count >= 2>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd), setup.item('Empty Flask').count -= 2]]
+                <<else>>
+                    You need to empty the Everhevea to sell it (have at least two empty flasks in your inventory).
+                <</if>>
+            <<case "Moonwatcher">>
+                <<if $BionicEye>>
+                    _relic.name: You can't sell Relics that have become part of your body.
+                <<else>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
+                <</if>>
+            <<case "Glory's Grasp">>
+                <<if $BionicArm>>
+                    _relic.name: You can't sell Relics that have become part of your body.
+                <<else>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
+                <</if>>
+            <<default>>
+                [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
+        <</switch>>
+        <br>
+    <</capture>>
+<</for>>
+<</nobr>>
+
+[[Continue exploring Downcast Village|Downcast Village Hub]]
+
 :: Layer2 Emily Visit [layer2]
 <<if $emilyHome == false>>
 	You retrace your steps and head back to where you previously met that odd plant girl. And after a short walk through a passageway that was cleared of vines and thick foliage, you spot her again. She seems to be sitting quitely, examining a bluish moss growing on the bark of a nearby tree.
