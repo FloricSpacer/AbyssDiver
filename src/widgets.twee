@@ -1433,6 +1433,45 @@
             <</if>>
         <</for>>
     <<else>>
-        There doesn't seem to be anything on this layer which triggers an especially strong reaction with anyone who is traveling with you right now..
+        There doesn't seem to be anything on this layer which triggers an especially strong reaction with anyone who is traveling with you right now.
+    <</if>>
+<</widget>>
+
+:: Companion Shrine Checker Widget [widget nobr]
+
+<<widget "showShrineInteractions">>
+    <<set _availableInteractions = {}>>
+
+    <<for _companion range $hiredCompanions>>
+        <<set _companionInteractions = []>>
+        
+        <<for _curseName range setup.companionShrineInteractions[_companion.id]>>
+            <<if $mc.curses.some(c => c.name === _curseName)>>
+                <<run _companionInteractions.push(_curseName)>>
+            <</if>>
+        <</for>>
+        
+        <<if _companionInteractions.length > 0>>
+            <<set _availableInteractions[_companion.id] = _companionInteractions>>
+        <</if>>
+    <</for>>
+
+    <<if Object.keys(_availableInteractions).length > 0>>
+        <h3>Available Shrine Interactions:</h3>
+        <<for _companion range $hiredCompanions>>
+            <<if _availableInteractions.hasOwnProperty(_companion.id)>>
+                <<set _interactions to _availableInteractions[_companion.id]>>
+                <h4 style="margin-bottom: 0;"><<= _companion.name>></h4>
+                <span class="smallbreak"></span>
+                <ul style="margin-top: 0; margin-bottom: 0;">
+                    <<for _curse range _interactions>>
+                        <li><<= _curse>></li>
+                    <</for>>
+                </ul>
+                <span class="smallbreak"></span>
+            <</if>>
+        <</for>>
+    <<else>>
+        There doesn't seem to be any Curses you have which would trigger an especially strong reaction from anyone who is traveling with you right now.
     <</if>>
 <</widget>>
