@@ -1378,3 +1378,61 @@
     $descentTimeCost
 <</if>>
 <</widget>>
+
+:: Companion Conversation Checker Widget [widget nobr]
+
+<<widget "showAvailableConversations">>
+    <<set _availableConversations = {}>>
+    <<set _relicsOnCurrentLayer = setup.relicsOnLayer[$currentLayer]>>
+    <<set _cursesOnCurrentLayer = setup.cursesOnLayer[$currentLayer]>>
+
+    <<for _companion range $hiredCompanions>>
+        <<set _companionConversations = {relics: [], curses: []}>>
+        
+        <<for _relic range _relicsOnCurrentLayer>>
+            <<if setup.companionConversationTriggers[_companion.id].relics.includes(typeof _relic === 'string' ? _relic : _relic.name)>>
+                <<run _companionConversations.relics.push(_relic)>>
+            <</if>>
+        <</for>>
+        
+        <<for _curse range _cursesOnCurrentLayer>>
+            <<if setup.companionConversationTriggers[_companion.id].curses.includes(typeof _curse === 'string' ? _curse : _curse.name)>>
+                <<run _companionConversations.curses.push(_curse)>>
+            <</if>>
+        <</for>>
+        
+        <<if _companionConversations.relics.length > 0 || _companionConversations.curses.length > 0>>
+            <<set _availableConversations[_companion.id] = _companionConversations>>
+        <</if>>
+    <</for>>
+
+    <<if Object.keys(_availableConversations).length > 0>>
+        <h3>Conversation triggers on this layer:</h3>
+        <<for _companion range $hiredCompanions>>
+            <<if _availableConversations.hasOwnProperty(_companion.id)>>
+                <<set _conversations to _availableConversations[_companion.id]>>
+                <h4 style="margin-bottom: 0;"><<= _companion.name>></h4>
+                <span class="smallbreak"></span>
+                <<if _conversations.relics.length > 0>>
+                    Relics:
+                    <ul style="margin-top: 0; margin-bottom: 0;">
+                        <<for _relic range _conversations.relics>>
+                            <li><<= typeof _relic === 'string' ? _relic : _relic.name>></li>
+                        <</for>>
+                    </ul>
+                <</if>>
+                <<if _conversations.curses.length > 0>>
+                    Curses:
+                    <ul style="margin-top: 0; margin-bottom: 0;">
+                        <<for _curse range _conversations.curses>>
+                            <li><<= typeof _curse === 'string' ? _curse : _curse.name>></li>
+                        <</for>>
+                    </ul>
+                <</if>>
+                <span class="smallbreak"></span>
+            <</if>>
+        <</for>>
+    <<else>>
+        There doesn't seem to be anything on this layer which triggers an especially strong reaction with anyone who is traveling with you right now..
+    <</if>>
+<</widget>>
