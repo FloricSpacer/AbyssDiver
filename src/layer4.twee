@@ -1840,21 +1840,24 @@ How do you want to deal with the creature descending upon you?
 	The Drifting Swallower looks imposing even from the mecha you're currently in. However, it should still be no match.<br>
 	[[Activate the plasma cannons and shoot it down|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
 <</if>>
-If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistent light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
-[[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration += 99; $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true]]
 
-<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.golem) && $hiredCompanions.length < 2 )) && $ownedRelics.some(e => e.name === "Creepy Doll") && $mc.appAge<18>>
-	<br>As the creature descends, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
+<<if $ownedRelics.some(e => e.name === "Creepy Doll")>>
+	As the creature descends, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
+	<<if ($hiredCompanions.length < 1 || ($hiredCompanions.some(e => e.id === setup.companionIds.golem) && $hiredCompanions.length < 2 ))>>
+		<<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>
 
-	<<say $creepydoll>>Don't be afraid, nobody's going to hurt you. Just hold me tight, and all the bad things will go away! <</say>><br>
+		A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embrace it and welcome its presence into your heart.<br><br>
 
-	A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embrace it and welcome its presence into your heart.<br><br>
-
-	<<link "Hug the doll tightly and close your eyes" $returnPassage>>
-	<<dollTF>>
-	<</link>><br>
+		<<link "Hug the doll tightly and close your eyes" $returnPassage>>
+			<<dollTF>>
+		<</link>><br><br>
+	<<else>>
+		<<say $creepydoll>> Wouldn't you just rather play with just me? I can make all bad things go away if its just the two of us!<</say>><br><br>
+	<</if>>
 <</if>>
 
+If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistent light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
+[[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration += 99; $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true]]
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down the creature.
