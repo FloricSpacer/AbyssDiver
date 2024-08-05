@@ -697,8 +697,13 @@
 <</if>>
 
 <<if $DesertedCompanions.length > 0 >>
-	<<set $SemenDemonVec = []>>
-	<<set $CreatureOfTheNight.donor = "none">>
+	<<for _companion range $DesertedCompanions>>
+		<<set _temp = $SemenDemonVec.indexOf(_companion.name)>>
+		<<set $SemenDemonVec.deleteAt(_i)>>
+		<<if _companion.name==$donor>>
+			<<set $donor = "">>
+		<</if>>
+	<</for>>
 	<<set _rejoinD = $companionsDepartT>>
 	<<if $currentLayer< $companionsDepartL >>
 		<<for _i = $currentLayer; _i < $companionsDepartL; _i++>>
@@ -756,7 +761,6 @@
 			<</if>>
 		<</for>>
 	<</if>>
-
 <</if>>
 
 /* $PulseBloomUse used to be initialized as an array, so check carefully. */
