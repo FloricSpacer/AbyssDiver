@@ -451,6 +451,19 @@
 <<if $status.duration > 0>>
 	@@.alert2; You are currently injured, increasing your next $status.duration travel times by $status.penalty days each. @@<br><br>
 <</if>>
+<<if $WaitingCompanions.length>0>>
+	<<set _i=0>>
+	<<for _companion range $WaitingCompanions>>
+	<<capture _companion _i>>
+		<<if _companion.location > 0 && $currentLayer!=_companion.location>>
+			<<set _companion.affec-=3-$hsswear>>
+			<<set $DesertedCompanions.push(_companion)>>
+			<<set $WaitingCompanions.deleteAt(_i)>>
+		<</if>>
+	<</capture>>
+	<<set _i++>>
+	<</for>>
+<</if>>
 
 <<if $time > $Maru_LastT + 7>>
 	<<set $companionMaru.affec+=(1+$hsswear + $maruPangea)>>
@@ -716,6 +729,15 @@
 		<</for>>
 	/*<<elseif $currentLayer=== $companionsDepartL>>
 		<<set _rejoinD +=  $UpTravelDays[$currentLayer-1]>>*/
+	<<elseif $currentLayer > $companionsDepartL>>
+		<<for _i = $currentLayer; _i < $companionsDepartL; _i++>>
+			<<if $DesertedCompanions.some(e => e.id === setup.companionIds.khemia)>>
+				<<set _temp = $DownTravelDays[_i]-2>>
+				<<set _rejoinD +=  Math.max(0,_temp)>>
+			<<else>>
+				<<set _rejoinD +=  $DownTravelDays[_i]>>
+			<</if>>
+		<</for>>
 	<</if>>
 	<<if _rejoinD<=$time>>
 		<<if $DesertedCompanions.length > 1>>

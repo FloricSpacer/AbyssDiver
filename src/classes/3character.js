@@ -107,6 +107,7 @@ class Character {
 	 * @param {boolean} o.tentaclePreg Whether this character is currently impragnated by tentacles.
 	 * @param {boolean} o.switched Whether this character has switched bodies.
 	 * @param {boolean} o.gestationJumps Tracks character specific gestation jumps for Gestation Jumpstart.
+	 * @param {number} o.location Layer at which a character is told to wait.
 	 * @param {CharEvent[]} o.events The list of events that affected this character.
 	 */
 	constructor({id, name, cost=-1, carry, affec=0, swap=false,
@@ -116,7 +117,7 @@ class Character {
 		            comfortableHeight = oheight, age, appDesc = '', fear,
 		            ohair, oskinColor, oskinType='', oears='normal human', oeyeColor,
 		            oblood='red', osubdom=0, pregnantT=setup.never, due=setup.never,
-		            lastBirth=setup.never, tentaclePreg=false, switched=false, gestationJumps=0, events=[]}) {
+		            lastBirth=setup.never, tentaclePreg=false, switched=false, gestationJumps=0, location=-1, events=[]}) {
 		if ([name, carry, image, imageIcon, obreasts, openis, ogender, fit, oheight, comfortableHeight,
 			 age, appDesc, fear, ohair, oskinColor, oeyeColor].includes(undefined)) {
 			console.error(`Character constructor called without all required arguments (${name || 'missing name'}).`);
@@ -226,11 +227,14 @@ class Character {
 		assert(typeof gestationJumps === 'number',
 		'gestationJumps must be a number')
  		this.gestationJumps = gestationJumps;
+		assert(typeof location === 'number',
+		'location must be a number')
+		this.location = location;
 	}
 
 	/**
 	 * Returns the internal state of this Character, from which another character can be built.
-	 * @returns {{mindSex: ("male"|"female"), oears: string, fit: number, comfortableHeight: number, imageIcon: string, oheight: number, id: number, ohair: string, pregnantT: number, events: CharEvent[], fear: ("darkness"|"spiders"|"wolves"|"snakes"|"insects"|"slime"|"desperation"|"rot"|"unknown"), image: string, cost: number, osex: ("male"|"female"), swap: boolean, ogender: number, oblood: string, lastBirth: number, oskinColor: string, oeyeColor: string, desiredBreasts: number, due: number, tentaclePreg: boolean, openis: number, appDesc: string, oskinType: string, name: string, affec: (number|undefined), switched: boolean, carry: number, obreasts: number, age: number}}
+	 * @returns {{mindSex: ("male"|"female"), oears: string, fit: number, comfortableHeight: number, imageIcon: string, oheight: number, id: number, ohair: string, pregnantT: number, events: CharEvent[], fear: ("darkness"|"spiders"|"wolves"|"snakes"|"insects"|"slime"|"desperation"|"rot"|"unknown"), image: string, cost: number, osex: ("male"|"female"), swap: boolean, ogender: number, oblood: string, lastBirth: number, oskinColor: string, oeyeColor: string, desiredBreasts: number, due: number, tentaclePreg: boolean, openis: number, appDesc: string, oskinType: string, name: string, affec: (number|undefined), switched: boolean, carry: number, obreasts: number, age: number, location: number}}
 	 */
 	_internalState() {
 		return {
@@ -242,7 +246,7 @@ class Character {
 			age: this.age, appDesc: this.appDesc, fear: this.fear, ohair: this.ohair,
 			oskinColor: this.oskinColor, oskinType: this.oskinType, oears: this.oears,
 			oeyeColor: this.oeyeColor, oblood: this.oblood, pregnantT: this.pregnantT, due: this.due, tentaclePreg: this.tentaclePreg,
-			lastBirth: this.lastBirth, switched: this.switched, gestationJumps: this.gestationJumps, events: this._events.map(e => e)
+			lastBirth: this.lastBirth, switched: this.switched, gestationJumps: this.gestationJumps, location: this.location, events: this._events.map(e => e)
 		};
 	}
 

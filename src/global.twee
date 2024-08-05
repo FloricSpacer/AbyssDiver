@@ -2313,10 +2313,56 @@ You will first drink:<br>
 	How many days would you like to rest here?<br>
 	<<textbox "_campTime" "0">><br>
 	<<WaitAtPassage 'Set up camp and wait' `passage()` 'Math.max(parseInt(_campTime, 10) || 0, 0)'>><br><br>
-
+	<<include "Drop companions">><br>
 	<<link "Return to exploring the layer without waiting" $hubReturn>><</link>>
 <</if>>
 
+:: Drop companions [nobr]
+<<set _i=0>>
+<<set _string = passage()>>
+You can ask companions to stay here and wait for you to pick them up again.
+<<if $currentLayer>0>>
+	Don't forget to pick them up before moving to a different layer or they will get mad at you for leaving them!
+<</if>>
+<br>
+<<if $hiredCompanions.length>0>>
+	<br>Companions in party:<br> 
+<</if>>
+<<for _companion range $hiredCompanions>>
+	<<capture _companion _i>>
+		<<link _companion.name _string>>
+			<<set $WaitingCompanions.push(_companion)>>
+			<<set $hiredCompanions.deleteAt(_i)>>
+			<<set _companion.location = $currentLayer>>
+			<<set _temp = $SemenDemonVec.indexOf(_companion.name)>>
+			<<set $SemenDemonVec.deleteAt(_i)>>
+			<<if _companion.name==$donor>>
+				<<set $donor = "">>
+			<</if>>
+		<</link>>
+		<<if _companion.name==$donor || $SemenDemonVec.some(e => e.id === _companion.id)>>
+			@@.alert1; _companion.name will no longer be able to provide sustenance to you if left here! 
+		<</if>>		
+		<br>
+	<</capture>>
+	<<set _i++>>
+<</for>>
+<<set _i=0>>
+<<if $WaitingCompanions.length>0>>
+	<br>Companions waiting here:<br> 
+<</if>>
+<<for _companion range $WaitingCompanions>>
+	<<capture _companion _i>>
+		<<if _companion.location==$currentLayer>>
+			<<link _companion.name _string>>
+				<<set $hiredCompanions.push(_companion)>>
+				<<set $WaitingCompanions.deleteAt(_i)>>
+				<<set _companion.location = -1>>
+			<</link>><br>
+		<</if>>
+		<<set _i++>>
+	<</capture>>
+<</for>>
 
 :: Hijinks Ensue Scenes [nobr]
 

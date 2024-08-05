@@ -159,7 +159,7 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
 <<if $fear === "">>
 <span class="icon">[img[setup.ImagePath+'Icons/olddiver.png']]</span> <b>[[Approach a grizzled diver and ask for advice for your dive|Surface Diver Tips 1]]</b><br><span class="smallbreak"></span>\
 <</if>>
-<<if $hiredCompanions.length === 0 && $LostCompanions.length === 0  && $DesertedCompanions.length === 0>>
+<<if $hiredCompanions.length === 0 && $LostCompanions.length === 0  && $DesertedCompanions.length === 0 && $WaitingCompanions.length === 0>>
 <span class="icon">[img[setup.ImagePath+'Icons/hirecompanions.png']]</span> <b>[[Check out the companions available to hire|Surface Companions]]</b><br><span class="smallbreak"></span>\
 <</if>>
 <<if $hiredCompanions.length > 0 || setup.haveSmartphoneAI>>
@@ -169,7 +169,7 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
 <<else>>
 <span class="icon">[img[setup.ImagePath+'Icons/olddiver.png']]</span> [[Approach a grizzled diver and ask for advice for your dive|Surface Diver Tips 3]]<br>
 <</if>>
-<<if $hiredCompanions.length > 0 || $LostCompanions.length > 0  || $DesertedCompanions.length > 0>>
+<<if $hiredCompanions.length > 0 || $LostCompanions.length > 0  || $DesertedCompanions.length > 0 || $WaitingCompanions.length > 0>>
 <span class="icon">[img[setup.ImagePath+'Icons/hirecompanions.png']]</span> [[Check out the companions available to hire|Surface Companions]]<br>
 <</if>>
 <span class="icon">[img[setup.ImagePath+'Icons/useitems.png']]</span> [[Use Items and Relics]]<br>
@@ -261,7 +261,7 @@ These are descriptions of the companions when they first join you on your expedi
 [img[setup.ImagePath + _companion.image]]
 <h2><<print _companion.name>></h2>
 <p>
-<<if $hiredCompanions.some(e => e.name === _companion.name) || $LostCompanions.some(e => e.name === _companion.name) || $DesertedCompanions.some(e => e.name === _companion.name)>>
+<<if $hiredCompanions.some(e => e.name === _companion.name) || $LostCompanions.some(e => e.name === _companion.name) || $DesertedCompanions.some(e => e.name === _companion.name)  || $WaitingCompanions.some(e => e.name === _companion.name)>>
 <button class="link-internal macro-button" type="button" disabled>Already hired</button>
 <<else>>
 <<button `"Hire for " + _companion.cost + " dubloons"` `"Hire " + _companion.name`>><</button>>
@@ -1163,6 +1163,7 @@ While your mind never changed, and you always yearned to once again have control
 <br><br>
 
 <<include "Inn Storage">>
+<<include "Drop companions">><br>
 
 [[Return to Outset Town|Surface Hub]]
 
