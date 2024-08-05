@@ -1783,6 +1783,7 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 	<</if>>	
 	<span class="icon">[img[setup.ImagePath+'Icons/inn.png']]</span> [[Go to the local Guesthouse|L1 Inn]]<br>
 	<span class="icon">[img[setup.ImagePath+'Icons/itemshop.png']]</span> [[Visit the farmers market|L1 Shop 1]]<br>
+	<span class="icon">[img[setup.ImagePath+'Icons/rules.png']]</span> [[You approach a board with wanted posters|Bounty Board]]<br>
 	<span class="icon">[img[setup.ImagePath+'Icons/village.png']]</span> [[View the Layer 1 habitation option|Layer1 Habitation][$returnPassage="Outcast Village Settlement"]]<br>
 	<span class="icon">[img[setup.ImagePath+'Icons/return.png']]</span> [[Leave the village|Layer1 Hub]]<br>
 
@@ -1831,3 +1832,83 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 <p>[[Stay overnight at the inn for 10 dubloons|Outcast Village Settlement][$dubloons-=10, $time+=1, $dehydrated = 0, $starving = 0]]</p><br>
 
 <p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
+
+:: Bounty Board [nobr]
+
+
+<<if $bountyboardvisit==false>>
+	You approach a large wooden board with a collection of what appears to be wanted posters.<br><br>
+	<<say $rndM>>Ya looking at the bounty board?<</say>><br>
+	
+	You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here.<br><br>
+
+	He spits to the side.<br><br>
+	<<say $rndM>> Especially those lookers will fetch you a pretty penny if you bring them in dead or alive.<</say>><br>	
+
+	He points to a set of wanted posters with some mean looking woman on them.<br><br>
+	<<include "Wanted posters">>
+	<br>
+	<<say $rndM>> If I were you I woudn't bother bringin' in sweet Kamilla here breathin'. That bitch is stone cold and when she has a chance she just off's you if you rubbed her the wrong way.<</say>>	<br>
+	<<say $mc>> I'm not going to start murdering people for some dubloons?!<</say>><br>
+	<<say $rndM>> Suit yar self, but in that case I would advise ya to just bring in our lil' red headed accomplice. You be carefull with her too though, that minx is a slipery one. Those quick little fingers of her get her out of sticky situation almost as fast as they get her into those. Ya'll gonna need some really sturdy rope or something to haul her in.<</say>><br>	
+	<<say $mc>> I'll keep my eyes open for her in that case.<</say>><br>
+
+	<<set $bountyboardvisit=true>>
+<<else>>
+	<<say $rndM>>Did you get Lil' quick fingers yet?<</say>><br>
+	<<say $mc>>No, not yet.<</say>><br>
+<</if>>
+
+<p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
+
+:: Bandit lookalike score
+<<set _changedAppearanceScore = Math.abs(Math.floor($WantedTraits.Gender - $mc.appGender)/3)>>
+<<if ($WantedTraits.Age >= 37 && $mc.appAge<27) || ($mc.appAge >= 37 && $WantedTraits.Age<27) >>
+	<<set _changedAppearanceScore +=1 >>
+<</if>>
+<<if ($WantedTraits.Age >= 27 && $mc.appAge<22) || ($mc.appAge >= 27 && $WantedTraits.Age<22)>>
+	<<set _changedAppearanceScore +=1 >>
+<</if>>
+<<if ($WantedTraits.Age >= 22 && $mc.appAge<19) || ($mc.appAge >= 22 && $WantedTraits.Age<19)>>
+	<<set _changedAppearanceScore +=1 >>
+<</if>>
+<<if $WantedTraits.Age > 18>> <<set _WantedAge = 18>><</if>>
+<<if $mc.appAge > 18>> <<set _mcAge = 18>><</if>>
+<<set _changedAppearanceScore += Math.abs(_WantedAge-_mcAge)>>
+<<set _changedAppearanceScore = Math.abs($WantedTraits.Human - $mc.inhuman)>>
+<<if $WantedTraits.Hair != $mc.hair>>
+	<<set _changedAppearanceScore +=1 >>
+<</if>>
+<<if $WantedTraits.Eye != $mc.eyeColor>>
+	<<set _changedAppearanceScore +=1 >>
+<</if>>
+<<set _changedAppearanceScore += Math.abs(Math.floor($WantedTraits.Height - $mc.heightCor)/10)>>
+<<if _changedAppearanceScore < 4 >>
+	@@.alert2; The sketch looks almost identical to you! You are at a high risk of being recognized and arrested, potentially ending your adventure!@@ <br><br>
+	<<set _temp = random(1,3)>>
+	<<if _temp == 1>><<set $arrested = true>><</if>>
+<<elseif _changedAppearanceScore < 8  >>
+	@@.alert1; The composition sketch, while not a perfect match, still captures enough of your current look to be concerning! You are at a risk of being recognized and arrested, potentially ending your adventure!@@ <br><br>
+	<<set _temp = random(1,10)>>
+	<<if _temp == 1>><<set $arrested = true>><</if>>
+<<else>>
+	Or at least, it looks like how you used to look. However, it looks nothing like how you look now, so you should be fine, and it's unlikely anyone would be able to arrest you based on that old description. <br><br>
+<</if>>
+
+:: Wanted posters [cards nobr]
+
+<div class="cards-grid">
+<div>
+[img[setup.ImagePath + 'Icons/Banditleader.png']]
+<h2>"Killer Kamilla"</h2>
+<p>
+Dead or Alive 300 dubloons
+</p>
+</div>
+<div>
+[img[setup.ImagePath + 'Icons/banditIcon_released.png']]
+<h2>"Little Vespa Quick Fingers"</h2>
+<p>
+Dead or Alive 100 dubloons
+</p>
+</div>
