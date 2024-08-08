@@ -1449,17 +1449,17 @@ class Character {
 		if (this.id === setup.companionIds.mc) {
 			if (this.isPregnant) {
 				if (this.daysConsideredPregnant >= 240) {
-					handicap -= 5;
-				} else if (this.daysConsideredPregnant >= 180) {
 					handicap -= 3;
-				} else if (this.daysConsideredPregnant >= 120) {
+				} else if (this.daysConsideredPregnant >= 180) {
 					handicap -= 2;
+				} else if (this.daysConsideredPregnant >= 120) {
+					handicap -= 1;
 				} else if (this.daysConsideredPregnant > 90) {
 					// nothing
 				} else if (this.daysConsideredPregnant >= 45) {
-					handicap -= 4;
-				} else if (this.daysConsideredPregnant >= 35) {
 					handicap -= 2;
+				} else if (this.daysConsideredPregnant >= 35) {
+					handicap -= 1;
 				}
 			}
 			if (State.variables.MaximCycleT_flag) {
