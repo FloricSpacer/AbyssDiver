@@ -1411,7 +1411,7 @@ class Character {
 		let armsLegsLost = ''
 		if (arms < 2) armsLegsLost += 'A';
 		if (arms < 1) armsLegsLost += 'A';
-		if (this.id !== setup.companionIds.mc || !State.variables.DaedalusEquip) {
+		if ((this.id !== setup.companionIds.mc || !State.variables.DaedalusEquip) && State.variables.currentLayer !== 9) {
 			if (legs < 2) armsLegsLost += 'L';
 			if (legs < 1) armsLegsLost += 'L';
 		}
