@@ -1834,32 +1834,56 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 <p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
 
 :: Bounty Board [nobr]
-xxx
+/*xxx*/
 
 <<if $bountyboardvisit==false>>
-	You approach a large wooden board with a collection of what appears to be wanted posters.<br><br>
-	<<say $rndM>>Ya looking at the bounty board?<</say>><br>
-	
-	You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here.<br><br>
+	You approach a large wooden board with a collection of what appears to be wanted posters on the side of a building.<br><br>
 
-	He spits to the side.<br><br>
-	<<say $rndM>> Especially those lookers will fetch you a pretty penny if you bring them in dead or alive.<</say>><br>	
+	<<if $hiredCompanions.some(c => c.id === setup.companionIds.bandit)>>
+		<<say $Sheriff>>Hey ya, you here for the bounty on Lil' quick fingers here?<</say>><br>
+		<<say $mc>>I'm sorry,  what?<</say>><br>
+		You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here, the local sheriff probably.<br><br>
+		<<say $Sheriff>>You snagged one of these darn bandits that have been troubling us, look<</say>><br>
+		He points towards a set of wanted posters with a familair face.<br><br>
+		<<include "Wanted posters">>
+		<<say $Sheriff>>So, are ya gonna hand her over for the bounty or what?<</say>><br>
+		<<ConversationChoices
+			[[Yes, take her away please|Bandit turned in]]
+			[[I'm sorry, she stays with me for the moment|Bandit not turned in]]
+		>>
+	<<else>>
+		<<say $Sheriff>>Ya looking at the bounty board?<</say>><br>
+		
+		You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here, the local sheriff probably<br><br>
 
-	He points to a set of wanted posters with some mean looking woman on them.<br><br>
-	<<include "Wanted posters">>
-	<br>
-	<<say $rndM>> If I were you I woudn't bother bringin' in sweet Kamilla here breathin'. That bitch is stone cold and when she has a chance she just off's you if you rubbed her the wrong way.<</say>>	<br>
-	<<say $mc>> I'm not going to start murdering people for some dubloons?!<</say>><br>
-	<<say $rndM>> Suit yar self, but in that case I would advise ya to just bring in our lil' red headed accomplice. You be carefull with her too though, that minx is a slipery one. Those quick little fingers of her get her out of sticky situation almost as fast as they get her into those. Ya'll gonna need some really sturdy rope or something to haul her in.<</say>><br>	
-	<<say $mc>> I'll keep my eyes open for her in that case.<</say>><br>
+		He spits to the side.<br><br>
+		<<say $Sheriff>> Especially those lookers will fetch you a pretty penny if you bring them in dead or alive.<</say>><br>	
 
+		He points to a set of wanted posters with some mean looking woman on them.<br><br>
+		<<include "Wanted posters">>
+		<br>
+		<<say $Sheriff>> If I were you I woudn't bother bringin' in sweet Kamilla here breathin'. That bitch is stone cold and when she has a chance she just off's you if you rubbed her the wrong way.<</say>>	<br>
+		<<say $mc>> I'm not going to start murdering people for some dubloons?!<</say>><br>
+		<<say $Sheriff>> Suit yar self, but in that case I would advise ya to just bring in our lil' red headed accomplice. You be carefull with her too though, that minx is a slipery one. Those quick little fingers of her get her out of sticky situation almost as fast as they get her into those. Ya'll gonna need some really sturdy rope or something to haul her in.<</say>><br>	
+		<<say $mc>> I'll keep my eyes open for her in that case.<</say>><br>
+		[[Return to exploring the layer|Outcast Village Settlement]]
+	<</if>>
 	<<set $bountyboardvisit=true>>
 <<else>>
-	<<say $rndM>>Did you get Lil' quick fingers yet?<</say>><br>
-	<<say $mc>>No, not yet.<</say>><br>
+	<<if $hiredCompanions.some(c => c.id === setup.companionIds.bandit)>>
+		<<say $Sheriff>>Seems you snagged our Lil'red headed birdy. So are you here to turn her in?<</say>><br>
+		<<ConversationChoices
+			[[Yes, take her away please|Bandit turned in]]
+			[[I'm sorry, she stays with me for the moment|Bandit not turned in]]
+		>>
+	<<else>>
+		<<say $Sheriff>>Did you get Lil' quick fingers yet?<</say>><br>
+		<<say $mc>>No, not yet.<</say>><br>
+
+			[[Return to exploring the layer|Outcast Village Settlement]]
+	<</if>>
 <</if>>
 
-<p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
 
 :: Bandit lookalike score
 <<set _changedAppearanceScore = Math.abs(Math.floor($WantedTraits.Gender - $mc.appGender)/3)>>
@@ -1912,3 +1936,40 @@ Dead or Alive 300 dubloons
 Dead or Alive 100 dubloons
 </p>
 </div>
+
+:: Bandit turned in [nobr]
+<<say $mc>> Yes, take her away please.<</say>><br>
+<<say $Sheriff>>Oh I will, I have been waiting to get my hands on this one. Thank you very much for your service to this community.<</say>><br>
+He locks eyes with $companionBandit.name and gives a big grin as he says that.<br><br>
+<<say $Sheriff>>Here is your reward.<</say>><br>
+He hands you a hundred dubloons and walks towards $companionBandit.name, corned she looks around for an escape route but the sheriff grabs here by the arm and starts hauling her into the building behind the bounty board.<br>
+<<set $dubloons += 100>>
+<<set _j=0>>
+<<for _i=0; _j<1; _i++>>
+	<<capture _i>>
+		<<if $hiredCompanions[_i].id == $companionBandit.id>>
+			<<set _j=1>>
+			<<set $hiredCompanions.deleteAt(_i)>>
+		<</if>>
+	<</capture>>
+<</for>>
+<<set $LostCompanions.push($companionBandit)>>
+
+<p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
+
+:: Bandit not turned in [nobr]
+<<say $mc>>I'm sorry, she stays with me for the moment.<</say>><br>
+The sheriff raises one eyebrow and clasps his rifle.<br><br>
+<<say $Sheriff>>Are you telling me you're harboring and aiding a fugative?<</say>><br>
+<<say $mc>>It's more like I want to keep her in my custody for now. I still need her for something during my dive.<</say>><br>
+The sheriff sighs and scratches the back of his head.<br><br>
+<<say $Sheriff>>If this is some weird sexual thing, don't bother explainin'. It's all the same with you divers nowadays. I guess as long as she is with you, she's outa our hair.<</say>><br>
+Suddenly he locks eyes with you again.<br><br>
+<<say $Sheriff>>But you better not lose her outa yar sight, this one is a slippery one, and if I see her back in these parts again, causin' trouble and whatnot yar face is going on my board as well. Did I make myself clear?<</say>><br>
+<<say $mc>>Yes sir!<</say>><br>
+<<if $firstturnindenied == false>>
+	<<set $companionBandit.affec += 3+$hsswear>>
+	<<set $firstturnindenied = true>>
+<</if>>
+
+<p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
