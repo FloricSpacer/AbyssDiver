@@ -1578,3 +1578,36 @@ setup.evaluateCharacterDescription = function(mc) {
 
     return description;
 };
+
+// Disable default autosave
+Config.saves.autosave = false;
+
+// Global variable to store the last known layer
+let _lastLayer = null;
+
+// Check if the layer has changed
+function layerChanged() {
+    let currentLayer = State.getVar("$currentLayer");
+    if (currentLayer !== _lastLayer) {
+        _lastLayer = currentLayer;
+        return true;
+    }
+    return false;
+}
+
+function getSaveLabel() {
+    let currentLayer = State.getVar("$currentLayer");
+    if (currentLayer === 0) return "Surface";
+    if (currentLayer === 10) return "Nadir";
+    if (currentLayer === 11) return "???";
+    if (currentLayer === 12) return "Surface?";
+    return "Layer " + currentLayer;
+}
+
+// Trigger the save when the layer changes
+$(document).on(':passageend', function () {
+    if (layerChanged()) {
+        let saveLabel = getSaveLabel();
+        Save.autosave.save(saveLabel);
+    }
+});
