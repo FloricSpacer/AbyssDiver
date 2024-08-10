@@ -3490,3 +3490,19 @@ setup.allCurses.GestationJumpstart = new GestationJumpstart()
 State.variables.curse126 = setup.allCurses.GestationJumpstart
 window.GestationJumpstart = GestationJumpstart
 setup.curseArray.push(GestationJumpstart)
+
+class BimboBabble extends Curse {
+    static corruption = 35;
+    static curseName = 'Bimbo Babble';
+    static description = `Your speech patterns dramatically shift to resemble those of a stereotypical bimbo/himbo. You'll find yourself frequently using filler words like "like," "totally," and "um," as well as valley girl inflections. Your vocabulary becomes more limited, focusing on simple words and phrases. Complex ideas become difficult to articulate, often resulting in confused rambling. This affects all forms of communication, including writing and texting.`;
+    static descriptionMitigated = `Your speech patterns dramatically shift to resemble those of a stereotypical bimbo/himbo. You'll find yourself frequently using filler words like "like," "totally," and "um," as well as valley girl inflections. Your vocabulary becomes more limited, focusing on simple words and phrases. Complex ideas become difficult to articulate, often resulting in confused rambling. This affects all forms of communication, including writing and texting.\n\nThanks to your MITIGATIONRELICNAME, you can temporarily suppress this effect for important conversations or when explaining complex topics. You're also able to understand complex ideas and vocabulary even if you can't express them easily. Additionally, you gain an uncanny ability to use your new speech patterns to your advantage in social situations, often appearing more charming and disarming to others. Your writing remains affected, but you can use voice-to-text software to partially bypass the curse's effects on written communication.`;
+    static picture = 'Curses/bimbobabble.png';
+    static type = '';
+    constructor() {
+        super('Bimbo Babble', '');
+    }
+}
+setup.allCurses.BimboBabble = new BimboBabble()
+State.variables.curse127 = setup.allCurses.BimboBabble
+window.BimboBabble = BimboBabble
+setup.curseArray.push(BimboBabble)
