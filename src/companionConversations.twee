@@ -4340,8 +4340,14 @@ The conversation seems to have cooled down and the both of your companions back 
 [[You continue your journey|Party overview]]
 
 :: Pulse Bloom Forced
-<<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
-<<if _companion.id === setup.companionIds.bandit && !$BanditConvo0>>Your eyes go over your captive as she is struggling helplessly against the ropes.<<else>>Silently, you approach _companion.name,  moving stealthily to catch them off guard. You aim to coax <<if _companion.sex==="male">>him<<else>>her<</if>> into a subdued state and wrestle <<if _companion.sex==="male">>him<<else>>her<</if>> into submission.<</if>>
+<<if _companion.id === setup.companionIds.bandit>>
+	<<set _companion  = $companionBandit >>
+	<<if !$BanditConvo0>>
+		Your eyes go over your captive as she is struggling helplessly against the ropes.<<else>>Silently, you approach _companion.name,  moving stealthily to catch them off guard. You aim to coax <<if _companion.sex==="male">>him<<else>>her<</if>> into a subdued state and wrestle <<if _companion.sex==="male">>him<<else>>her<</if>> into submission.
+	<</if>>
+<<else>>
+	<<print "<<set _companion  = $companion"+ $PulseBloomUse +" >>">>
+<</if>>
 <<set _appFitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>\
 <<set _companionFitCor = _companion.hasCurse("Weakling") ? 0 : _companion.fit>>\
 <<if _companion.id === setup.companionIds.bandit && !$BanditConvo0>>\
@@ -4349,7 +4355,7 @@ The bound bandit is helpless to resist you!
 
 <<say _companion>>Hmpf!<</say>>
 You ignore the soft, trembling pleas echoing in the cold air, your eyes locked on the task at hand. The Pulse Bloom, vibrant and robust, rests within your grip, ready to perform its unusual magic. An uncanny silence punctuates your forceful extraction of the life fluid, the bloom absorbing it greedily, a vampire of the plant kingdom.
-<<link "Use the Pulse Bloom" "Pulse Bloom Transformation" >>
+	<<link "Use the Pulse Bloom" "Pulse Bloom Transformation" >>
 		<<set _companion.affec -= 6 - $hsswear>>
 		<<include "Pulse Bloom Code">>
 		<<CarryAdjust>>
