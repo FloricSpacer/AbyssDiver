@@ -1859,14 +1859,35 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 
 :: Bounty Board [nobr]
 /*xxx*/
-
+<<include "Bandit lookalike score">>
 <<if $bountyboardvisit==false>>
 	You approach a large wooden board with a collection of what appears to be wanted posters on the side of a building.<br><br>
-
-	<<if $hiredCompanions.some(c => c.id === setup.companionIds.bandit)>>
-		<<say $Sheriff>>Hey ya, you here for the bounty on Lil' quick fingers here?<</say>><br>
+	<<say $Sheriff>>Ya looking at the bounty board?<</say>><br>
+		
+	You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here, the local sheriff probably.<br><br>
+	<<if _changedAppearanceScore < 8 && ($PulseBloomUse == "The bandit" || $companionSwitched == $companionBandit.id)>>
+			His jaw drops the moment he looks at your face. A moment later his face hardens and he raises his rifle. <br><br>
+			<<say $Sheriff>> So you have come to turn yourself in Lil' Quick Hands?<</say>><br>	
+			In shock you raise your hands.<br><br>
+			<<say $mc>> I don't...<</say>><br>
+			At that moment your eye falls on a set of wanted posters on the bounty board.<br><br>
+			<<include "Wanted posters">>
+			<<say $mc>> I'm not her! This is a misunderstanding.<</say>><br>
+			<<say $Sheriff>> Sure it is doll, now lay down on the floor face down please. <</say>><br>
+			Your brain is working in overtime to figure a way out of this situation.<br><br>
+			<<say $mc>> No seriously, how can I be here if she is walking over there?<</say>><br>
+			<<say $Sheriff>> What do you mean? <</say>><br>
+			As soon as the Sheriff turns around, you sprint a way and quickly round the corner of the building.<br><br>
+			<<say $Sheriff>> Why you! <</say>><br>
+			He sprints after you and you here him firing a few shots behind you. The moment you hear the second bang you feel a seering pain in your shoulder, as if it was hit with a hot spear.<br>
+			The other shots luckily miss their target and after a few, you can only hear some cursing in the distance.<br>
+			<<set $status.duration += (4 - $statRed)>>
+			<<set $status.penalty += 1>>
+			@@.alert1; You got injured fleeing from the Sheriff. Better to avoid him as long as you look like the Bandit!<br>
+	<<elseif $hiredCompanions.some(c => c.id === setup.companionIds.bandit)>>
+		<<say $Sheriff>>Ow wait, now I see. you here to collect the bounty on Lil' quick fingers here?<</say>><br>
 		<<say $mc>>I'm sorry,  what?<</say>><br>
-		You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here, the local sheriff probably.<br><br>
+		He raises an eyebrow in confussion.<br><br>
 		<<say $Sheriff>>You snagged one of these darn bandits that have been troubling us, look<</say>><br>
 		He points towards a set of wanted posters with a familair face.<br><br>
 		<<include "Wanted posters">>
@@ -1876,10 +1897,6 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 			[[I'm sorry, she stays with me for the moment|Bandit not turned in]]
 		>>
 	<<else>>
-		<<say $Sheriff>>Ya looking at the bounty board?<</say>><br>
-		
-		You turn around to see one of the towns people with a hunting rifle and a make shift badge looking at you. This person must be what passes as the local law enforcement here, the local sheriff probably<br><br>
-
 		He spits to the side.<br><br>
 		<<say $Sheriff>> Especially those lookers will fetch you a pretty penny if you bring them in dead or alive.<</say>><br>	
 
@@ -1889,9 +1906,14 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 		<<say $Sheriff>> If I were you I woudn't bother bringin' in sweet Kamilla here breathin'. That bitch is stone cold and when she has a chance she just off's you if you rubbed her the wrong way.<</say>>	<br>
 		<<say $mc>> I'm not going to start murdering people for some dubloons?!<</say>><br>
 		<<say $Sheriff>> Suit yar self, but in that case I would advise ya to just bring in our lil' red headed accomplice. You be carefull with her too though, that minx is a slipery one. Those quick little fingers of her get her out of sticky situation almost as fast as they get her into those. Ya'll gonna need some really sturdy rope or something to haul her in.<</say>><br>	
-		<<say $mc>> I'll keep my eyes open for her in that case.<</say>><br>
-		[[Return to exploring the layer|Outcast Village Settlement]]
+		<<if _changedAppearanceScore < 4 >>
+			<<say $Sheriff>> Ya can't miss her. She looks like she could be your darn sister. She ain't your sister, right?<</say>><br>	
+			<<say $mc>> No sir, but I'll keep my eyes open for her!<</say>><br>		
+		<<else>>
+			<<say $mc>> I'll keep my eyes open for her in that case.<</say>><br>
+		<</if>>
 	<</if>>
+	[[Return to exploring the layer|Outcast Village Settlement]]
 	<<set $bountyboardvisit=true>>
 <<else>>
 	<<if $hiredCompanions.some(c => c.id === setup.companionIds.bandit)>>
@@ -1909,39 +1931,28 @@ Similar to Outset Town, residents and shops can be found in this village. But si
 <</if>>
 
 
-:: Bandit lookalike score
-<<set _changedAppearanceScore = Math.abs(Math.floor($WantedTraits.Gender - $mc.appGender)/3)>>
-<<if ($WantedTraits.Age >= 37 && $mc.appAge<27) || ($mc.appAge >= 37 && $WantedTraits.Age<27) >>
+:: Bandit lookalike score [nobr]
+<<set _changedAppearanceScore = Math.abs(Math.floor($BanditTraits.Gender - $mc.appGender)/3)>>
+<<if ($BanditTraits.Age >= 37 && $mc.appAge<27) || ($mc.appAge >= 37 && $BanditTraits.Age<27) >>
 	<<set _changedAppearanceScore +=1 >>
 <</if>>
-<<if ($WantedTraits.Age >= 27 && $mc.appAge<22) || ($mc.appAge >= 27 && $WantedTraits.Age<22)>>
+<<if ($BanditTraits.Age >= 27 && $mc.appAge<22) || ($mc.appAge >= 27 && $BanditTraits.Age<22)>>
 	<<set _changedAppearanceScore +=1 >>
 <</if>>
-<<if ($WantedTraits.Age >= 22 && $mc.appAge<19) || ($mc.appAge >= 22 && $WantedTraits.Age<19)>>
+<<if ($BanditTraits.Age >= 22 && $mc.appAge<19) || ($mc.appAge >= 22 && $BanditTraits.Age<19)>>
 	<<set _changedAppearanceScore +=1 >>
 <</if>>
-<<if $WantedTraits.Age > 18>> <<set _WantedAge = 18>><</if>>
+<<if $BanditTraits.Age > 18>> <<set _WantedAge = 18>><</if>>
 <<if $mc.appAge > 18>> <<set _mcAge = 18>><</if>>
 <<set _changedAppearanceScore += Math.abs(_WantedAge-_mcAge)>>
-<<set _changedAppearanceScore = Math.abs($WantedTraits.Human - $mc.inhuman)>>
-<<if $WantedTraits.Hair != $mc.hair>>
+<<set _changedAppearanceScore = Math.abs($BanditTraits.Human - $mc.inhuman)>>
+<<if $BanditTraits.Hair != $mc.hair>>
 	<<set _changedAppearanceScore +=1 >>
 <</if>>
-<<if $WantedTraits.Eye != $mc.eyeColor>>
+<<if $BanditTraits.Eye != $mc.eyeColor>>
 	<<set _changedAppearanceScore +=1 >>
 <</if>>
-<<set _changedAppearanceScore += Math.abs(Math.floor($WantedTraits.Height - $mc.heightCor)/10)>>
-<<if _changedAppearanceScore < 4 >>
-	@@.alert2; The sketch looks almost identical to you! You are at a high risk of being recognized and arrested, potentially ending your adventure!@@ <br><br>
-	<<set _temp = random(1,3)>>
-	<<if _temp == 1>><<set $arrested = true>><</if>>
-<<elseif _changedAppearanceScore < 8  >>
-	@@.alert1; The composition sketch, while not a perfect match, still captures enough of your current look to be concerning! You are at a risk of being recognized and arrested, potentially ending your adventure!@@ <br><br>
-	<<set _temp = random(1,10)>>
-	<<if _temp == 1>><<set $arrested = true>><</if>>
-<<else>>
-	Or at least, it looks like how you used to look. However, it looks nothing like how you look now, so you should be fine, and it's unlikely anyone would be able to arrest you based on that old description. <br><br>
-<</if>>
+<<set _changedAppearanceScore += Math.abs(Math.floor($BanditTraits.Height - $mc.heightCor)/10)>>
 
 :: Wanted posters [cards nobr]
 
