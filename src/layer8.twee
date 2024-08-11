@@ -296,7 +296,7 @@ You have broken the temporal limits of your $timeRelic here, allowing you to low
 <</if>>
 <p>[[Consume food from Bedlam's Banquet once|Layer8 Forage][$mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));$foodL8 += 1]]<br>
 [[Consume water from Lethe Taps once|Layer8 Forage][$IQdrop += 0.5;$waterL8 += 1]]
-<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && (setup.haveSmartphone || $ownedRelics.some(e => e.name === "Heavy is the Head"))>>
 	<br>[[Consume purified water from Lethe Taps once|Layer8 Forage][$IQdrop += 0.05;$waterL8 += 1]]
 <</if>></p>
 
@@ -309,7 +309,7 @@ You have broken the temporal limits of your $timeRelic here, allowing you to low
 	<<if $items[2].count > 0>>
 		<<set $items[3].count += 1>>
 		<<set $items[2].count -= 1>>
-		<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone>>
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && (setup.haveSmartphone || $ownedRelics.some(e => e.name === "Heavy is the Head"))>>
 			<<set $flaskMatrix[5]+=1>>
 		<<else>>
 			<<set $flaskMatrix[6]+=1>>
@@ -322,8 +322,10 @@ You have broken the temporal limits of your $timeRelic here, allowing you to low
 <</nobr>>
 [img[setup.ImagePath+'Foraging/lethetaps.png']]
 
-<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && setup.haveSmartphone>>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && (setup.haveSmartphone || $ownedRelics.some(e => e.name === "Heavy is the Head"))>>
 In an incredible collaboration with colleagues on the surface, Saeko managed to develop some incredibly innovative water filtration techniques. The water purified from Lethe Taps using this technique is much safer to drink, though still hazardous. It's probably only 1/10th as dangerous as it would normally be, though you'll still be on a quick path to <<if $mc.sex === "male">>himbo<<else>>bimbo<</if>>ification if you drink too much.
+<<elseif $ownedRelics.some(e => e.name === "Heavy is the Head") && $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
+By using her enhanced intelligence with Heavy is the Head, Saeko managed to develop some incredibly innovative water filtration techniques. The water purified from Lethe Taps using this technique is much safer to drink, though still hazardous. It's probably only 1/10th as dangerous as it would normally be, though you'll still be on a quick path to <<if $mc.sex === "male">>himbo<<else>>bimbo<</if>>ification if you drink too much.
 <<else>>
 There is a very easily accessible source of water on this layer, the Lethe Taps, that are freely available everywhere and taste surprisingly like the tap water from the surface. Unfortunately, it also leaves you feeling a little hazy after a drink, and that is not simply a temporary effect. Each day of water you drink from these taps decreases you IQ by about half a point, leaving your mind in a subtly creeping fog that will leave you a <<if $mc.sex === "male">>himbo<<else>>bimbo<</if>> in no time at all.
 <</if>>
