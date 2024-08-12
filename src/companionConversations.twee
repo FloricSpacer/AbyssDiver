@@ -526,7 +526,7 @@ Grateful, you thank Maru once more and decide to carry on with your journey, now
 <<if $mc.hasCurse("Seafolk") && $currentLayer === 8 && !$convo.lilySeafolk>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you|Lily Seafolk]]<br>
 <</if>>
-<<if $convo.lilySeafolk && !$convo.lilySeafolkCarry>>
+<<if $convo.lilySeafolk && !$convo.lilySeafolkCarry && $companionLily.affec> 6>>
 	<<set _numConvos += 1>>[[Lily seems to notice you struggling with your new tail|Lily Seafolk]]<br>
 <</if>>
 <<if $convo.lilyDrawingSpades === 1 && $companionLily.affec> 6 && $convo.lilyTailRomance === 0>>
@@ -1396,14 +1396,32 @@ You chuckle, finding comfort in Lily's cheerful embrace.
 <<if $mc.hasCurse("Pheromones") && $currentLayer === 5 && $convo.khemiaPheromones === 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Pheromones]]<br>
 <</if>>
+<<if $mc.hasCurse("Seafolk") && $currentLayer === 8 && !$convo.khemiaSeafolk>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking at you|Khemia Seafolk One]]<br>
+<</if>>
+<<if $convo.khemiaSeafolk && $companionKhemia.affec> 6 && !$convo.khemiaSeafolkCarry>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking at your struggling with your new tail|Khemia Seafolk Carry]]<br>
+<</if>>
 <<if $companionKhemia.hasCurse("Power Dom") && $companionKhemia.affec> 6 && $convo.khemiaPowerDomHand === 0  && settings.MaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at you, with a look of dominance on his face|Khemia Power Dom Hand]]<br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Aegis Coffin") && $convo.khemiaAegis === 0>>
 	<<set _numConvos += 1>>[[Khemia seems to be looking at your Aegis Coffin curiously|Khemia Aegis 1]]<br>
 <</if>>
-<<if $convo.khemiaL6 === 0 && $currentLayer === 6>>
-	<<set _numConvos += 1>>[[Khemia seems to be looking around at your surroundings intensely|Khemia Layer6 Convo]]<br>
+<<if $ownedRelics.some(e => e.name === "Orbweaver") && $convo.khemiaOrbweaver === 1>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking at your Orbweaver|Khemia Orbweaver One]]<br>
+<</if>>
+<<if $ownedRelics.some(e => e.name === "World Stone") && $convo.khemiaWorldStone === 0>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking at your World Stone|Khemia World Stone]]<br>
+<</if>>
+<<if $joyousSword && !$convo.khemiaJoyousSunder>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking over the Joyous Sword|Khemia Joyous Sunder]]<br>
+<</if>>
+<<if !$convo.khemiaL6 && $currentLayer === 6>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking around at your surroundings intensely|Khemia Layer6 One]]<br>
+<</if>>
+<<if !$convo.khemiaL8 && $currentLayer === 8>>
+	<<set _numConvos += 1>>[[Khemia seems to be looking around at your surroundings intensely|Khemia Layer8 One]]<br>
 <</if>>
 
 :: Khemia Convo0
@@ -7770,7 +7788,7 @@ Khemia's expression softens as he looks down at you, his pace never faltering.
 <<say $companionKhemia>>As long as we need to. That's what teammates are for. We'll figure this out together, one step at a time. Or should I say, one fin at a time?<</say>>
 <</if>>
 As you continue your journey, cradled in Khemia's arms, you're acutely aware of your reliance on his strength and willingness to help. Yet, there's a comfort in knowing that even in your most vulnerable state, you have someone you can trust.
-[[Continue your journey|Party overview][$convo.KhemiaCarriesYou=true][$companionKhemia.affec += (2+$hsswear)]]
+[[Continue your journey|Party overview][$convo.khemiaSeafolkCarry=true][$companionKhemia.affec += (2+$hsswear)]]
 
 
 :: Cloud Submissiveness Kiss
@@ -9297,7 +9315,7 @@ As Khemia exercises, you notice the stone subtly changing, adapting to his stren
 Khemia jumps to his feet, barely winded despite the intense workout. He tosses the World Stone from hand to hand, a thoughtful expression on his face.
 
 <<say $companionKhemia>>Thanks for backing me on this. It means a lot to have an expedition leader who understands the thrill of the unknown. Now, how about we plan our next move? With this edge, I'm feeling ready to tackle whatever the Abyss throws at us!<</say>>
-[[End your conversation|Party overview][$convo.KhemiaWorldStone=true]]
+[[End your conversation|Party overview][$convo.khemiaWorldStone=true]]
 
 
 :: Khemia World Stone Three
@@ -9316,7 +9334,7 @@ He sets the World Stone down and leans against a nearby rock, his expression tho
 Khemia runs a hand through his blue hair, a wry smile playing on his lips.
 
 <<say $companionKhemia>>I'll hold off for now, but if I start feeling that my current limits aren't enough, you've got to let me try, you know? It's a lot riskier to lose a fight to a tentacle beast than it is to rely on a Relic.<</say>>
-[[End your conversation|Party overview][$convo.KhemiaWorldStone=true]]
+[[End your conversation|Party overview][$convo.khemiaWorldStone=true]]
 
 
 :: Cloud Heart-stealing Stole One
@@ -9410,7 +9428,7 @@ His enthusiasm is contagious, and you find yourself smiling along with him.
 <<say $companionKhemia>>What do you think? Ready to push the limits of what's possible and dive as deep as we can?<</say>>
 Khemia's eyes gleam with the thrill of adventure, reminding you why he's considered the most experienced Abyss explorer alive.
 
-[[End your conversation|Party overview][$convo.KhemiaOrbweaver=true]]
+[[End your conversation|Party overview][$convo.khemiaOrbweaver=true]]
 
 
 :: Khemia Orbweaver Three
@@ -9431,7 +9449,7 @@ Khemia launches into a tale of heroics that sounds like it may be slightly embel
 He sighs wistfully at what could have been, then gives you a wink, his earlier disappointment seemingly forgotten in the joy of sharing his experience.
 
 <<say $companionKhemia>>But you're right, we should be prepared for anything. When the time comes to use that Orbweaver, I'll be ready with a plan!<</say>>
-[[End your conversation|Party overview][$convo.KhemiaOrbweaver=true]]
+[[End your conversation|Party overview][$convo.khemiaOrbweaver=true]]
 
 
 :: Cherry Soulseeker One
@@ -10283,4 +10301,4 @@ You can't help but laugh at his exaggerated enthusiasm.
 Khemia chuckles, sheathing the Joyous Sunder with a flourish, ensuring the weapon is fully secured by the handle so that the blade can't touch the sheath.
 
 <<say $companionKhemia>>True enough. But mark my words, this Relic is going to be a game-changer. The secrets of the Abyss won't stand a chance against us now.<</say>>
-[[End your conversation|Party overview][$convo.KhemiaJoyousSunder=true][$companionKhemia.affec += (2+$hsswear)]]
+[[End your conversation|Party overview][$convo.khemiaJoyousSunder=true][$companionKhemia.affec += (2+$hsswear)]]
