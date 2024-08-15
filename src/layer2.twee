@@ -2353,7 +2353,7 @@ You approach the large hut where Mr. Reed resides. <br><br>
 <div class="cards-grid">
 <<for _item range $soldRelics>>
 <div>
-[img[setup.ImagePath + _item.image]]
+[img[setup.ImagePath + _item.pic]]
 <p>
 <<set _cost = _item.value*2>>
 <<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
@@ -2403,44 +2403,46 @@ Choose the Relic you would like to sell:
     <<capture _relic>>
         <<set _l2Value = Math.max(_relic.value * 0.75, _relic.value - 10)>>
         <<set _sellValue = Math.floor(_l2Value + $sellAdd)>>
-        <<set _linkText = `Sell ${_relic.name} for ${_sellValue} dubloons`>>
-        /* Add a bit of indentation: */ &nbsp;
-        <<switch _relic.name>>
-            <<case "Creepy Doll">>
-                <<if $creepydoll.affec > 5>>
-                    The Creepy Doll seems to stare at you accusingly. You can't bring yourself to sell it...
-                <<else>>
-                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
-                <</if>>
-            <<case "World Stone">>
-                <<if $LilyPromise>>
-                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd), setup.modAffection('Lily', -5)]]
-                    Selling the World Stone now would break your promise to Lily. The guilt might be worse than the reduced price.
-                <<else>>
-                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
-                <</if>>
-            <<case "Everhevea">>
-                <<if setup.item('Empty Flask').count >= 2>>
-                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd), setup.item('Empty Flask').count -= 2]]
-                <<else>>
-                    You need to empty the Everhevea to sell it (have at least two empty flasks in your inventory).
-                <</if>>
-            <<case "Moonwatcher">>
-                <<if $BionicEye>>
-                    _relic.name: You can't sell Relics that have become part of your body.
-                <<else>>
-                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
-                <</if>>
-            <<case "Glory's Grasp">>
-                <<if $BionicArm>>
-                    _relic.name: You can't sell Relics that have become part of your body.
-                <<else>>
-                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
-                <</if>>
-            <<default>>
-                [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, (r) => Math.max(r.value * 0.75, r.value - 10) + $sellAdd)]]
-        <</switch>>
-        <br>
+        <<capture _sellValue>>
+            <<set _linkText = `Sell ${_relic.name} for ${_sellValue} dubloons`>>
+            /* Add a bit of indentation: */ &nbsp;
+            <<switch _relic.name>>
+                <<case "Creepy Doll">>
+                    <<if $creepydoll.affec > 5>>
+                        The Creepy Doll seems to stare at you accusingly. You can't bring yourself to sell it...
+                    <<else>>
+                        [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue)]]
+                    <</if>>
+                <<case "World Stone">>
+                    <<if $LilyPromise>>
+                        [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue), setup.modAffection('Lily', -5)]]
+                        Selling the World Stone now would break your promise to Lily. The guilt might be worse than the reduced price.
+                    <<else>>
+                        [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue)]]
+                    <</if>>
+                <<case "Everhevea">>
+                    <<if setup.item('Empty Flask').count >= 2>>
+                        [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue), setup.item('Empty Flask').count -= 2]]
+                    <<else>>
+                        You need to empty the Everhevea to sell it (have at least two empty flasks in your inventory).
+                    <</if>>
+                <<case "Moonwatcher">>
+                    <<if $BionicEye>>
+                        _relic.name: You can't sell Relics that have become part of your body.
+                    <<else>>
+                        [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue)]]
+                    <</if>>
+                <<case "Glory's Grasp">>
+                    <<if $BionicArm>>
+                        _relic.name: You can't sell Relics that have become part of your body.
+                    <<else>>
+                        [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue)]]
+                    <</if>>
+                <<default>>
+                    [[_linkText|Downcast Village Sell][setup.sellRelic(_relic, () => _sellValue)]]
+            <</switch>>
+            <br>
+        <</capture>>
     <</capture>>
 <</for>>
 <</nobr>>
