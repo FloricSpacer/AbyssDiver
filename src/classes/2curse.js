@@ -1255,8 +1255,11 @@ class DoublePepperoni extends Curse {
 		      'Your nipples and areolae are rather large and puffy. ');
 	}
 
-	// correcting minimum breast size is done in character.js (breastCor()) because it has to happen last.
+	changeBreasts(character, prevBreasts) {
+		return Math.max(prevBreasts, 1);
+	}
 }
+
 setup.allCurses.DoublePepperoni = new DoublePepperoni()
 State.variables.curse39 = setup.allCurses.DoublePepperoni
 window.DoublePepperoni = DoublePepperoni
