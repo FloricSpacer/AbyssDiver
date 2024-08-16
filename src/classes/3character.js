@@ -438,6 +438,7 @@ class Character {
 		return !this.curses.some(c => c.name in curse.incompatibilities);
 	}
 
+	
 	/**
 	 * Returns the character's current age as it would be without age-reducing Curses.
 	 * Includes time spent in the Abyss and the effects of the fountain of youth.
@@ -569,7 +570,7 @@ class Character {
 		let breasts = this.breasts
 
 		if (penis === 0 && vagina === 0) return 'doll-like';
-		if (penis > 0 && (breasts > 0 || vagina > 0)) return 'futa';
+		if (penis > 0 && (breasts > 1 || vagina > 0)) return 'futa';//changed breast value to 1 so men with puffy nipples are still considered men
 		if (penis > 0) return 'male';
 		if (vagina > 0) return 'female';
 		// This can only happen if penis or vagina are < 0 somehow
@@ -669,8 +670,8 @@ class Character {
 			lactation += 2;
 		}
 
-		// Can't lactate without nipples
-		if (this.sex === 'doll-like') {
+		// Changed 'doll like' condition with no penis no vagina condition to avoid recursion. Can't lactate without nipples
+		if (this.penis === 0 && this.vagina === 0) {
 			lactation = 0;
 		}
 
@@ -686,71 +687,30 @@ class Character {
 	 */
 	get breasts() {
 		let breasts = this.obreasts;
+		let curAge = this.age 
 		for (let event of this.events) {
 			breasts = event.changeBreasts(this, breasts);
+			
+			if (event.type == 'age'){
+				curAge = this.age * AgeEvent.aYear;
+				curAge = event.age(curAge);
+			}
+
+			let currentBreasts = BreastCorrection(this, breasts, curAge) 
+			if ((currentBreasts>0 || this.penis == 0 ) && !this.hasCurse(ShrunkenAssets)){
+				breasts = event.growAsset(breasts)
+			}
 		}
 		return breasts;
 	}
+
 
 	/**
 	 * Returns the size of this character's breasts.
 	 * @returns {number} The size of this character's breasts in cups, or 0 for flat chests.
 	 */
 	get breastsCor() {
-		// If the character doesn't have a penis, expansion affects breasts even if they didn't used to have any
-		let breastsGrowAnyway = this.penis === 0;
-		let breastSize = this.breasts;
-		let fullyGrownAge = 18 - (this.gender - 1) / 5; /* 1 year lower for fully feminine characters. */
-		if (this.appAge < fullyGrownAge) {
-			breastSize = breastSize * Math.max(1 - (fullyGrownAge - this.appAge) / 10, 0);
-		}
-
-		if (!this.hasCurse(ShrunkenAssets)) {
-			let assetChange = 0;
-			for (let event of this.events) {
-				assetChange = event.growAsset(assetChange);
-			}
-
-			if (breastSize > 0 || breastsGrowAnyway) {
-				breastSize += assetChange;
-			}
-
-			if (this.daysConsideredPregnant >= 90) breastSize += 0.5;
-			if (this.daysConsideredPregnant >= 120) breastSize += 0.5;
-
-			if (this.id === setup.companionIds.mc && !this.isPregnant) {
-				if (State.variables.menCycleFlag) {
-					/* Boost breast size after day 20 of the menstruation cycle. */
-					if (State.variables.time - State.variables.menCycleT - State.variables.menCycleVar > 20) {
-						breastSize += 0.5;
-					}
-					/* Boost breast size after giving birth until the next menstruation cycle. */
-					if (State.variables.menCycleT - State.variables.time > 0) {
-						breastSize += 0.5;
-					}
-					if (State.variables.menCycleT - State.variables.time > 30) {
-						breastSize += 0.5;
-					}
-				}
-			} else if (!this.isPregnant && this.lastBirth < State.variables.time) {
-				/* Boost breast size for a while after giving birth. */
-				if (State.variables.time - this.lastBirth < 60) {
-					breastSize += 0.5;
-				}
-				if (State.variables.time - this.lastBirth < 30) {
-					breastSize += 0.5;
-				}
-			}
-
-			breastSize += this.lactation;
-		}
-
-		if (this.curses.find(c => c.name === 'Double Pepperoni')) {
-			/* You can't look entirely flat with such puffy nipples. */
-			breastSize = Math.max(breastSize, 1);
-		}
-
-		return breastSize;
+		return BreastCorrection(this, this.breasts, this.appAge) ;
 	}
 
 	/**
