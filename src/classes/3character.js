@@ -1098,6 +1098,15 @@ class Character {
 			let image = this.appGender <= 5 ? 'M' : 'F';
 			return `Player Icons/player${image}.png`;
 		}
+		/* //Code for apperent gender based portrait switches for most characters
+		if (!(this.id === setup.companionIds.bandit || this.id === setup.companionIds.golem || this.id === setup.companionIds.maru)) {
+			let image = this.appGender <= 5 ? 'M' : 'F';
+			if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
+				return `Player Icons/player${image}.png`;
+			}else{
+				return `Icons/${this.name}Icon${image}.png`
+			}
+		}*/
 
 		if (this.id === setup.companionIds.bandit && State.variables.BanditConvo0) {
 			return 'Icons/banditIcon_released.png'
