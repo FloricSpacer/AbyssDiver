@@ -479,7 +479,7 @@ Grateful, you thank Maru once more and decide to carry on with your journey, now
 	<<set _numConvos += 1>>[[Lily seems quiet|Lily Convo1][$LilyConvo1=true]]<br>
 <<elseif !$LilyConvo2 && $companionLily.affec>15 && $LilyConvo1 >>
 	<<set _numConvos += 1>>[[Chat with Lily|Lily Convo2][$LilyConvo2=true]]<br>
-<<elseif !$LilyConvo3 && $companionLily.affec>20 && $mc.appGender>7 && $mc.subdom > -1 && $LilyConvo2 && 0  >>
+<<elseif !$LilyConvo3 && $companionLily.affec>20 && ($mc.appGender>7 || $companionLily.hasCurse('Equal Opportunity') ) && $mc.subdom > -1 && $LilyConvo2 && 0  >>
 	<<set _numConvos += 1>>[[Chat with Lily|Lily Convo3][$LilyConvo3=true]]<br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "World Stone") && !$LilyPromise>>
@@ -552,9 +552,9 @@ Grateful, you thank Maru once more and decide to carry on with your journey, now
 <<if $currentLayer === 8 && !$convo.lilyLayer8>>
 	<<set _numConvos += 1>>[[Lily is glancing around at your surroundings|Lily Layer8 One]]<br>
 <</if>>
-<<if $companionLily.affec > 12 && !$convo.lilySexOne && settings.FemaleSceneToggleFilter>>
+<<if $companionLily.affec > 12 && $convo.lilySex==0 && settings.FemaleSceneToggleFilter>>
 	<<set _numConvos += 1>>[[Lily seems to be looking at you with lust in her eyes|Lily Sex One]]<br>
-<<elseif $companionLily.affec > 12 && settings.FemaleSceneToggleFilter>>
+<<elseif $companionLily.affec > 12 && settings.FemaleSceneToggleFilter && ($mc.appGender>7 || $companionLily.hasCurse('Equal Opportunity') ) && $mc.subdom > -1 && (($convo.lilySex+14) < $time) >>
 	[[Lily seems to be looking at you with lust in her eyes|Lily Sex One]]<br>
 <</if>>
 
@@ -9299,7 +9299,7 @@ Saeko's face lights up at your interest, and she begins to pace excitedly.
 <<say $companionSaeko>>Oh, the possibilities are endless! We could use it to map the miasma density throughout the Abyss, potentially identifying safer routes or areas of particular danger. It might even help us locate unique flora that thrive in specific miasma concentrations!<</say>>
 Saeko smiles as she continues explaining how that could be used, and you find yourself caught up in her enthusiasm for her ideas.
 
-[[End your conversation|Party overview][$convo.SaekoStarCompass=true]]
+[[End your conversation|Party overview][$convo.saekoStarCompass=true]]
 
 
 :: Saeko Star Compass Three
@@ -9321,7 +9321,7 @@ She seems to pause and consider it, as if thinking through whether there's any w
 
 Despite your initial skepticism, you can't help but admire Saeko's passion and scientific rigor.
 
-[[End your conversation|Party overview][$convo.SaekoStarCompass=true]]
+[[End your conversation|Party overview][$convo.saekoStarCompass=true]]
 
 
 :: Khemia World Stone One
@@ -10450,10 +10450,15 @@ You quickly follow, right on the heels of your lover's climax, as your own peak 
 
 Panting heavily, with your hearts racing in a frantic beat, you hold each other close, savoring the warmth provided by your sweat-soaked bodies pressing together before you eventually need to get moving once again.
 
-<<say $companionLily>>Well, that was pretty fun! We should definitely do that again sometime!<</say>>
-Lily flashes you a playful grin, her voice light and carefree as she effortlessly slips back into her clothes. With a cheeky wink, she heads out of the alcove.
-
-[[Return to what you were doing|Party overview][$companionLily.affec += 2, $convo.lilySexOne = true]]
+<<if ($mc.appGender>7 || $companionLily.hasCurse('Equal Opportunity') )>>
+	<<say $companionLily>>Well, that was pretty fun! We should definitely do that again sometime!<</say>>
+	Lily flashes you a playful grin, her voice light and carefree as she effortlessly slips back into her clothes. With a cheeky wink, she heads out of the alcove.
+<<else>>
+	<<say $companionLily>>I'm glad we tried this, it was fun...<</say>>
+	<<say $mc>>But...<</say>>
+	<<say $companionLily>>You're just too masculine for what I'm looking for, I hope you can understand.<</say>>
+<</if>>
+[[Return to what you were doing|Party overview][$companionLily.affec += 2, $convo.lilySex = $time ]]
 
 
 :: Lily Sex Two Vagina
