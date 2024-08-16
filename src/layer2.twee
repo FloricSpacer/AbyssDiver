@@ -2253,14 +2253,18 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 <p>Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg and your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.</p>
 
 <div class="cards-grid">
-<<for _item range [$item2, $item1, $item3].concat($item14, $item21, $item15, setup.itemMoney)>>
+<<for _item range [$item2, $item1, $item3].concat($item14, $item15, setup.itemMoney)>>
 <div>
 [img[setup.ImagePath + _item.image]]
 <h2><<print _item.name>></h2>
 <p>
 <<set _cost = _item.cost*2>>
 <<if $items.some(e => e.name === _item.name && e.count >= _item.maxCount)>>
+	<<if _item.name === "Pistol">>
+	<<button `"Buy 6 bullets for " + $items[20].cost + " dubloons"` `"Buy Bullets"`>><</button>>
+	<<else>>
 	<button class="link-internal macro-button" type="button" disabled>Already bought</button>
+	<</if>>
 <<elseif _item.cost>>
 	<<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
 <</if>>
