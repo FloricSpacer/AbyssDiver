@@ -1501,3 +1501,23 @@
         There doesn't seem to be any Curses you have which would trigger an especially strong reaction from anyone who is traveling with you right now.
     <</if>>
 <</widget>>
+
+
+:: Bandit Threat [widget nobr]
+<<widget "BanditThreat">>
+<<Threat1Criterion>>
+<<if $threat1Crit === 1>>
+    <<if $mc.curses.some(e => e.name === "Below the Veil") ||
+        (setup.haveCuttingTool && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)) ||
+        ($items[13].count > 0 && $items[20].count > 2) ||
+        $slingshot === 1 ||
+        $BionicArm ||
+        $hiredCompanions.length > 3>>
+        <<set $banditThreatLevel = 1>> /* Can win the fight */
+    <<else>>
+        <<set $banditThreatLevel = 2>> /* Would lose the fight */
+    <</if>>
+<<else>>
+    <<set $banditThreatLevel = 0>> /* No threat */
+<</if>>
+<</widget>>
