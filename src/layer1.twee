@@ -1999,15 +1999,8 @@ He locks eyes with $companionBandit.name, a wolfish grin spreading across his we
 <<say $Sheriff>>Here's your reward, as promised.<</say>><br>
 He presses a hefty pouch of 100 dubloons into your hand, then turns his attention to "Quickfingers". Cornered, she frantically scans for an escape route, but the sheriff's iron grip closes around her arm. He begins hauling her towards the squat building behind the bounty board, her struggles futile against his determined stride.<br>
 <<set $dubloons += 100>>
-<<set _j=0>>
-<<for _i=0; _j<1; _i++>>
-    <<capture _i>>
-        <<if $hiredCompanions[_i].id == $companionBandit.id>>
-            <<set _j=1>>
-            <<set $hiredCompanions.deleteAt(_i)>>
-        <</if>>
-    <</capture>>
-<</for>>
+<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
+<<if _i !== -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
 <<set $LostCompanions.push($companionBandit)>>
 
 <p>[[Return to exploring the layer|Outcast Village Settlement]]</p>
