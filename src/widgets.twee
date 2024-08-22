@@ -1012,7 +1012,7 @@
 
 :: widget for random sex scene selection with companions [widget nobr]
 <<widget "randomSexSelect">>
-<<set _elligbleCompanions=[]>>
+<<set _elligibleCompanions=[]>>
 <<set _tempflag=false>>
 <<if $mc.curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control")  >>
 	<<set _tempflag=true>>
@@ -1022,7 +1022,7 @@
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "male")>>
 	<<for _i=0; _i< _temp.length; _i++>>
 		<<if _temp.name !== setup.companionIds.golem && !(_tempflag && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
-			<<set _elligbleCompanions.push(_temp[_i])>>
+			<<set _elligibleCompanions.push(_temp[_i])>>
 		<</if>>
 	<</for>>
 <</if>>
@@ -1030,7 +1030,7 @@
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "female")>>
 	<<for _i=0; _i< _temp.length; _i++>>
 		<<if _temp.name !== setup.companionIds.golem && !(_tempflag && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
-			<<set _elligbleCompanions.push(_temp[_i])>>
+			<<set _elligibleCompanions.push(_temp[_i])>>
 		<</if>>	
 	<</for>>
 <</if>>
@@ -1038,18 +1038,18 @@
 	<<set _temp=$hiredCompanions.filter(e => e.sex === "futa" || e.sex === "doll-like" )>>
 	<<for _i=0; _i< _temp.length; _i++>>
 		<<if _temp.id !== setup.companionIds.golem && !(_tempflag && _temp[_i].curses.some(e => e.name === "Absolute Pregnancy" || e.name === "Absolute Birth Control"))>>
-			<<set _elligbleCompanions.push(_temp[_i])>>
+			<<set _elligibleCompanions.push(_temp[_i])>>
 		<</if>>
 	<</for>>
 <</if>>
-<<if _elligbleCompanions.length> 0>>
-	<<set _temp = random(0, _elligbleCompanions.length-1)>>
-	<<if _elligbleCompanions[_temp].id === setup.companionIds.twin>>
+<<if _elligibleCompanions.length> 0>>
+	<<set _temp = random(0, _elligibleCompanions.length-1)>>
+	<<if _elligibleCompanions[_temp].id === setup.companionIds.twin>>
 		<<set _handle = $companionTwin>>
-	<<elseif _elligbleCompanions[_temp].id === setup.companionIds.bandit>>
+	<<elseif _elligibleCompanions[_temp].id === setup.companionIds.bandit>>
 		<<set _handle = $companionBandit>>
 	<<else>>
-		<<print "<<set _handle = $companion" + _elligbleCompanions[_temp].name + " >>">>
+		<<print "<<set _handle = $companion" + _elligibleCompanions[_temp].name + " >>">>
 	<</if>>
 
 	/* 
