@@ -1941,7 +1941,7 @@ You can use the balloon to send requests and Relics back to Outset Town. You can
 		[[Use Purity Wood Plank|Balloon Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
 	<</if>>
 
-	<<if $ownedRelics[$i].name === "Rømer Stones" && $warmCloth === 0 && $coolCloth === 0>>
+	<<if ($ownedRelics.filter(relic => relic.name === "Rømer Stones").length === 1 && ($warmCloth === 0 && $coolCloth === 0)) || ($ownedRelics.filter(relic => relic.name === "Rømer Stones").length > 1 && ($warmCloth === 0 || $coolCloth === 0)) && !($warmCloth === 1 && $coolCloth === 1)>>
 	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either buy some winter clothes for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
 		[[Use the Rømer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30, $warmCloth=1]]<br>
