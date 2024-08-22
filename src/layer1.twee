@@ -1187,8 +1187,6 @@ How are you going to deal with the bandits encircling you?<br><br>
 	Use the following option only if you have specifically considered your inventory and made a plan of how to use it to either flee from or overpower the bandits.<br>
 	[[Use a combination of Relics not mentioned above you believe would be able to deal with the bandits|Layer1 Hub][$smaragdineThreatsDefeated.bandits = true]]<br>
 <</if>>
-
-
 :: Layer1 Bandits Fight [layer1 nobr]
 
 <<set _relicBonus = 0>>
@@ -1281,7 +1279,7 @@ How are you going to deal with the bandits encircling you?<br><br>
 	<<set _equipmentBonus += 7>>
 <</if>>
 
-<<set _bandit_threshold = 25>>
+<<set _bandit_threshold = random(20,30)>>
 <<set _temp =  (_relicBonus + _curseBonus + _companionBonus + _equipmentBonus + $mc.HandicapThreat * 10).toRounded(1)>>
 <<if _temp > _bandit_threshold >>
 	[[The fight seems to have been decided|Layer1 Bandits Won]]
@@ -1446,7 +1444,7 @@ Nervously, you begin going trough your bag, attempting to decide which Relics to
 <<if $ownedRelics.some(e => e.name === "Moonwatcher") && $BionicEye>>
 	<<set _temp = 145-95>>
 <<else>>
-	<<set _temp = 80>>
+	<<set _temp = 145>>
 <</if>>
 <<if $surrVal < _temp>>
 Choose the Relic you would like to hand over to the bandits:
@@ -1465,7 +1463,7 @@ Choose the Relic you would like to hand over to the bandits:
 			<<case "World Stone">>
 				<<if $LilyPromise>>
 					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.modAffection('Lily', -3)]]
-					You promised Lily she could use the World Stone at the end of your journey. Although you aren't selling it by choice, she would still be disappointed if you gave it away.
+					You promised Lily she could use the World Stone at the end of your journey. Although you are not exactly selling it, you feel she would still be disappointed if you gave it away.
 				<<else>>
 					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
 				<</if>>
