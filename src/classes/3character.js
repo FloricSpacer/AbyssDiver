@@ -1447,7 +1447,6 @@ class Character {
 				handicap -= 10;
 				break;
 		}
-		if (arms > 2) handicap -= (arms - 2);
 
 		if (this.id === setup.companionIds.mc) {
 			if (this.isPregnant) {
