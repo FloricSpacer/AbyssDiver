@@ -64,6 +64,40 @@ setup.id2name = id => {
 	}
 }
 
+setup.id2companion = id => {
+	switch (id) {
+		case setup.companionIds.mc:
+			return State.variables.mc;
+		case setup.companionIds.maru:
+			return State.variables.companionMaru;
+		case setup.companionIds.lily:
+			return State.variables.companionLily;
+		case setup.companionIds.khemia:
+			return State.variables.companionKhemia;
+		case setup.companionIds.cherry:
+			return State.variables.companionCherry;
+		case setup.companionIds.cloud:
+			return State.variables.companionCloud;
+		case setup.companionIds.saeko:
+			return State.variables.companionSaeko;
+		case setup.companionIds.twin:
+			return State.variables.companionTwin;
+		case setup.companionIds.golem:
+			return State.variables.companionGolem;
+		case setup.companionIds.bandit:
+			return State.variables.companionBandit;
+		case setup.companionIds.ai:
+			return State.variables.companionAi;
+		case setup.creatureIds.BayingGourmetMale:
+			return State.variables.creatureBayingGourmetMale;
+		case setup.creatureIds.BayingGourmetFemale:
+			return State.variables.creatureBayingGourmetFemale;
+		default:
+			console.error(`attempted to get companion of invalid id ${id}`)
+			return '[unknown person (please report this bug to the developers)]'
+	}
+}
+
 /* exported Character */
 class Character {
 	/**
