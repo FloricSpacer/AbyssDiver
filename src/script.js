@@ -404,6 +404,11 @@ Setting.addToggle("RandomizedThreats", {
     default  : true,
 });
 
+Setting.addToggle("EncounterFiat", {
+    label : "Allow you to use custom combinations of Relics to defeat <i>very</i> difficult encounters",
+    default  : false,
+});
+
 Setting.addHeader("Content Settings");
 
 Setting.addToggle("MaleSceneToggleFilter", {
