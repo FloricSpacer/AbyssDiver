@@ -1281,7 +1281,19 @@ You have currently borrowed $tempDebt of your 200 dubloons of extra debt.
 How many dubloons would you like to borrow?
 <<textbox "$temp" "">>
 
-[[Confirm|Surface Hub][$dubloons += Math.min(parseInt($temp), (200 - $tempDebt)), $debt += parseInt(Math.round(Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2)), $tempDebt += Math.min(parseInt($temp), (200 - $tempDebt))]]
+<<link "Confirm">>
+    <<if Number($temp) < 0>>
+        <<goto "Surface Negative Debt">>
+    <<else>>
+        <<set $dubloons += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)))>>
+        <<set $debt += parseInt(Math.round(Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2)))>>
+        <<set $tempDebt += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)))>>
+        <<goto "Surface Hub">>
+    <</if>>
+<</link>>
+
+
+[[Confirm|Surface Hub][$dubloons += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt))), $debt += parseInt(Math.round(Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2))), $tempDebt += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)))]]
 <<back>>
 
 
@@ -1294,6 +1306,21 @@ How many dubloons would you like to pay back?
 
 [[Confirm|Surface Hub][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
 <<back>>
+
+:: Surface Negative Debt [surface]
+
+The loan officer, a stern-looking woman with sharp eyes, regards you with a mixture of skepticism and amusement. She leans back in her chair, her crisp uniform rustling slightly.
+
+<<say $loanLady>>Let me get this straight... you want to borrow a <i>negative</i> amount of money?<</say>>
+She sighs deeply, pinching the bridge of her nose in exasperation. The fluorescent lights overhead flicker momentarily, as if sharing in her frustration.
+
+<<say $loanLady>>I'm afraid that's not possible, and believe me, we've had to learn that lesson the hard way. There was this one catgirl who... well, let's just say we've sealed that particular loophole tighter than a bandit's cell in the local prison. It's not a problem anymore, thankfully.<</say>>
+The officer shakes her head, a wry smile playing at the corners of her mouth. She straightens a stack of papers on her desk, the sound crisp in the quiet office.
+
+<<say $loanLady>>Now then, let's start over, shall we? How much do you <i>actually</i> want to borrow? And please, for both our sakes, let's keep the numbers in the positive realm this time.<</say>>
+Her tone is professional but not unkind, clearly ready to move past this unusual request and get down to business.
+
+[[Continue|Surface debt1]]
 
 :: Surface Diver Tips 1
 
