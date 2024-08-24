@@ -2002,7 +2002,22 @@ After a while you finally make it back to your boss. "Gerard, I finally got them
 			<</if>>
 		<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 	<</if>>
-	<<if $items[13].count > 0 && $items[20].count > 2>>
+	<<if $items[13].count > 0 && $items[20].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
+		Despite the creature's muscular build, it's no match for the lethal force of a pistol. A few well-aimed shots should do the trick. Cloud can bring the beast down easily with a single, precise shot.<br>
+		<<link "Have Cloud shoot once to bring down the beast" $returnPassage>>
+			<<set $smaragdineThreatsDefeated.baying = true>>
+			<<set $items[20].count -= 1>>
+			<<if $CotNBalance<-4>>
+				<<set $CotNBalance+=10>>
+				<<if $devouredRelics.some(c=> c.name === "Pulse Bloom")>>
+					<<set _companion = _temp ? $creatureBayingGourmetFemale : $creatureBayingGourmetMale>>
+					<<set $transformMonsterScene = true>>
+					<<set $PulseBloomUse = "Monster">>
+					<<include "Pulse Bloom Code">>
+				<</if>>
+			<</if>>
+		<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
+	<<elseif $items[13].count > 0 && $items[20].count > 2>>
 		Despite the creature's muscular build, it's no match for the lethal force of a pistol. A few well-aimed shots should do the trick.<br>
 		<<link "Fire your pistol thrice to bring down the beast" $returnPassage>>
 			<<set $smaragdineThreatsDefeated.baying = true>>
