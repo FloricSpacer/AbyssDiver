@@ -85,8 +85,6 @@ Please select your sex:
 <</if>>
 </div>
 
-You are currently <<print $mc.osex>>.
-
 :: Start 3 [start]
 
 Alright! Before you embark on your journey into the Abyss, we need to get some details about you. Don't worry, this isn't some bureaucratic nonsense – it's for your own safety and identification. After all, the Abyss has a way of... changing people.
@@ -102,9 +100,11 @@ Name:
   <tr>
     <td style="width: 25%;">
 		<h3>Body Build</h3>
-		<label><input type="radio" id="fitness15" name="fitness" value="15" onchange="updateDisplay(this.value)">15</label>
-		<label><input type="radio" id="fitness20" name="fitness" value="20" onchange="updateDisplay(this.value)" checked>20</label>
-		<label><input type="radio" id="fitness25" name="fitness" value="25" onchange="updateDisplay(this.value)">25</label>
+		<label><input type="radio" id="fitness15" name="fitness" value="-5" onchange="updateDisplay(this.value)">Very Weak</label>
+		<label><input type="radio" id="fitness18" name="fitness" value="-2" onchange="updateDisplay(this.value)">Weak</label>
+		<label><input type="radio" id="fitness20" name="fitness" value="0" onchange="updateDisplay(this.value)" checked>Average</label>
+		<label><input type="radio" id="fitness22" name="fitness" value="2" onchange="updateDisplay(this.value)">Fit</label>
+		<label><input type="radio" id="fitness25" name="fitness" value="5" onchange="updateDisplay(this.value)">Very Fit</label>
 		Your capacity is: <span id="capacityValue"></span>
 		<p id="description"></p>
 	</td>
@@ -172,22 +172,25 @@ Age:
 
 <script>
 function updateDisplay(value) {
-  document.getElementById("capacityValue").innerHTML = value;
-  let description = "";
-  if (value <= 16) {
-    description = "You're out of shape.";
-  } else if (value <= 18) {
-    description = "You could use some exercise.";
-  } else if (value <= 21) {
-    description = "You're average.";
-  } else if (value <= 23) {
-    description = "You're in shape.";
-  } else {
-    description = "You've taken very good care of yourself.";
-  }
-  document.getElementById("description").innerHTML = description;
+	/*State.variables.mc.fit = parseInt(value);
+    let adjustedValue = 20 + State.variables.mc.fit;*/
+    let adjustedValue = 20 + parseInt(value);
+    document.getElementById("capacityValue").innerHTML = adjustedValue;
+    let description = "";
+    if (adjustedValue <= 16) {
+        description = "You're out of shape.";
+    } else if (adjustedValue <= 18) {
+        description = "You could use some exercise.";
+    } else if (adjustedValue <= 21) {
+        description = "You're average.";
+    } else if (adjustedValue <= 23) {
+        description = "You're in shape.";
+    } else {
+        description = "You've taken very good care of yourself.";
+    }
+    document.getElementById("description").innerHTML = description;
 }
-updateDisplay(20)
+updateDisplay(0)
 </script>
 
 :: Start 4 [surface nobr]
