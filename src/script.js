@@ -453,6 +453,21 @@ Setting.addRange("appAgeControl", {
     step     : 1,
 });
 
+$(document).on(':dialogopen', function (ev) {
+    if (ev.target.id === 'ui-dialog-body') {
+        const restartButton = $('<button>')
+            .attr('id', 'restart-game')
+            .addClass('dark-btn warning')
+            .text('Restart Game')
+            .css('margin-top', '20px') // Adds extra spacing above the button
+            .on('click', function () {
+                Engine.restart();
+            });
+
+        $(ev.target).append(restartButton);
+    }
+});
+
 function findByName(variable, name) {
     return variables()[variable].find(obj => obj.name === name);
 }
@@ -1630,11 +1645,12 @@ Macro.add('sidebar-widget', {
         const SemenDemonBalance = State.variables.SemenDemonBalance || 0;
         const CotNBalance = State.variables.CotNBalance || 0;
 
-        function getLayerName(layer) {
-            if (layer === 0) return "Surface";
+        function getLayerName() {
+            const layer = State.variables.currentLayer;
+            if (layer === 0) return "The Surface";
             if (layer === 10) return "Nadir";
             if (layer === 11) return "???";
-            if (layer === 12) return "Surface?";
+            if (layer === 12) return "The Surface?";
             return `Layer ${layer}`;
         }
 
@@ -1662,9 +1678,12 @@ Macro.add('sidebar-widget', {
             return `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/blooddrop.png" alt="Blood Thirst"></span> Blood Thirst: ${status}<br>`;
         }
 
-        function getThreats(layer) {
+        function getThreats() {
             const threats = [];
+            const layer = State.variables.currentLayer;
             switch(layer) {
+                case 0:
+                    break;
                 case 1:
                     threats.push({name: "Bandits", time: calculateBanditThreatLevel(), max: 100});
                     break;
@@ -1697,8 +1716,16 @@ Macro.add('sidebar-widget', {
                 case 9:
                     threats.push({name: "The Elder", time: 100, max: 100});
                     break;
+                case 10:
+                    break;
             }
             return threats;
+        }
+
+        function getLayerThreatTitle() {
+            const layer = State.variables.currentLayer;
+            if (layer === 0 || layer === 10 || layer === 11 || layer === 12) return "";
+            return `<h4>Threats</h4>`;
         }
 
         function calculateBanditThreatLevel() {
@@ -1728,7 +1755,7 @@ Macro.add('sidebar-widget', {
             if (banditThreatLevel === 1) return 50;
             if (banditThreatLevel === 2) return 80;
         }
-        
+
         function calculateThreatLevel(time, max) {
             const level = Math.min(Math.floor((time / max) * 100), 100);
             if (!State.variables.voidDiamondActive && State.variables.hiredCompanions.length >= 4) {
@@ -1749,11 +1776,53 @@ Macro.add('sidebar-widget', {
             }
         }
 
+        // Create the default SugarCube sidebar content
+        const defaultSidebarContent = document.createElement('div');
+        defaultSidebarContent.id = 'default-sidebar-content';
+        
+        // Create the StoryMenu content
+        let storyMenuContent = '';
+        if (Story.has("StoryMenu")) {
+            const menuText = Story.get("StoryMenu").text;
+            const $div = $('<div>').wiki(menuText);
+            
+            storyMenuContent = $div.children().map(function() {
+                const $elem = $(this);
+                const elemText = $elem.text(); // Convert jQuery object to text for string operations
+                if (elemText.startsWith('<<if')) {
+                    // Handle conditional items
+                    const condition = elemText.match(/<<if (.+?)>>/)[1];
+                    const linkMatch = elemText.match(/\[\[(.+?)\]\]/);
+                    if (eval(condition) && linkMatch) {
+                        const [linkText, passage] = linkMatch[1].split('|');
+                        return `<button class="menu-button" data-passage="${passage || linkText}">${linkText}</button>`;
+                    }
+                    return '';
+                } else if (elemText.startsWith('[[')) {
+                    // Handle regular links
+                    const [linkText, passage] = elemText.match(/\[\[(.+?)\]\]/)[1].split('|');
+                    return `<button class="menu-button" data-passage="${passage || linkText}">${linkText}</button>`;
+                } else if ($elem[0].nodeName === 'BR') {
+                    return '<br>';
+                }
+                return '';
+            }).get().join('');
+
+            storyMenuContent = `<nav id="menu" class="storyMenu">${storyMenuContent}</nav>`;
+        }
+
+
+        // Create the Settings button
+        const settingsButton = `
+            <button id="settings-button" class="dark-btn obsidian">Settings</button>
+        `;
+
+        // Combine the default content with our custom sidebar
         const sidebarHTML = `
             <div class="twine-sidebar">
                 <div class="twine-sidebar-top">
                     <div class="twine-sidebar-character-info">
-                        <b>${getLayerName(currentLayer)}</b>
+                        <b>${getLayerName()}</b>
                     </div>
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                         '<img class="dalleImage" src="" alt="Generated Portrait" style="max-width: 100%; height: auto;">' :
@@ -1773,8 +1842,8 @@ Macro.add('sidebar-widget', {
                 </div>
                 <div class="twine-sidebar-bottom">
                     <div class="twine-sidebar-threat-info">
-                        <h4>Threats</h4>
-                        ${getThreats(currentLayer).map((threat, index) => {
+                        ${getLayerThreatTitle()}
+                        ${getThreats().map((threat, index) => {
                             const level = calculateThreatLevel(threat.time, threat.max);
                             return `
                                 <div class="twine-sidebar-threat-container">
@@ -1787,6 +1856,8 @@ Macro.add('sidebar-widget', {
                         }).join('')}
                     </div>
                 </div>
+                ${storyMenuContent}
+                ${settingsButton}
             </div>
         `;
 
@@ -1795,6 +1866,20 @@ Macro.add('sidebar-widget', {
         if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displayImage();
         }
+
+        // Handle StoryMenu links
+        $('#menu a').on('click', function(e) {
+            e.preventDefault();
+            const passage = $(this).attr('data-passage');
+            if (passage) {
+                Engine.play(passage);
+            }
+        });
+
+        // Handle Settings button
+        $('#settings-button').on('click', function() {
+            UI.settings();
+        });
     }
 });
 
