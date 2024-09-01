@@ -101,12 +101,13 @@ Name:
 <table class="character-table">
   <tr>
     <td style="width: 25%;">
-      <h3>Body Build</h3>
-      <small>(influences starting carrying capacity, which defaults to 20kg)</small>
-      <label><<radiobutton "$mc.fit" 2 autocheck>> Out of shape (-1.5 kg)</label>
-      <label><<radiobutton "$mc.fit" 5 autocheck>> Average (+0 kg)</label>
-      <label><<radiobutton "$mc.fit" 8 autocheck>> Well toned (+1.5 kg)</label>
-    </td>
+		<h3>Body Build</h3>
+		<label><input type="radio" id="fitness15" name="fitness" value="15" onchange="updateDisplay(this.value)">15</label>
+		<label><input type="radio" id="fitness20" name="fitness" value="20" onchange="updateDisplay(this.value)" checked>20</label>
+		<label><input type="radio" id="fitness25" name="fitness" value="25" onchange="updateDisplay(this.value)">25</label>
+		Your capacity is: <span id="capacityValue"></span>
+		<p id="description"></p>
+	</td>
     <td style="width: 25%;">
       <h3>Hair Color</h3>
       <label><<radiobutton "$mc.ohair" "black" autocheck>> Black</label>
@@ -169,6 +170,25 @@ Age:
 
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
 
+<script>
+function updateDisplay(value) {
+  document.getElementById("capacityValue").innerHTML = value;
+  let description = "";
+  if (value <= 16) {
+    description = "You're out of shape.";
+  } else if (value <= 18) {
+    description = "You could use some exercise.";
+  } else if (value <= 21) {
+    description = "You're average.";
+  } else if (value <= 23) {
+    description = "You're in shape.";
+  } else {
+    description = "You've taken very good care of yourself.";
+  }
+  document.getElementById("description").innerHTML = description;
+}
+updateDisplay(20)
+</script>
 
 :: Start 4 [surface nobr]
 <<set $ocarryWeight = 20>>
