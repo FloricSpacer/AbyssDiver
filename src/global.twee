@@ -2375,35 +2375,41 @@ You can ask any of your companions to stay here and wait for you to pick them up
 <</if>>
 <<for _companion range $hiredCompanions>>
 	<<capture _companion _i>>
-		<<link _companion.name _string>>
-			<<set $WaitingCompanions.push(_companion)>>
-			<<set $hiredCompanions.deleteAt(_i)>>
-			<<set _companion.location = $currentLayer>>
-			<<set _temp = $SemenDemonVec.indexOf(_companion.name)>>
-			<<set $SemenDemonVec.deleteAt(_i)>>
-			<<if _companion.name==$donor>>
-				<<set $donor = "">>
-			<</if>>
-		<</link>>
-		<<if _companion.name==$donor || $SemenDemonVec.some(e => e.id === _companion.id)>>
-			@@.alert1; _companion.name will no longer be able to provide sustenance to you if left here! 
-		<</if>>		
-		<br>
+		<div class="menu-item">
+			<button class="dark-btn obsidian" data-passage="passage()" data-setter="
+				$WaitingCompanions.push(_companion),
+				$hiredCompanions.deleteAt(_i),
+				_companion.location = $currentLayer,
+				_temp = $SemenDemonVec.indexOf(_companion.name),
+				$SemenDemonVec.deleteAt(_i),
+				_companion.name == $donor ? $donor = '' : null
+			">_companion.name</button>
+		</div>
+		<<if _companion.name == $donor || $SemenDemonVec.some(e => e.id === _companion.id)>>
+			<div class="menu-item">
+				@@.alert1;_companion.name will no longer be able to provide sustenance to you if left here!@@
+			</div>
+		<</if>>
 	<</capture>>
 	<<set _i++>>
 <</for>>
-<<set _i=0>>
-<<if $WaitingCompanions.length>0>>
-	<br>Companions waiting here:<br> 
+
+<<set _i = 0>>
+
+<<if $WaitingCompanions.length > 0>>
+	<br>Companions waiting here:<br>
 <</if>>
+
 <<for _companion range $WaitingCompanions>>
 	<<capture _companion _i>>
-		<<if _companion.location==$currentLayer>>
-			<<link _companion.name _string>>
-				<<set $hiredCompanions.push(_companion)>>
-				<<set $WaitingCompanions.deleteAt(_i)>>
-				<<set _companion.location = -1>>
-			<</link>><br>
+		<<if _companion.location == $currentLayer>>
+			<div class="menu-item">
+				<button class="dark-btn obsidian" data-passage="passage()" data-setter="
+					$hiredCompanions.push(_companion),
+					$WaitingCompanions.deleteAt(_i),
+					_companion.location = -1
+				">_companion.name</button>
+			</div>
 		<</if>>
 		<<set _i++>>
 	<</capture>>
