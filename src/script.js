@@ -344,10 +344,8 @@ Macro.add('say', {
         const person = this.args[0];
         const imageIcon = this.args[1];
         let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
-
         // Determine if this is the player's portrait
         const isPlayer = person === State.variables.mc;
-
         // Handle immediate image source replacement for override scenarios
         if (isPlayer) {
             if (settings.OverridePortrait) {
@@ -356,22 +354,23 @@ Macro.add('say', {
                 // Placeholder imgSrc to ensure something is set immediately
                 imgSrc = "images/Player Icons/playerF.png"; // Placeholder image
                 // Fetch the base64 image from IndexedDB and set it as the portrait
-                setup.displayPortraitImage();  // Note: This will update the src later when the db operation completes
+                setup.displayPortraitImage(); // Note: This will update the src later when the db operation completes
             }
-        }        
-
+        }
         const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
-
         const output =
             `<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
-                `<div class="avatar">` +
-                    `<img class="${imgClass}" src="${imgSrc}" style="width:100px;height:100px">` +
-                `</div>` +
-                `<span class="say-nameB">${person?.name ?? ''}</span>` +
-                `<hr>` +
-                `<span class="say-contents">` +
-                    `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
-                `</span>` +
+            `<div class="avatar" style="float: left; margin-right: 10px; margin-bottom: 5px;">` +
+            `<img class="${imgClass}" src="${imgSrc}" style="width:100px;height:100px">` +
+            `</div>` +
+            `<div style="display: flex; align-items: center; height: 100px; padding-left: 10px;">` +
+            `<span class="say-nameB">${person?.name ?? ''}</span>` +
+            `</div>` +
+            `<div style="clear: both;"></div>` +
+            `<hr>` +
+            `<span class="say-contents">` +
+            `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
+            `</span>` +
             `</div>`;
         $(this.output).wiki(output);
     }
