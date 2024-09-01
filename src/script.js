@@ -1615,3 +1615,190 @@ $(document).on(':passageend', function () {
         Save.autosave.save(saveLabel);
     }
 });
+
+Macro.add('sidebar-widget', {
+    handler: function() {
+        const currentLayer = State.variables.currentLayer || 1;
+        const days = State.variables.time || 0;
+        const water = State.variables.items ? (State.variables.items[0].count + State.variables.items[3].count + State.variables.items[25].count) : 0;
+        const food = State.variables.items ? (State.variables.items[1].count + State.variables.items[24].count) : 0;
+        const dubloons = State.variables.dubloons || 0;
+        const corruption = State.variables.corruption || 0;
+        const dehydrated = State.variables.dehydrated || 0;
+        const starving = State.variables.starving || 0;
+        const hexflame = State.variables.hexflame || 0;
+        const SemenDemonBalance = State.variables.SemenDemonBalance || 0;
+        const CotNBalance = State.variables.CotNBalance || 0;
+
+        function getLayerName(layer) {
+            if (layer === 0) return "Surface";
+            if (layer === 10) return "Nadir";
+            if (layer === 11) return "???";
+            if (layer === 12) return "Surface?";
+            return `Layer ${layer}`;
+        }
+
+        function getSemenDemonStatus() {
+            const curse = State.variables.mc.getCurse("Semen Demon");
+            if (!curse) return '';
+            let fluidType = curse.fluidType === "semen" ? "Semen" : curse.fluidType === "vaginal fluids" ? "Vaginal Fluid" : "Sexual Fluid";
+            let status = '';
+            if (SemenDemonBalance > 8) status = '<span class="gdr100">Stuffed</span>';
+            else if (SemenDemonBalance > 4) status = '<span class="gdr100">Full</span>';
+            else if (SemenDemonBalance >= -4) status = 'Satisfied';
+            else if (SemenDemonBalance >= -8) status = '<span class="alert1">Hungry</span>';
+            else status = '<span class="alert2">Starving. At risk of death!</span>';
+            return `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/fluidhunger.png" alt="Fluid Hunger"></span> ${fluidType} Hunger: ${status}<br>`;
+        }
+
+        function getCotNStatus() {
+            const curse = State.variables.mc.getCurse("Creature of the Night");
+            if (!curse) return '';
+            let status = '';
+            if (CotNBalance > 4) status = '<span class="gdr100">Saturated</span>';
+            else if (CotNBalance >= -4) status = 'Satisfied';
+            else if (CotNBalance >= -20) status = '<span class="alert1">Thirsty</span>';
+            else status = '<span class="alert2">Desperate. At risk of death!</span>';
+            return `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/blooddrop.png" alt="Blood Thirst"></span> Blood Thirst: ${status}<br>`;
+        }
+
+        function getThreats(layer) {
+            const threats = [];
+            switch(layer) {
+                case 1:
+                    threats.push({name: "Bandits", time: calculateBanditThreatLevel(), max: 100});
+                    break;
+                case 2:
+                    threats.push({name: "Baying Gourmet", time: State.variables.timeL2T1 || 0, max: 4});
+                    break;
+                case 3:
+                    threats.push({name: "Lesser Tentacle Beast", time: State.variables.timeL3T1 || 0, max: 6});
+                    threats.push({name: "Slackslime", time: State.variables.timeL3T2 || 0, max: 5});
+                    break;
+                case 4:
+                    threats.push({name: "Drifting Swallower", time: State.variables.timeL4T1 || 0, max: 7});
+                    break;
+                case 5:
+                    threats.push({name: "Dune Devouring Borer", time: State.variables.timeL5T2 || 0, max: 9});
+                    threats.push({name: "Mayfly Scuttler", time: State.variables.timeL5T1 || 0, max: 8});
+                    break;
+                case 6:
+                    threats.push({name: "Fell Dragon", time: State.variables.timeL6T2 || 0, max: 8});
+                    threats.push({name: "Greater Tentacle Beast", time: State.variables.timeL6T1 || 0, max: 15});
+                    break;
+                case 7:
+                    threats.push({name: "Debt Collection", time: Math.max(0, -State.variables.dubloons), max: 1});
+                    threats.push({name: "Rehabilitation", time: State.variables.timeL7T2 || 0, max: 6});
+                    break;
+                case 8:
+                    threats.push({name: "Inanis Ego", time: State.variables.timeL8T2a || 0, max: 100});
+                    threats.push({name: "Demential Aberrations", time: State.variables.timeL8T2a || 0, max: State.variables.hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 8 : 7});
+                    break;
+                case 9:
+                    threats.push({name: "The Elder", time: 100, max: 100});
+                    break;
+            }
+            return threats;
+        }
+
+        function calculateBanditThreatLevel() {
+            const mc = State.variables.mc;
+            const items = State.variables.items;
+            const hiredCompanions = State.variables.hiredCompanions;
+            const setup = window.setup; // Assuming setup is a global object
+
+            let banditThreatLevel = 0;
+
+            // Check for threat1Crit
+            if (State.variables.threat1Crit === 1) {
+                if (mc.curses.some(e => e.name === "Below the Veil") ||
+                    (setup.haveCuttingTool && hiredCompanions.some(e => e.id === setup.companionIds.khemia)) ||
+                    (items[13].count > 0 && items[20].count > 2) ||
+                    State.variables.slingshot === 1 ||
+                    State.variables.BionicArm ||
+                    hiredCompanions.length > 3) {
+                    banditThreatLevel = 1; // Can win the fight
+                } else {
+                    banditThreatLevel = 2; // Would lose the fight
+                }
+            }
+
+            // Convert threat level to percentage
+            if (banditThreatLevel === 0) return 20;
+            if (banditThreatLevel === 1) return 50;
+            if (banditThreatLevel === 2) return 80;
+        }
+        
+        function calculateThreatLevel(time, max) {
+            const level = Math.min(Math.floor((time / max) * 100), 100);
+            if (!State.variables.voidDiamondActive && State.variables.hiredCompanions.length >= 4) {
+                return 10;
+            }
+            return level;
+        }
+
+        function getThreatColor(level, isPurple = false) {
+            if (isPurple) {
+                return '#800080'; // Purple
+            } else if (level < 33) {
+                return '#4caf50'; // Green
+            } else if (level < 66) {
+                return '#ffc107'; // Yellow
+            } else {
+                return '#f44336'; // Red
+            }
+        }
+
+        const sidebarHTML = `
+            <div class="twine-sidebar">
+                <div class="twine-sidebar-top">
+                    <div class="twine-sidebar-character-info">
+                        <b>${getLayerName(currentLayer)}</b>
+                    </div>
+                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
+                        '<img class="dalleImage" src="" alt="Generated Portrait" style="max-width: 100%; height: auto;">' :
+                        (settings.SidebarPortrait && settings.OverridePortrait ?
+                        '<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" style="max-width: 100%; height: auto;">' : '')
+                    }
+                    <div class="twine-sidebar-resources">
+                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span> Day: ${days}</div>
+                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span> Water: ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}</div>
+                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span> Food: ${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}</div>
+                        ${getSemenDemonStatus()}
+                        ${getCotNStatus()}
+                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span> Dubloons: ${dubloons}</div>
+                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span> Corruption Pts: ${corruption}</div>
+                        ${hexflame > 9 ? `<div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/jinxedflames.png" alt="Jinxed Flames"></span> Jinxed Flames: ${hexflame - 9}</div>` : ''}
+                    </div>
+                </div>
+                <div class="twine-sidebar-bottom">
+                    <div class="twine-sidebar-threat-info">
+                        <h4>Threats</h4>
+                        ${getThreats(currentLayer).map((threat, index) => {
+                            const level = calculateThreatLevel(threat.time, threat.max);
+                            return `
+                                <div class="twine-sidebar-threat-container">
+                                    <div class="twine-sidebar-threat-label">${threat.name}</div>
+                                    <div class="twine-sidebar-threat-bar">
+                                        <div class="twine-sidebar-threat-progress" style="width: ${level}%; background-color: ${getThreatColor(level, currentLayer === 9)};"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const $sidebar = $(sidebarHTML).appendTo(this.output);
+
+        if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
+            setup.displayImage();
+        }
+    }
+});
+
+// This ensures the sidebar is updated whenever a passage is rendered
+$(document).on(':passagerender', function (ev) {
+    $('tw-sidebar').empty().wiki('<<sidebar-widget>>');
+});
