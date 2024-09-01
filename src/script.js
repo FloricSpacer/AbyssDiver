@@ -1780,36 +1780,38 @@ Macro.add('sidebar-widget', {
         const defaultSidebarContent = document.createElement('div');
         defaultSidebarContent.id = 'default-sidebar-content';
         
-        // Create the StoryMenu content
-        let storyMenuContent = '';
-        if (Story.has("StoryMenu")) {
-            const menuText = Story.get("StoryMenu").text;
-            const $div = $('<div>').wiki(menuText);
-            
-            storyMenuContent = $div.children().map(function() {
-                const $elem = $(this);
-                const elemText = $elem.text(); // Convert jQuery object to text for string operations
-                if (elemText.startsWith('<<if')) {
-                    // Handle conditional items
-                    const condition = elemText.match(/<<if (.+?)>>/)[1];
-                    const linkMatch = elemText.match(/\[\[(.+?)\]\]/);
-                    if (eval(condition) && linkMatch) {
-                        const [linkText, passage] = linkMatch[1].split('|');
-                        return `<button class="menu-button" data-passage="${passage || linkText}">${linkText}</button>`;
-                    }
-                    return '';
-                } else if (elemText.startsWith('[[')) {
-                    // Handle regular links
-                    const [linkText, passage] = elemText.match(/\[\[(.+?)\]\]/)[1].split('|');
-                    return `<button class="menu-button" data-passage="${passage || linkText}">${linkText}</button>`;
-                } else if ($elem[0].nodeName === 'BR') {
-                    return '<br>';
-                }
-                return '';
-            }).get().join('');
-
-            storyMenuContent = `<nav id="menu" class="storyMenu">${storyMenuContent}</nav>`;
-        }
+        const staticMenuContent = `
+            <nav id="menu" class="storyMenu">
+                <div style="height: 20px;"></div>
+                <div class="menu-item">
+                    <button class="dark-btn obsidian text-center" data-passage="Appearance">Appearance</button>
+                </div>
+                <div class="menu-item">
+                    <button class="dark-btn obsidian text-center" data-passage="Inventory">Inventory</button>
+                </div>
+                ${State.variables.mc.curses.length > 0 ? `
+                    <div class="menu-item">
+                        <button class="dark-btn obsidian text-center" data-passage="Curses">Curses</button>
+                    </div>
+                ` : ''}
+                ${State.variables.hiredCompanions.length > 0 ? `
+                    <div class="menu-item">
+                        <button class="dark-btn obsidian text-center" data-passage="Party Sidebar">Party</button>
+                    </div>
+                ` : ''}
+                ${setup.haveNotepad ? `
+                    <div class="menu-item">
+                        <button class="dark-btn obsidian text-center" data-passage="Layer Notes">Layer Notes</button>
+                    </div>
+                ` : ''}
+                ${State.variables.debugCheck === true ? `
+                    <div class="menu-item">
+                        <button class="dark-btn obsidian text-center" data-passage="Debug Menu">Debug Menu</button>
+                    </div>
+                ` : ''}
+                <div style="height: 20px;"></div>
+            </nav>
+        `;
 
 
         // Create the Settings button
@@ -1856,7 +1858,7 @@ Macro.add('sidebar-widget', {
                         }).join('')}
                     </div>
                 </div>
-                ${storyMenuContent}
+                ${staticMenuContent}
                 ${settingsButton}
             </div>
         `;
@@ -1867,9 +1869,8 @@ Macro.add('sidebar-widget', {
             setup.displayImage();
         }
 
-        // Handle StoryMenu links
-        $('#menu a').on('click', function(e) {
-            e.preventDefault();
+        // Handle menu button clicks
+        $('#menu .menu-button').on('click', function() {
             const passage = $(this).attr('data-passage');
             if (passage) {
                 Engine.play(passage);
