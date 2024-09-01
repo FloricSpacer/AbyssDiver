@@ -814,21 +814,21 @@ They are a bit sore at the moment.
 <</if>>
 
 <<if $mc.hasCurse("Weakling")>>
-	<<if $mc.fit > 8>>
+	<<if $mc.fit > 5>>
 		Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. If it wasn't for your Curse, this would allow you to carry more weight and might have even marginally decreases your travel time.
-	<<elseif $mc.fit > 6>>
+	<<elseif $mc.fit > 1>>
 		You possess a well-toned, athletic body. If it wasn't for your Curse, you might have been able to carry slightly more weight and required a bit less time to travel than a regular adventurer.
-	<<elseif $mc.fit > 4>>
+	<<elseif $mc.fit > -1>>
 		You have an unremarkable yet healthy body, but thanks to your Curse you are as weak as a babe.
 	<<else>>
 		Your body appears rather out of shape - although with your Curse, no amount of exercise would improve your physical ability.
 	<</if>>
 <<else>>
-	<<if $mc.fit > 8>>
+	<<if $mc.fit > 5>>
 		Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. This will allow you to carry more weight and may even marginally decrease your travel time.
-	<<elseif $mc.fit > 6>>
+	<<elseif $mc.fit > 1>>
 		You possess a well-toned, athletic body. Thus, you might be able to carry slightly more weight and require a bit less time to travel than a regular adventurer.
-	<<elseif $mc.fit > 4>>
+	<<elseif $mc.fit > -1>>
 		You have an unremarkable yet healthy body.
 	<<else>>
 		Your body appears rather out of shape, and you could certainly benefit from some exercise. Consequently, you can carry significantly less and must take more frequent breaks while traveling compared to a fit expedition leader.
@@ -1275,7 +1275,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $ownedRelics.some(e => e.name === "World Stone")>>
 	<br>
-	<<if $mc.fit >= 10>>
+	<<if $mc.fit >= 8>>
 		You don't think you would get anymore fit than you are from working out with the World Stone.
 		Your fitness has reached near peak human levels, and while you might be able to improve a bit more with a dedicated workout period, it's not likely you'll be able to achieve that in the Abyss.<br>
 	<<elseif $time > $LastEx + 1>>
@@ -2196,10 +2196,10 @@ How many dubloons would you like to pay back?
 	/* Increase/decrease time by 10% for every level of physical fitness. */
 	<<if $mc.HandicapMovement < 0>>
 		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
-		<<set _multiplicativeModifier *= 1 - $mc.HandicapMovement / 10>>
+		<<set _additiveModifier += Math.trunc($mc.HandicapMovement / 3)>>
 	<<elseif $mc.HandicapMovement > 0>>
 		Your exceptional physical condition is reducing your travel time.<br>
-		<<set _multiplicativeModifier /= 1 + $mc.HandicapMovement / 10>>
+		<<set _additiveModifier -= Math.trunc($mc.HandicapMovement / 3)>>
 	<</if>>
 
 	/* Apply the multiplicative modifiers. */

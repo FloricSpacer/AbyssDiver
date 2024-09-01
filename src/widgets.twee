@@ -555,10 +555,10 @@
 <</if>>
 
 <<if $time > $fit_adjustLastT + 20>>
-	<<if $mc.fit > 8>>
+	<<if $mc.fit > 5>>
 		<<set $mc.fit -= 1>>
 		@@.alert1; Your lack of an intensive work-out reduces your fitness to somewhat more average levels<br><br>
-	<<elseif $mc.fit < 5>>
+	<<elseif $mc.fit < 0>>
 		<<set $mc.fit += 1>>
 		@@.alert1; The constant physical activity of the expedition increases your fitness closer to average levels<br><br>
 	<</if>>
@@ -873,11 +873,11 @@
 	<<set $ocarryWeight = 7.5>>
 <</if>>
 
-<<set _fitCor = $mc.hasCurse("Weakling") ? 0 : $mc.fit>>
+<<set _fitCor = $mc.hasCurse("Weakling") ? -5 : $mc.fit>>
 <<if $mc.osex === 'male'>>
-	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 1))>>
+	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + (_fitCor - $mc.gender + 1))>>
 <<else>>
-	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + 0.5 * (_fitCor - 5 - $mc.gender + 6))>>
+	<<set $carryWeight = $mc.heightCor / $mc.oheight * ($ocarryWeight + (_fitCor - $mc.gender + 6))>>
 <</if>>
 
 <<set $carryWeight = $carryWeight*(1+ $mc.carryHandicap/10)>>

@@ -938,7 +938,7 @@ class Character {
 		let appGender = 2 * (this.gender - 1)
 						- 0.25 * (unscaledPenis - 4)
 						+ 0.5 * (this.breastsCor - 3)
-						- (this.fit > 7 ? 1 : 0);
+						- (this.fit > 2 ? 1 : 0);
 		if (this.id === setup.companionIds.mc) {
 			appGender += 0.5 * State.variables.colwear + 0.25 * State.variables.scent + 0.5 * State.variables.slwear
 			if (State.variables.dollevent2) appGender++;
@@ -1300,7 +1300,7 @@ class Character {
 		}
 
 		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? 0 : this.fit;
-		handicap += trueFitness / 4 - 1.25
+		handicap += trueFitness / 2
 
 		let arms = this.armCount;
 		let legs = this.legCount;
@@ -1406,8 +1406,8 @@ class Character {
 			if (State.variables.aawear) handicap += 1;
 		}
 
-		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? 0 : this.fit;
-		handicap += trueFitness / 4 - 1.25
+		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? -8 : this.fit;
+		handicap += (trueFitness + 2) / 2
 
 		let arms = this.armCount;
 		let legs = this.legCount;
