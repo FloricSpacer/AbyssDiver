@@ -1407,7 +1407,11 @@ class Character {
 		}
 
 		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? -8 : this.fit;
-		handicap += (trueFitness + 2) / 2
+
+		if (trueFitness < -4 || trueFitness > 4) {
+			let handicapChange = Math.trunc(trueFitness / 5);
+			handicap -= handicapChange;
+		}
 
 		let arms = this.armCount;
 		let legs = this.legCount;
