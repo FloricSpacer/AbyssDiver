@@ -395,7 +395,7 @@ Setting.addToggle("OverridePortrait", {
 
 Setting.addToggle("SidebarPortrait", {
     label : "Display your current character portrait in the sidebar",
-    default  : false,
+    default  : true,
 });
 
 Setting.addToggle("RandomizedThreats", {
