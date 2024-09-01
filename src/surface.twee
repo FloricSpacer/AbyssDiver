@@ -388,8 +388,15 @@ You stand at the foot of the Abyss, a hole large enough to defy the imagination.
 
 It won't take too long to make your way down to the Abyss proper &mdash; there's no cost in moving down to the next layer. Just be sure you're ready, getting back is the hard part.
 
-<button class="dark-btn obsidian" data-passage="Surface Hub">Return to town</button>
-<button class="dark-btn obsidian" data-passage="Layer1 1">Descend into the Abyss</button>
+<<nobr>>
+    <div class="menu-item">
+        <button class="dark-btn obsidian" data-passage="Surface Hub">Return to town</button>
+    </div>
+    <div class="menu-item">
+        <button class="dark-btn obsidian" data-passage="Layer1 1">Descend into the Abyss</button>
+    </div>
+<</nobr>>
+
 
 :: Hire Maru [surface]
 
@@ -1043,40 +1050,40 @@ You step into the Relic Workshop of Outset Town. The air is thick with the smell
 	<<capture _relic>>
 		<<if _relic.name == "Purity Tree Plank">>
 			<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
-			[[Use Purity Wood Plank|Surface Workshop][setup.loseRelic(_relic), $corruption += 25]]<br>
+			<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="setup.loseRelic(_relic), $corruption += 25">Use Purity Wood Plank</button><br>
 		<<elseif _relic.name == "Rømer Stones">>
 			<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br>
 			<br>You can either craft self-warming winter gear using winter clothes available, or you could use some light summer clothing to craft some self-cooling summer gear. Either one of these will require using all of the Rømer stones to craft.<br>
 			<<if $warmCloth === 0>>
-				[[Use the Rømer Stones for self-warming winter gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Warming Clothes').count = 1, $warmCloth = 1]]<br>
+				<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="setup.loseRelic(_relic), setup.item('Self-Warming Clothes').count = 1, $warmCloth = 1">Use the Rømer Stones for self-warming winter gear</button><br>
 			<</if>>
 			<<if $coolCloth === 0>>
-				[[Use the Rømer Stones for self-cooling summer gear|Surface Workshop][setup.loseRelic(_relic), setup.item('Self-Cooling Clothes').count = 1, $coolCloth = 1]]<br>
+				<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="setup.loseRelic(_relic), setup.item('Self-Cooling Clothes').count = 1, $coolCloth = 1">Use the Rømer Stones for self-cooling summer gear</button><br>
 			<</if>>
 		<<elseif _relic.name == "Creepy Doll" && !$dollevent>>
 			<br>You are intrigued by the doll and its warm yet creepy aura. Perhaps you want to take a peek inside and see whether it truly is a doll or if its something different entirely that merely takes on the appearance of a doll.<br>
-			[[Use scissors to cut open the doll|Doll event]]<br>
+			<button class="dark-btn obsidian" data-passage="Doll event">Use scissors to cut open the doll</button><br>
 		<<elseif _relic.name == "Brave Vector" && $slingshot === 0>>
 			<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo.<br>
-			[[Reshape the Brave Vector into a powerful slingshot|Surface Workshop][$slingshot = 1]]<br>
+			<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="$slingshot = 1">Reshape the Brave Vector into a powerful slingshot</button><br>
 		<<elseif _relic.name == "Joyous Sunder" && $joyousSword === 0>>
 			<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. <br>
-			[[Reshape the Joyous Sunder into a true sword|Surface Workshop][$joyousSword = 1]]<br>
+			<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="$joyousSword = 1">Reshape the Joyous Sunder into a true sword</button><br>
 		<<elseif _relic.name == "Moonwatcher" && !$BionicEye>>
 			<br>As you contemplate the potential benefits of the Moonwatcher serving as a bionic eye, an almost electric thrill runs through you. The thought of gaining night vision and the ability to see through objects seems incredibly appealing. Here, at the Relic Workshop, they can safely perform the installation for you.<br>
-			[[Opt to have the Moonwatcher installed as your bionic eye|Surface Workshop][$light = 1, $BionicEye = true]]<br>
+			<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="$light = 1, $BionicEye = true">Opt to have the Moonwatcher installed as your bionic eye</button><br>
 		<<elseif _relic.name == "Glory's Grasp" && !$BionicArm>>
 			<br>The allure of Glory's Grasp replacing your organic arm with a bionic one is not lost on you. The notion carries with it a certain charm and intrigue. Here, in the Relic Workshop, they can ensure a secure and proficient installation.<br>
-			[[Proceed with the installation of Glory's Grasp as your bionic arm|Surface Workshop][$BionicArm = true]]<br>
+			<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="$BionicArm = true">Proceed with the installation of Glory's Grasp as your bionic arm</button><br>
 		<<elseif _relic.name == "Omoikane Circuit" && setup.haveSmartphoneRegular>>
 			<br>The Omoikane Circuit, you've heard, is a Relic specifically designed for integration with your phone. Why not seize this opportunity to upgrade your device right here in the safety of the Relic Workshop?<br>
-			[[It's time to revolutionize your phone!|AI ConvoIn][setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.loseRelic(_relic) ]]<br>
+			<button class="dark-btn obsidian" data-passage="AI ConvoIn" data-setter="setup.haveSmartphoneRegular = false, setup.haveSmartphoneAI = true, setup.loseRelic(_relic)">It's time to revolutionize your phone!</button><br>
 		<</if>>
 	<</capture>>
 <</for>>
 <<if setup.haveSmartphoneAI>>
 	<br>Is listening to that snarky AI worth the spec upgrade to the Omoikone Smartphone?<br>
-	[[Hell no, time for a downgrade|AI ConvoOut][setup.haveSmartphoneRegular = true, setup.haveSmartphoneAI = false, setup.unsellRelic('Omoikane Circuit')]]<br>
+	<button class="dark-btn obsidian" data-passage="AI ConvoOut" data-setter="setup.haveSmartphoneRegular = true, setup.haveSmartphoneAI = false, setup.unsellRelic('Omoikane Circuit')">Hell no, time for a downgrade</button><br>
 <</if>>
 <</nobr>>
 
@@ -1405,7 +1412,7 @@ While your mind never changed, and you always yearned to once again have control
 
 <<if $innUsed !== $time>>
 	You can eat and drink enough to make yourself extra full and save a day of food and water on your travels.<br>
-	[[Consume the delicious food and drink|Surface Inn][$items[0].count += 1, $items[1].count += 1, $innUsed = $time]]
+	<button class="dark-btn obsidian" data-passage="Surface Inn" data-setter="$items[0].count += 1, $items[1].count += 1, $innUsed = $time">Consume the delicious food and drink</button>
 <<else>>
 	You are already full, but you can come back another day to get more freshly cooked meals and clear, cool water when you come back later.
 <</if>>
@@ -1414,7 +1421,7 @@ While your mind never changed, and you always yearned to once again have control
 <<include "Inn Storage">>
 <<include "Drop companions">><br>
 
-[[Return to Outset Town|Surface Hub]]
+<button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 
 
 :: Inn Storage [nobr]
@@ -1422,14 +1429,14 @@ While your mind never changed, and you always yearned to once again have control
 
 <<if $innDubloons > 0>>
 	You can retrieve all of the dubloons you have stored in your inn room. You currently have $innDubloons stored.<br>
-	[[Retrieve your dubloons|passage()][$dubloons += $innDubloons, $innDubloons = 0]]
+	<button class="dark-btn obsidian" data-passage="passage()" data-setter="$dubloons += $innDubloons, $innDubloons = 0">Retrieve your dubloons</button>
 	<br><br>
 <</if>>
 
 <<if $dubloons > 0>>
 	You can store any of your dubloons at the inn, in case you'd like to pick them up later. If you'd like to stash your dubloons, enter the amount you'd like to store and press Stash.<br>
 	<<textbox "$temp" "0">>
-	[[Stash your dubloons|passage()][$dubloons -= parseInt($temp), $innDubloons += parseInt($temp)]]
+	<button class="dark-btn obsidian" data-passage="passage()" data-setter="$dubloons -= parseInt($temp), $innDubloons += parseInt($temp)">Stash your dubloons</button>
 	<br><br>
 <</if>>
 
@@ -1491,21 +1498,21 @@ While your mind never changed, and you always yearned to once again have control
 As you approach a large building with stylings of marble and Roman pillars, you spot a sign declaring this to be the center of the town's administration. There seem to be a number of services that are provided here for people who need them, including managing debts and changing your legal name.
 
 For a small fee of 10 dubloons, you can change your legal name from $mc.name to whatever you wish.
-[[Change your name|Surface Name]]
+<button class="dark-btn obsidian" data-passage="Surface Name">Change your name</button>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 
 You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
-[[Borrow more money|Surface debt1]]
+<button class="dark-btn obsidian" data-passage="Surface debt1">Borrow more money</button>
 <</if>><<if $debt > 0>>
 
 You currently have $debt dubloons of debt, which you can pay off now to allow yourself to settle down at a habitation option.
-[[Pay off your debt|Surface debt2]]
+<button class="dark-btn obsidian" data-passage="Surface debt2">Pay off your debt</button>
 <</if>><<if $BabysBirthed > 0>>
 
 You can mention your baby to the receptionist, but it seems you can't pick them up until you've chosen to stay on the Surface. Or you could have someone bring them to you if you've settled within the first 2 layers.
 <</if>>
 <<if $reedVisit > 1 && $reedQuestItem == false>>
-	[[Attempt to break into the building to retrieve the documents for Reed|Surface Municipality Infiltration]]
+	<button class="dark-btn obsidian" data-passage="Surface Municipality Infiltration">Attempt to break into the building to retrieve the documents for Reed</button>
 <</if>>
 <button class="dark-btn obsidian" data-passage="Surface Hub">Continue your business on the surface</button>
 
@@ -1530,19 +1537,17 @@ You have currently borrowed $tempDebt of your 200 dubloons of extra debt.
 How many dubloons would you like to borrow?
 <<textbox "$temp" "">>
 
-<<link "Confirm">>
-    <<if Number($temp) < 0>>
-        <<goto "Surface Negative Debt">>
-    <<else>>
-        <<set $dubloons += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)))>>
-        <<set $debt += parseInt(Math.round(Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2)))>>
-        <<set $tempDebt += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)))>>
-        <<goto "Surface Hub">>
-    <</if>>
-<</link>>
+<button class="dark-btn obsidian" onclick="
+if (Number(SugarCube.State.variables.temp) < 0) {
+SugarCube.Engine.play('Surface Negative Debt');
+} else {
+SugarCube.State.variables.dubloons += Math.max(0, Math.min(parseInt(SugarCube.State.variables.temp), (200 - SugarCube.State.variables.tempDebt)));
+SugarCube.State.variables.debt += parseInt(Math.round(Math.max(0, Math.min(parseInt(SugarCube.State.variables.temp), (200 - SugarCube.State.variables.tempDebt)) * 1.2)));
+SugarCube.State.variables.tempDebt += Math.max(0, Math.min(parseInt(SugarCube.State.variables.temp), (200 - SugarCube.State.variables.tempDebt)));
+SugarCube.Engine.play('Surface Hub');
+}
+">Confirm</button>
 
-
-[[Confirm|Surface Hub][$dubloons += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt))), $debt += parseInt(Math.round(Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2))), $tempDebt += Math.max(0, Math.min(parseInt($temp), (200 - $tempDebt)))]]
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -1553,7 +1558,8 @@ In order to finally settle down at an ending, you must pay off your debt to Clou
 How many dubloons would you like to pay back?
 <<textbox "$temp" "">>
 
-[[Confirm|Surface Hub][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
+<button class="dark-btn obsidian" data-passage="Surface Hub" data-setter="$dubloons -= parseInt($temp), $debt -= parseInt($temp)">Confirm</button>
+
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 :: Surface Negative Debt [surface]
@@ -1569,7 +1575,7 @@ The officer shakes her head, a wry smile playing at the corners of her mouth. Sh
 <<say $loanLady>>Now then, let's start over, shall we? How much do you <i>actually</i> want to borrow? And please, for both our sakes, let's keep the numbers in the positive realm this time.<</say>>
 Her tone is professional but not unkind, clearly ready to move past this unusual request and get down to business.
 
-[[Continue|Surface debt1]]
+<button class="dark-btn obsidian" data-passage="Surface debt1">Continue</button>
 
 :: Surface Diver Tips 1
 
@@ -1940,7 +1946,7 @@ There are two apparent paths to the archives room where the documents are locate
     @@.alert1; You obtained the documents for Reed!@@ <br><br>
     <<set $reedQuestItem = true>>
 
-    [[Return to Outset Town|Surface Hub]]
+    <button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 <<elseif _success && $temp2 == "front">>
     Armed, you turn the situation from an attempted infiltration into an armed heist. The rattled employees quickly give you what you want.<br>
     <br>
@@ -1957,7 +1963,7 @@ There are two apparent paths to the archives room where the documents are locate
         Hair: $mc.hairColor,
         Height: $mc.heightCor 
     }>>
-    [[Return to Outset Town|Surface Hub]]
+    <button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 
 <<elseif _success && $temp2 == "back" && !_forceUsage>>
     The door proves no obstacle, and you manage to sneak inside stealthily. Once inside, you wait for an opportunity to enter the archives unseen. With ample time to find the documents, you sneak out again without being detected.<br> 
@@ -1965,7 +1971,7 @@ There are two apparent paths to the archives room where the documents are locate
     @@.alert1; You obtained the documents for Reed!@@ <br><br>
     <<set $reedQuestItem = true>>
 
-    [[Return to Outset Town|Surface Hub]]
+    <button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 
 <<elseif _success && $temp2 == "back">>
     Breaking the door with a weapon made a lot of noise, so you hurry inside as quickly as you can. The startled employees step aside when they see you wielding $temp. You quickly spot the documents in the archives room and grab them. When you try to exit to the back, a lone security guard blocks your path but steps aside, realizing his baton is no match for your $temp.<br>
@@ -1983,13 +1989,13 @@ There are two apparent paths to the archives room where the documents are locate
         Hair: $mc.hairColor,
         Height: $mc.heightCor 
     }>>
-    [[Return to Outset Town|Surface Hub]]
+    <button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 <<elseif $temp == "Nothing">> 
     You can't expect to infiltrate the municipality without a plan!<br><br>
-    [[Return to Outset Town|Surface Hub]]
+    <button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 <<else>>
     Your attempts amount to nothing and after a while, a guard comes around and asks you with a firm undertone to leave the premises.<br><br>
-    [[Return to Outset Town|Surface Hub]]
+    <button class="dark-btn obsidian" data-passage="Surface Hub">Return to Outset Town</button>
 <</if>>
 
 :: Layer0 Travel Events [surface nobr]
