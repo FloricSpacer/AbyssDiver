@@ -1409,7 +1409,7 @@ class Character {
 		let trueFitness = this.curses.some(c => c.name === 'Weakling') ? -8 : this.fit;
 
 		if (trueFitness < -4 || trueFitness > 4) {
-			let handicapChange = Math.trunc(trueFitness / 5);
+			let handicapChange = (-1 * Math.trunc(trueFitness / 5));
 			handicap -= handicapChange;
 		}
 
