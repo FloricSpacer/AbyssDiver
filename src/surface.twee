@@ -986,47 +986,70 @@ Some characters, like cloud, have a vested interest in the surface and would nee
 	Here you can permanently sell any of your collected Relics for a nice haul of dubloons. You can use this to fund further expeditions<<if $debt > 0>>, pay off your debt,<</if>> or just get a nice payday at the end of your expedition.
 
 	Choose the Relic you would like to sell:
+
 	<<nobr>>
 <<for _relic range $ownedRelics>>
 	<<capture _relic>>
 		<<set _linkText = `Sell ${_relic.name} for ${setup.sellValue(_relic)} dubloons`>>
-		/* Add a bit of indentation: */ &nbsp;
 		<<switch _relic.name>>
 			<<case "Creepy Doll">>
 				<<if $creepydoll.affec > 5>>
-					You can't seem to part ways with the Creepy Doll...
+					<div class="menu-item">
+						You can't seem to part ways with the Creepy Doll...
+					</div>
 				<<else>>
-					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic)">_linkText</button>
+					</div>
 				<</if>>
 			<<case "World Stone">>
 				<<if $LilyPromise>>
-					[[_linkText|Surface Sell 1][setup.sellRelic(_relic), setup.modAffection('Lily', -5)]]
-					You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely disappoint her greatly.
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic), setup.modAffection('Lily', -5)">_linkText</button>
+					</div>
+					<div class="menu-item">
+						You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely disappoint her greatly.
+					</div>
 				<<else>>
-					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic)">_linkText</button>
+					</div>
 				<</if>>
 			<<case "Everhevea">>
 				<<if setup.item('Empty Flask').count >= 2>>
-					[[_linkText|Surface Sell 1][setup.sellRelic(_relic), setup.item('Empty Flask').count -= 2]]
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic), setup.item('Empty Flask').count -= 2">_linkText</button>
+					</div>
 				<<else>>
-					You need to empty the Everhevea to sell it (have at least two empty flasks in your inventory).
+					<div class="menu-item">
+						You need to empty the Everhevea to sell it (have at least two empty flasks in your inventory).
+					</div>
 				<</if>>
 			<<case "Moonwatcher">>
 				<<if $BionicEye>>
-					_relic.name: You can't sell Relics that have become part of your body.
+					<div class="menu-item">
+						_relic.name: You can't sell Relics that have become part of your body.
+					</div>
 				<<else>>
-					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic)">_linkText</button>
+					</div>
 				<</if>>
 			<<case "Glory's Grasp">>
 				<<if $BionicArm>>
-					_relic.name: You can't sell Relics that have become part of your body.
+					<div class="menu-item">
+						_relic.name: You can't sell Relics that have become part of your body.
+					</div>
 				<<else>>
-					[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic)">_linkText</button>
+					</div>
 				<</if>>
 			<<default>>
-				[[_linkText|Surface Sell 1][setup.sellRelic(_relic)]]
+				<div class="menu-item">
+					<button class="dark-btn obsidian" data-passage="Surface Sell 1" data-setter="setup.sellRelic(_relic)">_linkText</button>
+				</div>
 		<</switch>>
-		<br>
 	<</capture>>
 <</for>>
 	<</nobr>>
@@ -1446,7 +1469,9 @@ While your mind never changed, and you always yearned to once again have control
 	You can pick up any of the Relics you've previously stored in your inn room:<br>
 	<<for _i, _relic range $innRelics>>
 		<<capture _i _relic>>
-			[[`Retrieve ${_relic.name}`|passage()][setup.unsellRelic(_relic), $innRelics.deleteAt(_i)]]<br>
+			<div class="menu-item">
+				<button class="dark-btn obsidian" data-passage="passage()" data-setter="setup.unsellRelic(_relic), $innRelics.deleteAt(_i)">Retrieve _relic.name</button>
+			</div>
 		<</capture>>
 	<</for>>
 	<br>
@@ -1458,36 +1483,52 @@ While your mind never changed, and you always yearned to once again have control
 	<<for _relic range $ownedRelics>>
 		<<capture _relic>>
 			<<set _linkText = `Store ${_relic.name}`>>
-			/* Add a bit of indentation: */ &nbsp;
 			<<switch _relic.name>>
 				<<case "Creepy Doll">>
 					<<if $creepydoll.affec > 5>>
-						You can't seem to part ways with the Creepy Doll...
+						<div class="menu-item">
+							You can't seem to part ways with the Creepy Doll...
+						</div>
 					<<else>>
-						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+						<div class="menu-item">
+							<button class="dark-btn obsidian" data-passage="passage()" data-setter="$innRelics.push(_relic), setup.loseRelic(_relic)">_linkText</button>
+						</div>
 					<</if>>
 				<<case "Everhevea">>
 					<<if setup.item('Empty Flask').count >= 2>>
-						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2]]
+						<div class="menu-item">
+							<button class="dark-btn obsidian" data-passage="passage()" data-setter="$innRelics.push(_relic), setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2">_linkText</button>
+						</div>
 					<<else>>
-						You need to empty the Everhevea to store it (have at least two empty flasks in your inventory).
+						<div class="menu-item">
+							You need to empty the Everhevea to store it (have at least two empty flasks in your inventory).
+						</div>
 					<</if>>
 				<<case "Moonwatcher">>
 					<<if $BionicEye>>
-						_relic.name: You can't store Relics that have become part of your body.
+						<div class="menu-item">
+							_relic.name: You can't store Relics that have become part of your body.
+						</div>
 					<<else>>
-						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+						<div class="menu-item">
+							<button class="dark-btn obsidian" data-passage="passage()" data-setter="$innRelics.push(_relic), setup.loseRelic(_relic)">_linkText</button>
+						</div>
 					<</if>>
 				<<case "Glory's Grasp">>
 					<<if $BionicArm>>
-						_relic.name: You can't store Relics that have become part of your body.
+						<div class="menu-item">
+							_relic.name: You can't store Relics that have become part of your body.
+						</div>
 					<<else>>
-						[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+						<div class="menu-item">
+							<button class="dark-btn obsidian" data-passage="passage()" data-setter="$innRelics.push(_relic), setup.loseRelic(_relic)">_linkText</button>
+						</div>
 					<</if>>
 				<<default>>
-					[[_linkText|passage()][$innRelics.push(_relic), setup.loseRelic(_relic)]]
+					<div class="menu-item">
+						<button class="dark-btn obsidian" data-passage="passage()" data-setter="$innRelics.push(_relic), setup.loseRelic(_relic)">_linkText</button>
+					</div>
 			<</switch>>
-			<br>
 		<</capture>>
 	<</for>>
 	<br>
