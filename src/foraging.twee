@@ -191,7 +191,7 @@
 			<<elseif _foraging.forageType === "water" && $currentLayer === 3>>
 				<<if $items[2].count > 0>>
 					<<if $atWaterSource>>
-						<p><<link 'Fill your empty flasks with water from the underground river' 'Layer3 Flasks'>><</link>></p>
+						<p><button class="dark-btn obsidian" data-passage="Layer3 Flasks">Fill your empty flasks with water from the underground river</button></p>
 					<<else>>
 						<p><<TravelToPassage 'Fill your empty flasks with water from underground rivers' 'Layer3 Flasks' 4 `-($abyssKnow + $riverVisit)`>></p>
 					<</if>>
@@ -205,7 +205,7 @@
 			<<elseif _foraging.forageType === "water" && $currentLayer === 5>>
 				<<if $items[2].count > 0>>
 					<<if $atWaterSource>>
-						<p><<link 'Fill your empty flasks with water from an oasis' 'Layer5 Flasks'>><</link>></p>
+						<p><button class="dark-btn obsidian" data-passage="Layer5 Flasks">Fill your empty flasks with water from an oasis</button></p>
 					<<else>>
 						<p><<TravelToPassage 'Fill your empty flasks with water from an oasis' 'Layer5 Flasks' 7 `-($abyssKnow + 2 * $oasisVisit)`>></p>
 					<</if>>
@@ -219,38 +219,38 @@
 			<<elseif $currentLayer === 2 && _foraging.forageType === "food">>
 				<<if $forageFood === 0>>
 					<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0 && _foraging.name === "Flanberries">>
-						<<print "[[Start foraging for flanberries for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 0, $L2FoodConvo = 1]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer2 Forage Convo" data-setter="$forageFood = 1, $mudHunt = 0, $L2FoodConvo = 1">Start foraging for flanberries for food</button></p>
 					<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 0 && _foraging.name === "Mudgrazer">>
-						<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage Convo][$forageFood = 1, $mudHunt = 1, $L2FoodConvo = 1]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer2 Forage Convo" data-setter="$forageFood = 1, $mudHunt = 1, $L2FoodConvo = 1">Start foraging for Mudgrazers for food</button></p>
 					<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L2FoodConvo === 1 && _foraging.name === "Flanberries">>
-						<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$forageFood = 1, $mudHunt = 0">Start foraging for flanberries for food</button></p>
 					<<elseif _foraging.name === "Flanberries">>
-						<<print "[[Start foraging for flanberries for food|Layer2 Forage][$forageFood = 1, $mudHunt = 0]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$forageFood = 1, $mudHunt = 0">Start foraging for flanberries for food</button></p>
 					<<else>>
-						<<print "[[Start foraging for Mudgrazers for food|Layer2 Forage][$forageFood = 1, $mudHunt = 1]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$forageFood = 1, $mudHunt = 1">Start foraging for Mudgrazers for food</button></p>
 					<</if>>
 				<<else>>
-					<<print "[[Stop foraging for food|Layer2 Forage][$forageFood = 0, $mudHunt = 0]]">><br>
+					<p><button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$forageFood = 0, $mudHunt = 0">Stop foraging for food</button></p>
 				<</if>>
 			<<elseif $currentLayer === 1 && _foraging.forageType === "food">>
 				<<if $forageFood === 0>>
 					<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru) && $L1FoodConvo === 0>>
-						<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage Convo][$forageFood = 1, $L1FoodConvo = 1]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer1 Forage Convo" data-setter="$forageFood = 1, $L1FoodConvo = 1">Start foraging for food from Blisshrooms</button></p>
 					<<else>>	
-						<<print "[[Start foraging for food from Blisshrooms|Layer1 Forage][$forageFood = 1]]">><br>
+						<p><button class="dark-btn obsidian" data-passage="Layer1 Forage" data-setter="$forageFood = 1">Start foraging for food from Blisshrooms</button></p>
 					<</if>>
 				<<else>>
-					<<print "[[Stop foraging for food|Layer1 Forage][$forageFood = 0]]">><br>
+					<p><button class="dark-btn obsidian" data-passage="Layer1 Forage" data-setter="$forageFood = 0">Stop foraging for food</button></p>
 				<</if>>
 			<<else>>
 				<<if $forageWater === 0 && _foraging.forageType === "water">>
-					<p><<print "[[Start Foraging for water from " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 1]]">></p>
+					<p><button class="dark-btn obsidian" data-passage="_foraging.location + ' Forage'" data-setter="$forageWater = 1">Start Foraging for water from _foraging.name</button></p>
 				<<elseif $forageWater === 1 && _foraging.forageType === "water">>
-					<p><<print "[[Stop foraging for water from " + _foraging.name + "|" + _foraging.location + " Forage][$forageWater = 0]]">></p>
+					<p><button class="dark-btn obsidian" data-passage="_foraging.location + ' Forage'" data-setter="$forageWater = 0">Stop foraging for water from _foraging.name</button></p>
 				<<elseif $forageFood === 0 && _foraging.forageType === "food">>
-					<p><<print "[[Start foraging for food from " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 1]]">></p>
+					<p><button class="dark-btn obsidian" data-passage="_foraging.location + ' Forage'" data-setter="$forageFood = 1">Start foraging for food from _foraging.name</button></p>
 				<<else>>
-					<p><<print "[[Stop foraging for food from " + _foraging.name + "|" + _foraging.location + " Forage][$forageFood = 0]]">></p>
+					<p><button class="dark-btn obsidian" data-passage="_foraging.location + ' Forage'" data-setter="$forageFood = 0">Stop foraging for food from _foraging.name</button></p>
 				<</if>>
 			<</if>>
 			<p><<include `_foraging.name + " Description"`>></p>
