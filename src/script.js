@@ -1709,7 +1709,15 @@ Macro.add('sidebar-widget', {
                     break;
                 case 7:
                     threats.push({name: "Debt Collection", time: Math.max(0, -State.variables.dubloons), max: 1});
-                    threats.push({name: "Rehabilitation", time: State.variables.timeL7T2 || 0, max: 6});
+                    let rehabilitationThreat;
+                    if (State.variables.dubloons > 300) {
+                        rehabilitationThreat = 2; // 20% of max 10
+                    } else if (State.variables.dubloons >= 100) {
+                        rehabilitationThreat = 5; // 50% of max 10
+                    } else {
+                        rehabilitationThreat = 8; // 80% of max 10
+                    }
+                    threats.push({name: "Rehabilitation", time: rehabilitationThreat, max: 10});
                     break;
                 case 8:
                     threats.push({name: "Inanis Ego", time: State.variables.timeL8T2a || 0, max: 100});
