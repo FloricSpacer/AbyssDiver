@@ -1710,9 +1710,9 @@ Macro.add('sidebar-widget', {
                 case 7:
                     threats.push({name: "Debt Collection", time: Math.max(0, -State.variables.dubloons), max: 1});
                     let rehabilitationThreat;
-                    if (State.variables.dubloons > 300) {
+                    if (State.variables.dubloons > 299) {
                         rehabilitationThreat = 2; // 20% of max 10
-                    } else if (State.variables.dubloons >= 100) {
+                    } else if (State.variables.dubloons > 99) {
                         rehabilitationThreat = 5; // 50% of max 10
                     } else {
                         rehabilitationThreat = 8; // 80% of max 10
