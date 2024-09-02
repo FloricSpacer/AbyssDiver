@@ -1553,46 +1553,46 @@ Nervously, you begin going trough your bag, attempting to decide which Relics to
 Choose the Relic you would like to hand over to the bandits:
 <<nobr>>
 <<for _relic range $ownedRelics>>
-	<<capture _relic>>
-		<<set _linkText = `Hand over ${_relic.name} worth ${setup.sellValue(_relic)} dubloons`>>
-		/* Add a bit of indentation: */ &nbsp;
-		<<switch _relic.name>>
-			<<case "Creepy Doll">>
-				<<if $creepydoll.affec > 5>>
-					You would never hand over your Dolly... Uh, the Creepy Doll, you mean.
-				<<else>>
-					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
-				<</if>>
-			<<case "World Stone">>
-				<<if $LilyPromise>>
-					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.modAffection('Lily', -3)]]
-					You promised Lily she could use the World Stone at the end of your journey. Although you are not exactly selling it, you feel she would still be disappointed if you gave it away.
-				<<else>>
-					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
-				<</if>>
-			<<case "Everhevea">>
-				<<if setup.item('Empty Flask').count >= 2>>
-					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.item('Empty Flask').count -= 2]]
-				<<else>>
-					You need to empty the Everhevea to hand it over (have at least two empty flasks in your inventory).
-				<</if>>
-			<<case "Moonwatcher">>
-				<<if $BionicEye>>
-					_relic.name: You can't give away Relics that have become part of your body.
-				<<else>>
-					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
-				<</if>>
-			<<case "Glory's Grasp">>
-				<<if $BionicArm>>
-					_relic.name: You can't give away Relics that have become part of your body.
-				<<else>>
-					[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
-				<</if>>
-			<<default>>
-				[[_linkText|Relic Surrender][setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)]]
-		<</switch>>
-		<br>
-	<</capture>>
+    <<capture _relic>>
+        <<set *linkText = *`Hand over ${relic.name} worth ${setup.sellValue(_relic)} dubloons`>>
+        /* Add a bit of indentation: */ &nbsp;
+        <<switch _relic.name>>
+            <<case "Creepy Doll">>
+                <<if $creepydoll.affec > 5>>
+                    You would never hand over your Dolly... Uh, the Creepy Doll, you mean.
+                <<else>>
+                    <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)">_linkText</button>
+                <</if>>
+            <<case "World Stone">>
+                <<if $LilyPromise>>
+                    <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.modAffection('Lily', -3)">_linkText</button>
+                    You promised Lily she could use the World Stone at the end of your journey. Although you are not exactly selling it, you feel she would still be disappointed if you gave it away.
+                <<else>>
+                    <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)">_linkText</button>
+                <</if>>
+            <<case "Everhevea">>
+                <<if setup.item('Empty Flask').count >= 2>>
+                    <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic), setup.item('Empty Flask').count -= 2">_linkText</button>
+                <<else>>
+                    You need to empty the Everhevea to hand it over (have at least two empty flasks in your inventory).
+                <</if>>
+            <<case "Moonwatcher">>
+                <<if $BionicEye>>
+                    _relic.name: You can't give away Relics that have become part of your body.
+                <<else>>
+                    <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)">_linkText</button>
+                <</if>>
+            <<case "Glory's Grasp">>
+                <<if $BionicArm>>
+                    _relic.name: You can't give away Relics that have become part of your body.
+                <<else>>
+                    <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)">_linkText</button>
+                <</if>>
+            <<default>>
+                <button class="dark-btn obsidian" data-passage="Relic Surrender" data-setter="setup.loseRelic(_relic), $surrVal += setup.sellValue(_relic)">_linkText</button>
+        <</switch>>
+        <br>
+    <</capture>>
 <</for>>
 <</nobr>>
 
