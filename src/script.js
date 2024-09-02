@@ -1815,6 +1815,10 @@ Macro.add('sidebar-widget', {
             <button id="settings-button" class="dark-btn obsidian">Settings</button>
         `;
 
+        const savesButton = `
+            <button id="saves-button" class="dark-btn obsidian">Saves</button>
+        `;
+
         const sidebarHTML = `
             <div class="twine-sidebar">
                 <div class="twine-sidebar-top">
@@ -1865,6 +1869,9 @@ Macro.add('sidebar-widget', {
                 <div class="twine-sidebar-footer">
                     ${settingsButton}
                 </div>
+                <div class="twine-sidebar-footer">
+                    ${savesButton}
+                </div>
             </div>
         `;
 
@@ -1883,6 +1890,10 @@ Macro.add('sidebar-widget', {
 
         $('#settings-button').on('click', function() {
             UI.settings();
+        });
+
+        $('#saves-button').on('click', function() {
+            UI.saves();
         });
     }
 });
