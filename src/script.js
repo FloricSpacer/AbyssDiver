@@ -1644,6 +1644,8 @@ Macro.add('sidebar-widget', {
         const hexflame = State.variables.hexflame || 0;
         const SemenDemonBalance = State.variables.SemenDemonBalance || 0;
         const CotNBalance = State.variables.CotNBalance || 0;
+        const forageFood = State.variables.forageFood || false;
+        const forageWater = State.variables.forageWater || false;
 
         function getLayerName() {
             const layer = State.variables.currentLayer;
@@ -1776,10 +1778,6 @@ Macro.add('sidebar-widget', {
             }
         }
 
-        // Create the default SugarCube sidebar content
-        const defaultSidebarContent = document.createElement('div');
-        defaultSidebarContent.id = 'default-sidebar-content';
-        
         const staticMenuContent = `
             <nav id="menu" class="storyMenu">
                 <div style="height: 20px;"></div>
@@ -1813,18 +1811,15 @@ Macro.add('sidebar-widget', {
             </nav>
         `;
 
-
-        // Create the Settings button
         const settingsButton = `
             <button id="settings-button" class="dark-btn obsidian">Settings</button>
         `;
 
-        // Combine the default content with our custom sidebar
         const sidebarHTML = `
             <div class="twine-sidebar">
                 <div class="twine-sidebar-top">
                     <div class="twine-sidebar-character-info">
-                        <b>${getLayerName()}</b>
+                        <h3 style="margin: 0; padding: 5px 0;">${getLayerName()}</h3>
                     </div>
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                         '<img class="dalleImage" src="" alt="Generated Portrait" style="max-width: 100%; height: auto;">' :
@@ -1833,8 +1828,16 @@ Macro.add('sidebar-widget', {
                     }
                     <div class="twine-sidebar-resources">
                         <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span> Day: ${days}</div>
-                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span> Water: ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}</div>
-                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span> Food: ${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}</div>
+                        <div style="display: flex; align-items: center;">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
+                            Water: ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}
+                            <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span>
+                            Food: ${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}
+                            <span class="twine-sidebar-foraging-icon ${forageFood ? 'active' : ''}"></span>
+                        </div>
                         ${getSemenDemonStatus()}
                         ${getCotNStatus()}
                         <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span> Dubloons: ${dubloons}</div>
@@ -1859,7 +1862,9 @@ Macro.add('sidebar-widget', {
                     </div>
                 </div>
                 ${staticMenuContent}
-                ${settingsButton}
+                <div class="twine-sidebar-footer">
+                    ${settingsButton}
+                </div>
             </div>
         `;
 
@@ -1869,7 +1874,6 @@ Macro.add('sidebar-widget', {
             setup.displayImage();
         }
 
-        // Handle menu button clicks
         $('#menu .text-center').on('click', function() {
             const passage = $(this).attr('data-passage');
             if (passage) {
@@ -1877,7 +1881,6 @@ Macro.add('sidebar-widget', {
             }
         });
 
-        // Handle Settings button
         $('#settings-button').on('click', function() {
             UI.settings();
         });
