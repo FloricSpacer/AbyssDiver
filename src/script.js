@@ -1870,7 +1870,7 @@ Macro.add('sidebar-widget', {
         }
 
         // Handle menu button clicks
-        $('#menu .menu-button').on('click', function() {
+        $('#menu .text-center').on('click', function() {
             const passage = $(this).attr('data-passage');
             if (passage) {
                 Engine.play(passage);
