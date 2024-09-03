@@ -1878,7 +1878,7 @@ Macro.add('sidebar-widget', {
                     </div>
                 </div>
                 ${staticMenuContent}
-                <div class="twine-sidebar-footer">
+                <div class="twine-sidebar-footer sticky-footer">
                     ${settingsButton} ${savesButton}
                 </div>
             </div>
