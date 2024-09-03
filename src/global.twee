@@ -2415,13 +2415,12 @@ You can ask any of your companions to stay here and wait for you to pick them up
 	<<capture _companion _i>>
 		<div class="menu-item">
 			<button class="dark-btn obsidian" data-passage="passage()" data-setter="
-				$WaitingCompanions.push(_companion),
-				$hiredCompanions.deleteAt(_i),
-				_companion.location = $currentLayer,
-				_temp = $SemenDemonVec.indexOf(_companion.name),
-				$SemenDemonVec.deleteAt(_i),
-				_companion.name == $donor ? $donor = '' : null
-			">_companion.name</button>
+			$WaitingCompanions.push(_companion),
+			$hiredCompanions.deleteAt(_i),
+			_companion.location = $currentLayer,
+			$SemenDemonVec = $SemenDemonVec.filter(e => e !== _companion.name),
+			_companion.name == $donor ? $donor = '' : null"
+		>_companion.name</button>
 		</div>
 		<<if _companion.name == $donor || $SemenDemonVec.some(e => e.id === _companion.id)>>
 			<div class="menu-item">
@@ -2439,17 +2438,21 @@ You can ask any of your companions to stay here and wait for you to pick them up
 <</if>>
 
 <<for _companion range $WaitingCompanions>>
-	<<capture _companion _i>>
+	<<capture _companion>>
 		<<if _companion.location == $currentLayer>>
 			<div class="menu-item">
 				<button class="dark-btn obsidian" data-passage="passage()" data-setter="
-					$hiredCompanions.push(_companion),
-					$WaitingCompanions.deleteAt(_i),
-					_companion.location = -1
+					(function() {
+						var index = $WaitingCompanions.indexOf(_companion);
+						if (index > -1) {
+							$hiredCompanions.push(_companion);
+							$WaitingCompanions.splice(index, 1);
+							_companion.location = -1;
+						}
+					})()
 				">_companion.name</button>
 			</div>
 		<</if>>
-		<<set _i++>>
 	<</capture>>
 <</for>>
 
