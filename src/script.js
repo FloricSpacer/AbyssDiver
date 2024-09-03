@@ -1820,11 +1820,15 @@ Macro.add('sidebar-widget', {
         `;
 
         const settingsButton = `
-            <button id="settings-button" class="dark-btn obsidian">Settings</button>
+        <button id="settings-button" class="dark-btn obsidian">
+            <img src="images/icons/settings.png" alt="Settings">
+        </button>
         `;
 
         const savesButton = `
-            <button id="saves-button" class="dark-btn obsidian">Saves</button>
+        <button id="saves-button" class="dark-btn obsidian">
+            <img src="images/icons/saves.png" alt="Saves">
+        </button>
         `;
 
         const sidebarHTML = `
@@ -1875,10 +1879,7 @@ Macro.add('sidebar-widget', {
                 </div>
                 ${staticMenuContent}
                 <div class="twine-sidebar-footer">
-                    ${settingsButton}
-                </div>
-                <div class="twine-sidebar-footer">
-                    ${savesButton}
+                    ${settingsButton} ${savesButton}
                 </div>
             </div>
         `;
