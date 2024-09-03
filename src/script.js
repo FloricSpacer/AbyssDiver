@@ -1844,6 +1844,7 @@ Macro.add('sidebar-widget', {
                     }
                     <div class="twine-sidebar-resources">
                         <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span> Day: ${days}</div>
+                        <span class="smallbreak"></span>
                         <div style="display: flex; align-items: center;">
                             <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
                             Water: ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}
@@ -1856,6 +1857,7 @@ Macro.add('sidebar-widget', {
                         </div>
                         ${getSemenDemonStatus()}
                         ${getCotNStatus()}
+                        <span class="smallbreak"></span>
                         <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span> Dubloons: ${dubloons}</div>
                         <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span> Corruption Pts: ${corruption}</div>
                         ${hexflame > 9 ? `<div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/jinxedflames.png" alt="Jinxed Flames"></span> Jinxed Flames: ${hexflame - 9}</div>` : ''}
