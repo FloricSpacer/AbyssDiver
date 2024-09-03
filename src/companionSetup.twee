@@ -818,20 +818,33 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 
 :: ConversationChoices [widget nobr]
 <<widget "ConversationChoices">>
-	<div class="conversation-choices">
-		<<for _link range _args>>
-			<<capture _link>>
-				<<link _link.text>>
-					<<replace ".conversation-choices:last" transition>>
-						<<if _link.setFn>>
-							<<run _link.setFn()>>
-						<</if>>
-						<<include _link.link>>
-					<</replace>>
-				<</link>><br>
-			<</capture>>
-		<</for>>
-	</div>
+<div class="conversation-choices">
+<<for _button range _args>>
+    <<capture _button>>
+        <<set _$button to $((_button))>>
+        <<set _text to _$button.text()>>
+        <<set _passage to _$button.attr("data-passage")>>
+        <<set _class to _$button.attr("class")>>
+        <<set _setter to _$button.attr("data-setter")>>
+        <div class="menu-item">
+            <button class="dark-btn obsidian" data-passage="_passage" data-setter="_setter">
+                _text
+            </button>
+        </div>
+    <</capture>>
+<</for>>
+</div>
+
+<<script>>
+$(document).on('click', '.conversation-choices button', function() {
+    var passage = $(this).data('passage');
+    var setter = $(this).data('setter');
+    if (setter) {
+        eval(setter);
+    }
+    Engine.play(passage);
+});
+<</script>>
 <</widget>>
 
 :: Companion Layer Interaction
