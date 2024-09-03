@@ -15,11 +15,16 @@ As you enter the second layer, the clear open fields of the first gradually give
 
 This layer is filled with a very dense growth of vines, bushes, and other plant life that impedes you and makes movement very time-consuming. Having a way to clear them out of your way would make navigation much easier. Subtract 1 day from every time on this layer (including the cost of going up or down layers) if you have a sword with you to cut through the flora.
 
-[[Walk through the second layer of the Abyss|Layer2 Hub]]
-<<nobr>><<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-	<<if $visitL2 === 0>>
-	<<print "[[Use Cherry's chaotic luck|Layer2 Cherry]]">><br><</if>>
-<</if>><</nobr>>
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Walk through the second layer of the Abyss</button>
+</div>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry) && $visitL2 === 0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Cherry">Use Cherry's chaotic luck</button>
+</div>
+<</if>>
+<</nobr>>
 
 
 :: Layer2 Hub [layer2]
@@ -103,19 +108,27 @@ This layer is filled with a very dense growth of vines, bushes, and other plant 
 
 How would you like to use Cherry's chaotic luck ability?
 
-[[Get 2 random Relics for half cost|Layer2 Cherry Relic]]
-[[Get 2 random Curses for +50% corruption|Layer2 Cherry Curse]]
-[[Get 1 Relic and 1 Curse|Layer2 Cherry Mix]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Cherry Relic">Get 2 random Relics for half cost</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Cherry Curse">Get 2 random Curses for +50% corruption</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Cherry Mix">Get 1 Relic and 1 Curse</button>
+</div>
+<</nobr>>
 
 
 :: Layer2 Threats [layer2 cards nobr]
 <h1>Threats</h1>
 
-<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button></p>
 
 <<ThreatGrid setup.bayingGourmet>>
 
-<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button></p>
 
 
 :: Layer2 Forage [cards layer2 nobr]
@@ -126,20 +139,28 @@ How would you like to use Cherry's chaotic luck ability?
 
 <p>Note: If you try to forage for meat, but run out of bullets or don't have a gun (or suitable replacement), you will forage for some flanberries instead, with any side effects that may entail.</p>
 
-<p>[[Return to exploring the rest of the layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring the rest of the layer</button></p>
 
 <<ForagingGrid setup.flanberries setup.mudgrazer setup.bewitcherPlant>>
 <<nobr>>
 
 <<if $items[2].count > 0>>
-<p>[[Fill your empty flasks with water from the layer|Layer2 Flasks]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Flasks">Fill your empty flasks with water from the layer</button></p>
 <</if>>
 
-<p>[[Consume food from unripe Flanberries|Layer2 Forage][$mc.events.push(new LibidoEvent("Flanberry Major", 1)); $foodL2 += 1; $smaragdineFoodConsumed.flan = true]]<br>
-<<if $abyssKnow>>[[Consume food from ripe Flanberries|Layer2 Forage][$lastFlan = $time; $foodL2 += 1; $smaragdineFoodConsumed.flan = true]]<br><</if>>
-[[Consume rainwater|Layer2 Forage][$bewitchBabies += 1;$waterL2 += 1]]</p>
+<p><div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$mc.events.push(new LibidoEvent(&quot;Flanberry Major&quot;, 1)); $foodL2 += 1; $smaragdineFoodConsumed.flan = true">Consume food from unripe Flanberries</button>
+</div>
+<<if $abyssKnow>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$lastFlan = $time; $foodL2 += 1; $smaragdineFoodConsumed.flan = true">Consume food from ripe Flanberries</button>
+</div>
+<</if>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Forage" data-setter="$bewitchBabies += 1;$waterL2 += 1">Consume rainwater</button>
+</div></p>
 <</nobr>>
-<p>[[Return to exploring the rest of the layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring the rest of the layer</button></p>
 
 :: Layer2 Forage Convo
 
@@ -190,7 +211,7 @@ Maru starts picking shiny, red berries, occasionally plucking unripe, unsafe one
 After collecting enough berries, you head back to camp with Maru. He mashes the berries into a paste, adding a few herbs he gathered along the way. The result is a delicious, nutty, red pudding with whole berries mixed in for texture. You and your companions share the scrumptious dessert, delighting in its unique flavor as you relax in the camp.
 <</if>>
 
-[[Return to exploring the rest of the layer|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring the rest of the layer</button>
 
 
 :: Layer2 Relics [layer2 cards nobr]
@@ -205,11 +226,11 @@ Some Relics may have special obstacles that must be overcome and certain supplie
 By default, your companions' reward for coming down here with you is the dubloons you hired them with (and the experience of travelling the Abyss and possibly learning useful information), and they won't be taking any Relics home. Maybe you'd like to give a few Relics to them as gifts? It could really improve your relationship, especially if you give them Relics in line with their goals or personality. After all, if you forge a lifelong bond with them, you'll still get to see and use those gifted Relics whenever you're with them!
 </p>
 
-<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button></p>
 
 <<RelicGrid `setup.relicsOnLayer[2]`>>
 
-<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button></p>
 
 
 :: Layer2 Curses [layer2 cards nobr]
@@ -218,34 +239,42 @@ By default, your companions' reward for coming down here with you is the dubloon
 
 <p><<CarryAdjust>></p>
 
-<<if $escBalDepl===0>>\
-	<p>[[Return to exploring layer 2|Layer2 Hub]]</p>
-<<else>>\
-	<p>[[Return to your balloon|Escape Balloon L2]]</p>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button></p>
+</div>
+<<else>>
+<div class="menu-item">
+<p><button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button></p>
+</div>
 <</if>>
 
 <<CurseGrid `setup.cursesOnLayer[2]`>>
 
 <<if $escBalDepl===0>>
-	<p>[[Return to exploring layer 2|Layer2 Hub]]</p>
+<div class="menu-item">
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button></p>
+</div>
 <<else>>
-	<p>[[Return to your balloon|Escape Balloon L2]]</p>
+<div class="menu-item">
+<p><button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button></p>
+</div>
 <</if>>
 
 
 :: Layer2 Wonders [layer2 cards nobr]
 <h1>Wonders</h1>
 
-<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button></p>
 
 <<WonderGrid setup.emptyHandedBroker setup.fateCrossingStar>>
 
-<p>[[Continue exploring the second layer|Layer2 Hub]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button></p>
 
 :: Layer2 Habitation [Layer2 cards nobr]
 <h1>Habitation</h1>
 <<if !$AgeEndReached>>
-	<p>[[Continue your business on the Second Layer|$returnPassage]]</p>
+	<p><button class="dark-btn obsidian" data-passage="$returnPassage">Continue your business on the Second Layer</button></p>
 <</if>>
 <<CarryAdjust>>
 <<set _lewdCrit=12>>
@@ -295,7 +324,7 @@ By default, your companions' reward for coming down here with you is the dubloon
 <<HabitationGrid setup.habitationL2>>
 
 <<if !$AgeEndReached>>
-	<p>[[Continue your business on the Second Layer|$returnPassage]]</p>
+	<p><button class="dark-btn obsidian" data-passage="$returnPassage">Continue your business on the Second Layer</button></p>
 <</if>>
 
 :: Layer2 Ascend 1 [layer2]
@@ -338,17 +367,25 @@ If you wanted to ascend all the way to the surface, it would cost
 <</switch>>
 <</nobr>>
 
-<<if $DaedalusEquip>>\
-	<<if !$DaedalusFly>>\
-		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer2 Ascend 1][$DaedalusFly=true]]
-	<<else>>\
-		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer2 Ascend 1][$DaedalusFly=false]]
-	<</if>>\
-<</if>>\
-[[Continue your ascent|Layer2 Ascend2]]
-[[Turn back and continue your business on the second layer|Layer2 Hub]]
+<<nobr>>
+<<if $DaedalusEquip>>
+<<if !$DaedalusFly>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
+</div>
+<<else>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
+</div>
+<</if>>
+<</if>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Ascend2">Continue your ascent</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Turn back and continue your business on the second layer</button>
+</div>
+<</nobr>>
 
 
 :: Layer2 Exit1 [layer2]
@@ -356,7 +393,7 @@ Descending to the next layer will take <<descentTime>> days. As you travel furth
 
 Accessing drinkable water tends to get a but more difficult from here on out, so having a fair emergency supply of water would be a good idea before continuing onward. At a minimum, about a week's worth of water should be enough to avoid the worst case scenario.
 
-[[Stay on layer 2|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Stay on layer 2</button>
 <<TravelToPassage 'Descend down to the third layer' 'Layer2 Exit2' 5>>
 
 
@@ -380,7 +417,7 @@ Accessing drinkable water tends to get a but more difficult from here on out, so
 
 The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name and $relics[$temp2].name for a cost of <<print Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>> and <<print Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>> corruption respectively.
 
-[[Continue on to the rest of the layer|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue on to the rest of the layer</button>
 
 
 :: Layer2 Cherry Curse [layer2]
@@ -453,7 +490,7 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 <</if>>
 
 
-[[Continue on to the rest of the layer|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue on to the rest of the layer</button>
 
 
 :: Layer2 Cherry Mix [layer2]
@@ -518,7 +555,7 @@ What type of fur would you like to gain?
 <</if>>
 
 
-[[Continue on to the rest of the layer|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue on to the rest of the layer</button>
 
 
 :: Empty-handed Broker Site [layer2]
@@ -547,7 +584,7 @@ Your thoughts are interrupted by the sound of falling rocks. As you look up, you
 <</if>>\
 <</if>>\
 
-[[Continue exploring the second layer|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
 <</if>>
 
 
@@ -560,9 +597,14 @@ You push through the dense foliage, seeking the site of the pond, until the sigh
 
 Would you like to swim in the pond of the Fate-crossing Star?
 
-[[Take a dip in the water|Layer2 Star 1]]
-
-[[Return to exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Star 1">Take a dip in the water</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -575,7 +617,7 @@ Would you like to swim in the pond of the Fate-crossing Star?
 
 	There's nothing else for you to do here.
 
-	[[Continue exploring the second layer|Layer2 Hub]]
+	<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
 
 <<elseif $hiredCompanions.length === 0>>
 	You must have companions before if you wish to swap bodies with someone using the Fate-Crossing Star. You swim through the cool lakewater and appreciate the jungle scenery, but nothing abnormal happens.
@@ -584,7 +626,7 @@ Would you like to swim in the pond of the Fate-crossing Star?
 
 	There's nothing else for you to do here.
 
-	[[Continue exploring the second layer|Layer2 Hub]]
+	<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
 	
 <<else>>
 	With cautious curiosity, you step into the water, which embraces your weary limbs like a soothing balm. It's comfortable, despite the foreign environment, but an inexplicable itch manifests in the back of your mind. You can't help but feel that the pond hides a secret, waiting to be uncovered.
@@ -597,11 +639,15 @@ Would you like to swim in the pond of the Fate-crossing Star?
 	<<nobr>>
 	<<for _i, _companion range $hiredCompanions>>
 		<<capture _i>>
-			&nbsp; [[_companion.name|Layer2 Star 2][$temp = _i]]<br>
+			&nbsp; <div class="menu-item">
+			<button class="dark-btn obsidian" data-passage="Layer2 Star 2" data-setter="$temp = _i">_companion.name</button>
+			</div>
 		<</capture>>
 	<</for>>
 	<<if setup.haveSmartphoneAI && $aiSuggest>>
-		Ai [[Switch|AI switch end]]
+		Ai <div class="menu-item">
+		<button class="dark-btn obsidian" data-passage="AI switch end">Switch</button>
+		</div>
 	<</if>>
 	<</nobr>>
 <</if>>
@@ -927,7 +973,7 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 	<</if>>
 <</if>>
 
-[[Continue exploring the layer|Layer2 Hub]]
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the layer</button>
 <</nobr>>
 
 
@@ -938,12 +984,20 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 <<include "Libido Curse">>
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Gender Reversal B [layer2]
@@ -953,12 +1007,20 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 <<include "Gender Curse">>
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 
@@ -980,12 +1042,20 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 	You can feel your milk ducts expanding with your breasts, and as the swelling finally subsides, you can look down at your new $mc.breastsLabel cup breasts. As the moment passes and you start to become accustomed to your transformed body, you are certain that for a while you'll be distracted by the added mass swinging between your legs and the extra jiggle on your chest.
 <</if>>
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 
@@ -996,12 +1066,20 @@ How do you feel? Be prepared for your relationship to change, as this isn't some
 
 <<include "Age Reduction Scene">>
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 
@@ -1022,8 +1100,7 @@ What type of ears would you like to gain?
 <<radiobutton "_curse.earType" "pig" >> Pig
 <<radiobutton "_curse.earType" "furry horse" >> Horse
 
-[[Continue|Layer2 Fluffy Ears]]
-
+<button class="dark-btn obsidian" data-passage="Layer2 Fluffy Ears">Continue</button>
 
 :: Layer2 Fluffy Ears
 
@@ -1062,12 +1139,20 @@ Sensory overload washes over you as your new ears flutter open to the sounds of 
 
 <<include "Inhumanity Warning">>
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Fluffy Tail [layer2]
@@ -1093,12 +1178,20 @@ What type of tail did you gain?
 
 <<include "Inhumanity Warning">>
 
-[[Accept more Curses from the second layer|Layer2 Curses][$mc.tail.push($tail)]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub][$mc.tail.push($tail)]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses" data-setter="$mc.tail.push($tail)">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub" data-setter="$mc.tail.push($tail)">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2][$mc.tail.push($tail)]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2" data-setter="$mc.tail.push($tail)">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Maximum Fluff [layer2]
@@ -1123,7 +1216,7 @@ What type of fur would you like to gain?
 <<radiobutton "_curse.furType" "pig-furred" >> Pig
 <<radiobutton "_curse.furType" "horse-furred" >> Horse
 
-[[Continue|Layer2 Maximum Fluff]]
+<button class="dark-btn obsidian" data-passage="Layer2 Maximum Fluff">Continue</button>
 
 
 :: Layer2 Maximum Fluff
@@ -1143,12 +1236,20 @@ But the second layer of the Abyss isn't the place to contemplate the aesthetics 
 
 <<include "Inhumanity Warning">>
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Heat/Rut [layer2]
@@ -1162,12 +1263,20 @@ As the realization dawns, you acknowledge the irresistible force of nature that 
 
 How does it feel to know what awaits you? Your quickened breaths betray your inner turmoil, revealing the truth about your deepest desires.
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Lightweight [layer2]
@@ -1181,12 +1290,20 @@ As the Curse takes hold, your senses are further heightened. The scent of the da
 
 You'll need to be particularly careful with alcohol, or any other similar substance, in the future.
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Sex Switcheroo [layer2]
@@ -1218,12 +1335,20 @@ What will this mean for your future in the Abyss? Will you be stronger, faster, 
 Standing tall, you brace yourself for the journey ahead. The Abyss has changed you, but it has not defeated you. You're not quite the woman you once were, but inside, you're still the same fearless explorer. Your body may have changed, but your spirit remains unbroken, ready to face whatever the Abyss throws at you next.
 <</if>>\
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 
@@ -1237,7 +1362,8 @@ Do you want to have a penis and a vagina or only a penis?
 <<radiobutton "_curse.sexType" "futa" checked>> A penis and a vagina
 <<radiobutton "_curse.sexType" "male">> Just a penis
 
-[[Continue|Futa Fun 2]]
+<button class="dark-btn obsidian" data-passage="Futa Fun 2">Continue</button>
+
 
 :: Futa Fun 2
 
@@ -1269,12 +1395,20 @@ Staring into the dense foliage, you try to gather your thoughts. Your life in th
 But you're a survivor. You've always been one. And if this new challenge is what the Abyss has thrown at you, then you'll face it head-on, with all the courage and resilience that's gotten you this far. The Abyss may be unpredictable, but so are you. And you're not about to let it forget that.
 <</if>>\
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Blushing Virgin [layer2]
@@ -1290,12 +1424,20 @@ As you continue your journey through the Abyss, you can't help but ponder how th
 
 Despite the anxiety and uncertainty that grips you, you press on, trying to focus on the task at hand - exploring the mysteries of the Abyss.
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Take on Princess Protocol [layer2]
@@ -1315,12 +1457,20 @@ A soft gasp leaves your lips as you realize the most bizarre change of all. Your
 
 You are still you, and yet, not. You are a Princess lost in the heart of the Abyss, waiting for your hero.
 
-[[Accept more Curses from the second layer|Layer2 Curses]]
-<<if $escBalDepl===0>>\
-	[[Return to exploring layer 2|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Curses">Accept more Curses from the second layer</button>
+</div>
+<<if $escBalDepl===0>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Return to exploring layer 2</button>
+</div>
 <<else>>
-	[[Return to your balloon|Escape Balloon L2]]
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2">Return to your balloon</button>
+</div>
 <</if>>
+<</nobr>>
 
 
 :: Pick up the Firmament Pigment [layer2]
@@ -1339,8 +1489,14 @@ Using a worn-out brush you find nearby, you dip it into the Firmament Pigment. T
 
 Suddenly, the whole cavern is bathed in starlight, as if you've brought the heavens themselves into the second layer of the Abyss. A sense of accomplishment fills you. You’ve discovered and retrieved the Firmament Pigment, ready to bring a piece of the cosmos back to the surface.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1360,8 +1516,14 @@ As your fingers curl around it, the water barrier subsides instantly, the downpo
 
 Pulling away from the now silent tree gateway, you embark back on your journey, braving the thicket with a renewed sense of determination.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1383,8 +1545,14 @@ Heart pounding with triumph, you slide down from the statue, the Relic in your g
 
 <b>You can try working out with this Relic. It can both improve your muscle tone and your carrying capacity, as long as you exercise regularly.</b>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1410,8 +1578,14 @@ The beast seems to pause, its eyes softening ever so slightly. Slowly, it steps 
 
 <b>If you encounter any normal animals throughout your expedtion, this Relic may help you placate them.</b>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1433,8 +1607,14 @@ As you lift the harp, the music swells, filling the clearing with a triumphant m
 
 With the Relic in your possession, you turn back to the dense path you've just cleared. The music adjusts again, now playing a calm and soothing tune, a balm to your tired body, matching the rhythmic patter of dewdrops around you.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1460,8 +1640,14 @@ You maneuver the flashlight strategically, manipulating the beam to corral the s
 
 The Umbra Trident - a golden fork, deceptively simple, and yet, brimming with uncanny power. A chill runs up your spine as you realize that the darkness in the cavern seems just a bit less oppressive now that the Relic is yours.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1483,8 +1669,14 @@ Mustering your courage, you push your hand through the stinging vapor. The Relic
 
 As you withdraw your hand, the vapor subsides, and the orchids return to their rhythmic dance, unperturbed. The Relic secured, you continue your descent into the Abyss, your journey made significantly easier with the Event Horizon at your disposal.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1508,8 +1700,14 @@ With the Heart-stealing Stole around your neck, you feel like the center of atte
 
 <b>You may want to start wearing this Relic regularly if you have any companions, it can significantly speed up how long it takes your companions to become closer to you.</b>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1525,8 +1723,14 @@ The undergrowth eventually opens into a circular clearing, an oasis of serenity 
 
 The Relic is unexpectedly cold to the touch, but it thrums with a sense of dormant power in your hand. You give it a little shake, hearing the faint sound of its liquid contents. A smirk plays on your lips as you press the top, releasing a puff of lilac mist that instantly clears, leaving an almost imperceptible film over the moss underneath, rendering it incredibly slick to the touch, as if all friction had been removed.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1548,8 +1752,14 @@ With a slight chuckle, you will the water to transform into the rich, dark ale y
 
 This grotto, feels more like a peaceful shrine; a sacred space hallowed by the presence of the Relic. You pause for a moment to savor the peace before you continue your journey.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1569,8 +1779,14 @@ In the center of the room, a bookshelf stands apart. Its size is imposing, its w
 
 With a sense of reverence, you approach the Relic. When you touch it, it feels like greeting an old friend.
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1588,8 +1804,14 @@ After safely storing the Relic, you continue your expedition. With the knowledge
 
 <b>You can use this Relic to see into your future and see what awaits you on the layer below the one you currently inhabit.</b>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 <</if>>
 
 
@@ -1644,8 +1866,14 @@ As you retreat back the way you came, you question whether this little flower wa
 
 <<include "Inhumanity Warning">>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 
 
 :: Emily Apologize [layer2]
@@ -1666,8 +1894,14 @@ After a moment's thought, Emily responds.
 <<say $emily>>I was not given a name at birth like most people... But I do like the sound of Emily. You may call me that. And you can come back here to meet me, I'll be sure to keep the way clear for you. We can discuss the details of my request when you visit me later.<</say>>
 <i>You can now meet with Emily again any time from the main part of Layer 2.</i>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 
 :: Emily Compromise [layer2]
 
@@ -1682,8 +1916,14 @@ She seems to smile for a moment, apparently glad that she was able to come up wi
 <<say $emily>>I was not given a name at birth like most people... But I do like the sound of Emily. You may call me that. And you can come back here to meet me, I'll be sure to keep the way clear for you. We can discuss the details of my request when you visit me later.<</say>>
 <i>You can now meet with Emily again any time from the main part of Layer 2.</i>
 
-[[Continue searching for the Relics of layer 2|Layer2 Relics]]
-[[Continue exploring the second layer|Layer2 Hub]]
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Relics">Continue searching for the Relics of layer 2</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="Layer2 Hub">Continue exploring the second layer</button>
+</div>
+<</nobr>>
 
 
 :: Layer2 Flasks [layer2]
