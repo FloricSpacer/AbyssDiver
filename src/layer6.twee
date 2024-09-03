@@ -202,11 +202,11 @@ How would you like to use Cherry's chaotic luck ability?
 <p><button class="dark-btn obsidian" data-passage="Layer6 Flasks">Fill your empty flasks with water from the layer</button></p>
 <</if>>
 <<if $slingshot>>
-	<p>[[Hunt and consume Omen Eyes once|Layer6 Forage][$foodL6 += 1]]</p>
+	<p><button class="dark-btn obsidian" data-passage="Layer6 Forage" data-setter="$foodL6 += 1">Hunt and consume Omen Eyes once</button></p>
 <<elseif $items[13].count && $items[20].count >= Math.max(3 - $bullRed, 1)>>
 	<p>[[Hunt and consume Omen Eyes once|Layer6 Forage][$foodL6 += 1;$items[20].count -= Math.max(3 - $bullRed, 1)]]</p>
 <</if>>
-<p>[[Consume unfiltered water from the River Dycx once|Layer6 Forage][$hexflame += 1;$waterL6 += 1]]</p>
+<p><button class="dark-btn obsidian" data-passage="Layer6 Forage" data-setter="$hexflame += 1;$waterL6 += 1">Consume unfiltered water from the River Dycx once</button></p>
 
 <p><button class="dark-btn obsidian" data-passage="Layer6 Hub">Return to exploring the rest of the layer</button></p>
 
@@ -300,10 +300,10 @@ If you wanted to ascend all the way to the surface, it would cost
 <<if $DaedalusEquip>>\
 	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer6 Ascend 1][$DaedalusFly=true]]
+		<button class="dark-btn obsidian" data-passage="Layer6 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
 	<<else>>\
 		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer6 Ascend 1][$DaedalusFly=false]]
+		<button class="dark-btn obsidian" data-passage="Layer6 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
 	<</if>>\
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Layer6 Ascend2">Continue your ascent</button>
@@ -368,7 +368,7 @@ You may pick up a new Relic for 10 dubloons and 1.5x its corruption cost:<br>
 	<<print `<<set _visitedRelicLayer = $visitL${_foundOnLayer}>>`>>
 	<<if _visitedRelicLayer && _relic.name !== 'Kin Shifter' && _relic.name !== 'Purity Tree Plank' && !_totalRelics.some(e => e.name === _relic.name)>>
 		<<capture _relic>>
-			&nbsp; [[_relic.name|Maw of Kimaris Site][$dubloons -= 10, $corruption -= Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10), $ownedRelics.push(_relic)]]
+			&nbsp; <button class="dark-btn obsidian" data-passage="Maw of Kimaris Site" data-setter="$dubloons -= 10, $corruption -= Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10), $ownedRelics.push(_relic)">_relic.name</button>
 			for <<print Math.max(Math.floor(1.5 * _relic.corr) - $corRed, 10)>> corruption points<br>
 		<</capture>>
 	<</if>>
@@ -377,7 +377,7 @@ You may pick up a copy of an old Relic for 20 dubloons and 2x its corruption cos
 <<for _relic range _totalRelics>>
 	<<if _relic.name !== 'Kin Shifter' && _relic.name !== 'Purity Tree Plank'>>
 		<<capture _relic>>
-			&nbsp; [[_relic.name|Maw of Kimaris Site][$mawUse = true, $dubloons -= 20, $corruption -= Math.max(2 * _relic.corr - $corRed, 10), $ownedRelics.push(_relic)]]
+			&nbsp; <button class="dark-btn obsidian" data-passage="Maw of Kimaris Site" data-setter="$mawUse = true, $dubloons -= 20, $corruption -= Math.max(2 * _relic.corr - $corRed, 10), $ownedRelics.push(_relic)">_relic.name</button>
 			for <<print Math.max(2 * _relic.corr - $corRed, 10)>> corruption points<br>
 		<</capture>>
 	<</if>>
@@ -1038,10 +1038,10 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 <<if _triggers.fellDragon()>>
 	<br><<include "Layer6 Dragon Encounter">><br><br>
-	[[Deal with the Fell Dragon|Layer6 Threat2][$returnPassage = passage()]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Layer6 Threat2" data-setter="$returnPassage = passage()">Deal with the Fell Dragon</button><br><br>
 <<elseif _triggers.greaterTentacleBeast()>>
 	<br><<include "Layer6 Tentacle Encounter">><br><br>
-	[[Deal with the Greater Tentacle Beast|Layer6 Threat1 1][$returnPassage = passage()]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Layer6 Threat1 1" data-setter="$returnPassage = passage()">Deal with the Greater Tentacle Beast</button><br><br>
 <</if>>
 
 
@@ -1095,9 +1095,9 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 <</if>><</nobr>>
 You wait as your balloon rapidly ascends and you can watch the infernal fields of tentacles gently undulating below and around you. A far cry from having to tread through them, you can take a moment to breathe in the subtle smell of sulfur wafting up to you, even as you float through the layer.
 
-[[Ascend to next layer|Escape Balloon L5][$corruption -= (65 - $corRed)]]
+<button class="dark-btn obsidian" data-passage="Escape Balloon L5" data-setter="$corruption -= (65 - $corRed)">Ascend to next layer</button>
 <button class="dark-btn obsidian" data-passage="Layer6 Curses">Hover on this layer to take in a Curse</button>
-[[Get off the balloon on this layer|Layer6 Hub][$escBalDepl=0]]
+<button class="dark-btn obsidian" data-passage="Layer6 Hub" data-setter="$escBalDepl=0">Get off the balloon on this layer</button>
 
 
 :: Layer6 Preview [image layer6]
@@ -1188,7 +1188,7 @@ As the beast's tendrils slowly begin to reach towards you, you realize that this
 <</if>>
 <<if $slingshot === 1>>
 Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily ranged combat doesn't pose as much of a risk as melee against a great beast such as this one.<br>
-[[Defeat it with the Brave Vector|$returnPassage][$smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
+<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleGreater = true">Defeat it with the Brave Vector</button><br><br>
 <</if>>
 <<if $items[14].count > 0>>
 Relying on your own swordplay will allow you to put up a minimum amount of resistance and tire it out a bit, leaving incapacitated for 10 days straight.<br>
@@ -1290,7 +1290,7 @@ Using the power of Sunbeam to fight it yourself is better than using a sword, bu
 <</if>>
 <<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	If you equip Khemia with the Joyous Sunder, he'll be much more effective, to the point that he'd be able to defeat the beast without sustaining any major injuries himself, an impressive feat even for someone like him.<br>
-	[[Have Khemia fight it off with Joyous Sunder|$returnPassage][$smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleGreater = true">Have Khemia fight it off with Joyous Sunder</button><br><br>
 <</if>>
 If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and your party <</if>>will be completely ravaged by the enormous beast. This will be incredibly pleasurable at the time, with powerful numbing agents making sure you don't feel any pain during the process, and only feel the pleasure. But after it's over, you'll be in a sorry state, being left completely incapacitated for a full 12 days unless you use a medkit. This is especially dangerous since it leaves you only a few days left until your next encounter with one of the beasts.<br>
 <<link "Allow it to overpower you" "Layer6 Threat1 2">>
@@ -1306,7 +1306,7 @@ If you allow it to overpower you, you <<if $hiredCompanions.length > 0 >>and you
 
 <<if $mechaBoarded>>
 	You can almost imagine your Starlit Conquest humming in satisfaction, as if it knows it was built to fight these sort of monstrosities and revels in the fact that it can finally do so. <br>
-	[[Set all weapon systems on go and start shooting and slicing this beast|$returnPassage][$smaragdineThreatsDefeated.tentacleGreater = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleGreater = true">Set all weapon systems on go and start shooting and slicing this beast</button><br><br>
 <</if>>
 
 <<if setup.haveHealing>>
@@ -1471,15 +1471,15 @@ While the Fell Dragons are immune to most conventional methods of attack, you ca
 <</if>>
 <<if $mechaBoarded>>
 	The dragon stands tall in front of you, unwilling to back down despite the power of your Starlit Conquest. This may be a worthy opponent to test the full capabilities of your machine. But if they see you fight like this, the dragons might avoid you from now on.
-	[[Dodge and weave through the dragons attacks, while hitting it with your weapon|$returnPassage][$dubloons += 50; $dragonKill += 5]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$dubloons += 50; $dragonKill += 5">Dodge and weave through the dragons attacks, while hitting it with your weapon</button><br><br>
 <</if>>
 You can appease the dragon by offering it 100 dubloons. It would graciously allow you to live and keep the rest of your hoard if you want, though keep in mind another one might come your way if you're still holding enough to attract them in 8 days.<br>
-	[[Offer 100 dubloons to appease the dragon|$returnPassage][$dubloons -= 100]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$dubloons -= 100">Offer 100 dubloons to appease the dragon</button><br><br>
 <<if $mc.hasCurse("Seafolk") && !$DaedalusFly>>
 Normally you'd be able to run away to escape the Dragon at the cost of getting burned, but that's impossible with your tail! There's no way you could move on land fast enough to get away from a dragon like that!<br><br>
 <<else>>
 If you try to run away without fighting to keep your dubloons safe, prepare to be severely burned before you manage to get away. This will increase all travel times by 4 days until you can get it healed and it will take 2 medkits to heal it!<br>
-	[[Try to run and accept the consequences|$returnPassage][$status.duration += 99; $status.penalty += 4; $dragonBurn = 1; $smaragdineThreatsSubmitted.dragon = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$status.duration += 99; $status.penalty += 4; $dragonBurn = 1; $smaragdineThreatsSubmitted.dragon = true">Try to run and accept the consequences</button><br><br>
 <</if>>
 <</nobr>>
 

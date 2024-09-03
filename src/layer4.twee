@@ -90,10 +90,10 @@ She stands at the edge of your peripheral vision, immaterial and seemingly harml
 	<</if>>
 
 	<<if $items[9].count > 0 && !setup.haveColdProtection && $torchUse === 0>>
-	[[Use torches to reduce travel times on this layer by 2 days each at the cost of 1 torch per travel|Layer4 Hub][$torchUse = 1]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Layer4 Hub" data-setter="$torchUse = 1">Use torches to reduce travel times on this layer by 2 days each at the cost of 1 torch per travel</button><br><br>
 	<</if>>
 	<<if $torchUse === 1 && !setup.haveColdProtection>>
-	[[Stop using torches to reduce travel time|Layer4 Hub][$torchUse = 0]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Layer4 Hub" data-setter="$torchUse = 0">Stop using torches to reduce travel time</button><br><br>
 	<</if>>
 
 <</if>>
@@ -246,18 +246,18 @@ How would you like to use Cherry's chaotic luck ability?
 <p><button class="dark-btn obsidian" data-passage="Layer4 Flasks">Fill your empty flasks with water from the layer</button></p>
 <</if>>
 <p><<if $slingshot>>
-	[[Hunt and consume Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1]]<br>
+	<button class="dark-btn obsidian" data-passage="Layer4 Forage" data-setter="$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1">Hunt and consume Flairabou once</button><br>
 <<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
 	[[Hunt and consume Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Major", 3));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]
 <</if>>
 <<if $abyssKnow>>
 	<<if $slingshot>>
-		[[Hunt and consume carefully prepared Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer4 Forage" data-setter="$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1">Hunt and consume carefully prepared Flairabou once</button><br>
 	<<elseif $items[13].count && $items[20].count >= Math.max(2 - $bullRed, 1)>>
 		[[Hunt and consume carefully prepared Flairabou once|Layer4 Forage][$mc.events.push(new HeightEvent("Flairabou Minor", 0.5));$foodL4 += 1;$items[20].count -= Math.max(2 - $bullRed, 1)]]
 	<</if>>
 <</if>>
-[[Consume water from melted snow once|Layer4 Forage][$algalSize += 1;$waterL4 += 1]]</p>
+<button class="dark-btn obsidian" data-passage="Layer4 Forage" data-setter="$algalSize += 1;$waterL4 += 1">Consume water from melted snow once</button></p>
 <</nobr>>
 
 <p><button class="dark-btn obsidian" data-passage="Layer4 Hub">Return to exploring the rest of the layer</button></p>
@@ -358,10 +358,10 @@ If you wanted to ascend all the way to the surface, it would cost
 <<if $DaedalusEquip>>\
 	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer4 Ascend 1][$DaedalusFly=true]]
+		<button class="dark-btn obsidian" data-passage="Layer4 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
 	<<else>>\
 		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer4 Ascend 1][$DaedalusFly=false]]
+		<button class="dark-btn obsidian" data-passage="Layer4 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
 	<</if>>\
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Layer4 Ascend2">Continue your ascent</button>
@@ -913,7 +913,7 @@ Which Curse would you like to forcibly copy onto your unwilling companion?
 			!$hiredCompanions.every(companion => companion === $companionGolem || companion.hasCurse(_curse.name))
 		>>
 			<<capture _i>>
-				[[_curse.name|Layer4 Steady2b][$temp = _i]]<br>
+				<button class="dark-btn obsidian" data-passage="Layer4 Steady2b" data-setter="$temp = _i">_curse.name</button><br>
 			<</capture>>
 		<</if>>
 	<</for>>
@@ -1006,7 +1006,7 @@ Description:<br>
 <<print _constellation.description>>
 <br><br>
 <button class="dark-btn obsidian" data-passage="Diver shrine take user constellation">Take on this constellation</button><br>
-[[Remove this constellation|Diver shrine][setup.removeUserCurseSet($diverShrineSelectedCurse)]]<br>
+<button class="dark-btn obsidian" data-passage="Diver shrine" data-setter="setup.removeUserCurseSet($diverShrineSelectedCurse)">Remove this constellation</button><br>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 <br><br>
 If you want to share this constellation with others, use this code:
@@ -1226,15 +1226,15 @@ As you draw closer, you notice that the air around the Purity Tree feels lighter
 You consider your options carefully, knowing that the wood of the Purity Tree holds untold potential. What would you like to do with the Purity Tree?
 <<if setup.haveCuttingTool>>
 You can chop down the dead purity tree and use the pieces to make crude protective gear for a total of +60 corruption immediately.
-[[Chop down the tree and make crude protective gear|Layer4 Hub][$purityUsed = true, $corruption += 60]]
+<button class="dark-btn obsidian" data-passage="Layer4 Hub" data-setter="$purityUsed = true, $corruption += 60">Chop down the tree and make crude protective gear</button>
 
 You could also chop down the tree and save the wood pieces. This will yield four Purity Tree Plank Relics, which you can bring back to the surface and either sell for 35 dubloons each or use in the Relic Workshop to gain +25 corruption per Plank (100 total).
-[[Chop down the tree and save the pieces to use them on the surface|Layer4 Hub][$purityUsed = true, $ownedRelics.push($purityPlank, $purityPlank, $purityPlank, $purityPlank)]]
+<button class="dark-btn obsidian" data-passage="Layer4 Hub" data-setter="$purityUsed = true, $ownedRelics.push($purityPlank, $purityPlank, $purityPlank, $purityPlank)">Chop down the tree and save the pieces to use them on the surface</button>
 <<else>>
 You don't have the right tools to chop down the dead purity tree.
 <</if>>
 You can burn down the dead purity tree and bathe in the raw cleansing smoke to gain +20 corruption a single time.
-[[Burn down the tree and bathe in its smoke|Layer4 Hub][$purityUsed = true, $corruption += 20]]
+<button class="dark-btn obsidian" data-passage="Layer4 Hub" data-setter="$purityUsed = true, $corruption += 20">Burn down the tree and bathe in its smoke</button>
 
 <<nobr>><<if !$hasPuritySeed && $emilyVisit>>
 <button class="dark-btn obsidian" data-passage="Layer4 Purity Seed">Search for the Purity Seed amongst the tree's remains</button><br><br>
@@ -1646,7 +1646,7 @@ With the Relic safely secured, you begin to make your way back down the mountain
 <<if _triggers.driftingSwallower()>>
 	<br>A great hissing sound, as if a blimp were leaking its helium, fills your ears as a dark form descends on you from above. A monstrous beast floats above your head and unveils its tentacles in preparation of its attempt to shovel you into its enormous maw.<br><br>
 
-	[[Deal with the Drifting Swallower|Layer4 Threat1][$returnPassage = passage()]]<br>
+	<button class="dark-btn obsidian" data-passage="Layer4 Threat1" data-setter="$returnPassage = passage()">Deal with the Drifting Swallower</button><br>
 <</if>>
 
 
@@ -1798,9 +1798,9 @@ Please enter your new scale color:
 <</if>><</nobr>>
 The chills of this layer don't seem to abate one bit when you aren't on the ground. You do feel a bit of relief to move rapidly through the enormous vertical tunnel at the lowest point of the ice though, rather than an agonizing climb through the steep cliffs and frozen tunnels.
 
-[[Ascend to next layer|Escape Balloon L3][$corruption -= (35 - $corRed)]]
+<button class="dark-btn obsidian" data-passage="Escape Balloon L3" data-setter="$corruption -= (35 - $corRed)">Ascend to next layer</button>
 <button class="dark-btn obsidian" data-passage="Layer4 Curses">Hover on this layer to take in a Curse</button>
-[[Get off the balloon on this layer|Layer4 Hub][$escBalDepl=0]]
+<button class="dark-btn obsidian" data-passage="Layer4 Hub" data-setter="$escBalDepl=0">Get off the balloon on this layer</button>
 
 
 :: Layer4 Preview [image layer4]
@@ -1885,11 +1885,11 @@ How do you want to deal with the creature descending upon you?
 <<nobr>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off, but even he would be seriously injured in the process, increasing your next 6 travel times by 1 day each if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|$returnPassage][$status.duration += (6 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true; $smaragdineThreatsDefeated.swallower = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$status.duration += (6 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true; $smaragdineThreatsDefeated.swallower = true">Have Khemia fight it off with a sword</button><br><br>
 <</if>>
 <<if ($joyousSword === 1 || $ownedRelics.some(e => e.name === "Sunbeam")) && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With a powerful Relic sword in hand, Khemia can defeat the Drifting Swallower without any major issues after an intense battle.<br>
-	[[Allow Khemia to defeat it with his Relic blade|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.swallower = true">Allow Khemia to defeat it with his Relic blade</button><br><br>
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 4>>
 	You can take it down effectively with a gun, but you'll need at least 5 bullets to take it down due to its evasive movements.<br>
@@ -1897,15 +1897,15 @@ How do you want to deal with the creature descending upon you?
 <</if>>
 	<<if $slingshot === 1>>
 	Your Brave Vector slingshot can be used like a gun, and a ranged weapon can efficiently bring down a swallower.<br>
-	[[Defeat it with the Brave Vector|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.swallower = true">Defeat it with the Brave Vector</button><br><br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Tranquility Knell")>>
 	The Drifting Swallower detects its prey by sensing vibrations, but the Tranquility Knell silences noise in the air and other media, nearly eliminating vibrations and leaving the creature virtually blind. This effect should provide you with a 30-minute window where the Swallower is unable to find you, allowing you to escape unnoticed until you are out of range.<br>
-	[[Escape with the Tranquility Knell|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.swallower = true">Escape with the Tranquility Knell</button><br><br>
 <</if>>
 <<if $mechaBoarded>>
 	The Drifting Swallower looks imposing even from the mecha you're currently in. However, it should still be no match.<br>
-	[[Activate the plasma cannons and shoot it down|$returnPassage][$smaragdineThreatsDefeated.swallower = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.swallower = true">Activate the plasma cannons and shoot it down</button><br><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Creepy Doll")>>
@@ -1924,7 +1924,7 @@ How do you want to deal with the creature descending upon you?
 <</if>>
 
 If you allow it to overpower you, prepare to be vored! It will swallow you whole and you will spend the next 3 days inside of its large stomach being tickled and lightly burned by gastric juices enveloping your entire body. After you are eventually expelled from the creature, you'll be left with persistent light burns, increasing all travel costs by 1 day until you are cured. This will not heal without a medkit.<br>
-[[Allow it to overpower you|Layer4 Swallower Ravage][$status.duration += 99; $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true]]
+<button class="dark-btn obsidian" data-passage="Layer4 Swallower Ravage" data-setter="$status.duration += 99; $status.penalty += 1; $smaragdineThreatsSubmitted.swallower = true">Allow it to overpower you</button>
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down the creature.
@@ -1991,4 +1991,4 @@ Gingerly, you retrieve the white seed, its snow white color almost indistinguish
 
 The wind picks up, reminding you to move once again. You turn back, the seed secured, as you prepare to bring it back to Emily.
 
-[[Continue your business at the Purity Tree|Purity Tree Site][$hasPuritySeed = true]]
+<button class="dark-btn obsidian" data-passage="Purity Tree Site" data-setter="$hasPuritySeed = true">Continue your business at the Purity Tree</button>

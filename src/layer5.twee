@@ -319,8 +319,8 @@ How would you like to use Cherry's chaotic luck ability?
 	<</if>>
 <</if>>
 </p>
-<p>[[Consume food from flowers once|Layer5 Forage][$crumbleFluid += 5;$foodL5 += 1]]
-<<if $abyssKnow>><br>[[Consume food from Crumbleweed flowers once|Layer5 Forage][$crumbleFluid += 1;$foodL5 += 1]]<</if>></p>
+<p><button class="dark-btn obsidian" data-passage="Layer5 Forage" data-setter="$crumbleFluid += 5;$foodL5 += 1">Consume food from flowers once</button>
+<<if $abyssKnow>><br><button class="dark-btn obsidian" data-passage="Layer5 Forage" data-setter="$crumbleFluid += 1;$foodL5 += 1">Consume food from Crumbleweed flowers once</button><</if>></p>
 
 <<if $atWaterSource>>
 	<p>You can also wait at the oasis if you'd like to pass the time while waiting for something.<br>
@@ -402,7 +402,7 @@ Already taken
 <<elseif _name === "Empath Coil" && !$slingshot && (!setup.item('Pistol').count || setup.item('Pistol Bullets').count < 1)>>
 @@.unreachable;Located in a sealed chamber locked by a switch on the ceiling, far out of reach. Can be hit with a pistol, using 1 bullet.@@
 <<else>>
-<<print "[[Pick up the " + _name + "|Layer5 Booby][$temp = " + (_i + 1) + ", $booby = " + (_i % 3 + 1) + "]]">>
+<<print "<button class="dark-btn obsidian" data-passage="Layer5 Booby" data-setter="$temp = " + (_i + 1) + ", $booby = " + (_i % 3 + 1) + "">Pick up the " + _name + "</button>">>
 <</if>>
 </p>
 <p><<include `_relic.name + " Description"`>></p>
@@ -500,10 +500,10 @@ You <b>don't have a rope</b>, so the journey will be very long.
 <<if $DaedalusEquip>>\
 	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer5 Ascend 1][$DaedalusFly=true]]
+		<button class="dark-btn obsidian" data-passage="Layer5 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
 	<<else>>\
 		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer5 Ascend 1][$DaedalusFly=false]]
+		<button class="dark-btn obsidian" data-passage="Layer5 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
 	<</if>>\
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Layer5 Ascend2">Continue your ascent</button>
@@ -620,7 +620,7 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 	<h1 class="gameover">Game Over</h1>
 <<else>>
 	The booby trap has caused you serious injury, increasing all travel times by 3 days until you use a medkit or other healing item.
-	[[Continue the search for the Relic|Layer5 Booby2][$status.duration += 99, $status.penalty += 3;$smaragdineThreatsSubmitted.booby = true]]
+	<button class="dark-btn obsidian" data-passage="Layer5 Booby2" data-setter="$status.duration += 99, $status.penalty += 3;$smaragdineThreatsSubmitted.booby = true">Continue the search for the Relic</button>
 	<<nobr>>
 	<<if setup.haveHealing>>
 
@@ -1536,10 +1536,10 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 
 <<if _triggers.duneDevouringBorer()>>
 	<br><<include "Layer5 Borer Encounter">><br><br>
-	[[Deal with the Dune Devouring Borer|Layer5 Threat2][$returnPassage = passage()]]<br>
+	<button class="dark-btn obsidian" data-passage="Layer5 Threat2" data-setter="$returnPassage = passage()">Deal with the Dune Devouring Borer</button><br>
 <<elseif _triggers.mayflyScuttler()>>
 	<br>When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up, but you'll need to decide what to do with the swarm today.<br><br>
-	[[Deal with the Mayfly Scuttler|Layer5 Threat1][$returnPassage = passage()]]<br>
+	<button class="dark-btn obsidian" data-passage="Layer5 Threat1" data-setter="$returnPassage = passage()">Deal with the Mayfly Scuttler</button><br>
 
 	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
@@ -1597,7 +1597,7 @@ When you wake up in the morning, you hear an enormous amount of buzzing in the a
 <<link "Hide out in the ruins for the day" `$returnPassage`>><<PassTime 1>><</link>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of or avoid these pests.
-[[Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm|$returnPassage][$smaragdineThreatsDefeated.scuttler = true]]
+<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.scuttler = true">Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm</button>
 
 
 :: Layer5 Exit2 [layer5]
@@ -1617,9 +1617,9 @@ Use the following option only if you have specifically considered your inventory
 <</if>><</nobr>>
 As you float gently above the scorching dunes below, you notice that even up here in your balloon, you can feel the uncomfortable heat of this layer's climate. Luckily you won't need to endure it on a long hike through the sand here, instead you can enjoy a relaxing float up to the layer above.
 
-[[Ascend to next layer|Escape Balloon L4][$corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10))) ]]
+<button class="dark-btn obsidian" data-passage="Escape Balloon L4" data-setter="$corruption -= (50 - $corRed + (5 * Math.trunc($hexflame / 10))) ">Ascend to next layer</button>
 <button class="dark-btn obsidian" data-passage="Layer5 Curses">Hover on this layer to take in a Curse</button>
-[[Get off the balloon on this layer|Layer5 Hub][$escBalDepl=0]]
+<button class="dark-btn obsidian" data-passage="Layer5 Hub" data-setter="$escBalDepl=0">Get off the balloon on this layer</button>
 
 
 :: Layer5 Preview [image layer5]
@@ -1723,11 +1723,11 @@ How will you deal with the monstrous worm approaching you?
 <</if>>
 <<if $joyousSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Wielding the formidable Joyous Sunder, an expert swordsman like Khemia can effortlessly vanquish the creature without sustaining any injuries.<br>
-	[[Have Khemia fight it off with Joyous Sunder|$returnPassage][$smaragdineThreatsDefeated.borer = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.borer = true">Have Khemia fight it off with Joyous Sunder</button><br><br>
 <</if>>
 <<if $mechaBoarded>>
 	With your Starlit Conquest, you are more than a match for these worms.<br>
-	[[Activate the plasma sword and slice away the worm|$returnPassage][$smaragdineThreatsDefeated.borer = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.borer = true">Activate the plasma sword and slice away the worm</button><br><br>
 <</if>>
 Sacrificing 10 days' worth of water will distract the Borer long enough for you to escape. If you don't choose which water to drop specifically, you'll relinquish your water supply based on your drinking water priority order, as it's the most easily accessible in this perilous situation.<br>
 	<<link "Choose which water type to use as distraction" "Layer5 Borer Drop Overview">>
@@ -1745,7 +1745,7 @@ Succumbing to the Dune Devouring Borer's onslaught will lead to a gruesome fate 
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms|$returnPassage][$smaragdineThreatsDefeated.borer = true]]
+<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.borer = true">Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms</button>
 
 :: Layer5 Borer Drop Overview
 <<FlaskFirst>>
@@ -1880,4 +1880,4 @@ Finally, nestled between two rocks near the water’s edge, you spot a hint of c
 
 Carefully, you dig around the base of the flower, ensuring not to damage its roots, and gently lift it from the sandy soil. You wrap the root ball in a damp cloth to preserve it during your journey back.
 
-[[Continue your business at the Oasis|Layer5 Flasks][$hasDesertFlower = true]]
+<button class="dark-btn obsidian" data-passage="Layer5 Flasks" data-setter="$hasDesertFlower = true">Continue your business at the Oasis</button>

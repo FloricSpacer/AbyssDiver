@@ -29,9 +29,9 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 <<for _i = 0; _i < $mc.curses.length; _i++>>
 	<<capture _i>>
 		<<if $mc.curses[_i].name === "Below the Veil">>
-			<<print "[[" + Creepify.encode("Below the Veil") + "|Curse Info][$temp = _i]]">><br>
+			<<print "<button class="dark-btn obsidian" data-passage="Curse Info" data-setter="$temp = _i">" + Creepify.encode("Below the Veil") + "</button>">><br>
 		<<else>>
-			<<print "[[$mc.curses[_i].name|Curse Info][$temp = _i]]">><br>
+			<<print "<button class="dark-btn obsidian" data-passage="Curse Info" data-setter="$temp = _i">$mc.curses[_i].name</button>">><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -85,7 +85,7 @@ You have $items[3].count days of water in filled flasks.<br>
 	<b>Relics:</b><br> 
 	<<for _i = 0; _i < $ownedRelics.length; _i++>>
 		<<capture _i>>
-			<<print "[[$ownedRelics[_i].name|Relic Info][$temp = _i]]">><<if setup.functionalRelics.contains($ownedRelics[_i].name)>> ☸<</if>><br>
+			<<print "<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">$ownedRelics[_i].name</button>">><<if setup.functionalRelics.contains($ownedRelics[_i].name)>> ☸<</if>><br>
 		<</capture>>
 	<</for>>
 <</if>>
@@ -101,7 +101,7 @@ The total value of all your Relics is $total_value_relics dubloons.<br><hr>
 	<b>Devoured Relics:</b><br> 
 	<<for _i = 0; _i < $devouredRelics.length; _i++>>
 		<<capture _i>>
-			<<print "[[$devouredRelics[_i].name|Devoured Relic Info][$temp = _i]]">><<if setup.functionalRelics.contains($devouredRelics[_i].name)>> ☸<</if>><br>
+			<<print "<button class="dark-btn obsidian" data-passage="Devoured Relic Info" data-setter="$temp = _i">$devouredRelics[_i].name</button>">><<if setup.functionalRelics.contains($devouredRelics[_i].name)>> ☸<</if>><br>
 		<</capture>>
 	<</for>>
 	<br><hr>
@@ -170,33 +170,33 @@ Do not cheat or fear the consequences of angering the things that lurk deep in t
 Many options have their abilities as something like a light source or heat source automatically accounted for, but if you find a Relic or combination that you think should give you an ability and it doesn't, use one of the following options to give that ability to yourself.
 
 Click this if you have found something that can be used for cutting like a sword:
-[[I have a Cutting Instrument|Adjustments][$cut = 1]]
-[[No Cutting Instrument|Adjustments][$cut = 0]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$cut = 1">I have a Cutting Instrument</button>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$cut = 0">No Cutting Instrument</button>
 
 Click this if you have found something that can be used as a light source:
-[[I have a Light|Adjustments][$light = 1]]
-[[No Light|Adjustments][$light = 0]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$light = 1">I have a Light</button>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$light = 0">No Light</button>
 
 Click this if you have found something that can be used to persistently keep you warm:
-[[I have protection from cold|Adjustments][$heatOverride = true]]
-[[No protection from cold|Adjustments][$heatOverride = false]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$heatOverride = true">I have protection from cold</button>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$heatOverride = false">No protection from cold</button>
 
 Click this if you have found something that can be used to persistently keep from overheating:
-[[I have protection from heat|Adjustments][$coolOverride = true]]
-[[No protection from cold|Adjustments][$coolOverride = false]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$coolOverride = true">I have protection from heat</button>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$coolOverride = false">No protection from cold</button>
 
 Click this if you have found something that can be used as a climbing rope:
-[[I have something that can be a Rope|Adjustments][$rope = 1]]
-[[No Rope|Adjustments][$rope = 0]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$rope = 1">I have something that can be a Rope</button>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$rope = 0">No Rope</button>
 
 Click this if you have found something that can be used for swimming underwater, similar to scuba gear:
-[[I have something that can be used for Swimming|Adjustments][$scuba = 1]]
-[[No Swimming|Adjustments][$scuba = 0]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$scuba = 1">I have something that can be used for Swimming</button>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$scuba = 0">No Swimming</button>
 
 <<if $abyssKnow === 1>>Click this if you'd like to disable the use of your Abyssal knowledge from the encyclopedia, smartphone, or Saeko (This will result in more side effects from foraging):
-	[[Turn off abyssal knowledge|Adjustments][$abyssKnowCheatoff = true]]
+	<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$abyssKnowCheatoff = true">Turn off abyssal knowledge</button>
 <<elseif $abyssKnow === 0 && ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>Click this if you'd like to enable the use of your Abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
-	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]
+	<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$abyssKnowCheatoff = false">Turn on abyssal knowledge</button>
 <</if>>
 If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
 <button class="dark-btn obsidian" data-passage="Commerce Balloon">Simulate the functionality of a commerce balloon</button>
@@ -254,7 +254,7 @@ How much would you like to modify your combat score by? (Use a negative number t
 
 [[Labor Scene Companion][$companionLily.pregnantT = -280]]
 [[Reed Shop]]
-[[Emily Quest Stuff|layer2 Hub][$hasCaveFlower = true, $hasDesertFlower = true, $hasPuritySeed = true]]
+<button class="dark-btn obsidian" data-passage="layer2 Hub" data-setter="$hasCaveFlower = true, $hasDesertFlower = true, $hasPuritySeed = true">Emily Quest Stuff</button>
 [[Pick up the Pulse Bloom]]
 [[Pick up the Luminous Phantasmagoria]]
 [[Take on The Maxim]]
@@ -1107,18 +1107,18 @@ Choose the Relic you would like to sell:<br>
 				<<if $creepydoll.affec > 5>>
 					You can't seem to part ways with the Creepy Doll...
 				<<else>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic)">_linkText</button>
 				<</if>>
 			<<case "World Stone">>
 				<<if $LilyPromise>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic), setup.modAffection('Lily', -5)]]
+					<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic), setup.modAffection('Lily', -5)">_linkText</button>
 					You promised Lily she could use the World Stone at the end of your journey. Selling it now will surely disappoint her greatly.
 				<<else>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic)">_linkText</button>
 				<</if>>
 			<<case "Everhevea">>
 				<<if setup.item('Empty Flask').count >= 2>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic), setup.item('Empty Flask').count -= 2]]
+					<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic), setup.item('Empty Flask').count -= 2">_linkText</button>
 				<<else>>
 					You need to empty the Everhevea to sell it (have at least two empty flasks in your inventory).
 				<</if>>
@@ -1126,16 +1126,16 @@ Choose the Relic you would like to sell:<br>
 				<<if $BionicEye>>
 					_relic.name: You can't sell Relics that have become part of your body.
 				<<else>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic)">_linkText</button>
 				<</if>>
 			<<case "Glory's Grasp">>
 				<<if $BionicArm>>
 					_relic.name: You can't sell Relics that have become part of your body.
 				<<else>>
-					[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic)">_linkText</button>
 				<</if>>
 			<<default>>
-				[[_linkText|Balloon Sell1][setup.sellRelic(_relic)]]
+				<button class="dark-btn obsidian" data-passage="Balloon Sell1" data-setter="setup.sellRelic(_relic)">_linkText</button>
 		<</switch>>
 		<br>
 	<</capture>>
@@ -1246,12 +1246,12 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $ownedRelics.some(e => e.name === "Moonwatcher") && !$BionicEye && $mc.hasCurse("Eye on the Prize")>>
 		<br>You are missing an eye, so it should be possible to install the Moonwatcher into the empty socket. However, due to your lack of surgical expertise and equipment, this will result in minor injuries increasing your next 2 travel times by 1 day each.<br>
-		[[Replace your missing eye with the Moonwatcher|Use Items and Relics][$light = 1, $BionicEye=true, $status.duration += 2, $status.penalty += 1]]<br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$light = 1, $BionicEye=true, $status.duration += 2, $status.penalty += 1">Replace your missing eye with the Moonwatcher</button><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Glory's Grasp") && !$BionicArm && $mc.hasCurse("Ampu-Q-tie")>>
 		<br>You are missing a limb, so you have a perfect opportunity to install your Glory's Grasp into the place where your arm would be. However, due to your lack of surgical expertise and equipment, this will result in minor injuries increasing your next 2 travel times by 1 day each.<br>
-		[[Replace your missing limb with the Glory's Grasp|Use Items and Relics][$BionicArm=true, $status.duration += 2, $status.penalty += 1]]<br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$BionicArm=true, $status.duration += 2, $status.penalty += 1">Replace your missing limb with the Glory's Grasp</button><br>
 <</if>>
 
 <<if $items[8].count > 0>>
@@ -1318,7 +1318,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<elseif $time > $LastEx + 1>>
 		You can make use of the World Stone to make use of a perfect fitness routine, tuned precisely to the needs of your body.
 		If you want to get <<if !$mc.hasCurse("Weakling")>>stronger and<</if>> more fit, using this Relic is the best way to do it.<br>
-		[[Work out with the World Stone|Use Items and Relics][$mc.fit += 1, $LastEx = $time, $fit_adjustLastT = $time]]<br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$mc.fit += 1, $LastEx = $time, $fit_adjustLastT = $time">Work out with the World Stone</button><br>
 	<<else>>
 		Your arms are still sore from your last workout with the World Stone, so even with the help of the Relic you won't get much benefit from working out more.<br>
 	<</if>>
@@ -1336,7 +1336,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<br>
 	<<else>>
 		<br>You possess the Aegis Coffin. Would you like to slumber within it to replace your current skeleton with a superior orichalcum one?<br>
-		[[Sleep in the Aegis Coffin|Use Items and Relics][$AegisWear=true, setup.skeletonRemains.weight= 9.3*$mc.heightCor/170, setup.skeletonRemains.count+=1,$items.push(setup.skeletonRemains)]]<br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$AegisWear=true, setup.skeletonRemains.weight= 9.3*$mc.heightCor/170, setup.skeletonRemains.count+=1,$items.push(setup.skeletonRemains)">Sleep in the Aegis Coffin</button><br>
 	<</if>>
 <</if>>
 
@@ -1928,9 +1928,9 @@ The current total value of Relics you have copied is $relic38.copiedValue dubloo
 		<<if _relic.name !== "Kin Shifter" && (!$relic38.copiedValue || _relic.value <= 70)>>
 			<<capture _relic>>
 				<<if _relic.name === "Managed Misfortune">>
-					_relic.name for _relic.value dubloons [[Copy|Kin Shifter Use][$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value, $ManagedMisfortuneMax += 2]]<br>
+					_relic.name for _relic.value dubloons <button class="dark-btn obsidian" data-passage="Kin Shifter Use" data-setter="$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value, $ManagedMisfortuneMax += 2">Copy</button><br>
 				<<else>>
-					_relic.name for _relic.value dubloons [[Copy|Kin Shifter Use][$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value]]<br>
+					_relic.name for _relic.value dubloons <button class="dark-btn obsidian" data-passage="Kin Shifter Use" data-setter="$ownedRelics.push(_relic), $relic38.copiedValue += _relic.value">Copy</button><br>
 				<</if>>
 			<</capture>>
 		<</if>>
@@ -1975,7 +1975,7 @@ You can use the balloon to send requests and Relics back to Outset Town. You can
 
 		<br>Would you like to fashion your Purity Wood Planks into protective gear for a value of +25 corruption each?<br>
 
-		[[Use Purity Wood Plank|Balloon Workshop][$ownedRelics.deleteAt($i), $corruption += 25]]<br>
+		<button class="dark-btn obsidian" data-passage="Balloon Workshop" data-setter="$ownedRelics.deleteAt($i), $corruption += 25">Use Purity Wood Plank</button><br>
 	<</if>>
 
 	<<if ($ownedRelics.filter(relic => relic.name === "Rømer Stones").length === 1 && ($warmCloth === 0 && $coolCloth === 0)) || ($ownedRelics.filter(relic => relic.name === "Rømer Stones").length > 1 && ($warmCloth === 0 || $coolCloth === 0)) && !($warmCloth === 1 && $coolCloth === 1)>>
@@ -1987,11 +1987,11 @@ You can use the balloon to send requests and Relics back to Outset Town. You can
 	<<if $ownedRelics[$i].name === "Brave Vector" && $slingshot === 0>>
 		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo. <br>
 		<br>The raw materials for this are relatively cheap, letting you reshape the Brave Vector for only 10 dubloons.<br>
-		[[Reshape the Brave Vector into a powerful slingshot|Balloon Workshop][$slingshot = 1, $dubloon -= 10]]<br>
+		<button class="dark-btn obsidian" data-passage="Balloon Workshop" data-setter="$slingshot = 1, $dubloon -= 10">Reshape the Brave Vector into a powerful slingshot</button><br>
 	<</if>>
 	<<if $ownedRelics[$i].name === "Joyous Sunder" && $joyousSword === 0>>
 		<br>The Joyous Sunder is an incredibly powerful offensive tool, but it is limited by its form as a small knife. Luckily, with the help of the local Relic Engineers, you can reshape this Relic into a true sword that an expert swordsman would feel comfortable using. A weapon like that would be literally unstoppable by any enemy that can be defeated by physical attacks and does not disable the user before they can get close enough to use it. This would be most useful in the hands of someone like Khemia, letting him defeat powerful beasts from the depths of the Abyss without fear of injury himself. The materials to forge a sword from the Joyous Sunder would cost you 20 dubloons.<br>
-		[[Reshape the Joyous Sunder into a true sword|Balloon Workshop][$joyousSword = 1, $dubloon -= 20]]<br>
+		<button class="dark-btn obsidian" data-passage="Balloon Workshop" data-setter="$joyousSword = 1, $dubloon -= 20">Reshape the Joyous Sunder into a true sword</button><br>
 	<</if>>
 	<</capture>>
 <</for>>
@@ -2038,7 +2038,7 @@ You have currently borrowed $tempDebt of your 200 dubloons of extra debt.
 How many dubloons would you like to borrow?
 <<textbox "$temp" "">>
 
-[[Confirm|Commerce Balloon][$dubloons += Math.min(parseInt($temp), (200 - $tempDebt)), $debt += parseInt(Math.round(Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2)), $tempDebt += Math.min(parseInt($temp), (200 - $tempDebt))]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon" data-setter="$dubloons += Math.min(parseInt($temp), (200 - $tempDebt)), $debt += parseInt(Math.round(Math.min(parseInt($temp), (200 - $tempDebt)) * 1.2)), $tempDebt += Math.min(parseInt($temp), (200 - $tempDebt))">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -2049,7 +2049,7 @@ In order to finally settle down at an ending, you must pay off your debt to Clou
 How many dubloons would you like to pay back?
 <<textbox "$temp" "">>
 
-[[Confirm|Commerce Balloon][$dubloons -= parseInt($temp), $debt -= parseInt($temp)]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon" data-setter="$dubloons -= parseInt($temp), $debt -= parseInt($temp)">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -2628,7 +2628,7 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 							<<if $flaskMatrix[_temp] > 1>>
 								<<print `&nbsp; ${$flaskMatrix[_temp]} × ${setup.flaskLabels[_temp]}`>>
 								<<print `(${(_item.weight * $flaskMatrix[_temp]).toRounded(1)} kg) |`>>
-								[[Empty|Drop Item Count][$temp = _k, $flaskID = _temp]]<br>
+								<button class="dark-btn obsidian" data-passage="Drop Item Count" data-setter="$temp = _k, $flaskID = _temp">Empty</button><br>
 							<<elseif $flaskMatrix[_temp] === 1>>
 								<<print `&nbsp; 1 × ${setup.flaskLabels[_temp]} (${_item.weight.toRounded(1)} kg) |`>>
 								[[Empty|Drop Items Menu][_item.count -= 1, setup.item('Empty Flask').count += 1, $flaskMatrix[_temp] -= 1]]
@@ -2639,16 +2639,16 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 				<</for>>
 			<</if>>
 		<<elseif _item.name === 'Self-Warming Clothes' && _item.count > 0>>
-			&nbsp; 1 × [[_item.name|Item Info][$temp = _k]] (_item.weight kg) | [[Drop|Drop Items Menu][_item.count -= 1, $warmCloth = 0]]<br>
+			&nbsp; 1 × <button class="dark-btn obsidian" data-passage="Item Info" data-setter="$temp = _k">_item.name</button> (_item.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="_item.count -= 1, $warmCloth = 0">Drop</button><br>
 		<<elseif _item.name === 'Self-Cooling Clothes' && _item.count > 0>>
-			&nbsp; 1 × [[_item.name|Item Info][$temp = _k]] (_item.weight kg) | [[Drop|Drop Items Menu][_item.count -= 1, $coolCloth = 0]]<br>
+			&nbsp; 1 × <button class="dark-btn obsidian" data-passage="Item Info" data-setter="$temp = _k">_item.name</button> (_item.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="_item.count -= 1, $coolCloth = 0">Drop</button><br>
 		<<elseif _item.count > 1 || _item.count < 0>>
 			<<print `&nbsp; ${_item.count} ×`>>
-			[[_item.name|Item Info][$temp = _k]]
+			<button class="dark-btn obsidian" data-passage="Item Info" data-setter="$temp = _k">_item.name</button>
 			<<print `(${(_item.weight * _item.count).toRounded(1)} kg) |`>>
-			[[Drop|Drop Item Count][$temp = _k]]<br>
+			<button class="dark-btn obsidian" data-passage="Drop Item Count" data-setter="$temp = _k">Drop</button><br>
 		<<elseif _item.count === 1>>
-			&nbsp; 1 × [[_item.name|Item Info][$temp = _k]] (_item.weight kg) | [[Drop|Drop Items Menu][_item.count -= 1]]<br>
+			&nbsp; 1 × <button class="dark-btn obsidian" data-passage="Item Info" data-setter="$temp = _k">_item.name</button> (_item.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="_item.count -= 1">Drop</button><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -2664,18 +2664,18 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 				<<if $creepydoll.affec > 5>>
 					You can't seem to part ways with the Creepy Doll...
 				<<else>>
-					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic)">Drop</button>
 				<</if>>
 			<<case "World Stone">>
 				<<if $LilyPromise>>
-					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic), setup.modAffection('Lily', -5)]]
+					<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic), setup.modAffection('Lily', -5)">Drop</button>
 					You promised Lily she could use the World Stone, dropping it now will surely disappoint her greatly.
 				<<else>>
-					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic)">Drop</button>
 				<</if>>
 			<<case "Everhevea">>
 				<<if setup.item('Empty Flask').count >= 2>>
-					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2]]
+					<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic), setup.item('Empty Flask').count -= 2">Drop</button>
 				<<else>>
 					You need to empty the Everhevea to drop it (have at least two empty flasks in your inventory).
 				<</if>>
@@ -2683,16 +2683,16 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 				<<if $BionicEye>>
 					_relic.name: You can't drop Relics that have become part of your body.
 				<<else>>
-					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic)">Drop</button>
 				<</if>>
 			<<case "Glory's Grasp">>
 				<<if $BionicArm>>
 					_relic.name: You can't drop Relics that have become part of your body.
 				<<else>>
-					[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+					<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic)">Drop</button>
 				<</if>>
 			<<default>>
-				[[_relic.name|Relic Info][$temp = _i]] (_relic.weight kg) | [[Drop|Drop Items Menu][setup.loseRelic(_relic)]]
+				<button class="dark-btn obsidian" data-passage="Relic Info" data-setter="$temp = _i">_relic.name</button> (_relic.weight kg) | <button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="setup.loseRelic(_relic)">Drop</button>
 		<</switch>>
 		<br>
 	<</capture>>
@@ -2753,8 +2753,8 @@ You look over at your companion, sleeping soundly at your camp. You've shared co
 	<<set _string1 = "Force the use of the Pulse Bloom on " + $hiredCompanions[_i].name>>
 	<<set _string2 = "Ask to use the Pulse Bloom on " + $hiredCompanions[_i].name>>
 	<<if $hiredCompanions[_i].id === setup.companionIds.twin>>
-		[[_string1| Pulse Bloom Forced][$PulseBloomUse = "Twin"]]<br>
-		[[_string2| Pulse Bloom Asked][$PulseBloomUse = "Twin"]]<br>
+		<button class="dark-btn obsidian" data-passage=" Pulse Bloom Forced" data-setter="$PulseBloomUse = "Twin"">_string1</button><br>
+		<button class="dark-btn obsidian" data-passage=" Pulse Bloom Asked" data-setter="$PulseBloomUse = "Twin"">_string2</button><br>
 	<<elseif $hiredCompanions[_i].id !== setup.companionIds.golem>>
 		[[_string1| Pulse Bloom Forced][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
 		[[_string2| Pulse Bloom Asked][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
