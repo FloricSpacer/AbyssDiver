@@ -2101,21 +2101,19 @@ How many dubloons would you like to pay back?
 <</widget>>
 
 <<widget "TravelToPassageButton">>
-/* 
-    _args[0]: var|string
-    _args[1]: var|string
-    _args[2]: var|number
-    _args[3]: [var|number]
-    _args[4]: [var|number]
-    _args[5]: [string]
+/*
+	_args[0]: var|string   = As linkText in <<link>>. The text of the link. May contain markup.
+	_args[1]: var|string   = As passageName in <<link>>. The name of the passage to go to.
+	_args[2]: var|number   = The raw, unadjusted travel time.
+	_args[3]: [var|number] = Initial additive modifier (optional, can be negative).
+	_args[4]: [var|number] = Initial multiplicative modifier (optional, <1 is a bonus, >1 is a penalty).
+	_args[5]: [string]     = Set expression to execute (optional).
+	_args[6]: [string]     = Set style (optional).
 */
-<button id="travelButton" class="dark-btn obsidian">_args[0]</button>
-<<script>>
-$('#travelButton').click(function() {
-<<StartTraveling _args[2] _args[3] _args[4] _args[1]>>
-<<if _args[5]>><<print <<set ${_args[5]}>>>><</if>>
-});
-<</script>>
+<span @class="_args[6]"><<button _args[0] _args[1]>>
+    <<StartTraveling _args[2] _args[3] _args[4] _args[1]>>
+    <<if _args[5]>><<print <<set ${_args[5]}>>>><</if>>
+<</button>></span>
 <</widget>>
 
 <<widget "StartTraveling">>
