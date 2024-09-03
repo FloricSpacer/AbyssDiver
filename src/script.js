@@ -1787,11 +1787,11 @@ Macro.add('sidebar-widget', {
             if (isPurple) {
                 return '#800080'; // Purple
             } else if (level < 33) {
-                return '#4caf50'; // Green
+                return '#2c6e2e'; // Green
             } else if (level < 66) {
-                return '#ffc107'; // Yellow
+                return '#b35900'; // Yellow
             } else {
-                return '#f44336'; // Red
+                return '#8b0000'; // Red
             }
         }
 
