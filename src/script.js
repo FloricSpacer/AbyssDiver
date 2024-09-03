@@ -1708,16 +1708,18 @@ Macro.add('sidebar-widget', {
                     threats.push({name: "Greater Tentacle Beast", time: State.variables.timeL6T1 || 0, max: 15});
                     break;
                 case 7:
-                    threats.push({name: "Debt Collection", time: Math.max(0, -State.variables.dubloons), max: 1});
-                    let rehabilitationThreat;
+                    let debtThreat;
                     if (State.variables.dubloons > 299) {
-                        rehabilitationThreat = 2; // 20% of max 10
+                        debtThreat = 2; // 20% of max 10
                     } else if (State.variables.dubloons > 99) {
-                        rehabilitationThreat = 5; // 50% of max 10
+                        debtThreat = 5; // 50% of max 10
+                    } else if (State.variables.dubloons > 49) {
+                        debtThreat = 8; // 80% of max 10
                     } else {
-                        rehabilitationThreat = 8; // 80% of max 10
+                        debtThreat = 10;
                     }
-                    threats.push({name: "Rehabilitation", time: rehabilitationThreat, max: 10});
+                    threats.push({name: "Debt Collection", time: debtThreat, max: 10});
+                    threats.push({name: "Rehabilitation", time: State.variables.timeL7T2, max: 6});
                     break;
                 case 8:
                     threats.push({name: "Inanis Ego", time: State.variables.timeL8T1 || 0, max: 100});
