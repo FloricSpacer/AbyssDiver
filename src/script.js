@@ -1720,7 +1720,7 @@ Macro.add('sidebar-widget', {
                     threats.push({name: "Rehabilitation", time: rehabilitationThreat, max: 10});
                     break;
                 case 8:
-                    threats.push({name: "Inanis Ego", time: State.variables.timeL8T2a || 0, max: 100});
+                    threats.push({name: "Inanis Ego", time: State.variables.timeL8T1 || 0, max: 100});
                     threats.push({name: "Demential Aberrations", time: State.variables.timeL8T2a || 0, max: State.variables.hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 8 : 7});
                     break;
                 case 9:
