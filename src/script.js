@@ -1744,7 +1744,7 @@ Macro.add('sidebar-widget', {
         function getLayerThreatTitle() {
             const layer = State.variables.currentLayer;
             if (layer === 0 || layer === 10 || layer === 11 || layer === 12) return "";
-            return `<h4>Threats</h4>`;
+            return `<h4 style="margin-top: 4px;">Threats</h4>`;
         }
 
         function calculateBanditThreatLevel() {
