@@ -1731,6 +1731,13 @@ Macro.add('sidebar-widget', {
                 case 10:
                     break;
             }
+            if (State.variables.voidDiamondActive) {
+                threats.forEach(threat => {
+                  if (threat.name !== "The Elder") {
+                    threat.time = threat.max * 0.1;
+                  }
+                });
+              }
             return threats;
         }
 
