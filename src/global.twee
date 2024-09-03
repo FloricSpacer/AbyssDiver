@@ -36,7 +36,7 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 	<</capture>>
 <</for>>
 <</nobr>>
-<<back [[$menuReturn]]>>
+<button class="dark-btn obsidian" data-passage="$menuReturn">Back</button>
 
 :: Curse Info
 <<nobr>>
@@ -64,19 +64,20 @@ You have $items[1].count days of food.<br>
 You have $items[2].count unfilled flasks.<br>
 You have $items[3].count days of water in filled flasks.<br>
 <<if $items[3].count>0 >>
-[[Organize your drinking water|Flask Order]]<br>
+<button class="dark-btn obsidian" data-passage="Flask Order">Organize your drinking water</button><br>
 <</if>>
 <hr>
 <b>Items:</b><br>
 
 <<for _i = 0; _i < $items.length; _i++>>
 	<<capture _i>>
-	<<if $items[_i].count > 1 || $items[_i].count < 0>>
-			<<print "[[$items[_i].name|Item Info][$temp = _i]]">><<print " ">><<print $items[_i].count>><br>
-	<<elseif $items[_i].count === 1>>
-		<<print "[[$items[_i].name|Item Info][$temp = _i]] ">>
-		<br>
-	<</if>>
+		<div class="menu-item">
+			<<if $items[_i].count > 1 || $items[_i].count < 0>>
+				<button class="dark-btn obsidian" data-passage="Item Info" data-setter="$temp = _i">$items[_i].name x$items[_i].count</button><br>
+			<<elseif $items[_i].count === 1>>
+				<button class="dark-btn obsidian" data-passage="Item Info" data-setter="$temp = _i">$items[_i].name</button><br>
+			<</if>>
+		</div>
 	<</capture>>
 <</for>>
 <hr>
@@ -140,7 +141,7 @@ Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br>
 
 <br><br>
 
-<<back [[$menuReturn]]>>
+<button class="dark-btn obsidian" data-passage="$menuReturn">Back</button>
 <</nobr>>
 
 :: Habitation Ending [ending]
@@ -571,14 +572,14 @@ Thanks again for playing! I hope the dive was worth it.
 	<br><br>
 
     <<if settings.OpenAIAPIKey && settings.OpenAIAPIKey.startsWith("sk")>>
-		[[Generate New AI Portrait|Generate AI Portrait]]
+		<button class="dark-btn obsidian" data-passage="Generate AI Portrait">Generate New AI Portrait</button>
     <<elseif $userAPIKey.startsWith("sk")>>
 		<<set settings.OpenAIAPIKey = $userAPIKey>>
-		[[Generate New AI Portrait|Generate AI Portrait]]
+		<button class="dark-btn obsidian" data-passage="Generate AI Portrait">Generate New AI Portrait</button>
 	<<else>>
         Enter your OpenAI API key to enable the generation of AI character portraits. (Do NOT share your save file if you have entered your API key! The AI Portrait option can be disabled in settings to remove this message.)<br>
-		[[API Key Guide]]<br>
-		[[View Portrait Prompt|Portrait Prompt]]<br>
+		<button class="dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button><br>
+		<button class="dark-btn obsidian" data-passage="Portrait Prompt">View Portrait Prompt</button><br>
 		<<textbox "$userAPIKey" "">><br>
         <<button "Submit">>
             <<set settings.OpenAIAPIKey to $userAPIKey>>
@@ -947,7 +948,7 @@ Overall, the world would probably see you as a <<PerceivedStature $mc>> <<Percei
     <</button>></span><br><br>
 <</if>>
 
-<<back [[$menuReturn]]>>
+<button class="dark-btn obsidian" data-passage="$menuReturn">Back</button>
 
 :: Layer Notes [noreturn nobr]
 Notes on layers visited:<br>
@@ -1203,7 +1204,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<set $switchFlask=false>>
 	<<set $temp0=-1>>
 	You can choose the order in which you drink the water you have with you:<br>
-	<span class="icon">[img[setup.ImagePath+'Icons/waterbottle.png']]</span> [[Organize your drinking water|Flask Order]]<br>
+	<span class="icon">[img[setup.ImagePath+'Icons/waterbottle.png']]</span> <button class="dark-btn obsidian" data-passage="Flask Order">Organize your drinking water</button><br>
 <</if>>
 
 <br><span class="icon">[img[setup.ImagePath+'Icons/trash.png']]</span> [[Empty some flasks or drop some items/Relics you're carrying|Drop Items Menu]]<br>
@@ -2771,7 +2772,7 @@ Once your portrait is generated, you can follow the next step to save it for lon
 
 Once you do that, you can save the image for future use and enable the use of the image as your main portrait in settings.<br><br>
 
-<<back [[$menuReturn]]>>
+<button class="dark-btn obsidian" data-passage="$menuReturn">Back</button>
 
 
 :: Portrait Prompt [noreturn nobr]
