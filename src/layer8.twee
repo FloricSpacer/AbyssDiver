@@ -321,9 +321,9 @@ Choose a Relic to temporally limit-break:
 <<for _relic range $ownedRelics>>
 	<<capture _relic>>
 		<<if _relic.name === "Aeonglass">>
-			[[_relic.name|Endless Time Site][$timeUsed = 1, setup.loseRelic(_relic), $ownedRelics.push($relic70_ET), $timeRelic = $relic70_ET.name]]<br>
+			<button class="dark-btn obsidian" data-passage="Endless Time Site" data-setter="$timeUsed = 1, setup.loseRelic(_relic), $ownedRelics.push($relic70_ET), $timeRelic = $relic70_ET.name">_relic.name</button><br>
 		<<elseif _relic.name !== $spaceRelic>>
-			[[_relic.name|Endless Time Site][$timeUsed = 1, $timeRelic = _relic.name]]<br>
+			<button class="dark-btn obsidian" data-passage="Endless Time Site" data-setter="$timeUsed = 1, $timeRelic = _relic.name">_relic.name</button><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -368,10 +368,10 @@ You have broken the temporal limits of your $timeRelic here, allowing you to low
 <<if $items[2].count > 0>>
 <p><button class="dark-btn obsidian" data-passage="Layer8 Flasks">Fill your empty flasks with water from Lethe Taps</button></p>
 <</if>>
-<p>[[Consume food from Bedlam's Banquet once|Layer8 Forage][$mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));$foodL8 += 1]]<br>
-[[Consume water from Lethe Taps once|Layer8 Forage][$IQdrop += 0.5;$waterL8 += 1]]
+<p><button class="dark-btn obsidian" data-passage="Layer8 Forage" data-setter="$mc.events.push(new StandardsEvent("Bedlam's Banquet Major", 1));$foodL8 += 1">Consume food from Bedlam's Banquet once</button><br>
+<button class="dark-btn obsidian" data-passage="Layer8 Forage" data-setter="$IQdrop += 0.5;$waterL8 += 1">Consume water from Lethe Taps once</button>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko) && (setup.haveSmartphone || $ownedRelics.some(e => e.name === "Heavy is the Head"))>>
-	<br>[[Consume purified water from Lethe Taps once|Layer8 Forage][$IQdrop += 0.05;$waterL8 += 1]]
+	<br><button class="dark-btn obsidian" data-passage="Layer8 Forage" data-setter="$IQdrop += 0.05;$waterL8 += 1">Consume purified water from Lethe Taps once</button>
 <</if>></p>
 
 <p><button class="dark-btn obsidian" data-passage="Layer8 Hub">Return to exploring the rest of the layer</button></p>
@@ -470,8 +470,8 @@ You have successfully taken the $relic86.name Relic. Hopefully you can make good
 
 <b>You can wear the Between Whispers to ensure that you are always able to have conversations, even if you would normally be deaf or mute.</b>
 
-[[Continue searching for the Relics of layer 8|Layer8 Relics][$WhispersWear = true]]
-[[Continue exploring the eighth layer|Layer8 Hub][$WhispersWear = true]]
+<button class="dark-btn obsidian" data-passage="Layer8 Relics" data-setter="$WhispersWear = true">Continue searching for the Relics of layer 8</button>
+<button class="dark-btn obsidian" data-passage="Layer8 Hub" data-setter="$WhispersWear = true">Continue exploring the eighth layer</button>
 <</if>>
 
 
@@ -767,13 +767,13 @@ You take a moment to recover and you feel your eye<<if $eyeRemove > 1>>s<</if>>.
 [img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.hasCurse("Knife Ear") || $mc.hasCurse("Fluffy Ears")>>\
-[[Lose your ability to hear|Deafening Silence 2][$deafeningViolent = 0]]
+<button class="dark-btn obsidian" data-passage="Deafening Silence 2" data-setter="$deafeningViolent = 0">Lose your ability to hear</button>
 
 <<else>>
 Would you like to have your ears violently ripped off for an extra +25 corruption points?
 
-[[No, just the basic Deafening Silence for me|Deafening Silence 2][$deafeningViolent = 0]]
-[[Yes, violently rip off my ears|Deafening Silence 2][$deafeningViolent = 1, $corruption += 10]]
+<button class="dark-btn obsidian" data-passage="Deafening Silence 2" data-setter="$deafeningViolent = 0">No, just the basic Deafening Silence for me</button>
+<button class="dark-btn obsidian" data-passage="Deafening Silence 2" data-setter="$deafeningViolent = 1, $corruption += 10">Yes, violently rip off my ears</button>
 
 <</if>>
 
@@ -827,14 +827,14 @@ Time loses meaning in the face of this newfound silence. You ponder how this wil
 [img[setup.ImagePath + _curse.pic]]
 
 <<if $mc.hasCurse("Lingual Leviathan")>>\
-[[Lose your ability to speak|Taciturn Turnaround 2][$taciturnViolent = 0]]
+<button class="dark-btn obsidian" data-passage="Taciturn Turnaround 2" data-setter="$taciturnViolent = 0">Lose your ability to speak</button>
 
 <<else>>
 
 Would you like to have your tongue violently ripped out for an extra +25 corruption points?
 
-[[No, just the basic Taciturn Turnaround for me|Taciturn Turnaround 2][$taciturnViolent = 0]]
-[[Yes, violently rip out my tongue|Taciturn Turnaround 2][$taciturnViolent = 1, $corruption += 25]]
+<button class="dark-btn obsidian" data-passage="Taciturn Turnaround 2" data-setter="$taciturnViolent = 0">No, just the basic Taciturn Turnaround for me</button>
+<button class="dark-btn obsidian" data-passage="Taciturn Turnaround 2" data-setter="$taciturnViolent = 1, $corruption += 25">Yes, violently rip out my tongue</button>
 
 <</if>>
 
@@ -1349,10 +1349,10 @@ If you wanted to ascend all the way to the surface, it would cost
 <<if $DaedalusEquip>>\
 	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer8 Ascend 1][$DaedalusFly=true]]
+		<button class="dark-btn obsidian" data-passage="Layer8 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
 	<<else>>\
 		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer8 Ascend 1][$DaedalusFly=false]]
+		<button class="dark-btn obsidian" data-passage="Layer8 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
 	<</if>>\
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Layer8 Ascend2">Continue your ascent</button>
@@ -1386,14 +1386,14 @@ If you wanted to ascend all the way to the surface, it would cost
 
 	You can feel the deepest fears of your party manifesting into reality once again. 
 	However, this time, they are not mere visions, but physical manifestations of your fears.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2b][$returnPassage = passage(), $L8loopLim = false]]
+	<button class="dark-btn obsidian" data-passage="Layer 8 Threat 2b" data-setter="$returnPassage = passage(), $L8loopLim = false">Deal with the Demential Aberrations</button>
 <<elseif _triggers.dementialAberrations2a()>>
 	[img[setup.ImagePath+'Threats/dementialaberrations.png']]<br>
 
 	Behind every corner there seems to be a hint of something strange and wrong. The combination of the stress and the inherent wrongness of this layer is calling your
 	<<if $hiredCompanions.length > 0>> party's<</if>> sanity into question. And even if you know that these things aren't real, 
 	it doesn't mean you aren't stopped in your tracks for a day while you reckon with the horrific visions.<br>
-	[[Deal with the Demential Aberrations|Layer 8 Threat 2a][$returnPassage = passage(), $L8loopLim = false]]
+	<button class="dark-btn obsidian" data-passage="Layer 8 Threat 2a" data-setter="$returnPassage = passage(), $L8loopLim = false">Deal with the Demential Aberrations</button>
 <</if>>
 
 
@@ -2761,9 +2761,9 @@ Her voice is quiet, but it seems like she's come out better for having faced her
 <</if>><</nobr>>
 You wait as your balloon rapidly ascends and you can watch the metallic buildings shrink beneath you. Swarms of robots seems to pursue their mysterious duties as if they were ants scurrying about an anthill. Luckily they don't seem to pay much attention to the air, and even the occasional flying robot pays you no notice as you ascend towards the gate to the sixth layer.
 
-[[Ascend to next layer|Escape Balloon L7][$corruption -= (100 - $corRed)]]
+<button class="dark-btn obsidian" data-passage="Escape Balloon L7" data-setter="$corruption -= (100 - $corRed)">Ascend to next layer</button>
 <button class="dark-btn obsidian" data-passage="Layer8 Curses">Hover on this layer to take in a Curse</button>
-[[Get off the balloon on this layer|Layer8 Hub][$escBalDepl=0]]
+<button class="dark-btn obsidian" data-passage="Layer8 Hub" data-setter="$escBalDepl=0">Get off the balloon on this layer</button>
 
 :: Layer8 Camp
 

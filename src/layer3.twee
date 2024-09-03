@@ -70,10 +70,10 @@ The Abyss has various bioluminescent moss, mushrooms, and so on scattered about,
 <<if setup.starlitConquestActivated.count>0>>
 	The powerful headlights of the Starlit Conquest illuminate the cave.
 <<elseif $items[9].count > 0 && $torchUse === 0>>
-	[[Use torches to ward off some threats at the cost of 1 torch per travel|Layer3 Hub][$torchUse = 1]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Layer3 Hub" data-setter="$torchUse = 1">Use torches to ward off some threats at the cost of 1 torch per travel</button><br><br>
 <</if>>
 <<if $torchUse === 1>>
-	[[Stop using torches to ward of threats|Layer3 Hub][$torchUse = 0]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Layer3 Hub" data-setter="$torchUse = 0">Stop using torches to ward of threats</button><br><br>
 <</if>>
 
 <<if !isPlaying("layer3")>>
@@ -201,8 +201,8 @@ What do you want to do while you're here?<br><br>
 <p><button class="dark-btn obsidian" data-passage="Layer3 Hub">Return to exploring the rest of the layer</button></p>
 
 <<ForagingGrid setup.crystallineConfectionaries setup.undergroundRivers>>
-<p>[[Consume food from unsafe crystals|Layer3 Forage][$mc.events.push(new AgeEvent("Crystalline Confectionery Major", {years: 1}));$foodL3 += 1]]<br>
-<<if $abyssKnow>>[[Consume food from safe crystals|Layer3 Forage][$mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}));$foodL3 += 1]]<</if>></p>
+<p><button class="dark-btn obsidian" data-passage="Layer3 Forage" data-setter="$mc.events.push(new AgeEvent("Crystalline Confectionery Major", {years: 1}));$foodL3 += 1">Consume food from unsafe crystals</button><br>
+<<if $abyssKnow>><button class="dark-btn obsidian" data-passage="Layer3 Forage" data-setter="$mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}));$foodL3 += 1">Consume food from safe crystals</button><</if>></p>
 
 <<if $atWaterSource>>
 	<p>You can also wait at the underground river if you'd like to pass the time while waiting for something.<br>
@@ -318,10 +318,10 @@ In case you were wondering, there is one straight-shot passage through this laye
 <<if $DaedalusEquip>>\
 	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer3 Ascend 1][$DaedalusFly=true]]
+		<button class="dark-btn obsidian" data-passage="Layer3 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
 	<<else>>\
 		You are about to fly to the next layer
-		[[Maybe it's better to walk to the next layer|Layer3 Ascend 1][$DaedalusFly=false]]
+		<button class="dark-btn obsidian" data-passage="Layer3 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
 	<</if>>\
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Layer3 Ascend2">Continue your ascent</button>
@@ -349,10 +349,10 @@ In the deeper parts of the layer, a cold breeze occasionally blows through the c
 
 <<if _triggers.lesserTentacleBeast()>>
 	<br><<include "Layer3 Tentacle Encounter">><br><br>
-	[[Deal with the lesser tentacle beast|Layer3 Threat1][$returnPassage = passage()]]<br>
+	<button class="dark-btn obsidian" data-passage="Layer3 Threat1" data-setter="$returnPassage = passage()">Deal with the lesser tentacle beast</button><br>
 <<elseif _triggers.slackslime()>>
 	<br><<include "Layer3 Slackslime Encounter">><br><br>
-	[[Deal with the slackslime|Layer3 Threat2][$returnPassage = passage()]]<br>
+	<button class="dark-btn obsidian" data-passage="Layer3 Threat2" data-setter="$returnPassage = passage()">Deal with the slackslime</button><br>
 <</if>>
 
 
@@ -526,7 +526,7 @@ Which Curse would you like to force upon your unwilling companion?
 			!$hiredCompanions.every(companion => companion === $companionGolem || companion.hasCurse(_curse.name))
 		>>
 			<<capture _i>>
-				[[_curse.name|Layer3 Skewed2b][$temp = _i]]<br>
+				<button class="dark-btn obsidian" data-passage="Layer3 Skewed2b" data-setter="$temp = _i">_curse.name</button><br>
 			<</capture>>
 		<<elseif _curse.name === 'The Maxim'>>
 			<button class="dark-btn obsidian" data-passage="Maxim Bad End">_curse.name</button> @@.alert1; You're stomach starts to ache intensely as you consider this option.<br>
@@ -1203,8 +1203,8 @@ You finish the tea and watch in amazement as the remaining leaves float to the s
 
 <b>You can choose to start using this Relic in the Item menu to reduce the travel times to all future Relics by 1 day each.</b>
 
-[[Continue searching for the Relics of layer 3|Layer3 Relics][$SibylBuff = true]]
-[[Continue exploring the third layer|Layer3 Hub][$SibylBuff = true]]
+<button class="dark-btn obsidian" data-passage="Layer3 Relics" data-setter="$SibylBuff = true">Continue searching for the Relics of layer 3</button>
+<button class="dark-btn obsidian" data-passage="Layer3 Hub" data-setter="$SibylBuff = true">Continue exploring the third layer</button>
 <</if>>
 
 
@@ -1468,9 +1468,9 @@ With a wide smile, you tuck the Relic safely into your pack, leaving the platfor
 <</if>><</nobr>>
 The float through this layer is pretty uneventful, as the tunnel is dark around your balloon, not giving you much to see aside from an occasional patch of bioluminescent mushrooms growing on the walls. Luckily you seem to be able to move through the complex of tunnels relatively smoothly in your balloon.
 
-[[Ascend to next layer|Escape Balloon L2][$corruption -= (25 - $corRed)]]
+<button class="dark-btn obsidian" data-passage="Escape Balloon L2" data-setter="$corruption -= (25 - $corRed)">Ascend to next layer</button>
 <button class="dark-btn obsidian" data-passage="Layer3 Curses">Hover on this layer to take in a Curse</button>
-[[Get off the balloon on this layer|Layer3 Hub][$escBalDepl=0]]
+<button class="dark-btn obsidian" data-passage="Layer3 Hub" data-setter="$escBalDepl=0">Get off the balloon on this layer</button>
 
 
 :: Layer3 Preview [image layer3]
@@ -1566,11 +1566,11 @@ How do you want to deal with the tentacle beast moving in on you?
 <<nobr>>
 <<if $items[14].count > 0>>
 	You can fight it with a sword, but it's dangerous. You'd likely end up with mild injuries increasing your next 3 travel times by 1 days each.<br>
-	[[Fight it off with your sword yourself|$returnPassage][$status.duration += (3 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.tentacleLesser = true; $smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$status.duration += (3 - $statRed); $status.penalty += 1; $smaragdineThreatsSubmitted.tentacleLesser = true; $smaragdineThreatsDefeated.tentacleLesser = true">Fight it off with your sword yourself</button><br><br>
 <</if>>
 <<if $items[14].count > 0 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Khemia has enough expertise with a blade to be able to fight it off without taking any injuries or penalties, if you let him fight for you.<br>
-	[[Have Khemia fight it off with a sword|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleLesser = true">Have Khemia fight it off with a sword</button><br><br>
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 10>>
 	Due to its amorphous nature, it will take at least 11 bullets to take down the monster.<br>
@@ -1578,11 +1578,11 @@ How do you want to deal with the tentacle beast moving in on you?
 <</if>>
 <<if $mechaBoarded>>
 	From the safe cockpit of your Starlit Conquest, the tentacle monster seems more like an insect than a serious threat.<br>
-	[[Crush it with the Starlit Conquest|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleLesser = true">Crush it with the Starlit Conquest</button><br><br>
 <</if>>
 <<if $slingshot === 1>>
 Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily pebbles to use as ammo are abundant in the rocky caves of this layer.<br>
-[[Defeat it with the Brave Vector|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
+<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleLesser = true">Defeat it with the Brave Vector</button><br><br>
 <</if>>
 <<if $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
 	Your eyes fall on the Effacing Asperity. You could spray this at the monster in hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
@@ -1632,7 +1632,7 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a beast.
-[[Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts|$returnPassage][$smaragdineThreatsDefeated.tentacleLesser = true]]
+<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleLesser = true">Use a combination of Relics not mentioned above you believe would be able to overpower one of the beasts</button>
 
 
 /* used Effacing Asperity on lesser tentacle beast */
@@ -1853,4 +1853,4 @@ After admiring it for a moment, you carefully uproot the flower, ensuring to kee
 
 With the flower secured, you turn back the way you came, the image of Emily’s expectant smile spurring you onward.
 
-[[Continue exploring the third layer|Layer3 Hub][$hasCaveFlower = true]]
+<button class="dark-btn obsidian" data-passage="Layer3 Hub" data-setter="$hasCaveFlower = true">Continue exploring the third layer</button>

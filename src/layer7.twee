@@ -359,12 +359,12 @@ If you wanted to ascend all the way to the surface, it would cost
 <<if $DaedalusEquip>>\
 	<<if !$DaedalusFly>>\
 		You are currently committed to simply walking to the next layer
-		[[Flap your wings and prepare to fly to the next layer|Layer7 Ascend 1][$DaedalusFly=true]]
+		<button class="dark-btn obsidian" data-passage="Layer7 Ascend 1" data-setter="$DaedalusFly=true">Flap your wings and prepare to fly to the next layer</button>
 	<<else>>\
 		You are about to fly to the next layer
 		<<set $companionsDepartT = $time>>
 		<<set $companionsDepartL = $currentLayer>>
-		[[Maybe it's better to walk to the next layer|Layer7 Ascend 1][$DaedalusFly=false]]
+		<button class="dark-btn obsidian" data-passage="Layer7 Ascend 1" data-setter="$DaedalusFly=false">Maybe it's better to walk to the next layer</button>
 	<</if>>\
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Layer7 Ascend2">Continue your ascent</button>
@@ -655,18 +655,18 @@ Choose the Relic you would like to sell:
 				<<if $creepydoll.affec > 5>>
 					You can't seem to part ways with the Creepy Doll...
 				<<else>>
-					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
+					<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback)">_linkText</button>
 				<</if>>
 			<<case "World Stone">>
 				<<if $LilyPromise>>
-					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback), setup.modAffection('Lily', -5)]]
+					<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback), setup.modAffection('Lily', -5)">_linkText</button>
 					You promised Lily she could use the World Stone at the end of your journey. Recycling it now will surely disappoint her quite a lot.
 				<<else>>
-					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
+					<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback)">_linkText</button>
 				<</if>>
 			<<case "Everhevea">>
 				<<if setup.item('Empty Flask').count >= 2>>
-					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback), setup.item('Empty Flask').count -= 2]]
+					<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback), setup.item('Empty Flask').count -= 2">_linkText</button>
 				<<else>>
 					You need to empty the everhevea to sell it (have at least two empty flasks in your inventory).
 				<</if>>
@@ -674,16 +674,16 @@ Choose the Relic you would like to sell:
 				<<if $BionicEye>>
 					_relic.name: You can't sell Relics that have become part of your body.
 				<<else>>
-					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
+					<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback)">_linkText</button>
 				<</if>>
 			<<case "Glory's Grasp">>
 				<<if $BionicArm>>
 					_relic.name: You can't sell Relics that have become part of your body.
 				<<else>>
-					[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
+					<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback)">_linkText</button>
 				<</if>>
 			<<default>>
-				[[_linkText|Recycling Centers Site][setup.sellRelic(_relic, _callback)]]
+				<button class="dark-btn obsidian" data-passage="Recycling Centers Site" data-setter="setup.sellRelic(_relic, _callback)">_linkText</button>
 		<</switch>>
 		<br>
 	<</capture>>
@@ -1214,9 +1214,9 @@ Navigating the Abyss in this colossal form will be challenging, the once wide st
 <</if>><</nobr>>
 You wait as your balloon rapidly ascends and you can watch the metallic buildings shrink beneath you. Swarms of robots seems to pursue their mysterious duties as if they were ants scurrying about an anthill. Luckily they don't seem to pay much attention to the air, and even the occasional flying robot pays you no notice as you ascend towards the gate to the sixth layer.
 
-[[Ascend to next layer|Escape Balloon L6][$corruption -= (80 - $corRed)]]
+<button class="dark-btn obsidian" data-passage="Escape Balloon L6" data-setter="$corruption -= (80 - $corRed)">Ascend to next layer</button>
 <button class="dark-btn obsidian" data-passage="Layer7 Curses">Hover on this layer to take in a Curse</button>
-[[Get off the balloon on this layer|Layer7 Hub][$escBalDepl=0]]
+<button class="dark-btn obsidian" data-passage="Layer7 Hub" data-setter="$escBalDepl=0">Get off the balloon on this layer</button>
 
 
 :: Layer7 Cherry Relic [layer7]
@@ -1344,14 +1344,14 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 Choose the first Relic you would like to swap:<br><br>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
-		<<print "[[$ownedRelics[$i].name|Layer7 Forge2][$temp1 = $i]]">><br>
+		<<print "<button class="dark-btn obsidian" data-passage="Layer7 Forge2" data-setter="$temp1 = $i">$ownedRelics[$i].name</button>">><br>
 	<</capture>>
 <</for>>
 <<elseif $temp1 >= 0 && $temp2 < 0>>
 Choose the second Relic you would like to swap:<br><br>
 <<for $i = 0; $i < $ownedRelics.length; $i++>>
 	<<capture $i>>
-		<<if $i !== $temp1>><<print "[[$ownedRelics[$i].name|Layer7 Forge2][$temp2 = $i]]">><br><</if>>
+		<<if $i !== $temp1>><<print "<button class="dark-btn obsidian" data-passage="Layer7 Forge2" data-setter="$temp2 = $i">$ownedRelics[$i].name</button>">><br><</if>>
 	<</capture>>
 <</for>>
 <<else>>
@@ -1416,15 +1416,15 @@ You have no choice, you gain consciousness a few times to see yourself in a surg
 		And suddenly, it's here, reaching down to grab your Starlit Conquest, with you in it, with shining metallic arms then pulling you into its shell.<br><br>
 
 		You consider leaving the cockpit and adhering to the law of the layer, so you can continue your journey as quickly as possible.<br><br>
-		[[Submit to rehabilitation|Layer7 Threat2][$returnPassage = passage()]]<br><br>
+		<button class="dark-btn obsidian" data-passage="Layer7 Threat2" data-setter="$returnPassage = passage()">Submit to rehabilitation</button><br><br>
 
 		Or you could resist, even though it's huge robot, your Starlit Conquest would likely be able to beat it. However, it may not be a great idea, as you will soon be going up against more than a single robot, you're going against the entire might of the city.<br><br>
-		[[Activate your plasma sword and destroy the robot|Layer7 Resist][$returnPassage = passage()]]<br><br>
+		<button class="dark-btn obsidian" data-passage="Layer7 Resist" data-setter="$returnPassage = passage()">Activate your plasma sword and destroy the robot</button><br><br>
 
 	<<else>>
 		And suddenly, it's here, reaching down to grab you with shining metallic arms and pulling you into its shell.<br><br>
 
-		[[Get rehabilitated|Layer7 Threat2][$returnPassage = passage()]]<br><br>
+		<button class="dark-btn obsidian" data-passage="Layer7 Threat2" data-setter="$returnPassage = passage()">Get rehabilitated</button><br><br>
 	<</if>>
 <</if>>
 
@@ -1435,11 +1435,11 @@ No sooner than you finish that thought, you hear sirens blaring from all around 
 
 "YOU ARE BEING CHARGED WITH DESTRUCTION OF CITY PROPERTY, SURRENDER AND BE FINED OR BE TERMINATED."<br><br>
 <<if $dubloons>250>>
-	[[Pay a 250 dubloon fine|$returnPassage][$dubloons-=250]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$dubloons-=250">Pay a 250 dubloon fine</button><br><br>
 <<else>>
 	You don't have the 250 dubloons you need to pay the fine.<br><br>
 <</if>>
-	[[Attempt to fight the legion of incoming robots|$returnPassage][$gameOver=true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$gameOver=true">Attempt to fight the legion of incoming robots</button><br><br>
 
 :: Layer7 Ascend2 [layer7]
 <<nobr>>
