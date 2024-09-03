@@ -5,7 +5,7 @@
 [[Curses]]
 <</if>>\
 <<if $hiredCompanions.length> 0>>\
-[[Party|Party Sidebar]]
+<button class="dark-btn obsidian" data-passage="Party Sidebar">Party</button>
 <</if>>\
 <<if setup.haveNotepad>>\
 [[Layer Notes]]
@@ -199,9 +199,9 @@ Click this if you have found something that can be used for swimming underwater,
 	[[Turn on abyssal knowledge|Adjustments][$abyssKnowCheatoff = false]]
 <</if>>
 If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
-[[Simulate the functionality of a commerce balloon|Commerce Balloon]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Simulate the functionality of a commerce balloon</button>
 
-[[Adjust Companion Affection|Adjust Affection]]
+<button class="dark-btn obsidian" data-passage="Adjust Affection">Adjust Companion Affection</button>
 
 [[Adjust Curses]]
 
@@ -212,7 +212,7 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 [[Debug Menu]]
 
 
-[[Confirm Adjustments|$menuReturn]]
+<button class="dark-btn obsidian" data-passage="$menuReturn">Confirm Adjustments</button>
 
 
 :: Adjust Combat Score [noreturn]
@@ -247,7 +247,7 @@ How much would you like to modify your combat score by? (Use a negative number t
 
 
 <<if $time > 0>>
-	[[View time spent in each layer|Time Stats]]<br>
+	<button class="dark-btn obsidian" data-passage="Time Stats">View time spent in each layer</button><br>
 <</if>>
 
 [[All Curses]]
@@ -360,7 +360,7 @@ Curses added and removed on this page will not influence corruption.<br><br>
 		<<RemoveCurse _curse>>
 	<</for>>
 <</link>><br>
-[[Return|Adjustments]]
+<button class="dark-btn obsidian" data-passage="Adjustments">Return</button>
 
 :: Adjust Relics [nobr noreturn]
 Relics added and removed on this page will not influence corruption.<br>
@@ -396,7 +396,7 @@ Relics are removed and added one at a time. To remove all copies of a given Reli
 <<link "Remove all Relics" "Adjust Relics">>
 	<<set $ownedRelics = []>>
 <</link>><br>
-[[Return|Adjustments]]
+<button class="dark-btn obsidian" data-passage="Adjustments">Return</button>
 
 :: Adjust Affection [noreturn nobr]
 <<set _mods = Array.from({ length: $hiredCompanions.length }, _ => '0')>>
@@ -1074,20 +1074,20 @@ Using your balloon, you're able to send up any Relics you want to sell and get b
 
 <<nobr>>
 <<if $tunnelUsed === 1>>
-<br>[[Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel|Balloon Tunnel Retrieval]]<br><br>
+<br><button class="dark-btn obsidian" data-passage="Balloon Tunnel Retrieval">Ask people on the surface to look for the items you sent to the surface from the One-sided Tunnel</button><br><br>
 <</if>>
-[[Send a request to the Outset Town Administration|Balloon Admin]]<br>
+<button class="dark-btn obsidian" data-passage="Balloon Admin">Send a request to the Outset Town Administration</button><br>
 <<if $items[19].count > 0>>
-[[Send a request to the Relic Workshop|Balloon Workshop]]<br>
+<button class="dark-btn obsidian" data-passage="Balloon Workshop">Send a request to the Relic Workshop</button><br>
 <</if>>
 <<if $items[18].count > 0>>
-[[Send a request to the inn on the surface|Balloon Inn]]<br>
+<button class="dark-btn obsidian" data-passage="Balloon Inn">Send a request to the inn on the surface</button><br>
 <</if>>
-<</nobr>>[[Sell Relics|Balloon Sell1]]
-[[Buy items|Balloon Store1]]
+<</nobr>><button class="dark-btn obsidian" data-passage="Balloon Sell1">Sell Relics</button>
+<button class="dark-btn obsidian" data-passage="Balloon Store1">Buy items</button>
 
 
-[[Finish using balloon to trade|$hubReturn]]
+<button class="dark-btn obsidian" data-passage="$hubReturn">Finish using balloon to trade</button>
 
 
 :: Balloon Sell1 [balloon nobr]
@@ -1141,23 +1141,23 @@ Choose the Relic you would like to sell:<br>
 	<</capture>>
 <</for>>
 <br>
-[[Continue using the commerce balloon|Commerce Balloon]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue using the commerce balloon</button>
 
 
 :: Balloon Store1 [balloon cards nobr]
 <p><<CarryAdjust>></p>
-<p>[[Continue using the commerce balloon|Commerce Balloon]]</p>
+<p><button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue using the commerce balloon</button></p>
 
 <<include "ShopInventory">>
 
-<p>[[Continue using the commerce balloon|Commerce Balloon]]</p>
+<p><button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue using the commerce balloon</button></p>
 
 :: Balloon Sell 2 [balloon]
 <<set $dubloons += ($ownedRelics[$temp].value)>>
 The Relic $ownedRelics[$temp].name has been successfully sold and you've gotten your dubloon payment. You won't be getting that Relic back easily.<<run $ownedRelics.deleteAt($temp)>>
 
-[[Sell more Relics|Balloon Sell1]]
-[[Continue your balloon business|Commerce Balloon]]
+<button class="dark-btn obsidian" data-passage="Balloon Sell1">Sell more Relics</button>
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue your balloon business</button>
 
 
 :: Credits
@@ -1227,7 +1227,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<span class="icon">[img[setup.ImagePath+'Icons/waterbottle.png']]</span> <button class="dark-btn obsidian" data-passage="Flask Order">Organize your drinking water</button><br>
 <</if>>
 
-<br><span class="icon">[img[setup.ImagePath+'Icons/trash.png']]</span> [[Empty some flasks or drop some items/Relics you're carrying|Drop Items Menu]]<br>
+<br><span class="icon">[img[setup.ImagePath+'Icons/trash.png']]</span> <button class="dark-btn obsidian" data-passage="Drop Items Menu">Empty some flasks or drop some items/Relics you're carrying</button><br>
 
 <<if $items[11].count < 1 && ($ownedRelics.some(e => e.name === "Silk Twister") || $devouredRelics.some(e => e.name === "Silk Twister"))>>
 <br>You could spend a day weaving a rope out of your own hair using the Silk Twister. You'd end up with a rope, but it would take a day of effort weaving it.<br>
@@ -1326,7 +1326,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $ownedRelics.some(e => e.name === "Empathic Prism")>>
 	<br>You can look through your Empathic Prism to see what Relics and Curses on this layer might interact with your companions in some way.<br>
-	[[Check your Empathic Prism to see what Relics and Curses would provoke strong reactions from your companions|Empathic Prism Check]]<br>
+	<button class="dark-btn obsidian" data-passage="Empathic Prism Check">Check your Empathic Prism to see what Relics and Curses would provoke strong reactions from your companions</button><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Aegis Coffin")>>
@@ -1346,7 +1346,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 	<<if $hiredCompanions.length > 0 && !_pulseBloomInUse>>
 		<br>You can use the Pulse Bloom to copy the appearance of one of your companions.<br>
-		[[Use the Pulse Bloom|Pulse Bloom Use]]<br>
+		<button class="dark-btn obsidian" data-passage="Pulse Bloom Use">Use the Pulse Bloom</button><br>
 	<<elseif _pulseBloomInUse>>
 		<br>You are already under the effect of the Pulse Bloom.<br>
 	<<else>>
@@ -1367,7 +1367,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<</link>>
 	<<else>>
 		<br>You have the opportunity to summon a spirit to forge a golem using the power of the Lambent Specter<br><br>
-		[[Summon a spirit with the Lambent Specter|Lambent Use]]
+		<button class="dark-btn obsidian" data-passage="Lambent Use">Summon a spirit with the Lambent Specter</button>
 	<</if>>
 <br><br>
 <</if>>
@@ -1454,17 +1454,17 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $ownedRelics.some(e => e.name === "Kin Shifter") && $ownedRelics.length > 1>>
 	<br>A glob of putty-like slime lays ready for you to copy other Relics, if you desire to.<br>
-	[[Use the Kin Shifter to copy Relics|Kin Shifter Use]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Kin Shifter Use">Use the Kin Shifter to copy Relics</button><br><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Forbidden Grimoire") && $hiredCompanions.length > 0>>
 	<br>A ragged book written in a strange, ancient language sits in your bag. It holds forgotten knowledge that can improve anyone's skills, doubling any numeric benefit they provide.<br>
-	[[Use the Forbidden Grimoire to improve someone's abilities|Forbidden Grimoire Select]]<br><br>
+	<button class="dark-btn obsidian" data-passage="Forbidden Grimoire Select">Use the Forbidden Grimoire to improve someone's abilities</button><br><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Ring of the Devourer")>>
 		<br>Your Ring of the Devourer has the ability to devour a Relic, absorbing it into your body. This allows you to absorb the power of a Relic, but destroys it in the process.<br>
-		[[Choose a Relic to absorb|Ring of the Devourer Use]]<br><br>
+		<button class="dark-btn obsidian" data-passage="Ring of the Devourer Use">Choose a Relic to absorb</button><br><br>
 <</if>>
 
 <br><div class="relicToggles">
@@ -1492,7 +1492,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<if $items[25].count > 0 && $hexflame > 9>>
 		<div>
 			You can drink as much Ward Water as you want if you you want to reduce your jinxed flame counters. This might not be the most economical idea, but it can help you solve the issue immediately if you're not worried about conserving water.<br>
-			[[Drink some Ward Water to reduce your hexflame count|Ward Water Drink]]
+			<button class="dark-btn obsidian" data-passage="Ward Water Drink">Drink some Ward Water to reduce your hexflame count</button>
     	</div>
     <</if>>
 
@@ -1702,7 +1702,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<if !$StoredCurse.length>>
 		You need to store a Curse in one of the Relic's marbles before you can use it.<br>
 	<<else>>
-		[[Manage the Curses stored in your Managed Misfortune|Managed Misfortune Use]]
+		<button class="dark-btn obsidian" data-passage="Managed Misfortune Use">Manage the Curses stored in your Managed Misfortune</button>
 	<</if>>
 <</if>>
 
@@ -1710,31 +1710,31 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <br>You can use the Gleam Dazer one time to view a glimpse of the next layer and see what threats, Relics, and Curses await you further into the Abyss.<br>
 	<<set $previewReturn = $hubReturn>>
 	<<if $currentLayer === 0>>
-		[[Peek at what is waiting for you on the first layer|Layer1 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer1 Preview">Peek at what is waiting for you on the first layer</button><br>
 	<</if>>
 	<<if $currentLayer === 1>>
-		[[Peek at what is waiting for you on the second layer|Layer2 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer2 Preview">Peek at what is waiting for you on the second layer</button><br>
 	<</if>>
 	<<if $currentLayer === 2>>
-		[[Peek at what is waiting for you on the third layer|Layer3 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer3 Preview">Peek at what is waiting for you on the third layer</button><br>
 	<</if>>
 	<<if $currentLayer === 3>>
-		[[Peek at what is waiting for you on the fourth layer|Layer4 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer4 Preview">Peek at what is waiting for you on the fourth layer</button><br>
 	<</if>>
 	<<if $currentLayer === 4>>
-		[[Peek at what is waiting for you on the fifth layer|Layer5 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer5 Preview">Peek at what is waiting for you on the fifth layer</button><br>
 	<</if>>
 	<<if $currentLayer === 5>>
-		[[Peek at what is waiting for you on the sixth layer|Layer6 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer6 Preview">Peek at what is waiting for you on the sixth layer</button><br>
 	<</if>>
 	<<if $currentLayer === 6>>
-		[[Peek at what is waiting for you on the seventh layer|Layer7 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer7 Preview">Peek at what is waiting for you on the seventh layer</button><br>
 	<</if>>
 	<<if $currentLayer === 7>>
-		[[Peek at what is waiting for you on the eighth layer|Layer8 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer8 Preview">Peek at what is waiting for you on the eighth layer</button><br>
 	<</if>>
 	<<if $currentLayer === 8>>
-		[[Peek at what is waiting for you on the ninth layer|Layer9 Preview]]<br>
+		<button class="dark-btn obsidian" data-passage="Layer9 Preview">Peek at what is waiting for you on the ninth layer</button><br>
 	<</if>>
 	<<if $currentLayer >= 9>>
 		For some reason, you cannot see any farther past this layer. Even the view of the Gleam Dazer seems to be blocked here.<br>
@@ -1742,9 +1742,9 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <</if>>
 
 <</nobr>>
-<span class="icon">[img[setup.ImagePath+'Icons/adjustments.png']]</span> [[Perform other stat adjustments to correct for errors|Adjustments]]
+<span class="icon">[img[setup.ImagePath+'Icons/adjustments.png']]</span> <button class="dark-btn obsidian" data-passage="Adjustments">Perform other stat adjustments to correct for errors</button>
 
-<span class="icon">[img[setup.ImagePath+'Icons/return.png']]</span> [[Return|$hubReturn]]
+<span class="icon">[img[setup.ImagePath+'Icons/return.png']]</span> <button class="dark-btn obsidian" data-passage="$hubReturn">Return</button>
 
 
 
@@ -1857,7 +1857,7 @@ What would you like to do with your Managed Misfortune?
 	<</capture>>
 <</for>>
 
-[[Back| Use Items and Relics]]
+<button class="dark-btn obsidian" data-passage=" Use Items and Relics">Back</button>
 
 :: Ring of the Devourer Use [nobr noreturn]
 <<set _i = 0>>
@@ -1883,7 +1883,7 @@ How many bottles of Ward Water would you like to drink today? You currently have
 
 <<textbox "$temp" "1">>
 
-[[Continue|Ward Water Drink 2]]
+<button class="dark-btn obsidian" data-passage="Ward Water Drink 2">Continue</button>
 
 :: Ward Water Drink 2
 <<nobr>>
@@ -1897,7 +1897,7 @@ You just drank $temp bottles of Ward Water.<<if $temp > 3 >> It was quite an eff
 
 You now have <<print $hexflame - 9>> jinxed flame counters and $items[25].count Ward Waters remaining.
 
-[[Continue exploring the layer|$hubReturn]]
+<button class="dark-btn obsidian" data-passage="$hubReturn">Continue exploring the layer</button>
 
 :: Adjust bullets [noreturn]
 <<set $temp = 0>>How many bullets would you like to add? (Use a negative number to subtract)
@@ -1943,7 +1943,7 @@ The current total value of Relics you have copied is $relic38.copiedValue dubloo
 <</if>>
 <</nobr>>
 
-[[Return to exploring|$hubReturn]]
+<button class="dark-btn obsidian" data-passage="$hubReturn">Return to exploring</button>
 
 :: Daedalus Mechanism Select [noreturn]
 
@@ -1960,7 +1960,7 @@ Please enter what kind of wings the Daedalus mechanism should mimic:
 
 <<include "Inn Storage">>
 
-[[Continue using the commerce balloon|Commerce Balloon]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue using the commerce balloon</button>
 
 
 :: Balloon Workshop [balloon]
@@ -1997,25 +1997,25 @@ You can use the balloon to send requests and Relics back to Outset Town. You can
 <</for>>
 <</nobr>>
 
-[[Continue using the commerce balloon|Commerce Balloon]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue using the commerce balloon</button>
 
 
 :: Balloon Admin [balloon]
 You can send a request to the Outset Town Administration. There seem to be a number of services that are provided here for people who need them, including managing debts and changing your legal name.
 
 For a small fee of 10 dubloons, you can change your legal name from $mc.name to whatever you wish.
-[[Change your name|Balloon Name]]
+<button class="dark-btn obsidian" data-passage="Balloon Name">Change your name</button>
 
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
-[[Borrow more money|Balloon debt1]]
+<button class="dark-btn obsidian" data-passage="Balloon debt1">Borrow more money</button>
 <</if>>
 <<if $debt > 0>>
 You currently have $debt dubloons of debt, which you can pay off now to allow yourself to settle down at a habitation option.
-[[Pay off your debt|Balloon debt2]]
+<button class="dark-btn obsidian" data-passage="Balloon debt2">Pay off your debt</button>
 <</if>>
 
-[[Continue using the commerce balloon|Commerce Balloon]]
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Continue using the commerce balloon</button>
 
 
 :: Balloon Name [balloon]
@@ -2700,7 +2700,7 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 
 <br>
 
-[[Return|$hubReturn]]
+<button class="dark-btn obsidian" data-passage="$hubReturn">Return</button>
 
 :: Drop Item Count [nobr noreturn]
 <<set _item = $items[$temp]>>
@@ -2801,7 +2801,7 @@ Generate a new AI portrait of your character (this will take at least a few seco
     <</script>>
 	<<set setup.firstPortraitGen = true>>
 <</button>><br>
-[[View Portrait Prompt|Portrait Prompt]]
+<button class="dark-btn obsidian" data-passage="Portrait Prompt">View Portrait Prompt</button>
 <div id="notification"></div><br>
 <img class="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;"><br><br>
 
