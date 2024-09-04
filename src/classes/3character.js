@@ -1222,6 +1222,17 @@ class Character {
 	 */
 	get inhuman() {
 		let inhuman = 0;
+	
+		const humanSkinColors = [
+			'pale', 'tanned', 'olive', 'brown', 'dark brown',
+			'fair', 'ivory', 'beige', 'light peach', 'pinkish', 'light tan',
+			'golden', 'honey', 'caramel', 'bronze', 'light brown', 'medium brown',
+			'warm brown', 'reddish brown', 'chestnut', 'amber', 'cocoa', 'espresso',
+			'deep brown', 'mahogany', 'sable', 'ebony', 'cool brown', 'ash brown',
+			'copper', 'nutmeg', 'cinnamon', 'sand', 'ochre', 'sienna', 'almond',
+			'black', 'white'
+		];
+	
 		if (this.ears !== 'normal human') inhuman++;
 		if (this.skinType !== '' && this.skinType !== 'hairless, smooth') inhuman += 4;
 		if (this.blood !== 'red') inhuman += 2;
@@ -1231,12 +1242,19 @@ class Character {
 		if (this.height < 100) inhuman += 1;
 		if (this.height > 1000) inhuman += 1;
 		if (this.height < 50) inhuman += 1;
-		if (State.variables.PulseBloomUse == "Monster") inhuman+=10;
+		if (State.variables.PulseBloomUse == "Monster") inhuman += 10;
 		inhuman += this.tail.length * 2;
 		inhuman = this.events.reduce((v, e) => e.inhumanise(v), inhuman);
+	
+		if (!humanSkinColors.includes(this.skinColor.toLowerCase())) {
+			inhuman += 2;
+		}
+	
 		if (this.id === setup.companionIds.mc && State.variables.LuminousWear) inhuman /= 4;
+	
 		return inhuman;
 	}
+	
 
 	/**
 	 * Returns the level of conversation handicap of this character.
