@@ -842,8 +842,7 @@ Object.defineProperties(setup, {
                         "Asset Robustness A", "Perma-dye", "Power Dom", "Equal Opportunity");
                     break;
                 case setup.companionIds.khemia:
-                    willingCurses.push("Clothing Restriction A", "Clothing Restriction B",
-                        "Power Dom", "Absolute Birth Control", "Pheromones");
+                    willingCurses.push("Power Dom", "Absolute Birth Control", "Pheromones");
                     if (companion.sex === 'male') {
                         willingCurses.push("Asset Robustness A", "Asset Robustness B",
                             "Asset Robustness C", "Asset Robustness D");
