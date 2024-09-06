@@ -719,24 +719,34 @@ class Character {
 	 * When writing events involving this character, use breastsCor instead.
 	 * @returns {number}
 	 */
-	get breasts() {
-		let breasts = this.obreasts;
-		let curAge = this.age 
-		for (let event of this.events) {
-			breasts = event.changeBreasts(this, breasts);
-			
-			if (event.type == 'age'){
-				curAge = this.age * AgeEvent.aYear;
-				curAge = event.age(curAge);
-			}
 
-			let currentBreasts = BreastCorrection(this, breasts, curAge) 
-			if ((currentBreasts>0 || this.penis == 0 ) && !this.hasCurse(ShrunkenAssets)){
-				breasts = event.growAsset(breasts)
-			}
-		}
-		return breasts;
+	
+  get breasts() {
+	let breasts = this.obreasts;
+	let curAge = this.age;
+  
+	const sexChangingCurse = this.curses.find(curse => curse instanceof SexSwitcheroo || curse instanceof FutaFun);
+	if (sexChangingCurse) {
+	  breasts = sexChangingCurse.changeBreasts(this, breasts);
 	}
+	for (let event of this.events) {
+	  if (!(event instanceof SexSwitcheroo) && !(event instanceof FutaFun)) {
+		breasts = event.changeBreasts(this, breasts);
+		let currentBreasts = BreastCorrection(this, breasts, curAge);
+		if ((currentBreasts > 0 || this.penis == 0) && !this.hasCurse(ShrunkenAssets)) {
+		  breasts = event.growAsset(breasts);
+		}
+	  }
+	}
+	for (let event of this.events) {
+	  if (event.type == 'age') {
+		curAge = this.age * AgeEvent.aYear;
+		curAge = event.age(curAge);
+	  }
+	}
+	breasts = BreastCorrection(this, breasts, curAge);
+	return breasts;
+  }
 
 
 	/**
