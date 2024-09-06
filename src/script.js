@@ -1750,8 +1750,7 @@ Macro.add('sidebar-widget', {
             const mc = State.variables.mc;
             const items = State.variables.items;
             const hiredCompanions = State.variables.hiredCompanions;
-            const setup = window.setup; // Assuming setup is a global object
-
+            
             let banditThreatLevel = 0;
 
             // Check for threat1Crit
