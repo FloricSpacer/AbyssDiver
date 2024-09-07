@@ -1763,15 +1763,15 @@ State.variables.curse61 = setup.allCurses.MassacreManicure
 window.MassacreManicure = MassacreManicure
 setup.curseArray.push(MassacreManicure)
 
-class DoS extends Curse {
+class ドS extends Curse {
 	static corruption = 50;
-	static curseName = 'DoS';
+	static curseName = 'ドS';
 	static description = `Causes you to feel pleasure when inflicting others with pain, but numbs feelings of physical pleasure from other sources somewhat.`;
-	static descriptionMitigated = `Causes you to feel pleasure when inflicting others with pain, but numbs feelings of physical pleasure from other sources somewhat.\n\nThanks to the effects of the Shifting Obelisk, pleasure received from other sources isn't dulled, the effect extends to psychological and emotional pain too, and your targets will feel pleasure from receiving the pain as if they had a weaker version of the DoM Curse.`;
+	static descriptionMitigated = `Causes you to feel pleasure when inflicting others with pain, but numbs feelings of physical pleasure from other sources somewhat.\n\nThanks to the effects of the Shifting Obelisk, pleasure received from other sources isn't dulled, the effect extends to psychological and emotional pain too, and your targets will feel pleasure from receiving the pain as if they had a weaker version of the ドM Curse.`;
 	static picture = 'Curses/dos.png';
 	static type = 'libido';
 	constructor() {
-		super('DoS', 'libido',
+		super('ドS', 'libido',
 		      'You feel pleasure when inflicting pain on others, though other sources of pleasure are somewhat dulled. ');
 	}
 
@@ -1779,20 +1779,20 @@ class DoS extends Curse {
 		return prevSubDom - 1;
 	}
 }
-setup.allCurses.DoS = new DoS()
-State.variables.curse62 = setup.allCurses.DoS
-window.DoS = DoS
-setup.curseArray.push(DoS)
+setup.allCurses.ドS = new ドS()
+State.variables.curse62 = setup.allCurses.ドS
+window.ドS = ドS
+setup.curseArray.push(ドS)
 
-class DoM extends Curse {
+class ドM extends Curse {
 	static corruption = 45;
-	static curseName = 'DoM';
+	static curseName = 'ドM';
 	static description = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both S and M, you will cease to feel pleasure entirely except when inflicting or receiving pain.`;
-	static descriptionMitigated = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both S and M, you will cease to feel pleasure entirely except when inflicting or receiving pain.\n\nThanks to the effects of the Shifting Obelisk, pleasure received from other sources isn't dulled, and the people inflicting the pain on you will feel pleasure from it as if they had a weaker version of the DoS Curse.`;
+	static descriptionMitigated = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both S and M, you will cease to feel pleasure entirely except when inflicting or receiving pain.\n\nThanks to the effects of the Shifting Obelisk, pleasure received from other sources isn't dulled, and the people inflicting the pain on you will feel pleasure from it as if they had a weaker version of the ドS Curse.`;
 	static picture = 'Curses/dom.png';
 	static type = 'libido';
 	constructor() {
-		super('DoM', 'libido',
+		super('ドM', 'libido',
 		      'All pain you feel is converted into pleasure, though other sources of pleasure are somewhat dulled. ');
 	}
 
@@ -1800,10 +1800,10 @@ class DoM extends Curse {
 		return prevSubDom + 1;
 	}
 }
-setup.allCurses.DoM = new DoM()
-State.variables.curse63 = setup.allCurses.DoM
-window.DoM = DoM
-setup.curseArray.push(DoM)
+setup.allCurses.ドM = new ドM()
+State.variables.curse63 = setup.allCurses.ドM
+window.ドM = ドM
+setup.curseArray.push(ドM)
 
 class HijinksEnsue extends Curse {
 	static corruption = 40;
