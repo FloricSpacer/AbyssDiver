@@ -1787,8 +1787,8 @@ setup.curseArray.push(ドS)
 class ドM extends Curse {
 	static corruption = 45;
 	static curseName = 'ドM';
-	static description = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both S and M, you will cease to feel pleasure entirely except when inflicting or receiving pain.`;
-	static descriptionMitigated = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both S and M, you will cease to feel pleasure entirely except when inflicting or receiving pain.\n\nThanks to the effects of the Shifting Obelisk, pleasure received from other sources isn't dulled, and the people inflicting the pain on you will feel pleasure from it as if they had a weaker version of the ドS Curse.`;
+	static description = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both ドS and ドM, you will cease to feel pleasure entirely except when inflicting or receiving pain.`;
+	static descriptionMitigated = `Converts all pain you receive into pleasure, but in return, dulls normal feelings of physical pleasure a bit. With both ドS and ドM, you will cease to feel pleasure entirely except when inflicting or receiving pain.\n\nThanks to the effects of the Shifting Obelisk, pleasure received from other sources isn't dulled, and the people inflicting the pain on you will feel pleasure from it as if they had a weaker version of the ドS Curse.`;
 	static picture = 'Curses/dom.png';
 	static type = 'libido';
 	constructor() {
