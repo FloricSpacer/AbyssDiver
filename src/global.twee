@@ -1247,7 +1247,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 
 <<if $items[11].count < 1 && ($ownedRelics.some(e => e.name === "Silk Twister") || $devouredRelics.some(e => e.name === "Silk Twister"))>>
 <br>You could spend a day weaving a rope out of your own hair using the Silk Twister. You'd end up with a rope, but it would take a day of effort weaving it.<br>
-<<WaitAtPassage 'Weave a hair rope' `"Silk Twister Rope"` '1'>><br>
+<<WaitAtPassageButton 'Weave a hair rope' `"Silk Twister Rope"` '1' 0 "dark-btn obsidian">><br>
 <</if>>
 
 <<if $items[7].count > 0>>
@@ -2103,6 +2103,21 @@ How many dubloons would you like to pay back?
 <</link>>
 <</widget>>
 
+<<widget "WaitAtPassageButton">>
+/*
+	_args[0]: var|string    = As linkText in <<button>>. The text of the button. May contain markup.
+	_args[1]: var|string    = As passageName in <<button>>. The name of the passage to go to.
+	_args[2]: number|string = The number of days to wait. Expressions should be passed as a regular string.
+	_args[3]: [string]      = Set expression to execute (optional).
+	_args[4]: [string]      = Set style (optional).
+*/
+<span @class="_args[4]"><<button _args[0] _args[1]>>
+	<<print `<<set _waitTime = ${_args[2]}>>`>>
+	<<if _waitTime > 0>><<set setup.startPassingTime(_args[1], _waitTime)>><</if>>
+	<<if _args[3]>><<print `<<set ${_args[3]}>>`>><</if>>
+<</button>></span>
+<</widget>>
+
 <<widget "TravelToPassage">>
 /*
 	_args[0]: var|string   = As linkText in <<link>>. The text of the link. May contain markup.
@@ -2413,7 +2428,7 @@ You will first drink:<br>
 
 	How many days would you like to rest here?<br>
 	<<textbox "_campTime" "0">><br>
-	<<WaitAtPassage 'Set up camp and wait' `passage()` 'Math.max(parseInt(_campTime, 10) || 0, 0)'>><br><br>
+	<<WaitAtPassageButton 'Set up camp and wait' `passage()` 'Math.max(parseInt(_campTime, 10) || 0, 0)' 0 "dark-btn obsidian">><br><br>
 	<<include "Drop companions">><br>
 	<button class="dark-btn obsidian" data-passage="$hubReturn">Return to exploring the layer without waiting</button>
 <</if>>
@@ -2802,7 +2817,7 @@ Finally, as you tie off the end, you can't help but feel a surge of pride. The r
 
 You pack the newly made rope carefully, ready for whatever challenges lie ahead. The Silk Twister, once again a simple comb, rests in your pocket, its job complete — for now.
 
-[[Return|$hubReturn][$items[11].count +=1, $hairRope = true]]
+<button class="dark-btn obsidian" data-passage="$hubReturn" data-setter="$items[11].count +=1, $hairRope = true">Return</button>
 <</if>>
 
 :: Generate AI Portrait [noreturn nobr]
