@@ -171,7 +171,7 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
     <<if $fear === "">>
     <div class="menu-item">
         <span class="icon" style="filter: invert(1); ">[img[setup.ImagePath+'Icons/KhemiaIcon.png']]</span>
-        <button class="dark-btn obsidian" data-passage="Surface Khemia Tips 1">
+        <button class="dark-btn obsidian" data-passage="Surface Khemia Tips 1" data-setter="$khemiaIntroduced = true">
             Approach Khemia and ask for advice
         </button>
     </div>
@@ -361,18 +361,28 @@ You currently have 1 companion token due to playing in easy mode. This allows yo
 <div class="cards-grid">
 <<for _companion range $companions>>
 <<capture _companion>>
+<<set _introducedVar = _companion.name.toLowerCase() + "Introduced">>
 <div>
-[img[setup.ImagePath + _companion.image]]
-<h2><<print _companion.name>></h2>
-<p>
-<<if $hiredCompanions.some(e => e.name === _companion.name) || $LostCompanions.some(e => e.name === _companion.name) || $DesertedCompanions.some(e => e.name === _companion.name)  || $WaitingCompanions.some(e => e.name === _companion.name)>>
-<button class="link-internal macro-button" type="button" disabled>Already hired</button>
+<<if variables()[_introducedVar]>>
+  <<= '<img src="' + setup.ImagePath + _companion.image + '" alt="' + _companion.name + '">' >>
+  <h2><<print _companion.name>></h2>
+  <p>
+  <<if $hiredCompanions.some(e => e.name === _companion.name) || $LostCompanions.some(e => e.name === _companion.name) || $DesertedCompanions.some(e => e.name === _companion.name)  || $WaitingCompanions.some(e => e.name === _companion.name)>>
+    <button class="link-internal macro-button" type="button" disabled>Already hired</button>
+  <<else>>
+    <<set $temp = "Hire " + _companion.name>>
+    <button class="dark-btn obsidian" data-passage="$temp">Hire for _companion.cost dubloons</button>
+  <</if>>
+  </p>
+  <p><<include `_companion.name + " Introduction"`>></p>
 <<else>>
-	<<set $temp = "Hire " + _companion.name>>
-<button class="dark-btn obsidian" data-passage="$temp">Hire for _companion.cost dubloons</button>
+  <<= '<img src="' + setup.ImagePath + _companion.image + '" alt="Unknown Companion" class="greyed-out">' >>
+  <h2>???</h2>
+  <p>
+    <button class="link-internal macro-button" type="button" disabled>Not yet introduced</button>
+  </p>
+  <p>???</p>
 <</if>>
-</p>
-<p><<include `_companion.name + " Introduction"`>></p>
 </div>
 <</capture>>
 <</for>>
@@ -422,7 +432,7 @@ Saeko nods, her expression a mix of seriousness and subtle encouragement.
 <<say $companionSaeko>>Very well. Remember, knowledge is your best tool in the Abyss. Stay observant, stay cautious, and may your research yield fascinating results.<</say>>
 With that, Saeko turns and walks away, leaving you to contemplate your impending descent into the Abyss.
 
-<button class="dark-btn obsidian" data-passage="Surface Hub">Return to town</button>
+<button class="dark-btn obsidian" data-passage="Surface Hub" data-setter="$saekoIntroduced = true">Return to town</button>
 
 /*[img[setup.ImagePath+'icon.png']]
 
