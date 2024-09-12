@@ -13,35 +13,12 @@ While traveling down into the pit is fraught with danger in the form of beasts, 
 
 Because Curses can often have substantial effects on the minds and behavior of divers, there are very few accurate reports and little information available about the Abyss past the first couple of layers. Most of it is an unknown, unexplored frontier. Just remember to make sure you can live with the decisions you make down there. Divers that have surfaced from particularly deep dives with many Curses generally seem happy with their life, but frequently have troubles reintegrating into society on account of the changes in their appearance and behavior. There's nothing wrong with deciding you've hit your limit and choosing to end your adventure early... just be sure that you make that decision while you're still you.
 
-Come with me, and I'll help you find some companions to help you on your journey!
+Come with me, and I'll give you some dubloons to help you buy some supplies!
 
-<button class="dark-btn obsidian" data-passage="Surface 2">Learn about the Companions</button>
+<button class="dark-btn obsidian" data-passage="Surface 2">Learn about the shop</button>
 
 
 :: Surface 2 [surface]
-
-<img @src="setup.ImagePath+'icon.png'" class="floatr">\
-
-You can hire some companions to come with you for your dive!
-
-They're all heavily screened, loyal, and drawn to work here by a shared lust for adventure and discovery. They will obey any commands directly related to helping you explore the Abyss, but they'll generally put their safety first in times of extreme danger - they're partners, not slaves, and they may even choose to leave you if you treat them exceptionally poorly. There's nothing stopping you from trying to forge a deeper relationship with them if you like, though. I have it on good authority that you could have a chance with any of them romantically, regardless of gender. Or you could just make some lifelong friends!
-
-They follow the same rules as you, so unless you buy supplies for them, they're going in with just the clothes on their backs and their rucksack sleeping bags. Also, all of them are injected with a lethal, dormant poison that activates on contact with human stomach acid, to prevent cannibalism. You'd be surprised by how much of an issue it used to be!
-
-Also, you should probably know about The Purity Gene. The "purity gene" (scientifically, PUR69E) is a unique insertion mutation rarely observed in infants born near the Abyss, here in Outset Town. This mutation confers on its bearer an immunity to the effects of Miasma, preventing them from being corrupted during their ascent, or from being locked out of the Abyss after they leave it and spend a few days on the surface. Furthermore, it even allows their bodies to use Miasma as a source of nutrition and maintain many bodily functions, so they need no food or water while in the Abyss. Being so heavily connected with the Abyss has drawbacks, however - it confers on them problems completely opposite to those of normal divers. While they can ascend through the Abyss just fine, descending through the Abyss (even through early layers) quickly causes them to lose their memory and sense of self, and invariably causes them to abandon their life on the surface and live as a beast of the Abyss, in mind if not in body. This effect is prevented if a human without the "purity gene" accompanies them while they descend. A strong, impassable repelling force also prevents them from picking up Relics that haven't yet been claimed by another diver, so they can't split up to find Relics faster or bypass their corruption costs. As they require other divers to be with them to effectively explore the Abyss, the general consensus is that they are better suited as companions to other divers, rather than solo divers themselves - and those with the "purity gene" have been strictly prohibited from traveling into the Abyss alone.
-
-In short: they're not corrupted by the Abyss, and don't need food or water, but are only effective and useful at exploring the Abyss when they're traveling with someone else who doesn't have the gene.
-
-All of the companions available for hire here have the "purity gene."
-
-Each companion has some initial abilities that will help you, but over time you can get to know them more and unlock more conversations, which will happen faster if you hit it off with them. Those can tell you more about the companion themselves and also unlock additional mechanical effects as they help you on your expedition!
-
-I'll show you around the shop then you can come back and get any companions you wanted to hire.
-
-<button class="dark-btn obsidian" data-passage="Surface 3">Check out the shop</button>
-
-
-:: Surface 3 [surface]
 <<set $dubloons = 300>>
 <img @src="setup.ImagePath+'icon.png'" class="floatr">\
 If you're going to be spending days, weeks, or months adventuring in a dangerous, monster-filled pit, you need to get some supplies first! Here's your stipend of 300 dubloons to get you started. We'll also supply you with a very large and a durable rucksack that should be big enough for just about anything you'll need to carry on your journey. It doubles as a thermal sleeping bag, too!
@@ -50,10 +27,12 @@ You can find valuable Relics while you're down in the Abyss, and if you like, yo
 
 Apart from the things you buy here and the clothes on your back, we can't let you bring anything else into the Abyss. Most tools made from outside materials quickly decay and become useless when brought into the Abyss, anyways.
 
-<button class="dark-btn obsidian" data-passage="Surface 4">Learn more about the surface and habitation</button>
+However, the most important way to spend your dubloons is to hire companions for your journey. They can bring unique abilities and expertise that are essential to any successful expedition. Once you meet someone around Outset Town you want to hire, you can head to the companion area and pick up their contract for the agreed price.
+
+<button class="dark-btn obsidian" data-passage="Surface 3">Learn more about the surface and habitation</button>
 
 
-:: Surface 4 [surface]
+:: Surface 3 [surface]
 <<set $totalCarry = parseInt($carryWeight)>><<set $carryWeight = parseInt($carryWeight)>>
 <img @src="setup.ImagePath+'icon.png'" class="floatr">\
 Now there's only a little more to tell you before you can spend those free 300 dubloons we're giving you! This is the habitation option for our current layer, which is the Surface.
@@ -177,7 +156,15 @@ A large, hulking machine stands motionless near the entrance to the Abyss. You o
     </div>
     <</if>>
 
-    <<if $hiredCompanions.length === 0 && $LostCompanions.length === 0 && $DesertedCompanions.length === 0 && $WaitingCompanions.length === 0>>
+    <<if !$companionVisit && $hiredCompanions.length === 0 && $LostCompanions.length === 0 && $DesertedCompanions.length === 0 && $WaitingCompanions.length === 0>>
+    <div class="menu-item">
+        <span class="icon">[img[setup.ImagePath+'Icons/hirecompanions.png']]</span>
+        <button class="dark-btn obsidian" data-passage="Surface Companions Info">
+            <b>Check out the companions available to hire</b>
+        </button>
+    </div>
+    
+	<<elseif $hiredCompanions.length === 0 && $LostCompanions.length === 0 && $DesertedCompanions.length === 0 && $WaitingCompanions.length === 0>>
     <div class="menu-item">
         <span class="icon">[img[setup.ImagePath+'Icons/hirecompanions.png']]</span>
         <button class="dark-btn obsidian" data-passage="Surface Companions">
@@ -352,6 +339,7 @@ You should <i>really</i> control your spending habits!
 
 :: Surface Companions [surface cards nobr]
 
+<<set $companionVisit = true>>
 <<if $compTok === 1>>
 <p>
 You are able to hire the companion Khemia for free due to playing in easy mode! He's a great guide, and the most experienced companion there is, so he should be very helpful on your expedition.
@@ -389,6 +377,29 @@ You are able to hire the companion Khemia for free due to playing in easy mode! 
 </div>
 
 <p><button class="dark-btn obsidian" data-passage="Surface Hub">Continue your business on the surface</button></p>
+
+
+:: Surface Companions Info [surface]
+
+<img @src="setup.ImagePath+'icon.png'" class="floatr">\
+
+You can hire some companions to come with you for your dive!
+
+They're all heavily screened, loyal, and drawn to work here by a shared lust for adventure and discovery. They will obey any commands directly related to helping you explore the Abyss, but they'll generally put their safety first in times of extreme danger - they're partners, not slaves, and they may even choose to leave you if you treat them exceptionally poorly. There's nothing stopping you from trying to forge a deeper relationship with them if you like, though. I have it on good authority that you could have a chance with any of them romantically, regardless of gender. Or you could just make some lifelong friends!
+
+They follow the same rules as you, so unless you buy supplies for them, they're going in with just the clothes on their backs and their rucksack sleeping bags. Also, all of them are injected with a lethal, dormant poison that activates on contact with human stomach acid, to prevent cannibalism. You'd be surprised by how much of an issue it used to be!
+
+Also, you should probably know about The Purity Gene. The "purity gene" (scientifically, PUR69E) is a unique insertion mutation rarely observed in infants born near the Abyss, here in Outset Town. This mutation confers on its bearer an immunity to the effects of Miasma, preventing them from being corrupted during their ascent, or from being locked out of the Abyss after they leave it and spend a few days on the surface. Furthermore, it even allows their bodies to use Miasma as a source of nutrition and maintain many bodily functions, so they need no food or water while in the Abyss. Being so heavily connected with the Abyss has drawbacks, however - it confers on them problems completely opposite to those of normal divers. While they can ascend through the Abyss just fine, descending through the Abyss (even through early layers) quickly causes them to lose their memory and sense of self, and invariably causes them to abandon their life on the surface and live as a beast of the Abyss, in mind if not in body. This effect is prevented if a human without the "purity gene" accompanies them while they descend. A strong, impassable repelling force also prevents them from picking up Relics that haven't yet been claimed by another diver, so they can't split up to find Relics faster or bypass their corruption costs. As they require other divers to be with them to effectively explore the Abyss, the general consensus is that they are better suited as companions to other divers, rather than solo divers themselves - and those with the "purity gene" have been strictly prohibited from traveling into the Abyss alone.
+
+In short: they're not corrupted by the Abyss, and don't need food or water, but are only effective and useful at exploring the Abyss when they're traveling with someone else who doesn't have the gene.
+
+All of the companions available for hire here have the "purity gene."
+
+Each companion has some initial abilities that will help you, but over time you can get to know them more and unlock more conversations, which will happen faster if you hit it off with them. Those can tell you more about the companion themselves and also unlock additional mechanical effects as they help you on your expedition!
+
+You can hire companions here, but you'll need to meet them around town first. Once you've encountered a potential companion in Outset Town, you can come back to the hiring area to bring them on as part of your expedition.
+
+<button class="dark-btn obsidian" data-passage="Surface Companions">Check out the companion area</button>
 
 
 :: Surface Summary [surface]
