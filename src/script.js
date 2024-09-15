@@ -351,27 +351,32 @@ Macro.add('say', {
             if (settings.OverridePortrait) {
                 imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
             } else if (setup.firstPortraitGen) {
-                // Placeholder imgSrc to ensure something is set immediately
                 imgSrc = "images/Player Icons/playerF.png"; // Placeholder image
-                // Fetch the base64 image from IndexedDB and set it as the portrait
-                setup.displayPortraitImage(); // Note: This will update the src later when the db operation completes
+                setup.displayPortraitImage();
             }
         }
         const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
+        
+        // Gender-based border color
+        const genderColors = {
+            1: 'deepskyblue', 2: 'aqua', 3: 'beige', 4: 'lavenderblush', 
+            5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink', 
+            100: 'rgb(136, 228, 56)'
+        };
+        const borderColor = genderColors[person?.genderVoice] || 'transparent';
+        
         const output =
-            `<div class="say clearfix" style="${person?.style ?? ''};${person?.style1 ?? ''}">` +
-            `<div class="avatar" style="float: left; margin-right: 10px; margin-bottom: 5px;">` +
-            `<img class="${imgClass}" src="${imgSrc}" style="width:100px;height:100px">` +
-            `</div>` +
-            `<div style="display: flex; align-items: center; height: 100px; padding-left: 10px;">` +
-            `<span class="say-nameB">${person?.name ?? ''}</span>` +
-            `</div>` +
-            `<div style="clear: both;"></div>` +
-            `<hr>` +
-            `<span class="say-contents">` +
-            `<span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>` +
-            `</span>` +
-            `</div>`;
+            `<div class="say" style="border: 3px solid ${borderColor};">
+                <div class="avatar">
+                    <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
+                </div>
+                <div class="say-text">
+                    <span class="say-nameB">${person?.name ?? ''}</span>
+                    <span class="say-contents">
+                        <span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>
+                    </span>
+                </div>
+            </div>`;
         $(this.output).wiki(output);
     }
 });
