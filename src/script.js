@@ -366,17 +366,19 @@ Macro.add('say', {
         const borderColor = genderColors[person?.genderVoice] || 'transparent';
         
         const output =
-            `<div class="say" style="border: 3px solid ${borderColor};">
+            `<<nobr>>
+            <div class="say" style="border: 3px solid ${borderColor};">
                 <div class="avatar">
                     <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
                 </div>
                 <div class="say-text">
-                    <span class="say-nameB">${person?.name ?? ''}</span>
+                    <span class="say-nameB">${person?.name ?? ''}</span><br>
                     <span class="say-contents">
                         <span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>
                     </span>
                 </div>
-            </div>`;
+            </div>
+            <</nobr>>`;
         $(this.output).wiki(output);
     }
 });
