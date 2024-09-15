@@ -1675,7 +1675,7 @@ How do you want to deal with the tentacle beast moving in on you?
 <</if>>
 <<if $items[13].count > 0 && $items[20].count > 10>>
 	Due to its amorphous nature, it will take at least 11 bullets to take down the monster.<br>
-	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (11 - $bullRed); $smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
+	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (Math.max(11 - (3 *$bullRed), 1)); $smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
 <</if>>
 <<if $mechaBoarded>>
 	From the safe cockpit of your Starlit Conquest, the tentacle monster seems more like an insect than a serious threat.<br>
@@ -1685,7 +1685,47 @@ How do you want to deal with the tentacle beast moving in on you?
 Your Brave Vector slingshot can be used like a gun, but it will take many shots to bring down the amorphous creature. Luckily pebbles to use as ammo are abundant in the rocky caves of this layer.<br>
 <button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.tentacleLesser = true">Defeat it with the Brave Vector</button><br><br>
 <</if>>
-<<if $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
+
+<<if $mc.curses.some(c => c.name === 'Omnitool') && $ownedRelics.some(r => r.name === "Effacing Asperity")>>
+	It seems like the tentacle beast feels some sort of urge to be gentler to beings it can impregnate. You also have the Effacing Asperity, which you can use as lubrication to decrease the pain from the thorough fucking it gives you. The combination of these two items allow you to get <i>no injury</i> if you allow the creature to fuck you. However, you run the risk of pregnancy, which can be a major problem in the Abyss.<br>
+	<<link "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed">>
+		<<set $layer3TentacleLubedFirstTime = false>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
+		<<PregCheckTentacle $mc>>
+		<<MonsterPregCheckParty>>
+	<</link>><br><br>
+<<elseif $mc.curses.some(c => c.name === 'Omnitool')>>
+	It seems like the tentacle beast feels some sort of urge to be gentler to beings it can impregnate. Due to your Omnitool Curse, you can allow it to fuck you, but only increase your next 2 travel times by 1 day each. However, you run the risk of pregnancy.<br>
+	<<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
+	<<set $status.duration += (2 - $statRed)>>
+	<<set $status.penalty += 1>>
+	<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
+	<<PregCheckTentacle $mc>>
+	<<MonsterPregCheckParty>>
+	<</link>>
+	<br><br>
+	<<if $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
+	Your eyes fall on the Effacing Asperity. You could spray this at the monster in hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
+	<<link "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed">>
+		<<set $layer3TentacleLubedFirstTime = false>>
+		<<set $status.duration += (2 - $statRed)>>
+		<<set $status.penalty += 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
+		<<PregCheckTentacle $mc>>
+		<<MonsterPregCheckParty>>
+	<</link>><br><br>
+	<<elseif $ownedRelics.some(r => r.name === "Effacing Asperity" ) && !$layer3TentacleLubedFirstTime >>
+	If you let it overpower you while using Effacing Asperity as a lubricant, the tentacle beast will subject you <<if $hiredCompanions.length > 0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
+	<<link "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed">>
+		<<set $layer3TentacleLubedFirstTime = false>>
+		<<set $status.duration += (2 - $statRed)>>
+		<<set $status.penalty += 1>>
+		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>> /* shouldn't be necessary but better to be safe */
+		<<PregCheckTentacle $mc>>
+		<<MonsterPregCheckParty>>
+	<</link>><br><br>
+	<</if>>
+<<elseif $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
 	Your eyes fall on the Effacing Asperity. You could spray this at the monster in hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
 	<<link "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed">>
 		<<set $layer3TentacleLubedFirstTime = false>>
@@ -1707,6 +1747,7 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 	<</link>><br><br>
 <</if>>
 
+<<if !$mc.curses.some(e => e.name === "Omnitool")>>
 If you allow it to overpower you, it will give you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>a very thorough tentacle fucking, leaving you with a serious limp, increasing your next 3 travel times by 2 days each. <br>
 <<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
 	<<set $status.duration += (3 - $statRed)>>
@@ -1715,6 +1756,7 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
 <</link>>
+<</if>>
 
 <<if $ownedRelics.some(e => e.name === "Creepy Doll")>>
 	<br><br>As the tentacle beast closes in on you, a childlike, otherworldly voice whispers to you, its origin both elusive and omnipresent.<br><br>
