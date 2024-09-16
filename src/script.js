@@ -368,11 +368,13 @@ Macro.add('say', {
         const output =
             `<<nobr>>
             <div class="say" style="border: 3px solid ${borderColor};">
-                <div class="avatar">
-                    <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
+                <div class="avatar-container" style="border: 3px solid ${borderColor}; border-radius: 10px; padding: 0 0 5px;">
+                    <div class="avatar">
+                        <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
+                    </div>
+                    <span class="say-nameB">${person?.name ?? ''}</span>
                 </div>
-                <div class="say-text">
-                    <span class="say-nameB">${person?.name ?? ''}</span><br>
+                <div class="say-text" style="border-color: ${borderColor};">
                     <span class="say-contents">
                         <span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>
                     </span>
