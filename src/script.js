@@ -344,26 +344,42 @@ Macro.add('say', {
         const person = this.args[0];
         const imageIcon = this.args[1];
         let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
-        // Determine if this is the player's portrait
         const isPlayer = person === State.variables.mc;
-        // Handle immediate image source replacement for override scenarios
+        
         if (isPlayer) {
             if (settings.OverridePortrait) {
                 imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
             } else if (setup.firstPortraitGen) {
-                imgSrc = "images/Player Icons/playerF.png"; // Placeholder image
+                imgSrc = "images/Player Icons/playerF.png";
                 setup.displayPortraitImage();
             }
         }
         const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
         
-        // Gender-based border color
-        const genderColors = {
-            1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush', 
-            5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink', 
-            100: 'rgb(136, 228, 56)'
+        // Use custom color for companions, fallback to gender-based color for others
+        let borderColor;
+        const companionColors = {
+            'saeko': '#D3CDCD',  // Light gray with a hint of red
+            'lily': '#DDA0DD',   // Pinkish lavender
+            'khemia': '#3480E3', // Deep masculine blue
+            'cloud': '#BF5D17',  // Mahogany brown
+            'maru': '#ADD8E6',   // Light feminine blue
+            'cherry': '#FF3030'  // Clear bright red
         };
-        const borderColor = genderColors[person?.genderVoice] || 'transparent';
+
+        const isCompanion = Object.values(setup.companionIds).includes(person?.id);
+        
+        if (isCompanion && !isPlayer) {
+            const companionName = Object.keys(setup.companionIds).find(key => setup.companionIds[key] === person.id);
+            borderColor = companionColors[companionName];
+        } else {
+            const genderColors = {
+                1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush', 
+                5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink', 
+                100: 'rgb(136, 228, 56)'
+            };
+            borderColor = genderColors[person?.genderVoice] || 'transparent';
+        }
         
         const output =
             `<<nobr>>
@@ -375,8 +391,8 @@ Macro.add('say', {
                     <span class="say-nameB">${person?.name ?? ''}</span>
                 </div>
                 <div class="say-text" style="border-color: ${borderColor};">
-                    <span class="say-contents">
-                        <span class="gdr${person?.genderVoice ?? ''}">${this.payload[0].contents}</span>
+                    <span class="say-contents" style="color: ${borderColor};">
+                        ${this.payload[0].contents}
                     </span>
                 </div>
             </div>
