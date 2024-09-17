@@ -364,7 +364,7 @@ Macro.add('say', {
             'khemia': '#3480E3', // Deep masculine blue
             'cloud': '#BF5D17',  // Mahogany brown
             'maru': '#ADD8E6',   // Light feminine blue
-            'cherry': '#FF3030'  // Clear bright red
+            'cherry': '#D13D3D'  // Clear bright red
         };
 
         const isCompanion = Object.values(setup.companionIds).includes(person?.id);
@@ -385,7 +385,7 @@ Macro.add('say', {
             `<<nobr>>
             <div class="say" style="border: 3px solid ${borderColor};">
                 <div class="avatar-container" style="border: 3px solid ${borderColor}; border-radius: 10px; padding: 0 0 5px;">
-                    <div class="avatar">
+                    <div class="avatar" style="--border-color: ${borderColor};">
                         <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
                     </div>
                     <span class="say-nameB">${person?.name ?? ''}</span>
