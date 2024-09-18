@@ -1820,34 +1820,34 @@ Macro.add('sidebar-widget', {
 
         const staticMenuContent = `
             <nav id="menu" class="storyMenu">
-                <div style="height: 10px;"></div>
-                <div class="menu-item">
-                    <button class="dark-btn obsidian text-center" data-passage="Appearance">Appearance</button>
+                <div class="menu-grid">
+                    <div class="menu-item">
+                        <button class="dark-btn obsidian text-center" data-passage="Appearance">Appearance</button>
+                    </div>
+                    <div class="menu-item">
+                        <button class="dark-btn obsidian text-center" data-passage="Inventory">Inventory</button>
+                    </div>
+                    ${State.variables.mc.curses.length > 0 ? `
+                        <div class="menu-item">
+                            <button class="dark-btn obsidian text-center" data-passage="Curses">Curses</button>
+                        </div>
+                    ` : ''}
+                    ${State.variables.hiredCompanions.length > 0 ? `
+                        <div class="menu-item">
+                            <button class="dark-btn obsidian text-center" data-passage="Party Sidebar">Party</button>
+                        </div>
+                    ` : ''}
+                    ${setup.haveNotepad ? `
+                        <div class="menu-item">
+                            <button class="dark-btn obsidian text-center" data-passage="Layer Notes">Layer Notes</button>
+                        </div>
+                    ` : ''}
+                    ${State.variables.debugCheck === true ? `
+                        <div class="menu-item">
+                            <button class="dark-btn obsidian text-center" data-passage="Debug Menu">Debug Menu</button>
+                        </div>
+                    ` : ''}
                 </div>
-                <div class="menu-item">
-                    <button class="dark-btn obsidian text-center" data-passage="Inventory">Inventory</button>
-                </div>
-                ${State.variables.mc.curses.length > 0 ? `
-                    <div class="menu-item">
-                        <button class="dark-btn obsidian text-center" data-passage="Curses">Curses</button>
-                    </div>
-                ` : ''}
-                ${State.variables.hiredCompanions.length > 0 ? `
-                    <div class="menu-item">
-                        <button class="dark-btn obsidian text-center" data-passage="Party Sidebar">Party</button>
-                    </div>
-                ` : ''}
-                ${setup.haveNotepad ? `
-                    <div class="menu-item">
-                        <button class="dark-btn obsidian text-center" data-passage="Layer Notes">Layer Notes</button>
-                    </div>
-                ` : ''}
-                ${State.variables.debugCheck === true ? `
-                    <div class="menu-item">
-                        <button class="dark-btn obsidian text-center" data-passage="Debug Menu">Debug Menu</button>
-                    </div>
-                ` : ''}
-                <div style="height: 20px;"></div>
             </nav>
         `;
 
@@ -1865,54 +1865,96 @@ Macro.add('sidebar-widget', {
 
         const sidebarHTML = `
             <div class="twine-sidebar">
-                <div class="twine-sidebar-top">
-                    <div class="twine-sidebar-character-info">
-                        <h3 style="margin: 0; padding: 5px 0;">${getLayerName()}</h3>
+                ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
+                    `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                    (settings.SidebarPortrait && settings.OverridePortrait ?
+                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                    `<img src="${State.variables.mc.gender >= 4 ? 'images/Player Icons/playerF.png' : 'images/Player Icons/playerM.png'}" alt="Default Portrait" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
+                }
+
+                <div class="resource-grid">
+                    <div class="resource-item tooltip">
+                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
+                        <span>${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}</span>
+                        <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
+                        <span class="tooltiptext">Water</span>
                     </div>
-                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
-                        '<img class="dalleImage" src="" alt="Generated Portrait" style="max-width: 100%; height: auto;">' :
-                        (settings.SidebarPortrait && settings.OverridePortrait ?
-                        '<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" style="max-width: 100%; height: auto;">' : '')
-                    }
-                    <div class="twine-sidebar-resources">
-                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span> Day: ${days}</div>
-                        <span class="smallbreak"></span>
-                        <div style="display: flex; align-items: center;">
-                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
-                            Water: ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}
-                            <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
-                        </div>
-                        <div style="display: flex; align-items: center;">
-                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span>
-                            Food: ${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}
-                            <span class="twine-sidebar-foraging-icon ${forageFood ? 'active' : ''}"></span>
-                        </div>
-                        ${getSemenDemonStatus()}
-                        ${getCotNStatus()}
-                        <span class="smallbreak"></span>
-                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span> Dubloons: ${dubloons}</div>
-                        <div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span> Corruption Pts: ${corruption}</div>
-                        ${hexflame > 9 ? `<div><span class="sidebar-item"><img src="${setup.ImagePath}Icons/jinxedflames.png" alt="Jinxed Flames"></span> Jinxed Flames: ${hexflame - 9}</div>` : ''}
+                    <div class="resource-item tooltip">
+                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span>
+                        <span>${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}</span>
+                        <span class="twine-sidebar-foraging-icon ${forageFood ? 'active' : ''}"></span>
+                        <span class="tooltiptext">Food</span>
                     </div>
                 </div>
-                <div class="twine-sidebar-bottom">
-                    <div class="twine-sidebar-threat-info">
-                        ${getLayerThreatTitle()}
-                        ${getThreats().map((threat, index) => {
-                            const level = calculateThreatLevel(threat.time, threat.max);
-                            return `
-                                <div class="twine-sidebar-threat-container">
-                                    <div class="twine-sidebar-threat-label">${threat.name}</div>
-                                    <div class="twine-sidebar-threat-bar">
-                                        <div class="twine-sidebar-threat-progress" style="width: ${level}%; background-color: ${getThreatColor(level, currentLayer === 9)};"></div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
+                <div class="resource-item tooltip">
+                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span>
+                    <span>${days}</span>
+                    <span class="tooltiptext">Day</span>
                 </div>
+                ${getSemenDemonStatus()}
+                ${getCotNStatus()}
+
+                <div class="divider"></div>
+
+                ${State.variables.status.duration > 0 ? `
+                    <div class="resource-grid">
+                        <div class="resource-item tooltip">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/injury.png" alt="Injury"></span>
+                            <span>${State.variables.status.duration}</span>
+                            <span class="tooltiptext">Injury Duration (days)</span>
+                        </div>
+                        <div class="resource-item tooltip">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/penalty.png" alt="Penalty"></span>
+                            <span>${State.variables.status.penalty}</span>
+                            <span class="tooltiptext">Injury Penalty</span>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                ` : ''}
+
+                
+
+                <div class="resource-grid">
+                    <div class="resource-item tooltip">
+                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span>
+                        <span>${dubloons}</span>
+                        <span class="tooltiptext">Dubloons</span>
+                    </div>
+                    <div class="resource-item tooltip">
+                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span>
+                        <span>${corruption}</span>
+                        <span class="tooltiptext">Corruption Points</span>
+                    </div>
+                    ${hexflame > 9 ? `
+                        <div class="resource-item tooltip">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/jinxedflames.png" alt="Jinxed Flames"></span>
+                            <span>${hexflame - 9}</span>
+                            <span class="tooltiptext">Jinxed Flames</span>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="divider"></div>
+
                 ${staticMenuContent}
-                <div class="twine-sidebar-footer sticky-footer">
+
+                <div class="divider"></div>
+
+                <h3 style="margin: 0; padding: 5px 0;">${getLayerName()}</h3>
+                ${getLayerThreatTitle()}
+                ${getThreats().map((threat, index) => {
+                    const level = calculateThreatLevel(threat.time, threat.max);
+                    return `
+                        <div class="twine-sidebar-threat-container">
+                            <div class="twine-sidebar-threat-label">${threat.name}</div>
+                            <div class="twine-sidebar-threat-bar">
+                                <div class="twine-sidebar-threat-progress" style="width: ${level}%; background-color: ${getThreatColor(level, currentLayer === 9)};"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+
+                <div class="twine-sidebar-footer">
                     ${settingsButton} ${savesButton}
                 </div>
             </div>
@@ -1945,3 +1987,8 @@ Macro.add('sidebar-widget', {
 $(document).on(':passagerender', function (ev) {
     $('tw-sidebar').empty().wiki('<<sidebar-widget>>');
 });
+
+function getGenderColor(gender) {
+    const genderColors = ['deepskyblue', 'aqua', 'rgb(185, 229, 240)', 'lavenderblush', 'lightpink', 'hotpink'];
+    return genderColors[gender - 1] || 'white';
+}
