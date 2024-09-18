@@ -1690,9 +1690,22 @@ Macro.add('sidebar-widget', {
             else if (SemenDemonBalance >= -4) status = 'Satisfied';
             else if (SemenDemonBalance >= -8) status = '<span class="alert1">Hungry</span>';
             else status = '<span class="alert2">Starving. At risk of death!</span>';
-            return `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/fluidhunger.png" alt="Fluid Hunger"></span> ${fluidType} Hunger: ${status}<br>`;
+            
+            return `
+                <div class="resource-item tooltip">
+                    <div class="icon-text-wrapper">
+                        <div class="icon-wrapper">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/fluidhunger.png" alt="Fluid Hunger"></span>
+                        </div>
+                        <div class="spacer"></div>
+                        <div class="number-wrapper">${status}</div>
+                    </div>
+                    <span class="tooltiptext">${fluidType} Hunger</span>
+                </div>
+            `;
         }
-
+        
+        // Updated getCotNStatus function
         function getCotNStatus() {
             const curse = State.variables.mc.getCurse("Creature of the Night");
             if (!curse) return '';
@@ -1701,7 +1714,19 @@ Macro.add('sidebar-widget', {
             else if (CotNBalance >= -4) status = 'Satisfied';
             else if (CotNBalance >= -20) status = '<span class="alert1">Thirsty</span>';
             else status = '<span class="alert2">Desperate. At risk of death!</span>';
-            return `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/blooddrop.png" alt="Blood Thirst"></span> Blood Thirst: ${status}<br>`;
+            
+            return `
+                <div class="resource-item tooltip">
+                    <div class="icon-text-wrapper">
+                        <div class="icon-wrapper">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/blooddrop.png" alt="Blood Thirst"></span>
+                        </div>
+                        <div class="spacer"></div>
+                        <div class="number-wrapper">${status}</div>
+                    </div>
+                    <span class="tooltiptext">Blood Thirst</span>
+                </div>
+            `;
         }
 
         function getThreats() {
@@ -1872,24 +1897,46 @@ Macro.add('sidebar-widget', {
                     `<img src="${State.variables.mc.gender >= 4 ? 'images/Player Icons/playerF.png' : 'images/Player Icons/playerM.png'}" alt="Default Portrait" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
                 }
 
+                <div class="resource-item tooltip">
+                    <div class="icon-text-wrapper">
+                        <div class="icon-wrapper">
+                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span>
+                        </div>
+                        <div class="spacer"></div>
+                        <div class="number-wrapper">${days}</div>
+                    </div>
+                    <span class="tooltiptext">Day</span>
+                </div>
+
+                <div class="divider"></div>
+
                 <div class="resource-grid">
                     <div class="resource-item tooltip">
-                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
-                        <span>${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}</span>
-                        <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
+                        <div class="icon-text-wrapper">
+                            <div class="icon-wrapper">
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
+                            </div>
+                            <div class="spacer"></div>
+                            <div class="number-wrapper">
+                                ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}
+                                <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
+                            </div>
+                        </div>
                         <span class="tooltiptext">Water</span>
                     </div>
                     <div class="resource-item tooltip">
-                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span>
-                        <span>${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}</span>
-                        <span class="twine-sidebar-foraging-icon ${forageFood ? 'active' : ''}"></span>
+                        <div class="icon-text-wrapper">
+                            <div class="icon-wrapper">
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span>
+                            </div>
+                            <div class="spacer"></div>
+                            <div class="number-wrapper">
+                                ${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}
+                                <span class="twine-sidebar-foraging-icon ${forageFood ? 'active' : ''}"></span>
+                            </div>
+                        </div>
                         <span class="tooltiptext">Food</span>
                     </div>
-                </div>
-                <div class="resource-item tooltip">
-                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/days.png" alt="Days"></span>
-                    <span>${days}</span>
-                    <span class="tooltiptext">Day</span>
                 </div>
                 ${getSemenDemonStatus()}
                 ${getCotNStatus()}
@@ -1899,36 +1946,60 @@ Macro.add('sidebar-widget', {
                 ${State.variables.status.duration > 0 ? `
                     <div class="resource-grid">
                         <div class="resource-item tooltip">
-                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/injury.png" alt="Injury"></span>
-                            <span>${State.variables.status.duration}</span>
+                            <div class="icon-text-wrapper">
+                                <div class="icon-wrapper">
+                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/injury.png" alt="Injury"></span>
+                                </div>
+                                <div class="spacer"></div>
+                                <div class="number-wrapper">${State.variables.status.duration}</div>
+                            </div>
                             <span class="tooltiptext">Injury Duration (days)</span>
                         </div>
                         <div class="resource-item tooltip">
-                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/penalty.png" alt="Penalty"></span>
-                            <span>${State.variables.status.penalty}</span>
+                            <div class="icon-text-wrapper">
+                                <div class="icon-wrapper">
+                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/penalty.png" alt="Penalty"></span>
+                                </div>
+                                <div class="spacer"></div>
+                                <div class="number-wrapper">${State.variables.status.penalty}</div>
+                            </div>
                             <span class="tooltiptext">Injury Penalty</span>
                         </div>
                     </div>
-                    <div class="divider"></div>
                 ` : ''}
 
-                
+                <div class="divider"></div>
 
                 <div class="resource-grid">
                     <div class="resource-item tooltip">
-                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span>
-                        <span>${dubloons}</span>
+                        <div class="icon-text-wrapper">
+                            <div class="icon-wrapper">
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" alt="Dubloons"></span>
+                            </div>
+                            <div class="spacer"></div>
+                            <div class="number-wrapper">${dubloons}</div>
+                        </div>
                         <span class="tooltiptext">Dubloons</span>
                     </div>
                     <div class="resource-item tooltip">
-                        <span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span>
-                        <span>${corruption}</span>
+                        <div class="icon-text-wrapper">
+                            <div class="icon-wrapper">
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span>
+                            </div>
+                            <div class="spacer"></div>
+                            <div class="number-wrapper">${corruption}</div>
+                        </div>
                         <span class="tooltiptext">Corruption Points</span>
                     </div>
                     ${hexflame > 9 ? `
                         <div class="resource-item tooltip">
-                            <span class="sidebar-item"><img src="${setup.ImagePath}Icons/jinxedflames.png" alt="Jinxed Flames"></span>
-                            <span>${hexflame - 9}</span>
+                            <div class="icon-text-wrapper">
+                                <div class="icon-wrapper">
+                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/jinxedflames.png" alt="Jinxed Flames"></span>
+                                </div>
+                                <div class="spacer"></div>
+                                <div class="number-wrapper">${hexflame - 9}</div>
+                            </div>
                             <span class="tooltiptext">Jinxed Flames</span>
                         </div>
                     ` : ''}
