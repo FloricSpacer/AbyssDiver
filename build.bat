@@ -5,7 +5,6 @@ set "WORKAREA=%~dp0"
 set "TWEEGO=tweego"
 
 where "%TWEEGO%" >nul
-echo %errorlevel%
 
 if errorlevel 1 (
     set "TWEEGO_VERSION=2.1.1"
