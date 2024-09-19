@@ -4,8 +4,10 @@ setlocal
 set "WORKAREA=%~dp0"
 set "TWEEGO=tweego"
 
-where "%TWEEGO%" >nul 2>nul
-if errorlevel equ 1 (
+where "%TWEEGO%" >nul
+echo %errorlevel%
+
+if errorlevel 1 (
     set "TWEEGO_VERSION=2.1.1"
     set "TWEEGO_OS=windows"
     set "TWEEGO_ARCH="
@@ -21,11 +23,6 @@ if errorlevel equ 1 (
         echo Please build Tweego from source and either add it to your PATH or put its location in the TWEEGO environment variable.
         exit /b 1
     )
-
-    echo "%TWEEGO_VERSION%"
-    echo "%TWEEGO_OS%"
-    echo "%TWEEGO_ARCH%"
-    echo "%TWEEGO_VERSION%-%TWEEGO_OS%-%TWEEGO_ARCH%"
 
     set "TWEEGO_ARCHIVE=tweego-%TWEEGO_VERSION%-%TWEEGO_OS%-%TWEEGO_ARCH%.zip"
     echo "%TWEEGO_ARCHIVE%"
@@ -48,10 +45,6 @@ if errorlevel equ 1 (
     echo Using systemwide Tweego: %TWEEGO%
 )
 
-for /f "delims=" %%i in ('where "%TWEEGO%"') do set "TWEEGO=%%i"
-
-echo Using systemwide Tweego: %TWEEGO%
-
 set "SUGARCUBE_VERSION=2.36.1"
 set "SUGARCUBE_ARCHIVE=sugarcube-%SUGARCUBE_VERSION%-for-twine-2.1-local.zip"
 
@@ -66,3 +59,5 @@ set "OUTPUT=AbyssDiver.html"
 echo Compiling to: %OUTPUT%
 set "TWEEGO_PATH=%WORKAREA%/storyformats/"
 "%TWEEGO%" "%WORKAREA%/src/" "%WORKAREA%/dependencies/" -o "%OUTPUT%" %*
+
+pause
