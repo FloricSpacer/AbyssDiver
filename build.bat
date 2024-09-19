@@ -6,8 +6,6 @@ set "TWEEGO=tweego"
 
 where "!TWEEGO!" >nul 2>nul
 
-echo "!errorlevel!"
-
 if "!errorlevel!" == "1" (
     set "TWEEGO_VERSION=2.1.1"
     echo TWEEGO_VERSION: !TWEEGO_VERSION!
@@ -26,7 +24,7 @@ if "!errorlevel!" == "1" (
         exit /b 1
     )
 
-    echo !TWEEGO_ARCH!
+    echo TWEEGO_ARCHITECTURE: !TWEEGO_ARCH!
 
     set "TWEEGO_ARCHIVE=tweego-!TWEEGO_VERSION!-!TWEEGO_OS!-!TWEEGO_ARCH!.zip"
     echo !TWEEGO_ARCHIVE!
