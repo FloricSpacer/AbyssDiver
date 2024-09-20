@@ -1892,9 +1892,9 @@ Macro.add('sidebar-widget', {
             <div class="twine-sidebar">
                 ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                     `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                    (settings.SidebarPortrait && settings.OverridePortrait ?
+                    (settings.OverridePortrait ?
                     `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                    `<img src="${State.variables.mc.gender >= 4 ? 'images/Player Icons/playerF.png' : 'images/Player Icons/playerM.png'}" alt="Default Portrait" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
+                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
                 }
 
                 <div class="resource-item tooltip">

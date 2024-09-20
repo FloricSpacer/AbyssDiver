@@ -294,3 +294,61 @@ If you have any questions, feel free to ask on our Discord server. And you're ve
 <</nobr>>
 
 <button class="dark-btn obsidian" data-passage="previous()">Back</button>
+
+
+:: Portrait Selector
+<div id="portrait-selector-container" class="portrait-selector-container">
+    <img id="portrait" class="portrait-selector-image" src="" alt="Player Portrait">
+    <div class="portrait-selector-buttons">
+        <button class="portrait-selector-btn" id="prev-portrait">←</button>
+        <button class="portrait-selector-btn" id="next-portrait">→</button>
+    </div>
+</div>
+
+<<script>>
+(function () {
+    var isMale = State.variables.mc.osex === "male";
+    var portraitPrefix = isMale ? "playerM" : "playerF";
+    var portraits = Array.from({length: 7}, function(_, i) { 
+        return "images/Player Icons/" + portraitPrefix + i + ".png"; 
+    });
+    
+    // Initialize currentPortrait with the existing value or default to 0
+    var currentPortrait = State.variables.portraitNumber || 0;
+
+    function updatePortrait() {
+        var portraitPath = portraits[currentPortrait];
+        
+        var imgElements = document.querySelectorAll("#portrait");
+        imgElements.forEach(function(imgElement) {
+            imgElement.src = portraitPath;
+            imgElement.alt = "Player Portrait " + (currentPortrait + 1) + " of " + portraits.length;
+            imgElement.onerror = function() {
+                console.error("Failed to load image: " + this.src);
+            };
+        });
+        
+        // Update SugarCube variables
+        State.variables.mc.imageIcon = portraitPath.replace("images/", "");
+        State.variables.portraitNumber = currentPortrait;
+
+        console.log("Current portrait path: " + State.variables.mc.imageIcon);
+        console.log("Current portrait number: " + State.variables.portraitNumber);
+    }
+
+    function changePortrait(direction) {
+        currentPortrait = (currentPortrait + direction + portraits.length) % portraits.length;
+        updatePortrait();
+    }
+
+    $(document).on('click', '#prev-portrait', function() { changePortrait(-1); });
+    $(document).on('click', '#next-portrait', function() { changePortrait(1); });
+
+    // Ensure the initial portrait is displayed immediately
+    $(document).ready(function() {
+        updatePortrait();
+    });
+})();
+<</script>>
+
+<button id="debug-menu-button" class="dark-btn obsidian" data-passage="Debug Menu">Confirm and Debug</button>
