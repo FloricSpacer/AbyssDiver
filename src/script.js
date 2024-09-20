@@ -341,65 +341,65 @@ setup.SoundPath = setup.Path + "sounds/";
 Macro.add('say', {
     tags: null,
     handler: function () {
-        const person = this.args[0];
-        const imageIcon = this.args[1];
-        let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
-        const isPlayer = person === State.variables.mc;
-        
-        if (isPlayer) {
-            if (settings.OverridePortrait) {
-                imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
-            } else if (setup.firstPortraitGen) {
-                imgSrc = "images/Player Icons/playerF.png";
-                setup.displayPortraitImage();
-            }
-        }
-        const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
-        
-        // Use custom color for companions, fallback to gender-based color for others
-        let borderColor;
-        const companionColors = {
-            'saeko': '#D3CDCD',  // Light gray with a hint of red
-            'lily': '#DDA0DD',   // Pinkish lavender
-            'khemia': '#3480E3', // Deep masculine blue
-            'cloud': '#BF5D17',  // Mahogany brown
-            'maru': '#ADD8E6',   // Light feminine blue
-            'cherry': '#D13D3D'  // Clear bright red
-        };
-
-        const isCompanion = Object.values(setup.companionIds).includes(person?.id);
-        
-        if (isCompanion && !isPlayer) {
-            const companionName = Object.keys(setup.companionIds).find(key => setup.companionIds[key] === person.id);
-            borderColor = companionColors[companionName];
-        } else {
-            const genderColors = {
-                1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush', 
-                5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink', 
-                100: 'rgb(136, 228, 56)'
-            };
-            borderColor = genderColors[person?.genderVoice] || 'transparent';
-        }
-        
-        const output =
-            `<<nobr>>
-            <div class="say" style="border: 3px solid ${borderColor};">
-                <div class="avatar-container" style="border: 3px solid ${borderColor}; border-radius: 10px; padding: 0 0 5px;">
-                    <div class="avatar" style="--border-color: ${borderColor};">
-                        <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
-                    </div>
-                    <span class="say-nameB">${person?.name ?? ''}</span>
-                </div>
-                <div class="say-text" style="border-color: ${borderColor};">
-                    <span class="say-contents" style="color: ${borderColor};">
-                        ${this.payload[0].contents}
-                    </span>
-                </div>
+       const person = this.args[0];
+       const imageIcon = this.args[1];
+       let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
+       const isPlayer = person === State.variables.mc;
+       if (isPlayer) {
+           if (settings.OverridePortrait) {
+               imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
+           } else if (setup.firstPortraitGen) {
+               imgSrc = "images/Player Icons/playerF.png";
+               setup.displayPortraitImage();
+           } else {
+               // Use the new numbered portrait system
+               const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
+               const portraitNumber = State.variables.portraitNumber || 0;
+               imgSrc = `images/Player Icons/player${gender}${portraitNumber}.png`;
+           }
+       }
+       const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
+       // Use custom color for companions, fallback to gender-based color for others
+       let borderColor;
+       const companionColors = {
+           'saeko': '#D3CDCD', // Light gray with a hint of red
+           'lily': '#DDA0DD', // Pinkish lavender
+           'khemia': '#3480E3', // Deep masculine blue
+           'cloud': '#BF5D17', // Mahogany brown
+           'maru': '#ADD8E6', // Light feminine blue
+           'cherry': '#D13D3D' // Clear bright red
+       };
+       const isCompanion = Object.values(setup.companionIds).includes(person?.id);
+       if (isCompanion && !isPlayer) {
+           const companionName = Object.keys(setup.companionIds).find(key => setup.companionIds[key] === person.id);
+           borderColor = companionColors[companionName];
+       } else {
+           const genderColors = {
+               1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush',
+               5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink',
+               100: 'rgb(136, 228, 56)'
+           };
+           borderColor = genderColors[person?.genderVoice] || 'transparent';
+       }
+       const output =
+       `<<nobr>>
+        <div class="say" style="border: 3px solid ${borderColor};">
+          <div class="avatar-container" style="border: 3px solid ${borderColor}; border-radius: 10px; padding: 0 0 5px;">
+            <div class="avatar" style="--border-color: ${borderColor};">
+              <img class="${imgClass}" src="${imgSrc}" alt="${person?.name ?? 'Character'} Avatar">
             </div>
-            <</nobr>>`;
-        $(this.output).wiki(output);
+            <span class="say-nameB">${person?.name ?? ''}</span>
+          </div>
+          <div class="say-text" style="border-color: ${borderColor};">
+            <span class="say-contents" style="color: ${borderColor};">
+              ${this.payload[0].contents}
+            </span>
+          </div>
+        </div>
+       <</nobr>>`;
+       $(this.output).wiki(output);
     }
-});
+   });
 
 
 
