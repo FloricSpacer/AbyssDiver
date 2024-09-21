@@ -2060,6 +2060,8 @@ Macro.add('sidebar-widget', {
                     `;
                 }).join('')}
 
+                <div style="height: 63px;"></div>
+
                 <div class="twine-sidebar-footer">
                     ${settingsButton} ${savesButton}
                 </div>
