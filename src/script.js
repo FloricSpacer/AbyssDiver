@@ -1941,9 +1941,11 @@ Macro.add('sidebar-widget', {
                 ${getSemenDemonStatus()}
                 ${getCotNStatus()}
 
-                <div class="divider"></div>
+                
 
                 ${State.variables.status.duration > 0 ? `
+                    <div class="divider"></div>
+
                     <div class="resource-grid">
                         <div class="resource-item tooltip">
                             <div class="icon-text-wrapper">
