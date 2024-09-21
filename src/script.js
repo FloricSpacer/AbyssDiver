@@ -1696,6 +1696,8 @@ Macro.add('sidebar-widget', {
         const forageFood = State.variables.forageFood || false;
         const forageWater = State.variables.forageWater || false;
 
+        $('.twine-sidebar').remove();
+
         function getLayerName() {
             const layer = State.variables.currentLayer;
             if (layer === 0) return "The Surface";
@@ -2064,7 +2066,7 @@ Macro.add('sidebar-widget', {
             </div>
         `;
 
-        const $sidebar = $(sidebarHTML).appendTo(this.output);
+        $('body').prepend(sidebarHTML);
 
         if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displayImage();
@@ -2110,10 +2112,11 @@ Macro.add('sidebar-widget', {
     }
 });
 
-// This ensures the sidebar is updated whenever a passage is rendered
-$(document).on(':passagerender', function (ev) {
-    $('tw-sidebar').empty().wiki('<<sidebar-widget>>');
+// Create sidebar on story ready, only once
+$(document).one(':storyready', function() {
+    $.wiki('<<sidebar-widget>>');
 });
+
 
 function getGenderColor(gender) {
     const genderColors = ['deepskyblue', 'aqua', 'rgb(185, 229, 240)', 'lavenderblush', 'lightpink', 'hotpink'];
