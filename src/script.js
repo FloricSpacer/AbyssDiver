@@ -81,6 +81,8 @@ Config.history.maxStates = 20;
 
 Config.saves.version = 2;
 
+Config.history.controls = false;
+
 function backwardCompat(vars, version) {
     if (!version || version < 1) {
         // Copy any missing properties from the deprecated $app object to the $mc object.
@@ -1913,12 +1915,18 @@ Macro.add('sidebar-widget', {
 
         const sidebarHTML = `
             <div class="twine-sidebar">
-                ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
-                    `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                    (settings.OverridePortrait ?
-                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
-                }
+                <div class="twine-sidebar-nav-sticky">
+                    <div class="twine-sidebar-nav">
+                        <button id="custom-back-button" class="nav-arrow">&larr;</button>
+                        <button id="custom-forward-button" class="nav-arrow">&rarr;</button>
+                    </div>
+                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
+                        `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                        (settings.OverridePortrait ?
+                        `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                        `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
+                    }
+                </div>
 
                 <div class="resource-item tooltip">
                     <div class="icon-text-wrapper">
@@ -2075,6 +2083,29 @@ Macro.add('sidebar-widget', {
 
         $('#saves-button').on('click', function() {
             UI.saves();
+        });
+
+        $('#custom-back-button').on('click', function() {
+            if (State.length > 1) {
+                Engine.backward();
+            }
+        });
+        
+        $('#custom-forward-button').on('click', function() {
+            if (State.length < State.size) {
+                Engine.forward();
+            }
+        });
+        
+        function updateButtonStates() {
+            $('#custom-back-button').prop('disabled', State.length <= 1);
+            $('#custom-forward-button').prop('disabled', State.length >= State.size);
+        }
+        
+        updateButtonStates();
+        
+        $(document).on(':passagerender', function() {
+            updateButtonStates();
         });
     }
 });
