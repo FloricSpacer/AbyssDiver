@@ -237,16 +237,39 @@ Config.navigation.override = function (destPassage) {
     return destPassage;
 };
 
+function getLayerFromPassageName(passageName) {
+    if (!passageName) {
+        return null;
+    }
+    if (passageName.toLowerCase().includes('surface')) {
+        return 0;
+    }
+    const match = passageName.match(/\d+/);
+    return match ? parseInt(match[0]) : null;
+}
+
 // Listen for the :passagestart jQuery event.
 $(document).on(':passagestart', ev => {
     // Get a reference to the active story variables store.
     const vars = variables();
 
     // Update $hubReturn.
-    if (vars.currentLayer < 1) {
-        vars.hubReturn = 'Surface Hub';
-    } else {
-        vars.hubReturn = `Layer${vars.currentLayer} Hub`;
+    const currentPassage = State.passage;
+    const previousLayer = getLayerFromPassageName(vars.hubReturn);
+    
+    // Check if the player has changed layers
+    if (vars.currentLayer !== previousLayer) {
+        // Reset hubReturn when changing layers
+        if (vars.currentLayer < 1) {
+            vars.hubReturn = 'Surface Hub';
+        } else {
+            vars.hubReturn = `Layer${vars.currentLayer} Hub`;
+        }
+    }
+    
+    // Update hubReturn if the current passage has the "hub" tag
+    if (tags().includes('hub')) {
+        vars.hubReturn = currentPassage;
     }
 
     // Update $menuReturn.
