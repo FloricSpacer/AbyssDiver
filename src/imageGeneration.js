@@ -233,17 +233,21 @@ setup.openAI_GenerateDallePortrait = async function() {
 	let staticPrompt = "Create an anime-inspired digital painting of a single character with each of the following traits. You must keep in mind every physical trait below. You must use an *anime-inspired digital painting* style. The character is an adventurer and the background of the scene is the Abyss from MiA. Do NOT use the word character in the final prompt.\n\nCharacter traits:\n";
 
 	// Dynamically generated character description
-	let characterDescription = await setup.evaluateDalleCharacterDescription(State.variables.mc); // Assuming $mc is stored in State.variables.mc
+	let characterDescription = setup.evaluateDalleCharacterDescription(State.variables.mc); // Assuming $mc is stored in State.variables.mc
 
 	// Concatenate the static prompt with the dynamic description
 	const prompt = staticPrompt + characterDescription;
 
 	try {
 		await setup.openAI_InvokeDalleGenerator(prompt);
+		notificationElement.style.display = 'hidden';
 	} catch (error) {
 		console.error('Error generating image:', error);
-		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
 		notificationElement.style.display = 'block';
+		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
+	}
+}
+
 	}
 }
 
