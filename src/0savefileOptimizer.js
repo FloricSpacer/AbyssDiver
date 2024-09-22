@@ -139,6 +139,41 @@ const SaveFileTrimmer = {
 	}
 }
 
+window.SetupSugarCubeSaveTrimmer = (adapter) => {
+	// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
+
+	//const original_set = adapter.set;
+	adapter.set = function(key, value) {
+		//console.log("storage - set - ", key);
+		if (FFLAG_ENABLE_MIDDLEWARE) {
+			SaveFileTrimmer.trim_save_file(value);
+		}
+		let serialized_value = adapter.constructor._serialize(value);
+		// TODO: fix this :(
+		/*if (FFLAG_ENABLE_PAKO_COMPRESS == true) {
+			serialized_value = "$$p$" + pako_compressString(encodeToBase64(serialized_value));
+		}*/
+		localStorage.setItem(adapter._prefix + key, serialized_value);
+		return true;
+	}
+
+	//const original_get = adapter.get;
+	adapter.get = function(key) {
+		//console.log("storage - get - ", key);
+		let save_raw = localStorage.getItem(adapter._prefix + key);
+		if (save_raw == null) return null;
+		/*if (save_raw.substring(0, 4) == "$$p$") {
+			save_raw = pako_decompressData(decodeFromBase64(save_raw.substring(4)));
+		}*/
+		let saveObject = adapter.constructor._deserialize(save_raw);
+		if (saveObject == null) return null;
+		if (FFLAG_ENABLE_MIDDLEWARE) {
+			SaveFileTrimmer.untrim_save_file(saveObject);
+		}
+		return saveObject;
+	}
+}
+
 window.hasDefinedMiddleware = false;
 window.updateSugarCubeStorageMiddleware = () => {
 	if (window.hasDefinedMiddleware == true) {
@@ -146,42 +181,11 @@ window.updateSugarCubeStorageMiddleware = () => {
 		return;
 	}
 
-	if (window.SugarCube && window.SugarCube.storage) {
+	if (window.SugarCube && window.SugarCube.storage && window.SugarCube.session) {
 		window.hasDefinedMiddleware = true;
 		console.log("Setting up SugarCube Saves Middleware");
-
-		// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
-
-		//const original_set = window.SugarCube.storage.set;
-		window.SugarCube.storage.set = function(key, value) {
-			//console.log("storage - set - ", key);
-			if (FFLAG_ENABLE_MIDDLEWARE == true) {
-				SaveFileTrimmer.trim_save_file(value);
-			}
-			let serialized_value = window.SugarCube.storage.constructor._serialize(value);
-			// TODO: fix this :(
-			/*if (FFLAG_ENABLE_PAKO_COMPRESS == true) {
-				serialized_value = "$$p$" + pako_compressString(encodeToBase64(serialized_value));
-			}*/
-			localStorage.setItem(window.SugarCube.storage._prefix + key, serialized_value);
-			return true;
-		}
-
-		//const original_get = window.SugarCube.storage.get;
-		window.SugarCube.storage.get = function(key) {
-			//console.log("storage - get - ", key);
-			let save_raw = localStorage.getItem(window.SugarCube.storage._prefix + key);
-			if (save_raw == null) return null;
-			/*if (save_raw.substring(0, 4) == "$$p$") {
-				save_raw = pako_decompressData(decodeFromBase64(save_raw.substring(4)));
-			}*/
-			let saveObject = window.SugarCube.storage.constructor._deserialize(save_raw);
-			if (saveObject == null) return null;
-			if (FFLAG_ENABLE_MIDDLEWARE == true) {
-				SaveFileTrimmer.untrim_save_file(saveObject);
-			}
-			return saveObject;
-		}
+		window.SetupSugarCubeSaveTrimmer(window.SugarCube.storage);
+		window.SetupSugarCubeSaveTrimmer(window.SugarCube.session);
 	} else {
 		console.warn('SugarCube is not loaded.');
 	}
