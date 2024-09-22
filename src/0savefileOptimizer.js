@@ -36,15 +36,40 @@ function pako_decompressData(compressed) {
 const SaveFileTrimmer = {
 	// trim events
 	trim_events(events, max_unique_events) {
+		events.reverse(); // reverse it so the newest events are first
+		// console.log("note: events is reversed below!");
+		console.log("Total Events:", events.length);
+		// console.log(events);
 		let pruned_events = [];
 		let counter = {};
+		let last_unique_event = {};
 		for (const item of events) {
-			let key = item.name;
+			let key = item.name + (item.superState == undefined ? null : item.superState.name);
 			let count = counter[key] || 0;
-			if (count > max_unique_events) continue;
-			counter[key] = count + 1;
-			pruned_events.unshift(item);
+			if (count > max_unique_events) {
+				// increment the 20th item unique
+				// event to accumulate the values
+				if (key.includes("GenderEvent()")) {
+					// don't need to accumulate these (there are 20 already....)
+					// furthest_event_item.sizes += item.sizes;
+				} else if (key.includes("AssetEvent()")) {
+					// don't need to accumulate these (there are 20 already....)
+					// also can't since there is no values
+				} else if (key.includes("LibidoEvent()")) {
+					furthest_event_item.amount += item.amount;
+				}
+			} else {
+				if (counter[key] == null || counter[key] == undefined) {
+					console.log(item);
+				}
+				counter[key] = count + 1;
+				pruned_events.unshift(item);
+				last_unique_event[key] = item;
+			}
 		}
+		console.log("Total Pruned Events:", pruned_events.length);
+		// console.log(pruned_events);
+		events.reverse(); // reverse it back
 		return pruned_events;
 	},
 
