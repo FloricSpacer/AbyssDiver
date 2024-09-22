@@ -319,6 +319,53 @@ Which sort of portait would you like?
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
 
 
+:: Start Portrait AI
+
+This game allows you to use an OpenAI API key to generate player portraits automatically, taking into account all of your transformations and changes to your appearance. You can disable this option in settings. You can add your API key and generater the images from the appearance menu. If you want to use this feature, but aren't sure how, click the link below for a brief guide on getting an API key!
+
+<button class="center-btn dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
+
+<<nobr>>
+<div class="relicToggleEntry">
+    <div>The Abyss can change you. Do you want to use an OpenAI API key to generate your portrait as you change?</div>
+    <div><<printHTML `toggle(v => settings.AIPortraitsMode = v, settings.AIPortraitsMode)`>></div>
+</div>
+<</nobr>>
+
+When you're done with that, please click the button below to start the game!
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
+:: Start Portrait Custom
+
+To upload your own portrait, ensure you have a .png image and place it in the game's files folder. Rename it so that you can replace the image at images/GeneratedPortraits/CharacterPortraitOverride.png. Then click the button below to start the game!
+
+<<nobr>>
+<div class="relicToggleEntry">
+    <div>Some divers prefer to use their own portraits. Would you like to override any AI portraits with your own static choice of portrait? This requires the previous setting to be on.</div>
+    <div><<printHTML `toggle(v => settings.OverridePortrait = v, settings.OverridePortrait)`>></div>
+</div>
+<</nobr>>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
+:: Start Portrait Preset
+
+Say cheese! Choose the portrait which best suits you below.
+
+<<include "Portrait Selector">>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
 
 :: Start Settings [nobr]
 
@@ -416,26 +463,20 @@ If you have any questions, feel free to ask on our Discord server. And you're ve
 <div class="relicToggleEntry">
     <div>The Abyss can change you. Do you want to use an OpenAI API key to generate your portrait as you change?</div>
     <div><<printHTML `toggle(v => settings.AIPortraitsMode = v, settings.AIPortraitsMode)`>></div>
-</div><br><br>
-
-<div class="relicToggleEntry">
-    <div>Some divers prefer to use their own portraits. Would you like to override any AI portraits with your own static choice of portrait? This requires the previous setting to be on.</div>
-    <div><<printHTML `toggle(v => settings.OverridePortrait = v, settings.OverridePortrait)`>></div>
 </div>
 <</nobr>>
 
 <button class="dark-btn obsidian" data-passage="previous()">Back</button>
 
 
-:: Portrait Selector
+:: Portrait Selector [start noreturn]
 <div id="portrait-selector-container" class="portrait-selector-container">
     <img id="portrait" class="portrait-selector-image" src="" alt="Player Portrait">
     <div class="portrait-selector-buttons">
         <button class="portrait-selector-btn" id="prev-portrait">←</button>
         <button class="portrait-selector-btn" id="next-portrait">→</button>
     </div>
-</div>
-
+</div>\
 <<script>>
 (function () {
     var isMale = State.variables.mc.osex === "male";
@@ -481,5 +522,3 @@ If you have any questions, feel free to ask on our Discord server. And you're ve
     });
 })();
 <</script>>
-
-<button id="debug-menu-button" class="dark-btn obsidian" data-passage="Debug Menu">Confirm and Debug</button>
