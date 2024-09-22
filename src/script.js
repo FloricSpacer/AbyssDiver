@@ -401,7 +401,7 @@ Macro.add('say', {
        } else {
            const genderColors = {
                1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush',
-               5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink',
+               5: 'lightpink', 6: 'hotpink', 'rgba(225, 0, 0,1)': 'ghostwhite', 99: 'lightpink',
                100: 'rgb(136, 228, 56)'
            };
            borderColor = genderColors[person?.genderVoice] || 'transparent';
