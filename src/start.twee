@@ -117,7 +117,7 @@ Name:
 <<nobr>>
 <table class="character-table">
   <tr>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
 		<h3>Body Build</h3>
 		<label><input type="radio" id="fitness15" name="fitness" value="-5" onchange="updateDisplay(this.value)">Very Weak</label>
 		<label><input type="radio" id="fitness18" name="fitness" value="-2" onchange="updateDisplay(this.value)">Weak</label>
@@ -127,7 +127,7 @@ Name:
 		Your initial carrying capacity is: <span id="capacityValue"></span>
 		<p id="description"></p>
 	</td>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
       <h3>Hair Color</h3>
       <label><<radiobutton "$mc.ohair" "black" autocheck>> Black</label>
       <label><<radiobutton "$mc.ohair" "brown" autocheck>> Brown</label>
@@ -135,7 +135,7 @@ Name:
       <label><<radiobutton "$mc.ohair" "red" autocheck>> Red</label>
       <label><<radiobutton "$mc.ohair" "gray" autocheck>> Gray</label>
     </td>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
       <h3>Eye Color</h3>
       <label><<radiobutton "$mc.oeyeColor" "blue" autocheck>> Blue</label>
       <label><<radiobutton "$mc.oeyeColor" "brown" autocheck>> Brown</label>
@@ -144,7 +144,7 @@ Name:
       <label><<radiobutton "$mc.oeyeColor" "hazel" autocheck>> Hazel</label>
       <label><<radiobutton "$mc.oeyeColor" "amber" autocheck>> Amber</label>
     </td>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
       <h3>Skin Color</h3>
       <label><<radiobutton "$mc.oskinColor" "pale" autocheck>> Pale</label>
       <label><<radiobutton "$mc.oskinColor" "tanned" autocheck>> Tanned</label>
@@ -154,7 +154,7 @@ Name:
     </td>
   </tr>
   <tr>
-    <td colspan="4">
+    <td>
       <<if $mc.osex === "female">>
         <h3>Breast Size</h3>
         <label><<radiobutton "$mc.obreasts" 0 autocheck>> Flat (Masculine)</label>
@@ -168,23 +168,31 @@ Name:
         <label><<radiobutton "$mc.obreasts" 8 autocheck>> F</label>
       <</if>>
       <<if $mc.osex === "male">>
-        <h3>Penis Size</h3>
-        <label><<radiobutton "$mc.openis" 4 autocheck>> Small</label>
-        <label><<radiobutton "$mc.openis" 5 autocheck>> Slightly Below Average</label>
-        <label><<radiobutton "$mc.openis" 6 autocheck>> Average</label>
-        <label><<radiobutton "$mc.openis" 7 autocheck>> Large</label>
-        <label><<radiobutton "$mc.openis" 8 autocheck>> Huge</label>
+        <h3>Penis Size (cm)</h3>
+        <div class="slider-container">
+          <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)">
+          <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
+        </div>
       <</if>>
     </td>
+    <td>
+      <h3>Height (cm)</h3>
+      <div class="slider-container">
+        <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)">
+        <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
+      </div>
+    </td>
+    <td>
+      <h3>Age</h3>
+      <div class="slider-container">
+        <input type="range" id="ageSlider" class="vertical-slider" min="18" max="60" value="30" oninput="updateAge(this.value)">
+        <input type="number" id="ageInput" class="slider-value" value="30" min="18" max="60" oninput="updateAgeSlider(this.value)">
+      </div>
+    </td>
+    <td></td>
   </tr>
 </table>
-<</nobr>><span class="smallbreak"></span>\
-Height (to the nearest cm):
-<<textbox "$mc.oheight" $mc.oheight>>
-<span class="smallbreak"></span>\
-Age:
-<<textbox "$mc.age" $mc.age>>
-
+<</nobr>>\
 <button class="dark-btn obsidian" data-passage="Start Portrait Choose">Continue</button>
 
 <script>
@@ -206,7 +214,38 @@ function updateDisplay(value) {
     }
     document.getElementById("description").innerHTML = description;
 }
-updateDisplay(0)
+
+function updateHeight(value) {
+    document.getElementById("heightInput").value = value;
+    SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updateHeightSlider(value) {
+    document.getElementById("heightSlider").value = value;
+    SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updatePenis(value) {
+    document.getElementById("penisInput").value = value;
+    SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updatePenisSlider(value) {
+    document.getElementById("penisSlider").value = value;
+    SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updateAge(value) {
+    document.getElementById("ageInput").value = value;
+    SugarCube.State.variables.mc.age = parseInt(value);
+}
+
+function updateAgeSlider(value) {
+    document.getElementById("ageSlider").value = value;
+    SugarCube.State.variables.mc.age = parseInt(value);
+}
+
+updateDisplay(0);
 </script>
 
 :: Start Portrait Choose
