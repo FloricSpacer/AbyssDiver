@@ -1919,8 +1919,8 @@ Macro.add('sidebar-widget', {
             <div class="twine-sidebar">
                 <div class="twine-sidebar-nav-sticky">
                     <div class="twine-sidebar-nav">
-                        <button id="custom-back-button" class="nav-arrow">&larr;</button>
-                        <button id="custom-forward-button" class="nav-arrow">&rarr;</button>
+                        <button id="custom-back-button" class="nav-arrow left">&larr;</button>
+                        <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                         `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
