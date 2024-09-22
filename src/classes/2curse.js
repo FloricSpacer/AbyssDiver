@@ -672,7 +672,7 @@ class MaximumFluff extends Curse {
 	}
 }
 setup.allCurses.MaximumFluff = new MaximumFluff();
-State.variables.curse19 = setup.allCurses;
+State.variables.curse19 = setup.allCurses.MaximumFluff;
 window.MaximumFluff = MaximumFluff
 setup.curseArray.push(MaximumFluff)
 
