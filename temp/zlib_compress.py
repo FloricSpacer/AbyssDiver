@@ -1,7 +1,7 @@
 
 import zlib
 
-with open('temp/trimmed.json', 'rb') as file:
+with open('temp/trimmed.txt', 'rb') as file:
 	byte_data = file.read()
 
 compressed = zlib.compress(byte_data, level=-1)
