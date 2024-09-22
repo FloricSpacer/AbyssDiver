@@ -1,12 +1,12 @@
 
 // LocalStorage Middleware //
-console.log("Loaded LocalStorage Middleware");
+console.log("Registering LocalStorage Middleware");
 
 const originalLocalStorage = window.localStorage;
 
 const LocalStorageMiddleware = {
 	log(action, key, value) {
-		//console.log(`Action: ${action}, Key: ${key}, Value: ${value}`);
+		console.log(`Action: ${action}, Key: ${key}`);
 	},
 	validate(key, value) {
 		if (value === null || value === undefined) {
@@ -50,29 +50,65 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 const SaveFileTrimmer = {
+	trim_events(events, max_unique_events) {
+		// console.log(typeof events);
+		let pruned_events = [];
+		let counter = {};
+		for (const item of events) {
+			let key = item.name;
+			let count = counter[key] || 0;
+			if (count > max_unique_events) continue;
+			counter[key] = count + 1;
+			pruned_events.unshift(item);
+		}
+		return pruned_events;
+	},
+
+	trim_delta(state_delta) {
+		// trim static relic variables
+		delete state_delta.relics;
+		// trim static companion variables
+		delete state_delta.companions;
+		// trim _events/events (HUGE SPACE SAVER)
+		let mc = state_delta['variables']['mc'];
+		if (typeof mc === 'object' && mc !== null && Array.isArray(mc) == false) {
+			// normal saves
+			let value = mc['_events'];
+			if (value != undefined && value != null) {
+				if (typeof value[0] == "number") {
+					value[1] = SaveFileTrimmer.trim_events(value[1], 20);
+				} else {
+					mc['_events'] = SaveFileTrimmer.trim_events(value, 20);
+				}
+			}
+		} else if (Array.isArray(mc)) {
+			// auto save
+			if (mc[1][1]['events'] != null && mc[1][1]['events'] != undefined) {
+				mc[1][1]['events'] = SaveFileTrimmer.trim_events(mc[1][1]['events'], 20);
+			}
+		}
+	},
+
 	trim_state(state) {
 		for (const state_delta of state.delta) {
-			// trim static relic variables
-			delete state_delta.relics;
-			// trim static companion variables
-			delete state_delta.companions;
-			// trim multi-static variables
-
-			/**
-			// TODO: NEEDS UNTRIM FUNCTIONS
-			const array_keys = Object.keys(state_delta.variables);
-			for (const key of array_keys) {
-				// curse#, relic#, item#
-				if (key.match(/curse\d+/) != null || key.match(/relic\d+/) != null || key.match(/item\d+/) != null) {
-					delete state_delta.variables[key];
-				}
-				// companionNAME
-				//if (key.includes("companion") && key != "companions") {
-				//	delete state_delta.variables[key];
-				//}
-			}
-			**/
+			SaveFileTrimmer.trim_delta(state_delta);
 		}
+
+		// 	// trim multi-static variables
+		// 	/*
+		// 	// TODO: NEEDS UNTRIM FUNCTIONS
+		// 	const array_keys = Object.keys(state_delta.variables);
+		// 	for (const key of array_keys) {
+		// 		// curse#, relic#, item#
+		// 		if (key.match(/curse\d+/) != null || key.match(/relic\d+/) != null || key.match(/item\d+/) != null) {
+		// 			delete state_delta.variables[key];
+		// 		}
+		// 		// companionNAME
+		// 		//if (key.includes("companion") && key != "companions") {
+		// 		//	delete state_delta.variables[key];
+		// 		//}
+		// 	}
+		// 	*/
 	},
 
 	untrim_state(state) {
@@ -84,30 +120,26 @@ const SaveFileTrimmer = {
 	iter_save_states(data, callback) {
 		// autosave trim
 		if (Object.hasOwn(data, 'autosave')) {
-			if (data.autosave != null) {
-				callback(data.autosave.state);
-			}
+			if (data.autosave != null) callback(data.autosave.state);
 		}
 		// save slot trims
 		if (Object.hasOwn(data, 'slots')) {
 			for (const slot_data of data.slots) {
-				if (slot_data != null) {
-					callback(slot_data.state);
-				}
+				if (slot_data != null) callback(slot_data.state);
 			}
 		}
 	},
 
 	trim(data) {
 		console.log("trim save file");
-		//console.log(data);
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.trim_state);
+		console.log(data);
 	},
 
 	untrim(data) {
 		console.log("untrim save file");
-		//console.log(data);
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.untrim_state);
+		console.log(data);
 	}
 }
 
@@ -121,28 +153,16 @@ window.updateSugarCubeStorageMiddleware = () => {
 	if (window.SugarCube && window.SugarCube.storage) {
 		window.hasDefinedMiddleware = true;
 		console.log('SugarCube storage middleware setup.');
-		
+
 		// MATCH WITH THIS
 		// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
 
-		// const original_set = window.SugarCube.storage.set;
-		// window.SugarCube.storage.set = original_set;
-		// return original_set(key, value);
-
-		// const original_get = window.SugarCube.storage.get;
-		// return original_get(key);
-
 		window.SugarCube.storage.set = function(key, value) {
 			console.log("storage - set - ", key);
-			try {
-				SaveFileTrimmer.trim(value);
-				const serial_value = window.SugarCube.storage.constructor._serialize(value);
-				LocalStorageMiddleware.setItem(window.SugarCube.storage._prefix + key, serial_value);
-				return true;
-			} catch (ex) {
-				console.error(ex);
-				return false;
-			}
+			SaveFileTrimmer.trim(value);
+			const serial_value = window.SugarCube.storage.constructor._serialize(value);
+			LocalStorageMiddleware.setItem(window.SugarCube.storage._prefix + key, serial_value);
+			return true;
 		}
 
 		window.SugarCube.storage.get = function(key) {
