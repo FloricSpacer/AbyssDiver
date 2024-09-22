@@ -69,6 +69,12 @@ variables
  * @property {function} addUserCurseSet
  */
 
+/*
+	===============================================
+	OPENAI DALLE GENERATOR
+	===============================================
+*/
+
 setup.evaluateDalleCharacterDescription = function(mc) {
 	let description = ``;
 	if (mc.sex === "male") {
@@ -83,32 +89,23 @@ setup.evaluateDalleCharacterDescription = function(mc) {
 	description += `${mc.eyeColor} colored eyes. `;
 	description += `${mc.skinType} ${mc.skinColor} colored skin. `;
 
-	if (mc.ears != "normal human"){
-		description += `${mc.ears} ears. `;
-	}
+	if (mc.ears != "normal human") description += `${mc.ears} ears. `;
 
-	if (mc.appAge < 15){
+	if (mc.appAge < 15) {
 		description += `A child. `;
-	}
-	else if (mc.appAge < 20) {
+	} else if (mc.appAge < 20) {
 		description += `A teenager. `;
-	}
-	else if (mc.appAge < 30) {
+	} else if (mc.appAge < 30) {
 		description += `A young adult. `;
-	}
-	else if (mc.appAge < 45) {
+	} else if (mc.appAge < 45) {
 		description += `An adult. `;
-	}
-	else if (mc.appAge < 55) {
+	} else if (mc.appAge < 55) {
 		description += `A middle-aged adult. `;
-	}
-	else if (mc.appAge < 65) {
+	} else if (mc.appAge < 65) {
 		description += `And older adult. `;
-	}
-	else {
+	} else {
 		description += `And elderly adult. `;
 	}
-
 
 	if (mc.subdom > 0) {
 		description += "with a very shy body posture. ";
@@ -121,7 +118,6 @@ setup.evaluateDalleCharacterDescription = function(mc) {
 		let hornCount = state.variables.hornCount || 0; // Adjust as needed
 		let hornAdjective = state.variables.hornAdjective || ""; // Adjust as needed
 		let hornVariation = state.variables.hornVariation || ""; // Adjust as needed
-
 		description += `with ${(hornCount === 1) ? "a" : "two"} noticeable ${hornAdjective} ${hornVariation} horn${(hornCount > 1) ? "s" : ""}. `;
 	}
 
@@ -147,9 +143,7 @@ setup.evaluateDalleCharacterDescription = function(mc) {
 	}
 
 	// Additional conditions
-	if (mc.dollevent2) {
-		description += "Wearing a tattered pink dress, resembling a child's doll. ";
-	}
+	if (mc.dollevent2) description += "Wearing a tattered pink dress, resembling a child's doll. ";
 
 	// Pregnancy
 	const pregnantDays = setup.daysConsideredPregnant(mc);
@@ -180,57 +174,61 @@ setup.evaluateDalleCharacterDescription = function(mc) {
 	if (mc.hasCurse("Eye-scream")) description += `${mc.extraEyes} extra eyes on their body. `;
 	if (mc.hasCurse("A Mouthful")) description += `${mc.extraMouths} extra mouths on their body. `;
 	if (mc.hasCurse("Below the Veil")) description += "A strange, eldritch entity that seems very creepy and *wrong* in subtle ways. ";
+
 	return description;
 };
 
-setup.openAI_CallDalleGenerator = async function(prompt) {
+setup.openAI_InvokeDalleGenerator = async function(prompt) {
 	const apiKey = settings.OpenAIAPIKey;
 
-	const notificationElement = document.getElementById('notification');
+	const headers = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${apiKey}`
+	}
 
-	try {
-		const response = await fetch('https://api.openai.com/v1/images/generations', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${apiKey}`
-			},
-			body: JSON.stringify({
-				model: 'dall-e-3',
-				prompt: prompt,
-				n: 1,
-				size: "1024x1024",
-				response_format: "b64_json"
-			})
-		});
-		if (!response.ok) {
-			throw new Error('Failed to connect to OpenAI. Please check your API key and network connection and try again. If those are both correct, this may be due to a content policy error from OpenAI.');
-		}
-		const data = await response.json();
-		console.log(data); // Debugging: Inspect the structure of the response
+	const body = JSON.stringify({
+		model: 'dall-e-3',
+		prompt: prompt,
+		n: 1,
+		size: "1024x1024",
+		response_format: "b64_json"
+	})
 
-		if (data.data && data.data.length > 0) {
-			/*const imageUrl = data.data[0].url;
-			$("#dalleImage").attr("src", imageUrl);*/
-			const base64Image = data.data[0].b64_json; // Assuming this is the correct path
-			console.log("Base64 Image Data: ", base64Image ? base64Image.substring(0, 100) : "undefined");
-			setup.storeImage(base64Image)
-				.then(() => console.log('Image successfully stored.'))
-				.catch((error) => console.error('Failed to store image:', error));
-		} else {
-			console.error('No images returned:', data);
-			throw new Error('No images returned from server. This is likely due to a content policy error or server error from OpenAI.');
-		}
-		return true;
-	} catch (error) {
-		console.error('Error generating image:', error);
-		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
-		notificationElement.style.display = 'block';
-		return false;
+	const response = await fetch('https://api.openai.com/v1/images/generations', {
+		method: 'POST',
+		headers: headers,
+		body: body
+	});
+
+	if (!response.ok) {
+		throw new Error('Failed to connect to OpenAI. Please check your API key and network connection and try again. If those are both correct, this may be due to a content policy error from OpenAI.');
+	}
+
+	const data = await response.json();
+
+	// Debugging: Inspect the structure of the response
+	console.log(data);
+
+	if (data.data && data.data.length > 0) {
+		/*
+			const imageUrl = data.data[0].url;
+			$("#dalleImage").attr("src", imageUrl);
+		*/
+		const base64Image = data.data[0].b64_json;
+		console.log("Base64 Data Length: ", base64Image ? base64Image.length : "undefined");
+		setup.storeImage(base64Image)
+			.then(() => console.log('Image successfully stored.'))
+			.catch((error) => console.error('Failed to store image:', error));
+	} else {
+		console.error('No images returned:', data);
+		throw new Error('No images returned from server. This is likely due to a content policy error or server error from OpenAI.');
 	}
 }
 
 setup.openAI_GenerateDallePortrait = async function() {
+	// Notification element
+	const notificationElement = document.getElementById('notification');
+
 	// Static part of the prompt
 	let staticPrompt = "Create an anime-inspired digital painting of a single character with each of the following traits. You must keep in mind every physical trait below. You must use an *anime-inspired digital painting* style. The character is an adventurer and the background of the scene is the Abyss from MiA. Do NOT use the word character in the final prompt.\n\nCharacter traits:\n";
 
@@ -239,9 +237,107 @@ setup.openAI_GenerateDallePortrait = async function() {
 
 	// Concatenate the static prompt with the dynamic description
 	const prompt = staticPrompt + characterDescription;
-	setup.openAI_CallDalleGenerator(prompt);
+
+	try {
+		setup.openAI_InvokeDalleGenerator(prompt);
+	} catch (error) {
+		console.error('Error generating image:', error);
+		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
+		notificationElement.style.display = 'block';
+		return false;
+	}
 }
+
+/*
+	===============================================
+	(LOCAL) COMFYUI GENERATOR
+	===============================================
+*/
+
+/*
+setup.comfyUI_InvokeGenerator = async function(base_url, payload) {
+	const url = base_url + '/proxy/generate_character';
+
+	const response = await fetch(url, {
+		method: 'POST',
+		headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify(payload)
+	});
+
+	if (!response.ok) {
+		throw new Error('Failed to connect to the Stable Diffusion API. Please check your API endpoint and ensure the server is running.');
+	}
+
+	const data = await response.json();
+
+	// Debugging: Inspect the structure of the response
+	console.log(data);
+
+	if (data.images && data.images.length > 0) {
+		const base64Image = data.images[0]; // Assuming the images are returned as base64 strings
+		console.log("Base64 Data Length: ", base64Image ? base64Image.length : "undefined");
+		setup.storeImage(base64Image)
+			.then(() => console.log('Image successfully stored.'))
+			.catch((error) => console.error('Failed to store image:', error));
+	} else {
+		console.error('No images returned:', data);
+		throw new Error('No images returned from server. This might be due to an issue with the Stable Diffusion model or the server.');
+	}
+}
+
+setup.comfyUI_PrepareOperationPayload = async function(operation, value) {
+	// get the character curses
+	const mc_curses = State.variables.mc.curses;
+	const mc_curse_names = mc_curses.map(curse => curse.name);
+
+	// get the character internal state (deep clone it)
+	const mc_internal_state_clone = Object.fromEntries(Object.entries(State.variables.mc._internalState()));
+	delete mc_internal_state_clone.image; // don't need the image to be sent
+	delete mc_internal_state_clone.events; // dont need the events to be sent
+	delete mc_internal_state_clone.imageIcon; // don't need the image icon to be sent
+
+	// payload to send to proxy/comfyui
+	const payload = {
+		'operation' : operation,
+		'operation_value' : value,
+		'character' : mc_internal_state_clone,
+		'curses' : mc_curse_names
+	};
+	return payload;
+}
+
+setup.comfyUI_GenerateUIPortrait = async function() {
+	// Notification element
+	const notificationElement = document.getElementById('notification');
+
+	// Data to be sent to comfyui
+	const base_url = "http://127.0.0.1:8000"
+
+	// operation 0 = portrait generation, data = null
+	// operation 1 = scene generation, data = scene id
+	const operation = 0;
+	const operation_data = null;
+
+	const payload = setup.comfyUI_PrepareOperationPayload(operation, operation_data);
+
+	try {
+		setup.comfyUI_InvokeGenerator(base_url, payload);
+	} catch (error) {
+		console.error('Error generating image:', error);
+		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
+		notificationElement.style.display = 'block';
+		return false;
+	}
+}
+*/
+
+/*
+	===============================================
+	ENTRY POINT
+	===============================================
+*/
 
 setup.call_PortraitImageGenerator = async function() {
 	setup.openAI_GenerateDallePortrait();
+	// setup.comfyUI_GenerateUIPortrait();
 }
