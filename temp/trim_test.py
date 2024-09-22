@@ -21,7 +21,6 @@ with open('temp/untrimmed.txt', 'r') as file:
 def parse_item_array(vault_items) -> None:
 	if isinstance(vault_items[0], int):
 		vault_items = vault_items[1]
-	
 	if isinstance(vault_items[0], int):
 		vault_items = vault_items[1]
 
@@ -40,28 +39,23 @@ def parse_events(events, max_unique_events : int = 20) -> list:
 		if event_unique_counter[key] > max_unique_events:
 			continue
 		event_unique_counter[key] += 1
-		print(key, event_unique_counter.get(key))
 		pruned_events.insert(0, item)
 	return pruned_events
 
 def parse_state_delta(delta):
 	for item in delta:
-
+		# medium space saver
 		item['variables'].pop("relics", None)
 		item['variables'].pop("companions", None)
 
+		# trim _events/events (HUGE SPACE SAVER)
 		mc = item['variables']['mc']
-		print('mc:', str(mc)[:400])
 		if isinstance(mc, dict):
-			# autosave
-			print(len(mc['_events'][1]))
+			# normal saves
 			mc['_events'][1] = parse_events(mc['_events'][1], max_unique_events=20)
 		elif isinstance(mc, list):
+			# autosave
 			mc[1][1]['events'] = parse_events(mc[1][1]['events'], max_unique_events=20)
-
-		# elif isinstance(mc, list):
-		# 	print('mc:', str(mc)[:400])
-		# 	mc[1][1]['events'] = parse_events(mc[1][1]['events'], max_unique_events=20)
 
 		# if item['variables'].get("vaultItems"):
 		# 	parse_item_array(item['variables']["vaultItems"])
