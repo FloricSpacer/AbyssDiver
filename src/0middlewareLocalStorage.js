@@ -49,6 +49,16 @@ Object.defineProperty(window, 'localStorage', {
 	writable: false // Prevent further overrides
 });
 
+const SaveFileTrimmer = {
+	trim(data) {
+
+	},
+
+	untrim(data) {
+
+	}
+}
+
 // MATCH WITH THIS
 // https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
 
