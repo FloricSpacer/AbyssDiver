@@ -76,9 +76,9 @@ const SaveFileTrimmer = {
 	// trim a delta-state
 	trim_delta(state_delta) {
 		// trim static relic variables
-		delete state_delta.relics;
+		//delete state_delta.relics;
 		// trim static companion variables
-		delete state_delta.companions;
+		//delete state_delta.companions;
 		// trim _events/events (HUGE SPACE SAVER)
 		let mc = state_delta['variables']['mc'];
 		if (typeof mc === 'object' && mc !== null && Array.isArray(mc) == false) {
