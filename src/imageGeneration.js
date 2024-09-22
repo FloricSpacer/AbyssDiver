@@ -244,7 +244,6 @@ setup.openAI_GenerateDallePortrait = async function() {
 		console.error('Error generating image:', error);
 		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
 		notificationElement.style.display = 'block';
-		return false;
 	}
 }
 
