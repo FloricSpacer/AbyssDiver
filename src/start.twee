@@ -109,15 +109,15 @@ Please fill out the form below to describe yourself. Remember, while you're jott
 
 :: Start Appearance
 
-<div id="genderSelection">
-<<include "Gender Selection">>\
-</div>
-Name:
-<<textbox "$mc.name" $mc.name>>
 <<nobr>>
+<div id="genderSelection">
+<<include "Gender Selection">>
+</div>
+Name:<br>
+<<textbox "$mc.name" $mc.name>><br>
 <table class="character-table">
   <tr>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
 		<h3>Body Build</h3>
 		<label><input type="radio" id="fitness15" name="fitness" value="-5" onchange="updateDisplay(this.value)">Very Weak</label>
 		<label><input type="radio" id="fitness18" name="fitness" value="-2" onchange="updateDisplay(this.value)">Weak</label>
@@ -127,7 +127,7 @@ Name:
 		Your initial carrying capacity is: <span id="capacityValue"></span>
 		<p id="description"></p>
 	</td>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
       <h3>Hair Color</h3>
       <label><<radiobutton "$mc.ohair" "black" autocheck>> Black</label>
       <label><<radiobutton "$mc.ohair" "brown" autocheck>> Brown</label>
@@ -135,7 +135,7 @@ Name:
       <label><<radiobutton "$mc.ohair" "red" autocheck>> Red</label>
       <label><<radiobutton "$mc.ohair" "gray" autocheck>> Gray</label>
     </td>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
       <h3>Eye Color</h3>
       <label><<radiobutton "$mc.oeyeColor" "blue" autocheck>> Blue</label>
       <label><<radiobutton "$mc.oeyeColor" "brown" autocheck>> Brown</label>
@@ -144,7 +144,7 @@ Name:
       <label><<radiobutton "$mc.oeyeColor" "hazel" autocheck>> Hazel</label>
       <label><<radiobutton "$mc.oeyeColor" "amber" autocheck>> Amber</label>
     </td>
-    <td style="width: 25%;">
+    <td style="width: 20%;">
       <h3>Skin Color</h3>
       <label><<radiobutton "$mc.oskinColor" "pale" autocheck>> Pale</label>
       <label><<radiobutton "$mc.oskinColor" "tanned" autocheck>> Tanned</label>
@@ -154,7 +154,7 @@ Name:
     </td>
   </tr>
   <tr>
-    <td colspan="4">
+    <td>
       <<if $mc.osex === "female">>
         <h3>Breast Size</h3>
         <label><<radiobutton "$mc.obreasts" 0 autocheck>> Flat (Masculine)</label>
@@ -168,23 +168,37 @@ Name:
         <label><<radiobutton "$mc.obreasts" 8 autocheck>> F</label>
       <</if>>
       <<if $mc.osex === "male">>
-        <h3>Penis Size</h3>
-        <label><<radiobutton "$mc.openis" 4 autocheck>> Small</label>
-        <label><<radiobutton "$mc.openis" 5 autocheck>> Slightly Below Average</label>
-        <label><<radiobutton "$mc.openis" 6 autocheck>> Average</label>
-        <label><<radiobutton "$mc.openis" 7 autocheck>> Large</label>
-        <label><<radiobutton "$mc.openis" 8 autocheck>> Huge</label>
+        <h3>Penis Size (cm)</h3>
+        <div class="slider-container">
+            <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)">
+            <div>
+                <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
+                <span id="penisConversion">(5.9")</span>
+            </div>
+            </div>
       <</if>>
     </td>
+    <td>
+      <h3>Height (cm)</h3>
+      <div class="slider-container">
+            <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)">
+            <div>
+                <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
+                <span id="heightConversion">(5'7")</span>
+            </div>
+        </div>
+    </td>
+    <td>
+      <h3>Age</h3>
+      <div class="slider-container">
+        <input type="range" id="ageSlider" class="vertical-slider" min="18" max="60" value="30" oninput="updateAge(this.value)">
+        <input type="number" id="ageInput" class="slider-value" value="30" min="18" max="60" oninput="updateAgeSlider(this.value)">
+      </div>
+    </td>
+    <td></td>
   </tr>
 </table>
-<</nobr>><span class="smallbreak"></span>\
-Height (to the nearest cm):
-<<textbox "$mc.oheight" $mc.oheight>>
-<span class="smallbreak"></span>\
-Age:
-<<textbox "$mc.age" $mc.age>>
-
+<</nobr>>\
 <button class="dark-btn obsidian" data-passage="Start Portrait Choose">Continue</button>
 
 <script>
@@ -206,7 +220,73 @@ function updateDisplay(value) {
     }
     document.getElementById("description").innerHTML = description;
 }
-updateDisplay(0)
+
+function updateHeight(value) {
+    document.getElementById("heightInput").value = value;
+    SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updateHeightSlider(value) {
+    document.getElementById("heightSlider").value = value;
+    SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updatePenis(value) {
+    document.getElementById("penisInput").value = value;
+    SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updatePenisSlider(value) {
+    document.getElementById("penisSlider").value = value;
+    SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updateAge(value) {
+    document.getElementById("ageInput").value = value;
+    SugarCube.State.variables.mc.age = parseInt(value);
+}
+
+function updateAgeSlider(value) {
+    document.getElementById("ageSlider").value = value;
+    SugarCube.State.variables.mc.age = parseInt(value);
+}
+
+function cmToFeetInches(cm) {
+  const inches = cm / 2.54;
+  const feet = Math.floor(inches / 12);
+  const remainingInches = Math.round(inches % 12);
+  return `${feet}'${remainingInches}"`;
+}
+
+function cmToInches(cm) {
+  return (cm / 2.54).toFixed(1);
+}
+
+function updateHeight(value) {
+  document.getElementById("heightInput").value = value;
+  document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
+  SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updateHeightSlider(value) {
+  document.getElementById("heightSlider").value = value;
+  document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
+  SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updatePenis(value) {
+  document.getElementById("penisInput").value = value;
+  document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
+  SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updatePenisSlider(value) {
+  document.getElementById("penisSlider").value = value;
+  document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
+  SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+updateDisplay(0);
 </script>
 
 :: Start Portrait Choose
@@ -237,6 +317,62 @@ Which sort of portait would you like?
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
 
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
+:: Start Portrait AI
+
+This game allows you to use an OpenAI API key to generate player portraits automatically, taking into account all of your transformations and changes to your appearance. You can disable this option in settings. You can add your API key and generater the images from the appearance menu. If you want to use this feature, but aren't sure how, click the link below for a brief guide on getting an API key!
+
+<button class="center-btn dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
+
+<<nobr>>
+<div class="relicToggleEntry">
+    <div>The Abyss can change you. Do you want to use an OpenAI API key to generate your portrait as you change?</div>
+    <div><<printHTML `toggle(v => settings.AIPortraitsMode = v, settings.AIPortraitsMode)`>></div>
+</div>
+<</nobr>>
+
+When you're done with that, please click the button below to start the game!
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
+<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+
+
+:: Start Portrait Custom
+
+To upload your own portrait, ensure you have a .png image and place it in the game's files folder. Rename it so that you can replace the image at images/GeneratedPortraits/CharacterPortraitOverride.png. Turn on the option, then click the button below to start the game!
+
+
+<<nobr>>
+<div class="relicToggleEntry">
+    <div>Some divers prefer to use their own portraits. Would you like to override any AI portraits with your own static choice of portrait? This requires the previous setting to be on.</div>
+    <div><<printHTML `toggle(v => settings.OverridePortrait = v, settings.OverridePortrait)`>></div>
+</div>
+<</nobr>>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
+<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+
+
+:: Start Portrait Preset
+
+Say cheese! Choose the portrait which best suits you below.
+
+<<include "Portrait Selector">>
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
+
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+
+
+<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
 
@@ -336,26 +472,20 @@ If you have any questions, feel free to ask on our Discord server. And you're ve
 <div class="relicToggleEntry">
     <div>The Abyss can change you. Do you want to use an OpenAI API key to generate your portrait as you change?</div>
     <div><<printHTML `toggle(v => settings.AIPortraitsMode = v, settings.AIPortraitsMode)`>></div>
-</div><br><br>
-
-<div class="relicToggleEntry">
-    <div>Some divers prefer to use their own portraits. Would you like to override any AI portraits with your own static choice of portrait? This requires the previous setting to be on.</div>
-    <div><<printHTML `toggle(v => settings.OverridePortrait = v, settings.OverridePortrait)`>></div>
 </div>
 <</nobr>>
 
 <button class="dark-btn obsidian" data-passage="previous()">Back</button>
 
 
-:: Portrait Selector
+:: Portrait Selector [start noreturn]
 <div id="portrait-selector-container" class="portrait-selector-container">
     <img id="portrait" class="portrait-selector-image" src="" alt="Player Portrait">
     <div class="portrait-selector-buttons">
         <button class="portrait-selector-btn" id="prev-portrait">←</button>
         <button class="portrait-selector-btn" id="next-portrait">→</button>
     </div>
-</div>
-
+</div>\
 <<script>>
 (function () {
     var isMale = State.variables.mc.osex === "male";
@@ -401,5 +531,3 @@ If you have any questions, feel free to ask on our Discord server. And you're ve
     });
 })();
 <</script>>
-
-<button id="debug-menu-button" class="dark-btn obsidian" data-passage="Debug Menu">Confirm and Debug</button>
