@@ -1,57 +1,41 @@
 
 // LocalStorage Middleware //
-console.log("Registering LocalStorage Middleware");
+// by SPOOKEXE - 22.09.2024 - DD.MM.YYYY
 
-const originalLocalStorage = window.localStorage;
+const FFLAG_ENABLE_MIDDLEWARE = true;
+// const FFLAG_ENABLE_PAKO_COMPRESS = true;
 
-const LocalStorageMiddleware = {
-	log(action, key, value) {
-		console.log(`Action: ${action}, Key: ${key}`);
-	},
-	validate(key, value) {
-		if (value === null || value === undefined) {
-			console.warn(`Invalid value for key: ${key}`);
-			return false;
-		}
-		return true;
-	},
-	setItem(key, value) {
-		if (this.validate(key, value)) {
-			originalLocalStorage.setItem(key, value);
-			this.log('set', key, value);
-		}
-	},
-	getItem(key) {
-		const value = originalLocalStorage.getItem(key);
-		this.log('get', key, value);
-		return value;
-	},
-	removeItem(key) {
-		this.log('remove', key, originalLocalStorage.getItem(key));
-		originalLocalStorage.removeItem(key);
-	},
-	clear() {
-		originalLocalStorage.clear();
-		this.log('clear', null, null);
-	},
-	get length() {
-		this.log('length', null, null);
-		return originalLocalStorage.length;
-	},
-	key(index) {
-		this.log('key', index, null);
-		return originalLocalStorage.key(index);
-	}
-};
+/*
+function encodeToBase64(input) {
+	// Convert the string to a UTF-8 encoded string
+	const utf8String = encodeURIComponent(input);
+	// Use btoa to encode it to Base64
+	return btoa(utf8String);
+}
 
-Object.defineProperty(window, 'localStorage', {
-	value: LocalStorageMiddleware,
-	writable: false // Prevent further overrides
-});
+function decodeFromBase64(base64) {
+	// Decode from Base64
+	const decodedString = atob(base64);
+	// Convert back from UTF-8 to a normal string
+	return decodeURIComponent(decodedString);
+}
+
+function pako_compressString(input) {
+	const binaryString = new TextEncoder().encode(input); // Convert string to Uint8Array
+	const compressed = pako.deflate(binaryString); // Compress
+	return compressed; // Returns a Uint8Array
+}
+
+function pako_decompressData(compressed) {
+	const decompressed = pako.inflate(compressed); // Decompress
+	const decodedString = new TextDecoder().decode(decompressed); // Convert back to string
+	return decodedString;
+}
+*/
 
 const SaveFileTrimmer = {
+	// trim events
 	trim_events(events, max_unique_events) {
-		// console.log(typeof events);
 		let pruned_events = [];
 		let counter = {};
 		for (const item of events) {
@@ -64,6 +48,7 @@ const SaveFileTrimmer = {
 		return pruned_events;
 	},
 
+	// trim a delta-state
 	trim_delta(state_delta) {
 		// trim static relic variables
 		delete state_delta.relics;
@@ -89,34 +74,18 @@ const SaveFileTrimmer = {
 		}
 	},
 
+	// trim a state
 	trim_state(state) {
 		for (const state_delta of state.delta) {
 			SaveFileTrimmer.trim_delta(state_delta);
 		}
-
-		// 	// trim multi-static variables
-		// 	/*
-		// 	// TODO: NEEDS UNTRIM FUNCTIONS
-		// 	const array_keys = Object.keys(state_delta.variables);
-		// 	for (const key of array_keys) {
-		// 		// curse#, relic#, item#
-		// 		if (key.match(/curse\d+/) != null || key.match(/relic\d+/) != null || key.match(/item\d+/) != null) {
-		// 			delete state_delta.variables[key];
-		// 		}
-		// 		// companionNAME
-		// 		//if (key.includes("companion") && key != "companions") {
-		// 		//	delete state_delta.variables[key];
-		// 		//}
-		// 	}
-		// 	*/
 	},
 
+	// untrim a state
 	untrim_state(state) {
-		// curse1, curse2, curse3, ...
-		// relic1, relic2, relic3, ...
-		// item1, item2, item3, ...
 	},
 
+	// iterate over all save states
 	iter_save_states(data, callback) {
 		// autosave trim
 		if (Object.hasOwn(data, 'autosave')) {
@@ -130,13 +99,15 @@ const SaveFileTrimmer = {
 		}
 	},
 
-	trim(data) {
+	// trim a save file
+	trim_save_file(data) {
 		console.log("trim save file");
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.trim_state);
 		console.log(data);
 	},
 
-	untrim(data) {
+	// untrim a save file
+	untrim_save_file(data) {
 		console.log("untrim save file");
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.untrim_state);
 		console.log(data);
@@ -144,38 +115,57 @@ const SaveFileTrimmer = {
 }
 
 window.hasDefinedMiddleware = false;
-
 window.updateSugarCubeStorageMiddleware = () => {
 	if (window.hasDefinedMiddleware == true) {
 		console.log("middleware is already defined!");
 		return;
 	}
+
 	if (window.SugarCube && window.SugarCube.storage) {
 		window.hasDefinedMiddleware = true;
-		console.log('SugarCube storage middleware setup.');
+		console.log("Setting up SugarCube Saves Middleware");
 
-		// MATCH WITH THIS
 		// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
 
+		//const original_set = window.SugarCube.storage.set;
 		window.SugarCube.storage.set = function(key, value) {
 			console.log("storage - set - ", key);
-			SaveFileTrimmer.trim(value);
-			const serial_value = window.SugarCube.storage.constructor._serialize(value);
-			LocalStorageMiddleware.setItem(window.SugarCube.storage._prefix + key, serial_value);
+			if (FFLAG_ENABLE_MIDDLEWARE == true) {
+				SaveFileTrimmer.trim_save_file(value);
+			}
+			let serialized_value = window.SugarCube.storage.constructor._serialize(value);
+			// TODO: fix this :(
+			/*if (FFLAG_ENABLE_PAKO_COMPRESS == true) {
+				serialized_value = "$$p$" + pako_compressString(encodeToBase64(serialized_value));
+			}*/
+			localStorage.setItem(window.SugarCube.storage._prefix + key, serialized_value);
 			return true;
 		}
 
+		//const original_get = window.SugarCube.storage.get;
 		window.SugarCube.storage.get = function(key) {
 			console.log("storage - get - ", key);
-			const saveRaw = LocalStorageMiddleware.getItem(window.SugarCube.storage._prefix + key);
-			const saveObject = saveRaw == null ? null : window.SugarCube.storage.constructor._deserialize(saveRaw);
-			if (saveObject != null) {
-				SaveFileTrimmer.untrim(saveObject);
+			let save_raw = localStorage.getItem(window.SugarCube.storage._prefix + key);
+			if (save_raw == null) return null;
+			/*if (save_raw.substring(0, 4) == "$$p$") {
+				save_raw = pako_decompressData(decodeFromBase64(save_raw.substring(4)));
+			}*/
+			let saveObject = window.SugarCube.storage.constructor._deserialize(save_raw);
+			if (saveObject == null) return null;
+			if (FFLAG_ENABLE_MIDDLEWARE == true) {
+				SaveFileTrimmer.untrim_save_file(saveObject);
 			}
 			return saveObject;
 		}
-
 	} else {
 		console.warn('SugarCube is not loaded.');
 	}
 };
+
+// auto setup middleware once storage is available
+const intervalId = setInterval(() => {
+	if (window.SugarCube.storage !== undefined) {
+		window.updateSugarCubeStorageMiddleware();
+		clearInterval(intervalId); // Clear the interval
+	}
+}, 10);
