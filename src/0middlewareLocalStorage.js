@@ -55,8 +55,11 @@ const SaveFileTrimmer = {
 			// trim static relic variables
 			delete state_delta.relics;
 			// trim static companion variables
-			delete state_delta.companions;
+			// delete state_delta.companions;
 			// trim multi-static variables
+
+			/**
+			// TODO: NEEDS UNTRIM FUNCTIONS
 			const array_keys = Object.keys(state_delta.variables);
 			for (const key of array_keys) {
 				// curse#, relic#, item#
@@ -64,21 +67,26 @@ const SaveFileTrimmer = {
 					delete state_delta.variables[key];
 				}
 				// companionNAME
-				/*if (key.includes("companion") && key != "companions") {
-					delete state_delta.variables[key];
-				}*/
+				//if (key.includes("companion") && key != "companions") {
+				//	delete state_delta.variables[key];
+				//}
 			}
+			**/
 		}
 	},
 
 	untrim_state(state) {
-
+		// curse1, curse2, curse3, ...
+		// relic1, relic2, relic3, ...
+		// item1, item2, item3, ...
 	},
 
 	iter_save_states(data, callback) {
 		// autosave trim
 		if (Object.hasOwn(data, 'autosave')) {
-			callback(data.autosave.state);
+			if (data.autosave != null) {
+				callback(data.autosave.state);
+			}
 		}
 		// save slot trims
 		if (Object.hasOwn(data, 'slots')) {
@@ -103,9 +111,6 @@ const SaveFileTrimmer = {
 	}
 }
 
-// MATCH WITH THIS
-// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
-
 window.hasDefinedMiddleware = false;
 
 window.updateSugarCubeStorageMiddleware = () => {
@@ -117,7 +122,16 @@ window.updateSugarCubeStorageMiddleware = () => {
 		window.hasDefinedMiddleware = true;
 		console.log('SugarCube storage middleware setup.');
 		
+		// MATCH WITH THIS
+		// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
+
 		// const original_set = window.SugarCube.storage.set;
+		// window.SugarCube.storage.set = original_set;
+		// return original_set(key, value);
+
+		// const original_get = window.SugarCube.storage.get;
+		// return original_get(key);
+
 		window.SugarCube.storage.set = function(key, value) {
 			console.log("storage - set - ", key);
 			try {
@@ -131,7 +145,6 @@ window.updateSugarCubeStorageMiddleware = () => {
 			}
 		}
 
-		// const original_get = window.SugarCube.storage.get;
 		window.SugarCube.storage.get = function(key) {
 			console.log("storage - get - ", key);
 			const saveRaw = LocalStorageMiddleware.getItem(window.SugarCube.storage._prefix + key);
