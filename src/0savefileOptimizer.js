@@ -101,23 +101,23 @@ const SaveFileTrimmer = {
 
 	// trim a save file
 	trim_save_file(data) {
-		console.log("trim save file");
+		//console.log("trim save file");
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.trim_state);
-		console.log(data);
+		//console.log(data);
 	},
 
 	// untrim a save file
 	untrim_save_file(data) {
-		console.log("untrim save file");
+		//console.log("untrim save file");
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.untrim_state);
-		console.log(data);
+		//console.log(data);
 	}
 }
 
 window.hasDefinedMiddleware = false;
 window.updateSugarCubeStorageMiddleware = () => {
 	if (window.hasDefinedMiddleware == true) {
-		console.log("middleware is already defined!");
+		console.log("SugarCube Middleware is already defined!");
 		return;
 	}
 
@@ -129,7 +129,7 @@ window.updateSugarCubeStorageMiddleware = () => {
 
 		//const original_set = window.SugarCube.storage.set;
 		window.SugarCube.storage.set = function(key, value) {
-			console.log("storage - set - ", key);
+			//console.log("storage - set - ", key);
 			if (FFLAG_ENABLE_MIDDLEWARE == true) {
 				SaveFileTrimmer.trim_save_file(value);
 			}
@@ -144,7 +144,7 @@ window.updateSugarCubeStorageMiddleware = () => {
 
 		//const original_get = window.SugarCube.storage.get;
 		window.SugarCube.storage.get = function(key) {
-			console.log("storage - get - ", key);
+			//console.log("storage - get - ", key);
 			let save_raw = localStorage.getItem(window.SugarCube.storage._prefix + key);
 			if (save_raw == null) return null;
 			/*if (save_raw.substring(0, 4) == "$$p$") {
