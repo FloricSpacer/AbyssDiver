@@ -250,94 +250,10 @@ setup.openAI_GenerateDallePortrait = async function() {
 
 /*
 	===============================================
-	(LOCAL) COMFYUI GENERATOR
-	===============================================
-*/
-
-/*
-setup.comfyUI_InvokeGenerator = async function(base_url, payload) {
-	const url = base_url + '/proxy/generate_character';
-
-	const response = await fetch(url, {
-		method: 'POST',
-		headers: {'Content-Type': 'application/json'},
-		body: JSON.stringify(payload)
-	});
-
-	if (!response.ok) {
-		throw new Error('Failed to connect to the Stable Diffusion API. Please check your API endpoint and ensure the server is running.');
-	}
-
-	const data = await response.json();
-
-	// Debugging: Inspect the structure of the response
-	console.log(data);
-
-	if (data.images && data.images.length > 0) {
-		const base64Image = data.images[0]; // Assuming the images are returned as base64 strings
-		console.log("Base64 Data Length: ", base64Image ? base64Image.length : "undefined");
-		setup.storeImage(base64Image)
-			.then(() => console.log('Image successfully stored.'))
-			.catch((error) => console.error('Failed to store image:', error));
-	} else {
-		console.error('No images returned:', data);
-		throw new Error('No images returned from server. This might be due to an issue with the Stable Diffusion model or the server.');
-	}
-}
-
-setup.comfyUI_PrepareOperationPayload = async function(operation, value) {
-	// get the character curses
-	const mc_curses = State.variables.mc.curses;
-	const mc_curse_names = mc_curses.map(curse => curse.name);
-
-	// get the character internal state (deep clone it)
-	const mc_internal_state_clone = Object.fromEntries(Object.entries(State.variables.mc._internalState()));
-	delete mc_internal_state_clone.image; // don't need the image to be sent
-	delete mc_internal_state_clone.events; // dont need the events to be sent
-	delete mc_internal_state_clone.imageIcon; // don't need the image icon to be sent
-
-	// payload to send to proxy/comfyui
-	const payload = {
-		'operation' : operation,
-		'operation_value' : value,
-		'character' : mc_internal_state_clone,
-		'curses' : mc_curse_names
-	};
-	return payload;
-}
-
-setup.comfyUI_GenerateUIPortrait = async function() {
-	// Notification element
-	const notificationElement = document.getElementById('notification');
-
-	// Data to be sent to comfyui
-	const base_url = "http://127.0.0.1:8000"
-
-	// operation 0 = portrait generation, data = null
-	// operation 1 = scene generation, data = scene id
-	const operation = 0;
-	const operation_data = null;
-
-	const payload = setup.comfyUI_PrepareOperationPayload(operation, operation_data);
-
-	try {
-		setup.comfyUI_InvokeGenerator(base_url, payload);
-	} catch (error) {
-		console.error('Error generating image:', error);
-		notificationElement.textContent = 'Error generating image: ' + error.message + (error.response ? (await error.response.json()).error : 'No additional error information from OpenAI.');
-		notificationElement.style.display = 'block';
-		return false;
-	}
-}
-*/
-
-/*
-	===============================================
 	ENTRY POINT
 	===============================================
 */
 
 setup.call_PortraitImageGenerator = async function() {
 	setup.openAI_GenerateDallePortrait();
-	// setup.comfyUI_GenerateUIPortrait();
 }
