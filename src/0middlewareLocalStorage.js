@@ -55,7 +55,7 @@ const SaveFileTrimmer = {
 			// trim static relic variables
 			delete state_delta.relics;
 			// trim static companion variables
-			// delete state_delta.companions;
+			delete state_delta.companions;
 			// trim multi-static variables
 
 			/**
@@ -100,13 +100,13 @@ const SaveFileTrimmer = {
 
 	trim(data) {
 		console.log("trim save file");
-		console.log(data);
+		//console.log(data);
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.trim_state);
 	},
 
 	untrim(data) {
 		console.log("untrim save file");
-		console.log(data);
+		//console.log(data);
 		SaveFileTrimmer.iter_save_states(data, SaveFileTrimmer.untrim_state);
 	}
 }
