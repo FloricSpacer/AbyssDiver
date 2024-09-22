@@ -170,17 +170,23 @@ Name:
       <<if $mc.osex === "male">>
         <h3>Penis Size (cm)</h3>
         <div class="slider-container">
-          <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)">
-          <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
-        </div>
+            <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)">
+            <div>
+                <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
+                <span id="penisConversion">(5.9")</span>
+            </div>
+            </div>
       <</if>>
     </td>
     <td>
       <h3>Height (cm)</h3>
       <div class="slider-container">
-        <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)">
-        <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
-      </div>
+            <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)">
+            <div>
+                <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
+                <span id="heightConversion">(5'7")</span>
+            </div>
+        </div>
     </td>
     <td>
       <h3>Age</h3>
@@ -243,6 +249,41 @@ function updateAge(value) {
 function updateAgeSlider(value) {
     document.getElementById("ageSlider").value = value;
     SugarCube.State.variables.mc.age = parseInt(value);
+}
+
+function cmToFeetInches(cm) {
+  const inches = cm / 2.54;
+  const feet = Math.floor(inches / 12);
+  const remainingInches = Math.round(inches % 12);
+  return `${feet}'${remainingInches}"`;
+}
+
+function cmToInches(cm) {
+  return (cm / 2.54).toFixed(1);
+}
+
+function updateHeight(value) {
+  document.getElementById("heightInput").value = value;
+  document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
+  SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updateHeightSlider(value) {
+  document.getElementById("heightSlider").value = value;
+  document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
+  SugarCube.State.variables.mc.oheight = parseInt(value);
+}
+
+function updatePenis(value) {
+  document.getElementById("penisInput").value = value;
+  document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
+  SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updatePenisSlider(value) {
+  document.getElementById("penisSlider").value = value;
+  document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
+  SugarCube.State.variables.mc.openis = parseInt(value);
 }
 
 updateDisplay(0);
