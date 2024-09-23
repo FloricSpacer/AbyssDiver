@@ -1958,7 +1958,6 @@ window.goBackToPassage = function(passageName) {
 
     for (var i = history.length - 1; i >= 0; i--) {
         var momentTitle = history[i].title.trim().toLowerCase();
-        console.log("Index:", i, "Title:", momentTitle);
     }
 
     // Search for the passage in history
@@ -1968,7 +1967,6 @@ window.goBackToPassage = function(passageName) {
 
         if (momentTitle === targetName) {
             var delta = i - currentIndex;
-            console.log("Found at Index:", i, "Delta:", delta);
             SugarCube.Engine.go(delta);
             return;
         }
