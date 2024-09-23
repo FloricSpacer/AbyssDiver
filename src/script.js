@@ -1948,3 +1948,34 @@ function getGenderColor(gender) {
     const genderColors = ['deepskyblue', 'aqua', 'rgb(185, 229, 240)', 'lavenderblush', 'lightpink', 'hotpink'];
     return genderColors[gender - 1] || 'white';
 }
+
+window.goBackToPassage = function(passageName) {
+    var history = SugarCube.State.history;
+    var currentIndex = history.length - 1; // Use history length to get current index
+
+    // Normalize the target passage name
+    var targetName = passageName.trim().toLowerCase();
+
+    for (var i = history.length - 1; i >= 0; i--) {
+        var momentTitle = history[i].title.trim().toLowerCase();
+        console.log("Index:", i, "Title:", momentTitle);
+    }
+
+    // Search for the passage in history
+    for (var i = currentIndex - 1; i >= 0; i--) {
+        var moment = history[i];
+        var momentTitle = moment.title.trim().toLowerCase();
+
+        if (momentTitle === targetName) {
+            var delta = i - currentIndex;
+            console.log("Found at Index:", i, "Delta:", delta);
+            SugarCube.Engine.go(delta);
+            return;
+        }
+    }
+    alert("Passage not found in history: " + passageName);
+};
+
+
+
+
