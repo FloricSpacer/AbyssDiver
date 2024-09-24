@@ -1,4 +1,3 @@
-
 // LocalStorage Middleware //
 // by SPOOKEXE - 22.09.2024 - DD.MM.YYYY
 
@@ -146,9 +145,7 @@ window.SetupSugarCubeSaveTrimmer = (storageLocation, adapter) => {
 	adapter.set = function(key, value) {
 		//console.log("storage - set - ", key);
 		if (FFLAG_ENABLE_MIDDLEWARE) {
-			console.log('attempting trim');
 			SaveFileTrimmer.trim_save_file(value);
-			console.log('trim success');
 		}
 		let serialized_value = adapter.constructor._serialize(value);
 		// TODO: fix this :(
