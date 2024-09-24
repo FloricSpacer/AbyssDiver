@@ -188,13 +188,8 @@ window.updateSugarCubeStorageMiddleware = () => {
 	if (window.SugarCube && window.SugarCube.storage && window.SugarCube.session) {
 		window.hasDefinedMiddleware = true;
 		console.log("Setting up SugarCube Saves Middleware");
-<<<<<<< Updated upstream
-		window.SetupSugarCubeSaveTrimmer(window.SugarCube.storage);
-		window.SetupSugarCubeSaveTrimmer(window.SugarCube.session);
-=======
 		window.SetupSugarCubeSaveTrimmer(localStorage, window.SugarCube.storage);
 		window.SetupSugarCubeSaveTrimmer(sessionStorage, window.SugarCube.session);
->>>>>>> Stashed changes
 	} else {
 		console.warn('SugarCube is not loaded.');
 	}
