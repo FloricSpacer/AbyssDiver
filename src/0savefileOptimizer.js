@@ -144,7 +144,6 @@ window.SetupSugarCubeSaveTrimmer = (storageLocation, adapter) => {
 
 	//const original_set = adapter.set;
 	adapter.set = function(key, value) {
-		console.log(adapter.name);
 		//console.log("storage - set - ", key);
 		if (FFLAG_ENABLE_MIDDLEWARE) {
 			console.log('attempting trim');
@@ -162,7 +161,6 @@ window.SetupSugarCubeSaveTrimmer = (storageLocation, adapter) => {
 
 	//const original_get = adapter.get;
 	adapter.get = function(key) {
-		console.log(adapter.name);
 		//console.log("storage - get - ", key);
 		let save_raw = storageLocation.getItem(adapter._prefix + key);
 		if (save_raw == null) return null;
