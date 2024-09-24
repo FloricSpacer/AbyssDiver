@@ -1,4 +1,3 @@
-
 // LocalStorage Middleware //
 // by SPOOKEXE - 22.09.2024 - DD.MM.YYYY
 
@@ -59,9 +58,9 @@ const SaveFileTrimmer = {
 					furthest_event_item.amount += item.amount;
 				}
 			} else {
-				if (counter[key] == null || counter[key] == undefined) {
-					console.log(item);
-				}
+				// if (counter[key] == null || counter[key] == undefined) {
+				// 	console.log(item);
+				// }
 				counter[key] = count + 1;
 				pruned_events.unshift(item);
 				last_unique_event[key] = item;
@@ -139,7 +138,7 @@ const SaveFileTrimmer = {
 	}
 }
 
-window.SetupSugarCubeSaveTrimmer = (adapter) => {
+window.SetupSugarCubeSaveTrimmer = (storageLocation, adapter) => {
 	// https://github.com/tmedwards/sugarcube-2/blob/v2-develop/src/storage/adapters/webstorage.js
 
 	//const original_set = adapter.set;
@@ -153,14 +152,14 @@ window.SetupSugarCubeSaveTrimmer = (adapter) => {
 		/*if (FFLAG_ENABLE_PAKO_COMPRESS == true) {
 			serialized_value = "$$p$" + pako_compressString(encodeToBase64(serialized_value));
 		}*/
-		localStorage.setItem(adapter._prefix + key, serialized_value);
+		storageLocation.setItem(adapter._prefix + key, serialized_value);
 		return true;
 	}
 
 	//const original_get = adapter.get;
 	adapter.get = function(key) {
 		//console.log("storage - get - ", key);
-		let save_raw = localStorage.getItem(adapter._prefix + key);
+		let save_raw = storageLocation.getItem(adapter._prefix + key);
 		if (save_raw == null) return null;
 		/*if (save_raw.substring(0, 4) == "$$p$") {
 			save_raw = pako_decompressData(decodeFromBase64(save_raw.substring(4)));
@@ -184,8 +183,8 @@ window.updateSugarCubeStorageMiddleware = () => {
 	if (window.SugarCube && window.SugarCube.storage && window.SugarCube.session) {
 		window.hasDefinedMiddleware = true;
 		console.log("Setting up SugarCube Saves Middleware");
-		window.SetupSugarCubeSaveTrimmer(window.SugarCube.storage);
-		window.SetupSugarCubeSaveTrimmer(window.SugarCube.session);
+		window.SetupSugarCubeSaveTrimmer(localStorage, window.SugarCube.storage);
+		window.SetupSugarCubeSaveTrimmer(sessionStorage, window.SugarCube.session);
 	} else {
 		console.warn('SugarCube is not loaded.');
 	}
@@ -193,7 +192,7 @@ window.updateSugarCubeStorageMiddleware = () => {
 
 // auto setup middleware once storage is available
 const intervalId = setInterval(() => {
-	if (window.SugarCube.storage !== undefined) {
+	if (window.SugarCube.storage !== undefined && window.SugarCube.session !== undefined) {
 		window.updateSugarCubeStorageMiddleware();
 		clearInterval(intervalId); // Clear the interval
 	}
