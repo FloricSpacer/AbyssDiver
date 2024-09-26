@@ -397,13 +397,15 @@ Macro.add('PassTime', {
 						if ((State.variables.items[3].count < consumption
 								|| setup.flaskLabels[State.variables.flaskPref] === 'Bottled water')
 							&& setup.flaskLabels[State.variables.flaskPref] !== 'Aquarius Ex Nihilo') {
-							State.variables.items[0].count -= consumption;
+							if (!State.variables.ownedRelics.some(r => r.name === "Aquarius Ex Nihilo")) {
+								State.variables.items[0].count -= consumption;
+							}
 							State.variables.smaragdineFoodConsumed.bottle = true;
 						} else if (setup.flaskLabels[State.variables.flaskPref] !== 'Aquarius Ex Nihilo') {
 							State.variables.items[3].count -= consumption;
 							State.variables.items[2].count += consumption;
 							State.variables.flaskMatrix[State.variables.flaskPref] -= consumption;
-
+				
 							switch(setup.flaskLabels[State.variables.flaskPref]) {
 								case 'Flask with heavily contaminated water from the first layer':
 									State.variables.waterL1 += 1;
@@ -443,9 +445,6 @@ Macro.add('PassTime', {
 						State.variables.smaragdineFoodConsumed.wardWater = true;
 						drank = true;
 					}
-				}
-				if (drank) {
-					State.variables.dehydrated -= 1;
 				}
 
 
