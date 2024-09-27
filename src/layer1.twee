@@ -503,16 +503,18 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 
 The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _curse2.name for a gain of _curse1.corr and _curse2.corr corruption respectively.
 <<nobr>>
-<<set _hasdye = (_dyeCurse = _curse1 instanceof PermaDye) || (_dyeCurse = _curse2 instanceof PermaDye)>>
+<<set _hasDye = ( _curse1 instanceof PermaDye) || (_curse2 instanceof PermaDye)>>
 <<if _hasDye>>
+	<<set _dyeCurse = (_curse1 instanceof PermaDye) ? _curse1 : _curse2>>
 	<br>What hair color do you prefer?<br>
 	<<textbox "_dyeCurse.hairColor" "turquoise">><br>
 <</if>>
-<<set _hasDH = (_DHCurse = _curse1 instanceof DizzyingHeights) || (_DHCurse = _curse2 instanceof DizzyingHeights)>>
+<<set _hasDH = (_curse1 instanceof DizzyingHeights) || ( _curse2 instanceof DizzyingHeights)>>
 <<if _hasDH>>
 	<<set $dizzyCount +=1>>
 	<<if $mc.heightDir === 0>>
 		<br>Would you like to increase or decrease your height?<br>
+		<<set _DHCurse = (_curse1 instanceof DizzyingHeights) ? _curse1 : _curse2>>
 		<<set _DHCurse.direction = -1>>
 		<<radiobutton "_DHCurse.direction" -1 checked>> Decrease<br>
 		<<radiobutton "_DHCurse.direction" 1 >> Increase<br>
