@@ -1807,7 +1807,7 @@ Macro.add('sidebar-widget', {
                         <div class="resource-item tooltip">
                             <div class="icon-text-wrapper">
                                 <div class="icon-wrapper">
-                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/injury.png" alt="Injury"></span>
+                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/injurytimer.png" alt="Injury"></span>
                                 </div>
                                 <div class="spacer"></div>
                                 <div class="number-wrapper">${State.variables.status.duration}</div>
@@ -1817,7 +1817,7 @@ Macro.add('sidebar-widget', {
                         <div class="resource-item tooltip">
                             <div class="icon-text-wrapper">
                                 <div class="icon-wrapper">
-                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/penalty.png" alt="Penalty"></span>
+                                    <span class="sidebar-item"><img src="${setup.ImagePath}Icons/injurybandage.png" alt="Penalty"></span>
                                 </div>
                                 <div class="spacer"></div>
                                 <div class="number-wrapper">${State.variables.status.penalty}</div>
