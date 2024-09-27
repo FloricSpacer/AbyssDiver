@@ -591,7 +591,7 @@ class HeightEvent extends CharEvent {
 	 * @param {number} amount The height change in cm.
 	 */
 	constructor(name, amount) {
-		super(name, 'lactation');
+		super(name, 'Height Change');
 		this.amount = amount;
 	}
 
@@ -628,6 +628,56 @@ class HeightEvent extends CharEvent {
 
 	changeHeight(prevHeight, direction) {
 		return prevHeight + direction * this.amount;
+	}
+}
+
+window.HeightEvent = HeightEvent;
+
+/* exported HeightEvent */
+class HeightEventPercent extends CharEvent {
+	/**
+	 * Creates a new height-affecting event.
+	 * @param {string} name The name of the event.
+	 * @param {number} percent The height change percentage relative to the current height.
+	 */
+	constructor(name, percent) {
+		super(name, 'Height Change Percentage');
+		this.percent = percent;
+	}
+
+	/**
+	 * Returns the internal state of this event, from which another event can be built.
+	 * @returns {any} The internal state of this event.
+	 * @protected
+	 */
+	_internalState() {
+		return {superState: super._internalState(), percent: this.percent};
+	}
+
+	/**
+	 * Initialises this HeightEvent with the given internal state. Intended to be used only on new, empty objects while
+	 * cloning.
+	 * @param {any} superState
+	 * @param {number} percent
+	 * @returns {HeightEvent} This object
+	 * @protected
+	 */
+	_init({superState, percent}) {
+		super._init(superState);
+		this.percent = percent;
+		return this;
+	}
+
+	changeHeightDirection(prevDir) {
+		if (prevDir !== -1 && prevDir !== 1) {
+			console.error('Height changed without having set a change direction.');
+			return -1;
+		}
+		return prevDir;
+	}
+
+	changeHeight(prevHeight, direction) {
+		return prevHeight* (1 + direction * this.percent/100);
 	}
 }
 
