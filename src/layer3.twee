@@ -474,13 +474,13 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 				<<if _companion === $companionBandit>><<set _tempName = "Bandit">><</if>>
 				<<capture _companion _curse _tempName>>
 					&nbsp; _curse.name
-					<<link "Choose" "Layer3 Skewed1a">>
+					<<LinkButton "Choose" "Layer3 Skewed1a" "dark-btn obsidian">>
 						<<set _companion.addCurse(_curse.copy())>>
 
 						<<RemoveCurse _curse>>
 						<<set $dubloons -= ($skewedUsed * 5)>>
 						<<set $skewedUsed += 1>>
-					<</link>><br>
+					<</LinkButton>><br>
 				<</capture>>
 			<</if>>
 		<</for>>
@@ -1009,7 +1009,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 		<<if _companion === $companionBandit>><<set _tempName = "Bandit">><</if>>
 		<<capture _companion _i _tempName>>
 			<<set _choiceText = "Transfer to " + _tempName>>
-			<<link _choiceText "Layer3 Skewed Apply">>
+			<<LinkButton _choiceText "Layer3 Skewed Apply" "dark-btn obsidian">>
 				<<set _companion.addCurse(_curse.copy())>>
 
 				<<RemoveCurse _curse>>
@@ -1017,7 +1017,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 				<<set $skewedUsed += 1>>
 
 				<<set $temp2 = _i>>
-			<</link>><br>
+			<</LinkButton>><br>
 		<</capture>>
 	<</if>>
 <</for>>
@@ -1677,74 +1677,74 @@ Your Brave Vector slingshot can be used like a gun, but it will take many shots 
 
 <<if $mc.curses.some(c => c.name === 'Omnitool') && $mc.womb > 0 && $ownedRelics.some(r => r.name === "Effacing Asperity")>>
 	It seems like the tentacle beast feels some sort of urge to be gentler to beings it can impregnate. You also have the Effacing Asperity, which you can use as lubrication to decrease the pain from the thorough fucking it gives you. The combination of these two items allow you to get <i>no injury</i> if you allow the creature to fuck you. However, you run the risk of pregnancy, which can be a major problem in the Abyss.<br>
-	<<link "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed">>
+	<<LinkButton "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed" "dark-btn obsidian">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
-	<</link>><br><br>
+	<</LinkButton>><br><br>
 <<elseif $mc.curses.some(c => c.name === 'Omnitool') && $mc.womb > 0>>
 	It seems like the tentacle beast feels some sort of urge to be gentler to beings it can impregnate. Due to your Omnitool Curse, you can allow it to fuck you, but only increase your next 2 travel times by 1 day each. However, you run the risk of pregnancy.<br>
-	<<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
+	<<LinkButton "Allow it to overpower you" "Layer3 Tentacle Ravage" "dark-btn obsidian">>
 	<<set $status.duration += (2 - $statRed)>>
 	<<set $status.penalty += 1>>
 	<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
-	<</link>>
+	<</LinkButton>>
 	<br><br>
 	<<if $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
 	Your eyes fall on the Effacing Asperity. You could spray this at the monster in hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
-	<<link "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed">>
+	<<LinkButton "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed" "dark-btn obsidian">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
 		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
-	<</link>><br><br>
+	<</LinkButton>><br><br>
 	<<elseif $ownedRelics.some(r => r.name === "Effacing Asperity" ) && !$layer3TentacleLubedFirstTime >>
 	If you let it overpower you while using Effacing Asperity as a lubricant, the tentacle beast will subject you <<if $hiredCompanions.length > 0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
-	<<link "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed">>
+	<<LinkButton "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed" "dark-btn obsidian">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
 		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>> /* shouldn't be necessary but better to be safe */
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
-	<</link>><br><br>
+	<</LinkButton>><br><br>
 	<</if>>
 <<elseif $ownedRelics.some(r => r.name === "Effacing Asperity" ) && $layer3TentacleLubedFirstTime>>
 	Your eyes fall on the Effacing Asperity. You could spray this at the monster in hopes of slowing it down enough to escape. However, if this strategy fails, the tentacle beast will subject you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
-	<<link "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed">>
+	<<LinkButton "Use the Effacing Asperity against the beast" "Layer3 Tentacle Lubed" "dark-btn obsidian">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
 		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
-	<</link>><br><br>
+	<</LinkButton>><br><br>
 <<elseif $ownedRelics.some(r => r.name === "Effacing Asperity" ) && !$layer3TentacleLubedFirstTime >>
 	If you let it overpower you while using Effacing Asperity as a lubricant, the tentacle beast will subject you <<if $hiredCompanions.length > 0>>and the rest of your party <</if>>to a thorough tentacle fucking, albeit a lubed-up one, leaving you with a minor limp, increasing your next 2 travel times by 1 day each. <br>
-	<<link "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed">>
+	<<LinkButton "Allow it to overpower you with Effacing Asperity" "Layer3 Tentacle Lubed" "dark-btn obsidian">>
 		<<set $layer3TentacleLubedFirstTime = false>>
 		<<set $status.duration += (2 - $statRed)>>
 		<<set $status.penalty += 1>>
 		<<set $smaragdineThreatsSubmitted.tentacleLesser = true>> /* shouldn't be necessary but better to be safe */
 		<<PregCheckTentacle $mc>>
 		<<MonsterPregCheckParty>>
-	<</link>><br><br>
+	<</LinkButton>><br><br>
 <</if>>
 
 <<if !$mc.curses.some(e => e.name === "Omnitool")>>
 If you allow it to overpower you, it will give you <<if $hiredCompanions.length >0>>and the rest of your party <</if>>a very thorough tentacle fucking, leaving you with a serious limp, increasing your next 3 travel times by 2 days each. <br>
-<<link "Allow it to overpower you" "Layer3 Tentacle Ravage">>
+<<LinkButton "Allow it to overpower you" "Layer3 Tentacle Ravage" "dark-btn obsidian">>
 	<<set $status.duration += (3 - $statRed)>>
 	<<set $status.penalty += 2>>
 	<<set $smaragdineThreatsSubmitted.tentacleLesser = true>>
 	<<PregCheckTentacle $mc>>
 	<<MonsterPregCheckParty>>
-<</link>>
+<</LinkButton>>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "Creepy Doll")>>
@@ -1754,9 +1754,7 @@ If you allow it to overpower you, it will give you <<if $hiredCompanions.length 
 
 		A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embrace it and welcome its presence into your heart.<br><br>
 
-		<<link "Hug the doll tightly and close your eyes" $returnPassage>>
-			<<dollTF>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="$returnPassage">Hug the doll tightly and close your eyes</button><br>
 	<<else>>
 		<<say $creepydoll>> Wouldn't you just rather play with just me? I can make all bad things go away if its just the two of us!<</say>><br>
 	<</if>>

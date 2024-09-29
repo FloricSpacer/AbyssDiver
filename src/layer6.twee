@@ -1108,7 +1108,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-	<<link "Reroll with Devil's Own" "Layer6 Cherry Relic">>
+	<<LinkButton "Reroll with Devil's Own" "Layer6 Cherry Relic" "dark-btn obsidian">>
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
@@ -1116,7 +1116,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 
 		<<set setup.loseRelic("Devil's Own")>>
-	<</link>>
+	<</LinkButton>>
 
 <</if>>
 
@@ -1150,14 +1150,14 @@ The Curses you have obtained with Cherry's Chaotic Luck are _curse1.name and _cu
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-	<<link "Reroll with Devil's Own" "Layer6 Cherry Curse">>
+	<<LinkButton "Reroll with Devil's Own" "Layer6 Cherry Curse" "dark-btn obsidian">>
 		<<set $corruption -= _curse1.corr>>
 		<<RemoveCurse _curse1>>
 		
 		<<set $corruption -= _curse2.corr>>
 		<<RemoveCurse _curse2>>
 		<<set setup.loseRelic("Devil's Own")>>
-	<</link>>
+<</LinkButton>>
 
 <</if>>
 
@@ -1183,14 +1183,14 @@ With Cherry's Chaotic Luck you have found the Relic $relics[$temp1].name for a c
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-	<<link "Reroll with Devil's Own" "Layer6 Cherry Mix">>
+	<<LinkButton "Reroll with Devil's Own" "Layer6 Cherry Mix" "dark-btn obsidian">>
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
 		<<set $corruption -= _curse.corr>>
 		<<RemoveCurse _curse>>
 		<<set setup.loseRelic("Devil's Own")>>
-	<</link>>
+<</LinkButton>>
 
 <</if>>
 
@@ -1601,7 +1601,7 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Sunbeam Relic he will be able to fight it off one time, but even he would be moderately burned by fighting it, increasing all travel times by 2 until you used a medkit on him. You will be able to get its hoard of 50 dubloons when you kill it though.<br>
-	<<link "Have Khemia fight it off with Sunbeam" $returnPassage>>
+	<<LinkButton "Have Khemia fight it off with Sunbeam" $returnPassage "dark-btn obsidian">>
 		<<set $status.duration += 99, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1, $smaragdineThreatsSubmitted.dragon = true>>
 		<<if $CotNBalance<-4>>
 			<<set $CotNBalance+=10>>
@@ -1612,11 +1612,11 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 				<<include "Pulse Bloom Code">>
 			<</if>>
 		<</if>>
-	<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
+	<</LinkButton>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 <</if>>
 <<if $joyousSword === 1 && $hiredCompanions.some(e => e.id === setup.companionIds.khemia) && $khemiaDragon === 0>>
 	Khemia has enough expertise with a blade that if you give him the Joyous Sunder sword he will be able to defeat a dragon with only minor burns, increasing your next 3 travel times by 2 days each.<br>
-	<<link "Have Khemia fight it off with the Joyous Sunder sword" $returnPassage>>
+	<<LinkButton "Have Khemia fight it off with the Joyous Sunder sword" $returnPassage "dark-btn obsidian">>
 		<<set $status.duration += 3, $status.penalty += 2, $khemiaDragon === 1, $dubloons += 50, $dragonKill += 1, $smaragdineThreatsSubmitted.dragon = true>>
 		<<if $CotNBalance<-4>>
 			<<set $CotNBalance+=10>>
@@ -1627,11 +1627,11 @@ The dragon takes care to avoid Khemia at close range, so he won't have a chance 
 				<<include "Pulse Bloom Code">>
 			<</if>>
 		<</if>>
-	<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
+	<</LinkButton>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 <</if>>
 <<if $ownedRelics.some(e => e.name === "Toral Wave") && $ownedRelics.some(e => e.name === "Empath Coil") && $electricDragon === 0>>
 While the Fell Dragons are immune to most conventional methods of attack, you can combine the power of the Toral Wave with the Empath Coil to electrocute the dragon. A single touch can stun the dragon, allowing follow-up attacks that can take it down. This method is only likely to work once, but it can effective. Even this method isn't safe though, leaving you with minor injuries that will increase your next 3 travel times by 2 days each.<br>
-	<<link "Use your Relics to electrocute the dragon" $returnPassage>>
+	<<LinkButton "Use your Relics to electrocute the dragon" $returnPassage "dark-btn obsidian">>
 		<<set $status.duration += 3, $status.penalty += 2, $electricDragon === 1, $dubloons += 50, $dragonKill += 1, $smaragdineThreatsSubmitted.dragon = true>>
 		<<if $CotNBalance<-4>>
 			<<set $CotNBalance+=10>>
@@ -1642,7 +1642,7 @@ While the Fell Dragons are immune to most conventional methods of attack, you ca
 				<<include "Pulse Bloom Code">>
 			<</if>>
 		<</if>>
-	<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
+	<</LinkButton>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
 <</if>>
 <<if $mechaBoarded>>
 	The dragon stands tall in front of you, unwilling to back down despite the power of your Starlit Conquest. This may be a worthy opponent to test the full capabilities of your machine. But if they see you fight like this, the dragons might avoid you from now on.
@@ -1659,7 +1659,7 @@ If you try to run away without fighting to keep your dubloons safe, prepare to b
 <</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm. You may only use each combination 1 time before the dragons learn from experience and overcome the weakness, making that strategy unusable a second time.
-<<link "Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons" $returnPassage>>
+<<LinkButton "Use a combination of Relics not mentioned above you believe would be able to overpower one of the dragons" $returnPassage "dark-btn obsidian">>
 	<<set $dragonKill += 1, $dubloons += 50>>
 	<<if $CotNBalance<-4>>
 		<<set $CotNBalance+=10>>
@@ -1670,4 +1670,4 @@ Use the following option only if you have specifically considered your inventory
 			<<include "Pulse Bloom Code">>
 		<</if>>
 	<</if>>
-<</link>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>
+<</LinkButton>><<if $mc.hasCurse("Creature of the Night")>> <span class="icon">[img[setup.ImagePath+'Icons/blooddrop.png']]</span> <</if>><br><br>

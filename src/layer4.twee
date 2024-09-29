@@ -984,14 +984,8 @@ Which Curse would you like to transfer to your willing companion? It can't be to
 				<<if _companion === $companionBandit>><<set _tempName = "Bandit">><</if>>
 				<<capture _companion _curse _tempName>>
 					&nbsp; _curse.name
-					<<link "Choose" "Layer4 Steady1a">>
-						<<set _companion.addCurse(_curse.copy())>>
-
-						<<set $corruption += Math.round(_curse.corr / 2)>>
-						/* The CYOA states that the cost counter is shared between shrines. */
-						<<set $dubloons -= ($skewedUsed * 5)>>
-						<<set $skewedUsed += 1>>
-					<</link>><br>
+					<button class="dark-btn obsidian" data-passage="Layer4 Steady1a" data-setter="_companion.addCurse(_curse.copy()), $corruption += Math.round(_curse.corr / 2), $dubloons -= ($skewedUsed * 5), $skewedUsed += 1">Choose</button>
+					/* The CYOA states that the cost counter is shared between shrines. */<br>
 				<</capture>>
 			<</if>>
 		<</for>>
@@ -1075,11 +1069,7 @@ You may choose one of them and be cursed with it for the usual corruption, or go
 <<nobr>>
 	<<for _constellation range setup.getCurseSets()>>
 		<<capture _constellation>>
-			<<link _constellation.name "Diver shrine inspect constellation">>
-				/* I really don't like that we have to set a global variable here, but there's no other way
-				 * to show this on a new page afaict. */
-				<<set $diverShrineSelectedCurse = _constellation.name>>
-			<</link>>
+			<button class="dark-btn obsidian" data-passage="Diver shrine inspect constellation" data-setter="$diverShrineSelectedCurse = _constellation.name">_constellation.name</button>
 			<br>
 		<</capture>>
 	<</for>>
@@ -1094,11 +1084,7 @@ You may choose one of them and be cursed with it for the usual corruption, or go
 <<nobr>>
 	<<for _constellation range setup.getUserCurseSets()>>
 		<<capture _constellation>>
-			<<link _constellation.name "Diver shrine inspect user constellation">>
-				/* I really don't like that we have to set a global variable here, but there's no other way
-				 * to show this on a new page afaict. */
-				<<set $diverShrineSelectedCurse = _constellation.name>>
-			<</link>>
+			<button class="dark-btn obsidian" data-passage="Diver shrine inspect user constellation" data-setter="$diverShrineSelectedCurse = _constellation.name">_constellation.name</button>
 			<br>
 		<</capture>>
 	<</for>>
@@ -1277,12 +1263,12 @@ Choose a subset of your current curses to form a new constellation:<br>
 	If you delete this website's data ("Clear cookies and site data" or similar buttons), they'll disappear too.<br>
 	In any of these cases, save the above code somewhere and import it again to restore the constellation.
 </div><br>
-<<link "Save">>
+<<LinkButton "Save" "Save" "dark-btn obsidian">>
 	<<set _constellation = new Constellation(_name, _curses, _description)>>
 	<<set setup.addUserCurseSet(_constellation)>>
 	<<set $('#diver-shrine-export-box').text(JSON.stringify(_constellation))>>
 	<<set $('#diver-shrine-confirm-diag').css({display: 'initial'})>>
-<</link>><br>
+<</LinkButton>><br>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 :: Diver shrine import [layer4]
@@ -1306,7 +1292,7 @@ Use this code to share all your constellations:\
 Paste such a code here to import all of its constellations. Note that if you already have constellations with the same name, they will be overwritten.
 <input type="text" id="diver-shrine-bulk-import-field" />
 
-<<link "Import constellations">>
+<<LinkButton "Import constellations" "none" "dark-btn obsidian">>
 	<<set _constellations = JSON.tryParse($('#diver-shrine-bulk-import-field')[0].value)>>
 	<<if _constellations === false || !(Array.isArray(_constellations) && _constellations.every(c => c instanceof Constellation))>>
 		<<set alert('The code you provided is not a valid set of constellations. It could be a single constellation, in which case use the form below to import it.')>>
@@ -1319,7 +1305,7 @@ Paste such a code here to import all of its constellations. Note that if you alr
 		}>>
 		<<set $('#diver-shrine-bulk-import-field')[0].value = ''>>
 	<</if>>
-<</link>>
+<</LinkButton>>
 
 
 Import a single constellation's code here:
@@ -1327,7 +1313,7 @@ Import a single constellation's code here:
 Write a name here if you want to replace the constellation's name (e.g. to avoid a collision with an existing constellation):
 <input type="text" id="diver-shrine-import-single-name" />
 
-<<link "Import constellation">>
+<<LinkButton "Import constellation" "none" "dark-btn obsidian">>
 	<<set _name = $('#diver-shrine-import-single-name')[0].value>>
 	<<set _constellation = JSON.tryParse($('#diver-shrine-import-single-field')[0].value)>>
 	<<if !_constellation instanceof Constellation>>
@@ -1341,7 +1327,7 @@ Write a name here if you want to replace the constellation's name (e.g. to avoid
         <<set $('#diver-shrine-import-single-field')[0].value = ''>>
         <<set $('#diver-shrine-import-single-name')[0].value = ''>>
 	<</if>>
-<</link>>
+<</LinkButton>>
 
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
@@ -1424,16 +1410,7 @@ The magic of the shrine wisps through the air menacingly as your victim struggle
 		<<if _companion === $companionBandit>><<set _tempName = "Bandit">><</if>>
 		<<capture _companion _i _tempName>>
 			<<set _choiceText = "Copy to " + _tempName>>
-			<<link _choiceText "Layer4 Steady Apply">>
-				<<set _companion.addCurse(_curse.copy())>>
-
-				<<set $corruption += Math.round(_curse.corr / 2)>>
-				/* The CYOA states that the cost counter is shared between shrines. */
-				<<set $dubloons -= ($skewedUsed * 5)>>
-				<<set $skewedUsed += 1>>
-
-				<<set $temp2 = _i>>
-			<</link>><br>
+			<button class="dark-btn obsidian" data-passage="Layer4 Steady Apply" data-setter="_companion.addCurse(_curse.copy()), $corruption += Math.round(_curse.corr / 2), $dubloons -= ($skewedUsed * 5), $skewedUsed += 1, $temp2 = _i">_choiceText</button><br>
 		<</capture>>
 	<</if>>
 <</for>>
@@ -2155,9 +2132,9 @@ How do you want to deal with the creature descending upon you?
 
 		A gentle, comforting warmth emanates from the Creepy Doll, beckoning you to embrace it and welcome its presence into your heart.<br><br>
 
-		<<link "Hug the doll tightly and close your eyes" $returnPassage>>
+		<<LinkButton "Hug the doll tightly and close your eyes" $returnPassage "dark-btn obsidian">>
 			<<dollTF>>
-		<</link>><br><br>
+		<</LinkButton>><br><br>
 	<<else>>
 		<<say $creepydoll>> Wouldn't you just rather play with just me? I can make all bad things go away if its just the two of us!<</say>><br><br>
 	<</if>>
