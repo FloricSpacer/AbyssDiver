@@ -1775,7 +1775,7 @@ Macro.add('sidebar-widget', {
                             </div>
                             <div class="spacer"></div>
                             <div class="number-wrapper">
-                                ${dehydrated <= 0 ? water : '<span class="alert2">Dehydrated for ' + dehydrated + ' days!</span>'}
+                                ${dehydrated <= 0 ? water : '<span class="alert2">-' + dehydrated + '</span>'}
                                 <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
                             </div>
                         </div>
@@ -1788,7 +1788,7 @@ Macro.add('sidebar-widget', {
                             </div>
                             <div class="spacer"></div>
                             <div class="number-wrapper">
-                                ${starving <= 0 ? food : '<span class="alert2">Starving for ' + starving + ' days!</span>'}
+                                ${starving <= 0 ? food : '<span class="alert2">-' + starving + '</span>'}
                                 <span class="twine-sidebar-foraging-icon ${forageFood ? 'active' : ''}"></span>
                             </div>
                         </div>
