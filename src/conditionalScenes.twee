@@ -12,13 +12,7 @@
 
 	Then you recover and find yourself once again in a new place. But this is one that you've been to before.
 
-	<<link 'Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil' $hubReturn>>
-		<<set setup.loseRelic('Phoenix Obol')>>
-		<<set $starving = 0>>
-		<<set $dehydrated = 0>>
-		<<set $SemenDemonBalance = 0>>
-		<<set $gameOver = false>>
-	<</link>>
+	<button class="dark-btn obsidian" data-passage="$hubReturn" data-setter="setup.loseRelic('Phoenix Obol'), $starving = 0, $dehydrated = 0, $SemenDemonBalance = 0, $gameOver = false">Open your eyes to find yourself back in the Abyss, your hand clutching a scorched coin, now devoid of its sigil</button>
 <<elseif $starving > 5>>
 	You have avoided eating for a few days, but eventually starved to death. If you didn't realize what had happened, you can avoid this fate by pressing the back arrow in the top left until you reach the main part of a layer. Once you are there, you can take the habitation option for the current layer to avoid death.
 <<elseif $dehydrated > 2>>
@@ -206,7 +200,7 @@ The violent chaos ends as suddenly as it began, leaving you drained and weak on 
 <<set $status.duration += 3>>
 <<set $status.penalty += 1>>
 
-<<link "You cast your eyes once more on the path ahead, it's time to get moving once again" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn">You cast your eyes once more on the path ahead, it's time to get moving once again</button>
 
 :: Bandit Joins [nobr]
 From the horizon, a familiar silhouette emerges, steadily approaching your camp. It's Vesper, the bandit you released just days before.<br><br>
@@ -221,7 +215,7 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
 <<say $companionBandit>>Enough with the questions! Do you want my assistance or not?<</say>><br>
 <<say $mc>>Sure, Vesper. Welcome to the team!<</say>><br>
 
-<<link "With a new member in your party you continue your journey!" $interruptReturn>><<set $BanditConvo0_rejoin=9999>><<set $hiredCompanions.push($companionBandit)>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn" data-setter="$BanditConvo0_rejoin=9999, $hiredCompanions.push($companionBandit)">With a new member in your party you continue your journey!</button>
 
 :: Bandit Escape [nobr noreturn]
 <<set _temp = $ownedRelics.length-1>>
@@ -250,7 +244,7 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
 		<<say $companionBandit>>This isn't over. I'll get my revenge and end you in your fucking sleep!<</say>><br>
 		<<say $mc>>Back into bindings it is.<</say>><br>
 		You quickly secure her again, tying up her limbs an gagging her mouth. <<set $companionBandit.imageIcon = "Icons/banditIcon.png">><br><br>
-		<<link "Try to catch a few more hours of sleep" $interruptReturn>><</link>>
+		<button class="dark-btn obsidian" data-passage="$interruptReturn">Try to catch a few more hours of sleep</button>
 	<<else>>
 		She fights with a ferocity that catches you off guard. Just when you think you have an edge, she blinds you with a well-timed spit into your eyes. Using the distraction, she lands a heavy blow that sends you sprawling to the ground.<br><br>
 		<<say $companionBandit>>Thought you could control me? Thought you could treat me like dirt? Think again.<</say>><br>
@@ -260,13 +254,13 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
 			The commotion draws the attention of _companion.name, who leaps into action. Together, you're able to restrain the bandit once again.<br><br>
 			<<say $mc>>Thanks. I underestimated her, so I appreciate your help there.<</say>><br>
 			<<say _companion>>You need to be more careful. She's dangerous! And you seem hurt!<</say>><br>
-			<<link "Rest and recover from the ordeal" $interruptReturn>><</link>>
+			<button class="dark-btn obsidian" data-passage="$interruptReturn">Rest and recover from the ordeal</button>
 		<<else>>
 			With you incapacitated, the bandit grabs one of your Relics and makes her escape, it looks like the $ownedRelics[_temp].name.<br><br>
 			<<say $companionBandit>>This should cover my damages. Goodbye and good riddance, asshole.<</say>><br>
 			<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
 			<<if _i !== -1>><<set $hiredCompanions.deleteAt(_i)>><</if>><<if $ownedRelics.length>0>><<set $ownedRelics.deleteAt(_temp)>><</if>>
-			<<link "You rest, trying to shake off the night's events" $interruptReturn>><</link>>
+			<button class="dark-btn obsidian" data-passage="$interruptReturn">You rest, trying to shake off the night's events</button>
 		<</if>>
 	<</if>>
 
@@ -282,7 +276,7 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
         <<say $companionBandit>>This isn't over! Hmmph<</say>><br>
         She struggle to talk as you pull the gag over her mouth.<br><br>
         <<say $mc>>We'll see about that.<</say>><br>
-        <<link "Settle down to get a few more hours of sleep" $interruptReturn>><</link>>
+        <button class="dark-btn obsidian" data-passage="$interruptReturn">Settle down to get a few more hours of sleep</button>
 
     <<elseif _maxMove + $hiredCompanions.length - 1 + random(-1,1)> $companionBandit.HandicapMovement + random(-1,1)>>
         <<say $companionBandit>>What the?!<</say>><br>
@@ -294,7 +288,7 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
         Annoyed yet compliant, she allows herself to be restrained.<br><br>
 		<<set $companionBandit.imageIcon = "Icons/banditIcon.png">>
         <<say $companionBandit>>You might've caught me now, but I'll find another way out. Hhmph!<</say>><br>
-        <<link "Head back to camp, ensuring a closer watch on the bandit" $interruptReturn>><</link>>
+        <button class="dark-btn obsidian" data-passage="$interruptReturn">Head back to camp, ensuring a closer watch on the bandit</button>
 
     <<else>>
         <<say $companionBandit>>What the?!<</say>>
@@ -306,7 +300,7 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
         <<if $hiredCompanions.length>1>>
         <<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
         <<if _i !== -1>><<set $hiredCompanions.deleteAt(_i)>><</if>><<if $ownedRelics.length>0>><<set $ownedRelics.deleteAt(_temp)>><</if>>
-        <<link "Return to camp, frustrated by the turn of events" $interruptReturn>><</link>>
+        <button class="dark-btn obsidian" data-passage="$interruptReturn">Return to camp, frustrated by the turn of events</button>
 
     <</if>>
 <</if>>
@@ -321,13 +315,13 @@ Caught off guard, Vesper's cheeks tint with a light shade of pink.<br><br>
 		<<say $mc>>I think you've created enough trouble for one night.<</say>><br>
 		You gag her and tie her up again. <<set $companionBandit.imageIcon = "Icons/banditIcon.png">><br><br>
 		<<say $companionBandit>>Hmph!<</say>><br>
-		<<link "Get a few more hours of sleep before continuing" $interruptReturn>><</link>>
+		<button class="dark-btn obsidian" data-passage="$interruptReturn">Get a few more hours of sleep before continuing</button>
 	<<else>>
 		Unfortunately, she proves to be pretty quick, and neither you<<if $hiredCompanions.length>1>> nor the rest of your group<</if>> manage to catch her before she escapes.<br><br>
 		<<say $mc>>Damn it!<</say>><br>
 		<<set _i = $hiredCompanions.findIndex(companion => companion === $companionBandit)>>
 		<<if _i !== -1>><<set $hiredCompanions.deleteAt(_i)>><</if>>
-		<<link "Return to camp, frustrated by the turn of events" $interruptReturn>><</link>>
+		<button class="dark-btn obsidian" data-passage="$interruptReturn">Return to camp, frustrated by the turn of events</button>
 	<</if>>
 <</if>>
 
@@ -645,7 +639,7 @@ Your breathing becomes rapid and shallow as you try to keep up with the contract
 <<set setup.setNotPregnant($mc)>>\
 <<set $menCycleFlag = true>>\
 <<set $menCycleT = $time+63>>\
-<<link "You cast your eyes once more on the path ahead, it's time to get moving once again" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn">You cast your eyes once more on the path ahead, it's time to get moving once again</button>
 
 :: Labor Scene Companion
 
@@ -714,7 +708,7 @@ In the end, you don't truly resume your travels in earnest until after 7 days.
 <<PassTime _waitTime>>\
 <<set setup.setNotPregnant(setup.id2companion($companionLabor))>>\
 
-<<link "You cast your eyes once more on the central location of this layer, ready to get moving again" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn">You cast your eyes once more on the path ahead, it's time to get moving once again</button>
 
 :: Pregnancy Swap Surprise[nobr]
 <<if $pregnant_surprise===$companionMaru>>
@@ -846,7 +840,7 @@ In the end, you don't truly resume your travels in earnest until after 7 days.
 	<<say $companionTwin>>All the way to the end this time!<</say>><br>
 <</if>>
 
-<<link "Despite the turmoil, you have to keep moving forward" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn">Despite the turmoil, you have to keep moving forward</button>
 
 :: Gestation Scene1 [nobr]
 The morning light barely filters through your window as consciousness seeps back into you. But with wakefulness comes a profound sense of change. Your limbs feel unusually heavy, and a deep lethargy grips your body. You sit up, feeling an unfamiliar weight pulling at your midsection. Glancing down, your eyes widen in surprise at the sight of your belly, now rounded and pronounced, unmistakably that of middle stage pregnancy.<br>
@@ -868,7 +862,7 @@ Your hands tremble as you pinch your skin, hoping against hope that this is just
 As you stand, your movements are cautious, almost reverent, as you adjust to the new balance of your body. The mirror reflects a version of you that seems both foreign and intimately familiar, the gentle bulge of your belly a sign of the rapid changes your body is going through.<br><br>
 
 <<set $gestation_scene1=false>>
-<<link "Nothing you can do about it now, you'll have to continue" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn" data-setter="$gestation_scene1=false">Nothing you can do about it now, you'll have to continue</button>
 
 :: Gestation Scene2 [nobr]
 Dawn greets you with a challenge. As you attempt to rise from bed, it feels like an immense effort. Your body no longer responds with its usual agility; instead, you find yourself rolling, maneuvering around the significant expanse of your belly, which has grown substantially overnight.<br><br>
@@ -879,7 +873,7 @@ You attempt to dress, only to find that your clothes are now hopelessly inadequa
 The curve of your belly is now pronounced and undeniable, a symbol of life accelerating within you. You place a hand gently over your baby bump, feeling a mix of wonder and trepidation at the thought of giving birth to a child soon.<br><br>
 
 <<set $gestation_scene2=false>>
-<<link "At least you will reach the end soon" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn" data-setter="$gestation_scene2=false">At least you will reach the end soon</button>
 
 :: Doll event [surface]
 
@@ -891,10 +885,7 @@ A sudden sensation of intense pain surges through your body, making you double o
 
 :: Doll event continued[surface]
 You wake up in a corner of the Relic Workshop with the doll clutched tightly in your arms, pressed against your chest. It gives a pleasantly warm feeling, comforting you after your terrifying experience before you passed out. Somehow, as you hug the doll, you feel calm and satisfied for at least a moment. When you look down and check your skin, everything seems alright, no scars or burns anywhere. Luckily it seems that your body has not actually been torn apart, instead it was either a psychic attack of some sort or a vision of a possible future. Whatever the case, perhaps its better to not proceed with the plan to cut open the doll.
-<<link "Was there anything else I wanted to do here?" "Surface Workshop">>
-	<<dollTF>>
-	<<set $dollevent=true>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Surface Workshop" data-setter="$dollevent=true">Was there anything else I wanted to do here?</button>
 
 
 :: DollWarning 
@@ -983,7 +974,7 @@ But this bliss is short-lived. An intense heat surges through your body, your sk
 Empowered by the Pulse Bloom, you stand transformed, a mirror image of the monster you defeated.
  
 <<set $transformMonsterScene = false>>
-<<link "Continue on your journey" $interruptReturn>><</link>>
+<button class="dark-btn obsidian" data-passage="$interruptReturn">Continue on your journey</button>
 
 :: SpectreEnd
 
