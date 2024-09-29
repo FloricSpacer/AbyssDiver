@@ -304,7 +304,7 @@ How would you like to use Cherry's chaotic luck ability?
 
 <p><<if $items[2].count > 0>>
 	<<if $atWaterSource>>
-		<<link 'Fill your empty flasks with water from the oasis' 'Layer5 Flasks'>><</link>>
+		<button class="dark-btn obsidian" data-passage="Layer5 Flasks">Fill your empty flasks with water from the oasis</button>
 	<<else>>
 		<<TravelToPassageButton 'Fill your empty flasks with water from an oasis' 'Layer5 Flasks' 7 `-($abyssKnow + 2 * $oasisVisit)` 0 1 0 'dark-btn obsidian'>>
 	<</if>>
@@ -351,12 +351,12 @@ Every Relic in this layer is found in one of the many ruins that are carved into
 			<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
 		<</if>>
 
-		<<link _text "Layer5 Relics">>
+		<<LinkButton _text "Layer5 Relics" "dark-btn obsidian">>
 			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<set $status.penalty = 0, $status.duration = 0>>
-		<</link>><br>
+		<</LinkButton>><br>
 	<<else>>
 		You do not have a medkit or other healing items to cure your status condition.<br>
 	<</if>>
@@ -631,12 +631,12 @@ While searching the ruins for the Relic, you have triggered a booby trap!
 			<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
 		<</if>>
 
-		<<link _text "Layer5 Booby2">>
+		<<LinkButton _text "Layer5 Booby2" "dark-btn obsidian">>
 			<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
 				<<set $items[4].count -= 1>>
 			<</if>>
 			<<set $status.penalty = 0, $status.duration = 0>>
-		<</link>><br>
+		<</LinkButton>><br>
 	<</if>><br>
 	<</nobr>>
 <</if>>
@@ -1472,7 +1472,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-	<<link "Reroll with Devil's Own" "Layer5 Cherry Relic">>
+	<<LinkButton "Reroll with Devil's Own" "Layer5 Cherry Relic" "dark-btn obsidian">>
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
@@ -1480,7 +1480,7 @@ The Relics you have found with Cherry's Chaotic Luck are $relics[$temp1].name an
 		<<set $corruption += Math.floor(Math.max(($relics[$temp2].corr / 2) - $corRed, 0))>>
 
 		<<set setup.loseRelic("Devil's Own")>>
-	<</link>>
+	<</LinkButton>>
 
 <</if>>
 
@@ -1540,7 +1540,7 @@ Please enter your new exoskeleton color:
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-	<<link "Reroll with Devil's Own" "Layer5 Cherry Curse">>
+	<<LinkButton "Reroll with Devil's Own" "Layer5 Cherry Curse" "dark-btn obsidian">>
 		<<set $corruption -= _curse1.corr>>
 		<<RemoveCurse _curse1>>
 		
@@ -1548,7 +1548,7 @@ Please enter your new exoskeleton color:
 		<<RemoveCurse _curse2>>
 
 		<<set setup.loseRelic("Devil's Own")>>
-	<</link>>
+	<</LinkButton>>
 
 <</if>>
 
@@ -1599,14 +1599,14 @@ Please enter your new exoskeleton color:
 
 	You have a single chance to bend fate using the mystical luck of the Devil's Own. Cherry's fate is strong, so you only get 1 chance to use this effect on your entire adventure. Would you like to reroll Cherry's Chaotic Luck?
 
-	<<link "Reroll with Devil's Own" "Layer5 Cherry Mix">>
+	<<LinkButton "Reroll with Devil's Own" "Layer5 Cherry Mix" "dark-btn obsidian">>
 		<<set $ownedRelics.deleteAt($ownedRelics.length-1)>>
 		<<set $corruption += Math.floor(Math.max(($relics[$temp1].corr / 2) - $corRed, 0))>>
 		
 		<<set $corruption -= _curse.corr>>
 		<<RemoveCurse _curse>>
 		<<set setup.loseRelic("Devil's Own")>>
-	<</link>>
+	<</LinkButton>>
 
 <</if>>
 
@@ -1730,12 +1730,12 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 
 	<<if $ownedRelics.some(e => e.name === "Breathless Exhale")>>
 		<br>The radiant sun empowers your Breathless Exhale Relic, its energy pulsating within your grasp. You can sense the potential of the Relic, trembling with anticipation, ready to alter the wind's course and drive the insects away from you.<br><br>
-		<<link "Summon a powerful gust to drive the swarm away from you" `passage()`>><<set $timeL5T1 -= 8>><<set $smaragdineThreatsDefeated.scuttler = true>><</link>><br>
+		<<LinkButton "Summon a powerful gust to drive the swarm away from you" `passage()` "dark-btn obsidian">><<set $timeL5T1 -= 8>><<set $smaragdineThreatsDefeated.scuttler = true>><</LinkButton>><br>
 	<</if>>
 
 	<<if $mechaBoarded>>
 		Inside the Starlit Conquest you remain unaffected by the pheromones of Mayfly Scuttlers. 
-		<<link "Continue your journey unimpeded" `passage()`>><<set $timeL5T1 -= 8>><<set $smaragdineThreatsDefeated.scuttler = true>><</link>><br>
+		<<LinkButton "Continue your journey unimpeded" `passage()` "dark-btn obsidian">><<set $timeL5T1 -= 8>><<set $smaragdineThreatsDefeated.scuttler = true>><</LinkButton>><br>
 	<</if>>
 <</if>>
 
@@ -1779,9 +1779,9 @@ Testing your Pocket Hoard, you stick a hand into the pink rucksack, but find you
 
 When you wake up in the morning, you hear an enormous amount of buzzing in the air, luckily you managed to stay out of the swarm when you woke up. They scarlet bugs produce a potent aphrodisiac venom, so if you choose to go out into the swarm, and succumb to the venom to participate in a day of sexual debauchery. On the other hand, you can stay in one of the ruins for the day and avoid the swarms altogether. Either choice will cost you one day.
 
-<<link "Walk out into the swarm and enjoy the sexual festivities" "Layer5 Mayfly Scuttler Sexual Activities">><<PassTime 1>><</link>>
+<<LinkButton "Walk out into the swarm and enjoy the sexual festivities" "Layer5 Mayfly Scuttler Sexual Activities" "dark-btn obsidian">><<PassTime 1>><</LinkButton>>
 
-<<link "Hide out in the ruins for the day" `$returnPassage`>><<PassTime 1>><</link>>
+<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="PassTime(1)">Hide out in the ruins for the day</button>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to rid of or avoid these pests.
 <button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.scuttler = true">Use a combination of Relics not mentioned above you believe would be able to get rid of the swarm</button>
@@ -1908,7 +1908,7 @@ How will you deal with the monstrous worm approaching you?
 <<nobr>>
 <<if $ownedRelics.some(e => e.name === "Sunbeam") && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	With Khemia's exceptional swordsmanship and the power of the Sunbeam Relic, he can fend off the beast. However, the struggle will leave him injured, requiring a day to recuperate.<br>
-	<<link 'Have Khemia fight it off with Sunbeam' `$returnPassage`>><<PassTime 1>><<set $smaragdineThreatsSubmitted.borer = true; $smaragdineThreatsDefeated.borer = true>><</link>><br><br>
+	<<LinkButton 'Have Khemia fight it off with Sunbeam' `$returnPassage` "dark-btn obsidian">><<PassTime 1>><<set $smaragdineThreatsSubmitted.borer = true; $smaragdineThreatsDefeated.borer = true>><</LinkButton>><br><br>
 <</if>>
 <<if $joyousSword && $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
 	Wielding the formidable Joyous Sunder, an expert swordsman like Khemia can effortlessly vanquish the creature without sustaining any injuries.<br>
@@ -1919,19 +1919,18 @@ How will you deal with the monstrous worm approaching you?
 	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.borer = true">Activate the plasma sword and slice away the worm</button><br><br>
 <</if>>
 Sacrificing 10 days' worth of water will distract the Borer long enough for you to escape. If you don't choose which water to drop specifically, you'll relinquish your water supply based on your drinking water priority order, as it's the most easily accessible in this perilous situation.<br>
-	<<link "Choose which water type to use as distraction" "Layer5 Borer Drop Overview">>
+	<<LinkButton "Choose which water type to use as distraction" "Layer5 Borer Drop Overview" "dark-btn obsidian">>
 		<<set $waterDropNb = 10>>
-	<</link>>
+	<</LinkButton>>
  | 
 	/*[[Use 10 days of water as a distraction to get away|Layer5 Hub][$items[0].count -= 10]]<br><br>*/
-	<<link "Drop 10 days of water as a distraction without choosing" "Layer5 Borer Water">>
+	<<LinkButton "Drop 10 days of water as a distraction without choosing" "Layer5 Borer Water" "dark-btn obsidian">>
 		<<for _k=0; _k<10; _k++>>
 			<<include "Water drop code">>
 		<</for>>
-	<</link>>
+	<</LinkButton>>
 	<br><br>
-Succumbing to the Dune Devouring Borer's onslaught will lead to a gruesome fate far worse than anything you've faced before. It is highly recommended that you avoid being consumed by the relentless predator, as it would certainly result in your death.
-<</nobr>>
+Succumbing to the Dune Devouring Borer's onslaught will lead to a gruesome fate far worse than anything you've faced before. It is highly recommended that you avoid being consumed by the relentless predator, as it would certainly result in your death.<</nobr>>
 
 Use the following option only if you have specifically considered your inventory and made a plan of how to use what you have to take down a worm.
 <button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$smaragdineThreatsDefeated.borer = true">Use a combination of Relics not mentioned above you believe would be able to overpower one of the worms</button>
@@ -1950,15 +1949,15 @@ In your inventory you have:
 	<br>$flaskMatrix[_temp] <<print setup.flaskLabels[_temp]>> remaining 
 		
 	<<capture _temp>>
-		<<link "Drop""Layer5 Borer Drop Count">>
+		<<LinkButton "Drop" "Layer5 Borer Drop Count" "dark-btn obsidian">>
 			<<set $flaskBorerID = _temp>>
-		<</link>>
+		<</LinkButton>>
 	<</capture>>
 	
 	<<if $flaskMatrix[_temp]>= $waterDropNb || setup.flaskLabels[_temp] === 'Aquarius Ex Nihilo'>> 
 		 | 
 		<<capture _temp>>
-			<<link "Drop <<print $waterDropNb>> water" "Layer5 Borer Water">>
+			<<LinkButton "Drop <<print $waterDropNb>> water" "Layer5 Borer Water" "dark-btn obsidian">>
 				<<if $items[3].count > 0 || $items[0].count > 0 || $ownedRelics.some(r => r.name === 'Aquarius Ex Nihilo')>>
 					<<if (setup.flaskLabels[_temp]==="Bottled water" || $items[3].count <= 0) && setup.flaskLabels[_temp] !== 'Aquarius Ex Nihilo'>>
 						<<set $items[0].count -= $waterDropNb >>
@@ -1970,7 +1969,7 @@ In your inventory you have:
 				<<else>>
 					<<set $items[0].count -= $waterDropNb >>
 				<</if>>
-			<</link>>
+			<</LinkButton>>
 		<</capture>>
 	<</if>>
 <</for>>
@@ -1983,7 +1982,7 @@ You have $flaskMatrix[$flaskBorerID] days worth of <<print setup.flaskLabels[$fl
 <<textbox "_temp" "0">>
 
 <<set _enoughWaterTest = "Layer5 Borer Drop Overview">>
-<<link " Drop water" >>
+<<LinkButton " Drop water" "" "dark-btn obsidian">>
 	<<set _temp = parseInt(_temp)>>
 	<<if _temp > $flaskMatrix[$flaskBorerID]>>
 		<<set _temp = $flaskMatrix[$flaskBorerID]>>
@@ -2017,7 +2016,7 @@ You have $flaskMatrix[$flaskBorerID] days worth of <<print setup.flaskLabels[$fl
 		<</if>>
 	<</if>>
 	<<goto _enoughWaterTest >>
-<</link>>
+<</LinkButton>>
 
 
 :: Layer5 Borer Water

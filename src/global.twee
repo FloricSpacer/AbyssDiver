@@ -223,10 +223,8 @@ How much would you like to modify your combat score by? (Use a negative number t
 
 <<textbox '_input' ''>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<set _parsed = parseInt(_input, 10) || 0>>
-	<<set $adjustmentBonus = _parsed>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="_parsed = parseInt(_input, 10) || 0, $adjustmentBonus = _parsed">Confirm</button>
+
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 :: Debug Menu [noreturn]
@@ -337,32 +335,18 @@ Curses added and removed on this page will not influence corruption.<br><br>
 			<<capture _cursename, _curse>>
 				<<if $mc.hasCurse(_curse.name)>>
 					<<set _linktext = "Remove " + _cursename>>
-					<<link _linktext "Adjust Curses">>
-						<<RemoveCurse _curse>>
-					<</link>><br>
+					<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="RemoveCurse(_curse)">Remove _cursename</button><br>
 				<<else>>
 					<<set _linktext = "Take " + _cursename>>
-					<<link _linktext "Adjust Curses">>
-						<<set $mc.addCurse(_curse)>>
-					<</link>><br>
+					<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="$mc.addCurse(_curse)">Take _cursename</button><br>
 				<</if>>
 			<</capture>>
 		<</for>>
 	<</if>>
 <</for>>
 <br>
-<<link "Take all Curses" "Adjust Curses">>
-	<<for _curse range Object.values(setup.allCurses)>>
-		<<if !$mc.hasCurse(_curse.name) >>
-			<<set $mc.addCurse(_curse.copy())>>
-		<</if>>
-	<</for>>
-<</link>> (including incompatible ones – use at your own risk)<br>
-<<link "Remove all Curses" "Adjust Curses">>
-	<<for _curse range $mc.curses>>
-		<<RemoveCurse _curse>>
-	<</for>>
-<</link>><br>
+<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="for (_curse of Object.values(setup.allCurses)) { if (!$mc.hasCurse(_curse.name)) { $mc.addCurse(_curse.copy()) } }">Take all Curses</button> (including incompatible ones – use at your own risk)<br>
+<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="for (_curse of $mc.curses) { RemoveCurse(_curse) }">Remove all Curses</button><br>
 <button class="dark-btn obsidian" data-passage="Adjustments">Return</button>
 
 :: Adjust Relics [nobr noreturn]
@@ -378,27 +362,17 @@ Relics are removed and added one at a time. To remove all copies of a given Reli
 			<<capture _relicname, _relic>>
 				<<if $ownedRelics.find(r => r.name === _relic.name) !== undefined>>
 					<<set _linktext = "Remove " + _relicname>>
-					<<link _linktext "Adjust Relics">>
-							<<set setup.returnRelic(_relic)>>
-					<</link>><br>
+					<button class="dark-btn obsidian" data-passage="Adjust Relics" data-setter="setup.returnRelic(_relic)">Remove _relicname</button><br>
 				<</if>>
 				<<set _linktext = "Add " + _relicname>>
-				<<link _linktext "Adjust Relics">>
-					<<set $ownedRelics.push(_relic)>>
-				<</link>><br>
+				<button class="dark-btn obsidian" data-passage="Adjust Relics" data-setter="$ownedRelics.push(_relic)">Add _relicname</button><br>
 			<</capture>>
 		<</for>>
 	<</if>>
 <</for>>
 <br>
-<<link "Take one of each Relic" "Adjust Relics">>
-	<<for _relic range $relics>>
-		<<set $ownedRelics.push(_relic)>>
-	<</for>>
-<</link>><br>
-<<link "Remove all Relics" "Adjust Relics">>
-	<<set $ownedRelics = []>>
-<</link>><br>
+<button class="dark-btn obsidian" data-passage="Adjust Relics" data-setter="for (_relic of $relics) { $ownedRelics.push(_relic) }">Take one of each Relic</button><br>
+<button class="dark-btn obsidian" data-passage="Adjust Relics" data-setter="$ownedRelics = []">Remove all Relics</button><br>
 <button class="dark-btn obsidian" data-passage="Adjustments">Return</button>
 
 :: Adjust Affection [noreturn nobr]
@@ -414,13 +388,7 @@ Enter how much affection you would like each companion to gain.<br><br>
 	<</if>>
 <</for>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<for _i, _companion range $hiredCompanions>>
-		<<if _companion !== $companionGolem>>
-			<<set _companion.affec += parseInt(_mods[_i], 10) || 0>>
-		<</if>>
-	<</for>>
-<</link>><br>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="for (_i = 0; _i < $hiredCompanions.length; _i++) { if ($hiredCompanions[_i] !== $companionGolem) { $hiredCompanions[_i].affec += parseInt(_mods[_i], 10) || 0 } }">Confirm</button><br>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 :: Time Stats [noreturn]
@@ -1010,10 +978,7 @@ How many dubloons would you like to add? (Use a negative number to subtract)
 
 <<textbox '_input' ''>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<set _parsed = parseInt(_input, 10) || 0>>
-	<<set $dubloons += _parsed>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="_parsed = parseInt(_input, 10) || 0, $dubloons += _parsed">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -1022,10 +987,7 @@ How many corruption points would you like to add? (Use a negative number to subt
 
 <<textbox '_input' ''>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<set _parsed = parseInt(_input, 10) || 0>>
-	<<set $corruption += _parsed>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="_parsed = parseInt(_input, 10) || 0, $corruption += _parsed">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -1036,11 +998,7 @@ This will not consume food, water, or any other resources, but it will affect ti
 
 <<textbox '_input' ''>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<set _parsed = parseInt(_input, 10) || 0>>
-	<<set _parsed = Math.max(_parsed, -$time)>>
-	<<set $time += _parsed>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="_parsed = parseInt(_input, 10) || 0, _parsed = Math.max(_parsed, -$time), $time += _parsed">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -1049,13 +1007,7 @@ How many water rations would you like to add? (Use a negative number to subtract
 
 <<textbox '_input' ''>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<set _parsed = parseInt(_input, 10) || 0>>
-	<<set _bottledIndex = setup.flaskLabels.indexOf('Bottled water')>>
-	<<set _parsed = Math.max(_parsed, -$flaskMatrix[_bottledIndex])>>
-	<<set setup.item('Bottled Water').count += _parsed>>
-	<<set $flaskMatrix[_bottledIndex] += _parsed>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="_parsed = parseInt(_input, 10) || 0, _bottledIndex = setup.flaskLabels.indexOf('Bottled water'), _parsed = Math.max(_parsed, -$flaskMatrix[_bottledIndex]), setup.item('Bottled Water').count += _parsed, $flaskMatrix[_bottledIndex] += _parsed">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 
@@ -1064,13 +1016,8 @@ How many food rations would you like to add? (Use a negative number to subtract)
 
 <<textbox '_input' ''>>
 
-<<link 'Confirm' 'Adjustments'>>
-	<<set _parsed = parseInt(_input, 10) || 0>>
-	<<set _parsed = Math.max(_parsed, -setup.item('Food Rations').count)>>
-	<<set setup.item('Food Rations').count += _parsed>>
-<</link>>
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="_parsed = parseInt(_input, 10) || 0, _parsed = Math.max(_parsed, -setup.item('Food Rations').count), setup.item('Food Rations').count += _parsed">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
-
 
 :: Commerce Balloon [balloon]
 Using your balloon, you're able to send up any Relics you want to sell and get back any items you want to buy (or just dubloons if you'd prefer).
@@ -1302,12 +1249,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<<set _text = "Use a medkit or other healing item to cure your status condition instantly">>
 	<</if>>
 
-	<<link  _text "Use Items and Relics">>
-		<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
-			<<set $items[4].count -= 1>>
-		<</if>>
-		<<set $status.penalty = 0, $status.duration = 0>>
-	<</link>><br>
+	<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$status.penalty = 0, $status.duration = 0"><<print _text>></button><br>
 <</if>>
 
 <<if (($items[4].count > 1) || $ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner')) && ($status.penalty > 0) && $dragonBurn === 1>>
@@ -1319,12 +1261,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 		<<set _text = "Use two medkits or other healing item to cure your status condition instantly">>
 	<</if>>
 	
-	<<link _text "Use Items and Relics">>
-		<<if !($ownedRelics.some(r => r.name === 'Lifespanner') || $devouredRelics.some(r => r.name === 'Lifespanner'))>>
-			<<set $items[4].count -= 2>>
-		<</if>>
-		<<set $status.penalty = 0, $status.duration = 0, $dragonBurn = 0>>
-	<</link>><br>
+	<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$status.penalty = 0, $status.duration = 0, $dragonBurn = 0"><<print _text>></button><br>
 <</if>>
 
 <<if $ownedRelics.some(e => e.name === "World Stone")>>
@@ -1375,13 +1312,13 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.golem)>>
 		<br>A golem, animated by a soul harnessed through the Lambent Specter's power, loyally follows you. <br>
 		<br>
-		<<link "Dispel the Golem by extinguishing its flame" "Use Items and Relics">>
+		<<LinkButton "Dispel the Golem by extinguishing its flame" "Use Items and Relics" "dark-btn obsidian">>
 		<<for _i = 0; _i < $hiredCompanions.length; _i++>>
 			<<if $hiredCompanions[_i].id === setup.companionIds.golem>>
 				<<set $hiredCompanions.deleteAt(_i)>>
 			<</if>>
 		<</for>>
-		<</link>>
+		<</LinkButton>>
 	<<else>>
 		<br>You have the opportunity to summon a spirit to forge a golem using the power of the Lambent Specter<br><br>
 		<button class="dark-btn obsidian" data-passage="Lambent Use">Summon a spirit with the Lambent Specter</button>
@@ -1392,80 +1329,25 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 <<if $ownedRelics.some(e => e.name === "Memory Reign") && $hiredCompanions.length > 0>>
 	<br>Do you wish to use the Memory Reign to erase the memories of one of your companions? This will reset affection to 0, like when you first met them, and will remove their memory of all of your past conversations.<br>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
-		<<link "Maru" "Use Items and Relics">>
-			<<set $MaruConvo0 = false>>
-			<<set $MaruConvo1 = false>>
-			<<set $MaruConvo2 = false>>
-			<<set $MaruConvoPreg = false>>
-			<<set $companionMaru.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$MaruConvo0 = false, $MaruConvo1 = false, $MaruConvo2 = false, $MaruConvoPreg = false, $companionMaru.affec=0">Maru</button><br>
 	<</if>>
 	<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>
-		<<link "Lily" "Use Items and Relics">>
-			<<set $LilyConvo0 = false>>
-			<<set $LilyConvo1 = false>>
-			<<set $LilyConvo2 = false>>
-			<<set $LilyPromise = false>>
-			<<set $LilyConvoLac = false>>
-			<<set $LilyConvoPreg = false>>
-			<<set $companionLily.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$LilyConvo0 = false, $LilyConvo1 = false, $LilyConvo2 = false, $LilyPromise = false, $LilyConvoLac = false, $LilyConvoPreg = false, $companionLily.affec=0">Lily</button><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
-		<<link "Khemia" "Use Items and Relics">>
-			<<set $KhemiaConvo0 = false>>
-			<<set $KhemiaConvo1 = false>>
-			<<set $KhemiaConvo2 = false>>
-			<<set $KhemiaConvoMoreFem = false>>
-			<<set $KhemiaConvoMostFem = false>>
-			<<set $KhemiaConvoMoreMasc = false>>
-			<<set $KhemiaConvoMostMasc = false>>
-			<<set $khmeiaWettingFlag = false>>
-			<<set $KhemiaConvoPreg = false>>
-			<<set $companionKhemia.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$KhemiaConvo0 = false, $KhemiaConvo1 = false, $KhemiaConvo2 = false, $KhemiaConvoMoreFem = false, $KhemiaConvoMostFem = false, $KhemiaConvoMoreMasc = false, $KhemiaConvoMostMasc = false, $khmeiaWettingFlag = false, $KhemiaConvoPreg = false, $companionKhemia.affec=0">Khemia</button><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.cherry)>>
-		<<link "Cherry" "Use Items and Relics">>
-			<<set $CherryConvo0 = false>>
-			<<set $CherryConvo1 = false>>
-			<<set $CherryConvo2 = false>>
-			<<set $CherryConvoLac = false>>
-			<<set $CherryFluffy = false>>
-			<<set $CherryConvoPreg = false>>
-			<<set $companionCherry.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$CherryConvo0 = false, $CherryConvo1 = false, $CherryConvo2 = false, $CherryConvoLac = false, $CherryFluffy = false, $CherryConvoPreg = false, $companionCherry.affec=0">Cherry</button><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
-		<<link "Cloud" "Use Items and Relics">>
-			<<set $CloudConvo0 = false>>
-			<<set $CloudConvo1 = false>>
-			<<set $CloudConvo2 = false>>
-			<<set $CloudConvoLac = false>>
-			<<set $CloudConvoPreg = false>>
-			<<set $altCloud	   = true>>
-			<<set $companionCloud.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$CloudConvo0 = false, $CloudConvo1 = false, $CloudConvo2 = false, $CloudConvoLac = false, $CloudConvoPreg = false, $altCloud = true, $companionCloud.affec=0">Cloud</button><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.saeko)>>
-		<<link "Saeko" "Use Items and Relics">>
-			<<set $SaekoConvo0 = false>>
-			<<set $SaekoConvo1 = false>>
-			<<set $SaekoConvo2 = false>>
-			<<set $SaekoConvoPlant = false>>
-			<<set $SaekoConvoPreg = false>>
-			<<set $companionSaeko.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$SaekoConvo0 = false, $SaekoConvo1 = false, $SaekoConvo2 = false, $SaekoConvoPlant = false, $SaekoConvoPreg = false, $companionSaeko.affec=0">Saeko</button><br>
 	<</if>>
 		<<if $hiredCompanions.some(e => e.id === setup.companionIds.twin)>>
-		<<link "Your twin" "Use Items and Relics">>
-			<<set $TwinConvo1 = false>>
-			<<set $TwinConvo2 = false>>
-			<<set $TwinFly = false>>
-			<<set $TwinConvoPreg = false>>
-			<<set $pregTwinMC = false>>
-			<<set $companionTwin.affec=0>>
-		<</link>><br>
+		<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$TwinConvo1 = false, $TwinConvo2 = false, $TwinFly = false, $TwinConvoPreg = false, $pregTwinMC = false, $companionTwin.affec=0">Your twin</button><br>
 	<</if>>
 <</if>>
 
@@ -1852,7 +1734,7 @@ What would you like to do with your Managed Misfortune?
 				<<radiobutton "_curse.bloodColor" "white">> White<br>
 			<</if>>
 			<<set _text = "Activate stored " + _curse.name + " Curse">>
-			<<link _text "Managed Misfortune Use">>
+			<<LinkButton _text "Managed Misfortune Use" "dark-btn obsidian">>
 				<<if _curse instanceof SemenDemon>>
 					<<set _curse = _curse.copy()>>
 					<<set _prevCurse = $mc.getCurse(SemenDemon)>>
@@ -1863,13 +1745,13 @@ What would you like to do with your Managed Misfortune?
 
 				<<set $mc.addCurse(_curse)>>
 				<<set $ManagedMisfortuneActive.push(_curse)>>
-			<</link>><br>
+			<</LinkButton>><br>
 		<<else>>
 			You are affected by Curse _curse.name stored in the marbles.<br>
 			<<set _text = "Deactivate stored " + _curse.name + " Curse">>
-			<<link _text "Managed Misfortune Use">>
+			<<LinkButton _text "Managed Misfortune Use" "dark-btn obsidian">>
 				<<RemoveCurse _curse>>
-			<</link>><br>
+			<</LinkButton>><br>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -1883,11 +1765,7 @@ Which Relic would you like to devour with your Ring?<br><br>
 <<for _relic range $ownedRelics>>
 	<<capture _i _relic>>
 		<<if _relic.name != "Perpetual Repose" && _relic.name != "Ring of the Devourer">>
-			<<link _relic.name "Use Items and Relics">>
-				<<set $ownedRelics.deleteAt(_i)>>
-				<<set $lostRelics.push(_relic)>>
-				<<set $devouredRelics.push(_relic)>>
-			<</link>><br>
+			<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$ownedRelics.deleteAt(_i), $lostRelics.push(_relic), $devouredRelics.push(_relic)">_relic.name</button><br>
 		<</if>>
 	<</capture>>
 	<<set _i++>>
@@ -2633,9 +2511,9 @@ Which gender will the soul you summon to inhabit the golem possess?<br>
 <<radiobutton "_sex" "male" checked>> Male<br>
 <<radiobutton "_sex" "female" >> Female<br>
 <br>
-<<link "Crafted your golem and let the summoned spirit bring it to life" "Use Items and Relics">>
+<<LinkButton "Crafted your golem and let the summoned spirit bring it to life" "Use Items and Relics" "dark-btn obsidian">>
 	<<createGolem _sex _type>>
-<</link>>	
+<</LinkButton>>
 
 :: Drop Items Menu [nobr noreturn]
 <<CarryAdjust>>
@@ -2745,15 +2623,7 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 
 	<<textbox '_input' '0'>>
 
-	<<link 'Drop' 'Drop Items Menu'>>
-		<<set _parsed = parseInt(_input, 10) || 0>>
-		<<if _item.count >= 0>>
-			<<set _parsed = Math.clamp(_parsed, 0, _item.count)>>
-		<<else>>
-			<<set _parsed = Math.clamp(_parsed, _item.count, 0)>>
-		<</if>>
-		<<set _item.count -= _parsed>>
-	<</link>>
+	<button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="_parsed = parseInt(_input, 10) || 0, _parsed = Math.clamp(_parsed, 0, _item.count), _item.count -= _parsed">Drop</button>
 <<else>>
 	You have $flaskMatrix[$flaskID] days worth of <<print setup.flaskLabels[$flaskID]>>, each weighing _item.weight kg,
 	for a total of <<print (_item.weight * $flaskMatrix[$flaskID]).toRounded(1)>> kg.<br>
@@ -2762,17 +2632,7 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 
 	<<textbox '_input' '0'>>
 
-	<<link 'Empty' 'Drop Items Menu'>>
-		<<set _parsed = parseInt(_input, 10) || 0>>
-		<<if $flaskMatrix[$flaskID] >= 0>>
-			<<set _parsed = Math.clamp(_parsed, 0, $flaskMatrix[$flaskID])>>
-		<<else>>
-			<<set _parsed = Math.clamp(_parsed, $flaskMatrix[$flaskID], 0)>>
-		<</if>>
-		<<set setup.item('Filled Flask').count -= _parsed>>
-		<<set setup.item('Empty Flask').count += _parsed>>
-		<<set $flaskMatrix[$flaskID] -= _parsed>>
-	<</link>>
+	<button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="_parsed = parseInt(_input, 10) || 0, _parsed = Math.clamp(_parsed, 0, $flaskMatrix[$flaskID]), setup.item('Filled Flask').count -= _parsed, setup.item('Empty Flask').count += _parsed, $flaskMatrix[$flaskID] -= _parsed">Empty</button>
 <</if>>
 
 :: Pulse Bloom Use
