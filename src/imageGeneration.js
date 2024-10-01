@@ -216,7 +216,7 @@ setup.openAI_InvokeDalleGenerator = async function(prompt) {
 		*/
 		const base64Image = data.data[0].b64_json;
 		console.log("Base64 Data Length: ", base64Image ? base64Image.length : "undefined");
-		setup.storeImage(base64Image)
+		setup.storeImage("playerPortrait", base64Image)
 			.then(() => console.log('Image successfully stored.'))
 			.catch((error) => console.error('Failed to store image:', error));
 	} else {
