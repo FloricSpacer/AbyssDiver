@@ -1308,167 +1308,116 @@ Object.defineProperties(JSON, {
     }
 })
 
-setup.storeImage = async function(base64Image) {
+setup.storeImage = async function(key, base64Image) {
     const dbName = "ImagesDB";
     const storeName = "images";
-    const version = 5; // Increment this number to trigger onupgradeneeded
-    const imageKey = "playerPortrait"; // Constant key for the image
+    const dbVersion = 5; // Define a version number for your database
 
     return new Promise((resolve, reject) => {
-        const dbOpenRequest = indexedDB.open(dbName, version);
+        const dbOpenRequest = indexedDB.open(dbName, dbVersion);
 
         dbOpenRequest.onupgradeneeded = function(event) {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(storeName)) {
-                // Create the object store with a keyPath 'id'
                 db.createObjectStore(storeName, { keyPath: 'id' });
-                //console.log(`${storeName} store created`);
             }
         };
-        
+
         dbOpenRequest.onsuccess = function(event) {
             const db = event.target.result;
+
+            if (!db.objectStoreNames.contains(storeName)) {
+                return reject("Object store does not exist even after attempting creation.");
+            }
+
             const transaction = db.transaction([storeName], "readwrite");
             const store = transaction.objectStore(storeName);
-
-            // Store the image with the object that includes the key
-            const imageData = { id: imageKey, image: base64Image };
-            const request = store.put(imageData); // No second parameter needed
+            const imageData = { id: key, image: base64Image };
+            const request = store.put(imageData); // Use put to update or add
 
             request.onsuccess = function() {
-                //console.log("Image stored in IndexedDB");
-                resolve();
+                resolve("Image stored successfully.");
             };
 
             request.onerror = function(event) {
-                console.error("Error storing image in IndexedDB:", event.target.error);
-                reject(event.target.error);
+                reject("Error storing image in IndexedDB: " + event.target.error);
             };
         };
 
         dbOpenRequest.onerror = function(event) {
-            console.error("Error opening database:", event.target.error);
-            reject(event.target.error);
+            reject("Error opening database: " + event.target.error);
         };
     });
 };
 
-
-
-
-setup.displayImage = async function() {
+setup.queryImageDB = async function(key) {
     const dbName = "ImagesDB";
     const storeName = "images";
-    const imageKey = "playerPortrait";
-    const imgElement = document.getElementById("dalleImage");
     const dbVersion = 5; // Define a version number for your database
 
-    // Attempt to open the database with version
-    const dbOpenRequest = indexedDB.open(dbName, dbVersion);
+    return new Promise((resolve, reject) => {
+        const dbOpenRequest = indexedDB.open(dbName, dbVersion);
 
-    // This event is only triggered when a new database is being created or needs an upgrade
-    dbOpenRequest.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        // Create the object store if it doesn't exist
-        if (!db.objectStoreNames.contains(storeName)) {
-            db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
-            //console.log(storeName + " store created.");
-        }
-    };
-
-    dbOpenRequest.onsuccess = function(event) {
-        const db = event.target.result;
-        
-        if (!db.objectStoreNames.contains(storeName)) {
-            console.error("Object store does not exist even after attempting creation.");
-            return;
-        }
-
-        const transaction = db.transaction([storeName], "readonly");
-        const store = transaction.objectStore(storeName);
-        const request = store.get(imageKey);
-
-        request.onsuccess = function() {
-            const imageData = request.result;
-            //console.log("Retrieved image data object:", imageData); // Debugging line
-            if (imageData && imageData.image) {
-                const base64Image = imageData.image; // Access the 'image' property of the object
-               // console.log("Retrieved base64Image:", base64Image); // Debugging line
-                const imgElements = document.querySelectorAll(".dalleImage");
-                imgElements.forEach(function(imgElement) {
-                    imgElement.src = "data:image/png;base64," + base64Image;
-                });
-            } else {
-                console.error("No base64 image data found."); // Error handling
+        dbOpenRequest.onupgradeneeded = function(event) {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(storeName)) {
+                db.createObjectStore(storeName, { keyPath: 'id' });
             }
         };
-        
-        
-        request.onerror = function(event) {
-            console.error("Error retrieving image from IndexedDB:", event.target.error);
-        };
-    };
 
-    dbOpenRequest.onerror = function(event) {
-        console.error("Error opening database:", event.target.error);
-    };
+        dbOpenRequest.onsuccess = function(event) {
+            const db = event.target.result;
+
+            if (!db.objectStoreNames.contains(storeName)) {
+                return reject("Object store does not exist even after attempting creation.");
+            }
+
+            const transaction = db.transaction([storeName], "readonly");
+            const store = transaction.objectStore(storeName);
+            const request = store.get(key);
+
+            request.onsuccess = function() {
+                const imageData = request.result;
+                if (imageData && imageData.image) {
+                    resolve(imageData.image); // Return the base64 image
+                } else {
+                    reject("No base64 image data found.");
+                }
+            };
+
+            request.onerror = function(event) {
+                reject("Error retrieving image from IndexedDB: " + event.target.error);
+            };
+        };
+
+        dbOpenRequest.onerror = function(event) {
+            reject("Error opening database: " + event.target.error);
+        };
+    });
+};
+
+setup.displayImage = async function() {
+    try {
+        const base64Image = await setup.queryImageDB("playerPortrait");
+        const imgElements = document.querySelectorAll(".dalleImage");
+        imgElements.forEach(function(imgElement) {
+            imgElement.src = "data:image/png;base64," + base64Image;
+        });
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 setup.displayPortraitImage = async function() {
-    const dbName = "ImagesDB";
-    const storeName = "images";
-    const imageKey = "playerPortrait";
-    const imgElement = document.getElementById("dalleImage");
-    const dbVersion = 5; // Define a version number for your database
-
-    // Attempt to open the database with version
-    const dbOpenRequest = indexedDB.open(dbName, dbVersion);
-
-    // This event is only triggered when a new database is being created or needs an upgrade
-    dbOpenRequest.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        // Create the object store if it doesn't exist
-        if (!db.objectStoreNames.contains(storeName)) {
-            db.createObjectStore(storeName, { keyPath: 'id' }); // 'id' is the key path, modify as necessary
-           // console.log(storeName + " store created.");
-        }
-    };
-
-    dbOpenRequest.onsuccess = function(event) {
-        const db = event.target.result;
-        
-        if (!db.objectStoreNames.contains(storeName)) {
-            console.error("Object store does not exist even after attempting creation.");
-            return;
-        }
-
-        const transaction = db.transaction([storeName], "readonly");
-        const store = transaction.objectStore(storeName);
-        const request = store.get(imageKey);
-
-        request.onsuccess = function() {
-            const imageData = request.result;
-            //console.log("Retrieved image data object:", imageData); // Debugging line
-            if (imageData && imageData.image) {
-                const base64Image = imageData.image; // Access the 'image' property of the object
-                //console.log("Retrieved base64Image:", base64Image); // Debugging line
-                const imgElements = document.querySelectorAll(".portraitImage");
-                imgElements.forEach(function(imgElement) {
-                    imgElement.src = "data:image/png;base64," + base64Image;
-                });
-            } else {
-                console.error("No base64 image data found."); // Error handling
-            }
-        };
-        
-        request.onerror = function(event) {
-            console.error("Error retrieving image from IndexedDB:", event.target.error);
-        };
-    };
-
-    dbOpenRequest.onerror = function(event) {
-        console.error("Error opening database:", event.target.error);
-    };
+    try {
+        const base64Image = await setup.queryImageDB("playerPortrait");
+        const imgElements = document.querySelectorAll(".portraitImage");
+        imgElements.forEach(function(imgElement) {
+            imgElement.src = "data:image/png;base64," + base64Image;
+        });
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 // Disable default autosave
