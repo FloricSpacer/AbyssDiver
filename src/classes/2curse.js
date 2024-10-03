@@ -2472,8 +2472,8 @@ class UrineReamplificationA extends Curse {
 	static iswatersports = true;
 	static corruption = 55;
 	static curseName = 'Urine Reamplification A';
-	static description = `Significantly reduces your bladder capacity. Though annoying, this shouldn't be too dangerous so long as you're careful. Urine Reamplification Curses also prevent the Event Horizon Relic from taking care of your pee for you.`;
-	static descriptionMitigated = `Significantly reduces your bladder capacity. Though annoying, this shouldn't be too dangerous so long as you're careful. Urine Reamplification Curses also prevent the Event Horizon Relic from taking care of your pee for you.\n\nThanks to the effects of the Shifting Obelisk, your pee becomes odorless and evaporates more quickly.`;
+	static description = `Significantly reduces your bladder capacity. Though annoying, this shouldn't be too dangerous so long as you're careful. Urine Reamplification Curses also prevent the Event Horizon Relic from taking care of your pee for you. You may want to avoid this Curse if you don't want to have any embarrassing accidents.`;
+	static descriptionMitigated = `Significantly reduces your bladder capacity. Though annoying, this shouldn't be too dangerous so long as you're careful. Urine Reamplification Curses also prevent the Event Horizon Relic from taking care of your pee for you. You may want to avoid this Curse if you don't want to have any embarrassing accidents.\n\nThanks to the effects of the Shifting Obelisk, your pee becomes odorless and evaporates more quickly.`;
 	static picture = 'Curses/urinereamplificationA.png';
 	static type = 'none';
 	constructor() {
