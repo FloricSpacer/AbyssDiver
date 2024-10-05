@@ -979,7 +979,7 @@ Object.defineProperties(setup, {
     },
     /* global Constellation */
     // eslint-disable-next-line no-unused-vars
-    /* global LibidoReinforcementA, GenderReversalA, AssetRobustnessA, ClothingRestrictionA, ShrunkenAssets, HairRemoval, PermaDye, FreckleSpeckle, KnifeEar, DizzyingHeights, IncreasedSensitivity, RefractoryRefactorization, LibidoReinforcementB, GenderReversalB, AssetRobustnessB, AgeReductionA, FluffyEars, FluffyTail, MaximumFluff, HeatRut, Lightweight, SexSwitcheroo, FutaFun, BlushingVirgin, SubmissivenessRectificationA, GenderReversalC, AssetRobustnessC, ClothingRestrictionB, PowerDom, Curse2020, ComicRelief, EqualOpportunity, AbsolutePregnancy, AbsoluteBirthControl, WackyWombs, Omnitool, Gooey, RainbowSwirl, DoublePepperoni, LiteralBlushingVirgin, LibidoReinforcementC, LactationRejuvenationA, AssetRobustnessD, AgeReductionB, SleepTight, SweetDreams, HypnoHappytime, CrossdressYourHeart, LieDetector, Megadontia, Softie, HardMode, LingualLeviathan, TippingTheScales, Reptail, ColdBlooded, LibidoReinforcementD, GenderReversalD, PleasureRespecificationA, ClothingRestrictionC, MassacreManicure, ドS, DoM, HijinksEnsue, FlowerPower, Cellulose, Chlorophyll, Pheromones, Carapacian, Hemospectrum, WrigglyAntennae, Eggxellent, SubmissivenessRectificationB, LactationRejuvenationB, PleasureRespecificationB, AgeReductionC, Horny, DrawingSpades, TattooTally, Leaky, WanderingHands, SemenDemon, Quota, InTheLimelight, LibidoReinforcementE, GenderReversalE, AssetRobustnessE, UrineReamplificationA, BarterSystem, SharedSpace, Weakling, RandomOrgasms, Beastly, CreatureOfTheNight, Minishish, Colossalable, LibidoReinforcementF, GenderReversalF, AssetRobustnessF, UrineReamplificationB, EyeOnThePrize, DeafeningSilence, TaciturnTurnaround, AmpuQtie, NoseGoes, ArmArmy, ALittleExtra, Null, Seafolk, TakenForGranite, DoubleTrouble, Conjoined, LibidoReinforcementG, GenderReversalG, AssetRobustnessG, Literalization, ConsentDissent, TheMaxim, AdversePossession, Erased, TicklyTentacles, Eyescream, AMouthful, BelowTheVeil, PrincessProtocol */
+    /* global LibidoReinforcementA, GenderReversalA, AssetRobustnessA, ClothingRestrictionA, ShrunkenAssets, HairRemoval, PermaDye, FreckleSpeckle, KnifeEar, DizzyingHeights, IncreasedSensitivity, RefractoryRefactorization, LibidoReinforcementB, GenderReversalB, AssetRobustnessB, AgeReductionA, FluffyEars, FluffyTail, MaximumFluff, HeatRut, Lightweight, SexSwitcheroo, FutaFun, BlushingVirgin, SubmissivenessRectificationA, GenderReversalC, AssetRobustnessC, ClothingRestrictionB, PowerDom, Curse2020, ComicRelief, EqualOpportunity, AbsolutePregnancy, AbsoluteBirthControl, WackyWombs, Omnitool, Gooey, RainbowSwirl, DoublePepperoni, LiteralBlushingVirgin, LibidoReinforcementC, LactationRejuvenationA, AssetRobustnessD, AgeReductionB, SleepTight, SweetDreams, HypnoHappytime, CrossdressYourHeart, LieDetector, Megadontia, Softie, HardMode, LingualLeviathan, TippingTheScales, Reptail, ColdBlooded, LibidoReinforcementD, GenderReversalD, PleasureRespecificationA, ClothingRestrictionC, MassacreManicure, ドS, ドM, HijinksEnsue, FlowerPower, Cellulose, Chlorophyll, Pheromones, Carapacian, Hemospectrum, WrigglyAntennae, Eggxellent, SubmissivenessRectificationB, LactationRejuvenationB, PleasureRespecificationB, AgeReductionC, Horny, DrawingSpades, TattooTally, Leaky, WanderingHands, SemenDemon, Quota, InTheLimelight, LibidoReinforcementE, GenderReversalE, AssetRobustnessE, UrineReamplificationA, BarterSystem, SharedSpace, Weakling, RandomOrgasms, Beastly, CreatureOfTheNight, Minishish, Colossalable, LibidoReinforcementF, GenderReversalF, AssetRobustnessF, UrineReamplificationB, EyeOnThePrize, DeafeningSilence, TaciturnTurnaround, AmpuQtie, NoseGoes, ArmArmy, ALittleExtra, Null, Seafolk, TakenForGranite, DoubleTrouble, Conjoined, LibidoReinforcementG, GenderReversalG, AssetRobustnessG, Literalization, ConsentDissent, TheMaxim, AdversePossession, Erased, TicklyTentacles, Eyescream, AMouthful, BelowTheVeil, PrincessProtocol */
     // eslint-disable-next-line no-unused-vars
     /* global NotGrowingReq, NotShrinkingReq, HasPenisReq, HasVaginaReq */
     getCurseSets: {
@@ -1217,7 +1217,33 @@ All the curses that make them orgasm a lot, combined with Taken for Granite.
 A few extra explanations:
  - Tattoo Tally doesn't really serve a function, it just makes sense for a statue to be scribbled on.
  - The Maxim is genital-specific, so this constellation assumes the statue is female. Take Futa Fun or Sex Switcheroo first if that is not the case.`,
-                                  [new HasVaginaReq()])
+                                  [new HasVaginaReq()]),
+                new Constellation("Everyone's Wife",
+                                  [
+                                      new LibidoReinforcementA(),
+                                      new LibidoReinforcementB(),
+                                      new LibidoReinforcementC(),
+                                      new Lightweight(),
+                                      new BlushingVirgin(),
+                                      new SubmissivenessRectificationA(),
+                                      new EqualOpportunity(),
+                                      new LieDetector(),
+                                      new PleasureRespecificationA(),
+                                      new Quota(),
+                                      new Quota(),
+                                      new SemenDemon("sexual fluids"),
+                                      new SemenDemon("sexual fluids"),
+                                      new TattooTally(),
+                                      new CreatureOfTheNight(),
+                                      new Weakling(),
+                                      new HeatRut(),
+                                      new RefractoryRefactorization(),
+                                  ],
+                                  "You're destined to live a life reliant on others; Granted various needs, forbidden from fulfilling them yourself.\n" +
+                                  "You can live happily, perhaps even more happily than before, with the help of companions that care for you. Without loving companions, your life will fall into disarray when your desperate sexual exploits mark you permanently and you can't lie to excuse them.\n" +
+                                  "Your sex drive will reach unnatural levels, including bouts of going into heat! These needs can't be sated with autoerotic stimulation. During your deeds, you need more intimate fluids than a single person can supply and you need to bring your partners to completion an amount of times that would quickly become painful for a sole ordinary human.\n" +
+                                  "Along with intimacy, you have other new physical needs, you can't physically protect yourself, lift heavy things on your own or enter domiciles without direct permission. Most notably of these needs, is your need for a blood donor. Without the ability to ever overpower someone, use deceit to get it or purposely take a dominant role, you'll need someone else willingly looking out for this need or you'll be an outcast and starve within a week.\n" +
+                                  "Fortunately (If you're optimistic), this constellation refits your behaviour in a way that lends itself to maintaining these complex long term relationships. You're agreeable, but not agreeable to the point that a new third party could bully you into cheating, your intelligence and decision making faculties are still entirely yours. Your mouth and body will both always tell the truth, so you'll never get trapped in a lie of what you've been doing with who, so jealousy between partners will inherently be reassured. You'll love the intimacy regardless of your partners equipment, your partners will always have a sparkable attraction to you, you will naturally fit into the role of servicing others while each experience will always feel new no matter how many days go by.")
             ];
         }
     },
@@ -1556,7 +1582,7 @@ Macro.add('sidebar-widget', {
                     threats.push({name: "Fell Dragon", time: State.variables.timeL6T2 || 0, max: 8});
                     threats.push({name: "Greater Tentacle Beast", time: State.variables.timeL6T1 || 0, max: 15});
                     break;
-                case 7:
+                case 7: {
                     let debtThreat;
                     if (State.variables.dubloons > 299) {
                         debtThreat = 2; // 20% of max 10
@@ -1570,6 +1596,7 @@ Macro.add('sidebar-widget', {
                     threats.push({name: "Debt Collection", time: debtThreat, max: 10});
                     threats.push({name: "Rehabilitation", time: State.variables.timeL7T2, max: 6});
                     break;
+                }
                 case 8:
                     threats.push({name: "Inanis Ego", time: State.variables.timeL8T1 || 0, max: 60});
                     threats.push({name: "Demential Aberrations", time: State.variables.timeL8T2a || 0, max: State.variables.hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 8 : 7});
@@ -1899,23 +1926,24 @@ function getGenderColor(gender) {
 }
 
 window.goBackToPassage = function(passageName) {
-    var history = SugarCube.State.history;
-    var currentIndex = history.length - 1; // Use history length to get current index
+    let history = SugarCube.State.history;
+    let currentIndex = history.length - 1; // Use history length to get current index
 
     // Normalize the target passage name
-    var targetName = passageName.trim().toLowerCase();
+    let targetName = passageName.trim().toLowerCase();
 
-    for (var i = history.length - 1; i >= 0; i--) {
-        var momentTitle = history[i].title.trim().toLowerCase();
+    for (let i = history.length - 1; i >= 0; i--) {
+        // What exactly is this unused declaration meant to do? Or the entire loop for that matter?
+        let momentTitle = history[i].title.trim().toLowerCase();
     }
 
     // Search for the passage in history
-    for (var i = currentIndex - 1; i >= 0; i--) {
-        var moment = history[i];
-        var momentTitle = moment.title.trim().toLowerCase();
+    for (let i = currentIndex - 1; i >= 0; i--) {
+        let moment = history[i];
+        let momentTitle = moment.title.trim().toLowerCase();
 
         if (momentTitle === targetName) {
-            var delta = i - currentIndex;
+            let delta = i - currentIndex;
             SugarCube.Engine.go(delta);
             return;
         }
