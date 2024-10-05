@@ -1206,7 +1206,7 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<elseif $currentLayer>7>>
 		<br>You are too deep in the Abyss to make use of the commerce balloon! Get back up to the seventh layer if you want to make contact with the surface.<br>
 	<<else>>
-		<br>[[Use a commerce balloon to trade with the surface|Commerce Balloon][$items[7].count -=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Commerce Balloon" data-setter="$items[7].count -=1">Use a commerce balloon to trade with the surface</button><br>
 	<</if>>
 <</if>>
 
@@ -1224,19 +1224,19 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 	<<if $currentLayer===0>>
 		<br>There is no need to deploy your escape balloon while you are on the surface.<br>
 	<<elseif $currentLayer===1>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L1][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L1" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer===2>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L2][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L2" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer===3>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L3][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L3" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer===4>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L4][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L4" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer===5>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L5][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L5" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer===6>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L6][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L6" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer===7>>
-		<br>[[Use an escape balloon to escape towards the surface|Escape Balloon L7][$items[8].count -=1, $escBalDepl=1]]<br>
+		<br><button class="dark-btn obsidian" data-passage="Escape Balloon L7" data-setter="$items[8].count -=1, $escBalDepl=1">Use an escape balloon to escape towards the surface</button><br>
 	<<elseif $currentLayer>7>>
 		<br>You are too deep in the Abyss to make use of the escape balloon! Get back up to the seventh layer if you want to use a balloon to return to the surface.<br>
 	<</if>>
@@ -1801,7 +1801,7 @@ You now have <<print $hexflame - 9>> jinxed flame counters and $items[25].count 
 
 <<textbox "$temp" "">>
 
-[[Confirm|Adjustments][$items[20].count += (parseInt($temp))]]
+<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$items[20].count += (parseInt($temp))">Confirm</button>
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
 :: Kin Shifter Use
@@ -1878,8 +1878,14 @@ You can use the balloon to send requests and Relics back to Outset Town. You can
 	<<if ($ownedRelics.filter(relic => relic.name === "Rømer Stones").length === 1 && ($warmCloth === 0 && $coolCloth === 0)) || ($ownedRelics.filter(relic => relic.name === "Rømer Stones").length > 1 && ($warmCloth === 0 || $coolCloth === 0)) && !($warmCloth === 1 && $coolCloth === 1)>>
 	<br>You muse over what you can do with the Rømer Stones, taking advantage over their ability for limitless small-scale heating or cooling.<br><br>
 	You can either buy some winter clothes for 30 dubloons to craft self-warming winter gear, or you could buy some light summer clothing for 25 dubloons to craft some cooling summer clothes.<br>
-		[[Use the Rømer Stones for self-warming winter gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30, $warmCloth=1]]<br>
-		[[Use the Rømer Stones for self-cooling summer gear|Balloon Workshop][$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1]]<br>
+		<<nobr>>
+			<div class="menu-item">
+				<button class="dark-btn obsidian" data-passage="Balloon Workshop" data-setter="$ownedRelics.deleteAt($i), $items[22].count = 1, $dubloons -=30, $warmCloth=1">Use the Rømer Stones for self-warming winter gear</button>
+			</div>
+			<div class="menu-item">
+				<button class="dark-btn obsidian" data-passage="Balloon Workshop" data-setter="$ownedRelics.deleteAt($i), $items[23].count = 1, $dubloons -=25, $coolCloth=1">Use the Rømer Stones for self-cooling summer gear</button>
+			</div>
+		<</nobr>>
 	<</if>>
 	<<if $ownedRelics[$i].name === "Brave Vector" && $slingshot === 0>>
 		<br>The Brave Vector seems like it should have some application as a weapon, but it turns out that it is exceedingly difficult to use a bent pipe like that as a gun substitute. Luckily, with the help of the resident Relic experts, you can change the form of the Brave Vector to a much more useful one. They seem to recommend a sort of metal slingshot design, which should be able to function like a gun, but will be able to use anything of approximately the correct size as ammo. <br>
@@ -2288,11 +2294,11 @@ You will first drink:<br>
 		<</if>>
 		<<if !$switchFlask>>
 			<<capture _i>>
-			[[Select to switch|Flask Order][$switchFlask=true, $temp0 = $flaskMatrixOrderAvailable[_i], $temp1=$flaskMatrixOrder[$temp0] ]]
+			<button class="dark-btn obsidian" data-passage="Flask Order" data-setter="$switchFlask=true, $temp0 = $flaskMatrixOrderAvailable[_i], $temp1=$flaskMatrixOrder[$temp0]">Select to switch</button>
 			<</capture>>
 		<<elseif $temp0 !== $flaskMatrixOrderAvailable[_i]>>
 			<<capture _i>>
-			[[Switch with|Flask Order][$switchFlask=false, _temp2 = $flaskMatrixOrderAvailable[_i], _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1 ]]
+			<button class="dark-btn obsidian" data-passage="Flask Order" data-setter="$switchFlask=false, _temp2 = $flaskMatrixOrderAvailable[_i], _temp3=$flaskMatrixOrder[_temp2], $flaskMatrixOrder[$temp0]=_temp3, $flaskMatrixOrder[_temp2]=$temp1">Switch with</button>
 			<</capture>>
 		<</if>>
 	<</for>>
@@ -2545,7 +2551,7 @@ Your team is currently carrying <<print setup.carriedWeight.toRounded(1)>> kg.<b
 								<button class="dark-btn obsidian" data-passage="Drop Item Count" data-setter="$temp = _k, $flaskID = _temp">Empty</button><br>
 							<<elseif $flaskMatrix[_temp] === 1>>
 								<<print `&nbsp; 1 × ${setup.flaskLabels[_temp]} (${_item.weight.toRounded(1)} kg) |`>>
-								[[Empty|Drop Items Menu][_item.count -= 1, setup.item('Empty Flask').count += 1, $flaskMatrix[_temp] -= 1]]
+								<button class="dark-btn obsidian" data-passage="Drop Items Menu" data-setter="_item.count -= 1, setup.item('Empty Flask').count += 1, $flaskMatrix[_temp] -= 1">Empty</button>
 								<<print `(net emptying gain = ${(_item.weight - $items[2].weight).toRounded(1)} kg)`>><br>
 							<</if>>
 						<</capture>>
@@ -2652,8 +2658,14 @@ You look over at your companion, sleeping soundly at your camp. You've shared co
 		<button class="dark-btn obsidian" data-passage="Pulse Bloom Forced" data-setter="$PulseBloomUse = "Twin"">_string1</button><br>
 		<button class="dark-btn obsidian" data-passage="Pulse Bloom Asked" data-setter="$PulseBloomUse = "Twin"">_string2</button><br>
 	<<elseif $hiredCompanions[_i].id !== setup.companionIds.golem>>
-		[[_string1| Pulse Bloom Forced][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
-		[[_string2| Pulse Bloom Asked][$PulseBloomUse = $hiredCompanions[_i].name]]<br>
+		<<nobr>>
+			<div class="menu-item">
+				<button class="dark-btn obsidian" data-passage="Pulse Bloom Forced" data-setter="$PulseBloomUse = $hiredCompanions[_i].name">_string1</button>
+			</div>
+			<div class="menu-item">
+				<button class="dark-btn obsidian" data-passage="Pulse Bloom Asked" data-setter="$PulseBloomUse = $hiredCompanions[_i].name">_string2</button>
+			</div>
+		<</nobr>>
 	<</if>>
 	<</capture>>
 <</for>>

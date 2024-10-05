@@ -190,8 +190,18 @@ What do you want to do while you're here?<br><br>
 <p><button class="dark-btn obsidian" data-passage="Layer3 Hub">Return to exploring the rest of the layer</button></p>
 
 <<ForagingGrid setup.crystallineConfectionaries setup.undergroundRivers>>
-<p><button class="dark-btn obsidian" data-passage="Layer3 Forage" data-setter="$mc.events.push(new AgeEvent("Crystalline Confectionery Major", {years: 1}));$foodL3 += 1">Consume food from unsafe crystals</button><br>
-<<if $abyssKnow>><button class="dark-btn obsidian" data-passage="Layer3 Forage" data-setter="$mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}));$foodL3 += 1">Consume food from safe crystals</button><</if>></p>
+<p><<button "Consume food from unsafe crystals">>
+    <<set $mc.events.push(new AgeEvent("Crystalline Confectionery Major", {years: 1}))>>
+    <<set $foodL3 += 1>>
+    <<goto "Layer3 Forage">>
+<</button>><br>
+<<if $abyssKnow>>
+    <<button "Consume food from safe crystals">>
+        <<set $mc.events.push(new AgeEvent("Crystalline Confectionery Minor", {months: 1}))>>
+        <<set $foodL3 += 1>>
+        <<goto "Layer3 Forage">>
+    <</button>>
+<</if>></p>
 
 <<if $atWaterSource>>
 	<p>You can also wait at the underground river if you'd like to pass the time while waiting for something.<br>
@@ -1665,7 +1675,7 @@ How do you want to deal with the tentacle beast moving in on you?
 <</if>>
 <<if $items[13].count > 0 && $items[20].count >= (Math.max(11 - (2 *$bullRed), 1))>>
 	Due to its amorphous nature, it will take <<print (Math.max(11 - (2 *$bullRed), 1))>> bullets to take down the monster.<br>
-	[[Shoot it with your pistol|$returnPassage][$items[20].count -= (Math.max(11 - (2 *$bullRed), 1)); $smaragdineThreatsDefeated.tentacleLesser = true]]<br><br>
+	<button class="dark-btn obsidian" data-passage="$returnPassage" data-setter="$items[20].count -= (Math.max(11 - (2 *$bullRed), 1)); $smaragdineThreatsDefeated.tentacleLesser = true">Shoot it with your pistol</button><br><br>
 <</if>>
 <<if $mechaBoarded>>
 	From the safe cockpit of your Starlit Conquest, the tentacle monster seems more like an insect than a serious threat.<br>
