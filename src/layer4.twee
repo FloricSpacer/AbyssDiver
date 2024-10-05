@@ -1292,20 +1292,20 @@ Use this code to share all your constellations:\
 Paste such a code here to import all of its constellations. Note that if you already have constellations with the same name, they will be overwritten.
 <input type="text" id="diver-shrine-bulk-import-field" />
 
-<<LinkButton "Import constellations" "none" "dark-btn obsidian">>
-	<<set _constellations = JSON.tryParse($('#diver-shrine-bulk-import-field')[0].value)>>
-	<<if _constellations === false || !(Array.isArray(_constellations) && _constellations.every(c => c instanceof Constellation))>>
-		<<set alert('The code you provided is not a valid set of constellations. It could be a single constellation, in which case use the form below to import it.')>>
-	<<else>>
-		<<set for (let constellation of _constellations) {
-			if (!setup.addUserCurseSet(constellation)) {
-				alert(`Importing constellations failed at constellation ${constellation}. This happened because the place where constellations are stored has limited size, and we ran out of space. This is configurable on most browsers (look up "increase local storage size" for your browser). Note that saves (including the automatic one that lets your reload the page without losing progress) and Curse constellations are stored in the same place and so compete for space. A large number of constellations will reduce the space available for saves and vice-versa. This means you might be able to make more space by deleting some saves or constellations. It also means that if importing this constellation failed, saving (including the mentioned automatic save) might fail soon too. We recommend ensuring that there is sufficient space immediately.`);
-				break;
-			}
-		}>>
-		<<set $('#diver-shrine-bulk-import-field')[0].value = ''>>
-	<</if>>
-<</LinkButton>>
+<<button "Import constellations">>
+    <<set _constellations = JSON.tryParse($('#diver-shrine-bulk-import-field')[0].value)>>
+    <<if _constellations === false || !(Array.isArray(_constellations) && _constellations.every(c => c instanceof Constellation))>>
+        <<set alert('The code you provided is not a valid set of constellations. It could be a single constellation, in which case use the form below to import it.')>>
+    <<else>>
+        <<set for (let constellation of _constellations) {
+            if (!setup.addUserCurseSet(constellation)) {
+                alert(`Importing constellations failed at constellation ${constellation}. This happened because the place where constellations are stored has limited size, and we ran out of space. This is configurable on most browsers (look up "increase local storage size" for your browser). Note that saves (including the automatic one that lets your reload the page without losing progress) and Curse constellations are stored in the same place and so compete for space. A large number of constellations will reduce the space available for saves and vice-versa. This means you might be able to make more space by deleting some saves or constellations. It also means that if importing this constellation failed, saving (including the mentioned automatic save) might fail soon too. We recommend ensuring that there is sufficient space immediately.`);
+                break;
+            }
+        }>>
+        <<set $('#diver-shrine-bulk-import-field')[0].value = ''>>
+    <</if>>
+<</button>>
 
 
 Import a single constellation's code here:
@@ -1313,21 +1313,21 @@ Import a single constellation's code here:
 Write a name here if you want to replace the constellation's name (e.g. to avoid a collision with an existing constellation):
 <input type="text" id="diver-shrine-import-single-name" />
 
-<<LinkButton "Import constellation" "none" "dark-btn obsidian">>
-	<<set _name = $('#diver-shrine-import-single-name')[0].value>>
-	<<set _constellation = JSON.tryParse($('#diver-shrine-import-single-field')[0].value)>>
-	<<if !_constellation instanceof Constellation>>
-		<<set alert('The code you provided is not a valid constellation. It could be a set of constellations instead, in which case use the form above to import it')>>
-	<<elseif _name !== ''>>
-		<<set _constellation.name = _name>>
-	<<else>>
-		<<if !setup.addUserCurseSet(_constellation)>>
-        	<<set alert(`Importing constellations failed. This happened because the place where constellations are stored has limited size, and we ran out of space. This is configurable on most browsers (look up "increase local storage size" for your browser). Note that saves (including the automatic one that lets your reload the page without losing progress) and Curse constellations are stored in the same place and so compete for space. A large number of constellations will reduce the space available for saves and vice-versa. This means you might be able to make more space by deleting some saves or constellations. It also means that if importing this constellation failed, saving (including the mentioned automatic save) might fail soon too. We recommend ensuring that there is sufficient space immediately.`);>>
+<<button "Import constellation">>
+    <<set _name = $('#diver-shrine-import-single-name')[0].value>>
+    <<set _constellation = JSON.tryParse($('#diver-shrine-import-single-field')[0].value)>>
+    <<if !_constellation instanceof Constellation>>
+        <<set alert('The code you provided is not a valid constellation. It could be a set of constellations instead, in which case use the form above to import it')>>
+    <<elseif _name !== ''>>
+        <<set _constellation.name = _name>>
+    <<else>>
+        <<if !setup.addUserCurseSet(_constellation)>>
+            <<set alert(`Importing constellations failed. This happened because the place where constellations are stored has limited size, and we ran out of space. This is configurable on most browsers (look up "increase local storage size" for your browser). Note that saves (including the automatic one that lets your reload the page without losing progress) and Curse constellations are stored in the same place and so compete for space. A large number of constellations will reduce the space available for saves and vice-versa. This means you might be able to make more space by deleting some saves or constellations. It also means that if importing this constellation failed, saving (including the mentioned automatic save) might fail soon too. We recommend ensuring that there is sufficient space immediately.`);>>
         <</if>>
         <<set $('#diver-shrine-import-single-field')[0].value = ''>>
         <<set $('#diver-shrine-import-single-name')[0].value = ''>>
-	<</if>>
-<</LinkButton>>
+    <</if>>
+<</button>>
 
 <button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
 
