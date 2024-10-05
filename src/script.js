@@ -1932,11 +1932,6 @@ window.goBackToPassage = function(passageName) {
     // Normalize the target passage name
     let targetName = passageName.trim().toLowerCase();
 
-    for (let i = history.length - 1; i >= 0; i--) {
-        // What exactly is this unused declaration meant to do? Or the entire loop for that matter?
-        let momentTitle = history[i].title.trim().toLowerCase();
-    }
-
     // Search for the passage in history
     for (let i = currentIndex - 1; i >= 0; i--) {
         let moment = history[i];
