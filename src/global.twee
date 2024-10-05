@@ -1736,7 +1736,7 @@ What would you like to do with your Managed Misfortune?
 				<<radiobutton "_curse.bloodColor" "white">> White<br>
 			<</if>>
 			<<set _text = "Activate stored " + _curse.name + " Curse">>
-			<<LinkButton _text "Managed Misfortune Use" "dark-btn obsidian">>
+			<<button _text>>
 				<<if _curse instanceof SemenDemon>>
 					<<set _curse = _curse.copy()>>
 					<<set _prevCurse = $mc.getCurse(SemenDemon)>>
@@ -1747,13 +1747,15 @@ What would you like to do with your Managed Misfortune?
 
 				<<set $mc.addCurse(_curse)>>
 				<<set $ManagedMisfortuneActive.push(_curse)>>
-			<</LinkButton>><br>
-		<<else>>
-			You are affected by Curse _curse.name stored in the marbles.<br>
-			<<set _text = "Deactivate stored " + _curse.name + " Curse">>
-			<<LinkButton _text "Managed Misfortune Use" "dark-btn obsidian">>
-				<<RemoveCurse _curse>>
-			<</LinkButton>><br>
+				<<goto "Managed Misfortune Use">>
+			<</button>><br>
+			<<else>>
+				You are affected by Curse _curse.name stored in the marbles.<br>
+				<<set _text = "Deactivate stored " + _curse.name + " Curse">>
+				<<button _text>>
+					<<RemoveCurse _curse>>
+					<<goto "Managed Misfortune Use">>
+				<</button>><br>
 		<</if>>
 	<</capture>>
 <</for>>
