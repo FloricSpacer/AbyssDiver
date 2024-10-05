@@ -1949,15 +1949,16 @@ In your inventory you have:
 	<br>$flaskMatrix[_temp] <<print setup.flaskLabels[_temp]>> remaining 
 		
 	<<capture _temp>>
-		<<LinkButton "Drop" "Layer5 Borer Drop Count" "dark-btn obsidian">>
+		<<button "Drop">>
 			<<set $flaskBorerID = _temp>>
-		<</LinkButton>>
+			<<goto "Layer5 Borer Drop Count">>
+		<</button>>
 	<</capture>>
 	
 	<<if $flaskMatrix[_temp]>= $waterDropNb || setup.flaskLabels[_temp] === 'Aquarius Ex Nihilo'>> 
 		 | 
 		<<capture _temp>>
-			<<LinkButton "Drop <<print $waterDropNb>> water" "Layer5 Borer Water" "dark-btn obsidian">>
+			<<button 'Drop @$waterDropNb water'>>
 				<<if $items[3].count > 0 || $items[0].count > 0 || $ownedRelics.some(r => r.name === 'Aquarius Ex Nihilo')>>
 					<<if (setup.flaskLabels[_temp]==="Bottled water" || $items[3].count <= 0) && setup.flaskLabels[_temp] !== 'Aquarius Ex Nihilo'>>
 						<<set $items[0].count -= $waterDropNb >>
@@ -1969,7 +1970,8 @@ In your inventory you have:
 				<<else>>
 					<<set $items[0].count -= $waterDropNb >>
 				<</if>>
-			<</LinkButton>>
+				<<goto "Layer5 Borer Water">>
+			<</button>>
 		<</capture>>
 	<</if>>
 <</for>>
