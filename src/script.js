@@ -1471,8 +1471,6 @@ Config.saves.isAllowed = function (saveType) {
 	return true;
 };
 
-
-
 function getSaveLabel() {
     let currentLayer = State.getVar("$currentLayer");
     if (currentLayer === 0) return "Surface";
@@ -1481,14 +1479,6 @@ function getSaveLabel() {
     if (currentLayer === 12) return "Surface?";
     return "Layer " + currentLayer;
 }
-
-// Trigger the save when the layer changes
-$(document).on(':passageend', function () {
-    if (layerChanged()) {
-        let saveLabel = getSaveLabel();
-        Save.browser.auto.save(saveLabel);
-    }
-});
 
 Macro.add('sidebar-widget', {
     handler: function() {
