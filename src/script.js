@@ -1975,8 +1975,17 @@ Macro.add('LinkButton', {
     }
 });
 
+Config.saves.descriptions = function (saveType) {
+    let currentLayer = State.getVar("$currentLayer");
+    if (currentLayer === 0) return "Surface";
+    if (currentLayer === 10) return "Nadir";
+    if (currentLayer === 11) return "???";
+    if (currentLayer === 12) return "Surface?";
+    return "Layer " + currentLayer;
+};
+
 window.updateSaveCount = function() {
-    if (Save.browser && Save.browser.size > 0) {
+    if (Save.browser && Save.browser.size > 1) {
         State.variables.multipleSaves = true;
     } else {
         State.variables.multipleSaves = false;

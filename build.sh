@@ -54,7 +54,7 @@ else
     echo "Using downloaded Tweego: $TWEEGO"
 fi
 
-SUGARCUBE_VERSION=2.36.1
+SUGARCUBE_VERSION=2.37.0
 SUGARCUBE_ARCHIVE="sugarcube-$SUGARCUBE_VERSION-for-twine-2.1-local.zip"
 if ! test -f "$WORKAREA/storyformats/$SUGARCUBE_ARCHIVE"
 then
