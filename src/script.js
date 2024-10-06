@@ -1446,8 +1446,7 @@ setup.displayPortraitImage = async function() {
     }
 };
 
-// Disable default autosave
-Config.saves.autosave = false;
+Config.saves.maxAutoSaves = 1;
 
 // Global variable to store the last known layer
 let _lastLayer = null;
@@ -1462,6 +1461,18 @@ function layerChanged() {
     return false;
 }
 
+Config.saves.isAllowed = function (saveType) {
+	if (saveType === Save.Type.Auto) {
+        if (layerChanged()) {
+            return true;
+        }
+        return false;
+	}
+	return true;
+};
+
+
+
 function getSaveLabel() {
     let currentLayer = State.getVar("$currentLayer");
     if (currentLayer === 0) return "Surface";
@@ -1475,7 +1486,7 @@ function getSaveLabel() {
 $(document).on(':passageend', function () {
     if (layerChanged()) {
         let saveLabel = getSaveLabel();
-        Save.autosave.save(saveLabel);
+        Save.browser.auto.save(saveLabel);
     }
 });
 
