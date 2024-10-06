@@ -1975,4 +1975,12 @@ Macro.add('LinkButton', {
     }
 });
 
+window.updateSaveCount = function() {
+    if (Save.browser && Save.browser.size > 0) {
+        State.variables.multipleSaves = true;
+    } else {
+        State.variables.multipleSaves = false;
+    }
+};
+
 
