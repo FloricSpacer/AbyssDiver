@@ -278,7 +278,9 @@ $(document).on(':passagestart', ev => {
     if (!tags().includes('noreturn')) vars.menuReturn = passage();
 
     // Add some CSS classes based on where we are.
-    if (State.variables.comBalloon) {
+    if (tags().includes('titleScreen')) {
+        document.body.classList.add('titleScreen');
+    } else if (State.variables.comBalloon) {
         document.body.classList.add('balloon');
     } else if (vars.currentLayer < 1) {
         document.body.classList.add('surface');
