@@ -1498,6 +1498,10 @@ Macro.add('sidebar-widget', {
         const forageFood = State.variables.forageFood || false;
         const forageWater = State.variables.forageWater || false;
 
+        if (tags().includes("titleScreen")) {
+            $('.twine-sidebar').remove();
+            return;
+        }
         $('.twine-sidebar').remove();
 
         function getLayerName() {
