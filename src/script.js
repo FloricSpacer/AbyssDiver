@@ -1996,3 +1996,76 @@ window.updateSaveCount = function() {
 };
 
 
+// Global variables to control the animation
+window.windAnimationActive = false;
+window.windParticles = [];
+window.windAnimationInterval = null;
+
+// Function to create a single wind particle
+function createWindParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'wind-particle';
+    const size = Math.random() * 100 + 50;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    document.body.appendChild(particle);
+
+    const duration = 5000 + Math.random() * 5000;
+    const curveStrength = Math.random() * 200 - 100;
+    const distance = Math.random() * 300 + 200;
+
+    const keyframes = [
+        { transform: 'translate(0, 0) scale(0)', opacity: 0 },
+        { transform: `translate(${distance/4}px, ${curveStrength/2}px) scale(1)`, opacity: 0.7, offset: 0.25 },
+        { transform: `translate(${distance/2}px, ${curveStrength}px) scale(0.8)`, opacity: 0.5, offset: 0.5 },
+        { transform: `translate(${distance*0.75}px, ${curveStrength/2}px) scale(0.6)`, opacity: 0.3, offset: 0.75 },
+        { transform: `translate(${distance}px, 0) scale(0)`, opacity: 0 }
+    ];
+
+    const animation = particle.animate(keyframes, {
+        duration: duration,
+        easing: 'ease-in-out'
+    });
+
+    animation.onfinish = () => {
+        particle.remove();
+        if (windAnimationActive) {
+            createWindParticle();
+        }
+    };
+
+    window.windParticles.push(particle);
+}
+
+// Function to start the wind animation
+window.startWindAnimation = function() {
+    if (!window.windAnimationActive) {
+        window.windAnimationActive = true;
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createWindParticle, Math.random() * 5000);
+        }
+    }
+};
+
+// Function to stop the wind animation and clean up
+window.stopWindAnimation = function() {
+    window.windAnimationActive = false;
+    window.windParticles.forEach(particle => {
+        particle.remove();
+    });
+    window.windParticles = [];
+    if (window.windAnimationInterval) {
+        clearInterval(window.windAnimationInterval);
+        window.windAnimationInterval = null;
+    }
+};
+
+$(document).on(':passagestart', function(ev) {
+    if (tags().includes("titleScreen")) {
+        startWindAnimation();
+    } else {
+        stopWindAnimation();
+    }
+});
