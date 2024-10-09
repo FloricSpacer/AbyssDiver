@@ -2073,3 +2073,32 @@ $(document).on(':passagestart', function(ev) {
         stopWindAnimation();
     }
 });
+
+/* Initialize current section */
+var currentSection = 0; // Start at the first section
+
+/* Function to navigate to a specific section */
+function goToSection(sectionNumber) {
+    currentSection = sectionNumber;
+    var translateYValue = -100 * sectionNumber + 'vh';
+    $('#container').css('transform', 'translateY(' + translateYValue + ')');
+    var backgroundPositionY = 50 * sectionNumber + '%';
+    $('body').css('background-position', 'center ' + backgroundPositionY);
+}
+
+/* Wait for the document to be ready */
+$(document).on('click', '#newGameBtn', function() {
+    goToSection(1); // Move to Section 2
+});
+
+$(document).on('click', '#nextBtn', function() {
+    goToSection(2); // Move to Section 3
+});
+
+$(document).on('click', '#backBtn1', function() {
+    goToSection(0); // Back to Section 1
+});
+
+$(document).on('click', '#backBtn2', function() {
+    goToSection(1); // Back to Section 2
+});
