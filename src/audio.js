@@ -18,7 +18,32 @@
 		  'rangeMax' options to 10 to restore the old feel.
 */
 
-(function () {
+window.setMasterVolume = function() {
+	try {
+		var value = settings.volume;
+		if (value == undefined) {
+			settings.volume = 0.5;
+			value = 0.5;
+		}
+		if (SimpleAudio) {
+			if (typeof SimpleAudio.volume === 'function') {
+				SimpleAudio.volume(value);
+			} else {
+				SimpleAudio.volume = value;
+			}
+		} else {
+			throw new Error('Cannot access audio API.');
+		}
+		return true;
+	} catch (err) {
+		// Fall back to the wikifier if we have to.
+		console.error(err.message, err);
+		$.wiki('<<masteraudio volume ' + val + '>>');
+		return false;
+	}
+}
+
+/*(function () {
 	// Set initial values.
 	var options = {
 		current  : 50,  // Default volume level.
@@ -106,7 +131,7 @@
 			console.error('This version of SugarCube does not include the `Settings.addRange()` method; please try updating to the latest version of SugarCube.');
 		}
 	}
-}());
+}());*/
 
 // Check to see if trackID is the currently playing track
 window.isPlaying = function (trackID) {
