@@ -2100,6 +2100,21 @@ $(document).on('click', '#nextBtn', function() {
     goToSection(2); // Move to Section 3
 });
 
+$(document).on('click', '#easyBtn', function() {
+    goToSection(2); // Move to Section 3
+    State.variables.difficultyMode = 0;
+});
+
+$(document).on('click', '#normalBtn', function() {
+    goToSection(2); // Move to Section 3
+    State.variables.difficultyMode = 1;
+});
+
+$(document).on('click', '#advancedBtn', function() {
+    goToSection(2); // Move to Section 3
+    State.variables.difficultyMode = 2;
+});
+
 $(document).on('click', '#backBtn1', function() {
     goToSection(0); // Back to Section 1
 });
