@@ -426,22 +426,34 @@ Macro.add('say', {
        <</nobr>>`;
        $(this.output).wiki(output);
     }
-   });
+});
 
+Setting.addHeader("General Settings");
 
+Setting.addRange("volume", {
+    label    : "Volume",
+    min      : 0,
+    max      : 1,
+    step     : 0.1,
+    default : (typeof settings.volume === 'number' && setting.volume || 0.5),
+    onInit : window.setMasterVolume,
+    onChange : window.setMasterVolume
+});
 
 Setting.addToggle("accessible", {
     label : "Disable extra fancy text formatting",
     default  : false,
 });
 
+Setting.addHeader("AI Settings");
+
 Setting.addToggle("AIPortraitsMode", {
-    label : "Enable you to use your own OpenAI API key to generate portraits of your character",
+    label : "Enable the use of AI to generate your own portrait using OpenAI Dalle Generator.",
     default  : false,
 });
 
 Setting.addToggle("OverridePortrait", {
-    label : "Override the most recent AI portrait with your own portrait choice, in the images folder",
+    label : "Force the portrait to be overriden by the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
     default  : false,
 });
 
