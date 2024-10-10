@@ -2014,10 +2014,14 @@ function createWindParticle() {
     particle.style.height = `${size}px`;
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.top = `${Math.random() * 100}%`;
+
+    // Set particle position and z-index to be behind other content
+    particle.style.zIndex = '-1';
+
     document.body.appendChild(particle);
 
     const duration = 5000 + Math.random() * 5000;
-    const curveStrength = Math.random() * 200 - 100;
+    const curveStrength = - (Math.random() * 100 + 50); // Negative value to move upwards
     const distance = Math.random() * 300 + 200;
 
     const keyframes = [
@@ -2065,6 +2069,7 @@ window.stopWindAnimation = function() {
         window.windAnimationInterval = null;
     }
 };
+
 
 $(document).on(':passagestart', function(ev) {
     if (tags().includes("titleScreen")) {
