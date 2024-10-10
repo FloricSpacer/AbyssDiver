@@ -448,7 +448,7 @@ Setting.addToggle("accessible", {
 Setting.addHeader("AI Settings");
 
 Setting.addToggle("AIPortraitsMode", {
-    label : "Enable the use of AI to generate your own portrait using OpenAI Dalle Generator.",
+    label : "Enable the use of OpenAI's Dalle Generator to generate your own portrait.",
     default  : false,
 });
 
