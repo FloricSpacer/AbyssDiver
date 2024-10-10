@@ -2009,7 +2009,7 @@ window.windAnimationInterval = null;
 function createWindParticle() {
     const particle = document.createElement('div');
     particle.className = 'wind-particle';
-    const size = Math.random() * 100 + 50;
+    const size = Math.random() * 50 + 25;
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
     particle.style.left = `${Math.random() * 100}%`;
