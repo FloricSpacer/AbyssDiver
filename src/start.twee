@@ -246,15 +246,13 @@ Name:<br>
     <td>
       <<if $mc.osex === "female">>
         <h3>Breast Size</h3>
-        <label><<radiobutton "$mc.obreasts" 0 autocheck>> Flat (Masculine)</label>
-        <label><<radiobutton "$mc.obreasts" 1 autocheck>> AA</label>
-        <label><<radiobutton "$mc.obreasts" 2 autocheck>> A</label>
-        <label><<radiobutton "$mc.obreasts" 3 autocheck>> B</label>
-        <label><<radiobutton "$mc.obreasts" 4 autocheck>> C</label>
-        <label><<radiobutton "$mc.obreasts" 5 autocheck>> D</label>
-        <label><<radiobutton "$mc.obreasts" 6 autocheck>> DD</label>
-        <label><<radiobutton "$mc.obreasts" 7 autocheck>> E</label>
-        <label><<radiobutton "$mc.obreasts" 8 autocheck>> F</label>
+        <div class="slider-container">
+            <input type="range" id="breastSlider" class="vertical-slider" min="0" max="8" value="3" oninput="updateBreast(this.value)">
+            <div style="text-align: center">
+                <input type="number" id="breastInput" class="slider-value" value="3" min="0" max="8" oninput="updateBreastSlider(this.value)">
+                <span id="cupSize">(B)</span>
+            </div>
+        </div>
       <</if>>
       <<if $mc.osex === "male">>
         <h3>Penis Size (cm)</h3>
@@ -264,7 +262,7 @@ Name:<br>
                 <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
                 <span id="penisConversion">(5.9")</span>
             </div>
-            </div>
+        </div>
       <</if>>
     </td>
     <td>
@@ -310,24 +308,66 @@ function updateDisplay(value) {
     document.getElementById("description").innerHTML = description;
 }
 
+function cmToFeetInches(cm) {
+  const inches = cm / 2.54;
+  const feet = Math.floor(inches / 12);
+  const remainingInches = Math.round(inches % 12);
+  return `${feet}'${remainingInches}"`;
+}
+
+function cmToInches(cm) {
+  return (cm / 2.54).toFixed(1);
+}
+
+function cupSizeLetter(value) {
+    const cupSizes = {
+        0: "Flat (Masculine)",
+        1: "(AA)",
+        2: "(A)",
+        3: "(B)",
+        4: "(C)",
+        5: "(D)",
+        6: "(DD)",
+        7: "(E)",
+        8: "(F)"
+    };
+    return cupSizes[value] || "";
+}
+
 function updateHeight(value) {
     document.getElementById("heightInput").value = value;
+    document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
     SugarCube.State.variables.mc.oheight = parseInt(value);
 }
 
 function updateHeightSlider(value) {
     document.getElementById("heightSlider").value = value;
+    document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
     SugarCube.State.variables.mc.oheight = parseInt(value);
 }
 
 function updatePenis(value) {
     document.getElementById("penisInput").value = value;
+    document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
     SugarCube.State.variables.mc.openis = parseInt(value);
 }
 
 function updatePenisSlider(value) {
     document.getElementById("penisSlider").value = value;
+    document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
     SugarCube.State.variables.mc.openis = parseInt(value);
+}
+
+function updateBreast(value) {
+    document.getElementById("breastInput").value = value;
+    document.getElementById("cupSize").textContent = cupSizeLetter(value);
+    SugarCube.State.variables.mc.obreasts = parseInt(value);
+}
+
+function updateBreastSlider(value) {
+    document.getElementById("breastSlider").value = value;
+    document.getElementById("cupSize").textContent = cupSizeLetter(value);
+    SugarCube.State.variables.mc.obreasts = parseInt(value);
 }
 
 function updateAge(value) {
@@ -340,43 +380,9 @@ function updateAgeSlider(value) {
     SugarCube.State.variables.mc.age = parseInt(value);
 }
 
-function cmToFeetInches(cm) {
-  const inches = cm / 2.54;
-  const feet = Math.floor(inches / 12);
-  const remainingInches = Math.round(inches % 12);
-  return `${feet}'${remainingInches}"`;
-}
-
-function cmToInches(cm) {
-  return (cm / 2.54).toFixed(1);
-}
-
-function updateHeight(value) {
-  document.getElementById("heightInput").value = value;
-  document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
-  SugarCube.State.variables.mc.oheight = parseInt(value);
-}
-
-function updateHeightSlider(value) {
-  document.getElementById("heightSlider").value = value;
-  document.getElementById("heightConversion").textContent = `(${cmToFeetInches(value)})`;
-  SugarCube.State.variables.mc.oheight = parseInt(value);
-}
-
-function updatePenis(value) {
-  document.getElementById("penisInput").value = value;
-  document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
-  SugarCube.State.variables.mc.openis = parseInt(value);
-}
-
-function updatePenisSlider(value) {
-  document.getElementById("penisSlider").value = value;
-  document.getElementById("penisConversion").textContent = `(${cmToInches(value)}")`;
-  SugarCube.State.variables.mc.openis = parseInt(value);
-}
-
 updateDisplay(0);
 </script>
+
 
 :: Start Portrait Choose
 
