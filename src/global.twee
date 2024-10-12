@@ -2155,6 +2155,15 @@ How many dubloons would you like to pay back?
 	<<set _additiveModifier -= 1>>
 <</if>>
 
+ /* Increase/decrease time for every level of physical fitness. */
+<<if $mc.HandicapMovement < 0>>
+	Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
+	<<set _additiveModifier += Math.floor($mc.HandicapMovement / 3)>>
+<<elseif $mc.HandicapMovement > 0>>
+	Your exceptional physical condition is reducing your travel time.<br>
+	<<set _additiveModifier -= Math.floor($mc.HandicapMovement / 3)>>
+<</if>>
+
 /* If the additive modifier is a time reduction, apply it to the base time. */
 <<if _additiveModifier < 0>>
 	<<set _inputTime += _additiveModifier>>
@@ -2168,15 +2177,7 @@ How many dubloons would you like to pay back?
 		The burden of your inconvenient size hampers your progress, increasing your travel time.<br>
 		<<set _multiplicativeModifier *= 2>>
 	<</if>>
-	/* Increase/decrease time by 10% for every level of physical fitness. */
-	<<if $mc.HandicapMovement < 0>>
-		Hindered by your physical shortcomings, your travel time increases as you struggle to keep pace.<br>
-		<<set _additiveModifier += Math.trunc($mc.HandicapMovement / 3)>>
-	<<elseif $mc.HandicapMovement > 0>>
-		Your exceptional physical condition is reducing your travel time.<br>
-		<<set _additiveModifier -= Math.trunc($mc.HandicapMovement / 3)>>
-	<</if>>
-
+	
 	/* Apply the multiplicative modifiers. */
 	<<set _inputTime *= _multiplicativeModifier>>
 	/* Adjust the travel time if the player is using energy rations. */
