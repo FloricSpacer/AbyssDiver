@@ -2161,7 +2161,27 @@ function applyButtonEffects() {
   }
 }
 
-// Apply effects on passage start
+const textSizeChangeProbability = 0.05;
+
+// Function to apply text size variation
+function applyTextSizeVariation() {
+    if (tags().includes("layer8")) {
+        // Remove any existing text size classes
+        $('body').removeClass('text-small text-large');
+
+        // Apply text size variation
+        if (Math.random() < textSizeChangeProbability) {
+            if (Math.random() < 0.5) {
+                $('body').addClass('text-small');
+            } else {
+                $('body').addClass('text-large');
+            }
+        }
+    }
+}
+
+// Apply layer 8 effects on passage start
 $(document).on(':passagerender', function(ev) {
   setTimeout(applyButtonEffects, 100);
+  setTimeout(applyTextSizeVariation, 100);
 });
