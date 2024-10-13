@@ -2134,3 +2134,34 @@ $(document).on('click', '#backBtn1', function() {
 $(document).on('click', '#backBtn2', function() {
     goToSection(1); // Back to Section 2
 });
+
+const shiftProbability = 0.05;
+const tiltProbability = 0.05;
+
+function applyButtonEffects() {
+  if (tags().includes("layer8")) {
+    $('.dark-btn').each(function() {
+      // Reset classes
+      $(this).removeClass('shift-left shift-right shift-up shift-down tilt-left tilt-right');
+
+      // Apply shift effect
+      if (Math.random() < shiftProbability) {
+        const shiftDirections = ['shift-left', 'shift-right', 'shift-up', 'shift-down'];
+        const randomShift = shiftDirections[Math.floor(Math.random() * shiftDirections.length)];
+        $(this).addClass(randomShift);
+      }
+
+      // Apply tilt effect
+      if (Math.random() < tiltProbability) {
+        const tiltDirections = ['tilt-left', 'tilt-right'];
+        const randomTilt = tiltDirections[Math.floor(Math.random() * tiltDirections.length)];
+        $(this).addClass(randomTilt);
+      }
+    });
+  }
+}
+
+// Apply effects on passage start
+$(document).on(':passagerender', function(ev) {
+  setTimeout(applyButtonEffects, 100);
+});
