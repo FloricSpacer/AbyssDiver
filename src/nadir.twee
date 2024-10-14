@@ -22,6 +22,9 @@ This isn't a proper layer - merely a small pocket at the bottom of the ninth lay
 
 <p>There's just one more choice left to make, now.</p>
 
+<<if $hiredCompanions.length > 0>>
+    <p><button class="dark-btn obsidian" data-passage="Layer10 Companions"><span class="icon">[img[setup.ImagePath+'Icons/partytalk.png']]</span> Discuss with your companions</button></p>
+<</if>>
 
 
 <<bordered "images/Finale/raisond'etre.png" "images/bordergold.png">>\
@@ -178,6 +181,32 @@ It's time to return to the ninth layer and begin your ascent back.
 
 <button class="dark-btn obsidian" data-passage="Layer9 Hub" data-setter="$currentLayer = 9">Return to the ninth Layer</button>
 
+
+:: Layer10 Companions [nobr]
+
+As you wade through the shallow water and admire the stars around you, your companions are with you. Each has their own thoughts on what you should do next, so you can take their advice and opinions into account when making your decision.<br><br>
+
+<<for _companion range $hiredCompanions>>
+    <<if _companion !== $companionTwin && _companion !== $companionBandit && _companion !== $companionGolem>>
+        <<set _name = _companion.name>>
+        <<if _companion === $companionLily>>
+            <<if $companionLily.affec >= 60>>
+                <<set _passage = "Lily Nadir High">>
+            <<else>>
+                <<set _passage = "Lily Nadir LowMid">>
+            <</if>>
+        <<else>>
+            <<set _passage = _name + " Nadir">>
+        <</if>>
+        <<print `<button class="dark-btn obsidian" data-passage="${_passage}"><span class="icon" style="filter: invert(1); "><<print "[img[setup.ImagePath+'" + _companion.imageIcon + "']]">></span> ${_companion.name}</button>`>>
+        <br>
+        <hr>
+    <</if>>
+<</for>>
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
 :: Khemia Nadir
 
 Khemia lands with a splash beside you, his blue hair slicked back and his muscular chest heaving from the long swim. His eyes are wide with wonder as he takes in the surreal scene of stars around you.
@@ -224,6 +253,8 @@ He crosses his arms, a mixture of anticipation and restlessness evident in his s
 
 <<say $companionKhemia>>So, what's it gonna be? Do we embrace what we've found here, or do we take the plunge into the unknown?<</say>>
 Khemia waits expectantly, his eyes reflecting the soft glow of the starry puddle at your feet.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 
 :: Maru Nadir
@@ -273,6 +304,8 @@ Maru hugs himself, his vulnerability evident in every line of his body.
 
 <<say $companionMaru>>So... what do you want to do? Should we stay here and explore what we've found, or... or do we take that scary step into the unknown?<</say>>
 Maru watches you intently, his gentle eyes reflecting the soft glow of the starry puddle at your feet. The weight of the decision hangs heavy in the damp air as you consider the path that lies ahead.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 
 :: Cherry Nadir
@@ -340,6 +373,8 @@ Cherry turns away slightly, her gaze once again unfocused.
 <</if>>\
 As you consider the weight of the decision before you, Cherry stands quietly by your side.
 
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
 
 :: Cloud Nadir
 
@@ -387,6 +422,8 @@ He turns back to you, his green eyes meeting yours with intensity.
 
 <<say $companionCloud>>So, what do you say? Shall we take this power we've gained and use it to forge a better world? Or do we risk it all on one more step into the unknown? The choice is yours, I suppose, but remember – sometimes the bravest thing isn't to keep pushing forward, but to turn back and face the challenges we left behind.<</say>>
 Cloud waits for your response, his usually relaxed demeanor replaced by an air of anticipation and conviction. 
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 
 :: Saeko Nadir
@@ -439,6 +476,8 @@ She looks at you, checking for your response.
 <<say $companionSaeko>>So, what do you think? Do we stay and unravel the mysteries we've already found? Or do we take that leap into the unknown? Whatever you decide, I'm with you. This is... well, it's the opportunity of a lifetime, either way.<</say>>
 Saeko waits for your response, her usual cool demeanor tinged with excitement. The starry puddle reflects in her glasses, a miniature universe mirroring the vast unknown that surrounds you both.
 
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
 
 :: Lily Nadir LowMid
 
@@ -484,6 +523,8 @@ She takes a deep breath, her eyes meeting yours with intensity.
 <<say $companionLily>>So what do you say, $mc.name? Are you ready for the ultimate adventure? Or are we going to let a little thing like the edge of reality stop us?<</say>>
 Lily waits for your response, practically vibrating with anticipation. The starry puddle reflects in her eyes, mirroring the endless possibilities that lie beyond the threshold of the known world.
 
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
 
 :: Lily Nadir High
 
@@ -524,3 +565,5 @@ She looks around the cavern, then back to you, her eyes shining with unshed tear
 
 <<say $companionLily>>So, what do you say? Will you take this leap with me? Will you be my companion in the great beyond? Because I... I don't want to face eternity without you.<</say>>
 Lily waits for your response, her usual energy replaced by a stillness. The decision you make here will shape not just your future, but hers as well.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
