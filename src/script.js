@@ -929,6 +929,9 @@ Object.defineProperties(setup, {
                 case setup.companionIds.saeko:
                     willingCurses.push("Asset Robustness A", "Freckle Speckle", "Equal Opportunity",
                         "Crossdress Your Heart", "Age Reduction A", "Age Reduction B");
+                    if (State.variables.argumentSaekoCloud === true) {
+                            willingCurses.push("Power Dom");
+                    }
                     break;
             }
             let idealGender = companion.mindSex === 'male' ? 1 : 6;
