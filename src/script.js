@@ -696,7 +696,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has scuba gear or an equivalent.
     haveScubaGear: {
-        get: () => checkAvailability(['Scuba Gear'], ['Pneuma Wisp'], ['scuba']),
+        get: () => checkAvailability(['Scuba Gear'], ['Pneuma Wisp'], ['scuba']) || variables().mc.hasCurse("Seafolk"),
     },
     // Check or set whether the player has a regular smartphone.
     haveSmartphoneRegular: {

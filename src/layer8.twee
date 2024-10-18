@@ -1686,6 +1686,27 @@ This layer's exit seems to be some sort of water pool, so you may not want to de
 
 	<<if $scuba === 1>>
 		<button class="dark-btn abyssal-depths" data-passage="Layer9 1">Descend into the pool</button>
+	<<elseif $StoredCurse.some(e => e.name === "Seafolk")>>
+		<<for _curse range $StoredCurse>>
+			<<capture _curse>>
+				<<if !$ManagedMisfortuneActive.some(c => c.name === _curse.name)>>
+					You have stored Curse _curse.name in your Managed Misfortune.<br>
+					<<set _text = "Activate stored " + _curse.name + " Curse">>
+					<<button _text>>
+						<<set $mc.addCurse(_curse)>>
+						<<set $ManagedMisfortuneActive.push(_curse)>>
+						<<goto "Layer8 Exit2">>
+					<</button>><br>
+				<<else>>
+					You are affected by Curse _curse.name stored in your Managed Misfortune.<br>
+					<<set _text = "Deactivate stored " + _curse.name + " Curse">>
+					<<button _text>>
+						<<RemoveCurse _curse>>
+						<<goto "Layer8 Exit2">>
+					<</button>><br>
+				<</if>>
+			<</capture>>
+		<</for>>
 	<<else>>
 		Because you have no way to continue through the deep pool, you must return to exploring the layer.
 		<button class="dark-btn obsidian" data-passage="Layer8 Hub">Continue exploring Layer 8</button>
