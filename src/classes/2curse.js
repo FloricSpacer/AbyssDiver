@@ -1669,7 +1669,7 @@ window.LibidoReinforcementD = LibidoReinforcementD
 setup.curseArray.push(LibidoReinforcementD)
 
 class GenderReversalD extends Curse {
-	static corruption = 15;
+	static corruption = 35;
 	static curseName = 'Gender Reversal D';
 	static description = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. The grass is always greener, right?`;
 	static descriptionMitigated = `Gives one level of the Gender Reversal Curse, causing your body's apparent gender to gradually change. The grass is always greener, right?\n\nThanks to the effects of the Shifting Obelisk you can choose how to distribute these changes, opting e.g. for a more masculine body shapes but a more feminine voice or vice versa. On average your apparent gender must still match the curse level. Also makes it more natural for you to act in ways befitting your new gender. At levels above 5, the curse will make your personality more masculine/feminine, but following your ideal notion of masculinity or femininity rather than the most stereotypical.`;
