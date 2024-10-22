@@ -337,7 +337,7 @@
 		$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
 	<</if>>
 	<</nobr>>
-	<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+	<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 <<elseif  $hiredCompanions[$temp].id === setup.companionIds.twin >>
 	<<include "Twin Introduction">>
 	<<nobr>>
@@ -351,7 +351,7 @@
 		$companionTwin.name is in your original body after your bodies were swapped by the Fate-crossing Star!<<if $mc.sex === $companionTwin.sex>>Not that it makes much of a difference... Fortunately for you, it just means you got some free corruption out of it.<</if>><br><br>
 	<</if>>
 	<</nobr>>
-	<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+	<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 <<else  $hiredCompanions[$temp].id === setup.companionIds.bandit >>
 	<<include "Bandit Introduction">>
 	<<nobr>>
@@ -365,7 +365,7 @@
 		$hiredCompanions[$temp].name is in your original body after your bodies were swapped by the Fate-crossing Star!<br><br>
 	<</if>>
 	<</nobr>>
-	<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+	<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 <</if>>
 :: Cloud Ability
 <<nobr>>
@@ -488,6 +488,9 @@ One can only imagine what she'll do if she manages to break free.
 	<</if>>
 	<<if $LilyConvo0 && $KhemiaConvo0 && $hiredCompanions.some(e=> e.id === setup.companionIds.lily) && $hiredCompanions.some(e=> e.id === setup.companionIds.khemia) && !$Discuss_Lily_Khemia>>
 		<<set _numConvos += 1>><button class="dark-btn obsidian" data-passage="Lily and Khemia" data-setter="$Discuss_Lily_Khemia=true">Lily comes walking towards you with a brisk pace</button><br>
+	<</if>>
+	<<if $SaekoConvo0 && $CloudConvo0 && $hiredCompanions.some(e=> e.id === setup.companionIds.cloud) && $hiredCompanions.some(e=> e.id === setup.companionIds.saeko) && !$argumentSaekoCloud && $currentLayer > 2>>
+		<<set _numConvos += 1>><button class="dark-btn obsidian" data-passage="Saeko Cloud Argument" data-setter="$argumentSaekoCloud=true">Saeko and Cloud seem to be having a heated discussion</button><br>
 	<</if>>
 
 	<<if setup.haveSmartphoneAI>>
@@ -660,7 +663,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <</if>>\
 <<set _companion = $companionMaru>>\
 <<include "CompanionDescription">>
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Lily Overview [noreturn]
 !Lily
@@ -685,7 +688,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <<include "CompanionDescription">><hr>
 <i>Lily is currently increasing the prices you can sell Relics for by $sellAdd.</i>
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Khemia Overview [noreturn]
 !Khemia
@@ -710,7 +713,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <<include "CompanionDescription">><hr>
 <i>Khemia is currently reducing your travel times by $timeRed days.</i>
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Cherry Overview [noreturn]
 !Cherry
@@ -735,7 +738,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <<include "CompanionDescription">><hr>
 <i>Cherry is currently reducing your status condition times by $statRed days.</i>
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Cloud Overview [noreturn]
 !Cloud
@@ -760,7 +763,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <<include "CompanionDescription">><hr>
 <i>Cloud is currently reducing your bullet usage by $bullRed bullets.</i>
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Saeko Overview [noreturn]
 !Saeko
@@ -785,7 +788,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <<include "CompanionDescription">><hr>
 <i>Saeko is currently reducing your corruption costs by $corRed.</i>
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Twin Overview [noreturn]
 !$companionTwin.name
@@ -808,7 +811,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <</if>>\
 <<set _companion = $companionTwin>>\
 <<include "CompanionDescription">>
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Bandit Overview [noreturn]
 [img[setup.ImagePath+$companionBandit.image]]
@@ -828,7 +831,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <</if>>\
 <<set _companion = $companionBandit>>\
 <<include "CompanionDescription">>
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Golem Overview [noreturn]
 !Golem
@@ -836,7 +839,7 @@ Overall the world would probably see <<if _companion.sex === "male">>him<<else>>
 <hr>
 <<set _companion = $companionGolem>>\
 <<include "CompanionDescription">>
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: ConversationChoices [widget nobr]
 <<widget "ConversationChoices">>

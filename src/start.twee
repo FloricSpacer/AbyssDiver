@@ -1,4 +1,4 @@
-:: Start [start]
+:: Start Old [start]
 
 <<= '<img src="' + setup.ImagePath + 'abyssdiverposteredited.png" class="half-img">' >>
 Welcome to Abyss Diver Interactive, a Twine adaptation of Abyss Diver, crafted with love by FloricSpacer. Thanks to all the people the assisted with the development of this game.
@@ -33,7 +33,7 @@ For those interested in viewing the latest code or content changes or contributi
 
 [[Start Experimental]]
 
-:: Start Experimental [titleScreen nobr]
+:: Start [titleScreen nobr]
 
 /*
 <<back>>
@@ -51,6 +51,11 @@ For those interested in viewing the latest code or content changes or contributi
 </div>
 
 */
+
+<<if !isPlaying("surface")>>
+	<<masteraudio stop>>
+	<<audio "surface" volume 0.2 play loop>>
+<</if>>
 
 <div id="container">
     <div class="section" id="section1">
@@ -110,7 +115,7 @@ For those interested in viewing the latest code or content changes or contributi
 
             Please fill out the form below to describe yourself. Remember, while you're jotting down your current features, keep in mind that some of these might, well, change as you dive deeper into the Abyss. The Miasma works in mysterious ways, and who knows what you might look like after a few Curses?<br><br>
 
-            <strong style="color: red;">Warning: This game will contain mature content (sexual and potentially disturbing) and is intended for players 18 years and older.</strong><br>
+            <b>Warning: This game will contain mature content (sexual and potentially disturbing) and is intended for players 18 years and older.</b><br>
 
             <div class="btn-adventure-container">
                 <button class="btn-adventure" data-passage="Start Appearance">Begin your adventure</button><<set setup.devilsReroll = 0>>
@@ -247,17 +252,17 @@ Name:<br>
       <<if $mc.osex === "female">>
         <h3>Breast Size</h3>
         <div class="slider-container">
-            <input type="range" id="breastSlider" class="vertical-slider" min="0" max="8" value="3" oninput="updateBreast(this.value)">
+            <input type="range" id="breastSlider" class="vertical-slider" min="1" max="8" value="3" oninput="updateBreast(this.value)" style="width: 80%;">
             <div style="text-align: center">
-                <input type="number" id="breastInput" class="slider-value" value="3" min="0" max="8" oninput="updateBreastSlider(this.value)">
-                <span id="cupSize">(B)</span>
+                <input type="number" id="breastInput" class="slider-value" value="3" min="0" max="8" oninput="updateBreastSlider(this.value)" style="display: none">
+                <span id="cupSize" style="font-size: 16pt">(B)</span>
             </div>
         </div>
       <</if>>
       <<if $mc.osex === "male">>
         <h3>Penis Size (cm)</h3>
         <div class="slider-container">
-            <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)">
+            <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)" style="width: 80%;">
             <div>
                 <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
                 <span id="penisConversion">(5.9")</span>
@@ -268,7 +273,7 @@ Name:<br>
     <td>
       <h3>Height (cm)</h3>
       <div class="slider-container">
-            <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)">
+            <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)" style="width: 80%;">
             <div>
                 <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
                 <span id="heightConversion">(5'7")</span>
@@ -278,7 +283,7 @@ Name:<br>
     <td>
       <h3>Age</h3>
       <div class="slider-container">
-        <input type="range" id="ageSlider" class="vertical-slider" min="18" max="60" value="30" oninput="updateAge(this.value)">
+        <input type="range" id="ageSlider" class="vertical-slider" min="18" max="60" value="30" oninput="updateAge(this.value)" style="width: 80%;">
         <input type="number" id="ageInput" class="slider-value" value="30" min="18" max="60" oninput="updateAgeSlider(this.value)">
       </div>
     </td>
@@ -327,9 +332,9 @@ function cupSizeLetter(value) {
         3: "(B)",
         4: "(C)",
         5: "(D)",
-        6: "(DD)",
-        7: "(E)",
-        8: "(F)"
+        6: "(E)",
+        7: "(F)",
+        8: "(G)"
     };
     return cupSizes[value] || "";
 }
@@ -392,31 +397,19 @@ In this game, there are a few ways to choose your character's portrait. First, i
 
 <button class="center-btn dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
 
-Second, you can upload your own image in and enable the Portrait Override setting. You must place the image in the GeneratedPortraits folder and replace the existing image there and rename your image so that it has the same name.
+Second, we have a small selection of pre-made portraits. These only change based on your gender, and are otherwise static. This is the simplest option, but also the least reactive to changes.
 
-Finally, we have a small selection of pre-made portraits. These only change based on your gender, and are otherwise static. This is the simplest option, but also the least reactive to changes.
+Finally, you can upload your own image in and enable the Custom Portrait Override setting. You must place the image in the GeneratedPortraits folder and replace the existing image there and rename your image so that it has the same name.
 
 Which sort of portait would you like?
 
 <div style="display: flex; justify-content: space-between; gap: 10px;">
-  <button class="dark-btn obsidian" data-passage="Start Portrait AI">AI-Generated Portrait</button>
+  <button class="dark-btn obsidian" data-passage="Start Portrait AI"><span class="icon">[img[setup.ImagePath+'Icons/aiportrait.png']]</span>&nbsp;&nbsp;AI-Generated Portrait</button>
 
-  <button class="dark-btn obsidian" data-passage="Start Portrait Preset">Preset Portrait</button>
+  <button class="dark-btn obsidian" data-passage="Start Portrait Preset"><span class="icon">[img[setup.ImagePath+'Icons/presetportrait.png']]</span>&nbsp;&nbsp;Preset Portrait</button>
 
-  <button class="dark-btn obsidian" data-passage="Start Portrait Custom">Custom Portrait</button>
+  <button class="dark-btn obsidian" data-passage="Start Portrait Custom"><span class="icon">[img[setup.ImagePath+'Icons/customportrait.png']]</span>&nbsp;&nbsp;Custom Portrait</button>
 </div>
-
-
-
-
-
-
-<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
-<<run updateSaveCount()>>\
-<<if $multipleSaves>>
-<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
-<</if>>
-
 
 
 :: Start Portrait AI
@@ -437,11 +430,11 @@ When you're done with that, please click the button below to start the game!
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
 <<run updateSaveCount()>>\
 <<if $multipleSaves>>
-<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction)
 <</if>>
 
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 
 :: Start Portrait Custom
@@ -459,11 +452,11 @@ To upload your own portrait, ensure you have a .png image and place it in the ga
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
 <<run updateSaveCount()>>\
 <<if $multipleSaves>>
-<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction)
 <</if>>
 
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 
 :: Start Portrait Preset
@@ -474,11 +467,11 @@ Say cheese! Choose the portrait which best suits you below.
 <button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=true" style="padding: 12px 24px; font-size: 18px;">Arrive at Outset Town</button>
 <<run updateSaveCount()>>\
 <<if $multipleSaves>>
-<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction - not recommended for new players)
+<button class="dark-btn obsidian" data-passage="Start 4" data-setter="$intro=false">Quick Start</button> (Skips introduction)
 <</if>>
 
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 
 

@@ -426,22 +426,34 @@ Macro.add('say', {
        <</nobr>>`;
        $(this.output).wiki(output);
     }
-   });
+});
 
+Setting.addHeader("General Settings");
 
+Setting.addRange("volume", {
+    label    : "Volume",
+    min      : 0,
+    max      : 1,
+    step     : 0.1,
+    default : (typeof settings.volume === 'number' && setting.volume || 0.5),
+    onInit : window.setMasterVolume,
+    onChange : window.setMasterVolume
+});
 
 Setting.addToggle("accessible", {
     label : "Disable extra fancy text formatting",
     default  : false,
 });
 
+Setting.addHeader("AI Settings");
+
 Setting.addToggle("AIPortraitsMode", {
-    label : "Enable you to use your own OpenAI API key to generate portraits of your character",
+    label : "Enable the use of OpenAI's Dalle Generator to generate your own portrait.",
     default  : false,
 });
 
 Setting.addToggle("OverridePortrait", {
-    label : "Override the most recent AI portrait with your own portrait choice, in the images folder",
+    label : "Force the portrait to be overriden by the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
     default  : false,
 });
 
@@ -684,7 +696,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has scuba gear or an equivalent.
     haveScubaGear: {
-        get: () => checkAvailability(['Scuba Gear'], ['Pneuma Wisp'], ['scuba']),
+        get: () => checkAvailability(['Scuba Gear'], ['Pneuma Wisp'], ['scuba']) || variables().mc.hasCurse("Seafolk"),
     },
     // Check or set whether the player has a regular smartphone.
     haveSmartphoneRegular: {
@@ -917,6 +929,9 @@ Object.defineProperties(setup, {
                 case setup.companionIds.saeko:
                     willingCurses.push("Asset Robustness A", "Freckle Speckle", "Equal Opportunity",
                         "Crossdress Your Heart", "Age Reduction A", "Age Reduction B");
+                    if (State.variables.argumentSaekoCloud === true) {
+                            willingCurses.push("Power Dom");
+                    }
                     break;
             }
             let idealGender = companion.mindSex === 'male' ? 1 : 6;
@@ -2009,7 +2024,7 @@ window.windAnimationInterval = null;
 function createWindParticle() {
     const particle = document.createElement('div');
     particle.className = 'wind-particle';
-    const size = Math.random() * 100 + 50;
+    const size = Math.random() * 50 + 25;
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
     particle.style.left = `${Math.random() * 100}%`;
@@ -2121,4 +2136,55 @@ $(document).on('click', '#backBtn1', function() {
 
 $(document).on('click', '#backBtn2', function() {
     goToSection(1); // Back to Section 2
+});
+
+const shiftProbability = 0.05;
+const tiltProbability = 0.05;
+
+function applyButtonEffects() {
+  if (tags().includes("layer8")) {
+    $('.dark-btn').each(function() {
+      // Reset classes
+      $(this).removeClass('shift-left shift-right shift-up shift-down tilt-left tilt-right');
+
+      // Apply shift effect
+      if (Math.random() < shiftProbability) {
+        const shiftDirections = ['shift-left', 'shift-right', 'shift-up', 'shift-down'];
+        const randomShift = shiftDirections[Math.floor(Math.random() * shiftDirections.length)];
+        $(this).addClass(randomShift);
+      }
+
+      // Apply tilt effect
+      if (Math.random() < tiltProbability) {
+        const tiltDirections = ['tilt-left', 'tilt-right'];
+        const randomTilt = tiltDirections[Math.floor(Math.random() * tiltDirections.length)];
+        $(this).addClass(randomTilt);
+      }
+    });
+  }
+}
+
+const textSizeChangeProbability = 0.05;
+
+// Function to apply text size variation
+function applyTextSizeVariation() {
+    if (tags().includes("layer8")) {
+        // Remove any existing text size classes
+        $('body').removeClass('text-small text-large');
+
+        // Apply text size variation
+        if (Math.random() < textSizeChangeProbability) {
+            if (Math.random() < 0.5) {
+                $('body').addClass('text-small');
+            } else {
+                $('body').addClass('text-large');
+            }
+        }
+    }
+}
+
+// Apply layer 8 effects on passage start
+$(document).on(':passagerender', function(ev) {
+  setTimeout(applyButtonEffects, 100);
+  setTimeout(applyTextSizeVariation, 100);
 });

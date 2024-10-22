@@ -81,7 +81,7 @@ Threats:
 
 [img[setup.ImagePath+'Clipped-Fin/Abyss Diver Page 9-threats.png']]
 
-<button class="dark-btn obsidian" onclick="SugarCube.State.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Layer8 Hub [layer8 nobr hub]
 
@@ -131,6 +131,10 @@ Threats:
 	<<masteraudio stop>><<audio "layer8" volume 0.2 play loop>>
 <</if>>
 What do you want to do while you're here?<br><br>
+<<set _swapRelicsCurses = random(1, 100) <= 10>>
+<<set _swapHabitationWonders = random(1, 100) <= 10>>
+<<set _swapAscendDescend = random(1, 100) <= 20>>
+
 <div class="options-container">
   <div>
     <div class="category-header">Organization</div>
@@ -162,16 +166,36 @@ What do you want to do while you're here?<br><br>
           <span class="icon">[img[setup.ImagePath+'Icons/foraging.png']]</span> Foraging
         </button>
       </div>
+      <<if _swapHabitationWonders>>
+      <div class="menu-item">
+        <button class="dark-btn obsidian text-center" data-passage="Layer8 Wonders">
+          <span class="icon">[img[setup.ImagePath+'Icons/wonder.png']]</span> Wonders
+        </button>
+      </div>
+      <<else>>
       <div class="menu-item">
         <button class="dark-btn obsidian text-center" data-passage="Layer8 Habitation">
           <span class="icon">[img[setup.ImagePath+'Icons/layer8habitation.png']]</span> Habitation
         </button>
       </div>
+      <</if>>
     </div>
   </div>
   <div>
     <div class="category-header">Curses and Relics</div>
     <div class="options-grid">
+      <<if _swapRelicsCurses>>
+      <div class="menu-item">
+        <button class="dark-btn obsidian option-button text-center" data-passage="Layer8 Relics">
+          <span class="icon">[img[setup.ImagePath+'Icons/relicsearch.png']]</span> Relics
+        </button>
+      </div>
+      <div class="menu-item">
+        <button class="dark-btn obsidian option-button text-center" data-passage="Layer8 Curses">
+          <span class="icon">[img[setup.ImagePath+'Icons/curses.png']]</span> Curses
+        </button>
+      </div>
+      <<else>>
       <div class="menu-item">
         <button class="dark-btn obsidian option-button text-center" data-passage="Layer8 Curses">
           <span class="icon">[img[setup.ImagePath+'Icons/curses.png']]</span> Curses
@@ -182,16 +206,25 @@ What do you want to do while you're here?<br><br>
           <span class="icon">[img[setup.ImagePath+'Icons/relicsearch.png']]</span> Relics
         </button>
       </div>
+      <</if>>
     </div>
   </div>
   <div>
     <div class="category-header">Places</div>
     <div class="options-grid">
+      <<if _swapHabitationWonders>>
+      <div class="menu-item">
+        <button class="dark-btn obsidian text-center" data-passage="Layer8 Habitation">
+          <span class="icon">[img[setup.ImagePath+'Icons/layer8habitation.png']]</span> Habitation
+        </button>
+      </div>
+      <<else>>
       <div class="menu-item">
         <button class="dark-btn obsidian text-center" data-passage="Layer8 Wonders">
           <span class="icon">[img[setup.ImagePath+'Icons/wonder.png']]</span> Wonders
         </button>
       </div>
+      <</if>>
       <div class="menu-item">
         <button class="dark-btn obsidian text-center" data-passage="Layer8 Camp">
           <span class="icon">[img[setup.ImagePath+'Icons/camping.png']]</span> Camp
@@ -201,6 +234,22 @@ What do you want to do while you're here?<br><br>
   </div>
   <div>
     <div class="category-header">Travel</div>
+    <<if _swapAscendDescend>>
+    <div class="options-grid">
+      <div class="menu-item">
+        <button class="dark-btn obsidian text-center" data-passage="Layer8 Exit1">
+          <span class="icon">[img[setup.ImagePath+'Icons/descent.png']]</span> Descend
+        </button>
+      </div>
+    </div>
+    <div class="options-grid">
+      <div class="menu-item">
+        <button class="dark-btn obsidian text-center" data-passage="Layer8 Ascend 1">
+          <span class="icon">[img[setup.ImagePath+'Icons/ascent.png']]</span> Ascend
+        </button>
+      </div>
+    </div>
+    <<else>>
     <div class="options-grid">
       <div class="menu-item">
         <button class="dark-btn obsidian text-center" data-passage="Layer8 Ascend 1">
@@ -215,8 +264,8 @@ What do you want to do while you're here?<br><br>
         </button>
       </div>
     </div>
+    <</if>>
   </div>
-</div>
 
 
 :: Layer8 Wonders [layer8 cards nobr]
@@ -1637,6 +1686,27 @@ This layer's exit seems to be some sort of water pool, so you may not want to de
 
 	<<if $scuba === 1>>
 		<button class="dark-btn abyssal-depths" data-passage="Layer9 1">Descend into the pool</button>
+	<<elseif $StoredCurse.some(e => e.name === "Seafolk")>>
+		<<for _curse range $StoredCurse>>
+			<<capture _curse>>
+				<<if !$ManagedMisfortuneActive.some(c => c.name === _curse.name)>>
+					You have stored Curse _curse.name in your Managed Misfortune.<br>
+					<<set _text = "Activate stored " + _curse.name + " Curse">>
+					<<button _text>>
+						<<set $mc.addCurse(_curse)>>
+						<<set $ManagedMisfortuneActive.push(_curse)>>
+						<<goto "Layer8 Exit2">>
+					<</button>><br>
+				<<else>>
+					You are affected by Curse _curse.name stored in your Managed Misfortune.<br>
+					<<set _text = "Deactivate stored " + _curse.name + " Curse">>
+					<<button _text>>
+						<<RemoveCurse _curse>>
+						<<goto "Layer8 Exit2">>
+					<</button>><br>
+				<</if>>
+			<</capture>>
+		<</for>>
 	<<else>>
 		Because you have no way to continue through the deep pool, you must return to exploring the layer.
 		<button class="dark-btn obsidian" data-passage="Layer8 Hub">Continue exploring Layer 8</button>

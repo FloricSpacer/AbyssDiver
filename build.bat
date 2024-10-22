@@ -44,7 +44,7 @@ if "!errorlevel!" == "1" (
     echo Using systemwide Tweego: !TWEEGO!
 )
 
-set "SUGARCUBE_VERSION=2.36.1"
+set "SUGARCUBE_VERSION=2.37.0"
 set "SUGARCUBE_ARCHIVE=sugarcube-!SUGARCUBE_VERSION!-for-twine-2.1-local.zip"
 
 if not exist "!WORKAREA!storyformats\!SUGARCUBE_ARCHIVE!" (

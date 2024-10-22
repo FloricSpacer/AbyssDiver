@@ -22,6 +22,9 @@ This isn't a proper layer - merely a small pocket at the bottom of the ninth lay
 
 <p>There's just one more choice left to make, now.</p>
 
+<<if $hiredCompanions.length > 0>>
+    <p><button class="dark-btn obsidian" data-passage="Layer10 Companions"><span class="icon">[img[setup.ImagePath+'Icons/partytalk.png']]</span> Discuss with your companions</button></p>
+<</if>>
 
 
 <<bordered "images/Finale/raisond'etre.png" "images/bordergold.png">>\
@@ -177,3 +180,393 @@ You have claimed your Raison d'Etre, and there is nothing left for you here. The
 It's time to return to the ninth layer and begin your ascent back.
 
 <button class="dark-btn obsidian" data-passage="Layer9 Hub" data-setter="$currentLayer = 9">Return to the ninth Layer</button>
+
+
+:: Layer10 Companions [nobr]
+
+As you wade through the shallow water and admire the stars around you, your companions are with you. Each has their own thoughts on what you should do next, so you can take their advice and opinions into account when making your decision.<br><br>
+
+<<for _companion range $hiredCompanions>>
+    <<if _companion !== $companionTwin && _companion !== $companionBandit && _companion !== $companionGolem>>
+        <<set _name = _companion.name>>
+        <<if _companion === $companionLily>>
+            <<if $companionLily.affec >= 60>>
+                <<set _passage = "Lily Nadir High">>
+            <<else>>
+                <<set _passage = "Lily Nadir LowMid">>
+            <</if>>
+        <<else>>
+            <<set _passage = _name + " Nadir">>
+        <</if>>
+        <<print `<button class="dark-btn obsidian" data-passage="${_passage}"><span class="icon" style="filter: invert(1); "><<print "[img[setup.ImagePath+'" + _companion.imageIcon + "']]">></span> ${_companion.name}</button>`>>
+        <br>
+        <hr>
+    <</if>>
+<</for>>
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
+:: Khemia Nadir
+
+Khemia lands with a splash beside you, his blue hair slicked back and his muscular chest heaving from the long swim. His eyes are wide with wonder as he takes in the surreal scene of stars around you.
+
+<<say $companionKhemia>>Holy shit, we actually made it! The bottom of the Abyss... I almost can't believe my eyes!<</say>>
+He turns to you, his face lit up with a mix of excitement and disbelief. He reaches out and grabs your shoulder, giving it a firm, celebratory shake.
+
+<<say $companionKhemia>>We did it, $mc.name! We freaking did it! All those expeditions, all that training... it was worth every damn second!<</say>>
+<<say $mc>>It's incredible, Khemia. I never thought I'd see anything like this.<</say>>
+Khemia nods vigorously, his grin widening as he surveys the cavern. His gaze lingers on the puddle of stars at your feet, then shifts to the strange formations around you.
+
+<<say $companionKhemia>>Look at this place... it's like nothing we've ever seen before. We're the first ones to ever lay eyes on this!<</say>>
+He takes a few steps forward, his movements causing ripples in the starry puddle. Suddenly, he stops and turns back to you, a more serious expression crossing his face.
+
+<<say $companionKhemia>>But now that we're here... what's next? We've reached the bottom, but I can feel it in my gut – there's more to this place. Something beyond...<</say>>
+Khemia's eyes narrow as he looks around, his adventurer's instinct clearly kicking in. He seems to be wrestling with a decision.
+
+<<if $companionKhemia.affec > 25>>\
+<<say $companionKhemia>>Listen, I've got your back no matter what. We've been through hell together to get here, and I trust your judgment. You've led us this far, and I'm not about to bail on you now. But I gotta say, part of me is itching to see what's on the other side of this place, while another part is worried about what we'd be giving up. What do you think? Should we try to go deeper?<</say>>
+He looks at you expectantly.
+<<else>>\
+<<say $companionKhemia>>I gotta be honest, $mc.name. Part of me wants to see what's beyond this point, but another part is hesitant. We've come so far, learned so much. Is it worth risking everything to go further? What's your take on this?<</say>>
+He looks at you with a mixture of respect and uncertainty, clearly valuing your opinion despite his own conflicted feelings.
+<</if>>\
+
+<<say $mc>>I'm not sure, Khemia. What do you think we should do here?<</say>>
+Khemia runs a hand through his damp blue hair, his brow furrowing in thought.
+
+<<say $companionKhemia>>Well, from what I can tell, we've got two main choices here. There's the Raison d'Etre – basically, accepting this as our final destination. It's got a few different paths we could take, each with its own perks.<</say>>
+Khemia pauses, his voice dropping to a more serious tone.
+
+<<say $companionKhemia>>But then there's the other option. The L'appel du Vide. The call of the void. It means we keep going, push past whatever barrier is holding us here and see what's beyond. It's a one-way trip, though. No coming back once we make that choice.<</say>>
+He looks at you intently, his usual bravado tempered by the weight of the decision before you.
+
+<<say $companionKhemia>>It's your call. We've come this far together, but this... this is something you've gotta decide for yourself. Whatever you choose, just know that you've already done something incredible. We're the first to ever stand where we're standing now.<</say>>
+<<if $companionKhemia.affec > 25>>\
+<<say $companionKhemia>>And hey, no matter what you decide, I've got your back. We're in this together, all the way. You've proven yourself as a leader, and I trust you to make the right call for us.<</say>>
+He gives you a reassuring smile and a thumbs up.
+<<else>>\
+<<say $companionKhemia>>Whatever you decide, I respect it. This is a huge decision, and there's no easy answer. We've got to weigh the risks and potential rewards carefully.<</say>>
+He crosses his arms, of anticipation and restlessness evident in his stance.
+<</if>>\
+
+<<say $companionKhemia>>But before we decide, we should think about what we'd be giving up. All the experience we've gained, the chance to help and guide people with what we've learned. There's a whole community back on the surface counting on us. And who knows what other discoveries we might make if we stay and explore up here more thoroughly?<</say>>
+Khemia's expression grows more thoughtful as he continues.
+
+<<say $companionKhemia>>On the other hand, what lies beyond could change everything we know about the Abyss. It's the ultimate unknown, and that's both exciting and terrifying. We'd be stepping into a realm no one's ever seen before, but at what cost?<</say>>
+He takes a deep breath, his gaze moving between you and the mysterious surroundings.
+
+<<say $companionKhemia>>So, what's it gonna be? Do we embrace what we've found here, use our knowledge to help others and continue exploring this world? Or do we take the plunge into the unknown, knowing we might never anyone on the surface again?<</say>>
+Khemia waits expectantly, his eyes reflecting the soft glow of the starry puddle at your feet. The weight of the decision hangs in the air between you.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
+:: Maru Nadir
+
+Maru's petite frame shivers slightly as he walks across the starry puddle you find yourself in, his light blue hair clinging to his delicate features. His wide eyes take in the surreal scene.
+
+<<say $companionMaru>>We made it... I can't believe we're actually here.<</say>>
+Maru's soft voice barely rises above a whisper as he steps closer to you, seeking comfort in your presence. His clothing, though soaked, still manages to look cute on his slender frame.
+
+<<say $mc>>It's incredible, isn't it? We've reached the bottom of the Abyss.<</say>>
+Maru nods, his eyes darting around, taking in every detail.
+
+<<say $companionMaru>>It's beautiful... but also a little scary. I-I never imagined we'd see anything like this.<</say>>
+He kneels down, gently touching the surface of the starry puddle, causing tiny ripples to spread across its surface.
+
+<<say $companionMaru>>I wonder if there are any flowers down here... Oh! But I guess that's not really important right now, is it?<</say>>
+Maru stands up, brushing his hands on his damp clothes. He looks at you with a mixture of concern and curiosity.
+
+<<say $companionMaru>>So... what happens now? We've come so far, through so many terrible things...<</say>>
+His voice trails off as he remembers the horrors of the journey, particularly the ocean of Layer 9 and the mind-bending white labyrinth of Layer 8. A shudder passes through his small frame.
+
+<<if $companionMaru.affec > 25>>\
+<<say $companionMaru>>I'm a little scared about what might come next, but... I want you to know that I'll stay with you, no matter what you decide. We've been through so much together, and... well... you make me feel safe.<</say>>
+Maru gives you a shy but warm smile, his cheeks flushing slightly.
+<<else>>\
+<<say $companionMaru>>I... I'm really worried about what might happen next. Everything's been so frightening, and now we're at the very bottom... What if there's something even worse waiting for us?<</say>>
+Maru wrings his hands nervously, his eyes darting between you and the stars around you.
+<</if>>\
+
+<<say $mc>>We have a choice to make, Maru. We can either accept this as our final destination or... we can try to go even deeper.<</say>>
+Maru's eyes widen at your words, a mix of fear and curiosity flickering across his face.
+
+<<say $companionMaru>>G-go deeper? But... but how? And what would happen if we did?<</say>>
+He takes a deep breath, trying to calm himself.
+
+<<say $companionMaru>>I mean... the Raison d'Etre options sound safer, don't they? We could stay here, or maybe find a way to make our journey easier... But then again, we've come so far...<</say>>
+Maru bites his lip, clearly conflicted. He looks up at you, seeking guidance.
+
+<<say $companionMaru>>What do you think we should do? I... I trust your judgment. You've gotten us this far, after all.<</say>>
+<<if $companionMaru.affec > 25>>\
+<<say $companionMaru>>And... and no matter what you choose, I'll be right here with you. We're in this together, okay? Maybe I'm not the strongest or the bravest, but I promise I'll do my best to support you.<</say>>
+Maru reaches out and gently squeezes your hand, his touch conveying the depth of his trust and affection.
+<<else>>\
+<<say $companionMaru>>I... I hope whatever you choose, it'll keep us safe. This place is so strange and unknown... it's hard not to worry about what might happen next.<</say>>
+Maru hugs himself, his vulnerability evident in every line of his body.
+<</if>>\
+
+<<say $companionMaru>>So... what do you want to do? Should we stay here and explore what we've found, or... or do we take that scary step into the unknown?<</say>>
+Maru watches you intently, his gentle eyes reflecting the soft glow of the starry puddle at your feet. The weight of the decision hangs heavy in the damp air as you consider the path that lies ahead.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
+:: Cherry Nadir
+
+Cherry's red hair hangs limp around her face, her wet sweatshirt clinging to her thin frame. Her eyes seem to look through the surreal scene rather than at it.
+
+<<say $companionCherry>>So... this is it. The bottom.<</say>>
+Cherry's voice is flat. She stands still, making no move to explore your surroundings.
+
+<<say $mc>>We made it, Cherry. We've reached a place no one else has ever seen.<</say>>
+Cherry nods slightly, her gaze unfocused.
+
+<<say $companionCherry>>Yeah. I guess we did.<</say>>
+She takes a few listless steps, her movements causing small ripples in the starry puddle at your feet. For a moment, she watches the disturbances in the water, but her expression remains unchanged.
+
+<<say $companionCherry>>What now?<</say>>
+<<say $mc>>We have a choice to make. We can either accept this as our final destination or try to go even deeper.<</say>>
+Cherry shrugs, her shoulders barely moving under her damp sweatshirt.
+
+<<say $companionCherry>>Either way. It doesn't really matter, does it?<</say>>
+<<if $companionCherry.affec > 25>>\
+A flicker of something — perhaps concern — passes across Cherry's face as she looks at you.
+
+<<say $companionCherry>>What do you want to do? You've... you've gotten us this far.<</say>>
+There's a hint of warmth in her voice, barely perceptible but present.
+<<else>>\
+Cherry's gaze drifts away from you, settling on some indistinct point in the cavern.
+
+<<say $companionCherry>>Whatever you decide. I'm just along for the ride.<</say>>
+Her voice is hollow, devoid of any real investment in the decision.
+<</if>>\
+
+<<say $mc>>We could stay here, explore what we've found. Or we could take the risk and see what's beyond.<</say>>
+Cherry nods slowly, her eyes finally focusing on you for a moment.
+
+<<say $companionCherry>>Beyond, huh? Away from everything up there.<</say>>
+She gestures vaguely upward, towards the world above.
+
+<<if $companionCherry.affec > 35>>\
+<<say $companionCherry>>I... I used to think that's what I wanted. To just... get away from it all.<</say>>
+There's a slight tremor in her voice, a crack in her usual flat affect.
+
+<<say $companionCherry>>But now... I don't know. Maybe there are still things worth seeing. Worth doing.<</say>>
+She looks at you, and for a brief moment, there's a glimmer of something in her eyes.
+
+<<else>>\
+<<say $companionCherry>>It's tempting. To just... leave it all behind.<</say>>
+Her voice is quiet, tinged with a weariness that seems bone-deep.
+
+<<say $companionCherry>>But I guess it doesn't really matter where we are. Here, there, beyond... it's all the same in the end.<</say>>
+<</if>>\
+Cherry takes a deep breath, her shoulders rising and falling with the effort.
+
+<<say $companionCherry>>Whatever you choose... I'll go along with it. I'm here, aren't I? Might as well see it through.<</say>>
+<<if $companionCherry.affec > 25>>\
+She takes a step closer to you, her movement hesitant but deliberate.
+
+<<say $companionCherry>>And... thanks. For bringing me this far. For showing me... well, this.<</say>>
+She gestures around the cavern, and for a brief moment, there's a flicker of wonder in her tired eyes.
+
+<<else>>\
+Cherry turns away slightly, her gaze once again unfocused.
+
+<<say $companionCherry>>Just... make your choice. We can't stay here forever.<</say>>
+<</if>>\
+As you consider the weight of the decision before you, Cherry stands quietly by your side.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
+:: Cloud Nadir
+
+Cloud's tanned skin seems to almost glow in the otherworldly illumination around you, his green eyes sparkling as he takes in the scene.
+
+<<say $companionCloud>>Well, well, well... looks like we've finally hit rock bottom, eh?<</say>>
+Cloud's voice is smooth and playful, a grin spreading across his handsome face as he nudges you with his elbow.
+
+<<say $mc>>We made it, Cloud. We're at the bottom of the Abyss.<</say>>
+Cloud nods, his expression becoming more serious as he surveys the area.
+
+<<say $companionCloud>>That we are, my friend. And what a journey it's been. I've got to hand it to you – you've got a knack for making the impossible look easy.<</say>>
+He steps forward, his movements graceful despite the damp conditions. His eyes narrow slightly as he examines the starry puddle at your feet.
+
+<<say $companionCloud>>You know, standing here, at the precipice of the unknown, I can't help but think about the potential we hold in our hands.<</say>>
+Cloud turns to you, his green eyes intense and focused.
+
+<<say $companionCloud>>So, $mc.name, what's our next move? I can see the wheels turning in that brilliant mind of yours.<</say>>
+<<say $mc>>We have a choice to make, Cloud. We can either accept this as our final destination or... we can try to go even deeper.<</say>>
+Cloud's eyebrows raise, a mix of surprise and concern crossing his face.
+
+<<say $companionCloud>>Deeper? Now that's a risky proposition. We've already pushed the boundaries of what's possible. Is it really worth risking everything we've gained?<</say>>
+He pauses, his voice taking on a more persuasive tone.
+
+<<say $companionCloud>>Consider this: we've amassed knowledge and power beyond our wildest dreams. We have the means to enact real, meaningful change. Why gamble that away on an uncertain leap into the void?<</say>>
+Cloud's voice grows more passionate, his usual playful demeanor giving way to genuine conviction.
+
+<<say $companionCloud>>Imagine the impact we could have. We could reshape society, tear down the barriers that divide us, ensure that no one goes hungry or faces persecution. We have the power to build a world that's genuinely more just, more equitable.<</say>>
+He gestures upward, towards the world above.
+
+<<say $companionCloud>>I know the allure of the unknown is strong. But we have a real chance here to help people, to make a tangible difference. Are we really prepared to turn our backs on that opportunity?<</say>>
+<<if $companionCloud.affec > 25>>\
+Cloud steps closer to you, his voice softening but maintaining its persuasive edge.
+
+<<say $companionCloud>>Look, I've seen your compassion firsthand. We've been through hell together, and I know you're a good person. Don't you think we owe it to the people up there to use what we've learned?<</say>>
+<<else>>\
+Cloud maintains his distance, his tone becoming even more convincing.
+
+<<say $companionCloud>>I know we might not always agree, but surely you can see the potential here. We're holding the keys to a better future. Isn't that worth more than satisfying our curiosity about what lies beyond?<</say>>
+<</if>>\
+Cloud's gaze moves around you, taking in the otherworldly beauty of the Nadir.
+
+<<say $companionCloud>>This place is undeniably remarkable and the secrets it holds are tempting. But the real adventure, the real challenge, lies in applying what we've learned to create lasting change.<</say>>
+He turns back to you, his green eyes meeting yours with intensity.
+
+<<say $companionCloud>>So, what do you say? Shall we take this power we've gained and use it to forge a better world? Or do we risk it all on one more step into the unknown? The choice is yours, I suppose, but remember – sometimes the bravest thing isn't to keep pushing forward, but to turn back and face the challenges we left behind.<</say>>
+Cloud waits for your response, his usually relaxed demeanor replaced by an air of anticipation and conviction. 
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
+:: Saeko Nadir
+
+Saeko's eyes widen behind her glasses, her usual composed demeanor giving way to genuine wonder.
+
+<<say $companionSaeko>>This is... incredible.<</say>>
+Her voice is barely above a whisper, filled with awe as she takes in the surreal scene around you.
+
+<<say $mc>>We made it, Saeko. We're at the bottom of the Abyss.<</say>>
+Saeko nods slowly, her gaze darting from one marvel to another.
+
+<<say $companionSaeko>>We've actually done it. All those theories, all that research... and now we're standing where no one has ever been before.<</say>>
+She kneels down, gently touching the surface of the starry puddle. Ripples spread out from her fingertips, distorting the galaxy of stars at your feet.
+
+<<say $companionSaeko>>The phenomena here... they defy everything we thought we knew. It's... it's beautiful.<</say>>
+Saeko stands up, brushing her damp hands on her clothes. She turns to you, a mix of excitement and uncertainty in her eyes.
+
+<<say $companionSaeko>>So, what's our next move? I assume you have some ideas.<</say>>
+<<say $mc>>We have a choice to make, Saeko. We can either accept this as our final destination or... we can try to go even deeper.<</say>>
+Saeko's eyebrows raise, a flicker of both interest and concern crossing her face.
+
+<<say $companionSaeko>>Deeper? I didn't think that was possible. But then again, I didn't think a lot of what we've seen was possible.<</say>>
+She pauses, her mind clearly working through the options.
+
+<<say $companionSaeko>>On one hand, staying here... the potential for what we can learn is immense. We've collected so much data, so many Relics. We could spend years here, unraveling the mysteries of the Abyss.<</say>>
+Her eyes drift around you.
+
+<<say $companionSaeko>>But going deeper... that's uncharted territory. Who knows what we might discover? It's risky, and there's clearly a cost involved that worries me. We'd be giving up the chance to study everything above us, even the terrible things we've encountered.<</say>>
+<<if $companionSaeko.affec > 25>>\
+Saeko's expression softens as she looks at you, her usual detachment giving way to a more personal concern.
+
+<<say $companionSaeko>>Whatever we choose, I... I'm glad you're here. Your insights have been invaluable, and I trust your judgment. We've come this far together, after all.<</say>>
+<<else>>\
+Saeko maintains her composed demeanor, though there's a hint of respect in her voice.
+
+<<say $companionSaeko>>I have to admit, your ability to navigate the Abyss has been impressive. Your decision here will determine the outcome of our expedition, and I'll stick with whatever you decide.<</say>>
+<</if>>\
+Saeko takes a deep breath, her gaze moving between you and the mysterious surroundings.
+
+<<say $companionSaeko>>A significant part of me wants to stay, to meticulously document everything we've found. We could revolutionize our understanding of the Abyss from here and up to the surface. There's so much we haven't fully explored or understood yet. I never finished my thesis, but compared to these new things... somehow that seems less important than before. But there's so much to learn from between the sixth layer to here that no one has ever reported and that we'd be giving up if we moved on.<</say>>
+She gestures around, then points downward.
+
+<<say $companionSaeko>>But that unknown... it's calling to me too, despite my reservations. The scientist in me can't help but wonder what lies beyond. What principles govern the space past this point? How would it change our theories?<</say>>
+Saeko shakes her head, a small, conflicted smile playing on her lips.
+
+<<say $companionSaeko>>Listen to me, getting all philosophical. The bottom line is, both options have merit, but also significant costs. We could make incredible strides in our understanding either way, but we might be sacrificing something valuable no matter what we choose.<</say>>
+She looks at you, checking for your response.
+
+<<say $companionSaeko>>So, what do you think? Do we stay and unravel the mysteries we've already found? Or do we take that leap into the unknown, knowing we might never get the chance to fully study what's above us? Whatever you decide, I'm with you. This is... well, it's the opportunity of a lifetime, either way, but it's also a weighty decision.<</say>>
+Saeko waits for your response, her usual cool demeanor tinged with a mix of excitement and concern. The starry puddle reflects in her glasses, a miniature universe mirroring the vast unknown that surrounds you both.
+
+
+:: Lily Nadir LowMid
+
+Lily's eyes sparkle with unbridled excitement as she takes in the surreal scene of stars around you, practically bouncing on her toes.
+
+<<say $companionLily>>Oh. My. Gosh! We did it! We're actually here! The bottom of the Abyss! It's incredible, isn't it?<</say>>
+Lily's voice echoes through the cavern, her enthusiasm palpable. She spins around, taking in every detail of your surroundings.
+
+<<say $mc>>Yeah, it's incredible, Lily. We've reached a place that no one has ever seen.<</say>>
+Lily grins widely, her energy seemingly unaffected by the long journey.
+
+<<say $companionLily>>I know, right? It's absolutely amazing! Just think about all the wonders we've seen on our way here. And now... who knows what else is waiting for us?<</say>>
+She kneels down, running her fingers through the starry puddle at your feet, giggling as the lights swirl around her hand.
+
+<<say $companionLily>>But you know what's even more exciting? The possibility of what could be beyond this point! I mean, we're at the bottom of the Abyss - but is it really the end? There's got to be more, don't you think?<</say>>
+<<say $mc>>We have a choice to make, Lily. We can either accept one of the blessings here or... we can try to go even deeper.<</say>>
+Lily's jumps to her feet, grabbing your hands in excitement.
+
+<<say $companionLily>>Are you kidding? Of course we should try to go deeper! This is the adventure of a lifetime! We can't stop now!<</say>>
+She releases your hands and gestures dramatically around you.
+
+<<say $companionLily>>Think about it - we've seen things that would make most people's heads explode. We've survived challenges that would make hardened adventurers cry for their mommies. And now we're standing at the edge of something... more. How can we possibly turn back now?<</say>>
+<<if $companionLily.affec < 25>>\
+Lily's expression becomes a bit more serious, though her eyes still sparkle with excitement.
+
+<<say $companionLily>>Look, I get it if you're hesitant. This is a big decision. I'll stick around for now, but... I can't promise I won't come back at some point if we don't go through. There's just something about this place that calls to me, you know?<</say>>
+<<else>>\
+Lily steps closer to you, her voice taking on a slightly more persuasive tone.
+
+<<say $companionLily>>Come on, hero! We've been through thick and thin together. Don't you want to see this through to the end? Whatever's on the other side, we can face it together. It'll be the most incredible experience of our lives! And... well, I've got to warn you - I'm really tempted to come back and go beyond this boundary myself if we don't do it now.<</say>>
+<</if>>\
+Lily starts pacing around the cavern, her words coming out in an excited rush.
+
+<<say $companionLily>>Just imagine what we might find! New discoveries, new experiences, things we've never even dreamed of!<</say>>
+She stops suddenly, turning to face you with a mischievous grin.
+
+<<say $companionLily>>Plus, think of all the amazing stories we'll have to tell. Well, if we can even explain what we see, that is. Some things are just beyond words, you know? It may be... difficult to explain to people that we came from somewhere else.<</say>>
+Lily's expression softens slightly, a hint of vulnerability showing through her excitement, but then she refocuses on you.
+
+<<say $companionLily>>I know it's scary. Trust me, I get it. But isn't that what makes it exciting? The unknown, the thrill of discovery... that's what life is all about! And hey, if it all goes wrong, at least we'll have faced it together, right?<</say>>
+She takes a deep breath, her eyes meeting yours with intensity.
+
+<<say $companionLily>>So what do you say, $mc.name? Are you ready for the ultimate adventure? Or are we going to let a little thing like the edge of reality stop us?<</say>>
+Lily waits for your response, practically vibrating with anticipation. The starry puddle reflects in her eyes, mirroring the endless possibilities that lie beyond the threshold of the known world.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+
+:: Lily Nadir High
+
+As you and Lily wander the area with the stars around you, you notice her usual boundless energy is tempered by something
+
+<<say $companionLily>>We... we made it. We're actually here at the bottom of the Abyss.<</say>>
+Lily's voice is softer than usual, filled the expected sense of wonder but also a hint of trepidation. She turns to you, her expression more serious than you've usually seen.
+
+<<say $mc>>It's incredible, Lily. We've reached a place few, if any, have ever seen.<</say>>
+Lily nods slowly, a small smile playing on her lips.
+
+<<say $companionLily>>Yeah, it's... it's pretty amazing. But you know what? This isn't the end. There's so much more beyond this point. I... I need to tell you something important.<</say>>
+She takes a deep breath, her fingers fidgeting with the hem of her skirt.
+
+<<say $companionLily>>I haven't told anyone this for a long time, but... I've done something like this before. Not exactly this, but... similar. I'm... I'm not really from around here. And by 'here', I mean... well, this world.<</say>>
+Lily looks at you nervously, gauging your reaction.
+
+<<say $companionLily>>I know it sounds crazy, but it's true. I've been traveling between worlds for... a long time. And each time, it's been through places like this - boundaries between realities.<</say>>
+She steps closer to you, her voice becoming more urgent.
+
+<<say $companionLily>>What I'm trying to say is... we have a choice to make here. We can stay, you can accept one of the Raisons, but... I really, really hope you'll consider going beyond with me.<</say>>
+Lily's eyes meet yours.
+
+<<say $companionLily>>I care about you. So much. More than I've cared about anyone in a very long time. And the thought of leaving you behind... it hurts. But I also can't stay here forever, I know that. The urge to explore, to see what's beyond... it's part of who I am.<</say>>
+She reaches out, gently taking your hands in hers.
+
+<<say $companionLily>>I promise you, if we go beyond the boundary together, things will be okay. We'll have each other, and that's... that's more than I've had in a long time. But if you choose to stay...<</say>>
+Lily's voice cracks slightly, her usual cheerfulness giving way to raw emotion.
+
+<<say $companionLily>>If you choose to stay, I'll... I'll stick around for a while. I really will. But eventually, I'll feel the pull to go on. And when that time comes, I'll have to leave you behind, since I know you can't come with me. I'll need to say goodbye to you if I don't want to be stuck here. The thought of that... it terrifies me.<</say>>
+She squeezes your hands gently, her eyes pleading.
+
+<<say $companionLily>>What I really want - more than anything - is to keep exploring, to keep discovering new worlds and wonders... but with you by my side. You've become so important to me, and the idea of facing all that vastness without you... it feels a little more empty than it did before.<</say>>
+Lily takes a shaky breath, her usual energetic demeanor replaced by earnest vulnerability.
+
+<<say $companionLily>>I know it's a lot to ask. I know it's scary to step into the unknown. But I promise you, it's worth it. The things we'll see, the experiences we'll share... they're beyond imagination. And we'll face it all together.<</say>>
+She looks around the cavern, then back to you, her eyes shining with unshed tears and the reflection of the starry puddle.
+
+<<say $companionLily>>So, what do you say? Will you take this leap with me? Will you be my companion in the great beyond? Because I... I don't want to face eternity without you.<</say>>
+Lily waits for your response, her usual energy replaced by a stillness. The decision you make here will shape not just your future, but hers as well.
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
