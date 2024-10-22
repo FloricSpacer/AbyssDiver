@@ -35,8 +35,6 @@ if "!errorlevel!" == "1" (
 
         echo Unpacking Tweego...
         powershell -command "Expand-Archive -Path '!WORKAREA!\tools\!TWEEGO_ARCHIVE!' -DestinationPath '!WORKAREA!\tools\' -Force"
-
-        attrib +x "!WORKAREA!\tools\!TWEEGO_EXE!"
     )
 
     set "TWEEGO=!WORKAREA!tools/tweego.exe"
