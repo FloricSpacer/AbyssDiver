@@ -203,95 +203,228 @@ Please fill out the form below to describe yourself. Remember, while you're jott
 <<set $corruption = -50>>
 <</if>>
 
+<div class="contract-container character-creation" style="width: 130%; margin-left: -15%; max-width: 130%;">
+    <div class="corner-fold"></div>
+    <div class="contract-content">
+        <h1 class="contract-title">Diver Registration</h1>
+        
+        <div id="genderSelection" class="section-block">
+            <<include "Gender Selection">>
+        </div>
+        
+        <div class="section-block">
+            <p class="contract-paragraph">Name:</p>
+            <<textbox "$mc.name" $mc.name>>
+        </div>
 
-<div id="genderSelection">
-<<include "Gender Selection">>
+        <table class="parchment-table">
+            <tr>
+                <td style="width: 25%;">
+                    <div class="attribute-section" style="color: #3a1f00;">
+                        <h3 class="parchment-heading">Body Build</h3>
+                        <label><input type="radio" id="fitness15" name="fitness" value="-5" onchange="updateDisplay(this.value)">Very Weak</label>
+                        <label><input type="radio" id="fitness18" name="fitness" value="-2" onchange="updateDisplay(this.value)">Weak</label>
+                        <label><input type="radio" id="fitness20" name="fitness" value="0" onchange="updateDisplay(this.value)" checked>Average</label>
+                        <label><input type="radio" id="fitness22" name="fitness" value="2" onchange="updateDisplay(this.value)">Fit</label>
+                        <label><input type="radio" id="fitness25" name="fitness" value="5" onchange="updateDisplay(this.value)">Very Fit</label>
+                        <p>Your initial carrying capacity is: <span id="capacityValue">kg</span></p>
+                        <p id="description"></p>
+                    </div>
+                </td>
+                <td style="width: 25%;">
+                    <div class="attribute-section">
+                        <h3 class="parchment-heading">Hair Color</h3>
+                        <label><<radiobutton "$mc.ohair" "black" autocheck>> Black</label>
+                        <label><<radiobutton "$mc.ohair" "brown" autocheck>> Brown</label>
+                        <label><<radiobutton "$mc.ohair" "blonde" autocheck>> Blonde</label>
+                        <label><<radiobutton "$mc.ohair" "red" autocheck>> Red</label>
+                        <label><<radiobutton "$mc.ohair" "gray" autocheck>> Gray</label>
+                    </div>
+                </td>
+                <td style="width: 25%;">
+                    <div class="attribute-section">
+                        <h3 class="parchment-heading">Eye Color</h3>
+                        <label><<radiobutton "$mc.oeyeColor" "blue" autocheck>> Blue</label>
+                        <label><<radiobutton "$mc.oeyeColor" "brown" autocheck>> Brown</label>
+                        <label><<radiobutton "$mc.oeyeColor" "gray" autocheck>> Gray</label>
+                        <label><<radiobutton "$mc.oeyeColor" "green" autocheck>> Green</label>
+                        <label><<radiobutton "$mc.oeyeColor" "hazel" autocheck>> Hazel</label>
+                        <label><<radiobutton "$mc.oeyeColor" "amber" autocheck>> Amber</label>
+                    </div>
+                </td>
+                <td style="width: 25%;">
+                    <div class="attribute-section">
+                        <h3 class="parchment-heading">Skin Color</h3>
+                        <label><<radiobutton "$mc.oskinColor" "pale" autocheck>> Pale</label>
+                        <label><<radiobutton "$mc.oskinColor" "tanned" autocheck>> Tanned</label>
+                        <label><<radiobutton "$mc.oskinColor" "olive" autocheck>> Olive</label>
+                        <label><<radiobutton "$mc.oskinColor" "brown" autocheck>> Brown</label>
+                        <label><<radiobutton "$mc.oskinColor" "dark brown" autocheck>> Dark Brown</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="attribute-section">
+                        <<if $mc.osex === "female">>
+                            <h3 class="parchment-heading">Breast Size</h3>
+                            <div class="slider-container">
+                                <input type="range" id="breastSlider" class="vertical-slider parchment-slider" min="1" max="8" value="3" oninput="updateBreast(this.value)">
+                                <div style="text-align: center">
+                                    <input type="number" id="breastInput" class="slider-value" value="3" min="0" max="8" oninput="updateBreastSlider(this.value)" style="display: none">
+                                    <span id="cupSize" style="font-size: 16pt; color: #3a1f00;">(B)</span>
+                                </div>
+                            </div>
+                        <</if>>
+                        <<if $mc.osex === "male">>
+                            <h3 class="parchment-heading">Penis Size (cm)</h3>
+                            <div class="slider-container">
+                                <input type="range" id="penisSlider" class="vertical-slider parchment-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)">
+                                <div>
+                                    <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
+                                    <span id="penisConversion">(5.9")</span>
+                                </div>
+                            </div>
+                        <</if>>
+                    </div>
+                </td>
+                <td>
+                    <div class="attribute-section">
+                        <h3 class="parchment-heading">Height (cm)</h3>
+                        <div class="slider-container">
+                            <input type="range" id="heightSlider" class="vertical-slider parchment-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)">
+                            <div>
+                                <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
+                                <span id="heightConversion">(5'7")</span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="attribute-section">
+                        <h3 class="parchment-heading">Age</h3>
+                        <div class="slider-container">
+                            <input type="range" id="ageSlider" class="vertical-slider parchment-slider" min="18" max="60" value="30" oninput="updateAge(this.value)">
+                            <input type="number" id="ageInput" class="slider-value" value="30" min="18" max="60" oninput="updateAgeSlider(this.value)">
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="button-container">
+            <button class="dark-btn parchment" data-passage="Start Portrait Choose">Confirm</button>
+        </div>
+    </div>
+    <div class="seal">OUTSET TOWN OFFICIAL SEAL</div>
 </div>
-Name:<br>
-<<textbox "$mc.name" $mc.name>><br>
-<table class="character-table">
-  <tr>
-    <td style="width: 20%;">
-		<h3>Body Build</h3>
-		<label><input type="radio" id="fitness15" name="fitness" value="-5" onchange="updateDisplay(this.value)">Very Weak</label>
-		<label><input type="radio" id="fitness18" name="fitness" value="-2" onchange="updateDisplay(this.value)">Weak</label>
-		<label><input type="radio" id="fitness20" name="fitness" value="0" onchange="updateDisplay(this.value)" checked>Average</label>
-		<label><input type="radio" id="fitness22" name="fitness" value="2" onchange="updateDisplay(this.value)">Fit</label>
-		<label><input type="radio" id="fitness25" name="fitness" value="5" onchange="updateDisplay(this.value)">Very Fit</label>
-		Your initial carrying capacity is: <span id="capacityValue">kg</span>
-		<p id="description"></p>
-	</td>
-    <td style="width: 20%;">
-      <h3>Hair Color</h3>
-      <label><<radiobutton "$mc.ohair" "black" autocheck>> Black</label>
-      <label><<radiobutton "$mc.ohair" "brown" autocheck>> Brown</label>
-      <label><<radiobutton "$mc.ohair" "blonde" autocheck>> Blonde</label>
-      <label><<radiobutton "$mc.ohair" "red" autocheck>> Red</label>
-      <label><<radiobutton "$mc.ohair" "gray" autocheck>> Gray</label>
-    </td>
-    <td style="width: 20%;">
-      <h3>Eye Color</h3>
-      <label><<radiobutton "$mc.oeyeColor" "blue" autocheck>> Blue</label>
-      <label><<radiobutton "$mc.oeyeColor" "brown" autocheck>> Brown</label>
-      <label><<radiobutton "$mc.oeyeColor" "gray" autocheck>> Gray</label>
-      <label><<radiobutton "$mc.oeyeColor" "green" autocheck>> Green</label>
-      <label><<radiobutton "$mc.oeyeColor" "hazel" autocheck>> Hazel</label>
-      <label><<radiobutton "$mc.oeyeColor" "amber" autocheck>> Amber</label>
-    </td>
-    <td style="width: 20%;">
-      <h3>Skin Color</h3>
-      <label><<radiobutton "$mc.oskinColor" "pale" autocheck>> Pale</label>
-      <label><<radiobutton "$mc.oskinColor" "tanned" autocheck>> Tanned</label>
-      <label><<radiobutton "$mc.oskinColor" "olive" autocheck>> Olive</label>
-      <label><<radiobutton "$mc.oskinColor" "brown" autocheck>> Brown</label>
-      <label><<radiobutton "$mc.oskinColor" "dark brown" autocheck>> Dark Brown</label>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <<if $mc.osex === "female">>
-        <h3>Breast Size</h3>
-        <div class="slider-container">
-            <input type="range" id="breastSlider" class="vertical-slider" min="1" max="8" value="3" oninput="updateBreast(this.value)" style="width: 80%;">
-            <div style="text-align: center">
-                <input type="number" id="breastInput" class="slider-value" value="3" min="0" max="8" oninput="updateBreastSlider(this.value)" style="display: none">
-                <span id="cupSize" style="font-size: 16pt">(B)</span>
-            </div>
-        </div>
-      <</if>>
-      <<if $mc.osex === "male">>
-        <h3>Penis Size (cm)</h3>
-        <div class="slider-container">
-            <input type="range" id="penisSlider" class="vertical-slider" min="4" max="25" value="15" oninput="updatePenis(this.value)" style="width: 80%;">
-            <div>
-                <input type="number" id="penisInput" class="slider-value" value="15" min="0" oninput="updatePenisSlider(this.value)">
-                <span id="penisConversion">(5.9")</span>
-            </div>
-        </div>
-      <</if>>
-    </td>
-    <td>
-      <h3>Height (cm)</h3>
-      <div class="slider-container">
-            <input type="range" id="heightSlider" class="vertical-slider" min="140" max="220" value="170" oninput="updateHeight(this.value)" style="width: 80%;">
-            <div>
-                <input type="number" id="heightInput" class="slider-value" value="170" min="0" oninput="updateHeightSlider(this.value)">
-                <span id="heightConversion">(5'7")</span>
-            </div>
-        </div>
-    </td>
-    <td>
-      <h3>Age</h3>
-      <div class="slider-container">
-        <input type="range" id="ageSlider" class="vertical-slider" min="18" max="60" value="30" oninput="updateAge(this.value)" style="width: 80%;">
-        <input type="number" id="ageInput" class="slider-value" value="30" min="18" max="60" oninput="updateAgeSlider(this.value)">
-      </div>
-    </td>
-    <td></td>
-  </tr>
-</table>
-<</nobr>>\
-<button class="dark-btn obsidian" data-passage="Start Portrait Choose">Continue</button>
+<</nobr>>
+
+<style>
+.character-creation {
+    height: auto;
+    min-height: 80vh;
+}
+
+.parchment-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px;
+    margin: 20px 0;
+}
+
+.parchment-table td {
+    padding: 15px;
+    vertical-align: top;
+    background: rgba(139, 69, 19, 0.05);
+    border-radius: 5px;
+    border: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.attribute-section {
+    padding: 10px;
+}
+
+.parchment-heading {
+    color: #4a2700;
+    border-bottom: 1px solid #8b4513;
+    padding-bottom: 5px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.parchment-table label {
+    display: block;
+    margin-bottom: 8px;
+    color: #3a1f00;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.parchment-table label:hover {
+    color: #8b4513;
+}
+
+.parchment-slider {
+    background: #d9c8a9;
+    border: 1px solid #8b4513;
+}
+
+.parchment-slider::-webkit-slider-thumb {
+    background: #8b4513;
+    border: 2px solid #d9c8a9;
+}
+
+.parchment-slider::-moz-range-thumb {
+    background: #8b4513;
+    border: 2px solid #d9c8a9;
+}
+
+.parchment-slider::-webkit-slider-runnable-track {
+    background: #d9c8a9;
+    border: 1px solid #8b4513;
+}
+
+.parchment-slider::-moz-range-track {
+    background: #d9c8a9;
+    border: 1px solid #8b4513;
+}
+
+.slider-value {
+    background: #f2e8c9;
+    border: 1px solid #8b4513;
+    color: #3a1f00;
+}
+
+.section-block {
+    margin: 20px 0;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+input[type="text"] {
+    background: #f2e8c9;
+    border: 1px solid #8b4513;
+    color: #3a1f00;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+#genderSelection {
+    margin-bottom: 20px;
+}
+
+#heightConversion,
+#penisConversion {
+    color: #3a1f00;
+    opacity: 0.8;
+}
+</style>
 
 <script>
 function updateDisplay(value) {
