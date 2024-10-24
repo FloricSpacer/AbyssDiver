@@ -428,8 +428,6 @@ Macro.add('say', {
     }
 });
 
-Setting.addHeader("General Settings");
-
 Setting.addRange("volume", {
     label    : "Volume",
     min      : 0,
@@ -440,27 +438,21 @@ Setting.addRange("volume", {
     onChange : window.setMasterVolume
 });
 
-Setting.addToggle("accessible", {
-    label : "Disable extra fancy text formatting",
-    default  : false,
-});
 
-Setting.addHeader("AI Settings");
+
+Setting.addHeader("Portrait Settings");
 
 Setting.addToggle("AIPortraitsMode", {
-    label : "Enable the use of OpenAI's Dalle Generator to generate your own portrait.",
+    label : "Enable the use of AI to generate your own portrait.",
     default  : false,
 });
 
 Setting.addToggle("OverridePortrait", {
-    label : "Force the portrait to be overriden by the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+    label : "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
     default  : false,
 });
 
-Setting.addToggle("SidebarPortrait", {
-    label : "Display your current character portrait in the sidebar",
-    default  : true,
-});
+Setting.addHeader("Other Settings");
 
 Setting.addToggle("RandomizedThreats", {
     label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
@@ -469,6 +461,11 @@ Setting.addToggle("RandomizedThreats", {
 
 Setting.addToggle("EncounterFiat", {
     label : "Allow you to use custom combinations of Relics to defeat <i>very</i> difficult encounters",
+    default  : false,
+});
+
+Setting.addToggle("accessible", {
+    label : "Disable a small amount of extra fancy text formatting",
     default  : false,
 });
 
