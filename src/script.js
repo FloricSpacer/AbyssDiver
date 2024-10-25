@@ -454,6 +454,11 @@ Setting.addToggle("OverridePortrait", {
 
 Setting.addHeader("Other Settings");
 
+Setting.addToggle("sidebarToggle", {
+    label : "Allows you to hide the sidebar with a toggle button.",
+    default  : false,
+});
+
 Setting.addToggle("RandomizedThreats", {
     label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
     default  : true,
@@ -1515,6 +1520,7 @@ Macro.add('sidebar-widget', {
             return;
         }
         $('.twine-sidebar').remove();
+        $('.sidebar-toggle').remove();
 
         function getLayerName() {
             const layer = State.variables.currentLayer;
@@ -1550,7 +1556,6 @@ Macro.add('sidebar-widget', {
             `;
         }
         
-        // Updated getCotNStatus function
         function getCotNStatus() {
             const curse = State.variables.mc.getCurse("Creature of the Night");
             if (!curse) return '';
@@ -1734,8 +1739,14 @@ Macro.add('sidebar-widget', {
         </button>
         `;
 
+        const toggleButton = settings.sidebarToggle ? `
+        <button class="sidebar-toggle">
+            <span class="toggle-icon">►</span>
+        </button>
+    ` : '';
+
         const sidebarHTML = `
-            <div class="twine-sidebar">
+            <div id="sidebar" class="twine-sidebar">
                 <div class="twine-sidebar-nav-sticky">
                     <div class="twine-sidebar-nav">
                         <button id="custom-back-button" class="nav-arrow left">&larr;</button>
@@ -1792,8 +1803,6 @@ Macro.add('sidebar-widget', {
                 </div>
                 ${getSemenDemonStatus()}
                 ${getCotNStatus()}
-
-                
 
                 ${State.variables.status.duration > 0 ? `
                     <div class="divider"></div>
@@ -1889,6 +1898,10 @@ Macro.add('sidebar-widget', {
 
         $('body').prepend(sidebarHTML);
 
+        if (toggleButton) {
+            $('body').prepend(toggleButton);
+        }
+
         if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displayImage();
         }
@@ -1930,6 +1943,38 @@ Macro.add('sidebar-widget', {
         $(document).on(':passagerender', function() {
             updateButtonStates();
         });
+
+        if (settings.sidebarToggle) {
+            // Initialize sidebar state
+            const sidebarState = State.variables.sidebarCollapsed || false;
+            if (sidebarState) {
+                $('.twine-sidebar').addClass('collapsed');
+                $('#story').addClass('sidebar-collapsed');
+                $('.sidebar-toggle').addClass('collapsed');
+                $('.sidebar-toggle .toggle-icon').text('◄');
+            }
+
+            $('.sidebar-toggle').on('click', function() {
+                const sidebar = $('.twine-sidebar');
+                const story = $('#story');
+                const icon = $('.sidebar-toggle .toggle-icon');
+                const button = $('.sidebar-toggle');
+
+                if (sidebar.hasClass('collapsed')) {
+                    sidebar.removeClass('collapsed');
+                    story.removeClass('sidebar-collapsed');
+                    button.removeClass('collapsed');
+                    icon.text('►');
+                    State.variables.sidebarCollapsed = false;
+                } else {
+                    sidebar.addClass('collapsed');
+                    story.addClass('sidebar-collapsed');
+                    button.addClass('collapsed');
+                    icon.text('◄');
+                    State.variables.sidebarCollapsed = true;
+                }
+            });
+        }
     }
 });
 
