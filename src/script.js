@@ -1700,6 +1700,11 @@ Macro.add('sidebar-widget', {
                     <div class="menu-item">
                         <button class="dark-btn obsidian text-center" data-passage="Appearance">Appearance</button>
                     </div>
+                    ${settings.AIPortraitsMode ? `
+                        <div class="menu-item">
+                            <button class="dark-btn obsidian text-center" data-passage="Generate AI Portrait">AI Portrait</button>
+                        </div>
+                    ` : ''}
                     <div class="menu-item">
                         <button class="dark-btn obsidian text-center" data-passage="Inventory">Inventory</button>
                     </div>
