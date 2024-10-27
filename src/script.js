@@ -280,6 +280,8 @@ $(document).on(':passagestart', ev => {
     // Add some CSS classes based on where we are.
     if (tags().includes('titleScreen')) {
         document.body.classList.add('titleScreen');
+    } else if (State.variables.credits) {
+        document.body.classList.add('credits');
     } else if (State.variables.comBalloon) {
         document.body.classList.add('balloon');
     } else if (vars.currentLayer < 1) {
@@ -1515,7 +1517,7 @@ Macro.add('sidebar-widget', {
         const forageFood = State.variables.forageFood || false;
         const forageWater = State.variables.forageWater || false;
 
-        if (tags().includes("titleScreen")) {
+        if (tags().includes("titleScreen") || tags().includes("credits")) {
             $('.twine-sidebar').remove();
             return;
         }
