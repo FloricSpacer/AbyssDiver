@@ -1784,7 +1784,7 @@ Macro.add('sidebar-widget', {
                     <div class="resource-item tooltip">
                         <div class="icon-text-wrapper">
                             <div class="icon-wrapper">
-                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.jpg" alt="Water"></span>
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
                             </div>
                             <div class="spacer"></div>
                             <div class="number-wrapper">
@@ -1854,7 +1854,7 @@ Macro.add('sidebar-widget', {
                     <div class="resource-item tooltip">
                         <div class="icon-text-wrapper">
                             <div class="icon-wrapper">
-                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.jpg" alt="Corruption"></span>
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" alt="Corruption"></span>
                             </div>
                             <div class="spacer"></div>
                             <div class="number-wrapper">${corruption}</div>
