@@ -211,7 +211,7 @@ Config.navigation.override = function (destPassage) {
         StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
         return "Bandit Escape";
     }
-    if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/banditIcon_released.png" &&
+    if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/banditIcon_released.jpg" &&
         StoryVar.mc.inhuman < 6 && StoryVar.mc.appAge > 12 && !StoryVar.arrested) {
         return "Bandit Arrested";
     }
@@ -376,15 +376,15 @@ Macro.add('say', {
        const isPlayer = person === State.variables.mc;
        if (isPlayer) {
            if (settings.OverridePortrait) {
-               imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
+               imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.jpg";
            } else if (setup.firstPortraitGen) {
-               imgSrc = "images/Player Icons/playerF.png";
+               imgSrc = "images/Player Icons/playerF.jpg";
                setup.displayPortraitImage();
            } else {
                // Use the new numbered portrait system
                const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
                const portraitNumber = State.variables.portraitNumber || 0;
-               imgSrc = `images/Player Icons/player${gender}${portraitNumber}.png`;
+               imgSrc = `images/Player Icons/player${gender}${portraitNumber}.jpg`;
            }
        }
        const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
@@ -451,7 +451,7 @@ Setting.addToggle("AIPortraitsMode", {
 });
 
 Setting.addToggle("OverridePortrait", {
-    label : "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+    label : "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.jpg' image file.",
     default  : false,
 });
 
@@ -1763,8 +1763,8 @@ Macro.add('sidebar-widget', {
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                         `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
                         (settings.OverridePortrait ?
-                        `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                        `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
+                        `<img src="images/GeneratedPortraits/CharacterPortraitOverride.jpg" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                        `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
                     }
                 </div>
 

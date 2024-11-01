@@ -1135,25 +1135,25 @@ class Character {
 	get imageIcon() {
 		let transformed = this.events.reduce((v, e) => e.changeImageIcon(v), '');
 		// as a special exception, anybody who swapped with the bandit is released
-		if (transformed === 'Icons/banditIcon.png') transformed = 'Icons/banditIcon_released.png';
+		if (transformed === 'Icons/banditIcon.jpg') transformed = 'Icons/banditIcon_released.jpg';
 		if (transformed !== '') return transformed;
 
 		if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
 			let image = this.appGender <= 5 ? 'M' : 'F';
-			return `Player Icons/player${image}.png`;
+			return `Player Icons/player${image}.jpg`;
 		}
 		/* //Code for apperent gender based portrait switches for most characters
 		if (!(this.id === setup.companionIds.bandit || this.id === setup.companionIds.golem || this.id === setup.companionIds.maru)) {
 			let image = this.appGender <= 5 ? 'M' : 'F';
 			if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
-				return `Player Icons/player${image}.png`;
+				return `Player Icons/player${image}.jpg`;
 			}else{
 				return `Icons/${this.name}Icon${image}.png`
 			}
 		}*/
 
 		if (this.id === setup.companionIds.bandit && State.variables.BanditConvo0) {
-			return 'Icons/banditIcon_released.png'
+			return 'Icons/banditIcon_released.jpg'
 		}
 
 		return this._imageIcon;
