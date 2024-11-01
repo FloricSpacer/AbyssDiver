@@ -396,7 +396,8 @@ Macro.add('say', {
            'khemia': '#3480E3', // Deep masculine blue
            'cloud': '#BF5D17', // Mahogany brown
            'maru': '#ADD8E6', // Light feminine blue
-           'cherry': '#D13D3D' // Clear bright red
+           'cherry': '#D13D3D', // Clear bright red
+           'ai': 'lightpink'
        };
        const isCompanion = Object.values(setup.companionIds).includes(person?.id);
        if (isCompanion && !isPlayer) {
@@ -405,10 +406,10 @@ Macro.add('say', {
        } else {
            const genderColors = {
                1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush',
-               5: 'lightpink', 6: 'hotpink', 'rgba(225, 0, 0,1)': 'ghostwhite', 99: 'lightpink',
+               5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink',
                100: 'rgb(136, 228, 56)'
            };
-           borderColor = genderColors[person?.genderVoice] || 'transparent';
+           borderColor = genderColors[person?.genderVoice] || 'white';
        }
        const output =
        `<<nobr>>
