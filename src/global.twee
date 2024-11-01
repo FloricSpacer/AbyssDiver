@@ -2255,11 +2255,14 @@ How many dubloons would you like to pay back?
 		<<if $mc.hasCurse("Minish-ish")>>
 			<<set _consumptionPerDay /= 4>> /* You eat a lot less than normal (your twin shares your curses). */
 		<</if>>
-		<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit) && $companionBandit.hasCurse(Minishish)>>
-			<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
-		<<elseif $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
-			<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
+		<<if $hiredCompanions.some(e => e.id === setup.companionIds.bandit)>>
+			<<if $companionBandit.hasCurse("Minish-ish")>>
+				<<set _consumptionPerDay += 0.25>> /* Add another small mouth for the bandit*/
+			<<else>>
+				<<set _consumptionPerDay += 1>> /* Add another mouth for the bandit*/
+			<</if>>
 		<</if>>
+
 		/* Using energy rations halves the travel time, so we need at most half the time worth. */
 		<<set _daysOfEnergyRations = Math.min(_inputTime / 2, $items[24].count / _consumptionPerDay)>>
 		/* Every day with an energy ration counts for twice as much. */
