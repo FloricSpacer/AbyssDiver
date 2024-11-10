@@ -2273,7 +2273,9 @@ window.setup = {
         data = data.filter(item => !item.hasOwnProperty('count') || item.count > 0);
     
         const table = document.createElement('table');
+        table.classList.add('inventory-screen');
         const tbody = document.createElement('tbody');
+        tbody.classList.add('inventory-screen');
     
         const sortState = {
             column: null,
@@ -2288,9 +2290,12 @@ window.setup = {
             }
     
             const thead = document.createElement('thead');
+            thead.classList.add('inventory-screen');
             const tr = document.createElement('tr');
+            tr.classList.add('inventory-screen');
             headers.forEach(header => {
                 const th = document.createElement('th');
+                th.classList.add('inventory-screen');
                 switch (header) {
                     case 'name':
                         th.textContent = dataUrl.charAt(0).toUpperCase() + dataUrl.slice(1);
@@ -2317,21 +2322,28 @@ window.setup = {
             });
             thead.appendChild(tr);
             table.appendChild(thead);
+    
             function renderRows(sortedData) {
                 tbody.innerHTML = '';
                 sortedData.forEach(row => {
                     const tr = document.createElement('tr');
+                    tr.classList.add('inventory-screen');
                     headers.forEach(header => {
                         const td = document.createElement('td');
+                        td.classList.add('inventory-screen');
                         const img = document.createElement('img');
+                        img.classList.add('inventory-screen');
                         const tableTooltip = document.createElement('div');
-                        const textBox = document.createElement('span');   
+                        tableTooltip.classList.add('inventory-screen');
+                        const textBox = document.createElement('span');
+                        textBox.classList.add('inventory-screen');
+    
                         if (header === 'name') {
                             td.innerHTML = row[header];
-                            tableTooltip.setAttribute('class', 'tableTooltip');
+                            tableTooltip.setAttribute('class', 'tableTooltip inventory-screen');
                             img.setAttribute('src', `./images/${row.image}`);
                             tableTooltip.appendChild(img);
-                            textBox.setAttribute('class', 'textBox');
+                            textBox.setAttribute('class', 'textBox inventory-screen');
                             
                             const description = dataUrl === 'relics' && SugarCube.setup.relicShortDescriptions
                                 ? SugarCube.setup.relicShortDescriptions.find(desc => desc.name === row.name)?.description
@@ -2348,6 +2360,7 @@ window.setup = {
                     tbody.appendChild(tr);
                 });
             }
+    
             function sortTable(column) {
                 if (sortState.column === column) {
                     sortState.ascending = !sortState.ascending;
@@ -2377,10 +2390,13 @@ window.setup = {
                     }
                 });
             }
+    
             renderRows(data);
         } else {
             const tr = document.createElement('tr');
+            tr.classList.add('inventory-screen');
             const td = document.createElement('td');
+            td.classList.add('inventory-screen');
             td.textContent = "No data available";
     
             const headerCount = data && data[0] ? 
@@ -2398,7 +2414,9 @@ window.setup = {
         } else {
             console.error('Error: Target element not found!');
         }
+        
         const style = document.createElement('style');
+        style.classList.add('inventory-screen');
         style.textContent = `
             .sort-asc::after {
                 content: ' ▲';
