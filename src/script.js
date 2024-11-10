@@ -2238,3 +2238,219 @@ $(document).on(':passagerender', function(ev) {
   setTimeout(applyButtonEffects, 100);
   setTimeout(applyTextSizeVariation, 100);
 });
+window.setup = {
+    createTable(dataUrl, targetElementId) {
+        let data;
+        if (dataUrl === 'relics') {
+            data = SugarCube.State.variables.ownedRelics;
+        } else if (dataUrl === 'items') {
+            data = SugarCube.State.variables.items;
+        } else {
+            console.error('Invalid dataUrl, not found');
+            return;
+        }
+    
+        if (data && data.length > 0 && !data[0].hasOwnProperty('count')) {
+            const processedData = new Map();
+            
+            data.forEach(item => {
+                const itemKey = JSON.stringify(
+                    Object.fromEntries(
+                        Object.entries(item).filter(([key]) => !['desc', 'image', 'time'].includes(key))
+                    )
+                );
+                
+                if (processedData.has(itemKey)) {
+                    processedData.get(itemKey).count++;
+                } else {
+                    processedData.set(itemKey, { ...item, count: 1 });
+                }
+            });
+            
+            data = Array.from(processedData.values());
+        }
+    
+        data = data.filter(item => !item.hasOwnProperty('count') || item.count > 0);
+    
+        const table = document.createElement('table');
+        const tbody = document.createElement('tbody');
+    
+        const sortState = {
+            column: null,
+            ascending: true
+        };
+    
+        if (data && data.length > 0) {
+            let headers = Object.keys(data[0]).filter(header => !["desc", "image", "time"].includes(header));
+    
+            if (headers.includes('count')) {
+                headers = ['count', ...headers.filter(header => header !== 'count')];
+            }
+    
+            const thead = document.createElement('thead');
+            const tr = document.createElement('tr');
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                switch (header) {
+                    case 'name':
+                        th.textContent = dataUrl.charAt(0).toUpperCase() + dataUrl.slice(1);
+                        break;
+                    case 'count':
+                        th.textContent = '';
+                        break;
+                    case 'weight':
+                        th.textContent = '⚖';
+                        break;
+                    case 'value':
+                    case 'cost':
+                        th.textContent = '🪙';
+                        break;
+                    case 'corr':
+                        th.textContent = '💥';
+                        break;
+                    default:
+                        th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
+                }
+                th.style.cursor = 'pointer';
+                th.addEventListener('click', () => sortTable(header));
+                tr.appendChild(th);
+            });
+            thead.appendChild(tr);
+            table.appendChild(thead);
+            function renderRows(sortedData) {
+                tbody.innerHTML = '';
+                sortedData.forEach(row => {
+                    const tr = document.createElement('tr');
+                    headers.forEach(header => {
+                        const td = document.createElement('td');
+                        const img = document.createElement('img');
+                        const tableTooltip = document.createElement('div');
+                        const textBox = document.createElement('span');   
+                        if (header === 'name') {
+                            td.innerHTML = row[header];
+                            tableTooltip.setAttribute('class', 'tableTooltip');
+                            img.setAttribute('src', `./images/${row.image}`);
+                            tableTooltip.appendChild(img);
+                            textBox.setAttribute('class', 'textBox');
+                            
+                            const description = dataUrl === 'relics' && SugarCube.setup.relicShortDescriptions
+                                ? SugarCube.setup.relicShortDescriptions.find(desc => desc.name === row.name)?.description
+                                : row.desc;
+                            
+                            textBox.textContent = description || row.desc || 'No description available';
+                            tableTooltip.appendChild(textBox);
+                            td.appendChild(tableTooltip);
+                        } else {
+                            td.textContent = row[header];
+                        }
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+            }
+            function sortTable(column) {
+                if (sortState.column === column) {
+                    sortState.ascending = !sortState.ascending;
+                } else {
+                    sortState.column = column;
+                    sortState.ascending = true;
+                }
+                const sortedData = [...data].sort((a, b) => {
+                    let valueA = a[column];
+                    let valueB = b[column];
+                    if (!isNaN(valueA) && !isNaN(valueB)) {
+                        valueA = Number(valueA);
+                        valueB = Number(valueB);
+                    }
+                    if (valueA == null) return 1;
+                    if (valueB == null) return -1;
+                    if (valueA < valueB) return sortState.ascending ? -1 : 1;
+                    if (valueA > valueB) return sortState.ascending ? 1 : -1;
+                    return 0;
+                });
+                renderRows(sortedData);
+                const headers = thead.getElementsByTagName('th');
+                Array.from(headers).forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                    if (th.textContent.toLowerCase().includes(column.toLowerCase())) {
+                        th.classList.add(sortState.ascending ? 'sort-asc' : 'sort-desc');
+                    }
+                });
+            }
+            renderRows(data);
+        } else {
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.textContent = "No data available";
+    
+            const headerCount = data && data[0] ? 
+                Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length : 
+                1;
+            td.colSpan = headerCount;
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+    
+        const targetElement = document.getElementById(targetElementId);
+        if (targetElement) {
+            targetElement.appendChild(table);
+        } else {
+            console.error('Error: Target element not found!');
+        }
+        const style = document.createElement('style');
+        style.textContent = `
+            .sort-asc::after {
+                content: ' ▲';
+                font-size: 0.8em;
+            }
+            .sort-desc::after {
+                content: ' ▼';
+                font-size: 0.8em;
+            }
+        `;
+        document.head.appendChild(style);
+    },
+    waterBar() {
+        const waterElement = document.getElementById('water-fill');
+        function updateWaterGradient() {
+            const values = {
+                total: Number([0, 1, 2, 3, 4, 5, 6, 7, 9].reduce((sum, i) => sum + Number(SugarCube.State.variables.flaskMatrix[i]), 0)),
+                impure: Number([1, 2, 4, 6, 9].reduce((sum, i) => sum + SugarCube.State.variables.flaskMatrix[i], 0)),
+                pure: Number([0, 3, 5, 7].reduce((sum, i) => sum + SugarCube.State.variables.flaskMatrix[i], 0)),
+                bottled: Number(SugarCube.State.variables.flaskMatrix[8]),
+            };
+            const totalWidth = values.bottled + values.total + 5;
+            const filledWidth = values.bottled + values.impure + values.pure;
+            const waterWidth = (filledWidth / totalWidth) * 100;
+
+            const percentages = {
+                impure: (values.impure / filledWidth) * 100,
+                pure: (values.pure / filledWidth) * 100,
+                bottled: (values.bottled / filledWidth) * 100
+            };
+            waterElement.style.background = `linear-gradient(
+                85deg,
+                rgba(8, 2, 58, 0.5) ${percentages.impure - 1}%,
+                rgba(6, 12, 207, 0.3) ${percentages.impure + 1}%,
+                rgba(6, 12, 207, 0.3) ${percentages.impure + percentages.pure - 1}%,
+                rgba(0, 255, 255, 0.2) ${percentages.impure + percentages.pure + 1}%
+            ),
+            linear-gradient(
+                to bottom,
+                rgba(8, 138, 224, 1) 20%,
+                rgba(3, 45, 86, 1) 80%
+            )`;
+            document.getElementById('impure').style.width = percentages.impure + '%';
+            document.getElementById('impure').dataset.value = values.impure;
+            document.getElementById('pure').style.width = percentages.pure + '%';
+            document.getElementById('pure').dataset.value = values.pure;
+            document.getElementById('bottled').style.width = percentages.bottled + '%';
+            document.getElementById('bottled').dataset.value = values.bottled;
+            waterElement.style.width = waterWidth + '%';
+            document.getElementById('empty').style.width = 100 - waterWidth + '%';
+            document.getElementById('empty').dataset.value = SugarCube.State.variables.items[2].count;
+        }
+        updateWaterGradient();
+    }
+}
