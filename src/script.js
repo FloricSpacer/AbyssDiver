@@ -2436,7 +2436,7 @@ window.setup = {
                 pure: Number([0, 3, 5, 7].reduce((sum, i) => sum + SugarCube.State.variables.flaskMatrix[i], 0)),
                 bottled: Number(SugarCube.State.variables.flaskMatrix[8]),
             };
-            const totalWidth = values.bottled + values.total + 5;
+            const totalWidth = values.bottled + values.total;
             const filledWidth = values.bottled + values.impure + values.pure;
             const waterWidth = (filledWidth / totalWidth) * 100;
 
