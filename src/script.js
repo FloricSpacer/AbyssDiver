@@ -2345,9 +2345,7 @@ window.setup = {
                             tableTooltip.appendChild(img);
                             textBox.setAttribute('class', 'textBox inventory-screen');
                             
-                            const description = dataUrl === 'relics' && SugarCube.setup.relicShortDescriptions
-                                ? SugarCube.setup.relicShortDescriptions.find(desc => desc.name === row.name)?.description
-                                : row.desc;
+                            const description = SugarCube.setup.relicShortDescriptions.find(desc => desc.name === row.name)?.description;
                             
                             textBox.textContent = description || row.desc || 'No description available';
                             tableTooltip.appendChild(textBox);
