@@ -46,7 +46,7 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 	<<print $mc.curses[$temp].name>>
 <</if>>
 <</nobr>>
-[img[setup.ImagePath+$mc.curses[$temp].pic]]
+[img[setup.ImagePath+$mc.curses[$temp].image]]
 
 <<print $mc.curses[$temp].description>>
 
@@ -56,7 +56,7 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 
 :: Inventory [noreturn]
 <<nobr>><<CarryAdjust>>
-<<if $debt > 0>>
+/*<<if $debt > 0>>
 	@@.alert1;You have $debt dubloons of debt, which you must pay before voluntarily settling down for any habitation.@@<br><br>
 <</if>>
 You have $items[0].count days of single-use water rations.<br>
@@ -132,8 +132,52 @@ Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br>
   <</if>>
 
   <<print "<div class=\"progress-bar-fill\" style=\"width:" + _percent + "%; background-color:" + _color + ";\"></div>">>
+</div> */
+<div id="backpack">
+	<div class="title">Inventory</div>
+	<div class="bar">
+		<div class="water" id="water-fill">
+			<div class="hover-zone" id="impure" data-value="0"></div>
+			<div class="hover-zone" id="pure" data-value="0"></div>
+			<div class="hover-zone" id="bottled" data-value="0"></div>
+		</div>
+		<div class="hover-zone" id="empty" data-value="0"></div>
+		<div class="hover-zone" id="water"></div>
+	</div>
+	<div id="collection">
+	</div>
 </div>
+<div class="progress-bar-container">
+  <<set _percent = (setup.carriedWeight / $totalCarry) * 100>>
+	<<if _percent <= 50>>
+    <<set _color = "#4CAF50">> <!-- Green for 50% and below -->
+  <<elseif _percent <= 75>>
+    <<set _color = "#FFC107">> <!-- Yellow for 51% to 75% -->
+  <<else>>
+    <<set _color = "#F44336">> <!-- Red for 76% and above -->
+  <</if>>
 
+  <<print "<div class=\"progress-bar-fill\" style=\"width:" + _percent + "%; background-color:" + _color + ";\"></div>">>
+</div>
+<<if $DaedalusFly>>
+	Your personal carrying capacity is only <<print Math.round($carryWeight)>> kg now that you are flying. If you went back to walking, you would be able carry double that amount.<br>
+<<else>>
+	Your personal carrying capacity is <<print Math.round($carryWeight)>> kg.<br>
+<</if>>
+Your team has a total carrying capacity of <<print Math.round($totalCarry)>> kg.<br>
+Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br><br>
+<script>
+	setup.waterBar();
+	setup.createTable('relics', 'collection');
+	setup.createTable('items', 'collection');
+</script>
+<svg position="absolute" width="0" height="0">
+<filter id="turbulence" width="115%" height="100%">
+<feTurbulence id="sea-filter" numOctaves="1" seed="3" baseFrequency="0.02 0.05"></feTurbulence>
+<feDisplacementMap scale="4" in="SourceGraphic"></feDisplacementMap>
+<animate xlink:href="#sea-filter" attributeName="baseFrequency" dur="60s" keyTimes="0;0.5;1" values="0.02 0.06;0.04 0.08;0.02 0.06" repeatCount="indefinite" />
+</filter>
+</svg>
 
 
 <br><br>
@@ -2470,7 +2514,7 @@ You struggle to free yourself, but _handle.name gasps as <<if _handle.sex==="mal
 After a few awkward minutes, you both continue your journey. What a ludicrous thing to happen!<br>
 
 :: Lambent Use [nobr]
-[img[setup.ImagePath + $relic75.pic]]
+[img[setup.ImagePath + $relic75.image]]
 
 <br>You have summoned a spirit. What material would you like to use to shape the golem your summoned spirit will possess?<br><br>
 
