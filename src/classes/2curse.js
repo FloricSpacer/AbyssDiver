@@ -85,10 +85,10 @@ class Curse extends CharEvent {
 	}
 
 	get pic() {
-		return this.constructor.image;
+		return this.constructor.picture;
 	}
 	get picture() {
-		return this.constructor.image;
+		return this.constructor.picture;
 	}
 
 	get description() {
