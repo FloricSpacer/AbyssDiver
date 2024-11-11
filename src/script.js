@@ -2322,10 +2322,14 @@ window.setup = {
             });
             thead.appendChild(tr);
             table.appendChild(thead);
-    
+
+            data.forEach((item, index) => {
+                item.originalIndex = index;
+            });
+            
             function renderRows(sortedData) {
                 tbody.innerHTML = '';
-                sortedData.forEach((row, index) => {
+                sortedData.forEach(row => {
                     const tr = document.createElement('tr');
                     tr.classList.add('inventory-screen');
             
@@ -2350,7 +2354,7 @@ window.setup = {
                             
                             td.appendChild(tableTooltip);
                             td.addEventListener('click', function() {
-                                SugarCube.State.variables.temp = index;
+                                SugarCube.State.variables.temp = row.originalIndex;
                                 try {
                                     const passageName = `${dataUrl} Info`;
                                     SugarCube.Engine.play(passageName, undefined);
@@ -2361,6 +2365,7 @@ window.setup = {
                         } else {
                             td.textContent = row[header];
                         }
+            
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
