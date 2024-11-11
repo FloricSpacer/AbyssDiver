@@ -2241,9 +2241,9 @@ $(document).on(':passagerender', function(ev) {
 window.setup = {
     createTable(dataUrl, targetElementId) {
         let data;
-        if (dataUrl === 'relics') {
+        if (dataUrl === 'Relic') {
             data = SugarCube.State.variables.ownedRelics;
-        } else if (dataUrl === 'items') {
+        } else if (dataUrl === 'Item') {
             data = SugarCube.State.variables.items;
         } else {
             console.error('Invalid dataUrl, not found');
@@ -2322,42 +2322,56 @@ window.setup = {
             });
             thead.appendChild(tr);
             table.appendChild(thead);
-    
+
+            data.forEach((item, index) => {
+                item.originalIndex = index;
+            });
+            
             function renderRows(sortedData) {
                 tbody.innerHTML = '';
                 sortedData.forEach(row => {
                     const tr = document.createElement('tr');
                     tr.classList.add('inventory-screen');
+            
                     headers.forEach(header => {
                         const td = document.createElement('td');
                         td.classList.add('inventory-screen');
-                        const img = document.createElement('img');
-                        img.classList.add('inventory-screen');
-                        const tableTooltip = document.createElement('div');
-                        tableTooltip.classList.add('inventory-screen');
-                        const textBox = document.createElement('span');
-                        textBox.classList.add('inventory-screen');
-    
+                        
                         if (header === 'name') {
                             td.innerHTML = row[header];
+                            const tableTooltip = document.createElement('div');
                             tableTooltip.setAttribute('class', 'tableTooltip inventory-screen');
+                            const img = document.createElement('img');
+                            img.classList.add('inventory-screen');
                             img.setAttribute('src', `./images/${row.image}`);
                             tableTooltip.appendChild(img);
+                            
+                            const textBox = document.createElement('span');
                             textBox.setAttribute('class', 'textBox inventory-screen');
-                            
                             const description = SugarCube.setup.relicShortDescriptions.find(desc => desc.name === row.name)?.description;
-                            
                             textBox.textContent = description || row.desc || 'No description available';
                             tableTooltip.appendChild(textBox);
+                            
                             td.appendChild(tableTooltip);
+                            td.addEventListener('click', function() {
+                                SugarCube.State.variables.temp = row.originalIndex;
+                                try {
+                                    const passageName = `${dataUrl} Info`;
+                                    SugarCube.Engine.play(passageName, undefined);
+                                } catch (error) {
+                                    console.error('Error playing passage:', error);
+                                }
+                            });
                         } else {
                             td.textContent = row[header];
                         }
+            
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
                 });
             }
+            
     
             function sortTable(column) {
                 if (sortState.column === column) {
@@ -2415,16 +2429,6 @@ window.setup = {
         
         const style = document.createElement('style');
         style.classList.add('inventory-screen');
-        style.textContent = `
-            .sort-asc::after {
-                content: ' ▲';
-                font-size: 0.8em;
-            }
-            .sort-desc::after {
-                content: ' ▼';
-                font-size: 0.8em;
-            }
-        `;
         document.head.appendChild(style);
     },
     waterBar() {
