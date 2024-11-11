@@ -2334,6 +2334,7 @@ window.setup = {
                     tr.classList.add('inventory-screen');
             
                     headers.forEach(header => {
+                        if (header === 'originalIndex') return;
                         const td = document.createElement('td');
                         td.classList.add('inventory-screen');
                         
