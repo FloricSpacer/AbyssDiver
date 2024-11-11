@@ -2269,7 +2269,9 @@ window.setup = {
             
             data = Array.from(processedData.values());
         }
-    
+        data.forEach((item, index) => {
+            item.originalIndex = index;
+        });
         data = data.filter(item => !item.hasOwnProperty('count') || item.count > 0);
     
         const table = document.createElement('table');
@@ -2283,7 +2285,7 @@ window.setup = {
         };
     
         if (data && data.length > 0) {
-            let headers = Object.keys(data[0]).filter(header => !["desc", "image", "time"].includes(header));
+            let headers = Object.keys(data[0]).filter(header => !["desc", "image", "time", "originalIndex"].includes(header));
     
             if (headers.includes('count')) {
                 headers = ['count', ...headers.filter(header => header !== 'count')];
@@ -2322,10 +2324,6 @@ window.setup = {
             });
             thead.appendChild(tr);
             table.appendChild(thead);
-
-            data.forEach((item, index) => {
-                item.originalIndex = index;
-            });
             
             function renderRows(sortedData) {
                 tbody.innerHTML = '';
@@ -2334,7 +2332,6 @@ window.setup = {
                     tr.classList.add('inventory-screen');
             
                     headers.forEach(header => {
-                        if (header === 'originalIndex') return;
                         const td = document.createElement('td');
                         td.classList.add('inventory-screen');
                         
@@ -2366,10 +2363,12 @@ window.setup = {
                         } else if (header === 'count' && dataUrl === 'Relic' && row[header] === 1) {
                             // Don't show anything if it's a Relic with count of 1
                             td.textContent = '';
+                        } else if (header === 'originalIndex') {
+                            return;
                         } else {
                             td.textContent = row[header];
                         }
-            
+                        
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
@@ -2413,7 +2412,7 @@ window.setup = {
             tr.classList.add('inventory-screen');
             const td = document.createElement('td');
             td.classList.add('inventory-screen');
-            td.textContent = "No items found.";
+            td.textContent = `No ${dataUrl}s found.`;
     
             const headerCount = data && data[0] ? 
                 Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length : 
