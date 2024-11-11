@@ -147,6 +147,7 @@ Your team is currently carrying <<print setup.carriedWeight.toFixed(1)>> kg.<br>
 	<div id="collection">
 	</div>
 </div>
+<br>
 <div class="progress-bar-container">
   <<set _percent = (setup.carriedWeight / $totalCarry) * 100>>
 	<<if _percent <= 50>>
@@ -576,12 +577,467 @@ Thanks again for playing! I hope the dive was worth it.
 -FloricSpacer
 
 
-:: Appearance [noreturn nobr]
+:: Appearance [noreturn nobr cards appearance]
+	<<CarryAdjust>>
+	<div class="top" id="row">
+		<fieldset class="box top" id="left">
+			<legend>
+				basic characteristics
+			</legend>
+				You're a <<ShowAge $mc.realAge>> year old $mc.sex <<PerceivedRace $mc>><<if Math.round(12 * $mc.realAge) !== Math.round(12 * $mc.appAge)>>, but you appear to be <<ShowAge $mc.appAge>> old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.<br>
+				Your hair color is $mc.hair.<br>
+			<<if $mc.eyeCount===0>>
+				You have no eyes, only empty sockets. You are effectively blind without the use of Relics and you need your companions to guide you.<br>
+			<<elseif $mc.eyeCount===1 && $BionicEye>>
+				You have lost both of your biological eyes and in one of your sockets you have the Moonwatcher Relic, 
+				which allows you to perceive the world even better than when you had both your normal eyes.<br>
+			<<elseif $mc.eyeCount===1>>
+				You only have 1 eye, which is colored $mc.eyeColor. You can still see quite well, 
+				but depth perception has become quite hard. <br>
+			<<elseif $mc.eyeCount===2 && $BionicEye>>
+				You have one natural $mc.eyeColor eye left. Your other eye has been replaced with the Moonwatcher Relic, 
+				which allows you to perceive the world even better than when you had both your normal eyes.<br>
+			<<else>>
+				You have two normal, $mc.eyeColor eyes.<br>
+				You have $mc.skinColor colored $mc.skinType skin.<<if $mc.skinType.includes("furred") >> <<print setup.allCurses.MaximumFluff.appDesc>><</if>><br>
+			<</if>>
+			<<if $mc.armCount===1>>
+				You only have one arm.
+			<<if $BionicArm>>
+				It is a pretty cool bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount>2>>You have more arms now than you started with. You're not used to it yet, so they still get in the way.<<if $BionicArm>>One of them is a bionic arm though, with anti-gravity abilities.<</if>><<elseif $mc.armCount===2 &&  $BionicArm>>One of your arms has been replaced with a bionic arm with anti-gravity abilities.<br><</if>>
+			<<if $mc.legCount===1>>
+				You only have one leg.
+			<<elseif $mc.legCount===0>>
+				You don't have any legs anymore.
+				<<if $mc.hasCurse("Seafolk")>>
+					Instead you have a beautiful finned tail. Could you be considered a <<if $mc.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><br><</if>>
+			You have $mc.ears ears.<br>
+		</fieldset>
+		<div class="box top" id="portrait">
+			<img src="images/companions/willowserendip.jpg">
+		</div>
+		<fieldset class="box top" id="right">
+			<legend>
+				handicaps
+			</legend>
+			/*Actual Handicaps*/
+			<<set _movementHandicap = $mc.HandicapMovement>>
+			<<set _carryHandicap = $mc.carryHandicap>>
+			<<set _threatHandicap = $mc.HandicapThreat>>
 
+			<<if _movementHandicap !== 0>>
+				Your movement handicap is 
+			<<if _movementHandicap > 0>>
+			<span style="color: green;"><<print +_movementHandicap>></span>
+			<<else>>
+			<span style="color: red;"><<print _movementHandicap>></span>
+			<</if>>.<br>
+			<</if>>
 
-<<if settings.AIPortraitsMode == true>>
+			<<if _carryHandicap !== 0>>
+				Your carry weight handicap is 
+			<<if _carryHandicap > 0>>
+			<span style="color: green;"><<print +_carryHandicap>></span>
+			<<else>>
+			<span style="color: red;"><<print _carryHandicap>></span>
+			<</if>>.<br>
+			<</if>>
+
+			<<if _threatHandicap !== 0>>
+				Your threat handicap is 
+			<<if _threatHandicap > 0>>
+			<span style="color: green;"><<print +_threatHandicap>></span>
+			<<else>>
+			<span style="color: red;"><<print _threatHandicap>></span>
+			<</if>>.<br>
+			<</if>>
+			<<if _movementHandicap !== 0 || _carryHandicap !== 0 || _threatHandicap !== 0>>
+			<</if>>
+			/*Strength*/
+			You are <<BodyHeightText>> tall.<br>
+			<<if $mc.hasCurse("Weakling")>>
+				<<if $mc.fit > 5>>
+					Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. If it wasn't for your Curse, this would allow you to carry more weight and might have even marginally decreases your travel time.
+				<<elseif $mc.fit > 1>>
+					You possess a well-toned, athletic body. If it wasn't for your Curse, you might have been able to carry slightly more weight and required a bit less time to travel than a regular adventurer.
+				<<elseif $mc.fit > -1>>
+					You have an unremarkable yet healthy body, but thanks to your Curse you are as weak as a babe.
+				<<else>>
+					Your body appears rather out of shape - although with your Curse, no amount of exercise would improve your physical ability.
+				<</if>>
+			<<else>>
+				<<if $mc.fit > 5>>
+					Training with the World Stone has granted you a fit physique, particularly well-defined arm muscles. This will allow you to carry more weight and may even marginally decrease your travel time.
+				<<elseif $mc.fit > 1>>
+					You possess a well-toned, athletic body. Thus, you might be able to carry slightly more weight and require a bit less time to travel than a regular adventurer.
+				<<elseif $mc.fit > -1>>
+					You have an unremarkable yet healthy body.
+				<<else>>
+					Your body appears rather out of shape, and you could certainly benefit from some exercise. Consequently, you can carry significantly less and must take more frequent breaks while traveling compared to a fit expedition leader.
+				<</if>>
+			<</if>>
+			<<if $AegisWear>>Although imperceptible to an outside observer, your natural skeleton has been seamlessly replaced with a lightweight and resilient orichalcum framework.<br><hr><</if>>
+			/*Intelligence*/
+			<<if $HeavyHeadwear>>
+				Your thoughts are organized and focused, and you are able to understand complex concepts and ideas with ease.<br>
+			<<elseif $IQdrop > 25>>
+				You are still able to function and hold conversations with people, but most of the time you aren't quite mentally there anymore. Congratulations, you have become a certified <<if $mc.appGender<=5>>himbo! <<else>>bimbo! <</if>><br>
+			<<elseif $IQdrop > 20>>
+				Thinking has become so tiring that you try to do it as little as possible. It does cause you to sometimes lose track of what people are talking about, but most of the time when you just <<if $mc.appGender<=5>>smile and wink <<else>>giggle or bite your lip <</if>>people think its fine anyway.<br>
+			<<elseif $IQdrop > 15>>
+				You now have clear indications of mental deteroia.. detroiatici... thinking has become harder. You have noticed that your speech has been affected by it more and more. At least you can still get your message across.<br>
+			<<elseif $IQdrop > 10>>
+				You feel like you have slowed down mentally compared to normal. It's not that you suddenly forgot everything you learned but it just feels like your head is tired all the time. Maybe a little less thinking will allow you to recover a bit.<br>
+			<</if>>
+			/*Needs*/
+			<<if $mc.hasCurse("Semen Demon")>>
+				You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads per day.
+				<<if $mc.curses.some(e =>
+					e instanceof SemenDemon && (
+						($mc.penis > 0 && e.fluidType !== 'vaginal fluids') ||
+						($mc.vagina > 0 && e.fluidType !== 'semen')
+					))
+				>>
+					You can supply yourself with <<print Math.floor($mc.fluids/100*2)>> loads a day.
+				<</if>>
+				<<if $SemenDemonVec.length > 0>>
+					<<if $SemenDemonVec.length === 1>>
+						<<print $SemenDemonVec[0].name>>
+					<<else>>
+						<<print `${$SemenDemonVec.slice(0, -1).map(c => c.name).join(', ')} and ${$SemenDemonVec.at(-1).name}`>>
+					<</if>>
+					<<if $SemenDemonVec.length === 1>>is<<else>>are<</if>> providing you with <<print 2 * $SemenDemonVec.map(c => c.fluids / 100).reduce((a, b) => a + b, 0)>> loads a day.
+				<</if>>
+				<<print " ">>
+			<</if>>
+			<<set _quotaCount = setup.activeCurseCount("Quota")>>
+			<<if _quotaCount > 0>>
+				You need to directly bring other people to orgasm <<if $mc.hasCurse("Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $mc.hasCurse("Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<</if>><<print " ">>
+			<</if>>
+			<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
+			<<if _limelightCount > 0>>
+				You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the Abyss are now streamed to quite a lot of people. This means <<if $mc.hasCurse("Semen Demon") || $mc.hasCurse("Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $mc.hasCurse("Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
+			<</if>>
+		</fieldset>
+	</div>
+
+	<div class="middle" id="row">
+		<fieldset class="box middle" id="left">
+			<legend>
+				sexual traits
+			</legend>
+			/*chest*/
+			<<if $mc.breastsCor < 1>>
+				You possess a flat, <<GenderPronoun>> chest, sleek and unassuming.
+			<<elseif $mc.breastsCor < 2>>
+				Your AA cup chest is subtle and delicate, making you stand out from the crowd in your own unique way.
+			<<elseif $mc.breastsCor < 3>>
+				Adorning your chest are charming A cup breasts, petite yet alluring.
+			<<elseif $mc.breastsCor < 4>>
+				Your B cup breasts are soft and supple, a perfect balance between size and grace.
+			<<elseif $mc.breastsCor < 5>>
+				Blessed with perfectly round C cup breasts, you exude a natural elegance.
+			<<elseif $mc.breastsCor < 6>>
+				Your D cup breasts are generously sized, offering a delightful handful to admire.
+			<<elseif $mc.breastsCor < 7>>
+				With larger than most E cup breasts, you command attention and admiration.
+			<<elseif $mc.breastsCor < 8>>
+				Your F cup breasts are becoming quite substantial, but you carry them with poise and confidence.
+			<<elseif $mc.breastsCor < 9>>
+				Your G cup breasts are voluptuous, requiring extra care to avoid potential back pain.
+			<<elseif $mc.breastsCor < 10>>
+				Your H cup breasts are stunningly ample, making it important to be mindful of potential back pain.
+			<<elseif $mc.breastsCor < 11>>
+				Your I cup breasts are exceptionally full, so it's wise to watch out for serious back pain.
+			<<elseif $mc.breastsCor < 12>>
+				With your J cup breasts, it's essential to be cautious of serious back pain due to their impressive size.
+			<<elseif $mc.breastsCor < 13>>
+				Your K cup breasts are truly striking, but be aware of the risk for serious back pain.
+			<<elseif $mc.breastsCor < 14>>
+				Boasting L cup breasts, you should remain vigilant for potential serious back pain.
+			<<elseif $mc.breastsCor < 15>>
+				Your M cup breasts are both captivating and challenging, making it important to watch for serious back pain.
+			<<elseif $mc.breastsCor < 16>>
+				With your N cup breasts, it's crucial to be cautious of very serious back pain.
+			<<elseif $mc.breastsCor < 17>>
+				Your O cup breasts are astounding, but it's important to watch out for very serious back pain.
+			<<elseif $mc.breastsCor < 18>>
+				Possessing P cup breasts, you should be mindful of the risk for very serious back pain.
+			<<elseif $mc.breastsCor < 19>>
+				With your Q cup breasts, it's essential to watch out for very serious back pain.
+			<<elseif $mc.breastsCor < 20>>
+				Your R cup breasts are truly magnificent, but be cautious of the potential for very serious back pain.
+			<<elseif $mc.breastsCor >= 20>>
+				Boasting an incredible S cup size, you must always be vigilant for the risk of extremely serious back pain.
+			<</if>>
+			<<if $time-$menCycleT-$menCycleVar>20 && $menCycleFlag>>
+				They are a bit sore at the moment.
+			<</if>>
+			<br>
+			<<if $mc.lactation > 1 >>
+				You are heavily lactating at all times, and need frequent milking breaks. Ignoring this causes your breasts to get sore and expand rather quickly.<br>
+			<<elseif $mc.lactation > 0  >>
+				You are lactating at all times, but thankfully it's just enough to be a bit annoying.<br>
+			<</if>>
+			/* Crotch */
+			<<if $mc.vagina === 0 && $mc.penisCor === 0>>
+				You have a smooth and featureless doll-like groin.<br>
+			<</if>>
+			<<if $algalSize > 0>>
+				Your <<if $mc.sex === "male">>testicles are<<elseif $mc.sex === "female">>clitoris is<<else>>testicles and clitoris are<</if>> approximately <<print (10 * $algalSize)>>% larger than usual due to drinking contaminated melted snow from the fourth layer.<<print " ">>
+			<</if>>
+			/*Crotch-Vagina*/
+			<<if $mc.vagina === 1>>
+			<<if $mc.hasCurse("Colossal-able")>>
+				You have a cavernous pussy sitting between your legs, most of your lovers would be able to fit their entire body inside you without even filling you up.
+			<<elseif $mc.hasCurse("Minish-ish")>>
+				You have a miniscule pussy to match your size, making it very difficult to have sex with normal-sized people.
+			<<else>>
+				You have a nice pussy sitting between your legs, pretty typical for a woman in your demographics.
+			<</if>>
+			<br>
+			<</if>>
+			/*Crotch-Penis*/
+			<<if $mc.penisCor>=1>>
+			<<if $mc.penisCor === 1>>
+				You have a tiny penis of <<PenisLengthText>>, which is honestly barely larger than a clitoris.
+			<<elseif $mc.penisCor <= 2.5>>
+				You have a very small penis of <<PenisLengthText>>. You need some very tight pants to show something that even remotely resembles a bulge in your crotch.
+			<<elseif $mc.penisCor <= 3.5>>
+				You have a small penis of <<PenisLengthText>>. You are a bit self conscious about it, but it works perfectly well.
+			<<elseif $mc.penisCor <= 4.5>>
+				You have a below average penis of <<PenisLengthText>>. Yeah, you know it's not that big, but you try not to get too hung up on it.
+			<<elseif $mc.penisCor <= 5.5>>
+				You have a pretty average penis of <<PenisLengthText>>. Nothing to be ashamed of, but nothing to write home about either.
+			<<elseif $mc.penisCor <= 6.5>>
+				You have a totally average penis of <<PenisLengthText>>, very typical for a man in your demographics.
+			<<elseif $mc.penisCor <= 7.5>>
+				You have a slightly above average penis of <<PenisLengthText>>, not anything out of the ordinary, but some people may particularly enjoy it.
+			<<elseif $mc.penisCor <= 8.5>>
+				You have a large penis of <<PenisLengthText>>, people who like larger sizes are likely to be impressed.
+			<<elseif $mc.penisCor <= 9.5>>
+				You have a very large penis of <<PenisLengthText>>, size queens dream of meeting someone like you, but tighter orifices can be a bit of an issue occasionally.
+			<<elseif $mc.penisCor > 9.5 && $mc.penisCor < 100>>
+				You have an enormous penis of <<PenisLengthText>>. Are you even going to able to have sex with this monster schlong?
+			<<elseif $mc.penisCor >= 100>>
+				You have a truly gargantuan penis that hangs at a size of <<PenisLengthText true>> long. Sex with normal sized people would need to be very different than it used to be.
+			<</if>>
+			<<if $mc.doublePenis>>
+				In fact, you have two of them!
+			<</if>>
+			<br>
+			<</if>>
+			/*Behaviour*/
+			<<if $mc.libido < 1>>
+				You have a very low libido, without much interest at all in sex.
+			<<elseif $mc.libido < 2>>
+				You have a below average libido, you sometimes thinks about sex, but most of the time you are still pretty indifferent about it.
+			<<elseif $mc.libido < 3>>
+				You have your normal libido, being somewhat interested in sex, but you can certainly control yourself.
+			<<elseif $mc.libido < 4>>
+				You have a slightly elevated libido. You will feel hot and bothered more regularly than you are accustomed to. Uncomfortable, but manageable.
+			<<elseif $mc.libido < 5>>
+				You have an elevated libido. Your sexual urges are frequent and very difficult to resist. Can be only barely hidden; leading a normal lifestyle will be possible, but frequently frustrating.
+			<<elseif $mc.libido < 6>>
+				Your libido would be considered a symptom of a mental disorder. You're hopelessly addicted to sex, and it is impossible to keep your desired hidden.
+			<<elseif $mc.libido < 7>>
+				You desire sex about as much as basic necessities as food and water, perhaps slightly more. You go to great lengths for sex, and it dominates your life.
+			<<elseif $mc.libido >= 7>>
+				You need sex constantly - having sex will only sate your hunger for a matter of minutes, and you will find little meaning in things that don't lead to you having more sex.
+			<</if>>
+			<<if $mc.subdom > 0>>
+				You feel you've become more submissive than you were when you started this journey.<br>
+			<<elseif $mc.subdom < 0>>
+				You feel you've become more dominant than you were when you started this journey.<br>
+			<</if>>
+			/*Behaviour Orgasm*/
+			<<set $randomOrgasms = $mc.curses.filter(e => e.name === "Random Orgasms").length>><<if setup.activeCurseCount("Random Orgasms") === 1>>Once each day, randomly, you spontaneously orgasm, sometimes in public.<br><<elseif setup.activeCurseCount("Random Orgasms") > 1>><<print setup.activeCurseCount("Random Orgasms")>> times each day you spontaneously orgasm without any stimulation, sometimes in public.<br><</if>>
+			<<if $mc.loweredStandards > 0 && $mc.loweredStandards < 30>>
+				You notice you're not as picky about who you find attractive as you used to be, or maybe everybody is just a bit more good-looking than they used to be.<br>
+			<<elseif $mc.loweredStandards >= 30 && $mc.loweredStandards < 60>>
+				You have had sexual fantasies about a lot more people than normal. Since when did the number of attractive people get so high?<br>
+			<<elseif $mc.loweredStandards >= 60>>
+				It's getting crazy how much more attractive everybody has become. Everybody basically looks like a knock-out hottie!<br>
+			<</if>>
+			/*Pregnancy*/
+			<<if $mc.extraWombs.length > 0 >>
+				You have an extra womb in your $mc.extraWombs[0]. <br>
+			<</if>>
+			<<if $mc.extraWombs.length > 1>>
+				You have another extra womb in your $mc.extraWombs[1]. <br>
+			<</if>>
+			<<if 120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180 && !$menFirstCycle>>
+				Your pregnancy is now visibly noticeable, with your belly round and growing. You occasionally feel a gentle flutter within, a reminder of the life blossoming inside you.<br><hr>
+			<<elseif 120 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 180 && $menFirstCycle>>
+				You've gained some weight, and your belly has become rounder. Every so often, you experience ticklish spasms from within, possibly a sign of your baby's movements.<br><hr>
+			<<elseif 180 <= setup.daysConsideredPregnant($mc) && setup.daysConsideredPregnant($mc) < 240>>
+				Your belly is now large and unmistakably that of a pregnant person. Your child's movements within your womb are frequent, and at times, the intensity of the sensations surprises you.<br><hr>
+			<<elseif setup.daysConsideredPregnant($mc) >= 240 && setup.daysUntilDue($mc) > 0>>
+				Your belly is sizable and clearly pregnant. Your child often tries to move and kick<<if $mc.tentacleFucked>>, although sometimes it feels more like slithering<</if>> within your womb, but space is becoming limited. The sensations can be quite intense, but you sense that your pregnancy is nearing its end.<br><hr>
+			<</if>>
+			<<if !(setup.isPregnant($mc) && 120 <= setup.daysConsideredPregnant($mc)) && $time - $MaximCycleT > 28 && $MaximCycleT_flag>>
+				Your belly has expanded significantly due to the parasite's growth. Each of its movements is clearly visible when you observe your midsection. To the unsuspecting eye, you could easily be mistaken for someone who is six months pregnant.<br><hr>
+			<<elseif !(setup.isPregnant($mc) && 120 <= setup.daysConsideredPregnant($mc)) && $time - $MaximCycleT > 21 && $MaximCycleT_flag>>
+				The parasite within you has grown noticeably. Each of its motions feels like a distinct push against your inner walls. To an unknowing observer, your expanded belly might suggest early pregnancy.<br><hr>
+			<<elseif !(setup.isPregnant($mc) && 120 <= setup.daysConsideredPregnant($mc)) && $time - $MaximCycleT > 14 && $MaximCycleT_flag>>
+				You sense the parasite's growth as a series of gentle flutters inside. Though your clothing might hide the slight bulge in your belly, to you, it appears as though the early stages of a pregnancy are setting in.<br><hr>
+			<</if>>
+			<<if $bewitchBabies > 0>>
+				Due to your consumption of the contaminated rainwater of the second layer, your fertility has greatly increased. The average amount of  babies born from any pregnancy you're involved in is increased by <<print $bewitchBabies>>.<<print " ">>
+			<</if>>
+		</fieldset>
+		<fieldset class="box middle" id="right">
+			<legend>
+				nonsexual stuff
+			</legend>
+			<<if $companionSwitched > 0>>
+				You are in the body originally belonging to <<print setup.id2name($companionSwitched)>> and <<print setup.id2name($companionSwitched)>> is in your old body.<br>
+			<</if>>
+			/*Gender*/
+			<<if $mc.gender <= 1>>
+				You appear as a typical man, with a distinctively masculine facial structure and a body profile that clearly reads as male from a distance.<br>
+			<<elseif $mc.gender === 2>>
+				You appear as a man, but your features are somewhat softer than average. While no one would mistake you for a woman, the term "twink" might come to mind for some observers.<br>
+			<<elseif $mc.gender === 3>>
+				You have a notably androgynous appearance. With clothes on, most people might perceive you as an effeminate man, while others could see you as a more masculine woman.<br>
+			<<elseif $mc.gender === 4>>
+				You have a strikingly androgynous appearance. With clothes on, most people might perceive you as a masculine woman, while others could see 	you as a more feminine man.<br>
+			<<elseif $mc.gender === 5>>
+				You appear as a woman with slightly masculine features. Many people might assume you have a tomboyish style based on your appearance.<br>
+			<<elseif $mc.gender >= 6>>
+				You appear as a typical woman, with a feminine facial structure and a body profile that is unmistakably female from a distance.<br>
+			<</if>>
+			/*Excess Parts*/
+			<<if $mc.hasCurse("Horny")>>
+				You have <<if $hornCount === 1>>a<<else>>two<</if>> noticeable $hornAdjective $hornVariation horn<<if $hornCount > 1>>s<</if>> protruding from
+				<<switch $hornVariation>>
+					<<case "rhino">>
+						your nose.
+					<<default>>
+						<<if $hornCount === 1>>the center of your forehead<<else>>your head<</if>>.
+				<</switch>>
+				<br>
+			<</if>>
+			<<if $mc.tail.length > 0>>
+			<<for $i = 0; $i < $mc.tail.length; $i++>>
+					You have a $mc.tail[$i] tail right above your butt.<br>
+			<</for>>
+			<</if>>
+			/*Relics*/
+			<<if $DaedalusEquip>>
+				You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br>
+			<</if>>
+			/*clothing*/
+			<<if $dollevent2>>
+				You find yourself wearing a tattered pink dress that bears a striking resemblance to the one worn by your doll. Frustratingly, this situation prevents you from changing into other clothes, even in extreme conditions.
+				<<if $dolleventWet>0>>
+					To make matters worse, you are also stuck wearing a disposable-type diaper beneath your dress. No matter how hard you try, it remains securely fastened around your waist, with the tapes seemingly nonfunctional.
+				<</if>>
+				<br><hr>
+			<</if>>
+			<<if $WettingSolution===2>>
+				Instead of your typical underwear, you now don Maru's protective absorbent underwear. However, calling it merely "protective" seems like a gross understatement. Maru designed it to be so bulky that it feels as if you're walking around in a cloth diaper.
+			<</if>>
+		</fieldset>
+	</div>
+
+	<div class="bottom" id="row">
+		<fieldset class="box bottom" id="left">
+			<legend>ID</legend>
+			<div class="idcard-container idcard-main">
+				<div class="idcard-border-pattern"></div>
+				<div class="idcard-mark-top-right">
+					❖
+				</div>
+				<div class="idcard-mark-bottom-left">
+					❖
+				</div>
+				<div class="idcard-watermark-stripe">
+					OTA OTA OTA OTA OTA OTA OTA OTA OTA OTA OTA OTA
+				</div>
+				<div class="idcard-seal">
+					OUTSET TOWN OFFICIAL SEAL
+				</div>
+				<div class="idcard-title">
+					Diver's License
+				</div>
+				<div class="idcard-content">
+					<div class="idcard-photo-section">
+						<div class="idcard-photo">
+							<img src="images/companions/willowserendip.jpg"
+							alt="Willow Serendip" style="width: 100%; height: 100%;">
+						</div>
+						<div class="idcard-name">Willow Serendip</div>
+					</div>
+					<div class="idcard-info">
+						<div class="idcard-info-row">
+							<span class="idcard-info-label">
+								ID #:
+							</span>
+							<span class="idcard-info-value">
+								1318162144125
+							</span>
+						</div>
+						<div class="idcard-info-row">
+							<span class="idcard-info-label">
+								Sex:
+							</span>
+							<span class="idcard-info-value">
+								F
+							</span>
+						</div>
+						<div class="idcard-info-row">
+							<span class="idcard-info-label">
+								Eye Color:
+							</span>
+							<span class="idcard-info-value">
+								Blue
+							</span>
+						</div>
+						<div class="idcard-info-row">
+							<span class="idcard-info-label">
+								Hair Color:
+							</span>
+							<span class="idcard-info-value">
+								Blonde
+							</span>
+						</div>
+						<div class="idcard-info-row">
+							<span class="idcard-info-label">
+								License Type:
+							</span>
+							<span class="idcard-info-value">
+								NPD
+							</span>
+						</div>
+						<div class="idcard-info-row">
+							<span class="idcard-info-label">
+								Issuer:
+							</span>
+							<span class="idcard-info-value">
+								OTA
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="box bottom" id="right">
+			<legend>
+				Curse box
+			</legend>
+			<<if $mc.curses.length > 0>>
+				<<for _i = 0; _i < $mc.curses.length; _i++>>
+					<<print $mc.curses[_i].appDesc>>
+				<</for>>
+			<</if>>
+		</fieldset>
+
+	</div>
+
+/* <<if settings.AIPortraitsMode == true>>
 	<<if settings.OverridePortrait == true>>
-		<img src="images/GeneratedPortraits/CharacterPortraitOverride.jpg" alt="Override Portrait Image" style="max-width: 70%;">
+		<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" style="max-width: 70%;">
 	<<elseif setup.firstPortraitGen>>
 		<img class="dalleImage" src="" style="max-width: 70%;">
 		<<run setup.displayImage()>>
@@ -963,9 +1419,9 @@ Overall, the world would probably see you as a <<PerceivedStature $mc>> <<Percei
 		<<set $userAPIKey = "x">>
         <<goto "Appearance">>
     <</button>></span><br><br>
-<</if>>
+<</if>> */
 
-<button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Back</button>
+/* <button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Back</button> */
 
 :: Layer Notes [noreturn nobr]
 Notes on layers visited:<br><br>
@@ -1771,6 +2227,16 @@ What would you like to do with your Managed Misfortune?
 		<</if>>
 	<</capture>>
 <</for>>
+
+<<if $devouredRelics.length > 0>>
+	<b>Devoured Relics:</b><br> 
+	<<for _i = 0; _i < $devouredRelics.length; _i++>>
+		<<capture _i>>
+			<button class="dark-btn obsidian" data-passage="Devoured Relic Info" data-setter="$temp = _i">$devouredRelics[_i].name</button><<if setup.functionalRelics.includes($devouredRelics[_i].name)>> ☸<</if>><br>
+		<</capture>>
+	<</for>>
+	<br><br>
+<</if>>
 
 <button class="dark-btn obsidian" data-passage="Use Items and Relics">Back</button>
 
@@ -2748,7 +3214,7 @@ You pack the newly made rope carefully, ready for whatever challenges lie ahead.
         Once your portrait is generated, you can follow the next step to save it for long term use, otherwise it will be permanently overridden when you generate a new portrait.
         
         <br><br>
-        <b>Right click the image and save it if you want to be able to see it in the future. You can use it as an image named "CharacterPortraitOverride.jpg" in the folder /images/GeneratedPortraits if you would like to use it with the custom portrait setting in the future.</b>
+        <b>Right click the image and save it if you want to be able to see it in the future. You can use it as an image named "CharacterPortraitOverride.png" in the folder /images/GeneratedPortraits if you would like to use it with the custom portrait setting in the future.</b>
         <br><br>
 
         <div class="portrait-navigation">
