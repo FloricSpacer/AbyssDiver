@@ -2304,14 +2304,14 @@ window.setup = {
                         th.textContent = '';
                         break;
                     case 'weight':
-                        th.textContent = '⚖';
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/weight.png"style="margin-left: 0px;" alt="weight"></span>`;
                         break;
                     case 'value':
                     case 'cost':
-                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" class="header-icon" style="margin-left: 0px;" alt="cost"></span>`;
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png"style="margin-left: 0px;" alt="cost"></span>`;
                         break;
                     case 'corr':
-                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" class="header-icon" style="margin-left: 0px;" alt="corruption"></span>`;
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png"style="margin-left: 0px;" alt="corruption"></span>`;
                         break;
                     default:
                         th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
