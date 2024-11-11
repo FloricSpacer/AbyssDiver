@@ -376,7 +376,7 @@ Macro.add('say', {
        const isPlayer = person === State.variables.mc;
        if (isPlayer) {
            if (settings.OverridePortrait) {
-               imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.jpg";
+               imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
            } else if (setup.firstPortraitGen) {
                imgSrc = "images/Player Icons/playerF.jpg";
                setup.displayPortraitImage();
@@ -451,7 +451,7 @@ Setting.addToggle("AIPortraitsMode", {
 });
 
 Setting.addToggle("OverridePortrait", {
-    label : "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.jpg' image file.",
+    label : "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
     default  : false,
 });
 
@@ -1763,7 +1763,7 @@ Macro.add('sidebar-widget', {
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                         `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
                         (settings.OverridePortrait ?
-                        `<img src="images/GeneratedPortraits/CharacterPortraitOverride.jpg" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                        `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
                         `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
                     }
                 </div>
@@ -2304,14 +2304,14 @@ window.setup = {
                         th.textContent = '';
                         break;
                     case 'weight':
-                        th.textContent = '⚖';
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/weight.png"style="margin-left: 0px;" alt="weight"></span>`;
                         break;
                     case 'value':
                     case 'cost':
-                        th.textContent = '🪙';
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png"style="margin-left: 0px;" alt="cost"></span>`;
                         break;
                     case 'corr':
-                        th.textContent = '💥';
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png"style="margin-left: 0px;" alt="corruption"></span>`;
                         break;
                     default:
                         th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
@@ -2363,6 +2363,9 @@ window.setup = {
                                     console.error('Error playing passage:', error);
                                 }
                             });
+                        } else if (header === 'count' && dataUrl === 'Relic' && row[header] === 1) {
+                            // Don't show anything if it's a Relic with count of 1
+                            td.textContent = '';
                         } else {
                             td.textContent = row[header];
                         }
@@ -2410,7 +2413,7 @@ window.setup = {
             tr.classList.add('inventory-screen');
             const td = document.createElement('td');
             td.classList.add('inventory-screen');
-            td.textContent = "No data available";
+            td.textContent = "No items found.";
     
             const headerCount = data && data[0] ? 
                 Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length : 
@@ -2441,7 +2444,7 @@ window.setup = {
                 pure: Number([0, 3, 5, 7].reduce((sum, i) => sum + SugarCube.State.variables.flaskMatrix[i], 0)),
                 bottled: Number(SugarCube.State.variables.flaskMatrix[8]),
             };
-            const totalWidth = values.bottled + values.total;
+            const totalWidth = values.bottled + values.total + SugarCube.State.variables.items[2].count;
             const filledWidth = values.bottled + values.impure + values.pure;
             const waterWidth = (filledWidth / totalWidth) * 100;
 
