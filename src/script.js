@@ -2308,10 +2308,10 @@ window.setup = {
                         break;
                     case 'value':
                     case 'cost':
-                        th.textContent = '🪙';
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/dubloons.png" class="header-icon" style="margin-left: 0px;" alt="cost"></span>`;
                         break;
                     case 'corr':
-                        th.textContent = '💥';
+                        th.innerHTML = `<span class="sidebar-item"><img src="${setup.ImagePath}Icons/corruption.png" class="header-icon" style="margin-left: 0px;" alt="corruption"></span>`;
                         break;
                     default:
                         th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
@@ -2363,6 +2363,9 @@ window.setup = {
                                     console.error('Error playing passage:', error);
                                 }
                             });
+                        } else if (header === 'count' && dataUrl === 'Relic' && row[header] === 1) {
+                            // Don't show anything if it's a Relic with count of 1
+                            td.textContent = '';
                         } else {
                             td.textContent = row[header];
                         }
@@ -2410,7 +2413,7 @@ window.setup = {
             tr.classList.add('inventory-screen');
             const td = document.createElement('td');
             td.classList.add('inventory-screen');
-            td.textContent = "No data available";
+            td.textContent = "No items found.";
     
             const headerCount = data && data[0] ? 
                 Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length : 
@@ -2441,7 +2444,7 @@ window.setup = {
                 pure: Number([0, 3, 5, 7].reduce((sum, i) => sum + SugarCube.State.variables.flaskMatrix[i], 0)),
                 bottled: Number(SugarCube.State.variables.flaskMatrix[8]),
             };
-            const totalWidth = values.bottled + values.total;
+            const totalWidth = values.bottled + values.total + SugarCube.State.variables.items[2].count;
             const filledWidth = values.bottled + values.impure + values.pure;
             const waterWidth = (filledWidth / totalWidth) * 100;
 
