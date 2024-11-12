@@ -2475,5 +2475,19 @@ window.setup = {
             document.getElementById('empty').dataset.value = SugarCube.State.variables.items[2].count;
         }
         updateWaterGradient();
-    }
+    },
+    randomCurseApp : function() {
+        const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
+        if (availableCurses.length > 0) {
+            const randomCurse = availableCurses[Math.floor(Math.random() * availableCurses.length)];
+            const curseImage = document.querySelector("#right .curse-box-image img");
+            curseImage.src = `./images/${randomCurse.picture}`;
+            const curseTitle = document.querySelector("#right .curse-box-title");
+            curseTitle.textContent = randomCurse.name;
+            const curseDescription = document.querySelector("#right .curse-box-description");
+            curseDescription.textContent = randomCurse._appDesc;
+        } else {
+            console.warn("No curses with an _appDesc available.");
+        }
+}
 }
