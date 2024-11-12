@@ -73,7 +73,7 @@ variables
 Object.defineProperties(Number.prototype, {
     // Rounds the number to the given number of decimals.
     toRounded: {
-        value(decimals) { return Math.round(10**decimals * this) / 10**decimals; },
+        value(decimals) { return Math.round(10 ** decimals * this) / 10 ** decimals; },
     }
 });
 
@@ -110,19 +110,19 @@ Config.navigation.override = function (destPassage) {
     if (StoryVar.brokerUsed === true && StoryVar.corruption < 0) {
         return "BrokerEnd";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollWarning && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length===0){
+    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 10 && !StoryVar.dollWarning && !StoryVar.dollevent2 && StoryVar.hiredCompanions.length === 0) {
         return "DollWarning";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2){
+    if (StoryVar.ownedRelics.some(e => e.name === "Creepy Doll") && isFinite(StoryVar.mc.appAge) && StoryVar.mc.appAge < 4 && StoryVar.dollevent2) {
         return "DollEnd";
     }
     if (StoryVar.endSpectre + 900 <= StoryVar.time && StoryVar.endSpectre > 0 && !StoryVar.voidDiamondActive) {
         return "SpectreEnd";
     }
-    if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer === 0 ){
+    if (StoryVar.ownedRelics.some(e => e.name === "Starlit Conquest") && StoryVar.currentLayer === 0) {
         return "Starlit Unlocked";
     }
-    if (StoryVar.PulseBloomUse == "Monster" && StoryVar.transformMonsterScene){
+    if (StoryVar.PulseBloomUse == "Monster" && StoryVar.transformMonsterScene) {
         return "Monster Transformation";
     }
     if (StoryVar.boundBanditEnding) {
@@ -192,7 +192,7 @@ Config.navigation.override = function (destPassage) {
         return "Labor Scene Companion";
     }
 
-    if ((StoryVar.time - StoryVar.pregnant_surprise.pregnantT > 45 && StoryVar.pregnant_surprise.o.mindSex == "female")||(StoryVar.time - StoryVar.pregnant_surprise.pregnantT > 180 && StoryVar.pregnant_surprise.o.mindSex == "male")){
+    if ((StoryVar.time - StoryVar.pregnant_surprise.pregnantT > 45 && StoryVar.pregnant_surprise.o.mindSex == "female") || (StoryVar.time - StoryVar.pregnant_surprise.pregnantT > 180 && StoryVar.pregnant_surprise.o.mindSex == "male")) {
         return "Pregnancy Swap Surprise";
     }
 
@@ -208,7 +208,7 @@ Config.navigation.override = function (destPassage) {
         return "Bandit Joins";
     }
     if (StoryVar.companionBandit.affec < -8 && StoryVar.escapeT < StoryVar.time && !StoryVar.companionBandit.swap && StoryVar.hiredCompanions.some(e => e.id === setup.companionIds.bandit)) {
-        StoryVar.escapeT = StoryVar.time + 7 + random(0,7);
+        StoryVar.escapeT = StoryVar.time + 7 + random(0, 7);
         return "Bandit Escape";
     }
     if (StoryVar.currentLayer === 0 && StoryVar.mc.imageIcon === "Icons/banditIcon_released.jpg" &&
@@ -258,7 +258,7 @@ $(document).on(':passagestart', ev => {
     // Update $hubReturn.
     const currentPassage = State.passage;
     const previousLayer = getLayerFromPassageName(vars.hubReturn);
-    
+
     // Check if the player has changed layers
     if (vars.currentLayer !== previousLayer) {
         // Reset hubReturn when changing layers
@@ -268,7 +268,7 @@ $(document).on(':passagestart', ev => {
             vars.hubReturn = `Layer${vars.currentLayer} Hub`;
         }
     }
-    
+
     // Update hubReturn if the current passage has the "hub" tag
     if (tags().includes('hub')) {
         vars.hubReturn = currentPassage;
@@ -305,9 +305,9 @@ $(document).on(':passagestart', ev => {
     for (const companions of companionArrays) {
         for (const [i, companion] of companions.entries()) {
             const name =
-                companion.id === setup.companionIds.twin   ? 'Twin' :
-                companion.id === setup.companionIds.bandit ? 'Bandit'
-                                                           : companion.name;
+                companion.id === setup.companionIds.twin ? 'Twin' :
+                    companion.id === setup.companionIds.bandit ? 'Bandit'
+                        : companion.name;
             const companionVar = vars[`companion${name}`];
             if (companionVar) {
                 companions[i] = companionVar;
@@ -339,7 +339,7 @@ $(document).on(':passagestart', ev => {
             const relicVar = relicVars.find(relicVar => relic.name === relicVar.name);
             if (relicVar) {
                 relics[i] = relicVar;
-            } else if (relicVar!= "Starlit Conquest Activated") {
+            } else if (relicVar != "Starlit Conquest Activated") {
                 // Purity tree plank doesn't have a relic variable
                 //console.error(`Couldn't find numbered relic variable for relic with name ${relic.name}!`);
             }
@@ -370,49 +370,49 @@ setup.SoundPath = setup.Path + "sounds/";
 Macro.add('say', {
     tags: null,
     handler: function () {
-       const person = this.args[0];
-       const imageIcon = this.args[1];
-       let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
-       const isPlayer = person === State.variables.mc;
-       if (isPlayer) {
-           if (settings.OverridePortrait) {
-               imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
-           } else if (setup.firstPortraitGen) {
-               imgSrc = "images/Player Icons/playerF.jpg";
-               setup.displayPortraitImage();
-           } else {
-               // Use the new numbered portrait system
-               const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
-               const portraitNumber = State.variables.portraitNumber || 0;
-               imgSrc = `images/Player Icons/player${gender}${portraitNumber}.jpg`;
-           }
-       }
-       const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
-       // Use custom color for companions, fallback to gender-based color for others
-       let borderColor;
-       const companionColors = {
-           'saeko': '#D3CDCD', // Light gray with a hint of red
-           'lily': '#DDA0DD', // Pinkish lavender
-           'khemia': '#3480E3', // Deep masculine blue
-           'cloud': '#BF5D17', // Mahogany brown
-           'maru': '#ADD8E6', // Light feminine blue
-           'cherry': '#D13D3D', // Clear bright red
-           'ai': 'lightpink'
-       };
-       const isCompanion = Object.values(setup.companionIds).includes(person?.id);
-       if (isCompanion && !isPlayer) {
-           const companionName = Object.keys(setup.companionIds).find(key => setup.companionIds[key] === person.id);
-           borderColor = companionColors[companionName];
-       } else {
-           const genderColors = {
-               1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush',
-               5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink',
-               100: 'rgb(136, 228, 56)'
-           };
-           borderColor = genderColors[person?.genderVoice] || 'white';
-       }
-       const output =
-       `<<nobr>>
+        const person = this.args[0];
+        const imageIcon = this.args[1];
+        let imgSrc = setup.ImagePath + (imageIcon ?? person?.imageIcon ?? '');
+        const isPlayer = person === State.variables.mc;
+        if (isPlayer) {
+            if (settings.OverridePortrait) {
+                imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
+            } else if (setup.firstPortraitGen) {
+                imgSrc = "images/Player Icons/playerF.jpg";
+                setup.displayPortraitImage();
+            } else {
+                // Use the new numbered portrait system
+                const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
+                const portraitNumber = State.variables.portraitNumber || 0;
+                imgSrc = `images/Player Icons/player${gender}${portraitNumber}.jpg`;
+            }
+        }
+        const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
+        // Use custom color for companions, fallback to gender-based color for others
+        let borderColor;
+        const companionColors = {
+            'saeko': '#D3CDCD', // Light gray with a hint of red
+            'lily': '#DDA0DD', // Pinkish lavender
+            'khemia': '#3480E3', // Deep masculine blue
+            'cloud': '#BF5D17', // Mahogany brown
+            'maru': '#ADD8E6', // Light feminine blue
+            'cherry': '#D13D3D', // Clear bright red
+            'ai': 'lightpink'
+        };
+        const isCompanion = Object.values(setup.companionIds).includes(person?.id);
+        if (isCompanion && !isPlayer) {
+            const companionName = Object.keys(setup.companionIds).find(key => setup.companionIds[key] === person.id);
+            borderColor = companionColors[companionName];
+        } else {
+            const genderColors = {
+                1: 'deepskyblue', 2: 'aqua', 3: 'rgb(185, 229, 240)', 4: 'lavenderblush',
+                5: 'lightpink', 6: 'hotpink', 98: 'ghostwhite', 99: 'lightpink',
+                100: 'rgb(136, 228, 56)'
+            };
+            borderColor = genderColors[person?.genderVoice] || 'white';
+        }
+        const output =
+            `<<nobr>>
         <div class="say" style="border: 3px solid ${borderColor};">
           <div class="avatar-container" style="border: 3px solid ${borderColor}; border-radius: 10px; padding: 0 0 5px;">
             <div class="avatar" style="--border-color: ${borderColor};">
@@ -427,18 +427,18 @@ Macro.add('say', {
           </div>
         </div>
        <</nobr>>`;
-       $(this.output).wiki(output);
+        $(this.output).wiki(output);
     }
 });
 
 Setting.addRange("volume", {
-    label    : "Volume",
-    min      : 0,
-    max      : 1,
-    step     : 0.1,
-    default : (typeof settings.volume === 'number' && setting.volume || 0.5),
-    onInit : window.setMasterVolume,
-    onChange : window.setMasterVolume
+    label: "Volume",
+    min: 0,
+    max: 1,
+    step: 0.1,
+    default: (typeof settings.volume === 'number' && setting.volume || 0.5),
+    onInit: window.setMasterVolume,
+    onChange: window.setMasterVolume
 });
 
 
@@ -446,80 +446,80 @@ Setting.addRange("volume", {
 Setting.addHeader("Portrait Settings");
 
 Setting.addToggle("AIPortraitsMode", {
-    label : "Enable the use of AI to generate your own portrait.",
-    default  : false,
+    label: "Enable the use of AI to generate your own portrait.",
+    default: false,
 });
 
 Setting.addToggle("OverridePortrait", {
-    label : "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
-    default  : false,
+    label: "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+    default: false,
 });
 
 Setting.addHeader("Other Settings");
 
 Setting.addToggle("sidebarToggle", {
-    label : "Allows you to hide the sidebar with a toggle button.",
-    default  : false,
+    label: "Allows you to hide the sidebar with a toggle button.",
+    default: false,
 });
 
 Setting.addToggle("RandomizedThreats", {
-    label : "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
-    default  : true,
+    label: "Enable a small amount of randomness when evaluating the results of some deep threat encounters",
+    default: true,
 });
 
 Setting.addToggle("EncounterFiat", {
-    label : "Allow you to use custom combinations of Relics to defeat <i>very</i> difficult encounters",
-    default  : false,
+    label: "Allow you to use custom combinations of Relics to defeat <i>very</i> difficult encounters",
+    default: false,
 });
 
 Setting.addToggle("accessible", {
-    label : "Disable a small amount of extra fancy text formatting",
-    default  : false,
+    label: "Disable a small amount of extra fancy text formatting",
+    default: false,
 });
 
 Setting.addHeader("Content Settings");
 
 Setting.addToggle("MaleSceneToggleFilter", {
-    label : "Enable sex scenes involving male characters",
-    default  : true,
+    label: "Enable sex scenes involving male characters",
+    default: true,
 });
 
 Setting.addToggle("FemaleSceneToggleFilter", {
-    label : "Enable sex scenes involving female characters",
-    default  : true,
+    label: "Enable sex scenes involving female characters",
+    default: true,
 });
 
 Setting.addToggle("OtherSceneToggleFilter", {
-    label : "Enable sex scenes involving futa characters or characters without genitals",
-    default  : true,
+    label: "Enable sex scenes involving futa characters or characters without genitals",
+    default: true,
 });
 
 Setting.addToggle("MenCycleToggleFilter", {
-    label : "Hide messages containing information about your menstrual cycle",
-    default  : true,
+    label: "Hide messages containing information about your menstrual cycle",
+    default: true,
 });
 
 Setting.addToggle("WSHidden", {
-    label : "Hide content involving watersports/urine",
-    default  : false,
+    label: "Hide content involving watersports/urine",
+    default: false,
 });
 
 Setting.addToggle("amputationHidden", {
-    label : "Hide content involving voluntary amputation. This includes non-physical crippling, such as losing the ability to hear or speak",
-    default  : false,
+    label: "Hide content involving voluntary amputation. This includes non-physical crippling, such as losing the ability to hear or speak",
+    default: false,
 });
 
 Setting.addToggle("ArachnophobiaMode", {
-    label : "Arachnophobia mode (Hide any images of spiders that would appear)",
-    default  : false,
+    label: "Arachnophobia mode (Hide any images of spiders that would appear)",
+    default: false,
 });
 
 Setting.addRange("appAgeControl", {
-    label    : "Minimum apparent age your physical body can regress to (3-18):",
-    min      : 3,
-    default  : 3,
-    max      : 18,
-    step     : 1,
+    label: "Minimum apparent age your physical body can regress to (3-18):",
+    min: 3,
+    default: 3,
+    max: 18,
+    step: 1,
 });
 
 $(document).on(':dialogopen', function (ev) {
@@ -719,7 +719,7 @@ Object.defineProperties(setup, {
     },
     // Check whether the player has a light source that won't run out.
     haveUnlimitedLightSource: {
-        get: () => checkAvailability(['Flashlight'], ['Sunbeam', 'Glare Vantage'], ['light', 'BDwear']) || setup.haveSmartphone || setup.starlitConquestActivated.count>0,
+        get: () => checkAvailability(['Flashlight'], ['Sunbeam', 'Glare Vantage'], ['light', 'BDwear']) || setup.haveSmartphone || setup.starlitConquestActivated.count > 0,
     },
     // Check whether the player has a light source, including consumables and ones that can only be used in short bursts.
     havePotentialLightSource: {
@@ -889,7 +889,7 @@ Object.defineProperties(setup, {
                 }
             }
             if (companion.osex === undefined || companion.sex === undefined ||
-                    companion.name === undefined || companion.breasts === undefined ||
+                companion.name === undefined || companion.breasts === undefined ||
                 companion.vagina === undefined || companion.penis === undefined) {
                 console.error(`willingCurses() was passed an object that isn't a companion or a companion name:`);
                 console.error(companion);
@@ -935,7 +935,7 @@ Object.defineProperties(setup, {
                     willingCurses.push("Asset Robustness A", "Freckle Speckle", "Equal Opportunity",
                         "Crossdress Your Heart", "Age Reduction A", "Age Reduction B");
                     if (State.variables.argumentSaekoCloud === true) {
-                            willingCurses.push("Power Dom");
+                        willingCurses.push("Power Dom");
                     }
                     break;
             }
@@ -943,7 +943,7 @@ Object.defineProperties(setup, {
             if (companion.id === setup.companionIds.maru) idealGender = 4;
             // Attempt to go back to original gender (in Maru's case go towards androgyny)
             if (companion.osex === 'male' && companion.gender < idealGender ||
-                    companion.osex === "female" && companion.gender > idealGender) {
+                companion.osex === "female" && companion.gender > idealGender) {
                 willingCurses.push("Gender Reversal A", "Gender Reversal B",
                     "Gender Reversal C", "Gender Reversal D", "Gender Reversal E");
             }
@@ -982,7 +982,7 @@ Object.defineProperties(setup, {
     },
     // Puts one copy of a relic back where it was found. Only used for debugging purposes.
     returnRelic: {
-        value: (relic, all=false) => {
+        value: (relic, all = false) => {
             if (typeof relic === 'string') {
                 relic = State.variables.relics.find(r => r.name === relic);
                 if (!relic) {
@@ -1013,35 +1013,35 @@ Object.defineProperties(setup, {
             // noinspection JSNonASCIINames
             return [
                 new Constellation('Pet',
-                                  [
-                                      new FluffyEars('furry cat'),
-                                      new FluffyTail('flowing cat'),
-                                      new SharedSpace(),
-                                      new HairRemoval(),
-                                      new SleepTight(),
-                                      new ClothingRestrictionB(),
-                                      new ClothingRestrictionC(),
-                                      new DizzyingHeights(-1),
-                                      new DizzyingHeights(-1),
-                                      new DizzyingHeights(-1),
-                                      new DizzyingHeights(-1),
-                                      new DizzyingHeights(-1),
-                                      new BarterSystem(),
-                                      new SubmissivenessRectificationA(),
-                                      new HeatRut(),
-                                      new IncreasedSensitivity(),
-                                      new ShrunkenAssets(),
-                                      new AgeReductionB(),
-                                      new RainbowSwirl('lightly tanned', 'deep blue'),
-                                      new Chlorophyll(),
-                                      new EqualOpportunity(),
-                                      new ComicRelief(),
-                                      new ColdBlooded(),
-                                      new Erased(),
-                                      new Omnitool(),
-                                      new Pheromones(),
-                                  ],
-                                  `This constellation turns cursed persons into a human pet (inspired by cats). 
+                    [
+                        new FluffyEars('furry cat'),
+                        new FluffyTail('flowing cat'),
+                        new SharedSpace(),
+                        new HairRemoval(),
+                        new SleepTight(),
+                        new ClothingRestrictionB(),
+                        new ClothingRestrictionC(),
+                        new DizzyingHeights(-1),
+                        new DizzyingHeights(-1),
+                        new DizzyingHeights(-1),
+                        new DizzyingHeights(-1),
+                        new DizzyingHeights(-1),
+                        new BarterSystem(),
+                        new SubmissivenessRectificationA(),
+                        new HeatRut(),
+                        new IncreasedSensitivity(),
+                        new ShrunkenAssets(),
+                        new AgeReductionB(),
+                        new RainbowSwirl('lightly tanned', 'deep blue'),
+                        new Chlorophyll(),
+                        new EqualOpportunity(),
+                        new ComicRelief(),
+                        new ColdBlooded(),
+                        new Erased(),
+                        new Omnitool(),
+                        new Pheromones(),
+                    ],
+                    `This constellation turns cursed persons into a human pet (inspired by cats). 
 Curse explanations: 
  - fluffy ears/tail — aesthetic.
  - Shared Space — pets don't get personal space.
@@ -1063,114 +1063,114 @@ Curse explanations:
  - Erased — nobody remembers a time when this pet wasn't a pet.
  - Omnitool — pets give birth to pets.
  - Pheromones — pets like getting attention from people around them.`,
-                                  [new NotGrowingReq()]),
+                    [new NotGrowingReq()]),
                 new Constellation('Pet — beastly',
-                                  [
-                                      new FluffyEars('furry cat'),
-                                      new FluffyTail('flowing cat'),
-                                      new MaximumFluff('cat-furred'),
-                                      new PermaDye('mottled black and white'),
-                                      new SharedSpace(),
-                                      new ClothingRestrictionA(),
-                                      new ClothingRestrictionB(),
-                                      new ClothingRestrictionC(),
-                                      new BarterSystem(),
-                                      new HeatRut(),
-                                      new ComicRelief(),
-                                      new Omnitool(),
-                                      new Erased(),
-                                      new Megadontia(),
-                                      new Beastly(),
-                                  ],
-                                  `This constellation turns people into a pet. 
+                    [
+                        new FluffyEars('furry cat'),
+                        new FluffyTail('flowing cat'),
+                        new MaximumFluff('cat-furred'),
+                        new PermaDye('mottled black and white'),
+                        new SharedSpace(),
+                        new ClothingRestrictionA(),
+                        new ClothingRestrictionB(),
+                        new ClothingRestrictionC(),
+                        new BarterSystem(),
+                        new HeatRut(),
+                        new ComicRelief(),
+                        new Omnitool(),
+                        new Erased(),
+                        new Megadontia(),
+                        new Beastly(),
+                    ],
+                    `This constellation turns people into a pet. 
 Unlike the Pet constellation, this one is focused more on making them animal-like than on treatment by others.
 Most curses should be fairly self-explanatory.
 A few that might not be:
  - Comic Relief: People don't take animals seriously.
  - Erased: animals have always been animals.`),
                 new Constellation('Eldritch',
-                                  [
-                                      new Erased(),
-                                      new ClothingRestrictionC(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new TicklyTentacles(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new Eyescream(),
-                                      new AMouthful(),
-                                      new AMouthful(),
-                                      new AMouthful(),
-                                      new AMouthful(),
-                                      new AMouthful(),
-                                      new BelowTheVeil(),
-                                  ],
-                                  `This constellation turns people into an eldritch being. 
+                    [
+                        new Erased(),
+                        new ClothingRestrictionC(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new TicklyTentacles(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new Eyescream(),
+                        new AMouthful(),
+                        new AMouthful(),
+                        new AMouthful(),
+                        new AMouthful(),
+                        new AMouthful(),
+                        new BelowTheVeil(),
+                    ],
+                    `This constellation turns people into an eldritch being. 
 The curses should be pretty self-explanatory.
 Clothing restriction C is there to people from hiding themselves.`),
                 new Constellation('Sex Slave',
-                                  [
-                                      new LibidoReinforcementA(),
-                                      new LibidoReinforcementB(),
-                                      new LibidoReinforcementC(),
-                                      new ClothingRestrictionC(),
-                                      new HairRemoval(),
-                                      new KnifeEar(),
-                                      new IncreasedSensitivity(),
-                                      new RefractoryRefactorization(),
-                                      new AgeReductionA(),
-                                      new Lightweight(),
-                                      new LiteralBlushingVirgin(),
-                                      new SubmissivenessRectificationA(),
-                                      new SubmissivenessRectificationB(),
-                                      new ComicRelief(),
-                                      new EqualOpportunity(),
-                                      new AbsoluteBirthControl(),
-                                      new HypnoHappytime(),
-                                      new LieDetector(),
-                                      new HardMode(),
-                                      new LingualLeviathan(),
-                                      new ColdBlooded(),
-                                      new PleasureRespecificationA(),
-                                      new DoM(),
-                                      new Pheromones(),
-                                      new Leaky(),
-                                      new WanderingHands(),
-                                      new Quota(),
-                                      new BarterSystem(),
-                                      new SharedSpace(),
-                                      new Weakling(),
-                                      new RandomOrgasms(),
-                                      // The genital field is only used if the character has both genitals, so this is
-                                      // safe even if a man takes this constellation.
-                                      new ALittleExtra('vagina'),
-                                      new Erased(),
-                                  ],
-                                  `This constellation turns people into perfect sex slaves.
+                    [
+                        new LibidoReinforcementA(),
+                        new LibidoReinforcementB(),
+                        new LibidoReinforcementC(),
+                        new ClothingRestrictionC(),
+                        new HairRemoval(),
+                        new KnifeEar(),
+                        new IncreasedSensitivity(),
+                        new RefractoryRefactorization(),
+                        new AgeReductionA(),
+                        new Lightweight(),
+                        new LiteralBlushingVirgin(),
+                        new SubmissivenessRectificationA(),
+                        new SubmissivenessRectificationB(),
+                        new ComicRelief(),
+                        new EqualOpportunity(),
+                        new AbsoluteBirthControl(),
+                        new HypnoHappytime(),
+                        new LieDetector(),
+                        new HardMode(),
+                        new LingualLeviathan(),
+                        new ColdBlooded(),
+                        new PleasureRespecificationA(),
+                        new DoM(),
+                        new Pheromones(),
+                        new Leaky(),
+                        new WanderingHands(),
+                        new Quota(),
+                        new BarterSystem(),
+                        new SharedSpace(),
+                        new Weakling(),
+                        new RandomOrgasms(),
+                        // The genital field is only used if the character has both genitals, so this is
+                        // safe even if a man takes this constellation.
+                        new ALittleExtra('vagina'),
+                        new Erased(),
+                    ],
+                    `This constellation turns people into perfect sex slaves.
 Explanations for a few of the curses:
  - Knife-ear is optional, for masters who like that sort of thing.
  - One level of age reduction ensures you don't get old sex slaves. Masters with certain preferences might prefer a slave with the other levels too.
@@ -1185,87 +1185,87 @@ Explanations for a few of the curses:
  Optionally add Consent Dissent.
  Optionally add Fluffy Ears and Tail (Fluffy Ears will override Knife-ear).`),
                 new Constellation('Trans',
-                                  [
-                                      new GenderReversalA(),
-                                      new GenderReversalB(),
-                                      new GenderReversalC(),
-                                      new GenderReversalD(),
-                                      new GenderReversalE(),
-                                      new SexSwitcheroo(),
-                                  ],
-                                  `This constellation flips the cursed person's sex and gender.`),
+                    [
+                        new GenderReversalA(),
+                        new GenderReversalB(),
+                        new GenderReversalC(),
+                        new GenderReversalD(),
+                        new GenderReversalE(),
+                        new SexSwitcheroo(),
+                    ],
+                    `This constellation flips the cursed person's sex and gender.`),
                 new Constellation('Statue',
-                                  [
-                                      new LibidoReinforcementA(),
-                                      new LibidoReinforcementB(),
-                                      new LibidoReinforcementC(),
-                                      new LibidoReinforcementD(),
-                                      new ClothingRestrictionA(),
-                                      new ClothingRestrictionB(),
-                                      new ClothingRestrictionC(),
-                                      new HairRemoval(),
-                                      new PermaDye('asbestos-white'),
-                                      new IncreasedSensitivity(),
-                                      new RefractoryRefactorization(),
-                                      new HeatRut(),
-                                      new SubmissivenessRectificationA(),
-                                      new SubmissivenessRectificationB(),
-                                      new EqualOpportunity(),
-                                      new AbsoluteBirthControl(),
-                                      new RainbowSwirl('granite-grey', 'quartz-white'),
-                                      new SweetDreams(),
-                                      new HardMode(),
-                                      new HijinksEnsue(),
-                                      new Pheromones(),
-                                      new TattooTally(),
-                                      new WanderingHands(),
-                                      new Quota(),
-                                      new InTheLimelight(),
-                                      new InTheLimelight(),
-                                      new InTheLimelight(),
-                                      new InTheLimelight(),
-                                      new SharedSpace(),
-                                      new RandomOrgasms(),
-                                      new RandomOrgasms(),
-                                      new RandomOrgasms(),
-                                      new RandomOrgasms(),
-                                      new RandomOrgasms(),
-                                      new ALittleExtra('vagina'),
-                                      new TakenForGranite(),
-                                      new TheMaxim('vagina'),
-                                  ],
-                                  `This constellation turns people into statues.
+                    [
+                        new LibidoReinforcementA(),
+                        new LibidoReinforcementB(),
+                        new LibidoReinforcementC(),
+                        new LibidoReinforcementD(),
+                        new ClothingRestrictionA(),
+                        new ClothingRestrictionB(),
+                        new ClothingRestrictionC(),
+                        new HairRemoval(),
+                        new PermaDye('asbestos-white'),
+                        new IncreasedSensitivity(),
+                        new RefractoryRefactorization(),
+                        new HeatRut(),
+                        new SubmissivenessRectificationA(),
+                        new SubmissivenessRectificationB(),
+                        new EqualOpportunity(),
+                        new AbsoluteBirthControl(),
+                        new RainbowSwirl('granite-grey', 'quartz-white'),
+                        new SweetDreams(),
+                        new HardMode(),
+                        new HijinksEnsue(),
+                        new Pheromones(),
+                        new TattooTally(),
+                        new WanderingHands(),
+                        new Quota(),
+                        new InTheLimelight(),
+                        new InTheLimelight(),
+                        new InTheLimelight(),
+                        new InTheLimelight(),
+                        new SharedSpace(),
+                        new RandomOrgasms(),
+                        new RandomOrgasms(),
+                        new RandomOrgasms(),
+                        new RandomOrgasms(),
+                        new RandomOrgasms(),
+                        new ALittleExtra('vagina'),
+                        new TakenForGranite(),
+                        new TheMaxim('vagina'),
+                    ],
+                    `This constellation turns people into statues.
 All the curses that make them orgasm a lot, combined with Taken for Granite.
 A few extra explanations:
  - Tattoo Tally doesn't really serve a function, it just makes sense for a statue to be scribbled on.
  - The Maxim is genital-specific, so this constellation assumes the statue is female. Take Futa Fun or Sex Switcheroo first if that is not the case.`,
-                                  [new HasVaginaReq()]),
+                    [new HasVaginaReq()]),
                 new Constellation("Everyone's Wife",
-                                  [
-                                      new LibidoReinforcementA(),
-                                      new LibidoReinforcementB(),
-                                      new LibidoReinforcementC(),
-                                      new Lightweight(),
-                                      new BlushingVirgin(),
-                                      new SubmissivenessRectificationA(),
-                                      new EqualOpportunity(),
-                                      new LieDetector(),
-                                      new PleasureRespecificationA(),
-                                      new Quota(),
-                                      new Quota(),
-                                      new SemenDemon("sexual fluids"),
-                                      new SemenDemon("sexual fluids"),
-                                      new TattooTally(),
-                                      new CreatureOfTheNight(),
-                                      new Weakling(),
-                                      new HeatRut(),
-                                      new RefractoryRefactorization(),
-                                  ],
-                                  "You're destined to live a life reliant on others; Granted various needs, forbidden from fulfilling them yourself.\n" +
-                                  "You can live happily, perhaps even more happily than before, with the help of companions that care for you. Without loving companions, your life will fall into disarray when your desperate sexual exploits mark you permanently and you can't lie to excuse them.\n" +
-                                  "Your sex drive will reach unnatural levels, including bouts of going into heat! These needs can't be sated with autoerotic stimulation. During your deeds, you need more intimate fluids than a single person can supply and you need to bring your partners to completion an amount of times that would quickly become painful for a sole ordinary human.\n" +
-                                  "Along with intimacy, you have other new physical needs, you can't physically protect yourself, lift heavy things on your own or enter domiciles without direct permission. Most notably of these needs, is your need for a blood donor. Without the ability to ever overpower someone, use deceit to get it or purposely take a dominant role, you'll need someone else willingly looking out for this need or you'll be an outcast and starve within a week.\n" +
-                                  "Fortunately (If you're optimistic), this constellation refits your behaviour in a way that lends itself to maintaining these complex long term relationships. You're agreeable, but not agreeable to the point that a new third party could bully you into cheating, your intelligence and decision making faculties are still entirely yours. Your mouth and body will both always tell the truth, so you'll never get trapped in a lie of what you've been doing with who, so jealousy between partners will inherently be reassured. You'll love the intimacy regardless of your partners equipment, your partners will always have a sparkable attraction to you, you will naturally fit into the role of servicing others while each experience will always feel new no matter how many days go by.")
+                    [
+                        new LibidoReinforcementA(),
+                        new LibidoReinforcementB(),
+                        new LibidoReinforcementC(),
+                        new Lightweight(),
+                        new BlushingVirgin(),
+                        new SubmissivenessRectificationA(),
+                        new EqualOpportunity(),
+                        new LieDetector(),
+                        new PleasureRespecificationA(),
+                        new Quota(),
+                        new Quota(),
+                        new SemenDemon("sexual fluids"),
+                        new SemenDemon("sexual fluids"),
+                        new TattooTally(),
+                        new CreatureOfTheNight(),
+                        new Weakling(),
+                        new HeatRut(),
+                        new RefractoryRefactorization(),
+                    ],
+                    "You're destined to live a life reliant on others; Granted various needs, forbidden from fulfilling them yourself.\n" +
+                    "You can live happily, perhaps even more happily than before, with the help of companions that care for you. Without loving companions, your life will fall into disarray when your desperate sexual exploits mark you permanently and you can't lie to excuse them.\n" +
+                    "Your sex drive will reach unnatural levels, including bouts of going into heat! These needs can't be sated with autoerotic stimulation. During your deeds, you need more intimate fluids than a single person can supply and you need to bring your partners to completion an amount of times that would quickly become painful for a sole ordinary human.\n" +
+                    "Along with intimacy, you have other new physical needs, you can't physically protect yourself, lift heavy things on your own or enter domiciles without direct permission. Most notably of these needs, is your need for a blood donor. Without the ability to ever overpower someone, use deceit to get it or purposely take a dominant role, you'll need someone else willingly looking out for this need or you'll be an outcast and starve within a week.\n" +
+                    "Fortunately (If you're optimistic), this constellation refits your behaviour in a way that lends itself to maintaining these complex long term relationships. You're agreeable, but not agreeable to the point that a new third party could bully you into cheating, your intelligence and decision making faculties are still entirely yours. Your mouth and body will both always tell the truth, so you'll never get trapped in a lie of what you've been doing with who, so jealousy between partners will inherently be reassured. You'll love the intimacy regardless of your partners equipment, your partners will always have a sparkable attraction to you, you will naturally fit into the role of servicing others while each experience will always feel new no matter how many days go by.")
             ];
         }
     },
@@ -1356,7 +1356,7 @@ Object.defineProperties(JSON, {
     }
 })
 
-setup.storeImage = async function(key, base64Image) {
+setup.storeImage = async function (key, base64Image) {
     const dbName = "ImagesDB";
     const storeName = "images";
     const dbVersion = 5; // Define a version number for your database
@@ -1364,14 +1364,14 @@ setup.storeImage = async function(key, base64Image) {
     return new Promise((resolve, reject) => {
         const dbOpenRequest = indexedDB.open(dbName, dbVersion);
 
-        dbOpenRequest.onupgradeneeded = function(event) {
+        dbOpenRequest.onupgradeneeded = function (event) {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(storeName)) {
                 db.createObjectStore(storeName, { keyPath: 'id' });
             }
         };
 
-        dbOpenRequest.onsuccess = function(event) {
+        dbOpenRequest.onsuccess = function (event) {
             const db = event.target.result;
 
             if (!db.objectStoreNames.contains(storeName)) {
@@ -1383,22 +1383,22 @@ setup.storeImage = async function(key, base64Image) {
             const imageData = { id: key, image: base64Image };
             const request = store.put(imageData); // Use put to update or add
 
-            request.onsuccess = function() {
+            request.onsuccess = function () {
                 resolve("Image stored successfully.");
             };
 
-            request.onerror = function(event) {
+            request.onerror = function (event) {
                 reject("Error storing image in IndexedDB: " + event.target.error);
             };
         };
 
-        dbOpenRequest.onerror = function(event) {
+        dbOpenRequest.onerror = function (event) {
             reject("Error opening database: " + event.target.error);
         };
     });
 };
 
-setup.queryImageDB = async function(key) {
+setup.queryImageDB = async function (key) {
     const dbName = "ImagesDB";
     const storeName = "images";
     const dbVersion = 5; // Define a version number for your database
@@ -1406,14 +1406,14 @@ setup.queryImageDB = async function(key) {
     return new Promise((resolve, reject) => {
         const dbOpenRequest = indexedDB.open(dbName, dbVersion);
 
-        dbOpenRequest.onupgradeneeded = function(event) {
+        dbOpenRequest.onupgradeneeded = function (event) {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(storeName)) {
                 db.createObjectStore(storeName, { keyPath: 'id' });
             }
         };
 
-        dbOpenRequest.onsuccess = function(event) {
+        dbOpenRequest.onsuccess = function (event) {
             const db = event.target.result;
 
             if (!db.objectStoreNames.contains(storeName)) {
@@ -1424,7 +1424,7 @@ setup.queryImageDB = async function(key) {
             const store = transaction.objectStore(storeName);
             const request = store.get(key);
 
-            request.onsuccess = function() {
+            request.onsuccess = function () {
                 const imageData = request.result;
                 if (imageData && imageData.image) {
                     resolve(imageData.image); // Return the base64 image
@@ -1433,22 +1433,22 @@ setup.queryImageDB = async function(key) {
                 }
             };
 
-            request.onerror = function(event) {
+            request.onerror = function (event) {
                 reject("Error retrieving image from IndexedDB: " + event.target.error);
             };
         };
 
-        dbOpenRequest.onerror = function(event) {
+        dbOpenRequest.onerror = function (event) {
             reject("Error opening database: " + event.target.error);
         };
     });
 };
 
-setup.displayImage = async function() {
+setup.displayImage = async function () {
     try {
         const base64Image = await setup.queryImageDB("playerPortrait");
         const imgElements = document.querySelectorAll(".dalleImage");
-        imgElements.forEach(function(imgElement) {
+        imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
     } catch (error) {
@@ -1456,11 +1456,11 @@ setup.displayImage = async function() {
     }
 };
 
-setup.displayPortraitImage = async function() {
+setup.displayPortraitImage = async function () {
     try {
         const base64Image = await setup.queryImageDB("playerPortrait");
         const imgElements = document.querySelectorAll(".portraitImage");
-        imgElements.forEach(function(imgElement) {
+        imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
     } catch (error) {
@@ -1484,13 +1484,13 @@ function layerChanged() {
 }
 
 Config.saves.isAllowed = function (saveType) {
-	if (saveType === Save.Type.Auto) {
+    if (saveType === Save.Type.Auto) {
         if (layerChanged()) {
             return true;
         }
         return false;
-	}
-	return true;
+    }
+    return true;
 };
 
 function getSaveLabel() {
@@ -1503,7 +1503,7 @@ function getSaveLabel() {
 }
 
 Macro.add('sidebar-widget', {
-    handler: function() {
+    handler: function () {
         const currentLayer = State.variables.currentLayer || 1;
         const days = State.variables.time || 0;
         const water = State.variables.items ? (State.variables.items[0].count + State.variables.items[3].count + State.variables.items[25].count) : 0;
@@ -1544,7 +1544,7 @@ Macro.add('sidebar-widget', {
             else if (SemenDemonBalance >= -4) status = 'Satisfied';
             else if (SemenDemonBalance >= -8) status = '<span class="alert1">Hungry</span>';
             else status = '<span class="alert2">Starving. At risk of death!</span>';
-            
+
             return `
                 <div class="resource-item tooltip">
                     <div class="icon-text-wrapper">
@@ -1558,7 +1558,7 @@ Macro.add('sidebar-widget', {
                 </div>
             `;
         }
-        
+
         function getCotNStatus() {
             const curse = State.variables.mc.getCurse("Creature of the Night");
             if (!curse) return '';
@@ -1567,7 +1567,7 @@ Macro.add('sidebar-widget', {
             else if (CotNBalance >= -4) status = 'Satisfied';
             else if (CotNBalance >= -20) status = '<span class="alert1">Thirsty</span>';
             else status = '<span class="alert2">Desperate. At risk of death!</span>';
-            
+
             return `
                 <div class="resource-item tooltip">
                     <div class="icon-text-wrapper">
@@ -1585,29 +1585,29 @@ Macro.add('sidebar-widget', {
         function getThreats() {
             const threats = [];
             const layer = State.variables.currentLayer;
-            switch(layer) {
+            switch (layer) {
                 case 0:
                     break;
                 case 1:
-                    threats.push({name: "Bandits", time: calculateBanditThreatLevel(), max: 100});
+                    threats.push({ name: "Bandits", time: calculateBanditThreatLevel(), max: 100 });
                     break;
                 case 2:
-                    threats.push({name: "Baying Gourmet", time: State.variables.timeL2T1 || 0, max: 4});
+                    threats.push({ name: "Baying Gourmet", time: State.variables.timeL2T1 || 0, max: 4 });
                     break;
                 case 3:
-                    threats.push({name: "Lesser Tentacle Beast", time: State.variables.timeL3T1 || 0, max: 6});
-                    threats.push({name: "Slackslime", time: State.variables.timeL3T2 || 0, max: 5});
+                    threats.push({ name: "Lesser Tentacle Beast", time: State.variables.timeL3T1 || 0, max: 6 });
+                    threats.push({ name: "Slackslime", time: State.variables.timeL3T2 || 0, max: 5 });
                     break;
                 case 4:
-                    threats.push({name: "Drifting Swallower", time: State.variables.timeL4T1 || 0, max: 7});
+                    threats.push({ name: "Drifting Swallower", time: State.variables.timeL4T1 || 0, max: 7 });
                     break;
                 case 5:
-                    threats.push({name: "Dune Devouring Borer", time: State.variables.timeL5T2 || 0, max: 9});
-                    threats.push({name: "Mayfly Scuttler", time: State.variables.timeL5T1 || 0, max: 8});
+                    threats.push({ name: "Dune Devouring Borer", time: State.variables.timeL5T2 || 0, max: 9 });
+                    threats.push({ name: "Mayfly Scuttler", time: State.variables.timeL5T1 || 0, max: 8 });
                     break;
                 case 6:
-                    threats.push({name: "Fell Dragon", time: State.variables.timeL6T2 || 0, max: 8});
-                    threats.push({name: "Greater Tentacle Beast", time: State.variables.timeL6T1 || 0, max: 15});
+                    threats.push({ name: "Fell Dragon", time: State.variables.timeL6T2 || 0, max: 8 });
+                    threats.push({ name: "Greater Tentacle Beast", time: State.variables.timeL6T1 || 0, max: 15 });
                     break;
                 case 7: {
                     let debtThreat;
@@ -1620,27 +1620,27 @@ Macro.add('sidebar-widget', {
                     } else {
                         debtThreat = 10;
                     }
-                    threats.push({name: "Debt Collection", time: debtThreat, max: 10});
-                    threats.push({name: "Rehabilitation", time: State.variables.timeL7T2, max: 6});
+                    threats.push({ name: "Debt Collection", time: debtThreat, max: 10 });
+                    threats.push({ name: "Rehabilitation", time: State.variables.timeL7T2, max: 6 });
                     break;
                 }
                 case 8:
-                    threats.push({name: "Inanis Ego", time: State.variables.timeL8T1 || 0, max: 60});
-                    threats.push({name: "Demential Aberrations", time: State.variables.timeL8T2a || 0, max: State.variables.hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 8 : 7});
+                    threats.push({ name: "Inanis Ego", time: State.variables.timeL8T1 || 0, max: 60 });
+                    threats.push({ name: "Demential Aberrations", time: State.variables.timeL8T2a || 0, max: State.variables.hiredCompanions.some(e => e.id === setup.companionIds.maru) ? 8 : 7 });
                     break;
                 case 9:
-                    threats.push({name: "The Elder", time: 100, max: 100});
+                    threats.push({ name: "The Elder", time: 100, max: 100 });
                     break;
                 case 10:
                     break;
             }
             if (State.variables.voidDiamondActive) {
                 threats.forEach(threat => {
-                  if (threat.name !== "The Elder") {
-                    threat.time = threat.max * 0.1;
-                  }
+                    if (threat.name !== "The Elder") {
+                        threat.time = threat.max * 0.1;
+                    }
                 });
-              }
+            }
             return threats;
         }
 
@@ -1761,11 +1761,11 @@ Macro.add('sidebar-widget', {
                         <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
-                        `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                        (settings.OverridePortrait ?
-                        `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
-                        `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
-                    }
+                `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                (settings.OverridePortrait ?
+                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">` :
+                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)};">`)
+            }
                 </div>
 
                 <div class="resource-item tooltip">
@@ -1885,8 +1885,8 @@ Macro.add('sidebar-widget', {
                 <h3 style="margin: 0; padding: 5px 0;">${getLayerName()}</h3>
                 ${getLayerThreatTitle()}
                 ${getThreats().map((threat, index) => {
-                    const level = calculateThreatLevel(threat.time, threat.max);
-                    return `
+                const level = calculateThreatLevel(threat.time, threat.max);
+                return `
                         <div class="twine-sidebar-threat-container">
                             <div class="twine-sidebar-threat-label">${threat.name}</div>
                             <div class="twine-sidebar-threat-bar">
@@ -1894,7 +1894,7 @@ Macro.add('sidebar-widget', {
                             </div>
                         </div>
                     `;
-                }).join('')}
+            }).join('')}
 
                 <div style="height: 63px;"></div>
 
@@ -1914,41 +1914,41 @@ Macro.add('sidebar-widget', {
             setup.displayImage();
         }
 
-        $('#menu .text-center').on('click', function() {
+        $('#menu .text-center').on('click', function () {
             const passage = $(this).attr('data-passage');
             if (passage) {
                 Engine.play(passage);
             }
         });
 
-        $('#settings-button').on('click', function() {
+        $('#settings-button').on('click', function () {
             UI.settings();
         });
 
-        $('#saves-button').on('click', function() {
+        $('#saves-button').on('click', function () {
             UI.saves();
         });
 
-        $('#custom-back-button').on('click', function() {
+        $('#custom-back-button').on('click', function () {
             if (State.length > 1) {
                 Engine.backward();
             }
         });
-        
-        $('#custom-forward-button').on('click', function() {
+
+        $('#custom-forward-button').on('click', function () {
             if (State.length < State.size) {
                 Engine.forward();
             }
         });
-        
+
         function updateButtonStates() {
             $('#custom-back-button').prop('disabled', State.length <= 1);
             $('#custom-forward-button').prop('disabled', State.length >= State.size);
         }
-        
+
         updateButtonStates();
-        
-        $(document).on(':passagerender', function() {
+
+        $(document).on(':passagerender', function () {
             updateButtonStates();
         });
 
@@ -1962,7 +1962,7 @@ Macro.add('sidebar-widget', {
                 $('.sidebar-toggle .toggle-icon').text('◄');
             }
 
-            $('.sidebar-toggle').on('click', function() {
+            $('.sidebar-toggle').on('click', function () {
                 const sidebar = $('.twine-sidebar');
                 const story = $('#story');
                 const icon = $('.sidebar-toggle .toggle-icon');
@@ -1987,7 +1987,7 @@ Macro.add('sidebar-widget', {
 });
 
 // Create sidebar on story ready, only once
-$(document).one(':storyready', function() {
+$(document).one(':storyready', function () {
     $.wiki('<<sidebar-widget>>');
 });
 
@@ -1997,7 +1997,7 @@ function getGenderColor(gender) {
     return genderColors[gender - 1] || 'white';
 }
 
-window.goBackToPassage = function(passageName) {
+window.goBackToPassage = function (passageName) {
     let history = SugarCube.State.history;
     let currentIndex = history.length - 1; // Use history length to get current index
 
@@ -2056,7 +2056,7 @@ Config.saves.descriptions = function (saveType) {
     return "Layer " + currentLayer;
 };
 
-window.updateSaveCount = function() {
+window.updateSaveCount = function () {
     if (Save.browser && Save.browser.size > 1) {
         State.variables.multipleSaves = true;
     } else {
@@ -2091,9 +2091,9 @@ function createWindParticle() {
 
     const keyframes = [
         { transform: 'translate(0, 0) scale(0)', opacity: 0 },
-        { transform: `translate(${distance/4}px, ${curveStrength/2}px) scale(1)`, opacity: 0.7, offset: 0.25 },
-        { transform: `translate(${distance/2}px, ${curveStrength}px) scale(0.8)`, opacity: 0.5, offset: 0.5 },
-        { transform: `translate(${distance*0.75}px, ${curveStrength/2}px) scale(0.6)`, opacity: 0.3, offset: 0.75 },
+        { transform: `translate(${distance / 4}px, ${curveStrength / 2}px) scale(1)`, opacity: 0.7, offset: 0.25 },
+        { transform: `translate(${distance / 2}px, ${curveStrength}px) scale(0.8)`, opacity: 0.5, offset: 0.5 },
+        { transform: `translate(${distance * 0.75}px, ${curveStrength / 2}px) scale(0.6)`, opacity: 0.3, offset: 0.75 },
         { transform: `translate(${distance}px, 0) scale(0)`, opacity: 0 }
     ];
 
@@ -2113,7 +2113,7 @@ function createWindParticle() {
 }
 
 // Function to start the wind animation
-window.startWindAnimation = function() {
+window.startWindAnimation = function () {
     if (!window.windAnimationActive) {
         window.windAnimationActive = true;
         for (let i = 0; i < 30; i++) {
@@ -2123,7 +2123,7 @@ window.startWindAnimation = function() {
 };
 
 // Function to stop the wind animation and clean up
-window.stopWindAnimation = function() {
+window.stopWindAnimation = function () {
     window.windAnimationActive = false;
     window.windParticles.forEach(particle => {
         particle.remove();
@@ -2136,7 +2136,7 @@ window.stopWindAnimation = function() {
 };
 
 
-$(document).on(':passagestart', function(ev) {
+$(document).on(':passagestart', function (ev) {
     if (tags().includes("titleScreen")) {
         startWindAnimation();
     } else {
@@ -2157,34 +2157,34 @@ function goToSection(sectionNumber) {
 }
 
 /* Wait for the document to be ready */
-$(document).on('click', '#newGameBtn', function() {
+$(document).on('click', '#newGameBtn', function () {
     goToSection(1); // Move to Section 2
 });
 
-$(document).on('click', '#nextBtn', function() {
+$(document).on('click', '#nextBtn', function () {
     goToSection(2); // Move to Section 3
 });
 
-$(document).on('click', '#easyBtn', function() {
+$(document).on('click', '#easyBtn', function () {
     goToSection(2); // Move to Section 3
     State.variables.difficultyMode = 0;
 });
 
-$(document).on('click', '#normalBtn', function() {
+$(document).on('click', '#normalBtn', function () {
     goToSection(2); // Move to Section 3
     State.variables.difficultyMode = 1;
 });
 
-$(document).on('click', '#advancedBtn', function() {
+$(document).on('click', '#advancedBtn', function () {
     goToSection(2); // Move to Section 3
     State.variables.difficultyMode = 2;
 });
 
-$(document).on('click', '#backBtn1', function() {
+$(document).on('click', '#backBtn1', function () {
     goToSection(0); // Back to Section 1
 });
 
-$(document).on('click', '#backBtn2', function() {
+$(document).on('click', '#backBtn2', function () {
     goToSection(1); // Back to Section 2
 });
 
@@ -2192,26 +2192,26 @@ const shiftProbability = 0.05;
 const tiltProbability = 0.05;
 
 function applyButtonEffects() {
-  if (tags().includes("layer8")) {
-    $('.dark-btn').each(function() {
-      // Reset classes
-      $(this).removeClass('shift-left shift-right shift-up shift-down tilt-left tilt-right');
+    if (tags().includes("layer8")) {
+        $('.dark-btn').each(function () {
+            // Reset classes
+            $(this).removeClass('shift-left shift-right shift-up shift-down tilt-left tilt-right');
 
-      // Apply shift effect
-      if (Math.random() < shiftProbability) {
-        const shiftDirections = ['shift-left', 'shift-right', 'shift-up', 'shift-down'];
-        const randomShift = shiftDirections[Math.floor(Math.random() * shiftDirections.length)];
-        $(this).addClass(randomShift);
-      }
+            // Apply shift effect
+            if (Math.random() < shiftProbability) {
+                const shiftDirections = ['shift-left', 'shift-right', 'shift-up', 'shift-down'];
+                const randomShift = shiftDirections[Math.floor(Math.random() * shiftDirections.length)];
+                $(this).addClass(randomShift);
+            }
 
-      // Apply tilt effect
-      if (Math.random() < tiltProbability) {
-        const tiltDirections = ['tilt-left', 'tilt-right'];
-        const randomTilt = tiltDirections[Math.floor(Math.random() * tiltDirections.length)];
-        $(this).addClass(randomTilt);
-      }
-    });
-  }
+            // Apply tilt effect
+            if (Math.random() < tiltProbability) {
+                const tiltDirections = ['tilt-left', 'tilt-right'];
+                const randomTilt = tiltDirections[Math.floor(Math.random() * tiltDirections.length)];
+                $(this).addClass(randomTilt);
+            }
+        });
+    }
 }
 
 const textSizeChangeProbability = 0.05;
@@ -2234,9 +2234,9 @@ function applyTextSizeVariation() {
 }
 
 // Apply layer 8 effects on passage start
-$(document).on(':passagerender', function(ev) {
-  setTimeout(applyButtonEffects, 100);
-  setTimeout(applyTextSizeVariation, 100);
+$(document).on(':passagerender', function (ev) {
+    setTimeout(applyButtonEffects, 100);
+    setTimeout(applyTextSizeVariation, 100);
 });
 window.setup = {
     createTable(dataUrl, targetElementId) {
@@ -2249,48 +2249,48 @@ window.setup = {
             console.error('Invalid dataUrl, not found');
             return;
         }
-    
+
         if (data && data.length > 0 && !data[0].hasOwnProperty('count')) {
             const processedData = new Map();
-            
+
             data.forEach(item => {
                 const itemKey = JSON.stringify(
                     Object.fromEntries(
                         Object.entries(item).filter(([key]) => !['desc', 'image', 'time'].includes(key))
                     )
                 );
-                
+
                 if (processedData.has(itemKey)) {
                     processedData.get(itemKey).count++;
                 } else {
                     processedData.set(itemKey, { ...item, count: 1 });
                 }
             });
-            
+
             data = Array.from(processedData.values());
         }
         data.forEach((item, index) => {
             item.originalIndex = index;
         });
         data = data.filter(item => !item.hasOwnProperty('count') || item.count > 0);
-    
+
         const table = document.createElement('table');
         table.classList.add('inventory-screen');
         const tbody = document.createElement('tbody');
         tbody.classList.add('inventory-screen');
-    
+
         const sortState = {
             column: null,
             ascending: true
         };
-    
+
         if (data && data.length > 0) {
             let headers = Object.keys(data[0]).filter(header => !["desc", "image", "time", "originalIndex"].includes(header));
-    
+
             if (headers.includes('count')) {
                 headers = ['count', ...headers.filter(header => header !== 'count')];
             }
-    
+
             const thead = document.createElement('thead');
             thead.classList.add('inventory-screen');
             const tr = document.createElement('tr');
@@ -2324,17 +2324,17 @@ window.setup = {
             });
             thead.appendChild(tr);
             table.appendChild(thead);
-            
+
             function renderRows(sortedData) {
                 tbody.innerHTML = '';
                 sortedData.forEach(row => {
                     const tr = document.createElement('tr');
                     tr.classList.add('inventory-screen');
-            
+
                     headers.forEach(header => {
                         const td = document.createElement('td');
                         td.classList.add('inventory-screen');
-                        
+
                         if (header === 'name') {
                             td.innerHTML = row[header];
                             const tableTooltip = document.createElement('div');
@@ -2343,19 +2343,19 @@ window.setup = {
                             img.classList.add('inventory-screen');
                             img.setAttribute('src', `./images/${row.image}`);
                             tableTooltip.appendChild(img);
-                            
+
                             const textBox = document.createElement('span');
                             textBox.setAttribute('class', 'textBox inventory-screen');
                             const description = SugarCube.setup.relicShortDescriptions.find(desc => desc.name === row.name)?.description;
                             textBox.textContent = description || row.desc || 'No description available';
                             tableTooltip.appendChild(textBox);
-                            
+
                             td.appendChild(tableTooltip);
-                            td.addEventListener('click', function() {
+                            td.addEventListener('click', function () {
                                 SugarCube.State.variables.temp = row.originalIndex;
                                 try {
                                     const passageName = `${dataUrl} Info`;
-                                    SugarCube.Engine.play(passageName, undefined);
+                                    SugarCube.Engine.play(passageName);
                                 } catch (error) {
                                     console.error('Error playing passage:', error);
                                 }
@@ -2368,14 +2368,14 @@ window.setup = {
                         } else {
                             td.textContent = row[header];
                         }
-                        
+
                         tr.appendChild(td);
                     });
                     tbody.appendChild(tr);
                 });
             }
-            
-    
+
+
             function sortTable(column) {
                 if (sortState.column === column) {
                     sortState.ascending = !sortState.ascending;
@@ -2405,7 +2405,7 @@ window.setup = {
                     }
                 });
             }
-    
+
             renderRows(data);
         } else {
             const tr = document.createElement('tr');
@@ -2413,23 +2413,23 @@ window.setup = {
             const td = document.createElement('td');
             td.classList.add('inventory-screen');
             td.textContent = `No ${dataUrl}s found.`;
-    
-            const headerCount = data && data[0] ? 
-                Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length : 
+
+            const headerCount = data && data[0] ?
+                Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length :
                 1;
             td.colSpan = headerCount;
             tr.appendChild(td);
             tbody.appendChild(tr);
         }
         table.appendChild(tbody);
-    
+
         const targetElement = document.getElementById(targetElementId);
         if (targetElement) {
             targetElement.appendChild(table);
         } else {
             console.error('Error: Target element not found!');
         }
-        
+
         const style = document.createElement('style');
         style.classList.add('inventory-screen');
         document.head.appendChild(style);
@@ -2476,7 +2476,7 @@ window.setup = {
         }
         updateWaterGradient();
     },
-    randomCurseApp : function() {
+    randomCurseApp: function () {
         const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
         if (availableCurses.length > 0) {
             const randomCurse = availableCurses[Math.floor(Math.random() * availableCurses.length)];
@@ -2489,14 +2489,20 @@ window.setup = {
         } else {
             console.warn("No curses with an _appDesc available.");
         }
-},
-    createCurseBoxes : function() {
-        const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
+    },
+    createCurseBoxes: function() {
+        const allCurses = SugarCube.State.variables.mc.curses;
         const allCursesDiv = document.getElementById("allCurses");
+        const displayableCurses = allCurses.filter(curse => curse._appDesc);
 
-        availableCurses.forEach(curse => {
+        displayableCurses.forEach(curse => {
+            const curseIndex = allCurses.indexOf(curse);
             const curseBox = document.createElement("div");
             curseBox.classList.add("curse-box", "bottom");
+            curseBox.onclick = function () {
+                SugarCube.State.variables.temp = curseIndex;
+                SugarCube.Engine.play('Curse Info');
+            };
 
             const curseImageDiv = document.createElement("div");
             curseImageDiv.classList.add("curse-box-image");
