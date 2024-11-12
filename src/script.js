@@ -2498,7 +2498,7 @@ window.setup = {
         displayableCurses.forEach(curse => {
             const curseIndex = allCurses.indexOf(curse);
             const curseBox = document.createElement("div");
-            curseBox.classList.add("curse-box", "bottom");
+            curseBox.classList.add("curse-box", "curse-menu");
             curseBox.onclick = function () {
                 SugarCube.State.variables.temp = curseIndex;
                 SugarCube.Engine.play('Curse Info');
