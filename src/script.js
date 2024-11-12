@@ -2489,5 +2489,41 @@ window.setup = {
         } else {
             console.warn("No curses with an _appDesc available.");
         }
-}
+},
+    createCurseBoxes : function() {
+        const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
+        const allCursesDiv = document.getElementById("allCurses");
+
+        availableCurses.forEach(curse => {
+            const curseBox = document.createElement("div");
+            curseBox.classList.add("curse-box", "bottom");
+
+            const curseImageDiv = document.createElement("div");
+            curseImageDiv.classList.add("curse-box-image");
+            const curseImage = document.createElement("img");
+            curseImage.src = `./images/${curse.picture}`;
+            curseImage.style.width = "100%";
+            curseImage.style.height = "100%";
+            curseImageDiv.appendChild(curseImage);
+
+            const curseContentDiv = document.createElement("div");
+            curseContentDiv.classList.add("curse-box-content");
+
+            const curseTitleElement = document.createElement("h2");
+            curseTitleElement.classList.add("curse-box-title");
+            curseTitleElement.textContent = curse.name;
+
+            const curseDescriptionElement = document.createElement("p");
+            curseDescriptionElement.classList.add("curse-box-description");
+            curseDescriptionElement.textContent = curse._appDesc;
+
+            curseContentDiv.appendChild(curseTitleElement);
+            curseContentDiv.appendChild(curseDescriptionElement);
+
+            curseBox.appendChild(curseImageDiv);
+            curseBox.appendChild(curseContentDiv);
+
+            allCursesDiv.appendChild(curseBox);
+        });
+    }
 }
