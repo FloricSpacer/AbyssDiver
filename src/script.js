@@ -1983,6 +1983,21 @@ Macro.add('sidebar-widget', {
                 }
             });
         }
+        else if (settings.sidebarToggle === false) {
+            const sidebarState = State.variables.sidebarCollapsed || false;
+            if (sidebarState) {
+                $('.twine-sidebar').addClass('collapsed');
+                $('#story').addClass('sidebar-collapsed');
+                $('.sidebar-toggle').addClass('collapsed');
+                $('.sidebar-toggle .toggle-icon').text('◄');
+            }
+            else {
+                $('.twine-sidebar').removeClass('collapsed');
+                $('#story').removeClass('sidebar-collapsed');
+                $('.sidebar-toggle').removeClass('collapsed');
+                $('.sidebar-toggle .toggle-icon').text('►');
+            }
+        }
     }
 });
 
