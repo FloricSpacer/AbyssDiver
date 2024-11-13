@@ -2548,3 +2548,87 @@ window.setup = {
         });
     }
 }
+
+setup.generateCharacterID = function () {
+    let id = '';
+    let baseID = '';  // Store first 11 digits separately
+    
+    // Digits 1-2-3: Difficulty (sum determines difficulty level)
+    let d1 = Math.floor(Math.random() * 10);
+    let d2 = Math.floor(Math.random() * 10);
+    let d3 = Math.floor(Math.random() * 10);
+    
+    // Validate difficulty sum matches current difficulty mode
+    const diffSum = d1 + d2 + d3;
+    const isPrime = num => {
+        for(let i = 2; i <= Math.sqrt(num); i++)
+            if(num % i === 0) return false;
+        return num > 1;
+    };
+    
+    // Regenerate until we match the current difficulty mode
+    while (
+        (State.variables.difficultyMode === 0 && diffSum % 2 !== 0) || // Easy: even sum
+        (State.variables.difficultyMode === 1 && (diffSum % 2 === 0 || isPrime(diffSum))) || // Normal: odd non-prime
+        (State.variables.difficultyMode === 2 && !isPrime(diffSum)) // Advanced: prime
+    ) {
+        d1 = Math.floor(Math.random() * 10);
+        d2 = Math.floor(Math.random() * 10);
+        d3 = Math.floor(Math.random() * 10);
+    }
+    
+    // Digits 4-5-6: Random placeholder
+    const d4 = Math.floor(Math.random() * 10);
+    const d5 = Math.floor(Math.random() * 10);
+    const d6 = Math.floor(Math.random() * 10);
+    
+    // Digits 7-8: Sex indicator (odd for male, even for female)
+    let d7, d8;
+    if (State.variables.mc.osex === "male") {
+        d7 = Math.floor(Math.random() * 10);
+        d8 = Math.floor(Math.random() * 5) * 2 + 1;
+    } else {
+        d7 = Math.floor(Math.random() * 10);
+        d8 = Math.floor(Math.random() * 5) * 2;
+    }
+    
+    // Digit 9: Fitness (-5 to 5 mapped to 0-9)
+    let d9;
+    switch(State.variables.mc.fit) {
+        case -5: d9 = Math.floor(Math.random() * 2); break;
+        case -2: d9 = Math.floor(Math.random() * 2) + 2; break;
+        case 0:  d9 = Math.floor(Math.random() * 2) + 4; break;
+        case 2:  d9 = Math.floor(Math.random() * 2) + 6; break;
+        case 5:  d9 = Math.floor(Math.random() * 2) + 8; break;
+    }
+    
+    // Digits 10-11: Current day of month
+    const currentDay = new Date().getDate();
+    const d10 = Math.floor(currentDay / 10);
+    const d11 = currentDay % 10;
+    
+    const d12 = Math.floor(Math.random() * 5);
+    const d13 = Math.floor(Math.random() * 5) + 5;
+    
+    baseID = `${d1}${d2}${d3}${d4}${d5}${d6}${d7}${d8}${d9}${d10}${d11}`;
+    
+    id = `${baseID}${d12}${d13}`;
+    
+    State.variables.characterBaseID = baseID;
+    State.variables.characterID = id;
+}
+
+setup.generateDebugID = function () {
+    const baseID = State.variables.characterBaseID;
+    
+    let d12, d13;
+    
+    do {
+        d12 = Math.floor(Math.random() * 10);
+        d13 = Math.floor(Math.random() * 10);
+    } while (d12 <= d13);
+    
+    const debugID = `${baseID}${d12}${d13}`;
+    
+    State.variables.characterID = debugID;
+}
