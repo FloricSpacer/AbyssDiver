@@ -12,7 +12,6 @@
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Debug Menu">Debug Menu</button>
 <br>*/
-
 :: Curses [noreturn]
 <<nobr>>
 
@@ -1048,9 +1047,18 @@ Thanks again for playing! I hope the dive was worth it.
 	</button>
 </div>
 <script>
-	setInterval(setup.randomCurseApp, 10000);
+	SugarCube.State.variables.curseInterval = setInterval(setup.randomCurseApp, 10000);
 	setup.randomCurseApp();	
 </script>
+:: PassageEnd [script]
+$(document).on(':passageend', function() {
+if (SugarCube.State.passage === "Appearance") {
+	if (SugarCube.State.variables.curseInterval) {
+		clearInterval(SugarCube.State.variables.curseInterval);
+		delete SugarCube.State.variables.curseInterval;
+	}
+}
+});
 :: curseApp [noreturn nobr cards]
 Hello, I'm the Curse App. I'm here to help you manage your curses.
 <div id="allCurses">
@@ -1068,7 +1076,6 @@ Hello, I'm the Curse App. I'm here to help you manage your curses.
 <script>
 	setup.createCurseBoxes();
 </script>
-
 /* <<if settings.AIPortraitsMode == true>>
 	<<if settings.OverridePortrait == true>>
 		<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" style="max-width: 70%;">
