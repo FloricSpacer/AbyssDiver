@@ -12,7 +12,7 @@
 <</if>>\
 <button class="dark-btn obsidian" data-passage="Debug Menu">Debug Menu</button>
 <br>*/
-:: Curses [noreturn]
+:: Curses Old [noreturn]
 <<nobr>>
 
 <<if $endSpectre > 0>>
@@ -37,9 +37,17 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 <</nobr>>
 <button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Back</button>
 
-:: Curse Info
-<<nobr>>
-!<<if $mc.curses[$temp].name === "Below the Veil">>
+:: Curse Info [noreturn item nobr]
+<div id="info-page">
+    <div id="navigation-buttons">
+    </div>
+    <div id="target-info">
+    </div>
+</div>
+<script>
+setup.infoGen("Curse");
+</script>
+/*!<<if $mc.curses[$temp].name === "Below the Veil">>
 	<<print Creepify.encode("Below the Veil")>><br>
 <<else>>
 	<<print $mc.curses[$temp].name>>
@@ -49,9 +57,9 @@ The Spectre of the End will come for you in <<print (900 - $time + $endSpectre)>
 
 <<print $mc.curses[$temp].description>>
 
-//Corruption value: $mc.curses[$temp].corr//
+Corruption value: $mc.curses[$temp].corr
 
-<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button> */
 
 :: Inventory [noreturn]
 <<nobr>><<CarryAdjust>>
@@ -1042,7 +1050,7 @@ Thanks again for playing! I hope the dive was worth it.
 	<button class="bottom left" id="onTopButton" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">
 		Back
 	</button>
-	<button class="bottom right" id="onTopButton" data-passage="curseApp">
+	<button class="bottom right" id="onTopButton" data-passage="Curses">
 		Curses
 	</button>
 </div>
@@ -1059,7 +1067,7 @@ if (SugarCube.State.passage === "Appearance") {
 	}
 }
 });
-:: curseApp [noreturn nobr cards]
+:: Curses [noreturn nobr cards]
 Hello, I'm the Curse App. I'm here to help you manage your curses.
 <div id="allCurses">
 	<button class="top left" id="onTopButton" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">
