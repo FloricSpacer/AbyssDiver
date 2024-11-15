@@ -2566,24 +2566,28 @@ window.setup = {
         };
         buttons.appendChild(listButton);
     
-        const previousButton = document.createElement("button");
-        previousButton.id = "previous-info";
-        previousButton.textContent = Previous || "No Previous";
-        previousButton.onclick = function () {
-            SugarCube.State.variables.temp = index - 1;
-            SugarCube.Engine.play(`${type} Info`);
-        };
-        buttons.appendChild(previousButton);
+        if (Previous) {
+            const previousButton = document.createElement("button");
+            previousButton.id = "previous-info";
+            previousButton.textContent = Previous || "No Previous";
+            previousButton.onclick = function () {
+                SugarCube.State.variables.temp = index - 1;
+                SugarCube.Engine.play(`${type} Info`);
+            };
+            buttons.appendChild(previousButton);
+        }
     
-        const nextButton = document.createElement("button");
-        nextButton.id = "next-info";
-        nextButton.textContent = Next || "No Next";
-        nextButton.onclick = function () {
-            SugarCube.State.variables.temp = index + 1;
-            SugarCube.Engine.play(`${type} Info`);
-        };
-        buttons.appendChild(nextButton);
-    
+        if (Next) {
+            const nextButton = document.createElement("button");
+            nextButton.id = "next-info";
+            nextButton.textContent = Next;
+            nextButton.onclick = function () {
+                SugarCube.State.variables.temp = index + 1;
+                SugarCube.Engine.play(`${type} Info`);
+            };
+            buttons.appendChild(nextButton);
+        }
+
         const body = document.getElementById("info-page");
     
         const img = document.createElement("img");
