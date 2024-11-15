@@ -2758,3 +2758,7 @@ setup.generateDebugID = function () {
     
     State.variables.characterID = debugID;
 }
+
+window.capitalize = function(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}

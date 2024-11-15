@@ -979,10 +979,19 @@ Thanks again for playing! I hope the dive was worth it.
 		<div class="idcard-content">
 			<div class="idcard-photo-section">
 				<div class="idcard-photo">
-					<img src="images/companions/willowserendip.jpg"
-					alt="Willow Serendip" style="width: 100%; height: 100%;">
+					<<if settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen>>
+						<<print '<img class="dalleImage" src="" alt="Generated Portrait" style="width: 100%; height: 100%;">'>>
+					<<elseif settings.OverridePortrait>>
+						<<print '<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="" style="width: 100%; height: 100%;">'>>
+					<<else>>
+						<<if $mc.gender >= 4>>
+							<<print '<img src="images/Player Icons/playerF' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="" style="width: 100%; height: 100%;">'>>
+						<<else>>
+							<<print '<img src="images/Player Icons/playerM' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="" style="width: 100%; height: 100%;">'>>
+						<</if>>
+					<</if>>
 				</div>
-				<div class="idcard-name">Willow Serendip</div>
+				<div class="idcard-name">$nameID</div>
 			</div>
 			<div class="idcard-info">
 				<div class="idcard-info-row">
@@ -998,7 +1007,7 @@ Thanks again for playing! I hope the dive was worth it.
 						Sex:
 					</span>
 					<span class="idcard-info-value">
-						F
+						$sexID
 					</span>
 				</div>
 				<div class="idcard-info-row">
@@ -1006,7 +1015,7 @@ Thanks again for playing! I hope the dive was worth it.
 						Eye Color:
 					</span>
 					<span class="idcard-info-value">
-						Blue
+						$eyeColorID
 					</span>
 				</div>
 				<div class="idcard-info-row">
@@ -1014,7 +1023,7 @@ Thanks again for playing! I hope the dive was worth it.
 						Hair Color:
 					</span>
 					<span class="idcard-info-value">
-						Blonde
+						$hairColorID
 					</span>
 				</div>
 				<div class="idcard-info-row">
