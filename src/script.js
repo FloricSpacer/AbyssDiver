@@ -2546,7 +2546,132 @@ window.setup = {
 
             allCursesDiv.appendChild(curseBox);
         });
+    },
+    infoGen: function (type) {
+        const variable = SugarCube.State.variables;
+        const index = variable.temp;
+    
+        const infoArray = type === "Relic" ? variable.ownedRelics : variable.mc.curses;
+        const Name = infoArray[index].name;
+        const Next = infoArray[(index + 1)]?.name;
+        const Previous = infoArray[(index - 1)]?.name;
+    
+        const buttons = document.getElementById("navigation-buttons");
+    
+        const listButton = document.createElement("button");
+        listButton.id = "list-button";
+        listButton.textContent = type === "Relic" ? "Inventory" : "Curses";
+        listButton.onclick = function () {
+            SugarCube.Engine.play(listButton.textContent);
+        };
+        buttons.appendChild(listButton);
+    
+        const previousButton = document.createElement("button");
+        previousButton.id = "previous-info";
+        previousButton.textContent = Previous || "No Previous";
+        previousButton.onclick = function () {
+            SugarCube.State.variables.temp = index - 1;
+            SugarCube.Engine.play(`${type} Info`);
+        };
+        buttons.appendChild(previousButton);
+    
+        const nextButton = document.createElement("button");
+        nextButton.id = "next-info";
+        nextButton.textContent = Next || "No Next";
+        nextButton.onclick = function () {
+            SugarCube.State.variables.temp = index + 1;
+            SugarCube.Engine.play(`${type} Info`);
+        };
+        buttons.appendChild(nextButton);
+    
+        const body = document.getElementById("info-page");
+    
+        const img = document.createElement("img");
+        img.id = "Info-Picture";
+
+        if (type === "Curse") {
+            img.src = `./images/${infoArray[index].picture}`;
+        } else {
+            img.src = `./images/${infoArray[index].image}`;
+        }
+
+        body.appendChild(img);
+    
+        const Title = document.createElement("div");
+        Title.id = "Info-Title";
+        Title.textContent = Name;
+        body.appendChild(Title);
+    
+        const Info = document.createElement("div");
+        Info.id = "info-info";
+        body.appendChild(Info);
+    
+        const infoBox = document.getElementById("info-info");
+    
+        function createResourceIcon(iconPath, status, Type) {
+            if (status == null || status === "") {
+                return;
+            }
+        
+            const resourceItem = document.createElement("div");
+            resourceItem.classList.add("resource-item", "tooltip");
+        
+            const iconTextWrapper = document.createElement("div");
+            iconTextWrapper.classList.add("icon-text-wrapper");
+        
+            const iconWrapper = document.createElement("div");
+            iconWrapper.classList.add("icon-wrapper");
+        
+            const iconSpan = document.createElement("span");
+            iconSpan.classList.add("sidebar-item");
+        
+            const icon = document.createElement("img");
+            icon.src = `./images/Icons/${iconPath}`;
+            icon.alt = `${Type}`;
+        
+            iconSpan.appendChild(icon);
+            iconWrapper.appendChild(iconSpan);
+            iconTextWrapper.appendChild(iconWrapper);
+        
+            const spacer = document.createElement("div");
+            spacer.classList.add("spacer");
+            iconTextWrapper.appendChild(spacer);
+        
+            const numberWrapper = document.createElement("div");
+            numberWrapper.classList.add("number-wrapper");
+            numberWrapper.textContent = status;
+            iconTextWrapper.appendChild(numberWrapper);
+        
+            resourceItem.appendChild(iconTextWrapper);
+        
+            const tooltipText = document.createElement("span");
+            tooltipText.classList.add("tooltiptext");
+            tooltipText.textContent = `${Type}`;
+            resourceItem.appendChild(tooltipText);
+        
+            return resourceItem;
+        }
+    
+        if (infoArray[index].corr != null) {
+            infoBox.appendChild(createResourceIcon(`corruption.png`, infoArray[index].corr, "Corruption"));
+        }
+        
+        if (infoArray[index].value != null) {
+            infoBox.appendChild(createResourceIcon(`dubloons.png`, infoArray[index].value, "Dubloons"));
+        }
+        
+        if (infoArray[index].weight != null) {
+            infoBox.appendChild(createResourceIcon(`weight.png`, infoArray[index].weight, "Weight"));
+        }
+    
+        const Description = document.createElement("div");
+        Description.id = "Info-Description";
+        Description.innerHTML = type === "Relic" ? SugarCube.Story.get(Name + " Description").text : infoArray[index].description;
+        body.appendChild(Description);
+    
+        console.log("Current Info: " + Name + "\nNext Info: " + Next + "\nPrevious Info: " + Previous);
     }
+
 }
 
 setup.generateCharacterID = function () {
