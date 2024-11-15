@@ -441,17 +441,20 @@ Setting.addRange("volume", {
     onChange: window.setMasterVolume
 });
 
+Setting.addHeader("AI Settings");
 
-
-Setting.addHeader("Portrait Settings");
+Setting.addToggle("OverridePortrait", {
+    label: "Force a custom portrait using the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+    default: false,
+});
 
 Setting.addToggle("AIPortraitsMode", {
     label: "Enable the use of AI to generate your own portrait.",
     default: false,
 });
 
-Setting.addToggle("OverridePortrait", {
-    label: "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+Setting.addToggle("CGSceneGeneration", {
+    label: "Allow for the creation of CG scenes using available backends. (NOT IMPLEMENTED).",
     default: false,
 });
 
