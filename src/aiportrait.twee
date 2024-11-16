@@ -19,7 +19,7 @@
 				<<script>>
 					(async () => {
 						await setup.openAI_GenerateDallePortrait();
-						await setup.displayImage();
+						await setup.displaySavedImage();
 					})();
 				<</script>>
 				<<set setup.firstPortraitGen = true>>
@@ -83,7 +83,7 @@
 			<<script>>
 				(async () => {
 					await setup.comfyUI_GeneratePortrait();
-					await setup.displayImage();
+					await setup.displayRecentGeneratedImage();
 				})();
 			<</script>>
 			<<set setup.firstPortraitGen = true>>
@@ -126,7 +126,16 @@
 	<</if>>
 
 	<div class="portrait-navigation">
-		<button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Confirm</button>
+		<<button "Confirm">>
+			<<script>>
+				(async () => {
+					const base64Image = await setup.queryImageDB("generatedImage");
+					setup.storeImage("playerPortrait", base64Image);
+					goBackToPassage(SugarCube.State.variables.menuReturn);
+				})();
+			<</script>>
+			<<set setup.firstPortraitGen = true>>
+		<</button>>
 		<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 	</div>
 </div>

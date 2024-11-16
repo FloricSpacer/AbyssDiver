@@ -379,7 +379,7 @@ Macro.add('say', {
                 imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
             } else if (setup.firstPortraitGen) {
                 imgSrc = "images/Player Icons/playerF.jpg";
-                setup.displayPortraitImage();
+                setup.displaySavedImage();
             } else {
                 // Use the new numbered portrait system
                 const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
@@ -1467,35 +1467,38 @@ setup.queryImageDB = async function (key) {
     });
 };
 
-setup.displayImage = async function () {
-    const imgElements = document.querySelectorAll(".dalleImage");
+setup.displaySavedImage = async function () {
+    const imgElementsDalle = document.querySelectorAll(".portraitImage");
+    const imgElementsPortrait = document.querySelectorAll(".portrait");
     try {
         const base64Image = await setup.queryImageDB("playerPortrait");
-        imgElements.forEach(function (imgElement) {
+        setup.firstPortraitGen = true;
+        imgElementsDalle.forEach(function (imgElement) {
+            imgElement.src = "data:image/png;base64," + base64Image;
+        });
+        imgElementsPortrait.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
     } catch (error) {
         console.error(error);
-        imgElements.forEach(function (imgElement) {
-            imgElement.src = "images/border.png";
-        });
     }
 };
 
-setup.displayPortraitImage = async function () {
-    const imgElements = document.querySelectorAll(".portraitImage");
+setup.displayRecentGeneratedImage = async function () {
+    const imgElements = document.querySelectorAll(".dalleImage");
     try {
-        const base64Image = await setup.queryImageDB("playerPortrait");
+        const base64Image = await setup.queryImageDB("generatedImage");
+        setup.firstPortraitGen = true;
         imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
     } catch (error) {
         console.error(error);
-        imgElements.forEach(function (imgElement) {
-            imgElement.src = "images/border.png";
-        });
     }
 };
+
+setTimeout(setup.displaySavedImage, 300);
+setTimeout(setup.displayGeneratedImage, 300);
 
 Config.saves.maxAutoSaves = 1;
 
@@ -1940,7 +1943,7 @@ Macro.add('sidebar-widget', {
         }
 
         if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
-            setup.displayImage();
+            setup.displaySavedImage();
         }
 
         $('#menu .text-center').on('click', function () {
