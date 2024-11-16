@@ -1,0 +1,91 @@
+
+:: Generate AI Portrait [noreturn nobr]
+
+<div class="portrait-generator-container">
+    <<if settings.OpenAIAPIKey && (settings.OpenAIAPIKey.startsWith("sk") || $userAPIKey.startsWith("sk"))>>
+        <<set $characterDescription = setup.evaluateDalleCharacterDescription($mc)>>
+        <<set settings.OpenAIAPIKey = $userAPIKey>>
+
+        <div class="portrait-api-notice">
+            Generate a new AI portrait of your character (this will take at least a few seconds). Be aware that you must pay with credit on your OpenAI account for each generation.
+        </div>
+
+		<button class="dark-btn obsidian" data-passage="Portrait Prompt">View Portrait Prompt</button><br><br>
+        <div class="portrait-controls">
+            <div class="generate-portrait-button">
+                <<button '<span class="icon">[img[setup.ImagePath+\'Icons/aiportrait.png\']]</span>&nbsp;&nbsp;Generate New Portrait'>>
+                    <<script>>
+                        (async () => {
+                            await setup.call_PortraitImageGenerator();
+                            setup.displayImage();
+                        })();
+                    <</script>>
+                    <<set setup.firstPortraitGen = true>>
+                <</button>>
+            </div>
+        </div>
+
+        <div id="notification"></div>
+
+        <div class="portrait-image-container">
+            <img class="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;">
+        </div>
+
+        Once your portrait is generated, you can follow the next step to save it for long term use, otherwise it will be permanently overridden when you generate a new portrait.
+
+        <br><br>
+        <b>Right click the image and save it if you want to be able to see it in the future. You can use it as an image named "CharacterPortraitOverride.png" in the folder /images/GeneratedPortraits if you would like to use it with the custom portrait setting in the future.</b>
+        <br><br>
+
+        <div class="portrait-navigation">
+            <button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Confirm</button>
+            <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+        </div>
+
+    <<else>>
+        <div class="portrait-api-form">
+            Enter your OpenAI API key to enable the generation of AI character portraits. (Do NOT share your save file if you have entered your API key!)
+            <br><br>
+            <button class="dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
+            <button class="dark-btn obsidian" data-passage="Portrait Prompt">View Portrait Prompt</button>
+            <br><br>
+            Enter your OpenAI API key:<br>
+            <<textbox "$userAPIKey" "">>
+            <br>
+            <<button "Submit">>
+                <<set settings.OpenAIAPIKey to $userAPIKey>>
+                <<goto "Generate AI Portrait">>
+            <</button>>
+        </div>
+
+        <div class="portrait-navigation">
+            <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+        </div>
+    <</if>>
+</div>
+
+:: Portrait Prompt [noreturn nobr]
+
+This prompt is made to be used with DALL-E 3 or ChatGPT and may require modification to be used with other image models, such as Stable Diffusion. It also has all NSFW information stripped away, so you can add that back in if you are using an uncensored model.<br><br>
+
+If you have ChatGPT Plus, then you can paste this prompt directly into ChatGPT and it should work well.<br><br>
+
+Prompt:<br><br>
+
+Create an anime-inspired digital painting of a single adventurer with each of the following traits, in the background of the Abyss from MiA. Do NOT use the word character in the final prompt.<br><br>
+
+<<= setup.evaluateDalleCharacterDescription(State.variables.mc) >><br><br>
+
+<<button "Copy Prompt">>
+	<<script>>
+		var promptText = "Create an anime-inspired digital painting of a single adventurer with each of the following traits, in the background of the Abyss from MiA. Do NOT use the word character in the final prompt.\n\n" + setup.evaluateDalleCharacterDescription(State.variables.mc);
+		navigator.clipboard.writeText(promptText).then(function() {
+			alert("Prompt copied to clipboard!");
+		}, function() {
+			alert("Failed to copy prompt. Please try again.");
+		});
+	<</script>>
+	<<set setup.firstPortraitGen = true>>
+<</button>><br><br>
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
