@@ -458,10 +458,25 @@ Setting.addToggle("SidebarPortrait", {
     default: false,
 });
 
-Setting.addToggle("CGSceneGeneration", {
-    label: "Allow for the creation of CG scenes using available backends. (NOT IMPLEMENTED).",
+Setting.addToggle("OpenAIGeneration", {
+    label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
     default: false,
 });
+
+Setting.addToggle("ComfyUIGeneration", {
+    label: "Allow for the creation of portraits using ComfyUI via the one-click system.",
+    default: false,
+});
+
+// Setting.addToggle("ReForgeGeneration", {
+//     label: "Allow for the creation of portraits using Stable Diffusion WebUI ReForge.",
+//     default: false,
+// });
+
+// Setting.addToggle("CGSceneGeneration", {
+//     label: "Allow for the creation of CG scenes using available backends. (NOT IMPLEMENTED).",
+//     default: false,
+// });
 
 Setting.addHeader("Other Settings");
 
