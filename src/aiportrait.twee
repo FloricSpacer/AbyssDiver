@@ -2,73 +2,131 @@
 :: Generate AI Portrait [noreturn nobr]
 
 <div class="portrait-generator-container">
-    <<if settings.OpenAIAPIKey && (settings.OpenAIAPIKey.startsWith("sk") || $userAPIKey.startsWith("sk"))>>
-        <<set $characterDescription = setup.evaluateDalleCharacterDescription($mc)>>
-        <<set settings.OpenAIAPIKey = $userAPIKey>>
 
-        <div class="portrait-api-notice">
-            Generate a new AI portrait of your character (this will take at least a few seconds). Be aware that you must pay with credit on your OpenAI account for each generation.
-        </div>
+	<div id="notification"></div>
 
-		<button class="dark-btn obsidian" data-passage="Portrait Prompt">View Portrait Prompt</button><br><br>
-        <div class="portrait-controls">
-            <div class="generate-portrait-button">
-                <<button '<span class="icon">[img[setup.ImagePath+\'Icons/aiportrait.png\']]</span>&nbsp;&nbsp;Generate New Portrait'>>
-                    <<script>>
-                        (async () => {
-                            await setup.call_PortraitImageGenerator();
-                            setup.displayImage();
-                        })();
-                    <</script>>
-                    <<set setup.firstPortraitGen = true>>
-                <</button>>
-            </div>
-        </div>
+	<h3>OpenAI Dalle Image Generator</h3>
 
-        <div id="notification"></div>
+	<<if settings.OpenAIAPIKey && (settings.OpenAIAPIKey.startsWith("sk") || $userAPIKey.startsWith("sk"))>>
+		<<set $characterDescription = setup.evaluateDalleCharacterDescription($mc)>>
+		<<set settings.OpenAIAPIKey = $userAPIKey>>
 
-        <div class="portrait-image-container">
-            <img class="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;">
-        </div>
+		<div class="portrait-api-notice">
+			Generate a new AI portrait of your character (this will take at least a few seconds). Be aware that you must pay with credit on your OpenAI account for each generation.
+		</div>
 
-        Once your portrait is generated, you can follow the next step to save it for long term use, otherwise it will be permanently overridden when you generate a new portrait.
+		<<button "Generate">>
+			<<script>>
+				(async () => {
+					await setup.openAI_GenerateDallePortrait();
+					setup.displayImage();
+				})();
+			<</script>>
+		<</button>>
+		<button class="dark-btn obsidian" data-passage="Portrait Prompt">View Dalle Portrait Prompt</button><br><br>
 
-        <br><br>
-        <b>Right click the image and save it if you want to be able to see it in the future. You can use it as an image named "CharacterPortraitOverride.png" in the folder /images/GeneratedPortraits if you would like to use it with the custom portrait setting in the future.</b>
-        <br><br>
+		<div class="portrait-image-container">
+			<img class="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;">
+		</div>
+	<<else>>
+		<div class="portrait-api-form">
+			<address>Enter your OpenAI API key to enable the generation of AI character portraits.</address>
+			<address>Do NOT share your save file if you have entered your API key!</address>
+			<br>
+			<button class="dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
+			<button class="dark-btn obsidian" data-passage="Dalle Portrait Prompt">View Dalle Portrait Prompt</button>
+			<br><br>
+			Enter your OpenAI API key:
+			<br>
+			<<textbox "$userAPIKey" "">>
+			<br>
+			<<button "Submit">>
+				<<set settings.OpenAIAPIKey to $userAPIKey>>
+				<<goto "Generate AI Portrait">>
+			<</button>>
+		</div>
+	<</if>>
 
-        <div class="portrait-navigation">
-            <button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Confirm</button>
-            <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
-        </div>
+	<hr>
 
-    <<else>>
-        <div class="portrait-api-form">
-            Enter your OpenAI API key to enable the generation of AI character portraits. (Do NOT share your save file if you have entered your API key!)
-            <br><br>
-            <button class="dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
-            <button class="dark-btn obsidian" data-passage="Portrait Prompt">View Portrait Prompt</button>
-            <br><br>
-            Enter your OpenAI API key:<br>
-            <<textbox "$userAPIKey" "">>
-            <br>
-            <<button "Submit">>
-                <<set settings.OpenAIAPIKey to $userAPIKey>>
-                <<goto "Generate AI Portrait">>
-            <</button>>
-        </div>
+	<h3>ComfyUI Local Image Generator</h3>
+	<address>- Requires you to run the one-click installer found in the AbyssDiver local-gen folder.</address>
+	<address>- Double click the batch (.bat) file on Windows, or double click the bash (.sh) file for Linux.</address>
+	<address>- Read the terminal for further instructions.</address>
 
-        <div class="portrait-navigation">
-            <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
-        </div>
-    <</if>>
+	<br>
+	<div class="portrait-image-container">
+		<img class="dalleImage" src="" alt="AI Generated Portrait" style="max-width: 70%;">
+	</div>
+
+	<<button "Generate">>
+		<<script>>
+			(async () => {
+				await setup.comfyUI_GeneratePortrait();
+				setup.displayImage();
+			})();
+		<</script>>
+	<</button>>
+
+	<button class="dark-btn obsidian" data-passage="ComfyUI Portrait Prompt">View ComfyUI Portrait Prompt</button>
+
+	<br>
+
+	<hr>
+
+	Once your portrait is generated, you can save it for long term use, otherwise it will be permanently overridden when you generate a new portrait.
+
+	<br><br>
+	To save for long term usage, do the following:
+	<ol>
+	<li>Right click and save image</li>
+	<li>Rename image to "CharacterPortraitOverride.png"</li>
+	<li>Move image to the folder "/images/GeneratedPortraits" from AbyssDiver's root directory.</li>
+	<li>Refresh the page or travel.</li>
+	</ol>
+	<br><br>
+
+	<div class="portrait-navigation">
+		<button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Confirm</button>
+		<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+	</div>
+
+	<div class="portrait-navigation">
+		<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+	</div>
 </div>
 
-:: Portrait Prompt [noreturn nobr]
+:: Dalle Portrait Prompt [noreturn nobr]
 
 This prompt is made to be used with DALL-E 3 or ChatGPT and may require modification to be used with other image models, such as Stable Diffusion. It also has all NSFW information stripped away, so you can add that back in if you are using an uncensored model.<br><br>
 
 If you have ChatGPT Plus, then you can paste this prompt directly into ChatGPT and it should work well.<br><br>
+
+Prompt:<br><br>
+
+Create an anime-inspired digital painting of a single adventurer with each of the following traits, in the background of the Abyss from MiA. Do NOT use the word character in the final prompt.<br><br>
+
+<<= setup.evaluateDalleCharacterDescription(State.variables.mc) >><br><br>
+
+<<button "Copy Prompt">>
+	<<script>>
+		var promptText = "Create an anime-inspired digital painting of a single adventurer with each of the following traits, in the background of the Abyss from MiA. Do NOT use the word character in the final prompt.\n\n" + setup.evaluateDalleCharacterDescription(State.variables.mc);
+		navigator.clipboard.writeText(promptText).then(function() {
+			alert("Prompt copied to clipboard!");
+		}, function() {
+			alert("Failed to copy prompt. Please try again.");
+		});
+	<</script>>
+	<<set setup.firstPortraitGen = true>>
+<</button>><br><br>
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+:: ComfyUI Portrait Prompt [noreturn nobr]
+
+This prompt is made to be used with ComfyUI using the Pony Hassaku Hentai model.<br><br>
+
+If you want to run prompts separately, make sure to have the correct model downloaded. The link can be found at the top of the local-gen's `installer.py` script.
 
 Prompt:<br><br>
 

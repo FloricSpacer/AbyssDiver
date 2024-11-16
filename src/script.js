@@ -453,6 +453,11 @@ Setting.addToggle("AIPortraitsMode", {
     default: false,
 });
 
+Setting.addToggle("SidebarPortrait", {
+    label: ".",
+    default: false,
+});
+
 Setting.addToggle("CGSceneGeneration", {
     label: "Allow for the creation of CG scenes using available backends. (NOT IMPLEMENTED).",
     default: false,
@@ -1448,14 +1453,17 @@ setup.queryImageDB = async function (key) {
 };
 
 setup.displayImage = async function () {
+    const imgElements = document.querySelectorAll(".dalleImage");
     try {
         const base64Image = await setup.queryImageDB("playerPortrait");
-        const imgElements = document.querySelectorAll(".dalleImage");
         imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
     } catch (error) {
         console.error(error);
+        imgElements.forEach(function (imgElement) {
+            imgElement.src = "images/border.png";
+        });
     }
 };
 
