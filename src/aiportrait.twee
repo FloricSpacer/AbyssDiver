@@ -2,7 +2,6 @@
 :: Generate AI Portrait [noreturn nobr]
 
 <div class="portrait-generator-container">
-
 	<div id="notification"></div>
 
 	<h3>OpenAI Dalle Image Generator</h3>
@@ -51,9 +50,23 @@
 	<hr>
 
 	<h3>ComfyUI Local Image Generator</h3>
-	<address>- Requires you to run the one-click installer found in the AbyssDiver local-gen folder.</address>
+	<address>- Requires you to run the one-click-comfyui found in the AbyssDiver local-gen folder.</address>
 	<address>- Double click the batch (.bat) file on Windows, or double click the bash (.sh) file for Linux.</address>
 	<address>- Read the terminal for further instructions.</address>
+
+	<br>
+
+	<address>You will need a total of at least 17GBs available for ComfyUI and the models to be downloaded.</address>
+	<address>It is recommended you have a graphics card with at least 4GBs of VRAM.</address>
+	<address>It will still run even without a graphics card, but will be on the CPU.</address>
+
+	<address id="comfyui-enabled">...</address>
+
+	<<script>>
+		(async () => {
+			await setup.updateComfyUIStatus();
+		})();
+	<</script>>
 
 	<br>
 	<div class="portrait-image-container">
@@ -84,7 +97,15 @@
 	<li>Move image to the folder "/images/GeneratedPortraits" from AbyssDiver's root directory.</li>
 	<li>Refresh the page or travel.</li>
 	</ol>
-	<br><br>
+
+	Custom Environmental Descriptors Prompt:
+	<<textbox "$customPromptPrefix" "">>
+
+	<br>
+
+	Custom Character Details Prompt:
+	<<textbox "$customPromptSuffix" "">>
+	<hr>
 
 	<div class="portrait-navigation">
 		<button class="dark-btn obsidian" onclick="goBackToPassage(SugarCube.State.variables.menuReturn)">Confirm</button>
