@@ -1483,14 +1483,17 @@ setup.displayImage = async function () {
 };
 
 setup.displayPortraitImage = async function () {
+    const imgElements = document.querySelectorAll(".portraitImage");
     try {
         const base64Image = await setup.queryImageDB("playerPortrait");
-        const imgElements = document.querySelectorAll(".portraitImage");
         imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
     } catch (error) {
         console.error(error);
+        imgElements.forEach(function (imgElement) {
+            imgElement.src = "images/border.png";
+        });
     }
 };
 
