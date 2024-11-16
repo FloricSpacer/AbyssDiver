@@ -601,7 +601,7 @@ Thanks again for playing! I hope the dive was worth it.
 			You have lost both of your biological eyes and in one of your sockets you have the Moonwatcher Relic, 
 			which allows you to perceive the world even better than when you had both your normal eyes.<br>
 		<<elseif $mc.eyeCount===1>>
-			You only have 1 eye, which is colored $mc.eyeColor. You can still see quite well, 
+			You only have 1 eye, which is colored $mc.eyeColor. You can still see well, 
 			but depth perception has become quite hard. <br>
 		<<elseif $mc.eyeCount===2 && $BionicEye>>
 			You have one natural $mc.eyeColor eye left. Your other eye has been replaced with the Moonwatcher Relic, 
@@ -710,7 +710,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 		/*Needs*/
 		<<if $mc.hasCurse("Semen Demon")>>
-			You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads per day.
+			You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids (<<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads)every day.
 			<<if $mc.curses.some(e =>
 				e instanceof SemenDemon && (
 					($mc.penis > 0 && e.fluidType !== 'vaginal fluids') ||
@@ -731,11 +731,11 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 		<<set _quotaCount = setup.activeCurseCount("Quota")>>
 		<<if _quotaCount > 0>>
-			You need to directly bring other people to orgasm <<if $mc.hasCurse("Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $mc.hasCurse("Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<</if>><<print " ">>
+			You need to directly bring other people to orgasm <<if $mc.hasCurse("Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel as if you hadn't slept for several days. <<if $mc.hasCurse("Blushing Virgin")>>And yet every time feels like your first time ever!<</if>><<print " ">>
 		<</if>>
 		<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
 		<<if _limelightCount > 0>>
-			You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the Abyss are now streamed to quite a lot of people. This means <<if $mc.hasCurse("Semen Demon") || $mc.hasCurse("Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $mc.hasCurse("Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
+			You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely. Also, your misadventures in the Abyss are now streamed to quite a lot of people. This means <<if $mc.hasCurse("Semen Demon") || $mc.hasCurse("Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $mc.hasCurse("Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
 		<</if>>
 	</fieldset>
 </div>
@@ -981,10 +981,19 @@ Thanks again for playing! I hope the dive was worth it.
 		<div class="idcard-content">
 			<div class="idcard-photo-section">
 				<div class="idcard-photo">
-					<img src="images/companions/willowserendip.jpg"
-					alt="Willow Serendip" style="width: 100%; height: 100%;">
+					<<if settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen>>
+						<<print '<img class="dalleImage" src="" alt="Generated Portrait" style="width: 100%; height: 100%;">'>>
+					<<elseif settings.OverridePortrait>>
+						<<print '<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="" style="width: 100%; height: 100%;">'>>
+					<<else>>
+						<<if $mc.gender >= 4>>
+							<<print '<img src="images/Player Icons/playerF' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="" style="width: 100%; height: 100%;">'>>
+						<<else>>
+							<<print '<img src="images/Player Icons/playerM' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="" style="width: 100%; height: 100%;">'>>
+						<</if>>
+					<</if>>
 				</div>
-				<div class="idcard-name">Willow Serendip</div>
+				<div class="idcard-name">$nameID</div>
 			</div>
 			<div class="idcard-info">
 				<div class="idcard-info-row">
@@ -1000,7 +1009,7 @@ Thanks again for playing! I hope the dive was worth it.
 						Sex:
 					</span>
 					<span class="idcard-info-value">
-						F
+						$sexID
 					</span>
 				</div>
 				<div class="idcard-info-row">
@@ -1008,7 +1017,7 @@ Thanks again for playing! I hope the dive was worth it.
 						Eye Color:
 					</span>
 					<span class="idcard-info-value">
-						Blue
+						$eyeColorID
 					</span>
 				</div>
 				<div class="idcard-info-row">
@@ -1016,7 +1025,7 @@ Thanks again for playing! I hope the dive was worth it.
 						Hair Color:
 					</span>
 					<span class="idcard-info-value">
-						Blonde
+						$hairColorID
 					</span>
 				</div>
 				<div class="idcard-info-row">
@@ -1060,6 +1069,8 @@ Thanks again for playing! I hope the dive was worth it.
 	SugarCube.State.variables.curseInterval = setInterval(setup.randomCurseApp, 10000);
 	setup.randomCurseApp();	
 </script>
+
+
 :: PassageEnd [script]
 $(document).on(':passageend', function() {
 if (SugarCube.State.passage === "Appearance") {
