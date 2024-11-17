@@ -379,7 +379,7 @@ Macro.add('say', {
                 imgSrc = "images/GeneratedPortraits/CharacterPortraitOverride.png";
             } else if (setup.firstPortraitGen) {
                 imgSrc = "images/Player Icons/playerF.jpg";
-                setup.displayPortraitImage();
+                setup.displaySavedImage();
             } else {
                 // Use the new numbered portrait system
                 const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
@@ -441,19 +441,42 @@ Setting.addRange("volume", {
     onChange: window.setMasterVolume
 });
 
+Setting.addHeader("AI Settings");
 
-
-Setting.addHeader("Portrait Settings");
+Setting.addToggle("OverridePortrait", {
+    label: "Force a custom portrait using the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+    default: false,
+});
 
 Setting.addToggle("AIPortraitsMode", {
     label: "Enable the use of AI to generate your own portrait.",
     default: false,
 });
 
-Setting.addToggle("OverridePortrait", {
-    label: "Use a custom portrait in the 'images/GeneratedPortraits/CharacterPortraitOverride.png' image file.",
+Setting.addToggle("SidebarPortrait", {
+    label: "Enable the use of the sidebar portrait for generated images.",
     default: false,
 });
+
+Setting.addToggle("OpenAIGeneration", {
+    label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
+    default: false,
+});
+
+Setting.addToggle("ComfyUIGeneration", {
+    label: "Allow for the creation of portraits using ComfyUI via the one-click system.",
+    default: false,
+});
+
+// Setting.addToggle("ReForgeGeneration", {
+//     label: "Allow for the creation of portraits using Stable Diffusion WebUI ReForge.",
+//     default: false,
+// });
+
+// Setting.addToggle("CGSceneGeneration", {
+//     label: "Allow for the creation of CG scenes using available backends. (NOT IMPLEMENTED).",
+//     default: false,
+// });
 
 Setting.addHeader("Other Settings");
 
@@ -1444,10 +1467,28 @@ setup.queryImageDB = async function (key) {
     });
 };
 
-setup.displayImage = async function () {
+setup.displaySavedImage = async function () {
+    const imgElementsDalle = document.querySelectorAll(".portraitImage");
+    const imgElementsPortrait = document.querySelectorAll(".portrait");
     try {
         const base64Image = await setup.queryImageDB("playerPortrait");
-        const imgElements = document.querySelectorAll(".dalleImage");
+        setup.firstPortraitGen = true;
+        imgElementsDalle.forEach(function (imgElement) {
+            imgElement.src = "data:image/png;base64," + base64Image;
+        });
+        imgElementsPortrait.forEach(function (imgElement) {
+            imgElement.src = "data:image/png;base64," + base64Image;
+        });
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+setup.displayRecentGeneratedImage = async function () {
+    const imgElements = document.querySelectorAll(".dalleImage");
+    try {
+        const base64Image = await setup.queryImageDB("generatedImage");
+        setup.firstPortraitGen = true;
         imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
         });
@@ -1456,17 +1497,8 @@ setup.displayImage = async function () {
     }
 };
 
-setup.displayPortraitImage = async function () {
-    try {
-        const base64Image = await setup.queryImageDB("playerPortrait");
-        const imgElements = document.querySelectorAll(".portraitImage");
-        imgElements.forEach(function (imgElement) {
-            imgElement.src = "data:image/png;base64," + base64Image;
-        });
-    } catch (error) {
-        console.error(error);
-    }
-};
+setTimeout(setup.displaySavedImage, 300);
+setTimeout(setup.displayGeneratedImage, 300);
 
 Config.saves.maxAutoSaves = 1;
 
@@ -1911,7 +1943,7 @@ Macro.add('sidebar-widget', {
         }
 
         if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
-            setup.displayImage();
+            setup.displaySavedImage();
         }
 
         $('#menu .text-center').on('click', function () {
