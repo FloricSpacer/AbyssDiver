@@ -522,7 +522,7 @@ Saeko nods, a small smile appearing on her face. She pulls out a small notebook 
 <<say $companionSaeko>>Excellent. First, let's talk about the four major things you need to keep track of down there.<</say>>
 She points to various entries in her notebook as she explains.
 
-<<say $companionSaeko>>There's <span class="sidebar-item">[img[setup.ImagePath+'Icons/corruption.png']]</span> <span style="color: #9370db;">corruption</span>, which you gain from Curses and spend obtaining Relics or when ascending layers. Then we have <span class="sidebar-item">[img[setup.ImagePath+'Icons/food.png']]</span> <span style="color: #ff8c00;">days of food</span> and <span class="sidebar-item">[img[setup.ImagePath+'Icons/water.png']]</span> <span style="color: #87ceeb;">days of water</span>. You'll consume one point of each daily, and trust me, you don't want to run out. Lastly, there are <span class="sidebar-item">[img[setup.ImagePath+'Icons/dubloons.png']]</span> <span style="color: #ffb833;">dubloons</span>, your currency down there and up here in Outset Town.<</say>>
+<<say $companionSaeko>>There's <span class="sidebar-item"><img src="images/Icons/corruption.png" alt="Corruption" style="margin-left: 10px;"></span></span> <span style="color: #9370db;">corruption</span>, which you gain from Curses and spend obtaining Relics or when ascending layers. Then we have <span class="sidebar-item"><img src="images/Icons/food.png" alt="Food" style="margin-left: 10px;"></span> <span style="color: #ff8c00;">days of food</span> and <span class="sidebar-item"><img src="images/Icons/water.png" alt="Water" style="margin-left: 10px;"></span> <span style="color: #87ceeb;">days of water</span>. You'll consume one point of each daily, and trust me, you don't want to run out. Lastly, there are <span class="sidebar-item"><img src="images/Icons/dubloons.png" alt="Dubloons" style="margin-left: 10px;"></span> <span style="color: #ffb833;">dubloons</span>, your currency down there and up here in Outset Town.<</say>>
 Saeko pauses, looking at you to ensure you're following along. Her fingers tap lightly on the notebook as she continues.
 
 <<say $companionSaeko>>Now, about weights. The Abyss isn't a place for overconfidence. You'll need to set your own limits, but be realistic. Breaking your back won't do you any favors.<</say>>
@@ -1870,6 +1870,9 @@ For a small fee of 10 dubloons, you can change your legal name from $mc.name to 
 <</nobr>>\
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
 
+You can update your diver's license here so that it represents your current legal status. There is a nominal fee of 5 dubloons for printing a new card.
+<button class="dark-btn obsidian" data-passage="Surface ID Card">Update your ID card</button>
+
 You can use your companion Cloud's connections to borrow some money, but you will need to pay back an extra 20% as interest before you settle down for any voluntary habitation option.
 <button class="dark-btn obsidian" data-passage="Surface debt1">Borrow more money</button>
 <</if>><<if $debt > 0>>
@@ -1893,6 +1896,80 @@ An elderly woman guides you through some surprisingly concise forms where you ca
 
 What is your new name?
 <<textbox "$mc.name" "Nana" "Surface Hub">>
+
+
+:: Surface ID Card [surface indoor]
+
+<<nobr>>
+<<set _matchScore = 0>>
+
+<<if $eyeColorID != $mc.eyeColor>>
+    <<set _matchScore += 1>>
+<</if>>
+
+<<if $hairColorID != $mc.hairColor>>
+    <<set _matchScore += 1>>
+<</if>>
+
+<<if $sexID != $mc.sex>>
+    <<set _matchScore += 1>>
+<</if>>
+
+<<if $nameID != $mc.name>>
+    <<set _matchScore += 1>>
+<</if>>
+
+<<set _matchScore += Math.abs($inhumanityID - $mc.inhuman)>>
+
+
+<<set $eyeColorID = $mc.eyeColor>>
+<<set $hairColorID = $mc.hairColor>>
+<<set $sexID = $mc.sex>>
+<<set $nameID = $mc.name>>
+<<set $inhumanityID = $mc.inhuman>>
+
+<<set $dubloons -= 5>>
+<</nobr>>
+
+:: Surface ID Card [surface]
+
+The ID office is clinically clean, with stark white walls and the faint scent of sanitizer in the air. Behind the counter, a middle-aged woman with rectangular glasses and impeccably painted nails examines your documents with practiced efficiency.
+
+<<if _matchScore == 0>>\
+<<say $idLady>>Hmm... let me see here...<</say>>
+She glances between your old ID and you several times, her expression growing increasingly puzzled. The ceiling fan whirs steadily overhead as she double-checks her terminal.
+
+<<say $idLady>>You do realize you've paid 5 dubloons for... exactly the same ID card? Everything matches perfectly.<</say>>
+She shrugs, the fluorescent lights glinting off her name badge as she begins processing your request anyway.
+
+<<say $idLady>>Well, it's your money. At least you'll have that 'new card' smell, I suppose.<</say>>
+With practiced movements, she prints and laminates your new ID, identical to the old one but considerably shinier.
+
+<<elseif _matchScore < 3>>\
+<<say $idLady>>Ah, yes... I see.<</say>>
+She examines your documents with a knowing smile, her eyes crinkling at the corners. Her fingers tap efficiently on the keyboard as she updates your information.
+
+<<say $idLady>>The Abyss leaves its mark on everyone, doesn't it? Sometimes in the subtlest ways.<</say>>
+The ID printer hums to life, its soft mechanical whirring filling the small office.
+
+<<say $idLady>>There we are. Updated and official. Keep an eye on those changes, dear. You never know when you might need another update down there.<</say>>
+She hands you the new card with a gentle nod of understanding.
+
+<<else>>\
+<<say $idLady>>Wait... this can't be right.<</say>>
+She looks between your old ID and you repeatedly, her brow furrowing deeper each time. With swift, decisive movements, she reaches under her desk and produces what appears to be an ordinary name tag that seems kind of worn out.
+
+<<say $idLady>>I'm going to need to verify your identity. Standard procedure for... significant alterations.<</say>>
+She holds it up to you and ink seems to appear from nowhere on the tag, indicating your identity to her. It shows a name, and some distinct sort of scratch patterns around the edges that weren't there before.
+
+<<say $idLady>>Well! Your identity match perfectly. I've certainly seen the Abyss work its ways before, but this is... quite something.<</say>>
+She processes your new ID with extra care, double-checking each detail before handing over the updated card.
+
+<<say $idLady>>Do try to keep this form for at least a little while, won't you? These cards aren't cheap to produce.<</say>>
+<</if>>\
+
+<button class="dark-btn obsidian" data-passage="Surface Admin">Continue</button>
+
 
 
 :: Surface debt1 [surface]

@@ -298,6 +298,8 @@ setup.generateDebugID();
 
 <button class="dark-btn obsidian" data-passage="Lily ConvoLac">Lily Lactation Convo</button>
 
+<button class="dark-btn obsidian" data-passage="DialogueTest">Nothing, nothing at all</button>
+
 <<if $time > 0>>
 	<button class="dark-btn obsidian" data-passage="Time Stats">View time spent in each layer</button><br>
 <</if>>
@@ -591,6 +593,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<legend>
 			basic characteristics
 		</legend>
+			You are $mc.name.<br>
 			You're a <<ShowAge $mc.realAge>> year old $mc.sex <<PerceivedRace $mc>><<if Math.round(12 * $mc.realAge) !== Math.round(12 * $mc.appAge)>>, but you appear to be <<ShowAge $mc.appAge>> old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.<br>
 			Your hair color is $mc.hair.<br>
 		<<if $mc.eyeCount===0>>
@@ -599,7 +602,7 @@ Thanks again for playing! I hope the dive was worth it.
 			You have lost both of your biological eyes and in one of your sockets you have the Moonwatcher Relic, 
 			which allows you to perceive the world even better than when you had both your normal eyes.<br>
 		<<elseif $mc.eyeCount===1>>
-			You only have 1 eye, which is colored $mc.eyeColor. You can still see quite well, 
+			You only have 1 eye, which is colored $mc.eyeColor. You can still see well, 
 			but depth perception has become quite hard. <br>
 		<<elseif $mc.eyeCount===2 && $BionicEye>>
 			You have one natural $mc.eyeColor eye left. Your other eye has been replaced with the Moonwatcher Relic, 
@@ -708,7 +711,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 		/*Needs*/
 		<<if $mc.hasCurse("Semen Demon")>>
-			You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids every day, or else you feel as though you were starving. This averages <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads per day.
+			You must drink <<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 10)>> ml of sexual fluids (<<print ($mc.curses.filter(c => c instanceof SemenDemon).reduce((v, c) => v + c.amount, 0) * 2)>> loads)every day.
 			<<if $mc.curses.some(e =>
 				e instanceof SemenDemon && (
 					($mc.penis > 0 && e.fluidType !== 'vaginal fluids') ||
@@ -729,11 +732,11 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 		<<set _quotaCount = setup.activeCurseCount("Quota")>>
 		<<if _quotaCount > 0>>
-			You need to directly bring other people to orgasm <<if $mc.hasCurse("Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel a huge wave of exhaustion and difficulty focusing, as if you hadn't slept for several days. <<if $mc.hasCurse("Blushing Virgin")>>And yet every time feels like your first time ever, making it a bit awkward to save time with group sessions!<</if>><<print " ">>
+			You need to directly bring other people to orgasm <<if $mc.hasCurse("Sleep Tight")>><<print (_quotaCount * 3)>><<else>><<print (_quotaCount * 2)>><</if>> times per day, or else you feel as if you hadn't slept for several days. <<if $mc.hasCurse("Blushing Virgin")>>And yet every time feels like your first time ever!<</if>><<print " ">>
 		<</if>>
 		<<set _limelightCount = setup.activeCurseCount("In the Limelight")>>
 		<<if _limelightCount > 0>>
-			You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely, falling into a deep depression. On top of that, your misadventures in the Abyss are now streamed to quite a lot of people. This means <<if $mc.hasCurse("Semen Demon") || $mc.hasCurse("Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $mc.hasCurse("Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
+			You need to be the focus of <<print (_limelightCount * 50)>> orgasms per day, even if you are not causing them directly, or else you cease to feel joy entirely. Also, your misadventures in the Abyss are now streamed to quite a lot of people. This means <<if $mc.hasCurse("Semen Demon") || $mc.hasCurse("Quota")>>not only you have to have sex with so many people, but also <</if>>you have to keep a steady supply of dirty photos and videos featuring you circling around for others to masturbate to. <<if $mc.hasCurse("Blushing Virgin")>>This line of work really does not go well with someone as shy as you! <</if>><<print " ">>
 		<</if>>
 	</fieldset>
 </div>
@@ -1067,6 +1070,8 @@ Thanks again for playing! I hope the dive was worth it.
 	SugarCube.State.variables.curseInterval = setInterval(setup.randomCurseApp, 10000);
 	setup.randomCurseApp();	
 </script>
+
+
 :: PassageEnd [script]
 $(document).on(':passageend', function() {
 if (SugarCube.State.passage === "Appearance") {
