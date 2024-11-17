@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import os
+import platform
 import sys
 import subprocess
 import zipfile
@@ -20,14 +21,7 @@ def is_tweego_in_path():
 
 # Determine processor architecture
 def get_architecture():
-	arch = os.environ.get("PROCESSOR_ARCHITECTURE", "").lower()
-	if arch == "x86":
-		return "x86"
-	elif arch == "amd64":
-		return "x64"
-	else:
-		sys.exit(f"No pre-built Tweego is available for CPU family {arch}. "
-				"Please build Tweego from source and add it to your PATH.")
+	return os.environ.get("PROCESSOR_ARCHITECTURE", "x64").lower()
 
 def download_file(url, dest):
 	print(f"Downloading from {url} to {dest}...")
@@ -40,8 +34,13 @@ def extract_zip(src, dest):
 
 if not is_tweego_in_path():
 	TWEEGO_VERSION = "2.1.1"
-	TWEEGO_OS = "windows"
+	TWEEGO_OS = platform.system().lower()
 	TWEEGO_ARCH = get_architecture()
+
+	if TWEEGO_OS == "darwin":
+		TWEEGO_OS = "macos"
+
+	print(TWEEGO_OS)
 
 	print(f"TWEEGO_VERSION: {TWEEGO_VERSION}")
 	print(f"TWEEGO_OS: {TWEEGO_OS}")
@@ -56,7 +55,7 @@ if not is_tweego_in_path():
 
 		extract_zip(tweego_archive_path, WORKAREA / "tools")
 
-	TWEEGO = WORKAREA / "tools" / "tweego.exe"
+	TWEEGO = WORKAREA / "tools" / "tweego"
 	print(f"Using downloaded Tweego: {TWEEGO}")
 else:
 	print(f"Using systemwide Tweego: {TWEEGO}")
