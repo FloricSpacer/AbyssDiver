@@ -21,14 +21,7 @@ def is_tweego_in_path():
 
 # Determine processor architecture
 def get_architecture():
-	arch = os.environ.get("PROCESSOR_ARCHITECTURE", "").lower()
-	if arch == "x86":
-		return "x86"
-	elif arch == "amd64":
-		return "x64"
-	else:
-		sys.exit(f"No pre-built Tweego is available for CPU family {arch}. "
-				"Please build Tweego from source and add it to your PATH.")
+	return os.environ.get("PROCESSOR_ARCHITECTURE", "x64").lower()
 
 def download_file(url, dest):
 	print(f"Downloading from {url} to {dest}...")
