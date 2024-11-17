@@ -8,8 +8,8 @@ check_and_install_python() {
 	echo "Checking for Python installation..."
 	if ! command -v python &>/dev/null && ! command -v python3 &>/dev/null && ! command -v py &>/dev/null; then
 		echo "Python is not installed. Attempting to install Python..."
-		chmod +x install_python.sh
-		./install_python.sh
+		chmod +x install_python_linux_macos.sh
+		./install_python_linux_macos.sh
 	else
 		echo "Python is already installed."
 	fi
