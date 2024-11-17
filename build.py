@@ -44,6 +44,9 @@ if not is_tweego_in_path():
 	TWEEGO_OS = platform.system().lower()
 	TWEEGO_ARCH = get_architecture()
 
+	if TWEEGO_OS is "darwin":
+		TWEEGO_OS = "macos"
+
 	print(TWEEGO_OS)
 
 	print(f"TWEEGO_VERSION: {TWEEGO_VERSION}")
