@@ -3,10 +3,10 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Check for Python installation
+# Function to check for Python installation
 check_and_install_python() {
 	echo "Checking for Python installation..."
-	if ! command -v python &>/dev/null && ! command -v py &>/dev/null; then
+	if ! command -v python &>/dev/null && ! command -v python3 &>/dev/null && ! command -v py &>/dev/null; then
 		echo "Python is not installed. Attempting to install Python..."
 		chmod +x install_python.sh
 		./install_python.sh
@@ -15,12 +15,15 @@ check_and_install_python() {
 	fi
 }
 
-# Ensure pip is installed and up-to-date
+# Function to ensure pip is installed and up-to-date
 install_or_update_pip() {
 	echo "Ensuring pip is installed and up-to-date..."
 	if command -v python &>/dev/null; then
 		python -m ensurepip --upgrade || true
 		python -m pip install --upgrade pip
+	elif command -v python3 &>/dev/null; then
+		python3 -m ensurepip --upgrade || true
+		python3 -m pip install --upgrade pip
 	elif command -v py &>/dev/null; then
 		py -m ensurepip --upgrade || true
 		py -m pip install --upgrade pip
@@ -30,7 +33,7 @@ install_or_update_pip() {
 	fi
 }
 
-# Main execution
+# Main function for execution
 main() {
 	check_and_install_python
 	install_or_update_pip
@@ -38,6 +41,8 @@ main() {
 	# Run the Python build script with `-w` argument
 	if command -v python &>/dev/null; then
 		python build.py -w
+	elif command -v python3 &>/dev/null; then
+		python3 build.py -w
 	elif command -v py &>/dev/null; then
 		py build.py -w
 	else

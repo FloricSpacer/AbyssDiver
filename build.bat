@@ -5,7 +5,7 @@ REM This is NORMAL and happens with any downloaded executable.
 
 echo Checking for Python installation...
 
-REM Check if 'py' or 'python' is available
+REM Check if 'py', 'python', or 'python3' is available
 where py >nul 2>&1
 if %errorlevel% equ 0 (
 	set PYTHON_CMD=py
@@ -14,15 +14,25 @@ if %errorlevel% equ 0 (
 	if %errorlevel% equ 0 (
 		set PYTHON_CMD=python
 	) else (
-		echo Error: Neither 'py' nor 'python' was found in PATH.
-		echo Please install Python and ensure it is in your PATH.
-		pause
-		exit /b 1
+		where python3 >nul 2>&1
+		if %errorlevel% equ 0 (
+			set PYTHON_CMD=python3
+		) else (
+			echo Error: Neither 'py', 'python', nor 'python3' was found in PATH.
+			echo Please install Python and ensure it is in your PATH.
+			pause
+			exit /b 1
+		)
 	)
 )
 
-REM Run the install_python.bat script
-call install_python.bat
+REM Run the install_python.bat script if required
+if exist install_python.bat (
+	echo Running install_python.bat to ensure Python is installed...
+	call install_python.bat
+) else (
+	echo Skipping install_python.bat as it was not found.
+)
 
 REM Update pip using the detected Python command
 echo Updating pip...
