@@ -9,15 +9,15 @@ If you don't have *Tweego* installed, it will automatically be downloaded by the
 
 If you have a custom version of *Tweego* installed on your system, to use it in the build process for the Abyss Diver game, add it to your shell's `PATH` or  use the `TWEEGO` environment variable. Note when using the environment variable, include the file extension in the absolute path of the executable file.
 
-### Abyss Diver Game
+### Abyss Diver Development
 
 Download the repository:
 - Install **git** from https://git-scm.com/downloads.
 - Clone this repository using `git clone`.
 
 Build the game:
-- For Linux, run `./build.sh` from the command line.
-- For Windows, run `./build.bat` from the command line.
+- For Linux, run `build.sh` from the command line.
+- For Windows, run `build.bat` from the command line.
 - Play using the **AbyssDiver.html** html file.
 
 It is recommended to join the discord server so you can receive the latest game assets for your develoment environment and any additional help you may need from fellow developers.
@@ -39,3 +39,8 @@ BUILDING: Abyss Diver.html
 WRITE: src/companions.twee
 BUILDING: Abyss Diver.html
 ```
+
+### Local Image Generation
+
+For those wanting local image generation, you can utilize the "one-click installer" batch/bash files to download ComfyUI and checkpoints to run it locally.
+The file is located in the "local-gen" folder in the root directory of the game, and there is additional instructions within the terminal so watch for those.
