@@ -88,4 +88,6 @@ command = [
 	"-o", OUTPUT
 ] + additional_args
 
+print("If you aren't constantly developing the game and updating the HTML file, you can close this prompt.")
+
 subprocess.run(command, check=True)
