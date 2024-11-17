@@ -21,7 +21,12 @@ def is_tweego_in_path():
 
 # Determine processor architecture
 def get_architecture():
-	return os.environ.get("PROCESSOR_ARCHITECTURE", "x64").lower()
+	arch = platform.architecture()[0]
+	if arch == "64bit":
+		return "x64"
+	if arch == "32bit":
+		return "x32"
+	return arch
 
 def download_file(url, dest):
 	print(f"Downloading from {url} to {dest}...")
@@ -39,8 +44,6 @@ if not is_tweego_in_path():
 
 	if TWEEGO_OS == "darwin":
 		TWEEGO_OS = "macos"
-
-	print(TWEEGO_OS)
 
 	print(f"TWEEGO_VERSION: {TWEEGO_VERSION}")
 	print(f"TWEEGO_OS: {TWEEGO_OS}")
