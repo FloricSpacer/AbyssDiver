@@ -16,17 +16,18 @@ Download the repository:
 - Clone this repository using `git clone`.
 
 Build the game:
-- For Linux, run `build.sh` from the command line.
-- For Windows, run `build.bat` from the command line.
+- For Linux, run `build-linux-macos.sh` from the command line.
+- For MacOS, run `build-linux-macos.sh` from the command line.
+- For Windows, run `build-windows.bat` from the command line.
 - Play using the **AbyssDiver.html** html file.
 
 It is recommended to join the discord server so you can receive the latest game assets for your develoment environment and any additional help you may need from fellow developers.
 
-Arguments given to `build.sh` or `build.bat` are passed on to Tweego.
+Arguments given to `build` files are passed on to Tweego.
 In particular, the `-w` option is useful: this makes Tweego watch the source files and as soon as any of them changes, it rebuilds the game. In the example below, `companions.twee` was edited, triggering a rebuild:
 
 ```
-$ ./build.sh -w
+$ ./build-linux-macos.sh -w
 Using downloaded Tweego: tools/tweego
 Compiling to: Abyss Diver.html
 
@@ -44,3 +45,5 @@ BUILDING: Abyss Diver.html
 
 For those wanting local image generation, you can utilize the "one-click installer" batch/bash files to download ComfyUI and checkpoints to run it locally.
 The file is located in the "local-gen" folder in the root directory of the game, and there is additional instructions within the terminal so watch for those.
+
+There is a guide in the game under the AI Portrait Menu.
