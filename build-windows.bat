@@ -26,12 +26,12 @@ if %errorlevel% equ 0 (
 	)
 )
 
-REM Run the install_python.bat script if required
-if exist install_python.bat (
-	echo Running install_python.bat to ensure Python is installed...
-	call install_python.bat
+REM Run the install_python_windows.bat script if required
+if exist install_python_windows.bat (
+	echo Running install_python_windows.bat to ensure Python is installed...
+	call install_python_windows.bat
 ) else (
-	echo Skipping install_python.bat as it was not found.
+	echo Skipping install_python_windows.bat as it was not found.
 )
 
 REM Update pip using the detected Python command
