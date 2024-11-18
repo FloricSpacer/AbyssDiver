@@ -10,7 +10,7 @@ if "!errorlevel!"=="0" (
 )
 
 :: Set Python version and download URL
-set "PYTHON_VERSION=3.12.0"
+set "PYTHON_VERSION=3.10.9"
 set "PYTHON_INSTALLER=python-!PYTHON_VERSION!-amd64.exe"
 set "PYTHON_URL=https://www.python.org/ftp/python/!PYTHON_VERSION!/!PYTHON_INSTALLER!"
 
