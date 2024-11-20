@@ -2913,7 +2913,7 @@ class AmpuQtie extends Curse {
 	static type = 'none';
 	static tags = ["limbs"];
 	constructor(arms = 0, legs = 0) {
-		super('Ampu-Q-tie', 'none');
+		super('Ampu-Q-tie', 'none', 'You are missing a limb and need to consistently work harder to accommodate the loss.');
 		if (typeof arms === 'string') {
 			this.arms = arms.count('A');
 			this.legs = arms.count('L');
@@ -2998,7 +2998,7 @@ Cannot be taken with Ampu-Q-tie. (max. 6)`;
 	static type = 'none';
 	static tags = ["limbs"];
 	constructor() {
-		super('Arm Army', 'none', "You are missing a limb and need to consistently work harder to accommodate the loss.");
+		super('Arm Army', 'none', "You've sprouted extra limbs! Unfortunately, they're pretty cumbersome, but perhaps you can adjust to your new body parts over time.");
 	}
 
 	static get incompatibilities() {
