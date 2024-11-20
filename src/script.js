@@ -1548,7 +1548,7 @@ Macro.add('sidebar-widget', {
         const SemenDemonBalance = State.variables.SemenDemonBalance || 0;
         const CotNBalance = State.variables.CotNBalance || 0;
         const forageFood = State.variables.forageFood || false;
-        const forageWater = State.variables.forageWater || false;
+        const forageWater = !([3, 5, 7].includes(State.variables.currentLayer)) && State.variables.forageWater;
 
         if (tags().includes("titleScreen") || tags().includes("credits")) {
             $('.twine-sidebar').remove();
@@ -2541,6 +2541,16 @@ window.setup = {
         const allCurses = SugarCube.State.variables.mc.curses;
         const allCursesDiv = document.getElementById("allCurses");
         const displayableCurses = allCurses.filter(curse => curse._appDesc);
+        if (allCurses.length >= 5) {
+            const backButton = document.createElement('button');
+            backButton.className = 'bottom left';
+            backButton.id = 'onTopButton';
+            backButton.textContent = 'Back';
+            backButton.onclick = function() {
+                goBackToPassage(SugarCube.State.variables.menuReturn);
+            };
+            allCursesDiv.appendChild(backButton);
+        }
 
         displayableCurses.forEach(curse => {
             const curseIndex = allCurses.indexOf(curse);
