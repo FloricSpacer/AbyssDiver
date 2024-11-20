@@ -184,7 +184,7 @@ class GenderReversalA extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal A', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal A', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -205,7 +205,7 @@ class AssetRobustnessA extends Curse {
 	static type = 'gender';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Asset Robustness A', 'gender', "Your penis/breasts are a little bigger than you remember them being when you first entered the Abyss.");
+		super('Asset Robustness A', 'gender', "Your genitals are a little bigger than you remember them being when you first entered the Abyss.");
 	}
 
 	static get incompatibilities() {
@@ -248,7 +248,7 @@ class ShrunkenAssets extends Curse {
 	static type = 'gender';
 	static tags = ["breasts","penis"];
 	constructor() {
-		super('Shrunken Assets', 'gender', "Your penis/breasts are much smaller than you remember them being when you first entered the Abyss. They seem/it seems almost miniscule now.");
+		super('Shrunken Assets', 'gender', "Your genitals and chest are much smaller than you remember them being when you first entered the Abyss. They seem almost miniscule now.");
 	}
 
 	static get incompatibilities() {
@@ -387,7 +387,7 @@ class DizzyingHeights extends Curse {
 	static type = 'height';
 	static tags = ["none"];
 	constructor(direction=0) {
-		super('Dizzying Heights', 'height');
+		super('Dizzying Heights', 'height', "You've experienced a significant change in height, leading people to perceive you differently than before.");
 		this.direction = direction;
 	}
 
@@ -499,7 +499,7 @@ class GenderReversalB extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal B', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal B', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -520,7 +520,7 @@ class AssetRobustnessB extends Curse {
 	static type = 'none';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Asset Robustness B', 'none', "Your penis/breasts are notably bigger than you remember them being when you first entered the Abyss.");
+		super('Asset Robustness B', 'none', "Your genitals are notably bigger than you remember them being when you first entered the Abyss.");
 	}
 
 	static get incompatibilities() {
@@ -754,7 +754,7 @@ class SexSwitcheroo extends Curse {
 	static type = 'gender';
 	static tags = ["special"];
 	constructor() {
-		super('Sex Switcheroo', 'gender', "Your genitals have been swapped! You now have a pussy/cock, even though you began your journey with a cock/pussy.");
+		super('Sex Switcheroo', 'gender', "Your genitals have been swapped! You now have the opposite set of sexual organs from when you began your journey.");
 	}
 
 	static get incompatibilities() {
@@ -919,7 +919,7 @@ class GenderReversalC extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal C', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal C', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -940,7 +940,7 @@ class AssetRobustnessC extends Curse {
 	static type = 'gender';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Asset Robustness C', 'gender', "Your penis/breasts are significantly bigger than you remember them being when you first entered the Abyss.");
+		super('Asset Robustness C', 'gender', "Your genitals are significantly bigger than you remember them being when you first entered the Abyss.");
 	}
 
 	static get incompatibilities() {
@@ -1377,7 +1377,7 @@ class AssetRobustnessD extends Curse {
 	static type = 'gender';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Asset Robustness D', 'gender', "Your penis/breasts are tremendously bigger than you remember them being when you first entered the Abyss.");
+		super('Asset Robustness D', 'gender', "Your genitals are tremendously bigger than you remember them being when you first entered the Abyss.");
 	}
 
 	static get incompatibilities() {
@@ -1544,7 +1544,7 @@ class Softie extends Curse {
 	static type = 'none';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Softie', 'none', "Your penis is eternally soft, preventing you from ever getting erect. / Your nipples and constantly inverted, reverting back even if you pull them out of their inverted state.");
+		super('Softie', 'none', "Your genitals and nipples are always soft, unable to ever get hard.");
 	}
 
 	static get incompatibilities() {
@@ -1570,7 +1570,7 @@ class HardMode extends Curse {
 	static type = 'none';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Hard Mode', 'none', "You penis is eternally erect, preventing you from ever softening your erection. / Your nipples are constantly erect, meaning you should be very conscious about what sort of clothes you wear to cover them, if you want to cover them, that is.");
+		super('Hard Mode', 'none', "Your nipples are constantly erect, meaning you should be very conscious about what sort of clothes you wear to cover them, if you want to cover them, that is.");
 	}
 
 	static get incompatibilities() {
@@ -1732,7 +1732,7 @@ class GenderReversalD extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal D', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal D', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -2107,7 +2107,7 @@ class Eggxellent extends Curse {
 	static type = 'none';
 	static tags = ["pregnancy"];
 	constructor() {
-		super('Eggxellent', 'none', "You now lay eggs rather than engage in standard mammal reproduction. (Your penis releases eggs when you ejaculate rather than sperm.)/(Your periods are replaced by laying infertile eggs, just like birds or many other animals.)");
+		super('Eggxellent', 'none', "You now lay eggs rather than engage in standard mammal reproduction.");
 	}
 
 	changeWomb(character, prevWomb, extraWombLocations) {
@@ -2288,12 +2288,7 @@ class Leaky extends Curse {
 	static type = 'none';
 	static tags = ["penis","vulva"];
 	constructor() {
-		super('Leaky', 'none',
-		      `<<nobr>><<set _vagina = $mc.vagina > 0>>
-<<set _penis = $mc.penis > 0>>
-<<if _vagina || _penis>>
-Your <<if _vagina>>pussy is always glistening with lubrication<</if>><<if _vagina && _penis>> and your <</if>><<if _penis>>cock is always leaking precum<</if>>, <<if _vagina && _penis>>so<<else>>and<</if>> it only takes a little motivation to get a real stream going down there.
-<</if>><</nobr>>`);
+		super('Leaky', 'none',"Your genitals are always aroused and leaking, and it only takes a little motivation to get a real stream going down there.");
 	}
 
 	changeLewdness(prevLewdness, character) {
@@ -2429,7 +2424,7 @@ class Quota extends Curse {
 	static type = 'libido';
 	static tags = ["behaviour"];
 	constructor() {
-		super('Quota', 'libido', `You must cause at least 2 orgasms each day or you will feel extremely tired, like you've been deprived of the rest you need.`);
+		super('Quota', 'libido', `You must cause orgasms each day or you will feel extremely tired, like you've been deprived of the rest you need.`);
 	}
 
 	get maximum() {
@@ -2457,7 +2452,7 @@ class InTheLimelight extends Curse {
 	static type = 'libido';
 	static tags = ["behaviour"];
 	constructor() {
-		super('In the Limelight', 'libido', "You need to bring ${SugarCube.State.variables.limelightCount} people to orgasm each day, and fortunately, your whole life is being streamed so that's easier than ever before! Just be sure not to miss a day, or all the joy wil vanish from your life.");
+		super('In the Limelight', 'libido', "You need to bring multiple people to orgasm each day, and fortunately, your whole life is being streamed so that's easier than ever before! Just be sure not to miss a day, or all the joy will vanish from your life.");
 	}
 
 	get maximum() {
@@ -2513,7 +2508,7 @@ class GenderReversalE extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal E', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal E', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -2534,7 +2529,7 @@ class AssetRobustnessE extends Curse {
 	static type = 'gender';
 	static tags = ["penis","breasts"];
 	constructor() {
-		super('Asset Robustness E', 'gender', "Your penis/breasts are enormously bigger than you remember them being when you first entered the Abyss. It's/they're beyond the size of almost anyone you'd naturally see on the surface.");
+		super('Asset Robustness E', 'gender', "Your genitals are enormously bigger than you remember them being when you first entered the Abyss. It's/they're beyond the size of almost anyone you'd naturally see on the surface.");
 	}
 
 	static get incompatibilities() {
@@ -2614,7 +2609,7 @@ class Weakling extends Curse {
 	static type = 'none';
 	static tags = ["behaviour","limbs"];
 	constructor() {
-		super('Weakling', 'none', "You've become incredibly weak, unable to carry more than a few kilograms at a time. (if ${SugarCube.State.variables.hiredCompanions.length} > 0) And you've become incredibly dependent on your companions to carry things for you throughout your expedition.");
+		super('Weakling', 'none', "You've become incredibly weak, unable to carry more than a few kilograms at a time, making it difficult to manage your equipment during your expedition.");
 	}
 
 	// Handicaps are implemented as special-purpose code in Character because it needs to come last.
@@ -2633,7 +2628,7 @@ class RandomOrgasms extends Curse {
 	static type = 'none';
 	static tags = ["behaviour","orgasm"];
 	constructor() {
-		super('Random Orgasms', 'none', "You randomly experience ${SugarCube.State.variables.randomOrgasmCount} spontaneous orgasms each day.");
+		super('Random Orgasms', 'none', "You randomly experience spontaneous orgasms throughout the day.");
 	}
 
 	get maximum() {
@@ -2775,7 +2770,7 @@ class GenderReversalF extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal F', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal F', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -2796,7 +2791,7 @@ class AssetRobustnessF extends Curse {
 	static type = 'gender';
 	static tags = ["penis breasts"];
 	constructor() {
-		super('Asset Robustness F', 'gender', "Your penis/breasts are shockingly huge. It's/they're beyond the size of any person you'd naturally see on the surface and it's very difficult to deal with in everyday life.");
+		super('Asset Robustness F', 'gender', "Your genitals are shockingly huge. It's/they're beyond the size of any person you'd naturally see on the surface and it's very difficult to deal with in everyday life.");
 	}
 
 	static get incompatibilities() {
@@ -2840,7 +2835,7 @@ class EyeOnThePrize extends Curse {
 	static type = 'handicap';
 	static tags = ["eyes"];
 	constructor() {
-		super('Eye on the Prize', 'handicap', "One of your eyes has been removed, but fortunately you were able to replace it with a superior version, so you suffer no ill effects. Beyond having a bionic eye rather than an organic one, of course. You are missing an eye, meaning you don't have any depth perception and have trouble tracking things as well as you used to. or You are completely blind. The world has gone dark and you need to rely on your other senses to make your way through it.");
+		super('Eye on the Prize', 'handicap', "You have lost one of your eyes, leading to reduced depth perception and difficulty tracking things as well as you used to.");
 	}
 
 	removeEye(prevEyes) {
@@ -3003,7 +2998,7 @@ Cannot be taken with Ampu-Q-tie. (max. 6)`;
 	static type = 'none';
 	static tags = ["limbs"];
 	constructor() {
-		super('Arm Army', 'none', "You've sprouted an extra arm/leg/limbs! Unfortunately, they're pretty cumbersome, but perhaps you can adjust to your new body parts over time.");
+		super('Arm Army', 'none', "You are missing a limb and need to consistently work harder to accommodate the loss.");
 	}
 
 	static get incompatibilities() {
@@ -3032,7 +3027,7 @@ class ALittleExtra extends Curse {
 	static type = 'none';
 	static tags = ["penis","vulva"];
 	constructor(genital = '') {
-		super('A Little Extra', 'none');
+		super('A Little Extra', 'none', 'You have extra genitals between your legs. Double the parts, double the fun!');
 		this.genitals = genital;
 	}
 
@@ -3137,7 +3132,7 @@ Cannot be taken with Ampu-Q-tie directed at the legs - requires both legs to sti
 	static type = 'handicap';
 	static tags = ["limbs"];
 	constructor() {
-		super('Seafolk', 'handicap', "You're a merman/mermaid, with a scaled fish tail that leaves you as a fish out of water if you try to move without someone to help you. But in the water, you really feel at home.");
+		super('Seafolk', 'handicap', "You're a merperson with a scaled fish tail that leaves you as a fish out of water if you try to move without someone to help you. But in the water, you really feel at home.");
 	}
 
 	inhumanise(prevInhumanity) {
@@ -3304,7 +3299,7 @@ class GenderReversalG extends Curse {
 	static type = 'gender';
 	static tags = ["gender"];
 	constructor() {
-		super('Gender Reversal G', 'gender', "You look more masculine/feminine than you did when you began your journey.");
+		super('Gender Reversal G', 'gender', "Your apparent gender has noticeably changed since you began your journey.");
 	}
 
 	changeGender(character, prevGender) {
@@ -3325,7 +3320,7 @@ class AssetRobustnessG extends Curse {
 	static type = 'gender';
 	static tags = ["breasts penis"];
 	constructor() {
-		super('Asset Robustness G', 'gender', "Your penis/breasts are enormous, beyond any normal comparison. It's/they're so much larger than any person you've seen before that you're in a league of your own and require custom made clothes to accommodate your proportions.");
+		super('Asset Robustness G', 'gender', "Your genitals are enormous, beyond any normal comparison. It's/they're so much larger than any person you've seen before that you're in a league of your own and require custom made clothes to accommodate your proportions.");
 	}
 
 	static get incompatibilities() {
@@ -3467,7 +3462,7 @@ class TicklyTentacles extends Curse {
 	static type = 'none';
 	static tags = ["limbs","behaviour"];
 	constructor() {
-		super('Tickly Tentacles', 'none', "You're sprouted ${SugarCube.State.variables.tentacleCount} tentacle(s) from your body. They also act somewhat autonomously, so try to keep them under control.");
+		super('Tickly Tentacles', 'none', `You're sprouted ${SugarCube?.State?.variables?.mc?.tentacles} tentacle(s) from your body. They also act somewhat autonomously, so try to keep them under control.`);
 	}
 
 	get maximum() {
@@ -3496,7 +3491,7 @@ class Eyescream extends Curse {
 	static type = 'none';
 	static tags = ["eyes"];
 	constructor() {
-		super('Eye-scream', 'none', "You've grown an additional ${SugarCube.State.variables.eyescreamCount} eyes on your body. It's harder to focus with more visual data coming in, but you'll eventually manage to adapt.");
+		super('Eye-scream', 'none', "You've grown additional eyes on your body. It's harder to focus with more visual data coming in, but you'll eventually manage to adapt.");
 	}
 
 	get maximum() {
