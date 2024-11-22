@@ -2524,6 +2524,7 @@ window.setup = {
         updateWaterGradient();
     },
     randomCurseApp: function () {
+        document.getElementById('appearance-portrait').style.borderColor = getGenderColor(State.variables.mc.gender);
         const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
         if (availableCurses.length > 0) {
             const randomCurse = availableCurses[Math.floor(Math.random() * availableCurses.length)];
