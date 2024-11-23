@@ -138,7 +138,7 @@ class Character {
 	 * @param {number} o.pregnantT The day in which this character has been impregnated.
 	 * @param {number} o.due The day in which this character's pregnancy is due.
 	 * @param {number} o.lastBirth The day on which this character's last birth occurred.
-	 * @param {boolean} o.tentaclePreg Whether this character is currently impragnated by tentacles.
+	 * @param {boolean} o.tentaclePreg Whether this character is currently impregnated by tentacles.
 	 * @param {boolean} o.switched Whether this character has switched bodies.
 	 * @param {boolean} o.gestationJumps Tracks character specific gestation jumps for Gestation Jumpstart.
 	 * @param {number} o.location Layer at which a character is told to wait.
@@ -1142,7 +1142,7 @@ class Character {
 			let image = this.appGender <= 5 ? 'M' : 'F';
 			return `Player Icons/player${image}.jpg`;
 		}
-		/* //Code for apperent gender based portrait switches for most characters
+		/* //Code for apparent gender based portrait switches for most characters
 		if (!(this.id === setup.companionIds.bandit || this.id === setup.companionIds.golem || this.id === setup.companionIds.maru)) {
 			let image = this.appGender <= 5 ? 'M' : 'F';
 			if (this.id === setup.companionIds.mc || this.id === setup.companionIds.twin) {
