@@ -360,7 +360,7 @@ class KnifeEar extends Curse {
 	static corruption = 20;
 	static curseName = 'Knife-ear';
 	static description = `Gives you a pair of sharp, pointy, elfish ears. There are some humans on the surface who get surgery to look like this, so you'll only kind of stick out up there!<br>Also affects any other ear-related Curses you take.`;
-	static descriptionMitigated = `Gives you a pair of sharp, pointy, elfish ears. There are some humans on the surface who get surgery to look like this, so you'll only kind of stick out up there!<br>Also affects any other ear-related Curses you take.\n\nThanks to the effects of the Shifting Obelisk you can choose to change your facial structure and other small bodily details to be more elf-like too, and choose between the normal-sized pointy ears of traditional (tolkien) elves and the long, sideways ears of japanese elves.`;
+	static descriptionMitigated = `Gives you a pair of sharp, pointy, elfish ears. There are some humans on the surface who get surgery to look like this, so you'll only kind of stick out up there!<br>Also affects any other ear-related Curses you take.\n\nThanks to the effects of the Shifting Obelisk you can choose to change your facial structure and other small bodily details to be more elf-like too, and choose between the normal-sized pointy ears of traditional (Tolkien) elves and the long, sideways ears of Japanese elves.`;
 	static picture = 'Curses/knifeear.jpg';
 	static type = '';
 	static tags = ["ears"];
@@ -2817,7 +2817,7 @@ class UrineReamplificationB extends Curse {
 	static type = 'none';
 	static tags = ["clothing"];
 	constructor() {
-		super('Urine Reamplification B', 'none', "You are completely unable to judge your own bladder or hold in your urine when it's full. You need to be constantly wary of embarassing accidents, even if you're careful.");
+		super('Urine Reamplification B', 'none', "You are completely unable to judge your own bladder or hold in your urine when it's full. You need to be constantly wary of embarrassing accidents, even if you're careful.");
 	}
 }
 setup.allCurses.UrineReamplificationB = new UrineReamplificationB()
@@ -2830,7 +2830,7 @@ class EyeOnThePrize extends Curse {
 	static corruption = 70;
 	static curseName = 'Eye on the Prize';
 	static description = `Gouges out one of the two eyes you were born with. (This might sting a little... and then a lot, for a long time. The wound will be sealed to prevent infection.) @@.italic; This could have major effects on your journey.@@ Losing one eye, and with it depth perception, will make many basic tasks difficult, rendering you much less capable of dealing with Threats. Losing both eyes will render you incapable of much of anything down here on your own. Even with a companion, you should assume a great deal of lost travel time, as they will need to slow their pace greatly to assist you. Can be taken twice if you still have both organic eyes.`;
-	static descriptionMitigated = `Gouges out one of the two eyes you were born with. (This might sting a little... and then a lot, for a long time. The wound will be sealed to prevent infection.) @@.italic; This could have major effects on your journey.@@ Losing one eye, and with it depth perception, will make many basic tasks difficult, rendering you much less capable of dealing with Threats. Losing both eyes will render you incapable of much of anything down here on your own. Even with a companion, you should assume a great deal of lost travel time, as they will need to slow their pace greatly to assist you. Can be taken twice if you still have both organic eyes.\n\nThanks to the effects of the Shifting Obelisk, you get improved hearing and touching senses and spacial memory. Not enough to be a superhero, but enough to find your way around, even if you lost both eyes.`;
+	static descriptionMitigated = `Gouges out one of the two eyes you were born with. (This might sting a little... and then a lot, for a long time. The wound will be sealed to prevent infection.) @@.italic; This could have major effects on your journey.@@ Losing one eye, and with it depth perception, will make many basic tasks difficult, rendering you much less capable of dealing with Threats. Losing both eyes will render you incapable of much of anything down here on your own. Even with a companion, you should assume a great deal of lost travel time, as they will need to slow their pace greatly to assist you. Can be taken twice if you still have both organic eyes.\n\nThanks to the effects of the Shifting Obelisk, you get improved hearing and touching senses and spatial memory. Not enough to be a superhero, but enough to find your way around, even if you lost both eyes.`;
 	static picture = 'Curses/eyeontheprize.jpg';
 	static type = 'handicap';
 	static tags = ["eyes"];

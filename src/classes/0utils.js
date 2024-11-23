@@ -29,7 +29,7 @@ function objMap(obj, mapFunction) {
 
 /**
  * Breast correction function
- * Returns a chacters cupsize after correcting for age, pregnancy, menstruation cycle and lactation activity
+ * Returns a character's cupsize after correcting for age, pregnancy, menstruation cycle and lactation activity
  * @param prevBreast 	The uncorrected cupsize of the character
  * @param age 			The current apperent age of the character
  * @returns {number} 	The corrected cupsize
