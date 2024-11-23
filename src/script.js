@@ -460,7 +460,7 @@ Setting.addToggle("SidebarPortrait", {
 
 Setting.addToggle("OpenAIGeneration", {
     label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
-    default: false,
+    default: true,
 });
 
 Setting.addToggle("ComfyUIGeneration", {
