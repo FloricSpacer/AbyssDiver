@@ -428,7 +428,11 @@ Now that you've told us your information, it's time to take your picture for our
 
 Here, there are a few ways to choose your character's portrait. First, is using an AI model to generate your portrait. That will ensure that no matter what changes you undergo, your portrait can match what you look like. However, that option requires setting up an OpenAI API key and costs around $0.04 per image in API costs. (Unless you're comfortable using a local AI image program to make the images for free)
 
+<div style="display: flex; justify-content: space-between; gap: 10px; width: 60%; margin: 0 auto">
 <button class="center-btn dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
+
+<button class="center-btn dark-btn obsidian" data-passage="Local AI Image Guide">Local AI Image Guide</button>
+</div>
 
 Second, we have a small selection of pre-made portraits. These only change based on your gender, and are otherwise static. This is the simplest option, but also the least reactive to changes.
 
@@ -452,7 +456,11 @@ Which sort of portrait would you like?
 
 This game allows you to use an OpenAI API key to generate player portraits automatically, taking into account all of your transformations and changes to your appearance. You can disable this option in settings. You can add your API key and generate the images from the appearance menu. If you want to use this feature, but aren't sure how, click the link below for a brief guide on getting an API key!
 
+<div style="display: flex; justify-content: space-between; gap: 10px; width: 60%; margin: 0 auto">
 <button class="center-btn dark-btn obsidian" data-passage="API Key Guide">API Key Guide</button>
+
+<button class="center-btn dark-btn obsidian" data-passage="Local AI Image Guide">Local AI Image Guide</button>
+</div>
 
 <<nobr>>
 <div class="relicToggleEntry">
@@ -648,8 +656,98 @@ setup.generateCharacterID();
     <p>If you have any questions, feel free to ask on our Discord server. And you're very welcome to share any especially good portraits you get!</p>
 
     <div class="abyss-toggle-container">
-        <div>The Abyss can change you. Do you want to use an OpenAI API key to generate your portrait as you change?</div>
+        <div>Do you want to enable the AI portraits menu in the sidebar?</div>
         <div><<printHTML `toggle(v => settings.AIPortraitsMode = v, settings.AIPortraitsMode)`>></div>
+    </div>
+
+     <div class="abyss-toggle-container">
+        <div>Do you want to use an OpenAI API key to generate your portrait as you change?</div>
+        <div><<printHTML `toggle(v => settings.OpenAIGeneration = v, settings.OpenAIGeneration)`>></div>
+    </div>
+
+    <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+
+
+:: Local AI Image Guide [start nobr]
+
+<div class="abyss-credits-block" style="margin-left: -5%; margin-right: -5%; padding: 40px; background: rgba(42, 42, 42, 0.75);">
+<h2>Local AI Image Guide</h2>
+
+    <div class="abyss-api-notice">
+        You can now generate AI portraits locally on your own computer using ComfyUI! This allows you to create portraits without paying for API credits, though it requires more setup and computer resources.
+    </div>
+
+    <div class="abyss-api-steps">
+        <h3>One-Click Installer Instructions</h3>
+        <ol>
+            <li>Navigate to the local-gen folder in your Abyss Diver installation directory.</li>
+            
+            <li>Run the appropriate installer file for your operating system:
+                <ul>
+                    <li>Windows: Run "one-click-comfyui.bat"</li>
+                    <li>Linux/Mac: Run "one-click-comfyui.sh"</li>
+                </ul>
+            </li>
+
+            <li>Wait for the disk space prompt. The installer will begin by setting up git, python, pip, and required packages.</li>
+            
+            <li>When prompted about required disk space, press Enter to confirm and continue.</li>
+
+            <li>The download process will begin - you'll see progress updates for every 10% completed.</li>
+
+            <li>Once ComfyUI installs with its components, you'll see "uvicorn running on http://127.0.0.1:8000" - this means the installation was successful!</li>
+        </ol>
+    </div>
+
+    <div class="abyss-api-warning">
+        GPU Support: Windows users need an NVIDIA graphics card. Linux and Mac users can use any GPU, but performance may vary.<br><br>
+        You will need at least 17GB of disk space available for ComfyUI and the required models to be downloaded.<br><br>
+        It is recommended you have a graphics card with at least 4GB of VRAM.
+    </div>
+
+    <div class="abyss-api-steps">
+        <h3>Final Setup</h3>
+        <ol>
+            <li>Wait for the "[ComfyUI-Manager] default cache updated" message</li>
+            <li>Open your Abyss Diver Settings and enable ComfyUI generation</li>
+            <li>Visit the AI Portrait Passage - you should see "ComfyUI Available" in green text</li>
+            <li>You're now ready to generate portraits!</li>
+        </ol>
+    </div>
+
+    <div class="abyss-api-steps">
+        <h3>Troubleshooting</h3>
+        <ul>
+            <li><strong>"git" is not recognized:</strong> Install git from https://git-scm.com/downloads </li>
+            
+            <li><strong>"python" commands not working:</strong> Install Python 3.10.9 from https://www.python.org/downloads/release/python-3109/ </li>
+            
+            <li><strong>Model download issues:</strong>
+                <ul>
+                    <li>Check Task Manager for network activity</li>
+                    <li>You can manually download models using links in installer.py</li>
+                    <li>Place downloaded files in ComfyUI/models/checkpoints or ComfyUI/models/lora</li>
+                </ul>
+            </li>
+            
+            <li><strong>Extraction errors:</strong>
+                    <li>Try reinstalling patool: "py -m pip install patool"</li>
+                    <li>Alternatively, manually extract using 7zip</li>
+            </li>
+        </ul>
+    </div>
+
+     <p>If you have any questions, feel free to ask on our Discord server. And you're very welcome to share any especially good portraits you get!</p>
+
+    <div class="abyss-toggle-container">
+        <div>Do you want to enable the AI portraits menu in the sidebar?</div>
+        <div><<printHTML `toggle(v => settings.AIPortraitsMode = v, settings.AIPortraitsMode)`>></div>
+    </div>
+    
+    <div class="abyss-toggle-container">
+        <div>Do you want to enable local ComfyUI portrait generation?</div>
+        <div><<printHTML `toggle(v => settings.ComfyUIGeneration = v, settings.ComfyUIGeneration)`>></div>
     </div>
 
     <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
