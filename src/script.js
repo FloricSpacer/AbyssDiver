@@ -2454,22 +2454,18 @@ window.setup = {
             }
 
             renderRows(data);
+            table.appendChild(tbody);
         } else {
-            const tr = document.createElement('tr');
-            tr.classList.add('inventory-screen');
-            const td = document.createElement('td');
-            td.classList.add('inventory-screen');
-            td.textContent = `No ${dataUrl}s found.`;
+            const noDataDiv = document.createElement('div');
+            noDataDiv.classList.add('no-data');
+            noDataDiv.textContent = `You don't have any ${dataUrl}s yet.`;
 
             const headerCount = data && data[0] ?
                 Object.keys(data[0]).filter(header => !["count", "desc", "image"].includes(header)).length :
                 1;
-            td.colSpan = headerCount;
-            tr.appendChild(td);
-            tbody.appendChild(tr);
+            noDataDiv.style.gridColumn = `span ${headerCount}`;
+            table.appendChild(noDataDiv);
         }
-        table.appendChild(tbody);
-
         const targetElement = document.getElementById(targetElementId);
         if (targetElement) {
             targetElement.appendChild(table);
