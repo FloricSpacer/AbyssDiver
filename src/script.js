@@ -1508,7 +1508,7 @@ let _lastLayer = null;
 // Check if the layer has changed
 function layerChanged() {
     let currentLayer = State.getVar("$currentLayer");
-    if (currentLayer !== _lastLayer) {
+    if (currentLayer !== _lastLayer && currentLayer !== 0) {
         _lastLayer = currentLayer;
         return true;
     }
