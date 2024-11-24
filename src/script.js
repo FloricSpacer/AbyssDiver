@@ -1793,10 +1793,10 @@ Macro.add('sidebar-widget', {
                         <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
                     ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
-                `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
+                `<img class="dalleImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                 (settings.OverridePortrait ?
-                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
-                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
+                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
+                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
             }
                 </div>
 
