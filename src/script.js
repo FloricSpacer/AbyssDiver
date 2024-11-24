@@ -384,7 +384,7 @@ Macro.add('say', {
                 // Use the new numbered portrait system
                 const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
                 const portraitNumber = State.variables.portraitNumber || 0;
-                imgSrc = `images/Player Icons/player${gender}${portraitNumber}.jpg`;
+                imgSrc = `images/Player Icons/player${gender}${portraitNumber}.png`;
             }
         }
         const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
@@ -1796,7 +1796,7 @@ Macro.add('sidebar-widget', {
                 `<img class="dalleImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                 (settings.OverridePortrait ?
                     `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
-                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
+                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
             }
                 </div>
 
