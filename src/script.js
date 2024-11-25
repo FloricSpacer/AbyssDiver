@@ -453,11 +453,6 @@ Setting.addToggle("AIPortraitsMode", {
     default: false,
 });
 
-Setting.addToggle("SidebarPortrait", {
-    label: "Enable the use of the sidebar portrait for generated images.",
-    default: false,
-});
-
 Setting.addToggle("OpenAIGeneration", {
     label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
     default: true,
@@ -1792,7 +1787,7 @@ Macro.add('sidebar-widget', {
                         <button id="custom-back-button" class="nav-arrow left">&larr;</button>
                         <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
-                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
+                    ${settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen ?
                 `<img class="dalleImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                 (settings.OverridePortrait ?
                     `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
@@ -1942,7 +1937,7 @@ Macro.add('sidebar-widget', {
             $('body').prepend(toggleButton);
         }
 
-        if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
+        if (settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displaySavedImage();
         }
 
