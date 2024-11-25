@@ -2524,6 +2524,7 @@ window.setup = {
         document.getElementById('appearance-portrait').style.backgroundImage = `url('images/layer intros/l${State.variables.currentLayer}intro.png')`;
         const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
         if (availableCurses.length > 0) {
+            console.log("Random curse selected successfully");
             const randomCurse = availableCurses[Math.floor(Math.random() * availableCurses.length)];
             const curseImage = document.querySelector("#right .curse-box-image img");
             curseImage.src = `./images/${randomCurse.picture}`;
