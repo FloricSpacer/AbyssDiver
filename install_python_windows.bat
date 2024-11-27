@@ -32,14 +32,7 @@ if "!errorlevel!" neq "0" (
     exit /b 1
 )
 
-:: Verify installation
-python --version >nul 2>&1
-if "!errorlevel!"=="0" (
-    echo Python successfully installed.
-    python --version
-) else (
-    echo Python installation did not complete successfully.
-    exit /b 1
-)
-
+echo You will need to restart the terminal for python to install.
+echo Press enter to exit.
+pause
 exit /b 0
