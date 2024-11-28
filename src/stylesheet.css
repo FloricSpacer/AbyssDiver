@@ -92,7 +92,7 @@ overflow-y: hidden !important;
 
 html, body {
   	position: absolute;
-	min-width: 100%;
+	  min-width: 100%;
     min-height: 100vh;
 }
 
@@ -1897,13 +1897,14 @@ button.classic-light:active, .classic-light button:active {
   vertical-align: middle;
 }
 .portrait {
-  width: 294px;
-  height: 294px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   border: 3px solid;
   border-color: var(--gender-color, white); /* Use a CSS variable for the border color, default to white */
   margin-bottom: 10px;
   border-radius: 10px;
+  box-sizing: border-box;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -2429,11 +2430,11 @@ button.center-btn, .center-btn button {
 }
 
 .layer-bg-8-3::before {
-  background-image: url("images/Layer Intros/l8intro.png");
+  background-image: url("images/Layer Intros/l8intro3.png");
 }
 
 .layer-bg-8-4::before {
-  background-image: url("images/Layer Intros/l8intro3.png");
+  background-image: url("images/Layer Intros/l8intro.png");
 }
 
 .layer-bg-9::before {
@@ -2481,12 +2482,65 @@ body.titleScreen {
 
 .start-menu-container {
   position: absolute;
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 10px;
-  padding: 20px;
+  background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(20, 20, 20, 0.4) 100%
+  );
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5),
+              0 0 100px rgba(0, 255, 255, 0.1),
+              inset 0 0 15px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(3px);
+  animation: containerPulse 4s infinite ease-in-out;
+  z-index: 1;
+}
+
+.start-menu-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+      rgba(0, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1),
+      rgba(0, 255, 255, 0.1)
+  );
+  border-radius: 16px;
+  z-index: -1;
+  animation: borderGlow 6s infinite linear;
+}
+
+@keyframes containerPulse {
+  0%, 100% {
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5),
+                  0 0 100px rgba(0, 255, 255, 0.1),
+                  inset 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.6),
+                  0 0 120px rgba(0, 255, 255, 0.15),
+                  inset 0 0 20px rgba(255, 255, 255, 0.15);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+      opacity: 0.5;
+  }
+  50% {
+      opacity: 1;
+  }
+  100% {
+      opacity: 0.5;
+  }
 }
 
 .menu-btn {
@@ -2529,6 +2583,100 @@ body.titleScreen {
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+
+.start-menu-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.start-menu-btn {
+  display: block;
+  width: 200px;
+  padding: 12px 24px;
+  margin: 10px auto;
+  font-size: 18px;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  border: none;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, #222 0%, #1a1a1a 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2),
+              0 1px 3px rgba(255, 255, 255, 0.1) inset,
+              0 0 20px rgba(0, 255, 255, 0.1),
+              0 0 0 1px rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 3px rgba(0, 255, 255, 0.5);
+}
+
+.start-menu-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.03),
+      transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.start-menu-btn:hover {
+  background: linear-gradient(145deg, #2a2a2a 0%, #222 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3),
+              0 1px 3px rgba(255, 255, 255, 0.2) inset,
+              0 0 30px rgba(0, 255, 255, 0.2),
+              0 0 0 1px rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  letter-spacing: 3px;
+}
+
+.start-menu-btn:hover::before {
+  animation: shine 1.5s infinite;
+}
+
+.start-menu-btn:active {
+  background: linear-gradient(145deg, #151515 0%, #0a0a0a 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2),
+              0 1px 3px rgba(255, 255, 255, 0.1) inset,
+              0 0 15px rgba(0, 255, 255, 0.1),
+              0 0 0 1px rgba(255, 255, 255, 0.05);
+  transform: translateY(1px);
+}
+
+.start-menu-btn:disabled {
+  background: linear-gradient(145deg, #555 0%, #666 100%);
+  color: #999;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+}
+
+@keyframes shine {
+  0% {
+      left: -50%;
+  }
+  100% {
+      left: 150%;
+  }
 }
 
 .character-creation {
@@ -3305,6 +3453,13 @@ tr.inventory-screen :nth-child(even) td:nth-child(2):hover {
   border: 2px solid #1a3c5e;
 }
 
+.id-photo-background{
+  background-image: url('images/Backgrounds/idcardbackground.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+} 
+
 .idcard-info {
   display: grid;
   gap: 0.5rem;
@@ -3389,7 +3544,7 @@ tr.inventory-screen :nth-child(even) td:nth-child(2):hover {
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
-  padding: 30px;
+  padding: 20px;
   user-select: none;
 }
 .curse-box.curse-menu{
@@ -3403,7 +3558,7 @@ tr.inventory-screen :nth-child(even) td:nth-child(2):hover {
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
-  padding: 30px;
+  padding: 20px;
   user-select: none;
 }
 
@@ -3504,6 +3659,7 @@ tr.inventory-screen :nth-child(even) td:nth-child(2):hover {
   flex-direction: column;
   overflow: auto;
   min-height: calc(100vh - 40px);
+  max-height: calc(100vh - 40px);
   scrollbar-width: none;
   background-color: #222;
 }
@@ -3560,6 +3716,7 @@ tr.inventory-screen :nth-child(even) td:nth-child(2):hover {
   border: 1px solid #444;
   border-radius: 4px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: auto;
 }
 
 #row {
@@ -3577,13 +3734,13 @@ tr.inventory-screen :nth-child(even) td:nth-child(2):hover {
   height: 300px;
   background-color: #333;
   box-sizing: border-box;
+  flex: 0 0 auto;
 }
 
 .middle#row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   flex-grow: 1;
-  align-items: stretch;
   background-color: #222;
   gap: 16px;
 }

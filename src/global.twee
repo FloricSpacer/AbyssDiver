@@ -256,11 +256,22 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 
 <button class="dark-btn obsidian" data-passage="Adjust Combat Score">Adjust Combat Score</button>
 
+<button class="dark-btn obsidian" data-passage="Adjust Portrait Preset">Change between preset portraits</button>
+
 <button class="dark-btn obsidian" data-passage="Debug Menu">Debug Menu</button>
 
 
 <button class="dark-btn obsidian" data-passage="$menuReturn">Confirm Adjustments</button>
 
+
+:: Adjust Portrait Preset [noreturn]
+
+Say cheese! Choose the portrait which best suits you below.
+
+<<include "Portrait Selector">>
+<button class="dark-btn obsidian" data-passage="Adjustments">Confirm</button>
+
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
 :: Adjust Combat Score [noreturn]
 
@@ -295,6 +306,8 @@ setup.generateDebugID();
 
 
 <button class="dark-btn obsidian" data-passage="Saeko Hypnosis 1 Ask">Begin Saeko Hypnosis Series</button>
+
+<button class="dark-btn obsidian" data-passage="Saeko Hypnosis 6 Male">Saeko hypno 6 male</button>
 
 <button class="dark-btn obsidian" data-passage="Lily ConvoLac">Lily Lactation Convo</button>
 
@@ -593,8 +606,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<legend>
 			basic characteristics
 		</legend>
-			You are $mc.name.<br>
-			You're a <<ShowAge $mc.realAge>> year old $mc.sex <<PerceivedRace $mc>><<if Math.round(12 * $mc.realAge) !== Math.round(12 * $mc.appAge)>>, but you appear to be <<ShowAge $mc.appAge>> old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.<br>
+			You're a <<ShowAge $mc.realAge>> old $mc.sex <<PerceivedRace $mc>><<if Math.round(12 * $mc.realAge) !== Math.round(12 * $mc.appAge)>>, but you appear to be <<ShowAge $mc.appAge>> old<</if>><<if $eternalYouth < 9999>> and you will never appear to be any older due to your biological immortality granted by the Fountain of Youth<</if>>.<br>
 			Your hair color is $mc.hair.<br>
 		<<if $mc.eyeCount===0>>
 			You have no eyes, only empty sockets. You are effectively blind without the use of Relics and you need your companions to guide you.<br>
@@ -623,22 +635,22 @@ Thanks again for playing! I hope the dive was worth it.
 				Instead you have a beautiful finned tail. Could you be considered a <<if $mc.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><br><</if>>
 		You have $mc.ears ears.<br>
 	</fieldset>
-	<<if settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen>>
+	<<if settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen>>
 		<div class="appearance-portrait-wrapper">
-			<<print '<img id="appearance-portrait" class="dalleImage portrait" src="" alt="Generated Portrait">'>>
+			<<print '<img id="appearance-portrait" class="dalleImage portrait" src="">'>>
 			<div class="appearance-name-badge"><<print $mc.name>></div>
 		</div>
 	<<elseif settings.OverridePortrait>>
 		<div class="appearance-portrait-wrapper">
-			<<print '<img id="appearance-portrait" src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait">'>>
+			<<print '<img id="appearance-portrait" src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait">'>>
 			<div class="appearance-name-badge"><<print $mc.name>></div>
 		</div>
 	<<else>>
 		<div class="appearance-portrait-wrapper">
 			<<if $mc.gender >= 4>>
-				<<print '<img id="appearance-portrait" src="images/Player Icons/playerF' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="portrait">'>>
+				<<print '<img id="appearance-portrait" src="images/Player Icons/playerF' + ($portraitNumber || 0) + '.png" class="portrait">'>>
 			<<else>>
-				<<print '<img id="appearance-portrait" src="images/Player Icons/playerM' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="portrait">'>>
+				<<print '<img id="appearance-portrait" src="images/Player Icons/playerM' + ($portraitNumber || 0) + '.png" class="portrait">'>>
 			<</if>>
 			<div class="appearance-name-badge"><<print $mc.name>></div>
 		</div>
@@ -653,7 +665,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<<set _threatHandicap = $mc.HandicapThreat>>
 
 		<<if _movementHandicap !== 0>>
-			Your movement handicap is 
+			Your movement modifier is 
 		<<if _movementHandicap > 0>>
 		<span style="color: green;"><<print +_movementHandicap>></span>
 		<<else>>
@@ -662,7 +674,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 
 		<<if _carryHandicap !== 0>>
-			Your carry weight handicap is 
+			Your carry weight modifier is 
 		<<if _carryHandicap > 0>>
 		<span style="color: green;"><<print +_carryHandicap>></span>
 		<<else>>
@@ -671,7 +683,7 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 
 		<<if _threatHandicap !== 0>>
-			Your threat handicap is 
+			Your threat modifier is 
 		<<if _threatHandicap > 0>>
 		<span style="color: green;"><<print +_threatHandicap>></span>
 		<<else>>
@@ -989,15 +1001,15 @@ Thanks again for playing! I hope the dive was worth it.
 		<div class="idcard-content">
 			<div class="idcard-photo-section">
 				<div class="idcard-photo">
-					<<if settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen>>
-						<<print '<img class="dalleImage" src="" alt="Generated Portrait" style="width: 100%; height: 100%;">'>>
+					<<if settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen>>
+						<<print '<img class="dalleImage id-photo-background" src="" style="width: 100%; height: 100%;">'>>
 					<<elseif settings.OverridePortrait>>
-						<<print '<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="" style="width: 100%; height: 100%;">'>>
+						<<print '<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="id-photo-background" style="width: 100%; height: 100%;">'>>
 					<<else>>
 						<<if $mc.gender >= 4>>
-							<<print '<img src="images/Player Icons/playerF' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="" style="width: 100%; height: 100%;">'>>
+							<<print '<img src="images/Player Icons/playerF' + ($portraitNumber || 0) + '.png" class="id-photo-background" style="width: 100%; height: 100%;">'>>
 						<<else>>
-							<<print '<img src="images/Player Icons/playerM' + ($portraitNumber || 0) + '.jpg" alt="Player Portrait ' + (($portraitNumber || 0) + 1) + '" class="" style="width: 100%; height: 100%;">'>>
+							<<print '<img src="images/Player Icons/playerM' + ($portraitNumber || 0) + '.png" class="id-photo-background" style="width: 100%; height: 100%;">'>>
 						<</if>>
 					<</if>>
 				</div>
@@ -1083,11 +1095,12 @@ Thanks again for playing! I hope the dive was worth it.
 
 :: PassageEnd [script]
 $(document).on(':passageend', function() {
-if (SugarCube.State.passage === "Appearance") {
 	if (SugarCube.State.variables.curseInterval) {
-		clearInterval(SugarCube.State.variables.curseInterval);
-		delete SugarCube.State.variables.curseInterval;
-	}
+		if (SugarCube.State.passage === 'Appearance') {
+			clearInterval(SugarCube.State.variables.curseInterval);
+			delete SugarCube.State.variables.curseInterval;
+			console.log("Cleared curse intervals")
+		}
 }
 });
 :: Curses [noreturn nobr cards]

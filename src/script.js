@@ -384,7 +384,7 @@ Macro.add('say', {
                 // Use the new numbered portrait system
                 const gender = State.variables.mc.gender >= 4 ? 'F' : 'M';
                 const portraitNumber = State.variables.portraitNumber || 0;
-                imgSrc = `images/Player Icons/player${gender}${portraitNumber}.jpg`;
+                imgSrc = `images/Player Icons/player${gender}${portraitNumber}.png`;
             }
         }
         const imgClass = (isPlayer && !settings.OverridePortrait) ? 'portraitImage' : 'otherImage';
@@ -450,11 +450,6 @@ Setting.addToggle("OverridePortrait", {
 
 Setting.addToggle("AIPortraitsMode", {
     label: "Enable the use of AI to generate your own portrait.",
-    default: false,
-});
-
-Setting.addToggle("SidebarPortrait", {
-    label: "Enable the use of the sidebar portrait for generated images.",
     default: false,
 });
 
@@ -540,7 +535,7 @@ Setting.addToggle("ArachnophobiaMode", {
 Setting.addRange("appAgeControl", {
     label: "Minimum apparent age your physical body can regress to (3-18):",
     min: 3,
-    default: 3,
+    default: 18,
     max: 18,
     step: 1,
 });
@@ -1792,11 +1787,11 @@ Macro.add('sidebar-widget', {
                         <button id="custom-back-button" class="nav-arrow left">&larr;</button>
                         <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
-                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
-                `<img class="dalleImage portrait" src="" alt="Generated Portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
+                    ${settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen ?
+                `<img class="dalleImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                 (settings.OverridePortrait ?
-                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" alt="Override Portrait Image" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
-                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.jpg" alt="Player Portrait ${(State.variables.portraitNumber || 0) + 1}" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
+                    `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
+                    `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
             }
                 </div>
 
@@ -1942,7 +1937,7 @@ Macro.add('sidebar-widget', {
             $('body').prepend(toggleButton);
         }
 
-        if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
+        if (settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displaySavedImage();
         }
 
@@ -2524,6 +2519,7 @@ window.setup = {
         document.getElementById('appearance-portrait').style.backgroundImage = `url('images/layer intros/l${State.variables.currentLayer}intro.png')`;
         const availableCurses = SugarCube.State.variables.mc.curses.filter(curse => curse._appDesc);
         if (availableCurses.length > 0) {
+            console.log("Random curse selected successfully");
             const randomCurse = availableCurses[Math.floor(Math.random() * availableCurses.length)];
             const curseImage = document.querySelector("#right .curse-box-image img");
             curseImage.src = `./images/${randomCurse.picture}`;

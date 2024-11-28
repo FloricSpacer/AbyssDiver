@@ -2659,12 +2659,12 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 <<set _cost = _item.cost*2>>
 <<if $items.some(e => e.name === _item.name && e.count >= _item.maxCount)>>
 	<<if _item.name === "Pistol">>
-	<button class="dark-btn mahogany" data-passage="Buy Bullets">Buy 6 bullets for <<print $items[20].cost>> dubloons</button>
+	<button class="dark-btn mahogany" data-passage="L2 Bullets">Buy 6 bullets for <<print $items[20].cost * 2>> dubloons</button>
 	<<else>>
 	<button class="link-internal macro-button" type="button" disabled>Already bought</button>
 	<</if>>
 <<elseif _item.cost>>
-	<button class="dark-btn mahogany" data-passage="'Buy ' + _item.name">Buy for <<print _item.cost>> <<print _item.cost === 1 ? "dubloon" : "dubloons">></button>
+	<button class="dark-btn mahogany" data-passage="'L2 ' + _item.name">Buy for <<print _item.cost * 2>> <<print (_item.cost * 2) === 1 ? "dubloon" : "dubloons">></button>
 <</if>>
 </p>
 <p>
@@ -2686,6 +2686,106 @@ Your limp after this rough encounter will increase your next <<print (4 - $statR
 <<include "ShopInventoryL2">>
 
 <p><button class="dark-btn obsidian" data-passage="Downcast Village Settlement Layer2">Continue your journey</button></p>
+
+
+:: L2 Bottled Water [item]
+
+[img[setup.ImagePath+$items[0].image]]
+
+How many bottles of water would you like to buy?
+
+<<textbox "$temp" "1">>
+
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="previous()" data-setter="$items[0].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[0].cost * 2), $flaskMatrix[8] = $items[0].count">Confirm</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+<</nobr>>
+
+:: L2 Food Rations [item]
+
+[img[setup.ImagePath+$items[1].image]]
+
+How many days of food rations would you like to buy?
+
+<<textbox "$temp" "1">>
+
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="previous()" data-setter="$items[1].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[1].cost * 2)">Confirm</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+<</nobr>>
+
+:: L2 Empty Flask [item]
+
+[img[setup.ImagePath+$items[2].image]]
+
+How many water flasks would you like to buy?
+
+<<textbox "$temp" "1">>
+
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="previous()" data-setter="$items[3].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[2].cost * 2), $flaskMatrix[0]+= parseInt($temp)">Confirm</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+<</nobr>>
+
+:: L2 Pistol [item]
+<<set $temp = 1>>
+[img[setup.ImagePath+$items[13].image]]
+
+You have bought a pistol.
+
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="previous()" data-setter="$items[13].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[13].cost * 2), $items[20].count += 6">Confirm</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+<</nobr>>
+
+:: L2 Sword [item]
+<<set $temp = 1>>
+[img[setup.ImagePath+$items[14].image]]
+
+You have bought a sword.
+
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="previous()" data-setter="$items[14].count += parseInt($temp), $dubloons -= (parseInt($temp)*$items[14].cost * 2)">Confirm</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+<</nobr>>
+
+:: L2 Bullets [item]
+
+[img[setup.ImagePath+$items[20].image]]
+
+How many sets of 6 bullets would you like to buy?
+
+<<textbox "$temp" "1">>
+
+<<nobr>>
+<div class="menu-item">
+<button class="dark-btn obsidian" data-passage="previous()" data-setter="$items[20].count += (parseInt($temp) * 6), $dubloons -= (parseInt($temp)*$items[20].cost * 2)">Confirm</button>
+</div>
+<div class="menu-item">
+<button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+</div>
+<</nobr>>
+
 
 :: L2 Inn [layer2 indoor nobr]
 <<= '<img src="' + setup.ImagePath + 'Settlements/l2innroom.jpg" class="half-size">' >>
