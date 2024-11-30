@@ -23,50 +23,24 @@ if %errorlevel% equ 0 (
 	)
 )
 
-REM If Python command is still not set, install Python
+:: If Python command is still not set, install Python
 if "%PYTHON_CMD%"=="" (
-	echo Python not found. Installing Python...
-	if exist install_python_windows.bat (
-		call install_python_windows.bat
-		if %errorlevel% neq 0 (
-			echo Failed to install Python. Exiting.
-			pause
-			exit /b 1
-		)
-	) else (
-		echo install_python_windows.bat not found. Please ensure it exists.
-		pause
-		exit /b 1
-	)
-
-	REM Retry Python detection after installation
-	where py >nul 2>&1 && set "PYTHON_CMD=py"
-	where python >nul 2>&1 && set "PYTHON_CMD=python"
-	where python3 >nul 2>&1 && set "PYTHON_CMD=python3"
-
-	if "%PYTHON_CMD%"=="" (
-		echo Python installation failed or not found in PATH. Exiting.
-		echo You may need to restart your terminal for it to register the newly installed python.
-		pause
-		exit /b 1
-	)
-) else (
-	echo Python found: %PYTHON_CMD%
-)
-
-REM Update pip using the detected Python command
-echo Updating pip...
-%PYTHON_CMD% -m ensurepip --upgrade >nul 2>&1
-if %errorlevel% neq 0 (
-	echo Failed to ensure pip is installed.
-)
-
-%PYTHON_CMD% -m pip install --upgrade pip
-if %errorlevel% neq 0 (
-	echo Failed to upgrade pip.
+	echo Python not found.
+	echo Please head to https://www.python.org/downloads/release/python-311/ and install python with the "Windows x86-64 MSI installer".
+	echo Make sure to install in the AppData directory
+	echo and have "Add to PATH" selected.\
+	echo Once you have done so, close the terminal and run the batch file again.
+	echo Press enter to exit...
 	pause
 	exit /b 1
 )
+
+:: Install required Python packages
+echo Ensuring pip is installed.
+%PYTHON_CMD% -m ensurepip
+
+echo Upgrading pip.
+%PYTHON_CMD% -m pip install --upgrade pip
 
 REM Run the build script
 echo Running build.py with watch mode...
