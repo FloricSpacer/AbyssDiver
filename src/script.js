@@ -1817,19 +1817,6 @@ Macro.add('sidebar-widget', {
                     <div class="resource-item tooltip">
                         <div class="icon-text-wrapper">
                             <div class="icon-wrapper">
-                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
-                            </div>
-                            <div class="spacer"></div>
-                            <div class="number-wrapper">
-                                ${dehydrated <= 0 ? water : '<span class="alert2">-' + dehydrated + '</span>'}
-                                <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
-                            </div>
-                        </div>
-                        <span class="tooltiptext">Water</span>
-                    </div>
-                    <div class="resource-item tooltip">
-                        <div class="icon-text-wrapper">
-                            <div class="icon-wrapper">
                                 <span class="sidebar-item"><img src="${setup.ImagePath}Icons/food.png" alt="Food"></span>
                             </div>
                             <div class="spacer"></div>
@@ -1839,6 +1826,19 @@ Macro.add('sidebar-widget', {
                             </div>
                         </div>
                         <span class="tooltiptext">Food</span>
+                    </div>
+                    <div class="resource-item tooltip">
+                        <div class="icon-text-wrapper">
+                            <div class="icon-wrapper">
+                                <span class="sidebar-item"><img src="${setup.ImagePath}Icons/water.png" alt="Water"></span>
+                            </div>
+                            <div class="spacer"></div>
+                            <div class="number-wrapper">
+                                ${dehydrated <= 0 ? water : '<span class="alert2">-' + dehydrated + '</span>'}
+                                <span class="twine-sidebar-foraging-icon ${forageWater ? 'active' : ''}"></span>
+                            </div>
+                        </div>
+                        <span class="tooltiptext">Water</span>
                     </div>
                 </div>
                 ${getSemenDemonStatus()}
