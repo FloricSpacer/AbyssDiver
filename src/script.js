@@ -453,6 +453,11 @@ Setting.addToggle("AIPortraitsMode", {
     default: false,
 });
 
+Setting.addToggle("SidebarPortrait", {
+    label: "Enable the use of the sidebar portrait for generated images.",
+    default: false,
+});
+
 Setting.addToggle("OpenAIGeneration", {
     label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
     default: true,
@@ -535,7 +540,7 @@ Setting.addToggle("ArachnophobiaMode", {
 Setting.addRange("appAgeControl", {
     label: "Minimum apparent age your physical body can regress to (3-18):",
     min: 3,
-    default: 18,
+    default: 3,
     max: 18,
     step: 1,
 });
@@ -1032,7 +1037,7 @@ Object.defineProperties(setup, {
             return [
                 new Constellation('Pet',
                     [
-                        new FluffyEars('furry cat'),
+                        new FluffyEars('fluffy cat'),
                         new FluffyTail('flowing cat'),
                         new SharedSpace(),
                         new HairRemoval(),
@@ -1084,7 +1089,7 @@ Curse explanations:
                     [new NotGrowingReq()]),
                 new Constellation('Pet — beastly',
                     [
-                        new FluffyEars('furry cat'),
+                        new FluffyEars('fluffy cat'),
                         new FluffyTail('flowing cat'),
                         new MaximumFluff('cat-furred'),
                         new PermaDye('mottled black and white'),
@@ -1787,7 +1792,7 @@ Macro.add('sidebar-widget', {
                         <button id="custom-back-button" class="nav-arrow left">&larr;</button>
                         <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
-                    ${settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen ?
+                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
                 `<img class="dalleImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                 (settings.OverridePortrait ?
                     `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
@@ -1937,7 +1942,7 @@ Macro.add('sidebar-widget', {
             $('body').prepend(toggleButton);
         }
 
-        if (settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen) {
+        if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displaySavedImage();
         }
 

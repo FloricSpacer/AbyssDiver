@@ -972,7 +972,7 @@ class Character {
 	/**
 	 * Returns a description of this character's ears.
 	 * The description is a string such as would fit into the phrase "this character has ### ears",
-	 * for example "furry cat".
+	 * for example "fluffy cat".
 	 * @returns {string} A description of this character's ears.
 	 */
 	get ears() {
