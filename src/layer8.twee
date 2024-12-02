@@ -1234,18 +1234,21 @@ You give a wry smile, looking down at your new arms. There's a certain allure to
 <</nobr>>
 
 :: Take on Null [layer8]
-[img[setup.ImagePath + _curse.picture]]
+[img[images/curses/null.jpg]]
 <<nobr>>
-	<<set _curse = new Null()>>
-	<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>
-	<<for _curseName range setup.cursesNegatedByNull>>
-		<<set _curse = $mc.hasCurse.getCurse(_curseName)>>
-		<<if _curse !== undefined>>
-			<<RemoveCurse _curseName>>
-			<<set $corruption -= _curse.corr>>
-			<br>You feel the _curseName Curse leaving your body.<br>
-		<</if>>
-	<</for>>
+<<set _curse = new Null()>>
+<<set $mc.addCurse(_curse)>><<set $corruption += _curse.corr>>
+<div id="null-curse-container"></div>
+<script>
+for (const curseName of SugarCube.setup.cursesNegatedByNull) {
+	const curse = SugarCube.State.variables.mc.curses.find(c => c.name === curseName);
+	if (curse) {
+		removeCurse(curse);
+		SugarCube.State.variables.corruption -= curse.corruption;
+		document.getElementById("null-curse-container").innerHTML += `You feel the ${curseName} Curse leaving your body. \n`;
+	}
+}
+</script>
 <</nobr>>\
 
 A soft hum resonates in your ear, growing louder and more persistent. You can't discern its source, but it wraps itself around your senses, penetrating deep within you, leaving you with an uneasy anticipation. Your heart pounds in sync with this uncanny rhythm, and you realize - it's the pulsating heartbeat of the Abyss.

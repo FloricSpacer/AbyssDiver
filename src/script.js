@@ -2797,3 +2797,13 @@ setup.generateDebugID = function () {
 window.capitalize = function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+window.removeCurse = function(targetCurse) {
+    const curseIndex = SugarCube.State.variables.mc.events.findLastIndex(curse => curse.name === targetCurse.name);
+    if (curseIndex !== -1) {
+        SugarCube.State.variables.mc.events.deleteAt(curseIndex);
+        const activeMisfortuneIndex = SugarCube.State.variables.ManagedMisfortuneActive.findLastIndex(curse => curse.name === targetCurse.name);
+        if (activeMisfortuneIndex !== -1) {
+            SugarCube.State.variables.ManagedMisfortuneActive.deleteAt(activeMisfortuneIndex);
+        }
+    }
+}
