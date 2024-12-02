@@ -453,10 +453,12 @@ Setting.addToggle("AIPortraitsMode", {
     default: false,
 });
 
+/*
 Setting.addToggle("SidebarPortrait", {
     label: "Enable the use of the sidebar portrait for generated images.",
     default: false,
 });
+*/
 
 Setting.addToggle("OpenAIGeneration", {
     label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
