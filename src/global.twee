@@ -205,7 +205,15 @@ Feel free to begin a new journey, by restarting and choosing the hard mode optio
 <<Equipment>>\
 Use this page ONLY to adjust numbers due to interactions that save you money or resources that are not already accounted for in the game, or if there was a bug.
 
-Do not cheat or fear the consequences of angering the things that lurk deep in the Abyss.
+@@.alert2;This menu will be removed in 1.4, so if you have a preferred solution, please report it to the developers in the Discord server so that it can be properly implemented in the game.@@
+
+<div style="display: flex; justify-content: center; gap: 20px;">
+<a href="https://discord.gg/gXnq5rmjxG" target="_blank" style="display: inline-flex; justify-content: center; align-items: center; font-size: 0; background: #000a; border: 8px solid transparent; border-image: url('images/bordershop.png') 82 / 20px / 10px round; box-shadow: 0 0 4px 0 black; width: min-content; line-height: 1.5; text-align: center; padding: 8px;">
+<span style="display: inline-block; width: 64px; height: 64px; background-color: transparent;">
+<img src="images/icons/discord-icon.png" alt="Discord Server" style="width: 64px; height: 64px; filter: invert(1);">
+</span>
+</a>
+</div>
 
 <button class="dark-btn obsidian" data-passage="Adjust dubloons">Adjust dubloons</button>
 <button class="dark-btn obsidian" data-passage="Adjust corruption">Adjust corruption</button>
@@ -245,7 +253,7 @@ Click this if you have found something that can be used for swimming underwater,
 <<elseif $abyssKnow === 0 && ($hiredCompanions.some(e => e.id === setup.companionIds.saeko) || $items[5].count > 0 || setup.haveSmartphone)>>Click this if you'd like to enable the use of your Abyssal knowledge from the encyclopedia or Saeko (This will result in less side effects from foraging):
 	<button class="dark-btn obsidian" data-passage="Adjustments" data-setter="$abyssKnowCheatoff = false">Turn on abyssal knowledge</button>
 <</if>>
-If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
+/*If you would like to use a Relic or combination of Relics to trade with the surface, similar to a commerce balloons function, then use the following:
 <button class="dark-btn obsidian" data-passage="Commerce Balloon">Simulate the functionality of a commerce balloon</button>
 
 <button class="dark-btn obsidian" data-passage="Adjust Affection">Adjust Companion Affection</button>
@@ -253,13 +261,14 @@ If you would like to use a Relic or combination of Relics to trade with the surf
 <button class="dark-btn obsidian" data-passage="Adjust Curses">Adjust Curses</button>
 
 <button class="dark-btn obsidian" data-passage="Adjust Relics">Adjust Relics</button>
-
+*/
 <button class="dark-btn obsidian" data-passage="Adjust Combat Score">Adjust Combat Score</button>
 
 <button class="dark-btn obsidian" data-passage="Adjust Portrait Preset">Change between preset portraits</button>
 
-<button class="dark-btn obsidian" data-passage="Debug Menu">Debug Menu</button>
-
+/*<button class="dark-btn obsidian" data-passage="Debug Menu">Debug Menu</button>
+Warning: This will break your game if you use any of the options in the debug menu! Do NOT use this option unless you know what you're doing.
+*/
 
 <button class="dark-btn obsidian" data-passage="$menuReturn">Confirm Adjustments</button>
 
@@ -307,8 +316,6 @@ setup.generateDebugID();
 
 <button class="dark-btn obsidian" data-passage="Saeko Hypnosis 1 Ask">Begin Saeko Hypnosis Series</button>
 
-<button class="dark-btn obsidian" data-passage="Saeko Hypnosis 6 Male">Saeko hypno 6 male</button>
-
 <button class="dark-btn obsidian" data-passage="Lily ConvoLac">Lily Lactation Convo</button>
 
 <button class="dark-btn obsidian" data-passage="DialogueTest">Nothing, nothing at all</button>
@@ -318,6 +325,13 @@ setup.generateDebugID();
 <</if>>
 
 <button class="dark-btn obsidian" data-passage="All Curses">All Curses</button>
+
+<button class="dark-btn obsidian" data-passage="Commerce Balloon">Simulate the functionality of a commerce balloon</button>
+
+<button class="dark-btn obsidian" data-passage="Adjust Affection">Adjust Companion Affection</button>
+
+<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="for (_curse of Object.values(setup.allCurses)) { if (!$mc.hasCurse(_curse.name)) { $mc.addCurse(_curse.copy()) } }">Take all Curses</button> (including incompatible ones – use at your own risk)<br>
+<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="for (_curse of $mc.curses) { RemoveCurse(_curse) }">Remove all Curses</button><br>
 
 <button class="dark-btn obsidian" data-passage="Portrait Selector">Portrait Selector</button>
 <button class="dark-btn obsidian" data-passage="Cloud Contract">Cloud Contract</button>
@@ -404,7 +418,7 @@ Curses added and removed on this page will not influence corruption.<br><br>
 			<<capture _cursename, _curse>>
 				<<if $mc.hasCurse(_curse.name)>>
 					<<set _linktext = "Remove " + _cursename>>
-					<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="RemoveCurse(_curse)">Remove _cursename</button><br>
+					<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="removeCurse(_curse)">Remove _cursename</button><br>
 				<<else>>
 					<<set _linktext = "Take " + _cursename>>
 					<button class="dark-btn obsidian" data-passage="Adjust Curses" data-setter="$mc.addCurse(_curse)">Take _cursename</button><br>
@@ -635,7 +649,7 @@ Thanks again for playing! I hope the dive was worth it.
 				Instead you have a beautiful finned tail. Could you be considered a <<if $mc.appGender<5>>merman<<else>>mermaid<</if>> now?<</if>><br><</if>>
 		You have $mc.ears ears.<br>
 	</fieldset>
-	<<if settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen>>
+	<<if settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen>>
 		<div class="appearance-portrait-wrapper">
 			<<print '<img id="appearance-portrait" class="portraitImage portrait" src="">'>>
 			<div class="appearance-name-badge"><<print $mc.name>></div>
@@ -2214,15 +2228,15 @@ What would you like to do with your Managed Misfortune?
 				Please enter your new hair color: <<textbox "_curse.hairColor" "turquoise" "Use Items and Relics">><br>
 			<<elseif _curse.name === "Fluffy Ears" && !_curse.earType>>
 				What type of ears would you like to gain?<br>
-				<<radiobutton "_curse.earType" "furry cat" checked>> Cat<br>
+				<<radiobutton "_curse.earType" "fluffy cat" checked>> Cat<br>
 				<<radiobutton "_curse.earType" "fluffy dog">> Dog<br>
 				<<radiobutton "_curse.earType" "floppy cow">> Cow<br>
-				<<radiobutton "_curse.earType" "furry monkey">> Monkey<br>
-				<<radiobutton "_curse.earType" "furry rabbit">> Rabbit<br>
-				<<radiobutton "_curse.earType" "furry fox">> Fox<br>
-				<<radiobutton "_curse.earType" "furry mouse">> Mouse<br>
+				<<radiobutton "_curse.earType" "fluffy monkey">> Monkey<br>
+				<<radiobutton "_curse.earType" "fluffy rabbit">> Rabbit<br>
+				<<radiobutton "_curse.earType" "fluffy fox">> Fox<br>
+				<<radiobutton "_curse.earType" "fluffy mouse">> Mouse<br>
 				<<radiobutton "_curse.earType" "pig">> Pig<br>
-				<<radiobutton "_curse.earType" "furry horse">> Horse<br>
+				<<radiobutton "_curse.earType" "fluffy horse">> Horse<br>
 			<<elseif _curse.name === "Fluffy Tail" && !_curse.tailType>>
 				What type of tail would you like to gain?<br>
 				<<radiobutton "_curse.tailType" "flowing cat" checked>> Cat<br>

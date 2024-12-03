@@ -453,6 +453,13 @@ Setting.addToggle("AIPortraitsMode", {
     default: false,
 });
 
+/*
+Setting.addToggle("SidebarPortrait", {
+    label: "Enable the use of the sidebar portrait for generated images.",
+    default: false,
+});
+*/
+
 Setting.addToggle("OpenAIGeneration", {
     label: "Allow for the creation of portraits using OpenAI's Dalle Generator.",
     default: true,
@@ -535,7 +542,7 @@ Setting.addToggle("ArachnophobiaMode", {
 Setting.addRange("appAgeControl", {
     label: "Minimum apparent age your physical body can regress to (3-18):",
     min: 3,
-    default: 18,
+    default: 3,
     max: 18,
     step: 1,
 });
@@ -1032,7 +1039,7 @@ Object.defineProperties(setup, {
             return [
                 new Constellation('Pet',
                     [
-                        new FluffyEars('furry cat'),
+                        new FluffyEars('fluffy cat'),
                         new FluffyTail('flowing cat'),
                         new SharedSpace(),
                         new HairRemoval(),
@@ -1084,7 +1091,7 @@ Curse explanations:
                     [new NotGrowingReq()]),
                 new Constellation('Pet — beastly',
                     [
-                        new FluffyEars('furry cat'),
+                        new FluffyEars('fluffy cat'),
                         new FluffyTail('flowing cat'),
                         new MaximumFluff('cat-furred'),
                         new PermaDye('mottled black and white'),
@@ -1937,7 +1944,7 @@ Macro.add('sidebar-widget', {
             $('body').prepend(toggleButton);
         }
 
-        if (settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen) {
+        if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displaySavedImage();
         }
 
@@ -2791,4 +2798,14 @@ setup.generateDebugID = function () {
 
 window.capitalize = function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+window.removeCurse = function(targetCurse) {
+    const curseIndex = SugarCube.State.variables.mc.events.findLastIndex(curse => curse.name === targetCurse.name);
+    if (curseIndex !== -1) {
+        SugarCube.State.variables.mc.events.deleteAt(curseIndex);
+        const activeMisfortuneIndex = SugarCube.State.variables.ManagedMisfortuneActive.findLastIndex(curse => curse.name === targetCurse.name);
+        if (activeMisfortuneIndex !== -1) {
+            SugarCube.State.variables.ManagedMisfortuneActive.deleteAt(activeMisfortuneIndex);
+        }
+    }
 }

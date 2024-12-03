@@ -569,8 +569,8 @@ class FluffyEars extends Curse {
 	static picture = 'Curses/fluffyears.jpg';
 	static type = 'none';
 	static tags = ["ears","skin","hair"];
-	constructor(earType='furry cat') {
-		super('Fluffy Ears', 'none');
+	constructor(earType='fluffy cat') {
+		super('Fluffy Ears', 'none', `You have got animal ears sticking out the top of your head!`);
 
 		this.earType = earType;
 	}
