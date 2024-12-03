@@ -1473,7 +1473,7 @@ setup.displaySavedImage = async function () {
     const imgElementsDalle = document.querySelectorAll(".portraitImage");
     const imgElementsPortrait = document.querySelectorAll(".portrait");
     try {
-        const base64Image = await setup.queryImageDB("playerPortrait");
+        const base64Image = await setup.queryImageDB("portraitImage");
         setup.firstPortraitGen = true;
         imgElementsDalle.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
@@ -1489,7 +1489,7 @@ setup.displaySavedImage = async function () {
 setup.displayRecentGeneratedImage = async function () {
     const imgElements = document.querySelectorAll(".dalleImage");
     try {
-        const base64Image = await setup.queryImageDB("generatedImage");
+        const base64Image = await setup.queryImageDB("dalleImage");
         setup.firstPortraitGen = true;
         imgElements.forEach(function (imgElement) {
             imgElement.src = "data:image/png;base64," + base64Image;
@@ -1794,8 +1794,8 @@ Macro.add('sidebar-widget', {
                         <button id="custom-back-button" class="nav-arrow left">&larr;</button>
                         <button id="custom-forward-button" class="nav-arrow right">&rarr;</button>
                     </div>
-                    ${settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen ?
-                `<img class="dalleImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
+                    ${settings.AIPortraitsMode && !settings.OverridePortrait && setup.firstPortraitGen ?
+                `<img class="portraitImage portrait" src="" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                 (settings.OverridePortrait ?
                     `<img src="images/GeneratedPortraits/CharacterPortraitOverride.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">` :
                     `<img src="images/Player Icons/player${State.variables.mc.gender >= 4 ? 'F' : 'M'}${State.variables.portraitNumber || 0}.png" class="portrait" style="--gender-color: ${getGenderColor(State.variables.mc.gender)}; background-image: url('images/Layer Intros/l${SugarCube.State.variables.currentLayer}intro.png')">`)
