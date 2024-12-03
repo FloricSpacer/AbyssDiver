@@ -453,6 +453,11 @@ Setting.addToggle("AIPortraitsMode", {
     default: false,
 });
 
+Setting.addToggle("SidebarPortrait", {
+    label: "Enable the use of the sidebar portrait for generated images.",
+    default: true,
+});
+
 /*
 Setting.addToggle("SidebarPortrait", {
     label: "Enable the use of the sidebar portrait for generated images.",
