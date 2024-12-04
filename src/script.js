@@ -452,7 +452,6 @@ Setting.addToggle("AIPortraitsMode", {
     label: "Enable the use of AI to generate your own portrait.",
     default: false,
 });
-
 /*
 Setting.addToggle("SidebarPortrait", {
     label: "Enable the use of the sidebar portrait for generated images.",
@@ -1944,7 +1943,7 @@ Macro.add('sidebar-widget', {
             $('body').prepend(toggleButton);
         }
 
-        if (settings.SidebarPortrait && !settings.OverridePortrait && setup.firstPortraitGen) {
+        if (!settings.OverridePortrait && setup.firstPortraitGen) {
             setup.displaySavedImage();
         }
 
