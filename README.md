@@ -47,3 +47,5 @@ For those wanting local image generation, you can utilize the "one-click install
 The file is located in the "local-gen" folder in the root directory of the game, and there is additional instructions within the terminal so watch for those.
 
 There is a guide in the game under the AI Portrait Menu.
+
+For any additional information relating to ComfyUI instances or the local generation, check the [Local ComfyUI Docs](LCDOCS.md)
