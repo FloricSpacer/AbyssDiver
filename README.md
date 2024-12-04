@@ -50,4 +50,4 @@ There is a guide in the game under the AI Portrait Menu, and additional troubles
 
 For any additional information relating to ComfyUI instances or the local generation, check the:
 
-[Local ComfyUI Docs](LocalDOCS.md)
+[Local ComfyUI Docs](local-gen/LocalDOCS.md)
