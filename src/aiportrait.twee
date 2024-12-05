@@ -124,9 +124,22 @@
 
 		<br>
 
+		Custom Seed Value:
+		<<textbox "$customSeedInput" "">>
+		<<button "Reset Seed">>
+			<<set $customSeedInput to "">>
+			<<set setup.customSeedInput = "">>
+			<<script>>
+				document.getElementById("textbox-customseedinput").value = "";
+			<</script>>
+		<</button>>
+
+		<br>
+
 		<<button "Set Values">>
 			<<set setup.customPromptPrefix = $customPromptPrefix>>
 			<<set setup.customPromptSuffix = $customPromptSuffix>>
+			<<set setup.customSeedInput = $customSeedInput>>
 		<</button>>
 		<hr>
 	<</if>>
@@ -137,7 +150,6 @@
 				(async () => {
 					const base64Image = await setup.queryImageDB("dalleImage");
 					setup.storeImage("portraitImage", base64Image);
-					goBackToPassage(SugarCube.State.variables.menuReturn);
 				})();
 			<</script>>
 			<<set setup.firstPortraitGen = true>>

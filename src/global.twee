@@ -978,7 +978,12 @@ Thanks again for playing! I hope the dive was worth it.
 		<</if>>
 		/*Relics*/
 		<<if $DaedalusEquip>>
-			You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br>
+			<<if $devouredRelics.some(e => e.name === "Daedalus Mechanism")>>
+				You have two $relic73.variation wings sprouting from your back.<br>
+			<<else>>
+				You appear to have two $relic73.variation wings sprouting from your back. However, in reality, this is the Daedalus Mechanism.<br>
+			<</if>>
+
 		<</if>>
 		/*clothing*/
 		<<if $dollevent2>>
@@ -2130,14 +2135,31 @@ Helpful people on the surface managed to find your items safely, retrieving all 
 				if (!v) {
 					_daedalusFlyToggle.disable();
 					document.getElementById('daedalusFlyToggleEntry').style.display = 'none';
+					document.getElementById('daedalusCustomizeEntry').style.display = 'none';
 				} else {
 					document.getElementById('daedalusFlyToggleEntry').style.display = '';
+					document.getElementById('daedalusCustomizeEntry').style.display = '';
 				}
 			}, $DaedalusEquip)`>></div>
 		</div>
 		<<set _style = $DaedalusEquip ? 'margin-top:-0.5em;' : 'margin-top:-1em;display: none'>>
 		<div class="relicToggleEntry" id="daedalusFlyToggleEntry" @style="_style">
 			<div>You can fly between layers instead of walking (note: this will leave companions behind and they will have to catch up at normal speed).</div>
+			<div><<printHTML _daedalusFlyToggle>></div>
+		</div>
+		<div id="daedalusCustomizeEntry" @style="_style">
+			While being equipped, you can concentrate on the Daedalus mechanism to alter how the wings should look like.<br>
+			<button class="dark-btn obsidian" data-passage="Daedalus Mechanism Customize">Concentrate on the mechanism to change its shape</button>
+		</div>
+	<</if>>
+
+    <<if $devouredRelics.some(e => e.name === "Daedalus Mechanism")>>
+    	<<set _daedalusFlyToggle = toggle(v => $DaedalusFly = v, $DaedalusFly)>>
+		<div class="relicToggleEntry" id="daedalusFlyToggleEntry">
+			<div>
+				You have devoured the Daedalus Mechanism and its wings are now a part of your body with no trace of the mechanism left.
+				You can fly between layers instead of walking (note: this will leave companions behind and they will have to catch up at normal speed).
+			</div>
 			<div><<printHTML _daedalusFlyToggle>></div>
 		</div>
 	<</if>>
@@ -2349,12 +2371,34 @@ Which Relic would you like to devour with your Ring?<br><br>
 <<for _relic range $ownedRelics>>
 	<<capture _i _relic>>
 		<<if _relic.name != "Perpetual Repose" && _relic.name != "Ring of the Devourer">>
-			<button class="dark-btn obsidian" data-passage="Use Items and Relics" data-setter="$ownedRelics.deleteAt(_i), $lostRelics.push(_relic), $devouredRelics.push(_relic)">_relic.name</button><br>
+			<<if ["Daedalus Mechanism"].includes(_relic.name)>>
+				<button class="dark-btn obsidian" data-passage="'Devour ' + _relic.name" data-setter="$relicToDevour = _relic, $relicToDevourIdx = _i">_relic.name</button><br>
+			<<else>>
+				<button class="dark-btn obsidian" data-passage="Devour Relic" data-setter="$relicToDevour = _relic, $relicToDevourIdx = _i">_relic.name</button><br>
+			<</if>>
 		<</if>>
 	<</capture>>
 	<<set _i++>>
 <</for>><br>
 <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
+
+:: Devour Daedalus Mechanism [noreturn]
+<<DevourRelic $relicToDevourIdx $relicToDevour>>\
+<<set $DaedalusEquip = true>>\
+You are about to devour the Daedalus Mechanism and have one last opportunity to set its final shape:
+<<textbox "$relic73.variation" "angel" "Use Items and Relics">>
+<<include "Devour Relic finalize">>
+
+:: Devour Relic [nobr noreturn]
+<<DevourRelic $relicToDevourIdx $relicToDevour>>
+You have devoured the <<= $relicToDevour.name>>.<br>
+<<include "Devour Relic finalize">>
+
+<button class="dark-btn obsidian" data-passage="Use Items and Relics">Back</button>
+
+:: Devour Relic finalize [nobr noreturn]
+<<set $relicToDevourIdx = -1>>
+<<set $relicToDevour = undefined>>
 
 :: Ward Water Drink
 
@@ -2429,6 +2473,14 @@ The current total value of Relics you have copied is $relic38.copiedValue dubloo
 As you tie the sash around your waist the mechanism on your back starts to flicker, you feel the mechanical contraption connecting with your mind and body and try to concentrate to give mechanism the apparent shape you wish.
 
 Please enter what kind of wings the Daedalus mechanism should mimic:
+
+<<textbox "$relic73.variation" "angel" "Use Items and Relics">>
+
+:: Daedalus Mechanism Customize [noreturn]
+
+You try to concentrate to give the Daedalus mechanism the apparent shape you wish.
+
+Please enter what kind of wings the mechanism should mimic:
 
 <<textbox "$relic73.variation" "angel" "Use Items and Relics">>
 
@@ -2539,6 +2591,15 @@ How many dubloons would you like to pay back?
 
 <button class="dark-btn obsidian" onclick="SugarCube.Engine.backward()">Back</button>
 
+
+:: Devour Relic widget [widget nobr]
+<<widget "DevourRelic">>
+<<set _i = _args[0]>>
+<<set _relic = _args[1]>>
+<<run $ownedRelics.deleteAt(_i)>>
+<<run $lostRelics.push(_relic)>>
+<<run $devouredRelics.push(_relic)>>
+<</widget>>
 
 :: Curse removal widget [widget nobr]
 <<widget "RemoveCurse">>

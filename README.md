@@ -46,4 +46,8 @@ BUILDING: Abyss Diver.html
 For those wanting local image generation, you can utilize the "one-click installer" batch/bash files to download ComfyUI and checkpoints to run it locally.
 The file is located in the "local-gen" folder in the root directory of the game, and there is additional instructions within the terminal so watch for those.
 
-There is a guide in the game under the AI Portrait Menu.
+There is a guide in the game under the AI Portrait Menu, and additional troubleshooting steps below in the Local ComfyUI Docs.
+
+For any additional information relating to ComfyUI instances or the local generation, check the:
+
+[Local ComfyUI Docs](local-gen/LocalDOCS.md)
