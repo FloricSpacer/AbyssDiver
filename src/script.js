@@ -541,7 +541,7 @@ Setting.addToggle("ArachnophobiaMode", {
 Setting.addRange("appAgeControl", {
     label: "Minimum apparent age your physical body can regress to (3-18):",
     min: 3,
-    default: 3,
+    default: 18,
     max: 18,
     step: 1,
 });
