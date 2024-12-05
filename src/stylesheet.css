@@ -2480,10 +2480,12 @@ body.titleScreen {
   width: 100%;
   position: relative;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 .start-menu-container {
-  position: absolute;
+  position: relative;
+  box-sizing: border-box;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -2492,8 +2494,6 @@ body.titleScreen {
       rgba(0, 0, 0, 0.5) 0%,
       rgba(20, 20, 20, 0.4) 100%
   );
-  border-radius: 15px;
-  padding: 30px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.5),
               0 0 100px rgba(0, 255, 255, 0.1),
               inset 0 0 15px rgba(255, 255, 255, 0.1);
@@ -2502,13 +2502,24 @@ body.titleScreen {
   animation: containerPulse 4s infinite ease-in-out;
   z-index: 1;
   max-height: 100vh;
-  box-sizing: border-box;
-  overflow: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  padding: 20px;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.start-menu-container::-webkit-scrollbar {
+  display: none;
 }
 
 .start-menu-container::before {
+  box-sizing: border-box;
   content: '';
-  position: absolute;
+  position: relative;
   top: -2px;
   left: -2px;
   right: -2px;
@@ -2518,9 +2529,13 @@ body.titleScreen {
       rgba(255, 255, 255, 0.1),
       rgba(0, 255, 255, 0.1)
   );
-  border-radius: 16px;
+  border-radius: 10px;
   z-index: -1;
   animation: borderGlow 6s infinite linear;
+  -ms-overflow-style: none;
+}
+.start-menu-container::before::-webkit-scrollbar {
+  display: none;
 }
 
 @keyframes containerPulse {
@@ -2589,7 +2604,6 @@ body.titleScreen {
   box-shadow: none;
   transform: none;
 }
-
 .start-menu-container {
   position: absolute;
   top: 50%;
@@ -4038,6 +4052,73 @@ legend {
   border-radius: 4px;
   transition: transform 0.2s ease;
 }
+/*Timer, maybe it has an alarm to wake you from your dream*/
+
+.game-timer-container {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid #4CAF50;
+  border-radius: 10px;
+  color: #00FF66; /* Bright green text */
+  font-family: 'Orbitron', monospace; /* Futuristic digital font */
+  padding: 15px;
+  max-width: 300px;
+  margin: 0 auto;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  user-select: none;
+}
+
+.game-timer-display {
+  font-size: 2.5rem;
+  text-align: center;
+  letter-spacing: 3px;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.game-timer-display:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px #00FF66;
+}
+
+.game-timer-slider {
+  width: 100%;
+  margin-top: 15px;
+  appearance: none;
+  background: rgba(76, 175, 80, 0.3);
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  border-radius: 5px;
+}
+
+.game-timer-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #00FF66;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
+.game-timer-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #00FF66;
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+
+.game-timer-hint {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  margin-top: 10px;
+}
+
 /*wake up, the dream is over*/
 
 .infoIcon:hover {
