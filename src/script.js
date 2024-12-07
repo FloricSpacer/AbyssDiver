@@ -1553,10 +1553,13 @@ Macro.add('sidebar-widget', {
 
         if (tags().includes("titleScreen") || tags().includes("credits")) {
             $('.twine-sidebar').remove();
+            $('.sidebar-toggle').remove();
+            $('.twine-sidebar-footer').remove();
             return;
         }
         $('.twine-sidebar').remove();
         $('.sidebar-toggle').remove();
+        
 
         function getLayerName() {
             const layer = State.variables.currentLayer;
@@ -1991,6 +1994,7 @@ Macro.add('sidebar-widget', {
                 $('#story').addClass('sidebar-collapsed');
                 $('.sidebar-toggle').addClass('collapsed');
                 $('.sidebar-toggle .toggle-icon').text('◄');
+                $('.twine-sidebar-footer').addClass('collapsed');
             }
 
             $('.sidebar-toggle').on('click', function () {
@@ -1998,17 +2002,20 @@ Macro.add('sidebar-widget', {
                 const story = $('#story');
                 const icon = $('.sidebar-toggle .toggle-icon');
                 const button = $('.sidebar-toggle');
-
+                const footer = $('.twine-sidebar-footer');
+            
                 if (sidebar.hasClass('collapsed')) {
                     sidebar.removeClass('collapsed');
                     story.removeClass('sidebar-collapsed');
                     button.removeClass('collapsed');
+                    footer.removeClass('collapsed');
                     icon.text('►');
                     State.variables.sidebarCollapsed = false;
                 } else {
                     sidebar.addClass('collapsed');
                     story.addClass('sidebar-collapsed');
                     button.addClass('collapsed');
+                    footer.addClass('collapsed');
                     icon.text('◄');
                     State.variables.sidebarCollapsed = true;
                 }
@@ -2018,12 +2025,14 @@ Macro.add('sidebar-widget', {
             const sidebarState = State.variables.sidebarCollapsed || false;
             if (sidebarState) {
                 $('.twine-sidebar').addClass('collapsed');
+                $('.twine-sidebar-footer').addClass('collapsed');
                 $('#story').addClass('sidebar-collapsed');
                 $('.sidebar-toggle').addClass('collapsed');
                 $('.sidebar-toggle .toggle-icon').text('◄');
             }
             else {
                 $('.twine-sidebar').removeClass('collapsed');
+                $('.twine-sidebar-footer').removeClass('collapsed');
                 $('#story').removeClass('sidebar-collapsed');
                 $('.sidebar-toggle').removeClass('collapsed');
                 $('.sidebar-toggle .toggle-icon').text('►');
