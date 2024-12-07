@@ -1931,13 +1931,11 @@ Macro.add('sidebar-widget', {
 
                 <div style="height: 63px;"></div>
 
-                <div class="twine-sidebar-footer">
-                    ${settingsButton} ${savesButton}
-                </div>
             </div>
         `;
 
         $('body').prepend(sidebarHTML);
+        $('body').prepend('<div class="twine-sidebar-footer">' + settingsButton + ' ' + savesButton + '</div>');
 
         if (toggleButton) {
             $('body').prepend(toggleButton);
