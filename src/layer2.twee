@@ -2705,23 +2705,23 @@ In a corner stands a rugged figure, her gaze as unwelcoming as the village's nam
 :: Reed visit [layer2 nobr]
 You approach the large hut where Mr. Reed resides. <br><br>
 <<if $hiredCompanions.some(e => e.id === setup.companionIds.cloud)>>
-	<<if $reedShop && $CloudWarningReed == False>>/*xxx*/
+	<<if $reedShop && $CloudWarningReed == false>>
 		<<set $CloudWarningReed = true>>
 		<<say $companionCloud>> Are you going back to see Reed again?<</say>><br>
 
-		<<say $mc>> I guess I am, why does this bother you so much?<</say>><br>
+		<<say $mc>> I guess I am. Why does this bother you so much?<</say>><br>
 
-		<<say $companionCloud>> We have a history together…<</say>><br>
+		<<say $companionCloud>> We have... a history together.<</say>><br>
 
 		<<say $mc>> I could tell that much.<</say>><br>
 
-		<<say $companionCloud>> Yeah well, let me tell you. I have known that man for a long time. He is monster, it just took me a while to realize. The fact that he is now confined in the Abyss suits a monster like him. I have told you once and I will tell you again, nothing good can come from helping that man and if you continue to do so I will not be a part of it.<</say>><br>
+		<<say $companionCloud>> Let me tell you something. I've known that man for a long time. He's a monster - it just took me a while to realize it. The fact that he's now confined to the Abyss suits someone like him. I've told you once and I'll tell you again: nothing good can come from helping that man. If you continue to do so, I won't be a part of it.<</say>><br>
 
-		<<say $mc>> Oh wow, I didn't knew you felt this strongly. I want to hear him out at least now we are already here and then I'll think about it.<</say>><br>
+		<<say $mc>> I didn't know you felt this strongly. Now that we're already here, I at least want to hear him out. Then I'll think about what to do.<</say>><br>
 
-		<<say $companionCloud>> But I'm not stepping a foot inside his house.<</say>><br>
+		<<say $companionCloud>> I'm not stepping foot inside his house.<</say>><br>
 
-		<<say $mc>> I understand, I'll be right back then.<</say>><br>
+		<<say $mc>> I understand. I'll be right back.<</say>><br>
 	<<else>>
 		<<say $companionCloud>>I'll wait outside until you conclude whatever business you have with him.<</say>><br>
 		Cloud demonstratively turns his back towards the hut and remains standing as you continue towards the entrance.<br><br>
@@ -2781,16 +2781,22 @@ You approach the large hut where Mr. Reed resides. <br><br>
 <div class="cards-grid">
 <<for _item range $soldRelics>>
 <<if _item.name !== "Kin Shifter" && _item.name !== "Phoenix Obol">>
-	<div>
-	[img[setup.ImagePath + _item.image]]
-	<p>
-	<<set _cost = Math.max(50, _item.value*2)>>
-	<<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `"Buy " + _item.name`>><</button>>
-	</p>
-	<p>
-	<<include `_item.name + " Description"`>>
-	</p>
-	</div>
+    <div>
+    [img[setup.ImagePath + _item.image]]
+    <p>
+    <<set _cost = Math.max(50, _item.value*2)>>
+    <<button `"Buy for " + _cost + (_item.cost === 1 ? " dubloon" : " dubloons")` `Reed Shop`>>
+        <<if $dubloon >= _cost>>
+            <<set $dubloon -= _cost>>
+            <<set $ownedRelics.push(_relic)>>
+            <<set $soldRelics.splice($soldRelic.indexOf(_relic), 1)>>
+        <</if>>
+    <</button>>
+    </p>
+    <p>
+    <<include `_item.name + " Description"`>>
+    </p>
+    </div>
 <</if>>
 <</for>>
 </div>
