@@ -82,6 +82,10 @@ Steps:
 
 ### Terminal Errors:
 
+### TypeError: unsupported operand type(s) for |: 'types.Generic'....
+1. You likely have a python version below 3.10.X
+2. Upgrade your python version to 3.10.X or 3.11.X and retry. Recommended is 3.11.X.
+
 ### "Python cannot find the file specified...."
 1. Look in the terminal for the PATH to the ABYSS DIVER folder
 2. Move the folder in a location with NO SPACES!
