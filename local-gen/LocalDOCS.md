@@ -70,6 +70,7 @@ Steps:
 1. *DO NOT USE THE WINDOWS STORE PYTHON*
 2. *DO NOT INSTALL PYTHON IN PROGRAM FILES / PROGRAM FILES (x86)*
 3. *USE THE MOST UP-TO-DATE VERSION OF THE GAME*
+4. *AVOID SPACES IN FILEPATH AS ITS NOT SUPPORTED*
 
 ### Select a different GPU using the command line argument "--cuda-device N"
 1. Open task manager and go to the performance tab
