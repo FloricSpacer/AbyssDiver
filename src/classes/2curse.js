@@ -544,7 +544,7 @@ class AgeReductionA extends Curse {
 	static picture = 'Curses/agereductionA.jpg';
 	static type = 'age';
 	constructor() {
-		super('Age Reduction A', 'age');
+		super('Age Reduction A', 'age', "You appear to be younger than your your true age.");
 	}
 
 	get variation() {
@@ -1401,7 +1401,7 @@ class AgeReductionB extends Curse {
 	static picture = 'Curses/agereductionB.jpg';
 	static type = 'none';
 	constructor() {
-		super('Age Reduction B', 'none');
+		super('Age Reduction B', 'none', "You appear to be younger than your your true age.");
 	}
 
 	get variation() {
@@ -2201,7 +2201,7 @@ class AgeReductionC extends Curse {
 	static picture = 'Curses/agereductionC.jpg';
 	static type = 'age';
 	constructor() {
-		super('Age Reduction C', 'age');
+		super('Age Reduction C', 'age', "You appear to be younger than your your true age.");
 	}
 
 	get variation() {
@@ -3359,7 +3359,7 @@ Thanks to the effects of the Shifting Obelisk, you are able to naturally take on
 	static picture = 'Curses/literalization.jpg';
 	static type = 'none';
 	constructor() {
-		super('Literalization', 'none');
+		super('Literalization', 'none', "One of your Curse sets has become manifested in a literal form.");
 	}
 }
 setup.allCurses.Literalization = new Literalization()
@@ -3393,7 +3393,7 @@ class TheMaxim extends Curse {
 	static type = 'none';
 	static tags = ["special"];
 	constructor(location = 'anus') {
-		super('The Maxim', 'none');
+		super('The Maxim', 'none', "You have a chasm crawler, a parasite unique to the Abyss, squirming around up inside you.");
 		this.location = location;
 	}
 
