@@ -499,7 +499,7 @@ def comfy_ui_windows(storage_directory : str) -> None:
 		arguments.append("--cpu")
 	elif device_n == 1:
 		try:
-			status, _ = run_command([python_filepath, "-c" "import torch; assert torch.cuda.is_available(), \'cuda not available\'"], shell=True)
+			status, _ = run_command([python_filepath, "-c", "import torch; assert torch.cuda.is_available(), \'cuda not available\'"], shell=True)
 			assert status == 0, "Torch failed to import."
 		except:
 			print("Installing torch torchaudio and torchvision with CUDA acceleration.")
