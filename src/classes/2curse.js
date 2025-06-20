@@ -3624,3 +3624,24 @@ setup.allCurses.BimboBabble = new BimboBabble()
 State.variables.curse127 = setup.allCurses.BimboBabble
 window.BimboBabble = BimboBabble
 setup.curseArray.push(BimboBabble)
+
+class ArchetypeAmplification extends Curse {
+   static corruption = 15;
+   static curseName = 'Archetype Amplification';
+   static description = `Shifts your natural gendered traits towards the stereotypical form of your sex. Men develop broader shoulders, deeper voices, and more defined musculature. Women gain more pronounced curves, softer features, and a more melodic voice.`;
+   static descriptionMitigated = `Shifts your natural gendered traits towards the stereotypical form of your sex. Men develop broader shoulders, deeper voices, and more defined musculature. Women gain more pronounced curves, softer features, and a more melodic voice.\n\nThanks to the effects of the Shifting Obelisk you can choose which gendered traits to emphasize, selecting traits that align with your personal identity while still reinforcing your overall gendered appearance. The changes enhance your natural features rather than creating an exaggerated caricature.`;
+   static picture = 'Curses/archetypeamplification.jpg';
+   static type = 'gender';
+   static tags = ["gender"];
+   constructor() {
+   	super('Archetype Amplification', 'gender', "Your gendered traits have become more pronounced since you began your journey.");
+   }
+
+   changeGender(character, prevGender) {
+   	return character.sex === 'male' ? 0 : 7;
+   }
+}
+setup.allCurses.ArchetypeAmplification = new ArchetypeAmplification()
+State.variables.curse128 = setup.allCurses.ArchetypeAmplification
+window.ArchetypeAmplification = ArchetypeAmplification
+setup.curseArray.push(ArchetypeAmplification)
