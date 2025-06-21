@@ -774,21 +774,85 @@ The creature has no interest in preying upon things that do not fly, an odd pecu
 <<CollectRelic $relic6>>\
 <<if !setup.passingTime()>>
 
-The Relic you're pursuing takes you off the beaten path. You leave the plains and rivers behind, climbing down a rocky ravine. You struggle as you climb down narrow ledges, large boulders, and dusty rocks. Everything is dry here, compared to the verdant sanctuary that is the rest of the layer.
+The Relic you're pursuing takes you off the beaten path. You leave the plains and rivers behind, climbing down a rocky ravine. <<if $mc.hasCurse("Massacre Manicure")>>Your claws prove invaluable here, finding purchase in the smallest cracks as you descend the treacherous rock face.<<else>>You struggle as you climb down narrow ledges, large boulders, and dusty rocks.<</if>> Everything is dry here, compared to the verdant sanctuary that is the rest of the layer.
 
-Eventually, you reach the bottom of the canyon, and there's a rectangular hole cut into the end of the canyon wall, proceeding down dark steps. It feels like a bad idea to enter into that dark tunnel, but you decide to do so anyway.
+Eventually, you reach the bottom of the canyon, and there's a rectangular hole cut into the end of the canyon wall, proceeding down dark steps. <<if setup.haveUnlimitedLightSource>>Your light illuminates the entrance, revealing ancient stonework and a faint metallic glint just inside the threshold.<<else>>It feels like a bad idea to enter into that dark tunnel, but you decide to do so anyway.<</if>>
 
-No sooner have you passed the threshold than a metal grate clanks down behind you. You turn around alarmed, trying to raise the grate, but somehow it is locked shut. You spot a small keyhole near the base of it, but it does you no good without a key, you're stuck. Since you're in this predicament, you might as well explore the tunnel, maybe there's another way out.
+No sooner have you passed the threshold than a metal grate clanks down behind you. You turn around alarmed, trying to raise the grate, but somehow it is locked shut. You spot a small keyhole near the base of it, but it does you no good without a key, you're stuck. 
 
-You feel your way through the dark passage, but not long after you start to feel things rattling around by your feet. They're inanimate, and at first you think they must be small branches, but they don't quite feel like that. As your foot jars another loose, the unmistakable sound of it raises the hairs on your neck. These are bones. Lots of bones. Bones of previous fools who got themselves trapped in this place? That's what you're afraid of, but you can't be sure of that. You don't even know if they're human bones after all.
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>\
+<<say $companionKhemia>>Stay calm. These kinds of traps usually have a solution nearby. The builders wouldn't create a permanent death trap without some way out - they'd want to reset it for the next victim.<</say>>
+<</if>>\
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.lily)>>\
+<<say $companionLily>>Well, this is fun! I've heard of chambers like this in the deeper layers, but finding one so close to the surface is unusual!<</say>>
+She's unusually cheery for someone stuck in here with you, but you suppose that's just how she is.
+<</if>>\
+
+Since you're in this predicament, you might as well explore the tunnel, maybe there's another way out.
+
+<<if setup.haveUnlimitedLightSource>>Your light reveals the true horror of the passage - bones scattered everywhere, creating a macabre carpet that crunches beneath your feet.<<else>>You feel your way through the dark passage, but not long after you start to feel things rattling around by your feet. They're inanimate, and at first you think they must be small branches, but they don't quite feel like that. As your foot jars another loose, the unmistakable sound of it raises the hairs on your neck. These are bones. Lots of bones.<</if>> Bones of previous fools who got themselves trapped in this place? That's what you're afraid of, but you can't be sure of that. You don't even know if they're human bones, after all.
 
 You gulp but press onward for what feels like an age. With nervous, careful steps you travel down that passage, until you see a faint grey light up ahead. At first you're excited, a way out? But no, ahead is just a circular room, lit faintly through some crevices in the ceiling, which must be reflecting down some trickle of light from the surface. There is no other way in or out.
 
-In most circumstances you'd call the gloom of the chamber pitch black, but your eyes have dilated so much in this dark hallway that even this faint light lets you see the circular room relatively clearly. In the center is a plinth, and on the plinth is a strange device. At first you think it's just more bones, and perhaps it is, but it's also some kind of key. A key! You grab it, and carefully make your way back to the grate. You fit the key into the lock, and nothing happens.
+In the center is a plinth, and on the plinth is a strange device. At first you think it's just more bones, and perhaps it is, but it's also some kind of key. A key! You grab it, noticing how the vertebrae have been fused together with some kind of metal framework to create the teeth and handle.
+
+You carefully make your way back to the grate. You fit the key into the lock, and nothing happens.
 
 It doesn't unlock. You're stuck here, stuck to die in this trap. You realize that this place is effectively a cell, not just any cell though, your cell.
 
-Something clicks in your brain, and you have a sudden instinct. This is your cell, you're the only living thing in it. You try the key again, and the latch turns. You're able to lift the metal bars blocking the way, and you exit that unnerving place. After a difficult climb back out of the canyon, you hold the key aloft. It is a grizzly device, but you expect it could be handy.
+Something clicks in your brain, and you have a sudden instinct. This is <i>your</i> cell. You try the key again, and the latch turns. You're able to lift the metal bars blocking the way, and you exit that unnerving place.
+
+As you emerge back into the canyon, you notice something glinting among the rocks near the entrance - a small pile of ancient dubloons, likely dropped by previous explorers in their haste to escape.
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
+<<say $companionMaru>>Oh! Look at those coins! But... um, they're wedged pretty deep in those rocks, and they seem sharp. We might get hurt trying to get them out.<</say>>
+<</if>>\
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+<<say $companionKhemia>>Those dubloons could be useful, but reaching them would require careful maneuvering between those sharp rocks. There's a risk of injury.<</say>>
+Khemia seems conflicted, but if you had a way to get the coins, you know he'd be happy to see you get them.
+<</if>>\
+
+<<nobr>>
+    <div class="menu-item">
+        <button class="dark-btn obsidian" data-passage="Vertebra Key Dubloons">Attempt to retrieve the dubloons</button>
+    </div>
+    <div class="menu-item">
+        <button class="dark-btn obsidian" data-passage="Vertebra Key Skip">Leave the dubloons and continue</button>
+    </div>
+<</nobr>>
+<</if>>
+
+
+:: Vertebra Key Dubloons [layer1]
+<<if $mc.hasCurse("Massacre Manicure")>>
+Your clawed hands prove perfect for this task. The sharp talons easily hook the coins and pull them free from their rocky prison without any risk to yourself. You manage to retrieve all the dubloons safely.
+
+<<set $dubloons += 5>>\
+<b>You gained 5 dubloons!</b>
+
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.maru)>>
+<<say $companionMaru>>Wow! Your claws made that look so easy! I'm glad we didn't have to risk getting hurt.<</say>>
+<<set $companionMaru.affec += (1 + $hsswear)>>
+<</if>>
+
+<<elseif $ownedRelics.some(e => e.name === "Afar Wanderer")>>
+You remember the Afar Wanderer in your pack. Pulling it out carefully, you're able to tap the coins and attempt to maneuver them. After the tap, you can slowly withdraw the wand and jiggle it to get the coins out of the crevice. They get a little scratched up by the bumpy exit, but are no worse for the wear. And after a few minutes of effort, you've retrived them all. 
+
+<<set $dubloons += 5>>\
+<b>You gained 5 dubloons!</b>
+<<else>>
+You carefully wedge yourself between the sharp rocks, trying to reach the dubloons. Despite your caution, the jagged edges catch you several times, leaving painful scrapes along your arms.
+
+<<set $dubloons += 5>>\
+<<set $status.duration += 2>>\
+<<set $status.penalty += 1>>\
+<b>You gained 5 dubloons!</b>
+<b>You suffered minor injuries from the sharp rocks.</b>
+<<if $hiredCompanions.some(e => e.id === setup.companionIds.khemia)>>
+<<say $companionKhemia>>Hey, I should have stopped you from doing that. You could have gotten more seriously hurt if there was something in there. Don't take a risk like that again down here unless you <i>know</i> you have a solution.<</say>>
+Khemia winces at the sight of your injuries, looking a bit guilty, then shakes his head and turns away.
+<</if>>\
+<</if>>
+After a difficult climb back out of the canyon, you hold the key aloft. It is a grizzly device, but you expect it could be handy.
 
 <<nobr>>
     <div class="menu-item">
@@ -798,7 +862,18 @@ Something clicks in your brain, and you have a sudden instinct. This is your cel
         <button class="dark-btn obsidian" data-passage="Layer1 Hub">Continue exploring the first layer</button>
     </div>
 <</nobr>>
-<</if>>
+
+:: Vertebra Key Skip [layer1]
+You decide the risk isn't worth a few dubloons. After a difficult climb back out of the canyon, you hold the key aloft. It is a grizzly device, but you expect it could be handy.
+
+<<nobr>>
+    <div class="menu-item">
+        <button class="dark-btn obsidian" data-passage="Layer1 Relics">Continue searching for the Relics of layer 1</button>
+    </div>
+    <div class="menu-item">
+        <button class="dark-btn obsidian" data-passage="Layer1 Hub">Continue exploring the first layer</button>
+    </div>
+<</nobr>>
 
 
 :: Pick up the Chain of Lorelei [layer1]
