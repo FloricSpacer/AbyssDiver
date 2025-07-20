@@ -88,6 +88,12 @@ class Curse extends CharEvent {
 		return this.constructor.picture;
 	}
 	get picture() {
+		if (State.variables.mc.sex === "male" && this.constructor.pictureMale) {
+			return this.constructor.pictureMale;
+		} else if (this.constructor.pictureFemale) {
+			return this.constructor.pictureFemale;
+		}
+		
 		return this.constructor.picture;
 	}
 
@@ -750,7 +756,9 @@ class SexSwitcheroo extends Curse {
 	static curseName = 'Sex Switcheroo';
 	static description = `If you have a penis, it'll retreat inwards and be replaced with a vagina and all other associated organs, along with breasts roughly proportionate to the size of penis you had as compared to the average. The reverse happens if you started with a vagina, and you'll gain a penis roughly proportionate to the size of your old boobs. (Flat boobs get a very small micropenis.)`;
 	static descriptionMitigated = `If you have a penis, it'll retreat inwards and be replaced with a vagina and all other associated organs, along with breasts roughly proportionate to the size of penis you had as compared to the average. The reverse happens if you started with a vagina, and you'll gain a penis roughly proportionate to the size of your old boobs. (Flat boobs get a very small micropenis.)\n\nThanks to the effects of the Shifting Obelisk, you will find that use of your new organs comes natural to you, and if you gained a womb you can choose not to get the menstrual cycle (you can still get pregnant though). If you gained a penis you can adjust its size by up to 2cm. If you gained breasts you can adjust their size by up to 1 cup size.`;
-	static picture = 'Curses/sexswitcheroo.jpg';
+	static picture = 'Curses/sexswitcherooM.jpg';
+	static pictureMale = 'Curses/sexswitcherooM.jpg';
+	static pictureFemale = 'Curses/sexswitcherooF.jpg';
 	static type = 'gender';
 	static tags = ["special"];
 	constructor() {
